@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Cadastro de Identificação</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Impressão de Cadastro de Identificação</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+				</div>
+
+
+				<div class="row" class="left">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="space-6"></div>
+
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+
+
+									<div class="widget-header widget-header-large">
+										<h3 class="widget-title grey lighter">
+											<i class="ace-icon fa fa-file-o green"></i>
+											Cadastro de Identificação
+										</h3>
+
+										<div class="widget-toolbar no-border invoice-info">
+											<span class="invoice-info-label">index:</span>
+											<span class="red">{{_id}}</span>
+
+											<br />
+											<span class="invoice-info-label">Data Cadastro:</span>
+											<span class="blue">{{bene_datacad}}</span>
+										</div>
+
+										<div class="widget-toolbar hidden-480">
+											<a href="#">
+												<i class="ace-icon fa fa-print"></i>
+											</a>
+										</div>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main padding-10">
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
+															<b>Informações da Instituição</b>
+														</div>
+													</div>
+
+													<div>
+														<ul class="list-unstyled">
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>Route Centro de Terapia e Apoio Infantil </b>
+															</li>
+
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ: </b> 33.346.423/0001-17
+															</li>
+
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>End.: </b>R. José Paraíso, 207 - Boa Viagem 
+															</li>
+
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i>Recife - PE - Br
+															</li>
+
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>CEP: </b>51030-390
+															</li>
+
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>Contato: </b>>81 3428-0982
+															</li>
+
+															<li class="divider"></li>
+
+
+														</ul>
+													</div>
+												</div><!-- /.col -->
+											</div><!-- /.row -->
+										</div>
+									</div>
+									<div class="main-content-inner">
+										<div class="page-content">
+											<div class="row">
+												<div class="left">
+
+													<div class="col-sm-12"><!-- Tabela Beneficiário -->						
+														<div class="row">
+															<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+																<b>Informações do Beneficiário</b>
+															</div>
+															<div>
+																<table class="table table-striped table-bordered">
+																	<tbody>
+																		<tr>
+																			<td class="left"><b>Nome:</b></td>
+																			<td>{{bene_nome}}</td>
+																			<td><b>Idade:</b></td>
+																			<td>{{bene_idade}}</td>					
+																		</tr>
+																		
+																		<tr>
+																			<td class="left"><b>Nacionalidade:</b></td>
+																			<td>{{bene_nacionalidade}}</td>
+																			<td><b>D.Nascimento:</b></td>
+																			<td>{{bene_datanasc}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Identidade:</b></td>
+																			<td>{{bene_Ident}}</td>
+																			<td><b>Cpf:</b></td>
+																			<td>{{bene_cpf}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Endereço:</b></td>
+																			<td>{{bene_end}}</td>
+																			<td><b>Complemento:</b></td>
+																			<td>{{bene_endcompl}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Bairro:</b></td>
+																			<td>{{bene_endbairro}}</td>
+																			<td><b>Cidade:</b></td>
+																			<td>{{bene_endcidade}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>UF:</b></td>
+																			<td>{{bene_enduf}}</td>
+																			<td><b>CEP:</b></td>
+																			<td>{{bene_endcep}}</td>					
+																		</tr>
+
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-sm-12"><!-- Tabela Convênio -->						
+														<div class="row">
+															<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+																<b>Convênio</b>
+															</div>
+															<div>
+																<table class="table table-striped table-bordered">
+																	<tbody>
+																		<tr>
+																			<td class="left" width="40%"><b>Convênio:</b></td>
+																			<td>{{bene_conv}}</td>
+				
+																		</tr>
+	
+
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-sm-12"><!-- Tabela Responsável -->						
+														<div class="row">
+															<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+																<b>Informações do Responsável</b>
+															</div>
+															<div>
+																<table class="table table-striped table-bordered">
+																	<tbody>
+																		<tr>
+																			<td class="left"><b>Nome:</b></td>
+																			<td>{{bene_out}}</td>
+																			<td><b>Grau Parentesco:</b></td>
+																			<td>{{bene_graupar}}</td>					
+																		</tr>
+																		
+																		<tr>
+																			<td class="left"><b>Profissão:</b></td>
+																			<td>{{bene_outprof}}</td>
+																			<td><b>D.Nascimento:</b></td>
+																			<td>{{bene_outnasc}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Identidade:</b></td>
+																			<td>{{bene_outIdent}}</td>
+																			<td><b>Cpf:</b></td>
+																			<td>{{bene_outcpf}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Endereço:</b></td>
+																			<td>{{bene_outend}}</td>
+																			<td><b>Complemento:</b></td>
+																			<td>{{bene_outendcompl}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Bairro:</b></td>
+																			<td>{{bene_outendbairro}}</td>
+																			<td><b>Cidade:</b></td>
+																			<td>{{bene_outendcidade}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>UF:</b></td>
+																			<td>{{bene_outenduf}}</td>
+																			<td><b>CEP:</b></td>
+																			<td>{{bene_outendcep}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Celular Whastapp:</b></td>
+																			<td>{{bene_outcel}}</td>
+																			<td><b>Celular</b></td>
+																			<td>{{bene_outcel2}}</td>					
+																		</tr>
+
+																																				<tr>
+																			<td class="left"><b>Email:</b></td>
+																			<td>{{bene_outemail}}</td>
+				
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-sm-12"><!-- Tabela Mãe -->						
+														<div class="row">
+															<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+																<b>Informações da Mãe</b>
+															</div>
+															<div>
+																<table class="table table-striped table-bordered">
+																	<tbody>
+																		<tr>
+																			<td class="left"><b>Nome:</b></td>
+																			<td>{{bene_mae}}</td>
+				
+																		</tr>
+																		
+																		<tr>
+																			<td class="left"><b>Profissão:</b></td>
+																			<td>{{bene_maeprof}}</td>
+																			<td><b>D.Nascimento:</b></td>
+																			<td>{{bene_maenasc}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Identidade:</b></td>
+																			<td>{{bene_maeIdent}}</td>
+																			<td><b>Cpf:</b></td>
+																			<td>{{bene_maecpf}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Endereço:</b></td>
+																			<td>{{bene_maeend}}</td>
+																			<td><b>Complemento:</b></td>
+																			<td>{{bene_maeendcompl}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Bairro:</b></td>
+																			<td>{{bene_maeendbairro}}</td>
+																			<td><b>Cidade:</b></td>
+																			<td>{{bene_maeendcidade}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>UF:</b></td>
+																			<td>{{bene_maeenduf}}</td>
+																			<td><b>CEP:</b></td>
+																			<td>{{bene_maeendcep}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Celular Whastapp:</b></td>
+																			<td>{{bene_maecel}}</td>
+																			<td><b>Celular</b></td>
+																			<td>{{bene_maecel2}}</td>					
+																		</tr>
+
+																																				<tr>
+																			<td class="left"><b>Email:</b></td>
+																			<td>{{bene_outemail}}</td>
+				
+																		</tr>
+
+
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+
+													<div class="col-sm-12"><!-- Tabela Pai -->						
+														<div class="row">
+															<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+																<b>Informações do Pai</b>
+															</div>
+															<div>
+																<table class="table table-striped table-bordered">
+																	<tbody height="60%">
+																		<tr>
+																			<td class="left"><b>Nome:</b></td>
+																			<td>{{bene_pai}}</td>
+																			<td><b>Grau Parentesco:</b></td>
+																			<td>{{bene_graupar}}</td>					
+																		</tr>
+																		
+																		<tr>
+																			<td class="left"><b>Profissão:</b></td>
+																			<td>{{bene_paiprof}}</td>
+																			<td><b>D.Nascimento:</b></td>
+																			<td>{{bene_painasc}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Identidade:</b></td>
+																			<td>{{bene_paiIdent}}</td>
+																			<td><b>Cpf:</b></td>
+																			<td>{{bene_paicpf}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Endereço:</b></td>
+																			<td>{{bene_paiend}}</td>
+																			<td><b>Complemento:</b></td>
+																			<td>{{bene_paiendcompl}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Bairro:</b></td>
+																			<td>{{bene_paiendbairro}}</td>
+																			<td><b>Cidade:</b></td>
+																			<td>{{bene_paiendcidade}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>UF:</b></td>
+																			<td>{{bene_paienduf}}</td>
+																			<td><b>CEP:</b></td>
+																			<td>{{bene_paiendcep}}</td>					
+																		</tr>
+
+																		<tr>
+																			<td class="left"><b>Celular Whastapp:</b></td>
+																			<td>{{bene_paicel}}</td>
+																			<td><b>Celular</b></td>
+																			<td>{{bene_paicel2}}</td>					
+																		</tr>
+
+																																				<tr>
+																			<td class="left"><b>Email:</b></td>
+																			<td>{{bene_paiemail}}</td>
+				
+																		</tr>
+
+
+																	</tbody>
+
+	
+																	
+
+																</table>
+															</div>
+														</div>
+													</div>
+
+
+
+
+												</div>
+											</div>
+										</div>
+									</div>
+								
+								
+								
+								</div>
+
+							
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.main-content -->
+
+
+				</div><!-- /.main-container -->
+			</div>
+		</div>	
+
+		
+	</body>
+</html>

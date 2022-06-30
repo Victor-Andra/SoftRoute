@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Pagina de Erro!</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Erro!</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+					{{#each erros}}
+						<div class="alert alert-danger">{{texto}}</div>
+					{{else}}
+					{{/each}}
+								<div class="error-container">
+									<div class="well">
+										<h1 class="grey lighter smaller">
+											<span class="blue bigger-125">
+												<i class="ace-icon fa fa-random"></i>
+												500
+											</span>
+											Opa! algo certo deu errado!
+										</h1>
+
+										<hr>
+										<h3 class="lighter smaller">
+											"Nummmm se aveche não, 
+											<i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i>
+											vamos cuidar disso!
+										</h3>
+
+										<div class="space"></div>
+
+										<div>
+											<h4 class="lighter smaller">Você também pode:</h4>
+
+											<ul class="list-unstyled spaced inline bigger-110 margin-15">
+												<li>
+													<i class="ace-icon fa fa-hand-o-right blue"></i>
+													Leia a ajuda!
+												</li>
+
+												<li>
+													<i class="ace-icon fa fa-hand-o-right blue"></i>
+													Mais informações sobre o erro ocorrido!
+												</li>
+
+												<li>
+													<i class="ace-icon fa fa-hand-o-right blue"></i>
+													Equipe de Desenvolvimento!<br>
+												</li>
+
+												<li>
+
+													<i class="ace-icon fa fa-gavel red"></i>
+													Abrir um Ticket de chamada técnica para os desenvolvedores.
+
+												</li>
+											</ul>
+										</div>
+
+										<hr>
+										<div class="space"></div>
+
+										<div class="center">
+											<a href="javascript:history.back()" class="btn btn-grey">
+												<i class="ace-icon fa fa-arrow-left"></i>
+												Voltar
+											</a>
+
+											<a href="#" class="btn btn-primary">
+												<i class="ace-icon fa fa-tachometer"></i>
+												Dashboard
+											</a>
+										</div>
+									</div>
+								</div>
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+		<!--<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<!-- JQUERY UI -->
+  		<!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>-->
+		
+		<!-- page tabelas plugin scripts -->
+
+
+		<!--[if IE]>
+				<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" src="/js/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+		<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.print.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript" src="/js/dataTables.select.min.js"></script>
+		
+		
+		<script src="/js/jquery-2.1.4.min.js"></script>
+		<!-- page specific plugin scripts -->
+
+
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- ace settings handler -->
+		<script type="text/javascript" src="/js/ace-extra.min.js"></script>
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<!-- page specific plugin styles -->
+		<!-- text fonts -->
+		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+		<!-- Carrega div Conteudo com paginas html -->
+		<script type = "text/javascript">
+ 			function carregar(pagina){ $("#conteudo").load(pagina);	}
+			function formatar(mask,doc){
+				var i = doc.value.length;
+				var saida = mask.substring(0,1);
+				var texto = mask.substring(i);
+
+				if(texto.substring(0,1) != saida){
+					doc.value += texto.substring(0,1);
+				}
+			}
+		</script>
+	</head>
+	<body class="no-skin">
+		
+
+        {{>_navbar}}
+		<!--validação-->
+        {{>_sidebar}}
+		{{#if success_msg}}
+			<div class="alert alert-danger">{{success_msg}}</div>
+		{{/if}}
+		<div id="containet-principal-side-nav" class="container" style="padding-left: 200px">
+            {{{body}}}
+        </div>
+		
+	</body>
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="/js/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+    <script type="text/javascript"  src="/js/bootstrap.min.js"></script>
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+        <script src="/js/excanvas.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/js/jquery-ui.custom.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.easypiechart.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.sparkline.index.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.pie.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.resize.min.js"></script>
+    <!-- Editor de Textos plugin scripts -->
+    <script type="text/javascript" src="/js/markdown.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-markdown.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.hotkeys.index.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-wysiwyg.min.js"></script>
+    <script type="text/javascript" src="/js/bootbox.js"></script>
+    <!-- ace scripts -->
+    <script type="text/javascript" src="/js/ace-elements.min.js"></script>
+    <script type="text/javascript" src="/js/ace.min.js"></script>
+    <!-- inline scripts related to this page -->
+
+</html>

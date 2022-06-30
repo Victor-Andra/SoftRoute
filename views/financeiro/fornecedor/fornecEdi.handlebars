@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Fornecedor</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Fornecedor Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/financeiro/fornecedor/atualizar" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Fornecedor</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+				
+												<label> Razão Social</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="fornecNome" placeholder="" class="form-control" value="{{fornec_nome}}"/>
+													</div>
+												</div>
+
+												<label> Nome Fantasia</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="fornecFantasia" placeholder="" class="form-control" value="{{fornec_fantasia}}"/>
+													</div>
+												</div>
+
+
+												<label> CNPJ</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="fornecCnpj" placeholder="" class="form-control" value="{{fornec_cnpj}}"/>
+													</div>
+												</div>
+
+
+												<label> Inscrição Municipal</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="fornecMuni" placeholder="" class="form-control" value="{{fornec_muni}}"/>
+													</div>
+												</div>
+
+												<label> Inscrição Estadual</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="fornecEstad" placeholder="" class="form-control" value="{{fornec_estad}}" />
+													</div>
+												</div>
+
+												<label> Contrato</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="fornecContrato" placeholder="" class="form-control" value="{{fornec_contrato}}" />
+													</div>
+												</div>
+
+												<label > Endereço </label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="fornecEnd" placeholder="" class="form-control" value="{{fornec_end}}"/>
+													</div>
+												</div>
+				
+												<label> Complemento </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="fornecEndcompl" placeholder="" class="form-control" value="{{fornec_endcompl}}"/>
+													</div>
+												</div>
+				
+												<label> Bairro </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="fornecEndbairro" placeholder="" class="form-control" value="{{fornec_endbairro}}"/>
+													</div>
+												</div>
+				
+												<label> Cidade </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="fornecEndcidade" placeholder="" class="form-control" value="{{fornec_endcidade}}"/>
+													</div>
+												</div>
+
+				
+												<label>UF</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="fornecEnduf" class="chosen-select" data-placeholder="Escolha..."value="{{fornec_enduf}}">
+																<option value="{{fornec_enduf}}">{{fornec_enduf}}</option>
+																<option value="AC">Acre</option>
+																<option value="AL">Alagoas</option>
+																<option value="AP">Amapá</option>
+																<option value="AM">Amazonas</option>
+																<option value="BA">Bahia</option>
+																<option value="CE">Ceará</option>
+																<option value="DF">Distrito Federal</option>
+																<option value="ES">Espírito Santo</option>
+																<option value="GO">Goiás</option>
+																<option value="MA">Maranhão</option>
+																<option value="MT">Mato Grosso</option>
+																<option value="MS">Mato Grosso do Sul</option>
+																<option value="MG">Minas Gerais</option>
+																<option value="PA">Pará</option>
+																<option value="PB">Paraíba</option>
+																<option value="PR">Paraná</option>
+																<option value="PE">Pernambuco</option>
+																<option value="PI">Piauí</option>
+																<option value="RJ">Rio de Janeiro</option>
+																<option value="RN">Rio Grande do Norte</option>
+																<option value="RS">Rio Grande do Sul</option>
+																<option value="RO">Rondônia</option>
+																<option value="RR">Roraima</option>
+																<option value="SC">Santa Catarina</option>
+																<option value="SP">São Paulo</option>
+																<option value="SE">Sergipe</option>
+																<option value="TO">Tocantins</option>
+																<option value="EX">Estrangeiro</option>
+										
+															</select>
+														</div>
+												</div>
+				
+												<label>CEP
+													<small class="text-warning">00000-000</small>
+												</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input type="text" name="fornecEndcep" placeholder="" class="form-control" value="{{fornec_endcep}}"/>
+													</div>
+												</div>
+
+
+												<div>
+													<label>whatsApp
+														<small class="text-warning">(99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="fornecWhatsapp"class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" value="{{fornec_whatsapp}}"/>
+													</div>
+												</div>
+				
+									
+												<div>
+													<label>Celular
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="fornecCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{fornec_cel}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>Fixo
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="fornecFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{fornec_fixo}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>E-mail
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-envelope-o"></i>
+														</span>
+									
+														<input name="fornecEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{fornec_email}}"/>
+													</div>
+												</div>
+
+
+												<div>
+													<label>Site
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-home"></i>
+														</span>
+									
+														<input name="fornecSite" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{fornec_site}}"/>
+													</div>
+												</div>
+
+												<label> Status </label>
+												<div class="form-group">
+													<div class="col-sm-2">
+														<input type="text" name="fornecStatus" placeholder="" class="form-control" value="{{fornec_status}}"/>
+													</div>
+												</div>
+
+
+												<label> Observações </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="fornecObs" placeholder="" class="form-control" value="{{fornec_obs}}"/>
+													</div>
+												</div>
+
+												<div class="hidden">
+													<input name="fornecId" value="{{_id}}" />
+												</div>
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/financeiro/fornecedor/lis">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

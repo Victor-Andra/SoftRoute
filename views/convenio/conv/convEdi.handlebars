@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Convênios</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Convênios Editar</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+
+
+							<form class="form-horizontal" role="form" action="/menu/convenio/conv/atualizar" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Dados</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+						
+												<label> Nome Convênio</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="convNome" id="convNome"  class="form-control" value="{{conv_nome}}"/>
+													</div>
+												</div>
+
+
+												<label> Razão Social</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convRazao" id="convRazao"  class="form-control" value="{{conv_razao}}"/>
+													</div>
+												</div>
+
+												<div class="space space-8"></div>
+												<label> Nº Contrato</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="convContrato" id="convContrato"  class="form-control" value="{{conv_contrato}}"/>
+													</div>
+												</div>
+
+												<div class="space space-8"></div>
+												<label> CNPJ</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="convCnpj" placeholder="" class="form-control" value="{{conv_cnpj}}"/>
+													</div>
+												</div>
+
+
+
+												<label > Endereço </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convEnd" id="convEnd" class="form-control" value="{{conv_end}}"/>
+													</div>
+												</div>
+				
+												<label> Complemento </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convEndcompl" id="convEndcompl"  class="form-control" value="{{conv_endcompl}}"/>
+													</div>
+												</div>
+				
+												<label> Bairro </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convEndbairro" id="convEndbairro" class="form-control" value="{{conv_endbairro}}"/>
+													</div>
+												</div>
+				
+												<label> Cidade </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convEndcidade" id="convEndcidade" class="form-control" value="{{conv_endcidade}}"/>
+													</div>
+												</div>
+
+				
+												<label>UF</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="convEnduf" id="convEnduf"  class="chosen-select" data-placeholder="Escolha o estado..."value="{{conv_enduf}}">
+																<option value="{{conv_enduf}}">{{conv_enduf}}</option>
+																{{#each estados}}
+																<option value="{{_id}}">{{estado_nome}}</option>
+																{{/each}}
+										
+															</select>
+														</div>
+												</div>
+				
+												<label> CEP </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="convEndcep" id="convEndcep" class="form-control" value="{{conv_endcep}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>whatsApp
+														<small class="text-warning">(99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="convWhatsapp" id="convWhatsapp" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" value="{{conv_whatsapp}}"/>
+													</div>
+												</div>
+				
+									
+												<div>
+													<label>Celular
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="convCel" id="convCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{conv_cel}}" />
+													</div>
+												</div>
+
+												<div>
+													<label>Celular
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="convFixo" id="convFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{conv_fixo}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>E-mail
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-envelope-o"></i>
+														</span>
+									
+														<input name="convEmail" id="convEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" value="{{conv_email}}" />
+													</div>
+												</div>
+
+
+												<div>
+													<label>Site
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-home"></i>
+														</span>
+									
+														<input name="convSite" id="convSite" class="col-sm-4" class="form-control input-mask-phone" type="text" value="{{conv_site}}" />
+													</div>
+												</div>
+
+												<label>Status</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="convStatus" id="convStatus" class="chosen-select" data-placeholder=""  value="{{conv_status}}">
+																<option value="{{conv_status}}">{{conv_status}}</option>
+																<option value="Ativo">Ativo</option>
+																<option value="Inativo">Inativo</option>
+															</select>
+														</div>
+												</div>
+
+
+												<label> Observações </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="convObs"  id="convObs" class="form-control" value="{{conv_obs}}"/>
+													</div>
+												</div>
+
+												<div class="hidden">
+													<input name="convId" id="convId" value="{{_id}}" />
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+<br>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/convenio/conv/edi">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Receitas</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Receitas Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/financeiro/receita/atualizar" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Dados</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+				
+												<label> Atendimento</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="creditAtendid" placeholder="" class="form-control" value="{{credit_atendid}}"/>
+													</div>
+												</div>
+
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+															<option value="{{credit_categoria}}">{{credit_categoria}}</option>
+															<option value="Padrão">Padrão</option>
+															<option value="Falta">Falta</option>						
+															<option value="Apoio">Apoio</option>
+															<option value="Supervisão">Supervisão</option>																											<option value="AC">Apoio</option>
+															<option value="Pais">Pais</option>
+															<option value="Substituto">Substituto</option>
+															<option value="Glosa">Glosa</option>
+															<option value="Extra">Extra</option>																	
+														</select>
+													</div>
+												</div>
+
+
+												<label> Terapia</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="creditTerapiaid" placeholder="" class="form-control" value="{{credit_terapiaid}}"/>
+													</div>
+												</div>
+
+
+												<label> Convenio</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="creditConvid" placeholder="" class="form-control" value="{{credit_convid}}" />
+													</div>
+												</div>
+
+												<label> Cliente</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="creditNome" placeholder="" class="form-control" value="{{credit_nome}}"/>
+													</div>
+												</div>
+
+												<label> Cpf / Cnpj</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="creditCpfcnpj" placeholder="" class="form-control" value="{{credit_cpfcnpj}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>Data Evento</label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-calendar"></i>
+														</span>
+									
+														<input name="creditDataevento" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_dataevento}}"/>
+													</div>
+												</div>
+
+				
+												<div>
+													<label>Data Vencimento</label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-calendar"></i>
+														</span>
+									
+														<input name="creditDatavenci" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_datavenci}}" />
+													</div>
+												</div>
+
+											
+												<div>
+													<label>Data Pagamento</label>							
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-calendar"></i>
+														</span>
+									
+														<input name="creditDatapg" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_datapg}}"/>
+													</div>
+												</div>
+
+				
+												<label> Valor Previsto </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="creditValorprev" placeholder="" class="form-control" value="{{credit_valorprev}}"/>
+													</div>
+												</div>
+
+
+												<label> Valor Juros </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="creditJuros" placeholder="0,00" class="form-control" value="{{credit_juros}}"/>
+													</div>
+												</div>
+
+
+												<label> Valor Multa </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="creditMulta" placeholder="0,00" class="form-control" value="{{credit_multa}}"/>
+													</div>
+												</div>
+
+
+												<label> Valor Adiantado </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="creditAdianta" placeholder="0,00" class="form-control" value="{{credit_adianta}}"/>
+													</div>
+												</div>
+
+
+												<label> Valor Pago </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="creditValorpg" placeholder="0,00" class="form-control" value="{{credit_valorpg}}"/>
+													</div>
+												</div>
+
+
+												<label>Pago?</label>
+												<div class="form-group">
+														<div class="col-sm-2">
+															<select name="creditPg" class="chosen-select" data-placeholder="Escolha..." value="{{credit_pg}}">
+																<option value="{{credit_pg}}">{{credit_pg}}</option>
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>						
+															</select>
+														</div>
+												</div>
+
+												<label> Observações </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="fornecObs" placeholder="" class="form-control" value="{{credit_obs}}"/>
+													</div>
+												</div>
+
+												<div class="hidden">
+													<input name="creditId" value="{{_id}}" />
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/financeiro/receita/lis">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

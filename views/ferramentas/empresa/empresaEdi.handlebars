@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Empresa</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Empresa Editar</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/empresa/atualizar" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Empresa</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+				
+												<label> Razão Social</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="empresaNome" placeholder="" class="form-control" value="{{empresa_nome}}"/>
+													</div>
+												</div>
+
+												<label> Nome Fantasia</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="empresaFantasia" placeholder="" class="form-control" value="{{empresa_fantasia}}"/>
+													</div>
+												</div>
+
+
+												<label> CNPJ</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="empresaCnpj" placeholder="" class="form-control" value="{{empresa_cnpj}}"/>
+													</div>
+												</div>
+
+
+												<label> Inscrição Municipal</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="empresaMuni" placeholder="" class="form-control" value="{{empresa_muni}}"/>
+													</div>
+												</div>
+
+												<label> Inscrição Estadual</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="empresaEstad" placeholder="" class="form-control" value="{{empresa_estad}}" />
+													</div>
+												</div>
+
+												<label > Endereço </label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="empresaEnd" placeholder="" class="form-control" value="{{empresa_end}}"/>
+													</div>
+												</div>
+				
+												<label> Complemento </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="empresaEndcompl" placeholder="" class="form-control" value="{{empresa_endcompl}}"/>
+													</div>
+												</div>
+				
+												<label> Bairro </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="empresaEndbairro" placeholder="" class="form-control" value="{{empresa_endbairro}}"/>
+													</div>
+												</div>
+				
+												<label> Cidade </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="empresaEndcidade" placeholder="" class="form-control" value="{{empresa_endcidade}}"/>
+													</div>
+												</div>
+
+				
+												<label>UF</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="empresaEnduf" class="chosen-select" data-placeholder="Escolha o estado..." value="{{empresa_enduf}}">
+																<option value="{{conv_enduf}}">{{conv_enduf}}</option>
+																{{#each estados}}
+																<option value="{{_id}}">{{estado_nome}}</option>
+																{{/each}}
+										
+															</select>
+														</div>
+												</div>
+				
+												<label>CEP
+													<small class="text-warning">00000-000</small>
+												</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input type="text" name="empresaEndcep" placeholder="" class="form-control" value="{{empresa_endcep}}"/>
+													</div>
+												</div>
+
+
+												<div>
+													<label>whatsApp
+														<small class="text-warning">(99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="empresaWhatsapp"class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" value="{{empresa_whatsapp}}"/>
+													</div>
+												</div>
+				
+									
+												<div>
+													<label>Celular
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="empresaCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_cel}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>Celular
+														<small class="text-warning"> (99) 9999-9999</small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-phone"></i>
+														</span>
+									
+														<input name="empresaFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_fixo}}"/>
+													</div>
+												</div>
+
+												<div>
+													<label>E-mail
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-envelope-o"></i>
+														</span>
+									
+														<input name="empresaEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_email}}"/>
+													</div>
+												</div>
+
+
+												<div>
+													<label>Site
+														<small class="text-warning"></small>
+													</label>
+									
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-home"></i>
+														</span>
+									
+														<input name="empresaSite" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_site}}"/>
+													</div>
+												</div>
+
+
+												<label> Observações </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="empresaObs" placeholder="" class="form-control" value="{{empresa_obs}}"/>
+													</div>
+												</div>
+
+												<div class="hidden">
+													<input name="empresaId" value="{{_id}}" />
+												</div>
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/ferramentas/empresa/lis">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

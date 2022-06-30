@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Usuários</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Usuários Editar</a>
+							</li>
+
+							<li class="active">Usuários Editar</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
+							
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/usuario/atualizar" method="POST">
+								<document class="document-horizontal" role="document" >
+									
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="tabbable">
+												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+													
+													<li class="active">
+														<a data-toggle="tab" href="#basico" aria-expanded="true">
+															<i class="blue ace-icon fa fa-child bigger-120"></i>
+															Dados Básicos
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#end" aria-expanded="false">
+															<i class="orange ace-icon fa fa-globe bigger-120"></i>
+															Endereço
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#contato" aria-expanded="false">
+															<i class="brown ace-icon fa fa-phone bigger-120"></i>
+															Contato
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#finan" aria-expanded="false">
+															<i class="green ace-icon fa fa-money bigger-120"></i>
+															Financeiro
+															
+														</a>
+													</li>
+
+
+													<li class="">
+														<a data-toggle="tab" href="#acesso" aria-expanded="false">
+															<i class="red ace-icon fa fa-male bigger-120"></i>
+															Permissões
+															
+														</a>
+													</li>
+
+
+												</ul>
+
+												<div class="tab-content">
+
+													<div id="basico" class="tab-pane fade active in">
+														
+															<label > Nome </label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<input type="text" name="usuarioNome" placeholder="" class="form-control" value="{{usuario.usuario_nome}}"/>
+																</div>
+															</div>
+							
+															<label > Nome Completo</label>
+															<div class="form-group">
+																<div class="col-sm-9">
+																	<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" value="{{usuario.usuario_nomecompleto}}"/>
+																</div>
+															</div>
+
+
+																<div class="row">
+
+																	<div class="col-xs-12 col-sm-4">
+																		<div >
+
+																			<div>
+																				<div>
+																					<div>
+																						
+																						<label for="id-date-picker-1">Data Nascimento</label>
+																						<div class="row">
+																							<div class="col-sm-3">
+																								<div class="input-group">
+																									<input class="form-control date-picker" name="usuarioDatanasc" type="text" data-date-format="dd-mm-yyyy" style="width: 200px;"  value="{{usuario.usuario_datanasc}}"/>
+																									<span class="input-group-addon">
+																										<i class="fa fa-calendar bigger-110"></i>
+																									</span>
+																								</div>
+																							</div>
+																						</div>
+																					
+																					</div>
+
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+
+																	<div class="col-xs-12 col-sm-4">
+																		<div >
+																			<div>
+																				<div>
+																					<div>
+																						<label> CPF </label>
+																						<div class="form-group">
+																							<div class="col-sm-3">
+																								<input type="text" name="usuarioCpf" placeholder="" class="form-control" style="width: 200px;"  value="{{usuario.usuario_cpf}}"/>
+																							</div>
+																						</div>
+
+																					</div>
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+
+																	<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+																		<div >
+																			<div >
+																				<div>
+																					<div>
+																						<label> Identidade </label>
+																						<div class="form-group">
+																							<div class="col-sm-9">
+																								<input type="text" name="usuarioIdent" placeholder="" class="form-control"  value="{{usuario.usuario_ident}}"/>
+																							</div>
+																						</div>
+																					</div>
+
+
+
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+																
+																</div>
+
+
+
+
+				
+
+
+														<div class="row">
+															<div class="col-xs-6">
+
+																<div class="space space-8"></div>
+
+																<label > Nome pai </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<input class="col-sm-8" type="text" name="usuarioNomepai" placeholder="" class="form-control"  value="{{usuario.usuario_nomepai}}"/>
+																	</div>
+																</div>									
+															
+															</div>
+															
+															<div class="col-xs-6">													
+																
+																<div class="space space-8"></div>
+																	<label > Nome Mãe </label>
+																	<div class="form-group">
+																		<div class="col-sm-12">
+																			<input class="col-sm-8" type="text" name="usuarioNomemae" placeholder="" class="form-control"  value="{{usuario.usuario_nomemae}}"/>
+																		</div>
+																	</div>
+															
+															</div>
+													
+																										
+														</div>
+
+
+
+														<div class="row">
+															<div class="col-xs-6">
+
+																<div class="space space-8"></div>
+																<label> Nacionalidade</label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<input type="text" name="usuarioNacionalidade" placeholder="" class="form-control"  value="{{usuario.usuario_nacionalidade}}"/>
+																	</div>
+																</div>										
+															
+															</div>
+															
+															<div class="col-xs-6">													
+																
+																<div class="space space-8"></div>
+																<label> Naturalidade</label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<input type="text" name="usuarioNaturalidade" placeholder="" class="form-control" value="{{usuario.usuario_naturalidade}}"/>
+																	</div>
+																</div>
+															
+															</div>
+													
+																										
+														</div>
+							
+
+
+	
+
+
+													</div>
+
+													<div id="end" class="tab-pane fade">
+														
+															<label > Endereço </label>
+															<div class="form-group">
+																<div class="col-sm-9">
+																	<input type="text" name="usuarioEnd" id="usuarioEnd" placeholder="" class="form-control"  value="{{usuario.usuario_end}}"/>
+																</div>
+															</div>
+
+														<div class="row">
+															<div class="col-xs-6">
+
+																<label> Complemento </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioEndcompl"  id="usuarioEndcompl" placeholder="" class="form-control"  value="{{usuario.usuario_endcompl}}" />
+																	</div>
+																</div>											
+															
+															</div>
+															
+															<div class="col-xs-6">													
+															
+																<label> Bairro </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioEndbairro" id="usuarioEndbairro" placeholder="" class="form-control"  value="{{usuario.usuario_endbairro}}"/>
+																	</div>
+																</div>
+															
+															</div>
+													
+													
+													
+														</div>
+
+
+														<div class="row" >
+
+															<div class="col-xs-12 col-sm-6">
+																<div >
+
+
+																	<div>
+																		<div>
+																			<div>
+
+																				<label> Cidade </label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioEndcidade" id="usuarioEndcidade" placeholder="" class="form-control"  value="{{usuario.usuario_endcidade}}"/>
+																					</div>
+																				</div>
+
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+															<div class="col-xs-12 col-sm-2">
+																<div >
+																	<div >
+																		<div>
+																			<div>
+																				
+																				<label>UF</label>
+																				<div class="form-group">
+																						<div class="col-sm-4">
+																							<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
+																									<option value="">&nbsp;</option>
+																									{{#each estados}}
+																									<option value="{{_id}}">{{estado_uf}}</option>
+																									{{else}}
+																									{{/each}}
+																							</select>
+																						</div>
+																				</div>
+
+
+																			</div>
+
+
+
+
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+														
+															<div class="col-xs-12 col-sm-4">
+																<div >
+																	<div >
+																		<div>
+																			<div>
+																				
+																				<label> CEP </label>
+																				<div class="form-group">
+																					<div class="col-sm-3" style="width: 200px;">
+																						<input type="text" name="usuarioEndcep" id="usuarioEndcep" placeholder="" class="form-control"  value="{{usuario.usuario_endcep}}"/>
+																					</div>
+																				</div>
+
+				
+
+
+																			</div>
+
+
+
+
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+														
+
+														</div>
+
+
+
+
+
+													</div>
+
+													<div id="contato" class="tab-pane fade">
+														
+
+														<div>
+															<label>whatsApp
+																<small class="text-warning">(99) 9999-9999</small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+											
+																<input name="usuarioCel1" id="usuarioCel1" class="col-sm-3" class="form-control input-mask-phone" type="text" id="Whatsapp"  value="{{usuario.usuario_cel1}}"/>
+															</div>
+														</div>
+						
+											
+														<div>
+															<label>Celular
+																<small class="text-warning"> (99) 9999-9999</small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+											
+																<input name="usuarioCel2" id="usuarioCel2" class="col-sm-3" type="text" id="Celular"  value="{{usuario.usuario_cel2}}"/>
+															</div>
+														</div>
+
+
+
+														<div>
+															<label>Email
+																<small class="text-warning"> </small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-envelope-o"></i>
+																</span>
+											
+																<input name="usuarioEmail" id="usuarioEmail" class="col-sm-8"  type="text" id="Celular"  value="{{usuario.usuario_email}}" />
+															</div>
+														</div>
+
+
+
+													</div>
+
+													<div id="finan" class="tab-pane fade">
+
+														<label > Banco </label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<input type="text" name="usuarioBanco" id="usuarioBanco"  placeholder="" class="form-control" value="{{usuario.usuario_banco}}" />
+															</div>
+														</div>
+
+														<div class="row">
+
+															<div class="col-xs-12 col-sm-4">
+																<div >
+
+																	<div>
+																		<div>
+																			<div>
+																				
+																				<label > Agência / Dv</label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioAgencia" id="usuarioAgencia" placeholder="" class="form-control" value="{{usuario.usuario_agencia}}" />
+																					</div>
+																				</div>
+																			
+																			</div>
+
+
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+															<div class="col-xs-12 col-sm-4">
+																<div >
+
+
+																	<div>
+																		<div>
+																			<div>
+																				
+																				<label > Conta / Dv</label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioConta" id="usuarioConta" placeholder="" class="form-control" value="{{usuario.usuario_conta}}" />
+																					</div>
+																				</div>
+																			
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+
+																<div >
+
+
+																	<div>
+																		<div>
+																			<div>
+																				<label for="id-date-picker-1">Tipo</label>
+																				<div class="form-group">
+																						<div class="col-sm-8">
+																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																									<option value="X"></option>
+																									<option value="Salário">Salário</option>
+																									<option value="Poupança">Poupança</option>
+																									<option value="Corrente">Corrente</option>																									
+																							</select>
+																						</div>
+																				</div>
+
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+															</div><!-- /.span -->
+														
+														</div>
+
+
+
+
+														
+													</div>
+
+													<div id="acesso" class="tab-pane fade">
+														
+
+
+
+															<div class="row">
+																<div class="col-xs-6">
+																	<div>
+																		<div>
+																			<div>
+																				<div>
+																					<label>Login
+																						<small class="text-warning"> </small>
+																					</label>
+																	
+																					<div class="input-group">
+																						<span class="input-group-addon">
+																							<i class="ace-icon fa fa-user"></i>
+																						</span>
+																	
+																						<input name="usuarioLogin" class="col-sm-4" class="form-control input-mask-phone" type="text" id="login" style="width: 200px;" value="{{usuario.usuario_login}}"/>
+																					</div>
+																				</div>	
+																			</div>									
+																		</div>
+																	</div>
+																</div>
+																
+																<div class="col-xs-6">													
+																	<div>
+																		<div>
+																			<div>																
+																					<div>
+																						<label>Senha
+																							<small class="text-warning"> </small>
+																						</label>
+																		
+																						<div class="input-group">
+																							<span class="input-group-addon">
+																								<i class="ace-icon fa fa-key"></i>
+																							</span>
+																		
+																							<input name="usuarioSenha" class="col-sm-4" class="form-control input-mask-phone" type="password" id="senha" style="width: 200px;"  value="{{usuario.usuario_senha}}"/>
+																						</div>
+																					</div>
+																			</div>	
+																		</div>
+																	</div>
+																</div>
+														
+															</div>
+
+
+															<div class="row" >
+
+																<div class="col-xs-12 col-sm-6">
+																	<div >
+
+
+																		<div>
+																			<div>
+																				<div>
+
+																					<label>Função</label>
+																					<div class="form-group">
+																							<div class="col-sm-4">
+																								<select name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" >
+																										<option value="">&nbsp;</option>
+																										{{#each funcaos}}
+																										<option value="{{_id}}">{{funcao_nome}}</option>
+																										{{else}}
+																										{{/each}}
+																								</select>
+																							</div>
+																					</div>
+
+																				</div>
+
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+
+																<div class="col-xs-12 col-sm-6">
+																	<div >
+																		<div >
+																			<div>
+																				<div>
+																					
+																					<label>Perfil</label>
+																					<div class="form-group">
+																							<div class="col-sm-4">
+																								<select name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																										<option value="">&nbsp;</option>
+																										{{#each perfils}}
+																										<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
+																										{{else}}
+																										{{/each}}
+																								</select>
+																							</div>
+																					</div>
+
+
+																				</div>
+
+
+
+
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+															
+
+															</div>
+
+
+
+							
+														<label>Status</label>
+														<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha..."  value="{{usuario.usuario_status}}">
+																			<option value="">&nbsp;</option>
+																			<option value="Ativo">Ativo</option>
+																			<option value="Inativo">Inativo</option>
+																	</select>
+																</div>
+														</div>
+
+														<div class="hidden">
+															<input name="usuarioId" value="{{usuario._id}}" />
+														</div>
+
+
+
+													</div>
+
+
+
+												</div>
+											</div>
+										</div>
+
+									<div class="space-4"></div>
+									
+
+									<div class="clearfix document-actions">
+									
+										<div class="col-md-offset-3 col-md-9">
+											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Cancelar
+											</button>
+										</div>
+									</div>
+						
+								</document>
+							</form>
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Atendimentos</title>
+		<script type="Text/javascript">
+			function carregaBody(){
+				document.getElementById("atendId").value = document.getElementById("atendIdEdi").value;
+				let dtatd= new Date(document.getElementById("atendDataatendEdi").value);
+				let mes = (dtatd.getMonth()+1).toString();
+				let dia = (dtatd.getDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dtatd.getFullYear()+"-"+mes+"-"+dia).toString();
+				console.log(fulldate)
+				document.getElementById("atenddata").value = fulldate;
+				console.log("middle")
+				document.getElementById("nextNum").value = document.getElementById("nextNumEdi").value;
+				document.getElementById("atendUsuid").value = document.getElementById("atendUsuidEdi").value;
+				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
+				document.getElementById("atendCategoria").value = document.getElementById("atendCategoriaEdi").value;
+				document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
+				console.log("Convid:"+document.getElementById("atendConvidEdi").value)
+				document.getElementById("atendConvid").value = document.getElementById("atendConvidEdi").value;
+				console.log("m-e")
+				document.getElementById("atendTerapeutaid").value = document.getElementById("atendTerapeutaidEdi").value;
+				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
+				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
+				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
+				document.getElementById("atendevolucao").value = document.getElementById("atendevolucaoEdi").value;
+				console.log("End")
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+			function selectConv(){
+					var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
+					console.log(v1)
+					document.getElementById("atendConvid").value = v1;
+				}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:carregaBody()">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Atendimentos Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/atendimento/atualizar" method="POST">
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Atendimento</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="hidden">
+													<input id="nextNum" name="nextNum" value="{{atend_num}}" />
+												</div>
+												
+
+												<div  class="hidden">
+													<div class="col-sm-6">
+														<input type="text" name="atendUsuid" id="atendUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
+													</div>
+												</div>
+
+												<label for="id-date-picker-1">Data Atendimento</label>
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="input-group">
+															<input name="atenddata" id="atenddata" type="date" onchange="javascript:atualizaData()" />
+														</div>
+													</div>
+												</div>
+												<label > Origem Atendimento </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="atendOrg" id="atendOrg" placeholder="Padrão" class="form-control"  readonly="true" value="{{atend_org}}"/>
+													</div>
+												</div>
+
+												<label > Categoria </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="atendCategoria" id="atendCategoria" placeholder="Padrão" class="form-control" readonly="true" value="{{atend_categoria}}"/>
+													</div>
+												</div>
+
+											
+												<label> Beneficiário</label>
+												<div class="hidden">
+													{{#each benes}}
+														{{#each ../convs}}
+															{{#ifEqual ../bene_convid _id}}
+																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+															{{/ifEqual}}
+														{{/each}}
+													{{/each}}
+												</div>
+												<div class="form-group">
+													<div class="col-sm-9">
+															<select name="atendBeneid" id="atendBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{atend_beneid}}" onchange="javascript:selectConv()">
+																	<option value="{{atend_beneid}}">{{bene_nome}}</option>
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+															</select>
+													</div>
+												</div>
+
+												<label> Convênio</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="atendConvid"  id="atendConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Sala</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select id="atendSalaid" name="atendSalaid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each salas}}
+																	<option value="{{_id}}">{{sala_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Terapeuta</label>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select name="atendTerapeutaid" id="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="{{atend_terapeutaid}}">{{usuario_nome}}</option>
+																	{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+															</select>
+														</div>
+												</div>
+
+												
+												<label> Terapia</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="atendTerapiaid" id="atendTerapiaid" class="chosen-select" data-placeholder="Escolha..." >
+																<option value="{{atend_terapiaid}}">{{terapia_nome}}</option>
+																{{#each terapias}}
+																<option value="{{_id}}">{{terapia_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+
+
+
+												<label> Valor Plano</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="atendValorcre" id="atendValorcre" placeholder="" class="form-control" value="{{atend_valorcre}}"/>
+													</div>
+												</div>
+												
+												<label> Valor Terapeuta</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="atendValordeb" id="atendValordeb" placeholder="" class="form-control" value="{{atend_valordeb}}"/>
+													</div>
+												</div>
+												
+												<label> Descrição do Atendimento / Evolução</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<!-- O campo abaixo deve começar no inicio da linha-->  <textarea type="text" name="atendevolucao"  id="atendevolucao"  class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa" value="{{atend_evolucao}}">
+														{{atend_evolucao}}
+														</textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="hidden" id="divCarrega" name="divCarrega" >
+									<input id="atendId" name="atendId" value="{{atend._id}}" />
+									<input id="nextNumEdi" name="nextNumEdi" value="{{atend.atend_num}}"/>				
+									<input id="atendIdEdi" name="atendIdEdi" value="{{atend._id}}"/>
+									<input id="atendOrgEdi" name="atendOrgEdi" value="{{atend.atend_org}}"/>
+									<input id="atendCategoriaEdi" name="atendCategoriaEdi" value="{{atend.atend_categoria}}"/>
+									<input id="atendBeneidEdi" name="atendBeneidEdi" value="{{atend.atend_beneid}}"/>
+									<input id="atendConvidEdi" name="atendConvidEdi" value="{{atend.atend_convid}}"/>
+									<input id="atendUsuidEdi" name="atendUsuidEdi" value="{{atend.atend_usuid}}"/>
+									<input id="atendDataatendEdi" name="atendDataatendEdi" value="{{atend.atend_atenddata}}"/>
+									<input id="atendTerapeutaidEdi" name="atendTerapeutaidEdi" value="{{atend.atend_terapeutaid}}"/>
+									<input id="atendTerapiaidEdi" name="atendTerapiaidEdi" value="{{atend.atend_terapiaid}}"/>
+									<input id="atendValorcreEdi" name="atendValorcreEdi" value="{{atend.atend_valorcre}}"/>
+									<input id="atendValordebEdi" name="atendValordebEdi" value="{{atend.atend_valordeb}}"/>
+									<input id="atendMergeterapeutaidEdi" name="atendMergeterapeutaidEdi" value="{{atend.atend_mergeterapeutaid}}"/>
+									<input id="atendMergeterapiaidEdi" name="atendMergeterapiaidEdi" value="{{atend.atend_mergeterapiaid}}"/>
+									<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atend.atend_mergevalorcre}}"/>
+									<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atend.atend_mergevalordeb}}"/>
+									<input id="atendEvolucaoEdi" name="atendEvolucaoEdi" value="{{atend.atend_evolucao}}"/>
+									<input id="atendAtenddata" name="atendAtenddata" />									
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar"  id="acaoCancelar" href="/menu/atendimento/lis/">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+	</body>
+</html>

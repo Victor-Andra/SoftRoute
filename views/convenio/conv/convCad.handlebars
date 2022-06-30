@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<title>Convênios</title>
+</head>
+
+<body class="no-skin">
+
+
+	<div class="main-container ace-save-state" id="main-container">
+
+
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="#">Home</a>
+						</li>
+
+						<li class="active">Convênios Cadastro</li>
+					</ul><!-- /.breadcrumb -->
+
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+
+
+						<form class="form-horizontal" role="form" action="/menu/convenio/conv/add" method="POST">
+						<div class="col-sm-12">
+							<div class="tabbable">
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active">
+										<a data-toggle="tab" href="#dados">
+											<i class="red ace-icon fa fa-heartbeat bigger-120"></i>
+											Dados Básicos
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#end">
+											Endereço
+											<i class="orange ace-icon fa fa-globe bigger-120"></i>
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#contato">
+											Contato
+											<i class="pink ace-icon fa fa-phone bigger-120"></i>
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#obs">
+											Observações
+											<i class="blue ace-icon fa fa-commenting-o bigger-120"></i>
+										</a>
+									</li>
+
+
+
+
+								</ul>
+
+								<div class="tab-content">
+									<div id="dados" class="tab-pane fade in active">
+
+										<div class="alert alert-warning">
+											<button type="button" class="close" data-dismiss="alert">
+												<i class="ace-icon fa fa-times"></i>
+											</button>
+											<strong>Aviso!</strong>
+
+											Os dados mais importantes para o sistema estão nessa aba, se desejar, pode salvar e ignorar as outras informações.
+											<br>
+										</div>
+
+										<label> Nome Convênio</label>
+										<div class="form-group">
+											<div class="col-sm-9">
+												<input type="text" name="convNome" id="convNome" placeholder="" class="form-control" style="width: 500px;"/>
+											</div>
+										</div>
+
+										<label> Razão Social</label>
+										<div class="form-group">
+											<div class="col-sm-9">
+												<input type="text" name="convRazao" id="convRazao" placeholder="" class="form-control" style="width: 900px;"/>
+											</div>
+										</div>
+
+
+										<div class="space space-8"></div>
+										<label> Nº Contrato</label>
+										<div class="form-group">
+											<div class="col-sm-3">
+												<input type="text" name="convContrato" id="convContrato" placeholder="" style="width: 300px;" class="form-control" />
+											</div>
+										</div>
+
+										<div class="space space-8"></div>
+										<label> CNPJ</label>
+										<div class="form-group">
+											<div class="col-sm-3">
+												<input type="text" name="convCnpj" id="convCnpj" placeholder="" style="width: 300px;"	class="form-control" />
+											</div>
+										</div>
+
+										<label>Status</label>
+										<div class="form-group">
+											<div class="col-sm-2">
+												<select name="convStatus" id="convStatus" class="chosen-select" style="width: 100px;"	data-placeholder="">
+													<option value="Ativo">Ativo</option>
+													<option value="Inativo">Inativo</option>
+												</select>
+											</div>
+										</div>
+
+									</div>
+
+
+
+
+									<div id="end" class="tab-pane fade">
+
+
+										<label> Endereço </label>
+										<div class="form-group">
+											<div class="col-sm-9">
+												<input type="text" name="convEnd" id="convEnd" placeholder="" class="form-control" style="width: 900px;" />
+											</div>
+										</div>
+
+										<label> Complemento </label>
+										<div class="form-group">
+											<div class="col-sm-5">
+												<input type="text" name="convEndcompl" id="convEndcompl" placeholder="" class="form-control" style="width: 500px;"/>
+											</div>
+										</div>
+
+										<label> Bairro </label>
+										<div class="form-group">
+											<div class="col-sm-5">
+												<input type="text" name="convEndbairro" id="convEndbairro" placeholder="" class="form-control" style="width: 300px;"/>
+											</div>
+										</div>
+
+										<label> Cidade </label>
+										<div class="form-group">
+											<div class="col-sm-5">
+												<input type="text" name="convEndcidade" id="convEndcidade" placeholder="" class="form-control" style="width: 300px;"/>
+											</div>
+										</div>
+
+
+										<label>UF</label>
+										<div class="form-group">
+											<div class="col-sm-3">
+												<select name="convEnduf" id="convEnduf" class="chosen-select" data-placeholder="Escolha..." style="width: 100px;">
+													<option value="">&nbsp;</option>
+													{{#each estados}}
+													<option value="{{_id}}">{{estado_uf}}</option>
+													{{else}}
+													{{/each}}
+												</select>
+											</div>
+										</div>
+
+										<label> CEP </label>
+										<div class="form-group">
+											<div class="col-sm-3">
+												<input type="text" name="convEndcep" id="convEndcep" placeholder="" class="form-control" style="width: 200px;" />
+											</div>
+										</div>
+
+
+
+
+									</div>
+
+									<div id="contato" class="tab-pane fade">
+
+
+										<div>
+											<label>whatsApp
+												<small class="text-warning">(99) 9999-9999</small>
+											</label>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="ace-icon fa fa-phone"></i>
+												</span>
+
+												<input name="convWhatsapp" id="convWhatsapp" class="form-control input-mask-phone" type="text" id="Whatsapp" style="width: 300px;"/>
+											</div>
+										</div>
+
+
+										<div>
+											<label>Celular
+												<small class="text-warning"> (99) 9999-9999</small>
+											</label>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="ace-icon fa fa-phone"></i>
+												</span>
+
+												<input name="convCel" id="convCel" class="form-control input-mask-phone" type="text" id="Celular" style="width: 300px;"/>
+											</div>
+										</div>
+
+										<div>
+											<label>Celular
+												<small class="text-warning"> (99) 9999-9999</small>
+											</label>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="ace-icon fa fa-phone"></i>
+												</span>
+
+												<input name="convFixo" id="convFixo"  class="form-control input-mask-phone" type="text" id="Celular" style="width: 300px;"/>
+											</div>
+										</div>
+
+										<div>
+											<label>E-mail
+												<small class="text-warning"></small>
+											</label>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="ace-icon fa fa-envelope-o"></i>
+												</span>
+
+												<input name="convEmail" id="convEmail" class="form-control input-mask-phone" type="text" id="Celular" style="width: 800px;"/>
+											</div>
+										</div>
+
+
+										<div>
+											<label>Site
+												<small class="text-warning"></small>
+											</label>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="ace-icon fa fa-home"></i>
+												</span>
+
+												<input name="convSite" id="convSite" class="form-control input-mask-phone" type="text" id="Celular" style="width: 800px;"/>
+											</div>
+										</div>
+
+
+
+
+									</div>
+
+									<div id="obs" class="tab-pane fade">
+
+										<label> Observações </label>
+										<div class="form-group">
+											<div class="col-sm-9">
+												<input name="convObs" id="convObs" type="text" placeholder="" class="form-control" style="width: 900px; height: 72px;"/>
+											</div>
+										</div>
+
+
+
+									</div>
+
+
+
+
+								</div>
+							</div>
+						</div>
+
+
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+
+
+						</form>
+					</div>
+				</div><!-- /.main-content -->
+
+
+			</div><!-- /.main-container -->
+
+
+
+
+
+			<!-- basic scripts -->
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- /.col -->
+</div><!-- /.row -->
+
+
+
+
+</div>
+</div><!-- /.main-content -->
+
+
+</div><!-- /.main-container -->
+
+
+
+
+
+<!-- basic scripts -->
+
+</body>
+
+</html>

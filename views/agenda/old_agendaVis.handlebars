@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Página em Branco</title>
+
+
+
+		<meta name="description" content="Static &amp; Dynamic Tables">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css">
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+		<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css">
+		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
+ 	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
+
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->	
+		<script src="../../assets/js/ace-extra.min.js"></script>
+		<style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
+		<script src="../../assets/js/html5shiv.min.js"></script>
+		<script src="../../assets/js/respond.min.js"></script>
+
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Página em Branco</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+					{{#each erros}}
+						<div class="alert alert-danger">{{texto}}</div>
+					{{else}}
+					{{/each}}
+
+
+
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
+								<document class="document-horizontal" role="document" >
+									
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="tabbable">
+												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+													
+													<li class="active">
+														<a data-toggle="tab" href="#seg" aria-expanded="true">
+															<i class="orange ace-icon fa fa-calendar-o bigger-120"></i>
+															Segunda
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#ter" aria-expanded="false">
+															<i class="orange ace-icon fa fa-calendar-o bigger-120"></i>
+															Terça
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#qua" aria-expanded="false">
+															<i class="green ace-icon fa fa-calendar-o bigger-120"></i>
+															Quarta
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#qui" aria-expanded="false">
+															<i class="pink ace-icon fa fa-calendar-o bigger-120"></i>
+															Quinta
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#sex" aria-expanded="false">
+															<i class="blue ace-icon fa fa-calendar-o bigger-120"></i>
+															Sexta
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#util" aria-expanded="false">
+															<i class="brown ace-icon fa fa-cogs bigger-120"></i>
+															Util
+															
+														</a>
+													</li>
+
+	
+												</ul>
+
+												<div class="tab-content"><!-- .tab-contente -->
+													<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+														
+
+
+														<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															
+															<thead>
+																<tr role="row">
+																	<th class="colgroup"aria-controls="dynamic-table" rowspan="1" colspan="9"><b>11/04/2022</b></th>
+																</tr>
+																
+																<tr  role="row">	
+
+																
+																	
+																	<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Horario: activate to sort column ascending"><b>Horario</b></th>
+																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Beneficiário</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio: activate to sort column ascending">Convênio</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapia: activate to sort column ascending">Terapia</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapeuta: activate to sort column ascending">Terapeuta</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Sala: activate to sort column ascending">Sala</th>
+																	<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Realizado: activate to sort column ascending">Realizado?</th>
+																	<th>Ação</th>
+
+																</tr>
+																
+															</thead>
+															
+															<tbody>
+																{{#each horaages}}
+																	{{#each ../agendas}}					
+																	<tr role="row" class="odd">
+
+																		{{#ifEqual ../horaage_hora agenda_hora}}
+
+																		<td><b>{{agenda_hora}}</b></td>
+																		<td>{{agenda_beneid}}</td>							
+																		<td>{{agenda_convid}}</td>
+																		<td>{{agenda_usuid}}</td>																		
+																		<td>{{agenda_terapiaid}}</td>
+																		<td>{{agenda_salaid}}</td>
+																																				
+																		
+																		<td class="center">
+																			<label class="pos-rel">
+																				<input type="checkbox" class="ace" />{{../agenda_migrado}}
+																				<span class="lbl"></span>
+																			</label>
+																		</td>
+
+																		<td>
+																				<div class="hidden-sm hidden-xs action-buttons">
+																				<a class="blue" href="/menu/agenda/imp/{{_id}}">
+																					<i class="ace-icon fa fa-print bigger-130"></i>
+																				</a>
+																				<a class="green" href="/menu/agenda/edi/{{_id}}">
+																					<i class="ace-icon fa fa-pencil bigger-130"></i>
+																				</a>
+																				<a class="red" href="/menu/agenda/del/{{_id}}">
+																					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																				</a>
+																			</div>
+													
+																		</td>
+																		{{/ifEqual}}
+																	</tr>
+																	{{/each}}
+																{{/each}}
+															</tbody>
+
+														</table>
+
+														
+										
+													</div><!-- /fade-tab-seg -->
+
+													<div id="ter" class="tab-pane fade"><!-- .fade-tab-ter -->
+														
+
+													
+													</div><!-- /fade-tab-ter -->
+
+													<div id="qua" class="tab-pane fade"><!-- .fade-tab-qua -->
+
+																									
+														
+													</div><!-- /fade-tab-qua -->
+
+													<div id="qui" class="tab-pane fade"><!-- .fade-tab-qui -->
+														
+
+
+													</div><!-- /fade-tab-qui -->
+
+													<div id="sex" class="tab-pane fade"><!-- .fade-tab-sex -->
+														
+
+
+													</div><!-- /fade-tab-sex -->
+
+													<div id="util" class="tab-pane fade"><!-- .fade-tab-util -->
+
+
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														<strong>Atenção</strong>
+
+														Espaço reservado para aumentar a velocidade de criação de Agendamentos.
+														<br>
+													</div>
+
+													<div>Dia </div>
+													<div class="row">
+
+														<div class="col-xs-12 col-sm-4">
+															<div >
+
+																<div>
+																	<div>
+																		<div>
+																			
+																			<button class="btn btn-blue" name="copiaDia" id="copiaDia" onclick="">
+																				<i class="ace-icon fa fa-copy align-top "></i>
+																				Copiar Dia
+																			</button>
+																		
+
+
+
+																		</div>
+
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+
+														<div class="col-xs-12 col-sm-4">
+															<div >
+
+
+																<div>
+																	<div>
+																		<div>
+																			
+
+																		<label class="col-sm-4 control-label no-padding-right" for="form-field-1" style="width: 400px;"> Copiar Agenda do dia para outro: </label>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+
+														<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+															<div >
+																<div >
+																	<div>
+																		<div>
+
+
+																			<div class="row">
+																				<div class="col-xs-8 col-sm-11">
+																					
+																					<div class="input-daterange input-group">
+																						<input type="text" class="input-sm form-control" name="start">
+																						<span class="input-group-addon">
+																							<i class="fa fa-exchange"></i>
+																						</span>
+
+																						<input type="text" class="input-sm form-control" name="end">
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+
+
+
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+												
+													</div>
+
+													<div>Semana </div>
+
+													<div class="row">
+
+														<div class="col-xs-12 col-sm-4">
+															<div >
+
+																<div>
+																	<div>
+																		<div>
+																			
+																			<button class="btn btn-purple">
+																				<i class="ace-icon fa fa-copy align-top "></i>
+																				Copiar Semana
+																			</button>
+																		
+
+
+
+																		</div>
+
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+
+														<div class="col-xs-12 col-sm-4">
+															<div >
+
+
+																<div>
+																	<div>
+																		<div>
+																			
+
+																		<label class="col-sm-4 control-label no-padding-right" for="form-field-1" style="width: 400px;"> Copiar Agenda de Toda a semana para outra: </label>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+
+														<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+															<div >
+																<div >
+																	<div>
+																		<div>
+
+
+																			<div class="row">
+																				<div class="col-xs-8 col-sm-11">
+																					
+																					<div class="input-daterange input-group">
+																						<input type="text" class="input-sm form-control" name="start">
+																						<span class="input-group-addon">
+																							<i class="fa fa-exchange"></i>
+																						</span>
+
+																						<input type="text" class="input-sm form-control" name="end">
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+
+
+
+
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.span -->
+													
+													</div>
+
+												</div><!-- /fade-tab-util -->
+
+
+												</div>
+											</div>
+										</div>
+
+
+									<div class="space-6" style="height: 70px;"></div>
+
+				
+						
+								</document>
+							</form>
+
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+			
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="red bolder">Soft</span>
+							Route
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+		
+						</span>
+					</div>
+				</div>
+			</div>
+		<!-- basic scripts -->
+
+	</body>
+		<!-- basic scripts -->
+
+
+
+
+		<!-- page specific plugin scripts -->
+
+		
+		<script type="text/javascript">
+			jQuery(function($) {
+				/**
+				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				  //console.log(e.target.getAttribute("href"));
+				})
+					
+				$('#accordion').on('shown.bs.collapse', function (e) {
+					//console.log($(e.target).is('#collapseTwo'))
+				});
+				*/
+				
+				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+					//if($(e.target).attr('href') == "#home") doSomethingNow();
+				})
+			
+				
+				/**
+					//go to next tab, without user clicking
+					$('#myTab > .active').next().find('> a').trigger('click');
+				*/
+			
+			
+				$('#accordion-style').on('click', function(ev){
+					var target = $('input', ev.target);
+					var which = parseInt(target.val());
+					if(which == 2) $('#accordion').addClass('accordion-style2');
+					 else $('#accordion').removeClass('accordion-style2');
+				});
+				
+				//$('[href="#collapseTwo"]').trigger('click');
+			
+			
+				$('.easy-pie-chart.percentage').each(function(){
+					$(this).easyPieChart({
+						barColor: $(this).data('color'),
+						trackColor: '#EEEEEE',
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: 8,
+						animate: ace.vars['old_ie'] ? false : 1000,
+						size:75
+					}).css('color', $(this).data('color'));
+				});
+			
+				$('[data-rel=tooltip]').tooltip();
+				$('[data-rel=popover]').popover({html:true});
+			
+			
+				$('#gritter-regular').on(ace.click_event, function(){
+					$.gritter.add({
+						title: 'This is a regular notice!',
+						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="blue">magnis dis parturient</a> montes, nascetur ridiculus mus.',
+						image: 'assets/images/avatars/avatar1.png', //in Ace demo ./dist will be replaced by correct assets path
+						sticky: false,
+						time: '',
+						class_name: (!$('#gritter-light').get(0).checked ? 'gritter-light' : '')
+					});
+			
+					return false;
+				});
+			
+				$('#gritter-sticky').on(ace.click_event, function(){
+					var unique_id = $.gritter.add({
+						title: 'This is a sticky notice!',
+						text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="red">magnis dis parturient</a> montes, nascetur ridiculus mus.',
+						image: 'assets/images/avatars/avatar.png',
+						sticky: true,
+						time: '',
+						class_name: 'gritter-info' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
+					});
+			
+					return false;
+				});
+			
+			
+				$('#gritter-without-image').on(ace.click_event, function(){
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'This is a notice without an image!',
+						// (string | mandatory) the text inside the notification
+						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="orange">magnis dis parturient</a> montes, nascetur ridiculus mus.',
+						class_name: 'gritter-success' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
+					});
+			
+					return false;
+				});
+			
+			
+				$('#gritter-max3').on(ace.click_event, function(){
+					$.gritter.add({
+						title: 'This is a notice with a max of 3 on screen at one time!',
+						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="green">magnis dis parturient</a> montes, nascetur ridiculus mus.',
+						image: 'assets/images/avatars/avatar3.png', //in Ace demo ./dist will be replaced by correct assets path
+						sticky: false,
+						before_open: function(){
+							if($('.gritter-item-wrapper').length >= 3)
+							{
+								return false;
+							}
+						},
+						class_name: 'gritter-warning' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
+					});
+			
+					return false;
+				});
+			
+			
+				$('#gritter-center').on(ace.click_event, function(){
+					$.gritter.add({
+						title: 'This is a centered notification',
+						text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
+						class_name: 'gritter-info gritter-center' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
+					});
+			
+					return false;
+				});
+				
+				$('#gritter-error').on(ace.click_event, function(){
+					$.gritter.add({
+						title: 'This is a warning notification',
+						text: 'Just add a "gritter-light" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
+						class_name: 'gritter-error' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
+					});
+			
+					return false;
+				});
+					
+			
+				$("#gritter-remove").on(ace.click_event, function(){
+					$.gritter.removeAll();
+					return false;
+				});
+					
+			
+				///////
+			
+			
+				$("#bootbox-regular").on(ace.click_event, function() {
+					bootbox.prompt("What is your name?", function(result) {
+						if (result === null) {
+							
+						} else {
+							
+						}
+					});
+				});
+					
+				$("#bootbox-confirm").on(ace.click_event, function() {
+					bootbox.confirm("Are you sure?", function(result) {
+						if(result) {
+							//
+						}
+					});
+				});
+				
+			/**
+				$("#bootbox-confirm").on(ace.click_event, function() {
+					bootbox.confirm({
+						message: "Are you sure?",
+						buttons: {
+						  confirm: {
+							 label: "OK",
+							 className: "btn-primary btn-sm",
+						  },
+						  cancel: {
+							 label: "Cancel",
+							 className: "btn-sm",
+						  }
+						},
+						callback: function(result) {
+							if(result) alert(1)
+						}
+					  }
+					);
+				});
+			**/
+				
+			
+				$("#bootbox-options").on(ace.click_event, function() {
+					bootbox.dialog({
+						message: "<span class='bigger-110'>I am a custom dialog with smaller buttons</span>",
+						buttons:
+						{
+							"success" :
+							 {
+								"label" : "<i class='ace-icon fa fa-check'></i> Success!",
+								"className" : "btn-sm btn-success",
+								"callback": function() {
+									//Example.show("great success");
+								}
+							},
+							"danger" :
+							{
+								"label" : "Danger!",
+								"className" : "btn-sm btn-danger",
+								"callback": function() {
+									//Example.show("uh oh, look out!");
+								}
+							}, 
+							"click" :
+							{
+								"label" : "Click ME!",
+								"className" : "btn-sm btn-primary",
+								"callback": function() {
+									//Example.show("Primary button");
+								}
+							}, 
+							"button" :
+							{
+								"label" : "Just a button...",
+								"className" : "btn-sm"
+							}
+						}
+					});
+				});
+			
+			
+			
+				$('#spinner-opts small').css({display:'inline-block', width:'60px'})
+			
+				var slide_styles = ['', 'green','red','purple','orange', 'dark'];
+				var ii = 0;
+				$("#spinner-opts input[type=text]").each(function() {
+					var $this = $(this);
+					$this.hide().after('<span />');
+					$this.next().addClass('ui-slider-small').
+					addClass("inline ui-slider-"+slide_styles[ii++ % slide_styles.length]).
+					css('width','125px').slider({
+						value:parseInt($this.val()),
+						range: "min",
+						animate:true,
+						min: parseInt($this.attr('data-min')),
+						max: parseInt($this.attr('data-max')),
+						step: parseFloat($this.attr('data-step')) || 1,
+						slide: function( event, ui ) {
+							$this.val(ui.value);
+							spinner_update();
+						}
+					});
+				});
+			
+			
+			
+				//CSS3 spinner
+				$.fn.spin = function(opts) {
+					this.each(function() {
+					  var $this = $(this),
+						  data = $this.data();
+			
+					  if (data.spinner) {
+						data.spinner.stop();
+						delete data.spinner;
+					  }
+					  if (opts !== false) {
+						data.spinner = new Spinner($.extend({color: $this.css('color')}, opts)).spin(this);
+					  }
+					});
+					return this;
+				};
+			
+				function spinner_update() {
+					var opts = {};
+					$('#spinner-opts input[type=text]').each(function() {
+						opts[this.name] = parseFloat(this.value);
+					});
+					opts['left'] = 'auto';
+					$('#spinner-preview').spin(opts);
+				}
+			
+			
+			
+				$('#id-pills-stacked').removeAttr('checked').on('click', function(){
+					$('.nav-pills').toggleClass('nav-stacked');
+				});
+			
+				
+				
+				
+				
+				
+				///////////
+				$(document).one('ajaxloadstart.page', function(e) {
+					$.gritter.removeAll();
+					$('.modal').modal('hide');
+				});
+			
+			});
+		</script>
+
+</html>
