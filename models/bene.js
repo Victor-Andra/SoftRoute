@@ -7,6 +7,10 @@ const BeneSchema = mongoose.Schema({
         type: String,
         required: true 
     },
+    bene_apelido:{
+        type: String,
+        required: false
+    },
     bene_idade:{
         type: String, 
         required: false
@@ -233,7 +237,7 @@ const BeneSchema = mongoose.Schema({
 
 class Bene{
     constructor(
-        bene_nome, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
+        bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
         bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out, bene_graupar,
         bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, bene_outendcidade,
         bene_outenduf, bene_outendcep,	bene_outcel, bene_outcel2, bene_outemail, bene_pai, bene_paiprof, bene_paiident,
@@ -243,6 +247,7 @@ class Bene{
         bene_maeemail, bene_datacad, bene_dataedi
          ){
             this.bene_nome = bene_nome,
+            this.bene_apelido = bene_apelido,
             this.bene_idade = bene_idade,
             this.bene_datanasc = bene_datanasc,
             this.bene_nacionalidade = bene_nacionalidade,
@@ -315,6 +320,7 @@ module.exports = {BeneModel,BeneSchema,
         await BeneModel.findByIdAndUpdate(req.body.beneId, 
             {$set: {
                 bene_nome: req.body.beneNome,
+                bene_apelido: req.body.beneApelido,               
                 bene_idade: req.body.beneIdade,
                 bene_datanasc: (req.body.beneDatanasc+"T00:00:00.000Z"),
                 bene_nacionalidade: req.body.beneNacionalidade,
@@ -398,6 +404,7 @@ module.exports = {BeneModel,BeneSchema,
             console.log("benemodel");
             const newBene = new BeneModel({
                 bene_nome: req.body.beneNome,
+                bene_apelido: req.body.beneApelido,
                 bene_idade: req.body.beneIdade,
                 bene_datanasc: req.body.beneDatanasc,
                 bene_nacionalidade: req.body.beneNacionalidade,

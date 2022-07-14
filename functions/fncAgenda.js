@@ -8,6 +8,8 @@ const agendaClass = require("../models/agenda")
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
+const convecreClass = require("../models/convCre")
+const convdebClass = require("../models/convDeb")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia") 
 const horaageClass = require("../models/horaAge")
@@ -18,6 +20,8 @@ const atendClass = require("../models/atend")
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
+const Convcre = mongoose.model("tb_convcre")
+const Convdeb = mongoose.model("tb_convdeb")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Horaage = mongoose.model("tb_horaage")
@@ -41,6 +45,42 @@ module.exports = {
         }
         
         return (dia+'/'+mes+'/'+dt.getFullYear()).toString();
+    },
+    getDataDiaMes(data){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        let semana;
+
+        switch (dt.getUTCDay()){
+            case 1:
+                semana = "Segunda";
+                break;
+            case 2:
+                semana = "Terça";
+                break;
+            case 3:
+                semana = "Quarta";
+                break;
+            case 4:
+                semana = "Quinta";
+                break;
+            case 5:
+                semana = "Sexta";
+                break;
+            default:
+                semana = "Dom";
+                break;
+        }
+        
+        return (semana+" - "+dia+'/'+mes).toString();
     },
     getDataFMT(data){
         let dt = new Date(data);
@@ -109,41 +149,41 @@ module.exports = {
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 5);
+                dtFill = {dia: "seg"};
                 break;
             case 1://SEG
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 4);
+                dtFill = {dia: "seg"};
                 break;
             case 2://TER
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 1);
                 sex.setUTCDate(sex.getUTCDate() + 3);
+                dtFill = {dia: this.getDiaSemana(seg)};
                 break;
             case 3://QUA
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 2);
                 sex.setUTCDate(sex.getUTCDate() + 2);
+                dtFill = {dia: this.getDiaSemana(seg)};
                 break;
             case 4://QUI
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 3);
                 sex.setUTCDate(sex.getUTCDate() + 1);
+                dtFill = {dia: this.getDiaSemana(seg)};
                 break;
             case 5://SEX
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 4);
+                dtFill = {dia: this.getDiaSemana(seg)};
                 break;
             case 6://SAB
                 seg.setUTCDate(seg.getUTCDate() - 5);
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() - 1);
+                dtFill = {dia: "seg"};
                 break;
             default:
                 seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 5);
+                dtFill = {dia: "seg"};
                 break;
         }
         let agora = seg.toISOString();
@@ -213,6 +253,7 @@ module.exports = {
     },
 
     carregaAgendaG(req,res){
+        let aux = 1;
         let dtFill;
         let seg = new Date();
         let sex = new Date();
@@ -268,9 +309,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -279,7 +318,10 @@ module.exports = {
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 e.agenda_hora = hora+":"+min;
-
+                console.log("aux:"+aux)
+                e.agenda_aux = aux;
+                aux++;
+                
                 switch (dat.getUTCDay()){
                     case 0:
                         e.agenda_data_semana = "dom"
@@ -308,7 +350,27 @@ module.exports = {
                         break;
                 }
             })
-            //console.log(agenda)
+            agenda.sort(function(a, b) {
+                let h1 = a.agenda_hora.substring(0,2);
+                let m1 = a.agenda_hora.substring(3,5);
+                let h2 = b.agenda_hora.substring(0,2);
+                let m2 = b.agenda_hora.substring(3,5);
+                if(h1 == h2){
+                    if(m1 < m2) {
+                        return -1;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    if(h1 < h2) {
+                        return -1;
+                    } else {
+                        return true;
+                    }
+                }
+            });
+            console.log("Listagem Realizada de agendamentos!")
+            console.log(agenda)
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -328,8 +390,17 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    carregaAgendaG2(req,res){
+    carregaAgendaS(req,res){
         let dtFill;
+        let nomeBene;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
         let sex = new Date();
         seg.setUTCHours(0);
         seg.setMinutes(0);
@@ -377,46 +448,20 @@ module.exports = {
                 sex.setUTCDate(sex.getUTCDate() + 5);
                 break;
         }
-        //Seg
-        let seg2 = seg;
-        seg2.setUTCHours(23);
-        seg2.setMinutes(59);
-        seg2.setSeconds(59);
-        //Ter
-        let ter = (seg.getUTCDate() + 1);
-        let ter2 = ter;
-        ter2.setUTCHours(23);
-        ter2.setMinutes(59);
-        ter2.setSeconds(59);
-        //Qua
-        let qua = (seg.getUTCDate() + 2);
-        let qua2 = ter;
-        qua2.setUTCHours(23);
-        qua2.setMinutes(59);
-        qua2.setSeconds(59);
-        //Qui
-        let qui = (seg.getUTCDate() + 3);
-        let qui2 = ter;
-        qui2.setUTCHours(23);
-        qui2.setMinutes(59);
-        qui2.setSeconds(59);
-        //Sex
-        let sex2 = sex;
-        sex2.setUTCHours(23);
-        sex2.setMinutes(59);
-        sex2.setSeconds(59);
-        //Continua
         let agora = seg.toISOString();
         let depois = sex.toISOString();
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        console.log()
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
         Bene.findOne().then((b) =>{
-        //Agenda.find({ agenda_data: { $gte : seg, $lte:  seg2 }, agenda_beneid: b._id}).then((agenda) =>{
-        //Agenda.find({ agenda_data: { $gte : ter, $lte:  ter2 }, agenda_beneid: b._id}).then((agenda) =>{
-        //Agenda.find({ agenda_data: { $gte : qua, $lte:  qua2 }, agenda_beneid: b._id}).then((agenda) =>{
-        //Agenda.find({ agenda_data: { $gte : qui, $lte:  qui2 }, agenda_beneid: b._id}).then((agenda) =>{
-        //Agenda.find({ agenda_data: { $gte : sex, $lte:  sex2 }, agenda_beneid: b._id}).then((agenda) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
@@ -458,6 +503,153 @@ module.exports = {
                 }
             })
             //console.log(agenda)
+            Bene.find({_id: b._id}).then((bene)=>{
+                bene.forEach(e => {
+                    nomeBene = e.bene_nome
+                    beneConvid = e.bene_convid
+                });
+                console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            console.log("Listagem Realizada de Terapia")
+                            Horaage.find().then((horaage)=>{
+                                console.log("Listagem Realizada de Terapia")
+                                Sala.find().then((sala)=>{
+                                    console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv;
+                                    console.log("benenomeconv:"+benenomeconv)
+                                    res.render("agenda/agendaSemBene", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    carregaAgendaFilG(req,res){
+        let aux = 1;
+        let dtFill = new Date(req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Bene.findOne().then((b) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                console.log("aux:"+aux)
+                e.agenda_aux = aux;
+                aux++;
+                
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        console.log("erro");
+                        break;
+                }
+            })
+            agenda.sort(function(a, b) {
+                let h1 = a.agenda_hora.substring(0,2);
+                let m1 = a.agenda_hora.substring(3,5);
+                let h2 = b.agenda_hora.substring(0,2);
+                let m2 = b.agenda_hora.substring(3,5);
+                if(h1 == h2){
+                    if(m1 < m2) {
+                        return -1;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    if(h1 < h2) {
+                        return -1;
+                    } else {
+                        return true;
+                    }
+                }
+            });
+            console.log("Listagem Realizada de agendamentos!")
+            console.log(agenda)
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -759,54 +951,91 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    copiaDiaAgenda(req,res){
+    converteAgendaEmAtend(req,res){
         console.log("----------CÓPIA----------")
-        console.log("dia:"+req.body.data)
+        console.log("dia:"+req.body.data2)
+
+        let convcreval;
+        let convdebval;
+        let dataIni = new Date(this.formataData(req.body.data2));
         
-        let dataIni = this.formataData(req.body.data);
-        let dataFim = dataIni;
+        dataIni.setUTCHours(0);
+        dataIni.setMinutes(0);
+        dataIni.setSeconds(0);
+        dataIni = dataIni.toISOString();
+        let dataFim = new Date(this.formataData(req.body.data2));
+        
         dataFim.setUTCHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
+        dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
-        Agenda.find({agenda_data: { $gte: dataIni}, agenda_data: { $lte: dataFim}}).then((agenda)=>{
+        console.log("dataIni"+dataIni);
+        console.log("dataFim"+dataFim);
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
             //-------------------------
             console.log(agenda)
             console.log("atendmodel");
-            Atend.findOne().sort({atend_num : -1}).then((atendimento) =>{
-                nextNum = atendimento.atend_num + 1;
-                console.log(nextNum)
+            let atend;
+            Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
+                console.log("validação caso seja o primeiro registro")
+                atendimento.forEach(e => {atend = e});
+                console.log("atendNum")
+                console.log(atend.atend_num)
+                atend.atend_num = atend.atend_num+1;
+                console.log(atend.atend_num)
+                console.log("Listagem Realizada de NextNum")
+                console.log("size:"+agenda.length)
+                agenda.forEach((a)=>{
+                    console.log("migrado?")
+                    console.log(a.agenda_migrado)
+                    console.log("mi")
+                    if(a.agenda_migrado != undefined){
+                        console.log("T")
+                    }
+                    if(a.agenda_migrado != "true"){
+
+                        Convcre.find({convcre_convid: a.agenda_convid, convcre_terapiaid: a.agenda_terapiaid}).then((convcre) => {
+                            convcreval = convcre.convcre_valor;
+                        })
+                        if(convcreval == undefined || convcreval == "undefined"){
+                            convcreval = "0,00";
+                        }
+                        Convdeb.find({convdeb_convid: a.agenda_convid, convdeb_terapiaid: a.agenda_terapiaid}).then((convdeb) => {
+                            convdebval = convdeb.convdeb_valor;
+                        })
+                        if(convdebval == undefined || convcreval == "undefined"){
+                            convdebval = "0,00";
+                        }
+                        const newAtend = new Atend({
+                            atend_org : "Padrão",//
+                            atend_categoria : "Padrão",//
+                            atend_beneid : a.agenda_beneid,//
+                            atend_convid : a.agenda_convid,//
+                            atend_usuid : "Usuario Atual",
+                            atend_atenddata : a.agenda_data,//
+                            atend_terapeutaid : a.agenda_usuid,//
+                            atend_terapiaid : a.agenda_terapiaid,//
+                            atend_salaid : a.agenda_salaid,//
+                            atend_valorcre : convcreval,//
+                            atend_valordeb : convdebval,//
+                            atend_num : atend.atend_num,
+                            atend_datacad : dataAtual.toISOString()
+                        });
+                        
+                        console.log("newAtend:"+newAtend)
+                        nextNum = nextNum + 1;
+                        console.log("newAtend save");
+                        this.geraAtend(newAtend);
+                        console.log("Setar migrado")
+                        Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
+                        Agenda.findById(a._id)
+                        console.log("setou migrado")
+                    }
+                })
             })
-            console.log("size:"+agenda.length)
-            agenda.forEach((a)=>{
-                console.log("migrado?")
-                console.log(a.agenda_migrado)
-                console.log("mi")
-                if(a.agenda_migrado != undefined){
-                    console.log("T")
-                }
-                if(a.agenda_migrado != "true"){
-                    const newAtend = new AtendModel({
-                        atend_org : "Padrão",//
-                        atend_categoria : "Padrão",//
-                        atend_beneid : a.agenda_beneid,//
-                        atend_convid : a.agenda_convid,//
-                        //atend_usuid : req.body.atendUsuid,
-                        atend_atenddata : req.body.agenda_data,//
-                        atend_terapeutaid : a.agenda_usuid,//
-                        atend_terapiaid : a.agenda_terapiaid,//
-                        //atend_valorcre : req.body.atendValorcre,
-                        //atend_valordeb : req.body.atendValordeb,
-                        atend_num : nextNum,
-                        atend_datacad : dataAtual.toISOString()
-                    });
-                    nextNum = nextNum + 1;
-                    console.log("newAtend save");
-                    geraAtend(newAtend);
-                    Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
-                }
-            })
+            
             console.log("END COPIA")
         }).catch((err)=>{
             console.log(err)
@@ -817,6 +1046,108 @@ module.exports = {
     }, geraAtend: async (newAtend,res) => {
         console.log("newAtend save");
         await newAtend.save().then(()=>{
+            console.log("Cadastro realizado!");
+            return true;
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
+    },
+    copiaDiaAgendaFill(req,res){
+        console.log("----------CÓPIA----------")
+        console.log("dia:"+req.body.data)
+
+        let dataaux;
+        let dataIni = new Date(this.formataData(req.body.data));
+        
+        dataIni.setUTCHours(0);
+        dataIni.setMinutes(0);
+        dataIni.setSeconds(0);
+        dataIni = dataIni.toISOString();
+        let dataFim = new Date(this.formataData(req.body.data));
+        
+        dataFim.setUTCHours(23);
+        dataFim.setMinutes(59);
+        dataFim.setSeconds(59);
+        dataFim = dataFim.toISOString();
+        let dataAtual = new Date();
+        let nextNum;
+        console.log("dataIni"+dataIni);
+        console.log("dataFim"+dataFim);
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
+            agenda.forEach((a)=>{
+                dataaux = new Date(a.agenda_data);
+                dataaux.setUTCDate(dataaux.getUTCDate()+7);
+                console.log("date")
+                console.log(dataaux)
+                a.agenda_data = dataaux.toISOString();
+                const newAgenda = new Agenda({
+                    agenda_data : a.agenda_data,//
+                    agenda_beneid : a.agenda_beneid,//
+                    agenda_convid : a.agenda_convid,//
+                    agenda_salaid : a.agenda_salaid,//
+                    agenda_terapiaid : a.agenda_terapiaid,//
+                    agenda_usuid : a.agenda_usuid,//
+                    agenda_datacad: dataAtual//
+                });
+                this.salvaAgenda(newAgenda);
+            })
+        }).catch((err)=>{
+            console.log(err)
+            res.render('admin/erro')
+        }).finally(()=>{
+            this.carregaAgendaL(req,res);
+        })
+    },
+    copiaDiaAgendaGeral(req,res){
+        console.log("----------CÓPIA----------")
+        console.log("dia:"+req.body.data)
+
+        let dataaux;
+        let dataIni = new Date(this.formataData(req.body.data));
+        
+        dataIni.setUTCHours(0);
+        dataIni.setMinutes(0);
+        dataIni.setSeconds(0);
+        dataIni = dataIni.toISOString();
+        let dataFim = new Date(this.formataData(req.body.data));
+        
+        dataFim.setUTCHours(23);
+        dataFim.setMinutes(59);
+        dataFim.setSeconds(59);
+        dataFim = dataFim.toISOString();
+        let dataAtual = new Date();
+        let nextNum;
+        console.log("dataIni"+dataIni);
+        console.log("dataFim"+dataFim);
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
+            agenda.forEach((a)=>{
+                dataaux = new Date(a.agenda_data);
+                dataaux.setUTCDate(dataaux.getUTCDate()+7);
+                console.log("date")
+                console.log(dataaux)
+                a.agenda_data = dataaux.toISOString();
+                const newAgenda = new Agenda({
+                    agenda_data : a.agenda_data,//
+                    agenda_beneid : a.agenda_beneid,//
+                    agenda_convid : a.agenda_convid,//
+                    agenda_salaid : a.agenda_salaid,//
+                    agenda_terapiaid : a.agenda_terapiaid,//
+                    agenda_usuid : a.agenda_usuid,//
+                    agenda_datacad: dataAtual//
+                });
+                this.salvaAgenda(newAgenda);
+            })
+        }).catch((err)=>{
+            console.log(err)
+            res.render('admin/erro')
+        }).finally(()=>{
+            this.carregaAgendaL(req,res);
+        })
+    },
+    salvaAgenda: async (newAgenda,res) => {
+        console.log("newAgenda save");
+        await newAgenda.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {

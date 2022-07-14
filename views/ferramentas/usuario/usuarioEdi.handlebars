@@ -2,9 +2,20 @@
 <html lang="pt-br">
 	<head>
 		<title>Usuários</title>
+		<script>
+			function carregaBody(){
+				console.log("começa");
+				let funcaoId = document.getElementById("usuFuncaoId").value;
+				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
+				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
+				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
+				document.getElementById("usuarioContatipo").value = document.getElementById("usuContaTipo").value;
+				console.log("termina");
+			}
+		</script>
 	</head>
 
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregaBody()">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -157,9 +168,6 @@
 																						</div>
 																					</div>
 
-
-
-
 																				</div>
 																			</div>
 																		</div>
@@ -310,16 +318,12 @@
 																				<div class="form-group">
 																						<div class="col-sm-4">
 																							<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
-																									<option value="">&nbsp;</option>
 																									{{#each estados}}
-																									<option value="{{_id}}">{{estado_uf}}</option>
-																									{{else}}
+																										<option value="{{_id}}">{{estado_uf}}</option>
 																									{{/each}}
 																							</select>
 																						</div>
 																				</div>
-
-
 																			</div>
 
 
@@ -343,13 +347,7 @@
 																					</div>
 																				</div>
 
-				
-
-
 																			</div>
-
-
-
 
 																		</div>
 																	</div>
@@ -483,8 +481,8 @@
 																				<label for="id-date-picker-1">Tipo</label>
 																				<div class="form-group">
 																						<div class="col-sm-8">
-																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																									<option value="X"></option>
+																							<select name="usuarioContaTipo" id="usuarioContaTipo" class="chosen-select" data-placeholder="Escolha...">
+																									<option value="{{usuario.usuario_contatipo}}">{{usuario.usuario_contatipo}}</option>
 																									<option value="Salário">Salário</option>
 																									<option value="Poupança">Poupança</option>
 																									<option value="Corrente">Corrente</option>																									
@@ -500,9 +498,43 @@
 
 															</div><!-- /.span -->
 														
+
 														</div>
 
+														<div class="row">
+															
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
 
+																<div >
+
+
+																	<div>
+																		<div>
+																			<div>
+																				<label for="id-date-picker-1">Contrato</label>
+																				<div class="form-group">
+																						<div class="col-sm-8">
+																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																									<option value="{{usuario.usuario_contrato}}">{{usuario.usuario_contrato}}</option>
+																									<option value="CLT">CLT</option>
+																									<option value="CNPJ">CNPJ</option>
+																									<option value="Autônomo">Autônomo</option>																									
+																							</select>
+																						</div>
+																				</div>
+
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+															</div><!-- /.span -->
+
+
+														</div>
+
+														
 
 
 														
@@ -574,14 +606,19 @@
 																					<label>Função</label>
 																					<div class="form-group">
 																							<div class="col-sm-4">
-																								<select name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" >
-																										<option value="">&nbsp;</option>
+																								<select id="usuarioFuncaoid" name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" >
 																										{{#each funcaos}}
 																										<option value="{{_id}}">{{funcao_nome}}</option>
 																										{{else}}
 																										{{/each}}
 																								</select>
 																							</div>
+																					</div>
+																					<div id="carregaUsu" class="hidden">
+																						<input id="usuFuncaoId" name="usuFuncaoId" value="{{usuario.usuario_funcaoid}}" />
+																						<input id="usuUFId" name="usuUFId" value="{{usuario.usuario_enduf}}" />
+																						<input id="usuPerfilId" name="usuPerfilId" value="{{usuario.usuario_perfilid}}" />
+																						<input id="usuContaTipo" name="usuContaTipo" value="{{usuario.usuario_contatipo}}" />
 																					</div>
 
 																				</div>
@@ -601,7 +638,6 @@
 																					<div class="form-group">
 																							<div class="col-sm-4">
 																								<select name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
-																										<option value="">&nbsp;</option>
 																										{{#each perfils}}
 																										<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
 																										{{else}}
@@ -631,7 +667,7 @@
 														<div class="form-group">
 																<div class="col-sm-4">
 																	<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha..."  value="{{usuario.usuario_status}}">
-																			<option value="">&nbsp;</option>
+																			<option value="{{usuario.usuario_status}}">{{usuario.usuario_status}}</option>
 																			<option value="Ativo">Ativo</option>
 																			<option value="Inativo">Inativo</option>
 																	</select>

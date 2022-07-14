@@ -13,7 +13,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
     agenda_migrado :{ type: String, required: false }, //Status se o agendamento gerou agendamento
     agenda_datacad :{ type: String, required: false },
-    agenda_dataedi :{ type: String, required: false }
+    agenda_dataedi :{ type: String, required: false },
+    agenda_aux :{ type: String, required: false }
 })
 
 class Agenda{
@@ -29,7 +30,8 @@ class Agenda{
         agenda_usuid,
         agenda_migrado,
         agenda_datacad,
-        agenda_dataedi
+        agenda_dataedi,
+        agenda_aux
 
         ){
         this.agenda_data = agenda_data,
@@ -44,7 +46,7 @@ class Agenda{
         this.agenda_migrado = agenda_migrado,
         this.agenda_datacad = agenda_datacad,
         this.agenda_dataedi = agenda_dataedi
-                 
+        this.agenda_aux = agenda_aux
     }
 }
 

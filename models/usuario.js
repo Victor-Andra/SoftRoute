@@ -81,6 +81,31 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
         required: false
     },
+
+
+    usuario_banco: {
+        type: String,
+        required: false
+    },
+    usuario_agencia : {
+        type: String,
+        required: false
+    },  
+    usuario_conta : {
+        type: String,
+        required: false
+    },
+    usuario_contatipo : {
+        type: String,
+        required: false
+    },
+    usuario_contrato : {
+        type: String,
+        required: false
+    },
+
+
+
     usuario_funcaoid : {
         type: ObjectId,
         required: true
@@ -111,8 +136,9 @@ class Usuario{
         usuario_login, usuario_nome, usuario_nomecompleto, usuario_end, usuario_endcompl, usuario_endbairro,
         usuario_endcidade, usuario_enduf, usuario_endcep, usuario_ident, usuario_cpf,
         usuario_nacionalidade, usuario_naturalidade, usuario_datanasc,
-        usuario_nomepai, usuario_nomemae, usuario_email, usuario_cel1,
-        usuario_cel2, usuario_funcaoid, usuario_perfilid, usuario_status,
+        usuario_nomepai, usuario_nomemae, usuario_email, usuario_cel1, usuario_cel2,
+        usuario_banco, usuario_agencia, usuario_conta, usuario_contatipo, usuario_contrato,
+        usuario_funcaoid, usuario_perfilid, usuario_status,
         usuario_senha, usuario_img, usuario_datacad, usuario_dataedi
 
         ){
@@ -136,6 +162,13 @@ class Usuario{
         this.usuario_email = usuario_email ,
         this.usuario_cel1 = usuario_cel1 ,
         this.usuario_cel2 = usuario_cel2 ,
+
+        this.usuario_banco = usuario_banco ,
+        this.usuario_agencia = usuario_agencia,
+        this.usuario_conta = usuario_conta ,
+        this.usuario_contatipo = usuario_contatipo ,
+        this.usuario_contrato = usuario_contrato ,
+
         this.usuario_funcaoid = usuario_funcaoid ,
         this.usuario_perfilid = usuario_perfilid ,
         this.usuario_status = usuario_status ,
@@ -181,6 +214,13 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 usuario_email : req.body.usuarioEmail ,
                 usuario_cel1 : req.body.usuarioCel1 ,
                 usuario_cel2 : req.body.usuarioCel2 ,
+
+                usuario_banco : req.body.usuarioBanco,
+                usuario_agencia : req.body.usuarioAgencia ,
+                usuario_conta : req.body.usuarioConta ,
+                usuario_contatipo : req.body.usuarioContaTipo,
+                usuario_contrato : req.body.usuarioContrato ,
+
                 usuario_funcaoid : req.body.usuarioFuncaoid ,
                 usuario_perfilid : req.body.usuarioPerfilid ,
                 usuario_status : req.body.usuarioStatus ,
@@ -234,6 +274,13 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_email : req.body.usuarioEmail ,
             usuario_cel1 : req.body.usuarioCel1 ,
             usuario_cel2 : req.body.usuarioCel2 ,
+
+            usuario_banco : req.body.usuarioBanco,
+            usuario_agencia : req.body.usuarioAgencia ,
+            usuario_conta : req.body.usuarioConta ,
+            usuario_contatipo : req.body.usuarioContaTipo,
+            usuario_contrato : req.body.usuarioContrato ,
+
             usuario_funcaoid : req.body.usuarioFuncaoid ,
             usuario_perfilid : req.body.usuarioPerfilid ,
             usuario_status : req.body.usuarioStatus ,

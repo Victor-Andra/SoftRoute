@@ -38,10 +38,7 @@
 				console.log("A Aba Util foi Clicada!")
 			}
 			function carregaBody(){
-				document.getElementById("salaFilDiv").style.display = "none";
-				document.getElementById("agendaSalaid").style.display = "none";
-				document.getElementById("terapeutaFilDiv").style.display = "none";
-				document.getElementById("agendaTerapeutaid").style.display = "none";
+				console.log("Carregando o bode")
 				let dias = ["seg","ter","qua","qui","sex"];
 				try{
 					dias.forEach((dia)=>{
@@ -56,87 +53,28 @@
 							let val = document.getElementById(valor).value;
 							console.log("value2:"+val)
 							document.getElementById(id).append(val);
+
+							//teste 
+							let dis = ""+dia+"c";
+							document.getElementsByName(dis).forEach((e)=>{
+								let id = "hora"+e.id;
+								console.log(e.id)
+								document.getElementById(id).append(e);
+							});
+
+							dis = ""+dia+"e";
+							document.getElementsByName(dis).forEach((e)=>{
+								let id = "hora"+e.id;
+								console.log(e.id)
+								document.getElementById(id).append(e);
+							});
+							dis = ""+dia+"d";
+							document.getElementsByName(dis).forEach((e)=>{
+								let id = "hora"+e.id;
+								console.log(e.id)
+								document.getElementById(id).append(e);
+							});
 						})
-						console.log("END EACH: dia")
-						document.getElementsByName("segc").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("terc").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quac").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quic").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("sexc").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						console.log("END EACH: dia")
-						document.getElementsByName("sege").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("tere").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quae").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quie").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("sexe").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						console.log("------------------")
-						console.log("END EACH: dia")
-						document.getElementsByName("segd").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("terd").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quad").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("quid").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						document.getElementsByName("sexd").forEach((e)=>{
-							let id = "hora"+e.id;
-							console.log(e.id)
-							document.getElementById(id).append(e);
-						})
-						//---------------------------------------------------
 					})
 					
 				} catch(err){
@@ -180,7 +118,7 @@
 							</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filLG" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filG" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
 							<div class="col-xs-12 col-sm-3"  >
 								<label>Data:</label>
@@ -196,7 +134,6 @@
 							</div>
 						</div>
 					</form>
-
 					{{#each erros}}
 						<div class="alert alert-danger">{{texto}}</div>
 					{{else}}
@@ -276,12 +213,19 @@
 																							Copiar dia
 																						</button>
 																					</form>
+																					<br/>
+																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
+																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
+																						<button name="acaoConverte" id="acaoConverte" type="submit">
+																							Converter dia em Atendimento
+																						</button>
+																					</form>
 																				{{/compareString}}
 																			{{/each}}
-																		</b> 
+																		</b>
 																	</th>
 																</tr>
-																<tr  role="row">	
+																<tr  role="row">
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
 																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
@@ -289,48 +233,52 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
 															{{#each agendas}}
-																<tbody>
-																	<tr role="row" class="odd">
-																		<td style="width: 50px;">{{agenda_hora}}</td>
-																		<td id="horasegSalaId_{{agenda_hora}}"></td>
-																		<td id="horasegBeneId_{{agenda_hora}}"></td>
-																		<td id="horasegConvId_{{agenda_hora}}"></td>
-																		<td id="horasegTerapiaId_{{agenda_hora}}"></td>
-																		<td id="horasegTerapeutaId_{{agenda_hora}}"></td>
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-																		<td id="horasegacao_{{agenda_hora}}" style="width: 60px;"></td>
-																	</tr>
-																</tbody>
+																{{#compareString agenda_data_semana "seg"}}
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td style="width: 50px;">{{agenda_hora}}</td>
+																			<td id="horasegSalaId_{{agenda_aux}}"></td>
+																			<td id="horasegBeneId_{{agenda_aux}}"></td>
+																			<td id="horasegConvId_{{agenda_aux}}"></td>
+																			<td id="horasegTerapiaId_{{agenda_aux}}"></td>
+																			<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
+																			<td class="center"  style="width: 50px;">
+																				<label class="pos-rel">
+																					<input type="checkbox" class="ace" />
+																					<span class="lbl"></span>
+																				</label>
+																			</td>
+																			<td id="horasegacao_{{agenda_aux}}" style="width: 70px;"></td>
+																		</tr>
+																	</tbody>
+																{{/compareString}}
 															{{/each}}
 															<div id="carregaSegunda" class="hidden">
 																{{#each agendas}}
-																	<a class="green" id="{{agenda_data_semana}}acao_{{agenda_hora}}" name="{{agenda_data_semana}}e" href="/menu/agenda/edi/{{_id}}">
-																		<i class="ace-icon fa fa-pencil bigger-130"></i>
-																	</a>
-																	<a class="red" id="{{agenda_data_semana}}acao_{{agenda_hora}}" name="{{agenda_data_semana}}d" href="/menu/agenda/del/{{_id}}" style="padding-left: 5px;">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
-																	<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
-																	<input id="{{agenda_data_semana}}ConvId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
-																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+																	<input id="{{agenda_data_semana}}SalaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+																	<input id="{{agenda_data_semana}}BeneId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
+																	<input id="{{agenda_data_semana}}ConvId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
+																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
+																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
 																{{/each}}
 																{{#each semanas}}
 																	{{#each ../agendas}}
-																		<div class="hidden">{{agenda_hora}}</div>
-																		<a class="Blue" name="{{agenda_data_semana}}c" id="{{agenda_data_semana}}acao_{{agenda_hora}}" href="/menu/agenda/cadF/{{agenda_data_dia}}/{{agenda_hora}}">
-																			<i class="ace-icon fa fa-plus bigger-130"></i>
-																		</a>
+																		{{#compareString agenda_data_semana ../dia}}
+																			<div class="hidden">{{agenda_hora}}</div>
+																			<a class="Blue" name="{{agenda_data_semana}}c" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/cadF/{{agenda_data_dia}}/{{agenda_hora}}">
+																				<i class="ace-icon fa fa-plus bigger-130"></i>
+																			</a>
+																			<a class="green" name="{{agenda_data_semana}}e" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/edi/{{_id}}">
+																				<i class="ace-icon fa fa-pencil bigger-130"></i>
+																			</a>
+																			<a class="red" name="{{agenda_data_semana}}d" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/del/{{_id}}" style="padding-left: 5px;">
+																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																			</a>
+																		{{/compareString}}
 																	{{/each}}
 																{{/each}}
 															</div>
@@ -365,27 +313,29 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
-															{{#each horaages}}
-																<tbody>
-																	<tr role="row" class="odd">
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaterSalaId_{{horaage_hora}}"></td>
-																		<td id="horaterBeneId_{{horaage_hora}}"></td>
-																		<td id="horaterConvId_{{horaage_hora}}"></td>
-																		<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-																		<td id="horateracao_{{horaage_hora}}" style="width: 60px;"></td>
-																	</tr>
-																</tbody>
+															{{#each agendas}}
+																{{#compareString agenda_data_semana "ter"}}
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td style="width: 50px;">{{agenda_hora}}</td>
+																			<td id="horaterSalaId_{{agenda_aux}}"></td>
+																			<td id="horaterBeneId_{{agenda_aux}}"></td>
+																			<td id="horaterConvId_{{agenda_aux}}"></td>
+																			<td id="horaterTerapiaId_{{agenda_aux}}"></td>
+																			<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
+																			<td class="center"  style="width: 50px;">
+																				<label class="pos-rel">
+																					<input type="checkbox" class="ace" />
+																					<span class="lbl"></span>
+																				</label>
+																			</td>
+																			<td id="horateracao_{{agenda_aux}}" style="width: 70px;"></td>
+																		</tr>
+																	</tbody>
+																{{/compareString}}
 															{{/each}}
 														</table>
 													</div><!-- /fade-tab-ter -->
@@ -418,27 +368,29 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaquaSalaId_{{horaage_hora}}"></td>
-																		<td id="horaquaBeneId_{{horaage_hora}}"></td>
-																		<td id="horaquaConvId_{{horaage_hora}}"></td>
-																		<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-																		<td id="horaquaacao_{{horaage_hora}}" style="width: 60px;"></td>
-																	</tr>
-															</tbody>
+															{{#each agendas}}
+																{{#compareString agenda_data_semana "qua"}}
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td style="width: 50px;">{{agenda_hora}}</td>
+																			<td id="horaquaSalaId_{{agenda_aux}}"></td>
+																			<td id="horaquaBeneId_{{agenda_aux}}"></td>
+																			<td id="horaquaConvId_{{agenda_aux}}"></td>
+																			<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
+																			<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
+																			<td class="center"  style="width: 50px;">
+																				<label class="pos-rel">
+																					<input type="checkbox" class="ace" />
+																					<span class="lbl"></span>
+																				</label>
+																			</td>
+																			<td id="horaquaacao_{{agenda_aux}}" style="width: 70px;"></td>
+																		</tr>
+																	</tbody>
+																{{/compareString}}
 															{{/each}}
 														</table>										
 													</div><!-- /fade-tab-qua -->
@@ -471,27 +423,29 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaquiSalaId_{{horaage_hora}}"></td>
-																		<td id="horaquiBeneId_{{horaage_hora}}"></td>
-																		<td id="horaquiConvId_{{horaage_hora}}"></td>
-																		<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-																		<td id="horaquiacao_{{horaage_hora}}" style="width: 60px;"></td>
-																	</tr>
-															</tbody>
+															{{#each agendas}}
+																{{#compareString agenda_data_semana "qui"}}
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td style="width: 50px;">{{agenda_hora}}</td>
+																			<td id="horaquiSalaId_{{agenda_aux}}"></td>
+																			<td id="horaquiBeneId_{{agenda_aux}}"></td>
+																			<td id="horaquiConvId_{{agenda_aux}}"></td>
+																			<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
+																			<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
+																			<td class="center"  style="width: 50px;">
+																				<label class="pos-rel">
+																					<input type="checkbox" class="ace" />
+																					<span class="lbl"></span>
+																				</label>
+																			</td>
+																			<td id="horaquiacao_{{agenda_aux}}" style="width: 70px;"></td>
+																		</tr>
+																	</tbody>
+																{{/compareString}}
 															{{/each}}
 														</table>
 													</div><!-- /fade-tab-qui -->
@@ -524,27 +478,29 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
-															{{#each horaages}}
-																<tbody>
+															{{#each agendas}}
+																{{#compareString agenda_data_semana "sex"}}
+																	<tbody>
 																		<tr role="row" class="odd">
-																			<td style="width: 50px;">{{horaage_hora}}</td>
-																			<td id="horasexSalaId_{{horaage_hora}}"></td>
-																			<td id="horasexBeneId_{{horaage_hora}}"></td>
-																			<td id="horasexConvId_{{horaage_hora}}"></td>
-																			<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-																			<td id="horasexTerapeutaId_{{horaage_hora}}"></td>
+																			<td style="width: 50px;">{{agenda_hora}}</td>
+																			<td id="horasexSalaId_{{agenda_aux}}"></td>
+																			<td id="horasexBeneId_{{agenda_aux}}"></td>
+																			<td id="horasexConvId_{{agenda_aux}}"></td>
+																			<td id="horasexTerapiaId_{{agenda_aux}}"></td>
+																			<td id="horasexTerapeutaId_{{agenda_aux}}"></td>
 																			<td class="center"  style="width: 50px;">
 																				<label class="pos-rel">
 																					<input type="checkbox" class="ace" />
 																					<span class="lbl"></span>
 																				</label>
 																			</td>
-																			<td id="horasexacao_{{horaage_hora}}" style="width: 60px;"></td>
+																			<td id="horasexacao_{{agenda_aux}}" style="width: 70px;"></td>
 																		</tr>
-																</tbody>
+																	</tbody>
+																{{/compareString}}
 															{{/each}}
 														</table>
 													</div><!-- /fade-tab-sex -->

@@ -197,6 +197,15 @@ router.get("/agenda/cadG/",(req,res) =>{//direciona a listagem de Agenda Geral.
     fncAgenda.carregaAgendaG(req, res);
 })
 
+router.post("/agenda/filG/",(req,res) =>{//direciona a listagem de Agenda Geral.
+    console.log("lista")
+    fncAgenda.carregaAgendaFilG(req, res);
+})
+
+router.get("/agenda/cadS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
+    console.log("Agenda Semanal")
+    fncAgenda.carregaAgendaS(req, res);
+})
 
 
 router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
@@ -225,10 +234,12 @@ router.get('/agenda/atualiza/:id', (req,res) =>{//direciona para a edição de a
 })
 
 router.post('/agenda/copiaDia', (req,res) =>{//direciona para a edição de agenda
-    console.log("Pssando correto")
-    fncAgenda.copiaDiaAgenda(req, res);
+    fncAgenda.copiaDiaAgendaGeral(req, res);
 })
 
+router.post('/agenda/converteDia', (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.converteAgendaEmAtend(req, res);
+})
 // Visualizar Agenda
 /*
 router.get("/agenda/vis",(req,res) =>{//direciona o cadstro A AGENDA.

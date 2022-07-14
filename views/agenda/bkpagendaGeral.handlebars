@@ -4,7 +4,7 @@
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Agenda por Filtros</title>
+		<title>Agenda Geral</title>
 
 
 
@@ -34,193 +34,129 @@
 		<script src="../../assets/js/html5shiv.min.js"></script>
 		<script src="../../assets/js/respond.min.js"></script>
 		<script type="text/javascript">
-		function abaClicada(req, res){
-			console.log("A Aba Util foi Clicada!")
-		}
-		function carregaBody(){
-			document.getElementById("salaFilDiv").style.display = "none";
-			document.getElementById("agendaSalaid").style.display = "none";
-			document.getElementById("terapeutaFilDiv").style.display = "none";
-			document.getElementById("agendaTerapeutaid").style.display = "none";
-			let dias = ["seg","ter","qua","qui","sex"];
-			try{
-				dias.forEach((dia)=>{
-					console.log("dia:"+dia)
-					document.getElementsByName(dia).forEach((e)=>{
-						console.log("e")
-						console.log(e.value)
-						let id = "hora"+e.id;
-						let valor = e.value;
-						console.log("id:"+id)
-						console.log("valor:"+valor)
-						let val = document.getElementById(valor).value;
-						console.log("value2:"+val)
-						document.getElementById(id).append(val);
-					})
-					console.log("END EACH: dia")
-					document.getElementsByName("segc").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("terc").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quac").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quic").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("sexc").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					console.log("END EACH: dia")
-					document.getElementsByName("sege").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("tere").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quae").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quie").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("sexe").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					console.log("------------------")
-					console.log("END EACH: dia")
-					document.getElementsByName("segd").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("terd").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quad").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("quid").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("sexd").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName("segm").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						if(e.value == true){
-							document.getElementById(id).checked = true;
-						}
-					})
-					document.getElementsByName("term").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						if(e.value == true){
-							document.getElementById(id).checked = true;
-						}
-					})
-					document.getElementsByName("quam").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						if(e.value == true){
-							document.getElementById(id).checked = true;
-						}
-					})
-					document.getElementsByName("quim").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						if(e.value == true){
-							document.getElementById(id).checked = true;
-						}
-					})
-					document.getElementsByName("sexm").forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						if(e.value == true){
-							document.getElementById(id).checked = true;
-						}
-					})
-					//---------------------------------------------------
-				})
-				
-			} catch(err){
-				console.log(err)
+			function abaClicada(req, res){
+				console.log("A Aba Util foi Clicada!")
 			}
-		}
-		function selectFil(){
-			let origem = document.getElementById("tipoFil").value;
-			switch (origem) {
-				case "bene":
-					document.getElementById("beneFilDiv").style.display = "";
-					document.getElementById("agendaBeneid").style.display = "";
-					document.getElementById("salaFilDiv").style.display = "none";
-					document.getElementById("agendaSalaid").style.display = "none";
-					document.getElementById("terapeutaFilDiv").style.display = "none";
-					document.getElementById("agendaTerapeutaid").style.display = "none";
-					break;
-				case "sala":
-					document.getElementById("beneFilDiv").style.display = "none";
-					document.getElementById("agendaBeneid").style.display = "none";
-					document.getElementById("salaFilDiv").style.display = "";
-					document.getElementById("agendaSalaid").style.display = "";
-					document.getElementById("terapeutaFilDiv").style.display = "none";
-					document.getElementById("agendaTerapeutaid").style.display = "none";
-					break;
-				case "tera":
-					document.getElementById("beneFilDiv").style.display = "none";
-					document.getElementById("agendaBeneid").style.display = "none";
-					document.getElementById("salaFilDiv").style.display = "none";
-					document.getElementById("agendaSalaid").style.display = "none";
-					document.getElementById("terapeutaFilDiv").style.display = "";
-					document.getElementById("agendaTerapeutaid").style.display = "";
-					break;
+			function carregaBody(){
+				document.getElementById("salaFilDiv").style.display = "none";
+				document.getElementById("agendaSalaid").style.display = "none";
+				document.getElementById("terapeutaFilDiv").style.display = "none";
+				document.getElementById("agendaTerapeutaid").style.display = "none";
+				let dias = ["seg","ter","qua","qui","sex"];
+				try{
+					dias.forEach((dia)=>{
+						console.log("dia:"+dia)
+						document.getElementsByName(dia).forEach((e)=>{
+							console.log("e")
+							console.log(e.value)
+							let id = "hora"+e.id;
+							let valor = e.value;
+							console.log("id:"+id)
+							console.log("valor:"+valor)
+							let val = document.getElementById(valor).value;
+							console.log("value2:"+val)
+							document.getElementById(id).append(val);
+						})
+						console.log("END EACH: dia")
+						document.getElementsByName("segc").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("terc").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quac").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quic").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("sexc").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						console.log("END EACH: dia")
+						document.getElementsByName("sege").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("tere").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quae").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quie").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("sexe").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						console.log("------------------")
+						console.log("END EACH: dia")
+						document.getElementsByName("segd").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("terd").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quad").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("quid").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						document.getElementsByName("sexd").forEach((e)=>{
+							let id = "hora"+e.id;
+							console.log(e.id)
+							document.getElementById(id).append(e);
+						})
+						//---------------------------------------------------
+					})
+					
+				} catch(err){
+					console.log(err)
+				}
 			}
-		}
-		function formataData(){
-			let dat = new Date(document.getElementById('dataFil').value);
-			let mes = (dat.getMonth()+1).toString();
-			let dia = (dat.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
+			function formataData(){
+				let dat = new Date(document.getElementById('dataFil').value);
+				let mes = (dat.getMonth()+1).toString();
+				let dia = (dat.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-			document.getElementById('dataFinal').value = fulldate;
-			console.log("dataFinal:"+document.getElementById('dataFinal').value);
-		}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody()">
@@ -232,51 +168,21 @@
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">
-								<label class="red">
+								<label class="blue">
 									Home
 								</label>
 								</a>
 							</li>
 							<li class="active">
-								<i class="ace-icon fa fa-filter"></i>
-								<label class="red">
-									Agenda Diária por Filtro
+								<label class="blue">
+									Agenda Diária Geral
 								</label>
 							</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filL" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filLG" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
-							<div class="col-xs-12 col-sm-3">
-								<label>Tipo Filtro:</label>
-								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
-										<option value="bene">Beneficiário</option>
-										<option value="sala">Sala</option>
-										<option value="tera">Terapeuta</option>
-								</select>
-							</div>
-							<div class="col-xs-12 col-sm-5 center"  >
-								<label id="beneFilDiv">Beneficiário:</label>
-								<label id="salaFilDiv">Sala:</label>
-								<label id="terapeutaFilDiv">Terapeuta:</label>
-								<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each benes}}
-									<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
-								<select id="agendaSalaid" name="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each salas}}
-									<option value="{{_id}}">{{sala_nome}}</option>
-									{{/each}}
-								</select>
-								<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each terapeutas}}
-									<option value="{{_id}}">{{usuario_nome}}</option>
-									{{/each}}
-								</select>
-								<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">
-							</div>
-							<div class="col-xs-12 col-sm-3 center"  >
+							<div class="col-xs-12 col-sm-3"  >
 								<label>Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
@@ -290,6 +196,7 @@
 							</div>
 						</div>
 					</form>
+
 					{{#each erros}}
 						<div class="alert alert-danger">{{texto}}</div>
 					{{else}}
@@ -300,7 +207,7 @@
 								<!-- PAGE CONTENT BEGINS -->
 								<document class="document-horizontal" role="document" >
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-											<div class="hidden" id="divHoraage" name="divHoraage">
+											<div class="hidden" id="divCarrega" name="divCarrega">
 												{{#each salas}}
 													<input id="{{_id}}" value="{{sala_nome}}" />
 												{{/each}}
@@ -365,15 +272,8 @@
 																						<input class="hidden" id="data" name="data" value="{{data}}" />
 																						{{data}}
 																						 - / - 
-																						<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+																						<button name="acaoCopia" id="acaoCopia" type="submit">
 																							Copiar dia
-																						</button>
-																					</form>
-																					<br/>
-																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
-																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
-																						<button name="acaoConverte" id="acaoConverte" type="submit">
-																							Converter dia em Atendimento
 																						</button>
 																					</form>
 																				{{/compareString}}
@@ -389,27 +289,27 @@
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 70px;">Ação</th>
+																	<th style="width: 60px;">Ação</th>
 																</tr>
 															</thead>
-															{{#each horaages}}
-															<tbody>
-																<tr role="row" class="odd">
-																	<td style="width: 50px;">{{horaage_hora}}</td>
-																	<td id="horasegSalaId_{{horaage_hora}}"></td>
-																	<td id="horasegBeneId_{{horaage_hora}}"></td>
-																	<td id="horasegConvId_{{horaage_hora}}"></td>
-																	<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-																	<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horasegMigrado_{{horaage_hora}}" id="horasegMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
-																	<td id="horasegacao_{{horaage_hora}}" style="width: 60px;"></td>
-																</tr>
-															</tbody>
+															{{#each agendas}}
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td style="width: 50px;">{{agenda_hora}}</td>
+																		<td id="horasegSalaId_{{agenda_hora}}"></td>
+																		<td id="horasegBeneId_{{agenda_hora}}"></td>
+																		<td id="horasegConvId_{{agenda_hora}}"></td>
+																		<td id="horasegTerapiaId_{{agenda_hora}}"></td>
+																		<td id="horasegTerapeutaId_{{agenda_hora}}"></td>
+																		<td class="center"  style="width: 50px;">
+																			<label class="pos-rel">
+																				<input type="checkbox" class="ace" />
+																				<span class="lbl"></span>
+																			</label>
+																		</td>
+																		<td id="horasegacao_{{agenda_hora}}" style="width: 60px;"></td>
+																	</tr>
+																</tbody>
 															{{/each}}
 															<div id="carregaSegunda" class="hidden">
 																{{#each agendas}}
@@ -424,12 +324,11 @@
 																	<input id="{{agenda_data_semana}}ConvId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
 																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-																	<input id="{{agenda_data_semana}}Migrado_{{agenda_hora}}" name="{{agenda_data_semana}}m" value="{{agenda_migrado}}" />
 																{{/each}}
 																{{#each semanas}}
-																	{{#each ../horaages}}
-																		<div class="hidden">{{horaage_hora}}</div>
-																		<a class="Blue" name="{{../dia}}c" id="{{../dia}}acao_{{horaage_hora}}" href="/menu/agenda/cadF/{{../data}}/{{horaage_hora}}">
+																	{{#each ../agendas}}
+																		<div class="hidden">{{agenda_hora}}</div>
+																		<a class="Blue" name="{{agenda_data_semana}}c" id="{{agenda_data_semana}}acao_{{agenda_hora}}" href="/menu/agenda/cadF/{{agenda_data_dia}}/{{agenda_hora}}">
 																			<i class="ace-icon fa fa-plus bigger-130"></i>
 																		</a>
 																	{{/each}}
@@ -449,7 +348,7 @@
 																						<input class="hidden" id="data" name="data" value="{{data}}" />
 																						{{data}}
 																						 - / - 
-																						<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+																						<button name="acaoCopiar" id="acaoCopiar" type="submit">
 																							Copiar dia
 																						</button>
 																					</form>
@@ -471,21 +370,21 @@
 															</thead>
 															{{#each horaages}}
 																<tbody>
-																<tr role="row" class="odd">
-																	<td style="width: 50px;">{{horaage_hora}}</td>
-																	<td id="horaterSalaId_{{horaage_hora}}"></td>
-																	<td id="horaterBeneId_{{horaage_hora}}"></td>
-																	<td id="horaterConvId_{{horaage_hora}}"></td>
-																	<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-																	<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaterMigrado_{{horaage_hora}}" id="horaterMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
-																	<td id="horateracao_{{horaage_hora}}" style="width: 60px;"></td>
-																</tr>
+																	<tr role="row" class="odd">
+																		<td style="width: 50px;">{{horaage_hora}}</td>
+																		<td id="horaterSalaId_{{horaage_hora}}"></td>
+																		<td id="horaterBeneId_{{horaage_hora}}"></td>
+																		<td id="horaterConvId_{{horaage_hora}}"></td>
+																		<td id="horaterTerapiaId_{{horaage_hora}}"></td>
+																		<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
+																		<td class="center"  style="width: 50px;">
+																			<label class="pos-rel">
+																				<input type="checkbox" class="ace" />
+																				<span class="lbl"></span>
+																			</label>
+																		</td>
+																		<td id="horateracao_{{horaage_hora}}" style="width: 60px;"></td>
+																	</tr>
 																</tbody>
 															{{/each}}
 														</table>
@@ -502,7 +401,7 @@
 																						<input class="hidden" id="data" name="data" value="{{data}}" />
 																						{{data}}
 																						 - / - 
-																						<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+																						<button name="acaoCopia" id="acaoCopia" type="submit">
 																							Copiar dia
 																						</button>
 																					</form>
@@ -524,21 +423,21 @@
 															</thead>
 															{{#each horaages}}
 															<tbody>
-																<tr role="row" class="odd">
-																	<td style="width: 50px;">{{horaage_hora}}</td>
-																	<td id="horaquaSalaId_{{horaage_hora}}"></td>
-																	<td id="horaquaBeneId_{{horaage_hora}}"></td>
-																	<td id="horaquaConvId_{{horaage_hora}}"></td>
-																	<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-																	<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaquaMigrado_{{horaage_hora}}" id="horaquaMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
-																	<td id="horaquaacao_{{horaage_hora}}" style="width: 60px;"></td>
-																</tr>
+																	<tr role="row" class="odd">
+																		<td style="width: 50px;">{{horaage_hora}}</td>
+																		<td id="horaquaSalaId_{{horaage_hora}}"></td>
+																		<td id="horaquaBeneId_{{horaage_hora}}"></td>
+																		<td id="horaquaConvId_{{horaage_hora}}"></td>
+																		<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
+																		<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
+																		<td class="center"  style="width: 50px;">
+																			<label class="pos-rel">
+																				<input type="checkbox" class="ace" />
+																				<span class="lbl"></span>
+																			</label>
+																		</td>
+																		<td id="horaquaacao_{{horaage_hora}}" style="width: 60px;"></td>
+																	</tr>
 															</tbody>
 															{{/each}}
 														</table>										
@@ -555,7 +454,7 @@
 																						<input class="hidden" id="data" name="data" value="{{data}}" />
 																						{{data}}
 																						 - / - 
-																						<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+																						<button name="acaoCopia" id="acaoCopia" type="submit">
 																							Copiar dia
 																						</button>
 																					</form>
@@ -577,21 +476,21 @@
 															</thead>
 															{{#each horaages}}
 															<tbody>
-																<tr role="row" class="odd">
-																	<td style="width: 50px;">{{horaage_hora}}</td>
-																	<td id="horaquiSalaId_{{horaage_hora}}"></td>
-																	<td id="horaquiBeneId_{{horaage_hora}}"></td>
-																	<td id="horaquiConvId_{{horaage_hora}}"></td>
-																	<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-																	<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaquiMigrado_{{horaage_hora}}" id="horaquiMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
-																	<td id="horaquiacao_{{horaage_hora}}" style="width: 60px;"></td>
-																</tr>
+																	<tr role="row" class="odd">
+																		<td style="width: 50px;">{{horaage_hora}}</td>
+																		<td id="horaquiSalaId_{{horaage_hora}}"></td>
+																		<td id="horaquiBeneId_{{horaage_hora}}"></td>
+																		<td id="horaquiConvId_{{horaage_hora}}"></td>
+																		<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
+																		<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
+																		<td class="center"  style="width: 50px;">
+																			<label class="pos-rel">
+																				<input type="checkbox" class="ace" />
+																				<span class="lbl"></span>
+																			</label>
+																		</td>
+																		<td id="horaquiacao_{{horaage_hora}}" style="width: 60px;"></td>
+																	</tr>
 															</tbody>
 															{{/each}}
 														</table>
@@ -608,7 +507,7 @@
 																						<input class="hidden" id="data" name="data" value="{{data}}" />
 																						{{data}}
 																						 - / - 
-																						<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+																						<button name="acaoCopia" id="acaoCopia" type="submit">
 																							Copiar dia
 																						</button>
 																					</form>
@@ -629,23 +528,23 @@
 																</tr>
 															</thead>
 															{{#each horaages}}
-															<tbody>
-																<tr role="row" class="odd">
-																	<td style="width: 50px;">{{horaage_hora}}</td>
-																	<td id="horasexSalaId_{{horaage_hora}}"></td>
-																	<td id="horasexBeneId_{{horaage_hora}}"></td>
-																	<td id="horasexConvId_{{horaage_hora}}"></td>
-																	<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-																	<td id="horasexTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horasexMigrado_{{horaage_hora}}" id="horasexMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																		<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
-																	<td id="horasexacao_{{horaage_hora}}" style="width: 60px;"></td>
-																</tr>
-															</tbody>
+																<tbody>
+																		<tr role="row" class="odd">
+																			<td style="width: 50px;">{{horaage_hora}}</td>
+																			<td id="horasexSalaId_{{horaage_hora}}"></td>
+																			<td id="horasexBeneId_{{horaage_hora}}"></td>
+																			<td id="horasexConvId_{{horaage_hora}}"></td>
+																			<td id="horasexTerapiaId_{{horaage_hora}}"></td>
+																			<td id="horasexTerapeutaId_{{horaage_hora}}"></td>
+																			<td class="center"  style="width: 50px;">
+																				<label class="pos-rel">
+																					<input type="checkbox" class="ace" />
+																					<span class="lbl"></span>
+																				</label>
+																			</td>
+																			<td id="horasexacao_{{horaage_hora}}" style="width: 60px;"></td>
+																		</tr>
+																</tbody>
 															{{/each}}
 														</table>
 													</div><!-- /fade-tab-sex -->
