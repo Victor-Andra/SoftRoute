@@ -47,7 +47,7 @@
 			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
 			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getDate()).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
 			if (mes.length == 1){
 				mes = "0"+mes;
 			}
@@ -135,7 +135,7 @@
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/beneficiario/atualizar" method="POST">
 								<document class="document-horizontal" role="document" >
 									
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -276,7 +276,6 @@
 														<div class="input-group">
 																<div >
 																	<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																			<option value="{{bene_status}}">{{bene_status}}</option>
 																			<option value="Ativo">Ativo</option>
 																			<option value="Inativo">Inativo</option>
 																	</select>
@@ -322,7 +321,6 @@
 														<div class="input-group">
 																<div >
 																	<select name="beneEnduf" id="beneEnduf" class="chosen-select" data-placeholder="Escolha..." value="{{bene_enduf}}">
-																			<option value="">&nbsp;</option>
 																			{{#each estados}}
 																			<option value="{{_id}}">{{estado_uf}}</option>
 																			{{else}}
@@ -352,7 +350,6 @@
 													<div class="input-group">
 															<div >
 																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;" value="{{bene_convid}}">
-																		<option value="">&nbsp;</option>
 																		{{#each convs}}
 																		<option value="{{_id}}">{{conv_nome}}</option>
 																		{{else}}
@@ -729,7 +726,7 @@
 												</div>
 											</div>
 											<div id="divCarrega" name="divCarrega" class="hidden">
-												<input id="beneIdEdi" name="beneIdEdi" value="{{beneEdi.bene_id}}"/>
+												<input id="beneId" name="beneId" value="{{beneEdi._id}}"/>
 												<input id="beneNomeEdi" name="beneNomeEdi" value="{{beneEdi.bene_nome}}"/>
 												<input id="beneIdadeEdi" name="beneIdadeEdi" value="{{beneEdi.bene_idade}}"/>
 												<input id="beneDatanascEdi" name="beneDatanascEdi" value="{{beneEdi.bene_datanasc}}"/>

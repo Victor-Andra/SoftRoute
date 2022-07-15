@@ -15,7 +15,7 @@
 			function carregaBody(){
 				let data= new Date();
 				let mes = (data.getMonth()+1).toString();
-				let dia = (data.getDate()).toString();
+				let dia = (data.getUTCDate()).toString();
 				if (mes.length == 1){
 					mes = "0"+mes;
 				}

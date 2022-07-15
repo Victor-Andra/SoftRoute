@@ -130,13 +130,14 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/financeiro/atendadm/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/financeiro/atendadm/atualizar" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Atendimento</h4>
 											<div class="hidden">
 												<input id="nextNum" name="nextNum" type="number"  value="{{atendEdi.atend_num}}" />
+												<input id="atendId" name="atendId" type="number"  value="{{atendEdi._id}}" />
 											</div>
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">

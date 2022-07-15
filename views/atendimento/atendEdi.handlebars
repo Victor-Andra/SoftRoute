@@ -7,7 +7,7 @@
 				document.getElementById("atendId").value = document.getElementById("atendIdEdi").value;
 				let dtatd= new Date(document.getElementById("atendDataatendEdi").value);
 				let mes = (dtatd.getMonth()+1).toString();
-				let dia = (dtatd.getDate()).toString();
+				let dia = (dtatd.getUTCDate()).toString();
 				if (mes.length == 1){
 					mes = "0"+mes;
 				}
@@ -30,6 +30,7 @@
 				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
 				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
 				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
+				document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
 				document.getElementById("atendevolucao").value = document.getElementById("atendevolucaoEdi").value;
 				console.log("End")
 			}
@@ -79,7 +80,7 @@
 											<span class="widget-toolbar">
 
 												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
+													<i class="ace-icon fa fa-refresh" ></i>
 												</a>
 
 												<a href="#" data-action="collapse">
@@ -241,6 +242,7 @@
 									<input id="atendMergeterapiaidEdi" name="atendMergeterapiaidEdi" value="{{atend.atend_mergeterapiaid}}"/>
 									<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atend.atend_mergevalorcre}}"/>
 									<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atend.atend_mergevalordeb}}"/>
+									<input id="atendSalaidEdi" name="atendSalaidEdi" value="{{atend.atend_salaid}}"/>
 									<input id="atendEvolucaoEdi" name="atendEvolucaoEdi" value="{{atend.atend_evolucao}}"/>
 									<input id="atendAtenddata" name="atendAtenddata" />									
 								</div>

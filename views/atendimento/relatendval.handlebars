@@ -6,7 +6,7 @@
 			function atualizaDataIni(){
 				let dat = new Date(document.getElementById('dataFilDe').value);
 				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getDate()).toString();
+				let dia = (dat.getUTCDate()).toString();
 				if (mes.length == 1){
 					mes = "0"+mes;
 				}
@@ -19,7 +19,7 @@
 			function atualizaDataFin(){
 				let dat = new Date(document.getElementById('dataFilAte').value);
 				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getDate()).toString();
+				let dia = (dat.getUTCDate()).toString();
 				if (mes.length == 1){
 					mes = "0"+mes;
 				}

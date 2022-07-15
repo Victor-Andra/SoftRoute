@@ -21,7 +21,7 @@ module.exports = {
     carregaBene(req,res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs")
-            Conv.find().then((conv)=>{
+            Conv.find().sort({conv_nome: 1}).then((conv)=>{
             console.log("Listagem Realizada de Convenios")
             res.render("beneficiario/beneCad", {estados: estado, convs: conv})
         })}).catch((err) =>{
@@ -57,8 +57,6 @@ module.exports = {
             })
         })
     },
-
-
     atualizaBene(req, res){
         let resposta;
         try{
@@ -74,14 +72,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a bene de listagem
-                    Bene.find().then((bene) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('beneficiario/beneLis', {benes: bene})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    this.listaBene(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")
@@ -94,11 +85,10 @@ module.exports = {
         }
 
     },
-
     carregaBeneEdi(req, res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs")
-                Conv.find().then((conv)=>{
+                Conv.find().sort({conv_nome: 1}).then((conv)=>{
                     console.log("Listagem Realizada de Convenios")
                     Bene.findById(req.params.id).then((beneEdi) =>{
                         res.render("beneficiario/beneEdi", {estados: estado, convs: conv, beneEdi})
@@ -120,7 +110,7 @@ module.exports = {
                 console.log("b.datanasc"+b.bene_datanasc)
                 let datanasc = new Date(b.bene_datanasc)
                 let mes = (datanasc.getMonth()+1).toString();
-                let dia = (datanasc.getDate()).toString();
+                let dia = (datanasc.getUTCDate()).toString();
                 if (mes.length == 1){
                     mes = "0"+mes;
                 }

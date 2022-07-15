@@ -47,7 +47,7 @@
 			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
 			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getDate()).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
 			if (mes.length == 1){
 				mes = "0"+mes;
 			}
