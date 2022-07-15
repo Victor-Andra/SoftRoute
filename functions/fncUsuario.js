@@ -115,14 +115,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a usuario de listagem
-                    Usuario.find().then((usuario) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    this.listaUsuario(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")
