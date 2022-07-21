@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Escola</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Escola Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/escola/add" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Dados</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+												<label>Beneficiário</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="escola_beneid" class="chosen-select" data-placeholder="Escolha o Beneficiário..." >
+																{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+										
+															</select>
+														</div>
+												</div>
+				
+												<label> Nome</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="escolaNome" id="escolaNome"  class="form-control" />
+													</div>
+												</div>
+
+												<label> Nome Fantasia</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="escolaFantasia" id="escolaFantasia" placeholder="" class="form-control" />
+													</div>
+												</div>
+
+
+			
+
+												<label > Endereço </label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="escolaEnd" id="escolaEnd" class="form-control" />
+													</div>
+												</div>
+				
+												<label> Complemento </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escolaEndcompl" id="escolaEndcompl" class="form-control" />
+													</div>
+												</div>
+				
+												<label> Bairro </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="escolaEndbairro" id="escolaEndbairro" class="form-control" />
+													</div>
+												</div>
+				
+												<label> Cidade </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="escolaEndcidade" id="escolaEndcidade" class="form-control" />
+													</div>
+												</div>
+
+												<label>UF</label>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select name="escolaEnduf"  id="escolaEnduf"  class="chosen-select" data-placeholder="Escolha...">
+																	<option value="">&nbsp;</option>
+																	{{#each estados}}
+																	<option value="{{_id}}">{{estado_uf}}</option>
+																	{{else}}
+																	{{/each}}
+															</select>
+														</div>
+												</div>
+				
+												<label>CEP
+													<small class="text-warning">00000-000</small>
+												</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input type="text" name="escolaEndcep" id="escolaEndcep" class="form-control" />
+													</div>
+												</div>
+
+												<label>Coordenador</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_coordenador " class="form-control" />
+													</div>
+												</div>
+												
+												<label>Whatsapp</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_coorwhatsapp " class="form-control"/>
+													</div>
+												</div>
+												
+												<label>Professor(a)</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_professor " class="form-control" />
+													</div>
+												</div>
+												
+												<label>Whatsapp</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_profwhatsapp " class="form-control" />
+													</div>
+												</div>
+												<label>Telefone Fixo</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_fixo " class="form-control"/>
+													</div>
+												</div>
+												
+
+												<label> Observações </label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<input type="text" name="escolaObs" id="escolaObs" class="form-control" />
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/admin/branco">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

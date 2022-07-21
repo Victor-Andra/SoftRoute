@@ -50,6 +50,8 @@
 							let valor = e.value;
 							console.log("id:"+id)
 							console.log("valor:"+valor)
+							console.log("elemento:")
+							console.log(document.getElementById(valor).value);
 							let val = document.getElementById(valor).value;
 							console.log("value2:"+val)
 							document.getElementById(id).append(val);
@@ -120,12 +122,12 @@
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filG" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
-							<div class="col-xs-12 col-sm-3"  >
+							<div class="col-xs-20 col-sm-3"  >
 								<label>Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
 							</div>
-							<div class="col-xs-12 col-sm-1">
+							<div class="col-xs-20 col-sm-1">
 								<div class="widget-toolbar hidden-480">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
 										<i class="ace-icon fa fa-search-plus "></i>
@@ -140,7 +142,7 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
-							<div class="col-xs-12">
+							<div class="col-xs-20">
 								<!-- PAGE CONTENT BEGINS -->
 								<document class="document-horizontal" role="document" >
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -149,13 +151,13 @@
 													<input id="{{_id}}" value="{{sala_nome}}" />
 												{{/each}}
 												{{#each benes}}
-													<input id="{{_id}}" value="{{bene_nome}}" />
+													<input id="{{_id}}" name="BENENOMES" value="{{bene_nome}}" />
 												{{/each}}
 												{{#each convs}}
 													<input id="{{_id}}" value="{{conv_nome}}" />
 												{{/each}}
 												{{#each terapeutas}}
-													<input id="{{_id}}" value="{{usuario_nome}}" />
+													<input id="{{_id}}" name="TERAPEUTANOMES" value="{{usuario_nome}}" />
 												{{/each}}
 												{{#each terapias}}
 													<input id="{{_id}}" value="{{terapia_nome}}" />

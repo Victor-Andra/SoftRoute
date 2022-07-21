@@ -2,61 +2,47 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Atendimentos</title>
+		<title>Lista de Escola</title>
+
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
 		<link rel="stylesheet" href="../../../assets/css/fonts.googleapis.com.css">
+
+		<!-- ace styles -->
 		<link rel="stylesheet" href="../../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="../../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
 		<link rel="stylesheet" href="../../../assets/css/ace-skins.min.css">
 		<link rel="stylesheet" href="../../../assets/css/ace-rtl.min.css">
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="../../../assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
 		<script src="../../../assets/js/ace-extra.min.js"></script><style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
-		<script>
-			function ajustaData(){
 
-				let fullDatas = document.getElementsByName("fullData");
-				
-				fullDatas.forEach((elementox)=>{
-					console.log("start")
-					console.log("atendmun:")
-					console.log(elementox.id);
-					let id = "atenddata"+elementox.id;
-					console.log("procure:")
-					console.log(id)
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
-					//
-
-					let dat = new Date(elementox.value);
-					console.log("dat:"+dat)
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					console.log("ta undefined?")
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-					console.log("não")
-					//
-					
-
-					console.log("receba:")
-					console.log(elementox.value)
-					console.log("what?")
-					document.getElementById(id).value = fulldate;
-					console.log(document.getElementById(id).value)
-					//document.getElementById(id).value = "asdasd";
-					console.log("resultado:")
-					//console.log(document.getElementById(id).value)
-				})
-			}
-		</script>
+		<!--[if lte IE 8]>
+		<script src="../../../assets/js/html5shiv.min.js"></script>
+		<script src="../../../assets/js/respond.min.js"></script>
+		<![endif]-->
 	</head>
 
-	<body class="no-skin" onload="javascript:ajustaData()">
+	<body class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -68,7 +54,8 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Atendimentos</li>
+							<li class="active">Escola Lista</li>
+						
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -81,101 +68,65 @@
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-										<div class="clearfix" >
-											<div class="pull-right tableTools-container">
+											<div class="clearfix" >
+												<div class="pull-right tableTools-container">
 
 
+												</div>
 											</div>
-										</div>
 
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
-										
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+											</div>
 											
-											<thead>
-												<tr role="row">
-													<th class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"></span>
-														</label>
-													</th>
-
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio:     activate to sort column ascending">Convênio</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapia:     activate to sort column ascending">Terapia</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Terapeuta</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Origem:     activate to sort column ascending">Origem</th>
-													
-													<th>Ação</th>
-
-												</tr>
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 												
-											</thead>
-											
-											<tbody>
-												{{#each atends}}
-													<tr role="row" class="odd">
-														<div id="divData" name="divData" class="hidden" value="{{qtdAtends.qtd}}">
-																<input id="{{atend_num}}" name="fullData" value="{{atend_atenddata}}" />
-																<!-- O id é o atendnum utilizado para verificar qual o atendimento correspondente, o nome é utilizado para pegar todos elementos de data -->
-														</div>
-														<th class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</th>
-														
-														<td>
-															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{atend_atenddata}}" />
-														</td>
-				
+												<thead>
+													<tr role="row">
 
-														{{#each ../benes}}
-															{{#ifEqual this._id ../atend_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Escola: activate to sort column ascending">Escola</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Beneficiário</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Coordenador:     activate to sort column ascending">Coordenador</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
+														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Professor(a):     activate to sort column ascending">Professor(a)</th>
+														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
+														<th>Ação</th>
 
-														{{#each ../convs}}<!-- Ok -->	
-															{{#ifEqual this._id ../atend_convid}}
-																<td>{{conv_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-			
-														{{#each ../terapias}}<!-- Ok -->
-															{{#ifEqual this._id ../atend_terapiaid}}
-																<td>{{terapia_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-
-														{{#each ../usuarios}}
-															{{#ifEqual this._id ../atend_terapeutaid}}
-																<td>{{usuario_nome}}</td> <!-- Nome Usuário que é Terapeuta -->	
-															{{/ifEqual}}
-														{{/each}}
-
-														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
-														
-														<td>
-															<div class="action-buttons">
-																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-																<a class="red" name="acaoDel" id="acaoDel" href="/menu/atendimento/del/{{_id}}">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-															<div class="hidden-md hidden-lg">
-															</div>
-														</td>
 													</tr>
-												{{/each}}
-											</tbody>
-										</table>
+													
+												</thead>
+												
+												<tbody>
+													{{#each escolas}}
+														<tr role="row" class="odd">
+
+	
+															<td>{{escola_nome}}</td>
+															<td>{{escola_bene}}</td>
+															<td>{{escola_coordenador}}</td>
+															<td>{{escola_coorwhatsapp}}</td>
+															<td>{{escola_professor}}</td>
+															<td>{{escola_profwhatsapp}}</td>															
+															<td>
+																<div class="action-buttons">
+																	<a class="green" href="/menu/beneficiario/escola/edi/{{_id}}">
+																			<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	</a>
+																</div>
+																<div class="hidden-md hidden-lg">
+																	
+																</div>
+										
+															</td>
+												
+														</tr>
+													{{/each}}
+												</tbody>
+
+											</table>
+
+													
+										
+										
 									</div>
 								</div>				
 							</div>
@@ -251,7 +202,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

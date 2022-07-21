@@ -247,7 +247,7 @@
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filL" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
-							<div class="col-xs-12 col-sm-3">
+							<div class="col-xs-20 col-sm-3">
 								<label>Tipo Filtro:</label>
 								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
 										<option value="bene">Beneficiário</option>
@@ -255,15 +255,17 @@
 										<option value="tera">Terapeuta</option>
 								</select>
 							</div>
-							<div class="col-xs-12 col-sm-5 center"  >
+							<div class="col-xs-20 col-sm-5 center"  >
 								<label id="beneFilDiv">Beneficiário:</label>
 								<label id="salaFilDiv">Sala:</label>
 								<label id="terapeutaFilDiv">Terapeuta:</label>
+								
 								<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
 									{{#each benes}}
-									<option value="{{_id}}">{{bene_nome}}</option>
+									<option value="{{_id}}"><span class="label label-success arrowed">{{bene_apelido}}</span></option>
 									{{/each}}
 								</select>
+								
 								<select id="agendaSalaid" name="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
 									{{#each salas}}
 									<option value="{{_id}}">{{sala_nome}}</option>
@@ -276,12 +278,12 @@
 								</select>
 								<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">
 							</div>
-							<div class="col-xs-12 col-sm-3 center"  >
+							<div class="col-xs-20 col-sm-3 center"  >
 								<label>Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
 							</div>
-							<div class="col-xs-12 col-sm-1">
+							<div class="col-xs-20 col-sm-1">
 								<div class="widget-toolbar hidden-480">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
 										<i class="ace-icon fa fa-search-plus "></i>
@@ -296,7 +298,7 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
-							<div class="col-xs-12">
+							<div class="col-xs-20">
 								<!-- PAGE CONTENT BEGINS -->
 								<document class="document-horizontal" role="document" >
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -305,7 +307,7 @@
 													<input id="{{_id}}" value="{{sala_nome}}" />
 												{{/each}}
 												{{#each benes}}
-													<input id="{{_id}}" value="{{bene_nome}}" />
+													<input id="{{_id}}" value="{{bene_apelido}}" />
 												{{/each}}
 												{{#each convs}}
 													<input id="{{_id}}" value="{{conv_nome}}" />

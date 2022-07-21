@@ -12,7 +12,7 @@
 
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -78,16 +78,17 @@
 												</div>
 
 
-												<label>Terapia</label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<select name="debitTerapia" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="">&nbsp;</option>
-															<option value="ADA">ADA</option>
-															<option value="Psicologia">Psicologia</option>						
-															<option value="Fono">Fono</option>
-															
-														</select>
+												
+												<div class="col-xs-6">													
+													<label>Terapia</label>
+													<div class="form-group">
+														<div class="col-sm-4" style="width: 600px;">
+															<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+															</select>
+														</div>
 													</div>
 												</div>
 

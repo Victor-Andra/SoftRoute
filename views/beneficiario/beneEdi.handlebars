@@ -44,6 +44,7 @@
 		function carregaBody(){
 
 			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
 			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
 			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
@@ -120,7 +121,7 @@
 
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -138,7 +139,7 @@
 							<form class="form-horizontal" role="form"  action="/menu/beneficiario/atualizar" method="POST">
 								<document class="document-horizontal" role="document" >
 									
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+										<div class="col-xl-12" style="padding-top: 50px;">
 											<div class="tabbable">
 												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
 													
@@ -728,6 +729,7 @@
 											<div id="divCarrega" name="divCarrega" class="hidden">
 												<input id="beneId" name="beneId" value="{{beneEdi._id}}"/>
 												<input id="beneNomeEdi" name="beneNomeEdi" value="{{beneEdi.bene_nome}}"/>
+												<input id="beneApelidoEdi" name="beneApelidoEdi" value="{{beneEdi.bene_apelido}}"/>
 												<input id="beneIdadeEdi" name="beneIdadeEdi" value="{{beneEdi.bene_idade}}"/>
 												<input id="beneDatanascEdi" name="beneDatanascEdi" value="{{beneEdi.bene_datanasc}}"/>
 												<input id="beneNacionalidadeEdi" name="beneNacionalidadeEdi" value="{{beneEdi.bene_nacionalidade}}"/>

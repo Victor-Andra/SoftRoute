@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Escola</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Escola Editar</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/escola/atualizar" method="POST">
+
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Escola</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+												<label>Beneficiário</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="escola_beneid" class="chosen-select" data-placeholder="Escolha o Beneficiário..." >
+																<option value="{{bene_.id}}">{{bene_nome}}</option>
+																{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+										
+															</select>
+														</div>
+												</div>
+
+
+
+												<label>Nome Escola</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_nome " class="form-control" value="{{escola_nome}}"/>
+													</div>
+												</div>
+												<label>Nome Fantasia</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_fantasia " class="form-control" value="{{escola_fantasia}}"/>
+													</div>
+												</div>
+												<label>Endereço</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_end " class="form-control" value="{{escola_end}}"/>
+													</div>
+												</div>
+												<label>Complemento</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_endcompl " class="form-control" value="{{escola_endcompl}}"/>
+													</div>
+												</div>
+												<label>Bairro</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_endbairro " class="form-control" value="{{escola_endbairro}}"/>
+													</div>
+												</div>
+												<label>Cidade</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_endcidade " class="form-control" value="{{escola_endcidade}}"/>
+													</div>
+												</div>
+
+
+												<label>UF</label>
+												<div class="form-group">
+														<div class="col-sm-6">
+															<select name="escolaEnduf" class="chosen-select" data-placeholder="Escolha o estado..." >
+																<option value="{{escola_enduf}}">{{escola_enduf}}</option>
+																{{#each estados}}
+																<option value="{{_id}}">{{estado_nome}}</option>
+																{{/each}}
+										
+															</select>
+														</div>
+												</div>
+												<label>CEP</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_endcep " class="form-control" value="{{escola_endcep}}"/>
+													</div>
+												</div>
+												<label>Coordenador</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_coordenador " class="form-control" value="{{escola_coordenador}}"/>
+													</div>
+												</div>
+												<label>Whatsapp</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_coorwhatsapp " class="form-control" value="{{escola_coorwhatsapp}}"/>
+													</div>
+												</div>
+												<label>Professor(a)</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_professor " class="form-control" value="{{escola_professor}}"/>
+													</div>
+												</div>
+												<label>Whatsapp</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_profwhatsapp " class="form-control" value="{{escola_profwhatsapp}}"/>
+													</div>
+												</div>
+												<label>Telefone Fixo</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_fixo " class="form-control" value="{{escola_fixo}}"/>
+													</div>
+												</div>
+												<label>Observações</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="escola_obs " class="form-control" value="{{escola_obs}}"/>
+													</div>
+												</div>
+			
+
+												<div class="hidden">
+													<input name="escolaId" value="{{_id}}" />
+												
+													<input id="escolaBeneid" name="escola_beneid" value="{{escolaEdi.escola_beneid}}"/>
+													<input id="escolaNome" name="escola_nome" value="{{escolaEdi.escola_nome}}"/>
+													<input id="escolaFantasia" name="escola_fantasia" value="{{escolaEdi.escola_fantasia}}"/>
+													<input id="escolaEnd" name="escola_end" value="{{escolaEdi.escola_end}}"/>
+													<input id="escolaEndcompl" name="escola_endcompl" value="{{escolaEdi.escola_endcompl}}"/>
+													<input id="escolaEndbairro" name="escola_endbairro" value="{{escolaEdi.escola_endbairro}}"/>
+													<input id="escolaEndcidade" name="escola_endcidade" value="{{escolaEdi.escola_endcidade}}"/>
+													<input id="escolaEnduf" name="escola_enduf" value="{{escolaEdi.escola_enduf}}"/>
+													<input id="escolaEndcep" name="escola_endcep" value="{{escolaEdi.escola_endcep}}"/>
+													<input id="escolaCoordenador" name="escola_coordenador" value="{{escolaEdi.escola_coordenador}}"/>
+													<input id="escolaCoorwhatsapp" name="escola_coorwhatsapp" value="{{escolaEdi.escola_coorwhatsapp}}"/>
+													<input id="escolaProfessor" name="escola_professor" value="{{escolaEdi.escola_professor}}"/>
+													<input id="escolaProfwhatsapp" name="escola_profwhatsapp" value="{{escolaEdi.escola_profwhatsapp}}"/>
+													<input id="escolaFixo" name="escola_fixo" value="{{escolaEdi.escola_fixo}}"/>
+													<input id="escolaObs" name="escola_obs" value="{{escolaEdi.escola_obs}}"/>
+													<input id="escolaDatacad" name="escola_datacad" value="{{escolaEdi.escola_datacad}}"/>
+													<input id="escolaDataedi" name="escola_dataedi" value="{{escolaEdi.escola_dataedi}}"/>
+
+
+												</div>
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/ferramentas/escola/lis">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

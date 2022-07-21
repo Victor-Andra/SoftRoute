@@ -133,123 +133,74 @@
 
 
 						<div class="tab-content"><!-- .tab-contente -->
-							<div class="row">
-								<div class="col-xs-16 col-sm-9">
-									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
-												<tr role="row">
-													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="11">
-														<b>	
-															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
-																<input class="hidden" id="data" name="data" value="" />
-																<div>(({{benenomeconv}}))</div><!-- se for tipo tera colocar nome do tecnico só-->
-															</form>
-														</b> 
-													</th>
-												</tr>
-												
-												
-												<tr  role="row">
-													
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
-													
-												</tr>
+							<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+								<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+									<thead>
+										<tr role="row">
+											<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="11">
+												<b>	
+													<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
+														<input class="hidden" id="data" name="data" value="" />
+														<div>(({{benenomeconv}}))</div><!-- se for tipo tera colocar nome do tecnico só-->
+													</form>
+												</b> 
+											</th>
+										</tr>
+										
+										
+										<tr  role="row">
+											
+											<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+											<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
+											<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
+											<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
+											<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
+											<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
+											
+										</tr>
 
-												<tr  role="row">	
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-												</tr>
+										<tr  role="row">	
+											<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+											<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+											<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+											<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+											<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+											<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+											<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+											<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+											<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+											<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+											<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+										</tr>
 
 
-											</thead>
-											{{#each horaages}}
-											<tbody>
-												<tr role="row" class="odd">
-													<td style="width: 50px;">{{horaage_hora}}</td>
-													<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasexTerapeutaId_{{horaage_hora}}"></td>											
+									</thead>
+									{{#each horaages}}
+									<tbody>
+										<tr role="row" class="odd">
+											<td style="width: 50px;">{{horaage_hora}}</td>
+											<td id="horasegTerapiaId_{{horaage_hora}}"></td>
+											<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
+											<td id="horaterTerapiaId_{{horaage_hora}}"></td>
+											<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
+											<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
+											<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
+											<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
+											<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
+											<td id="horasexTerapiaId_{{horaage_hora}}"></td>
+											<td id="horasexTerapeutaId_{{horaage_hora}}"></td>											
 
-												</tr>
-											</tbody>
-											{{/each}}
+										</tr>
+									</tbody>
+									{{/each}}
 
-										</table>
+								</table>
 
 
 
 
-									</div>
-								</div>
-
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert">
-										<br>
-										<br>
-										<br>
-									</div>
-								</div>
-
-
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-danger">
-										<strong>
-										Agenda
-										</strong>
-										<br>
-											Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-
-
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-warning">
-										<strong>
-										Beneficiário
-										</strong>
-										<br>
-										Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-info">
-										<strong>
-										Técnico
-										</strong>
-										<br>
-										Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-
-
-							</div>
 						</div>
+				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->

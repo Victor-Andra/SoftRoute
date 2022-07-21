@@ -177,7 +177,7 @@ const BeneSchema = mongoose.Schema({
         },
     bene_maeprof:{
          type: String, 
-         required: true 
+         required: false 
         },
     bene_maeident:{
          type: String, 

@@ -88,7 +88,6 @@ const FornecSchema = mongoose.Schema({
     },
     fornec_datacad :{ 
         type: String, 
-         
         required: false 
     },
     fornec_dataedi :{ 
