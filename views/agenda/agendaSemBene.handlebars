@@ -4,42 +4,26 @@
 		<title>Agenda Semanal por Beneficiário ou Terapeuta</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
-
 		<!-- page specific plugin styles -->
-
 		<!-- text fonts -->
 		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css">
-
 		<!-- ace styles -->
 		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
 		<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
 		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css">
 		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
  	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
-
 		<!-- inline styles related to this page -->
 		<!-- ace settings handler -->	
 		<script src="../../assets/js/ace-extra.min.js"></script>
 		<style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
 		<script src="../../assets/js/html5shiv.min.js"></script>
 		<script src="../../assets/js/respond.min.js"></script>
-		
+
 		<script type="text/javascript">
-				
-			
-			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("agendaBeneid").value).value.toString();
-				console.log(v1)
-				document.getElementById("agendaConvid").value = v1;
-			}
-			function atualizaConvId(){
-				let convId = document.getElementById("agendaConvid").value;
-				console.log(convId)
-			}
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
 				var dataFmt = new Date(dataIso);
@@ -47,14 +31,28 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
-				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
-				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
-				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
-				document.getElementById("agendaConvid").value = document.getElementById("agendaConvidEdi").value;
-				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
-				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
-				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
-				atualizaData();
+				let dias = ["seg","ter","qua","qui","sex"];
+				try{
+					dias.forEach((dia)=>{
+						console.log("dia:"+dia)
+						document.getElementsByName(dia).forEach((e)=>{
+							console.log("e.value")
+							console.log(e.value)
+							console.log("e.id")
+							console.log(e.id)
+							let id = "hora"+e.id;
+							let valor = e.value;
+							console.log("hora+e.id/id:"+id)
+							console.log("valor:"+valor)
+							let val = document.getElementById(valor).value;
+							console.log("value2:"+val)
+							document.getElementById(id).append(val);
+						})
+					})
+					//horasegTerapiaId_
+				} catch(err){
+					console.log(err)
+				}
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -66,9 +64,52 @@
 					console.log(chck.value);
 				}
 			}
+			function selectFil(){
+				let origem = document.getElementById("tipoFil").value;
+				switch (origem) {
+					case "bene":
+						document.getElementById("beneFilDiv").style.display = "";
+						document.getElementById("agendaBeneid").style.display = "";
+						document.getElementById("salaFilDiv").style.display = "none";
+						document.getElementById("agendaSalaid").style.display = "none";
+						document.getElementById("terapeutaFilDiv").style.display = "none";
+						document.getElementById("agendaTerapeutaid").style.display = "none";
+						break;
+					case "sala":
+						document.getElementById("beneFilDiv").style.display = "none";
+						document.getElementById("agendaBeneid").style.display = "none";
+						document.getElementById("salaFilDiv").style.display = "";
+						document.getElementById("agendaSalaid").style.display = "";
+						document.getElementById("terapeutaFilDiv").style.display = "none";
+						document.getElementById("agendaTerapeutaid").style.display = "none";
+						break;
+					case "tera":
+						document.getElementById("beneFilDiv").style.display = "none";
+						document.getElementById("agendaBeneid").style.display = "none";
+						document.getElementById("salaFilDiv").style.display = "none";
+						document.getElementById("agendaSalaid").style.display = "none";
+						document.getElementById("terapeutaFilDiv").style.display = "";
+						document.getElementById("agendaTerapeutaid").style.display = "";
+						break;
+				}
+			}
+			function formataData(){
+				let dat = new Date(document.getElementById('dataFil').value);
+				let mes = (dat.getMonth()+1).toString();
+				let dia = (dat.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
 		</script>
 	</head>
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregaBody()">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -85,44 +126,44 @@
 						<div class="alert alert-danger">{{error}}</div>
 					{{else}}
 					{{/if}}
-
-					<form class="form-horizontal" role="form" action="/menu/agenda/filL" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" >
-							<div class="col-xs-20 col-sm-3">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filS" method="POST">
+						<div class="breadcrumbs" id="pesquisaAge">
+							<div>
 								<label>Tipo Filtro:</label>
 								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
-										<option value="bene">Beneficiário</option>
-										<option value="tera">Terapeuta</option>
+									<option value="bene">Beneficiário</option>
+									<option value="tera">Terapeuta</option>
 								</select>
 							</div>
-							
-							<div class="col-xs-20 col-sm-5 center"  >
+							<div class="hidden" id="divCarrega" name="divCarrega">
+								<input id="766f69643132333435366964" value="&nbsp;" />
+								{{#each agendas}}
+									<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
+									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+								{{/each}}
+								{{#each terapeutas}}
+									<input id="{{_id}}" value="{{usuario_nome}}" />
+								{{/each}}
+								{{#each terapias}}
+									<input id="{{_id}}" value="{{terapia_nome}}" />
+								{{/each}}
+							</div>
+							<div c >
 								<label id="beneFilDiv">Beneficiário:</label>
-								<!-- 
-								<label id="terapeutaFilDiv">Terapeuta:</label>
-								-->
-								<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
+								<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
 									{{#each benes}}
-									<option value="{{_id}}">{{bene_nome}}</option>
+										<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}
 								</select>
-								<!-- 
-								<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each terapeutas}}
-									<option value="{{_id}}">{{usuario_nome}}</option>
-									{{/each}}
-								</select>
-								-->
-								<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">
+								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 							</div>
-
-							<div class="col-xs-20 col-sm-3 center"  >
+							<div >
 								<label>Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
 							</div>
-							<div class="col-xs-20 col-sm-1">
-								<div class="widget-toolbar hidden-480">
+							<div >
+								<div >
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
 										<i class="ace-icon fa fa-search-plus "></i>
 									</button>
@@ -130,8 +171,6 @@
 							</div>
 						</div>
 					</form>
-
-
 						<div class="tab-content"><!-- .tab-contente -->
 							<div class="row">
 								<div class="col-xs-16 col-sm-9">
@@ -143,24 +182,19 @@
 														<b>	
 															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
 																<input class="hidden" id="data" name="data" value="" />
-																<div>(({{benenomeconv}}))</div><!-- se for tipo tera colocar nome do tecnico só-->
+																<div>{{benenomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
 															</form>
 														</b> 
 													</th>
 												</tr>
-												
-												
 												<tr  role="row">
-													
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
 													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
 													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
 													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
 													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
-													
 												</tr>
-
 												<tr  role="row">	
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
@@ -174,36 +208,57 @@
 													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 												</tr>
-
-
 											</thead>
 											{{#each horaages}}
 											<tbody>
 												<tr role="row" class="odd">
 													<td style="width: 50px;">{{horaage_hora}}</td>
-													<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-													<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasexTerapeutaId_{{horaage_hora}}"></td>											
-
+													{{#each ../agendas}}
+													{{#compareString ../horaage_hora agenda_hora}}
+													{{#compareString "seg" agenda_data_semana}}
+													<td id="horasegTerapiaId_{{agenda_aux}}"></td>
+													<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
+													{{/compareString}}
+													{{/compareString}}
+													{{/each}}
+													{{#each ../agendas}}
+													{{#compareString ../horaage_hora agenda_hora}}
+													{{#compareString "ter" agenda_data_semana}}
+													<td id="horaterTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
+													{{/compareString}}
+													{{/compareString}}
+													{{/each}}
+													{{#each ../agendas}}
+													{{#compareString ../horaage_hora agenda_hora}}
+													{{#compareString "qua" agenda_data_semana}}
+													<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
+													{{/compareString}}
+													{{/compareString}}
+													{{/each}}
+													{{#each ../agendas}}
+													{{#compareString ../horaage_hora agenda_hora}}
+													{{#compareString "qui" agenda_data_semana}}
+													<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
+													{{/compareString}}
+													{{/compareString}}
+													{{/each}}
+													{{#each ../agendas}}
+													{{#compareString ../horaage_hora agenda_hora}}
+													{{#compareString "sex" agenda_data_semana}}
+													<td id="horasexTerapiaId_{{agenda_aux}}"></td>
+													<td id="horasexTerapeutaId_{{agenda_aux}}"></td>											
+													{{/compareString}}
+													{{/compareString}}
+													{{/each}}
 												</tr>
 											</tbody>
 											{{/each}}
-
 										</table>
-
-
-
-
 									</div>
 								</div>
-
 								<div class="col-xs-16 col-sm-3">	
 									<div class="alert alert">
 										<br>
@@ -211,8 +266,6 @@
 										<br>
 									</div>
 								</div>
-
-
 								<div class="col-xs-16 col-sm-3">	
 									<div class="alert alert-danger">
 										<strong>
@@ -223,8 +276,6 @@
 										<br>
 									</div>
 								</div>
-
-
 								<div class="col-xs-16 col-sm-3">	
 									<div class="alert alert-warning">
 										<strong>
@@ -235,7 +286,6 @@
 										<br>
 									</div>
 								</div>
-
 								<div class="col-xs-16 col-sm-3">	
 									<div class="alert alert-info">
 										<strong>
@@ -246,8 +296,6 @@
 										<br>
 									</div>
 								</div>
-
-
 							</div>
 						</div>
 			</div><!-- /.main-content -->

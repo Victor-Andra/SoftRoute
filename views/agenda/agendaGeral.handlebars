@@ -149,6 +149,7 @@
 											<div class="hidden" id="divCarrega" name="divCarrega">
 												{{#each salas}}
 													<input id="{{_id}}" value="{{sala_nome}}" />
+													<input id="766f69643132333435366964" value="&nbsp;" />
 												{{/each}}
 												{{#each benes}}
 													<input id="{{_id}}" name="BENENOMES" value="{{bene_nome}}" />
@@ -229,9 +230,9 @@
 																</tr>
 																<tr  role="row">
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
@@ -302,6 +303,13 @@
 																							Copiar dia
 																						</button>
 																					</form>
+																					<br/>
+																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
+																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
+																						<button name="acaoConverte" id="acaoConverte" type="submit">
+																							Converter dia em Atendimento
+																						</button>
+																					</form>
 																				{{/compareString}}
 																			{{/each}}
 																		</b> 
@@ -309,9 +317,9 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
@@ -357,6 +365,13 @@
 																							Copiar dia
 																						</button>
 																					</form>
+																					<br/>
+																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
+																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
+																						<button name="acaoConverte" id="acaoConverte" type="submit">
+																							Converter dia em Atendimento
+																						</button>
+																					</form>
 																				{{/compareString}}
 																			{{/each}}
 																		</b> 
@@ -364,9 +379,9 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
@@ -412,6 +427,13 @@
 																							Copiar dia
 																						</button>
 																					</form>
+																					<br/>
+																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
+																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
+																						<button name="acaoConverte" id="acaoConverte" type="submit">
+																							Converter dia em Atendimento
+																						</button>
+																					</form>
 																				{{/compareString}}
 																			{{/each}}
 																		</b> 
@@ -419,9 +441,9 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
@@ -467,6 +489,13 @@
 																							Copiar dia
 																						</button>
 																					</form>
+																					<br/>
+																					<form class="form-horizontal" role="form" action="/menu/agenda/converteDia" method="POST">
+																						<input class="hidden" id="data2" name="data2" value="{{data}}" />
+																						<button name="acaoConverte" id="acaoConverte" type="submit">
+																							Converter dia em Atendimento
+																						</button>
+																					</form>
 																				{{/compareString}}
 																			{{/each}}
 																		</b> 
@@ -474,9 +503,9 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>

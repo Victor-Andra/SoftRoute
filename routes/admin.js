@@ -207,6 +207,10 @@ router.get("/agenda/cadS/",(req,res) =>{//direciona a listagem de Agenda Semanal
     fncAgenda.carregaAgendaS(req, res);
 })
 
+router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Geral.
+    console.log("lista")
+    fncAgenda.carregaAgendaFilS(req, res);
+})
 
 router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
     fncAgenda.filtraAgendaL(req, res);
