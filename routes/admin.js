@@ -100,6 +100,7 @@ const fncAgenda = require("../functions/fncAgenda")
 //Debit, Débitos (parcialmente vinculadas ao Atendimento)
 const debitClass = require("../models/debit")
 const Debit = mongoose.model("tb_debit")
+const fncDebit = require("../functions/fncDebit")
 
 //Credit, Créditos (parcialmente vinculadas ao Atendimento)
 const creditClass = require("../models/credit")
@@ -445,7 +446,7 @@ router.get('/financeiro/despesa/lis',(req,res) =>{//lista todas debits
 })
 
 router.get('/financeiro/despesa/cad',(req,res) =>{//direciona o cadstro de debit
-    res.render("financeiro/despesa/debitCad")
+    fncDebit.carregaDebit(req,res)
 })
 
 router.post('/financeiro/despesa/add',(req,res) =>{//adiciona debit

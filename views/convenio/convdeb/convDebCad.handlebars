@@ -33,7 +33,7 @@
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Crédito de Convênios</h4>
+											<h4 class="widget-title">Débito de Convênios</h4>
 
 											<span class="widget-toolbar">
 
@@ -53,11 +53,10 @@
 
 
 				
-												<label>Convênio Id</label>
+												<label>Convênio</label>
 												<div class="form-group">
 														<div class="col-sm-4">
 															<select name="convdebConvid" id="convdebConvid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
 																	{{#each convs}}
 																	<option value="{{_id}}">{{conv_nome}}</option>
 																	{{else}}
@@ -78,7 +77,6 @@
 												<div class="form-group">
 														<div class="col-sm-4">
 															<select name="convdebTerapiaid" id="convdebTerapiaid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
 																	{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
 																	{{else}}

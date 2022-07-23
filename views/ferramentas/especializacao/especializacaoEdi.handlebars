@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Especialidade</title>
+		<title>Especializacao</title>
 	</head>
 
 	<body class="no-skin">
@@ -16,10 +16,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
+								<a href="#">Especializacao Editar</a>
 							</li>
 
-							<li class="active">Especialidade Cadastro</li>
+							<li class="active">Especializacao Editar</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,13 +27,13 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/especialidade/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/especializacao/atualizar" method="POST">
 
 
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Graduação</h4>
+											<h4 class="widget-title">Especializacaos</h4>
 
 											<span class="widget-toolbar">
 
@@ -53,10 +53,10 @@
 
 
 				
-												<label> Graduação</label>
+												<label> Especializacao</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="especialidadeNome" id="especialidadeNome" class="form-control" />
+														<input type="text" name="especializacaoNome" id="especializacaoNome" class="form-control" value="{{especializacao.especializacao_nome}}"/>
 													</div>
 												</div>
 
@@ -64,10 +64,13 @@
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="especialidadeDescricao" id="especialidadeDescricao"  class="form-control" />
+														<input type="text" name="especializacaoDescricao" id="especializacaoDescricao" class="form-control" value="{{especializacao.especializacao_descricao}}"/>
 													</div>
 												</div>
 
+												<div class="hidden">
+													<input name="especializacaoId" value="{{especializacao._id}}" />
+												</div>
 
 
 
@@ -88,7 +91,7 @@
 										</button>
 	
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
+										<button class="btn btn-warning"  href="/menu/ferramentas/especializacao/lis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>

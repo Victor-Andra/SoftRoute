@@ -48,8 +48,12 @@ module.exports = {
     },
     carregaConvcreEdi(req,res){
         Convcre.findById(req.params.id).then((convcre) =>{
-            res.render('convenio/convcre/convCreEdi', convcre)
-        }).catch((err) =>{
+            Conv.find().then((conv)=>{
+                console.log("Listagem Realizada de Convênios")
+                    Terapia.find().then((terapia)=>{
+                        console.log("Listagem Realizada de Terapias")
+            res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
+        })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

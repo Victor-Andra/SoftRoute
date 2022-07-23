@@ -122,6 +122,29 @@ const UsuarioSchema = mongoose.Schema({
     usuario_img : { 
         type: String,
     },
+
+    usuario_filhos :{
+        type: String,
+    },
+    usuario_filhosqt :{
+        type: String,
+    },
+    usuario_numconselho :{
+        type: String,
+    },
+    usuario_escolaridade :{
+        type: String,
+    },
+    usuario_graduacao :{
+        type: String,
+    },
+    usuario_especializacao :{
+        type: String,
+    },
+    usuario_pix :{
+        type: String,
+    },
+
     usuario_datacad: {
         type: Date
     },
@@ -139,7 +162,7 @@ class Usuario{
         usuario_nomepai, usuario_nomemae, usuario_email, usuario_cel1, usuario_cel2,
         usuario_banco, usuario_agencia, usuario_conta, usuario_contatipo, usuario_contrato,
         usuario_funcaoid, usuario_perfilid, usuario_status,
-        usuario_senha, usuario_img, usuario_datacad, usuario_dataedi
+        usuario_senha, usuario_img, usuario_filhos, usuario_filhosqt, usuario_numconselho, usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix, usuario_datacad, usuario_dataedi
 
         ){
 
@@ -174,6 +197,15 @@ class Usuario{
         this.usuario_status = usuario_status ,
         this.usuario_senha = usuario_senha ,
         this.usuario_img = usuario_img ,
+
+        this.usuario_filhos = usuario_filhos ,
+        this.usuario_filhosqt = usuario_filhosqt ,
+        this.usuario_numconselho = usuario_numconselho ,
+        this.usuario_escolaridade = usuario_escolaridade ,
+        this.usuario_graduacao = usuario_graduacao ,
+        this.usuario_especializacao = usuario_especializacao ,
+        this.usuario_pix = usuario_pix ,
+
         this.usuario_datacad = usuario_datacad ,
         this.usuario_dataedi = usuario_dataedi
 
@@ -226,6 +258,17 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 usuario_status : req.body.usuarioStatus ,
                 usuario_senha : req.body.usuarioSenha ,
                 usuario_img : req.body.usuarioImg ,
+
+                usuario_filhos : req.body.usuarioFilhos ,
+                usuario_filhosqt : req.body.usuarioFilhosQt ,
+                usuario_numconselho : req.body.usuarioNumConselho ,
+                usuario_escolaridade : req.body.usuarioEscolaridade ,
+                usuario_graduacao : req.body.usuarioGraduacao ,
+                usuario_especializacao : req.body.usuarioEspecializacao ,
+                usuario_pix : req.body.usuarioPix ,
+
+
+
                 usuario_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -286,6 +329,15 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_status : req.body.usuarioStatus ,
             usuario_senha : req.body.usuarioSenha ,
             usuario_img : req.body.usuarioImg ,
+
+            usuario_filhos : req.body.usuarioFilhos ,
+            usuario_filhosqt : req.body.usuarioFilhosQt ,
+            usuario_numconselho : req.body.usuarioNumConselho ,
+            usuario_escolaridade : req.body.usuarioEscolaridade ,
+            usuario_graduacao : req.body.usuarioGraduacao ,
+            usuario_especializacao : req.body.usuarioEspecializacao ,
+            usuario_pix : req.body.usuarioPix ,
+
             usuario_datacad : dataAtual
 
             

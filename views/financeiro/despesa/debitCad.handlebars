@@ -64,7 +64,6 @@
 												<div class="form-group">
 													<div class="col-sm-9">
 														<select name="debitCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="">&nbsp;</option>
 															<option value="Padrão">Padrão</option>
 															<option value="Falta">Falta</option>						
 															<option value="Apoio">Apoio</option>
@@ -96,14 +95,22 @@
 												<label> Convenio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitConvid" placeholder="" class="form-control" />
+														<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each convs}}
+																	<option value="{{_id}}">{{conv_nome}}</option>
+															{{/each}}
+														</select>
 													</div>
 												</div>
 
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitNome" placeholder="" class="form-control" />
+														<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+															{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+															{{/each}}
+														</select>
 													</div>
 												</div>
 
@@ -194,9 +201,8 @@
 												<div class="form-group">
 														<div class="col-sm-2">
 															<select name="debitPg" class="chosen-select" data-placeholder="Escolha...">
-																<option value="">&nbsp;</option>
+																<option value="Não">Não</option>
 																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>						
 															</select>
 														</div>
 												</div>
@@ -205,12 +211,10 @@
 												<div class="form-group">
 														<div class="col-sm-8">
 															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
-																<option value="">&nbsp;</option>
 																<option value="Sim">Celpe</option>
 																<option value="Não">Compesa</option>						
 																<option value="Sim">Tim</option>
-																<option value="Não">Oi</option>	
-
+																<option value="Não">Oi</option>
 															</select>
 														</div>
 												</div>
