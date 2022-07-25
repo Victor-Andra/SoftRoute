@@ -10,6 +10,8 @@
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
 				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
 				document.getElementById("usuarioContatipo").value = document.getElementById("usuContaTipo").value;
+				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
+				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
 				console.log("termina");
 			}
 		</script>
@@ -317,10 +319,9 @@
 																<div class="space space-8"></div>
 																<label> Especialização</label>
 																<div class="col-sm-4">
-																	<select name="usuarioEspecialidade" id="usuarioEspecialidade" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="usuarioEspecializacao" id="usuarioEspecializacao" class="chosen-select" data-placeholder="Escolha...">
 																			{{#each especializacaos}}
 																			<option value="{{_id}}">{{especializacao_nome}}</option>
-																			{{else}}
 																			{{/each}}
 																	</select>
 																</div>
@@ -600,14 +601,13 @@
 																			<div>
 																				<label for="id-date-picker-1">Contrato</label>
 																				<div class="form-group">
-																						<div class="col-sm-8">
-																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																									<option value="{{usuario.usuario_contrato}}">{{usuario.usuario_contrato}}</option>
-																									<option value="CLT">CLT</option>
-																									<option value="CNPJ">CNPJ</option>
-																									<option value="Autônomo">Autônomo</option>																									
-																							</select>
-																						</div>
+																					<div class="col-sm-8">
+																						<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha...">
+																								<option value="CLT">CLT</option>
+																								<option value="CNPJ">CNPJ</option>
+																								<option value="Autônomo">Autônomo</option>																									
+																						</select>
+																					</div>
 																				</div>
 
 																			</div>
@@ -627,7 +627,7 @@
 																<label for="id-date-picker-1">Tipo PIX</label>
 																<div class="form-group">
 																		<div class="col-sm-8">
-																			<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." >
+																			<select name="usuarioTipoPix" id="usuarioTipoPix" class="chosen-select" data-placeholder="Escolha..." >
 																					<option value="CPF">CPF</option>
 																					<option value="CNPJ">CNPJ</option>
 																					<option value="Número Celular">Número Celular</option>
@@ -737,6 +737,8 @@
 																						<input id="usuUFId" name="usuUFId" value="{{usuario.usuario_enduf}}" />
 																						<input id="usuPerfilId" name="usuPerfilId" value="{{usuario.usuario_perfilid}}" />
 																						<input id="usuContaTipo" name="usuContaTipo" value="{{usuario.usuario_contatipo}}" />
+																						<input id="usuTipoPix" name="usuTipoPix" value="{{usuario.usuario_tipopix}}" />
+																						<input id="usuEspecializacao" name="usuEspecializacao" value="{{usuario.usuario_especializacao}}" />
 																					</div>
 
 																				</div>

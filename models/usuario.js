@@ -144,7 +144,9 @@ const UsuarioSchema = mongoose.Schema({
     usuario_pix :{
         type: String,
     },
-
+    usuario_tipopix :{
+        type: String,
+    },
     usuario_datacad: {
         type: Date
     },
@@ -204,6 +206,7 @@ class Usuario{
         this.usuario_escolaridade = usuario_escolaridade ,
         this.usuario_graduacao = usuario_graduacao ,
         this.usuario_especializacao = usuario_especializacao ,
+        this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
 
         this.usuario_datacad = usuario_datacad ,
@@ -265,6 +268,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 usuario_escolaridade : req.body.usuarioEscolaridade ,
                 usuario_graduacao : req.body.usuarioGraduacao ,
                 usuario_especializacao : req.body.usuarioEspecializacao ,
+                usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
 
 
@@ -336,6 +340,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_escolaridade : req.body.usuarioEscolaridade ,
             usuario_graduacao : req.body.usuarioGraduacao ,
             usuario_especializacao : req.body.usuarioEspecializacao ,
+            usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
 
             usuario_datacad : dataAtual

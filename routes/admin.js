@@ -396,8 +396,6 @@ router.get('/financeiro/fornecedor/edi/:id', (req,res) =>{//direciona a edição
     fncFornec.carregaFornecEdi(req, res);
 })
 
-
-
 router.post('/financeiro/fornecedor/atualizar',(req,res) =>{//atualiza o cadastro da Fornecimento
     fncFornec.atualizaFornec(req, res);
 })

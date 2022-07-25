@@ -102,27 +102,21 @@
 																	<span class="lbl"></span>
 																</label>
 															</td>
-															<td>{{debit_fornecid}}</td>
+															<td>
+																{{#each ../fornecs}}
+																	{{#ifEqual this._id ../debit_fornecid}}
+																		{{fornec_nome}}
+																	{{/ifEqual}}
+																	{{#compareThis ../debit_fornecid "unfefinec"}}
+																		undefined
+																	{{/compareThis}}
+																{{/each}}
+															</td>
 															<td>{{debit_datavenci}}</td>
 															<td>{{debit_datapg}}</td>
 															<th>{{debit_valorprev}}</th>
 															<th>{{debit_valorpg}}</th>
 															<th>{{debit_pg}}</th>					
-															{{#each ../benes}}
-																{{#ifEqual this._id ../atend_beneid}}
-																	<td>{{bene_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
-															{{#each ../terapias}}<!-- Ok -->
-																{{#ifEqual this._id ../atend_terapiaid}}
-																	<td>{{terapia_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
-															{{#each ../usuarios}}
-																{{#ifEqual this._id ../atend_terapeutaid}}
-																	<td>{{usuario_nome}}</td> <!-- Nome Usuário que é Terapeuta -->	
-																{{/ifEqual}}
-															{{/each}}
 															<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
 															<td>
 																<div class="action-buttons">

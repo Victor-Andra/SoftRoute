@@ -361,7 +361,7 @@ module.exports = {
     },
     carregaEditar(req,res){
         Debit.findById(req.params.id).then((debit) =>{
-            res.render('financeiro/receita/debitEdi', debit)
+            res.render('financeiro/despesa/debitEdi', debit)
         }).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -395,30 +395,35 @@ module.exports = {
         }
     },
     adicionar(req,res){
-        let resultado
+        let resultado = false
         let cadastro = debitClass.debitAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
-        cadastro.then((res)=>{
-            console.log(res)
-            retorno = true;
-        }).catch((err) => {
-            console.log(err)
-            retorno = err;
-        }).finally(() => {
-            if(resposta){
-                console.log('verdadeiro')
-                this.listar(req,res);
-            } else {
-                console.log(cadastro)
-                res.render('admin/erro');
-            }
-        })
+        try{
+            cadastro.then((res)=>{
+                console.log(res)
+                resultado = true;
+            }).catch((err) => {
+                console.log(err)
+                resultado = err;
+            }).finally(() => {
+                console.log(resultado)
+                if(resultado == true){
+                    console.log('verdadeiro')
+                    this.listar(req,res);
+                } else {
+                    console.log(cadastro)
+                    res.render('admin/erro');
+                }
+            })
+        } catch(err1){
+            console.log(err1)
+        }
     },
     listar(req,res){
         Debit.find().then((debit) =>{
             console.log("Listagem Realizada!")
-            res.render('financeiro/receita/debitLis', {debits: debit})
-        }).catch((err) =>{
+            Fornec.find().then((fornec)=>{
+                res.render('financeiro/despesa/debitLis', {debits: debit, fornecs: fornec})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Debits")
             res.redirect('admin/erro')

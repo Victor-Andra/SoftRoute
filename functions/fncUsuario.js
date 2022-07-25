@@ -10,7 +10,7 @@ const Usuario = mongoose.model("tb_usuario")
 const estadoClass = require("../models/estado")
 const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
-const especialidadeClass = require("../models/especialidade")
+const especializacaoClass = require("../models/especializacao")
 
 
 //Tabelas extrangeiras   
@@ -18,6 +18,7 @@ const Estado = mongoose.model("tb_estado")
 const Perfil = mongoose.model("tb_perfil")
 const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
+const Especializacao = mongoose.model("tb_especializacao")
 
 
 
@@ -45,10 +46,11 @@ module.exports = {
                                 Funcao.find().then((funcao)=>{
                                     console.log("Listagem Realizada de Ufs!")
                                         Especialidade.find().then((especialidade)=>{
-                                            console.log("Listagem Realizada de Ufs!")
-
-            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, funcaos: funcao})
-        })})})})}).catch((err) =>{
+                                            console.log("Listagem Realizada de Especialidade!")
+                                                Especializacao.then((especializacao)=>{
+                                                    console.log("Listagem Realizada de Especializacao!")
+            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
@@ -68,8 +70,10 @@ module.exports = {
                                     console.log("Listagem Realizada de Ufs!")
                                         Especialidade.find().then((especialidade)=>{
                                             console.log("Listagem Realizada de Ufs!")
-            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, funcaos: funcao})
-        })})})})}).catch((err) =>{
+                                            Especializacao.then((especializacao)=>{
+                                                console.log("Listagem Realizada de Especializacao!")
+            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -80,23 +84,9 @@ module.exports = {
         let cadastro = usuarioClass.usuarioAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
         if(cadastro){
-            console.log('verdadeiro')
-            Usuario.find().then((usuario) =>{
-                console.log("Listagem Realizada!")
-                    Estado.find().then((estado)=>{
-                        console.log("Listagem Realizada de Ufs!")
-                            Perfil.find().then((perfil)=>{
-                                console.log("Listagem Realizada de Ufs!")
-                                    Funcao.find().then((funcao)=>{
-                                        console.log("Listagem Realizada de Ufs!")
-                                            Especialidade.find().then((especialidade)=>{
-                                                console.log("Listagem Realizada de Ufs!")
-    
-                res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, funcaos: funcao})
-            })})})})})} else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
+            this.listaUsuario(req,res)
+        } else {
+            res.render('admin/erro')
         }
     },
 

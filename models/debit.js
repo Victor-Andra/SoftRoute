@@ -191,49 +191,39 @@ module.exports = {DebitModel,DebitSchema,
         return resultado;
     },
     debitAdicionar: async (req,res) => {
-        let debitExiste;
-        if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
-        } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
-        }
         let dataAtual = new Date();
-        if(debitExiste){//se tiver null cai no else
-            return "O nome da debit já existe";
-            //programar alert
-        } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
-                debit_atendnum : req.body.nextNum ,
-                debit_categoria : req.body.debitCategoria ,
-                debit_terapiaid : req.body.debitTerapiaid ,
-                debit_convid : req.body.debitConvid ,
-                debit_nome : req.body.debitNome ,
-                debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.debitDataevento ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
-                debit_valorprev : req.body.debitValorprev ,
-                debit_juros : req.body.debitJuros ,
-                debit_multa : req.body.debitMulta ,
-                debit_adianta : req.body.debitAdianta ,
-                debit_valorpg : req.body.debitValorpg ,
-                debit_pg : req.body.debitPg ,
-                debit_fornecid : req.body.debitFornecid ,
-                debit_parcelado : req.body.debitParcelado ,
-                debit_recorrente : req.body.debitRecorrente ,
-                debit_descr : req.body.debitDescr ,
-                debit_datacad : dataAtual
-            });
-            console.log("newDebit save");
-            await newDebit.save().then(()=>{
-                console.log("Cadastro realizado!");
-                return "Cadastro realizado!";
-            }).catch((err) => {
-                console.log(err)
-                return err;
-            });
-        }
+        
+        console.log("debitmodel");
+        const newDebit = new DebitModel({
+            debit_atendnum : req.body.nextNum ,
+            debit_categoria : req.body.debitCategoria ,
+            debit_terapiaid : req.body.debitTerapiaid ,
+            debit_convid : req.body.debitConvid ,
+            debit_nome : req.body.debitNome ,
+            debit_cpfcnpj : req.body.debitCpfcnpj ,
+            debit_dataevento : req.body.debitDataevento ,
+            debit_datavenci : req.body.debitDatavenci ,
+            debit_datapg : req.body.debitDatapg ,
+            debit_valorprev : req.body.debitValorprev ,
+            debit_juros : req.body.debitJuros ,
+            debit_multa : req.body.debitMulta ,
+            debit_adianta : req.body.debitAdianta ,
+            debit_valorpg : req.body.debitValorpg ,
+            debit_pg : req.body.debitPg ,
+            debit_fornecid : req.body.debitFornecid ,
+            debit_parcelado : req.body.debitParcelado ,
+            debit_recorrente : req.body.debitRecorrente ,
+            debit_descr : req.body.debitDescr ,
+            debit_datacad : dataAtual
+        });
+        console.log("newDebit save");
+        await newDebit.save().then(()=>{
+            console.log("Cadastro realizado!");
+            return "Cadastro realizado!";
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
     },
     debitAdicionarApoio: async (req,res) => {
         let debitExiste;
