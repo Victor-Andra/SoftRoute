@@ -390,7 +390,6 @@
 																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -403,12 +402,6 @@
 																	<td id="horasegConvId_{{horaage_hora}}"></td>
 																	<td id="horasegTerapiaId_{{horaage_hora}}"></td>
 																	<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horasegMigrado_{{horaage_hora}}" id="horasegMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
 																	<td id="horasegacao_{{horaage_hora}}" style="width: 60px;"></td>
 																</tr>
 															</tbody>
@@ -426,7 +419,6 @@
 																	<input id="{{agenda_data_semana}}ConvId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
 																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-																	<input id="{{agenda_data_semana}}Migrado_{{agenda_hora}}" name="{{agenda_data_semana}}m" value="{{agenda_migrado}}" />
 																{{/each}}
 																{{#each semanas}}
 																	{{#each ../horaages}}
@@ -467,8 +459,7 @@
 																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
 															{{#each horaages}}
@@ -480,12 +471,6 @@
 																	<td id="horaterConvId_{{horaage_hora}}"></td>
 																	<td id="horaterTerapiaId_{{horaage_hora}}"></td>
 																	<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaterMigrado_{{horaage_hora}}" id="horaterMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
 																	<td id="horateracao_{{horaage_hora}}" style="width: 60px;"></td>
 																</tr>
 																</tbody>
@@ -520,8 +505,7 @@
 																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
 															{{#each horaages}}
@@ -533,12 +517,6 @@
 																	<td id="horaquaConvId_{{horaage_hora}}"></td>
 																	<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
 																	<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaquaMigrado_{{horaage_hora}}" id="horaquaMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
 																	<td id="horaquaacao_{{horaage_hora}}" style="width: 60px;"></td>
 																</tr>
 															</tbody>
@@ -573,8 +551,7 @@
 																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
 															{{#each horaages}}
@@ -586,12 +563,6 @@
 																	<td id="horaquiConvId_{{horaage_hora}}"></td>
 																	<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
 																	<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horaquiMigrado_{{horaage_hora}}" id="horaquiMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																			<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
 																	<td id="horaquiacao_{{horaage_hora}}" style="width: 60px;"></td>
 																</tr>
 															</tbody>
@@ -626,8 +597,7 @@
 																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
+																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
 															{{#each horaages}}
@@ -639,12 +609,6 @@
 																	<td id="horasexConvId_{{horaage_hora}}"></td>
 																	<td id="horasexTerapiaId_{{horaage_hora}}"></td>
 																	<td id="horasexTerapeutaId_{{horaage_hora}}"></td>
-																	<td class="center"  style="width: 50px;">
-																		<label class="pos-rel">
-																			<input name="horasexMigrado_{{horaage_hora}}" id="horasexMigrado_{{horaage_hora}}" type="checkbox" class="ace" />
-																		<span class="lbl" onclick="return false;"></span>
-																		</label>
-																	</td>
 																	<td id="horasexacao_{{horaage_hora}}" style="width: 60px;"></td>
 																</tr>
 															</tbody>

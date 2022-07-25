@@ -2,9 +2,47 @@
 <html lang="pt-br">
 	<head>
 		<title>Créditos de Convênios Edição</title>
+		<script type="text/javascript">
+			function carregaBody(){
+				let data = document.getElementById("dataEdi").value;
+
+				let dia = data.substring(0,2);
+				let mes = data.substring(3,5);
+				let ano = data.toString().substring(6,10);
+				/*
+				let prs = parseInt(mes,10);
+				prs=prs-1;
+				//console.log("prs:"+prs)
+				let mesformat;
+				if(prs<=9){
+					mesformat = "0"+prs+""
+				} else {
+					mesformat = ""+prs+""
+				}
+				*/
+				
+				//let dt = new Date(ano,mesformat,dia,0,0,0,0)
+				//dt.setUTCHours(0);
+				//dt.setMinutes(0);
+				///dt.setSeconds(0);
+
+				let fulldate=(ano+"-"+mes+"-"+dia).toString();
+				console.log(fulldate)
+				document.getElementById("convcreData").value = fulldate;
+				document.getElementById("convcreConvid").value = document.getElementById("convIdEdi").value;
+				document.getElementById("convcreTerapiaid").value = document.getElementById("terapiaIdEdi").value;
+				atualizaData();
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("convcreData").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("convcreDataFinal").value = datafmt.toISOString();
+			}
+		</script>
 	</head>
 
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregaBody()">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -29,7 +67,6 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/convenio/convcre/atualizar" method="POST">
 
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -50,25 +87,35 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-
 												<input name="convcreId" id="convcreId" class="hidden" value="{{_id}}"/>
-				
 												<label> Convênio Id</label>
 												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" readonly="true" name="convcreConvid" id="convcreConvid"  placeholder="" class="form-control" value="{{convcre_convid}}"/>
-														<input type="text" readonly="true" name="convcreConvid" id="convcreConvid"  placeholder="" class="form-control" value="{{convcre_convNome}}"/>
+													<div class="col-sm-4">
+														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each convs}}
+															<option value="{{_id}}">{{conv_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
 													</div>
 												</div>
-
-
-
-												<div class="space space-8"></div>
-												<label> Terapia</label>
-												<div class="form-group">
+<!--
+												<label> Convênio</label>
+												<div class="form-group" class="hidden">
 													<div class="col-sm-6">
-														<input name="convcreTerapiaid" id="convcreTerapiaid" class="hidden" value="{{convcre_terapiaid}}"/>
-														<input readonly="true" name="convcreTerapianome" id="convcreTerapianome" type="text" placeholder="" class="form-control" value="{{convcre_terapiaNome}}"/>
+														<input type="text" name="convcreConvnome"  id="convcreConvnome" value="{{convcre.convcre_convnome}}" class="form-control" />
+													</div>
+												</div>
+-->
+												<label>Terapia</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="convcreTerapiaid" id="convcreTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each terapias}}
+															<option value="{{_id}}">{{terapia_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
 													</div>
 												</div>
 
@@ -76,8 +123,8 @@
 												<div class="row">
 													<div class="col-sm-3">
 														<div class="input-group">
-															<input name="convcreData" id="convcreData" type="date" value="{{convcre_data}}"/>
-										
+															<input name="convcreData" id="convcreData" type="date" onchange="javascript:atualizaData()" />
+															<input name="convcreDataFinal" id="convcreDataFinal" class="hidden" />
 														</div>
 													</div>
 												</div>
@@ -86,7 +133,7 @@
 												<label> Valor de Crédito</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convcreValor" placeholder="" class="form-control" value="{{convcre_valor}}"/>
+														<input type="text" name="convcreValor" placeholder="" class="form-control" value="{{convcre.convcre_valor}}"/>
 													</div>
 												</div>
 
@@ -94,9 +141,16 @@
 												<label> Observações</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convcreObs" id="convcreObs" placeholder="" class="form-control" value="{{convcre_obs}}"/>
+														<input type="text" name="convcreObs" id="convcreObs" placeholder="" class="form-control" value="{{convcre.convcre_obs}}"/>
 													</div>
 												</div>
+
+												<div class="hidden" id="divCarrega">
+													<input id="convIdEdi" nome="convIdEdi" value="{{convcre.convcre_convid}}" />
+													<input id="terapiaIdEdi" nome="terapiaIdEdi" value="{{convcre.convcre_terapiaid}}" />
+													<input id="dataEdi" nome="dataEdi"  value="{{convcre.convcre_data}}" />
+												</div>
+
 
 											</div>
 										</div>

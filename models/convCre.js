@@ -65,6 +65,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
         //Pega data atual
         
         //Realiza Atualização
+        console.log("id:"+req.body.convcreId)
         await ConvcreModel.findByIdAndUpdate(req.body.convcreId, 
             {$set: {
                 convcre_nome: req.body.convcreConvnome,

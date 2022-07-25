@@ -52,22 +52,30 @@ module.exports = {
                 console.log("Listagem Realizada de Convênios")
                     Terapia.find().then((terapia)=>{
                         console.log("Listagem Realizada de Terapias")
-            res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
+                        res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
     },
     cadastraConvcre(req,res){
+        let retorno
         let cadastro = convcreClass.convcreAdicionar(req,res);//variavel para armazenar a função que armazena o async
-
-        if(cadastro == true){
-            console.log('verdadeiro')
-            res.render('convenio/convCre/cad');
-        } else {
-            console.log(cadastro)
-            res.render('admin/erro');
-        }
+        cadastro.then((res)=>{
+            console.log(res)
+            retorno = true;
+        }).catch((err) => {
+            console.log(err)
+            retorno = err;
+        }).finally(() => {
+            if(retorno == true){
+                console.log('verdadeiro')
+                this.listaConvcre(req,res)
+            } else {
+                console.log(cadastro)
+                res.render('admin/erro');
+            }
+        })
     },
     editaConvcre(req,res){
         let resposta;
@@ -83,6 +91,7 @@ module.exports = {
         }).finally(() =>{
             if(resposta){
                 //Volta para a convcre de listagem
+                console.log("Abrir Lista")
                 this.listaConvcre(req,res);
             }else{
                 //passar classe de erro

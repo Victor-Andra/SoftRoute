@@ -124,11 +124,8 @@
 												<div>
 													<label>Data Evento</label>
 													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />
+														<!--<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
+														<input style="height: 30px;" id="debitDataevento" name="debitDataevento" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
 
@@ -136,11 +133,8 @@
 												<div>
 													<label>Data Vencimento</label>
 													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="debitDatavenci" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />
+														<!--<input name="debitDatavenci" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
+														<input style="height: 30px;" id="debitDatavenci" name="debitDatavenci" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
 
@@ -148,11 +142,8 @@
 												<div>
 													<label>Data Pagamento</label>							
 													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />
+														<!--<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
+														<input style="height: 30px;" id="debitDatapg" name="debitDatapg" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
 
@@ -231,9 +222,8 @@
 												<div class="form-group">
 														<div class="col-sm-2">
 															<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
-																<option value="">&nbsp;</option>
 																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>						
+																<option value="Não">Não</option>
 															</select>
 														</div>
 

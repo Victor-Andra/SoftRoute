@@ -56,36 +56,34 @@
 				
 												<label>Convênio Id</label>
 												<div class="form-group">
-														<div class="col-sm-4">
-															<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
-																	{{#each convs}}
-																	<option value="{{_id}}">{{conv_nome}}</option>
-																	{{else}}
-																	{{/each}}
-															</select>
-														</div>
+													<div class="col-sm-4">
+														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each convs}}
+																<option value="{{_id}}">{{conv_nome}}</option>
+																{{else}}
+																{{/each}}
+														</select>
+													</div>
 												</div>
 
-
+<!--
 												<label> Convênio</label>
 												<div class="form-group" class="hidden">
 													<div class="col-sm-6">
 														<input type="text" name="convcreConvnome"  id="convcreConvnome" value="{{convcreConvid}}" class="form-control" />
 													</div>
 												</div>
-
+-->
 												<label>Terapia</label>
 												<div class="form-group">
-														<div class="col-sm-4">
-															<select name="convcreTerapiaid" id="convcreTerapiaid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
-																	{{#each terapias}}
-																	<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{else}}
-																	{{/each}}
-															</select>
-														</div>
+													<div class="col-sm-4">
+														<select name="convcreTerapiaid" id="convcreTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each terapias}}
+																<option value="{{_id}}">{{terapia_nome}}</option>
+																{{else}}
+																{{/each}}
+														</select>
+													</div>
 												</div>
 
 

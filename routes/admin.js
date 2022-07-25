@@ -520,9 +520,6 @@ router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro d
     }
 })
 
-
-
-
 //Menu Beneficiario
 //Bene    
     router.get('/beneficiario/lis',(req,res) =>{//lista todas benes
@@ -665,7 +662,7 @@ router.get('/convenio/conv/relatendconvval',(req,res) =>{
     })
 
     router.post('/convenio/convcre/atualizar',(req,res) =>{//atualiza o cadastro da Convcreimento
-        fncConvdeb.editarConvdev(req, res);
+        fncConvcre.editaConvcre(req, res);
     })
 
 //Menu Convenio/Convdeb 
