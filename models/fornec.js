@@ -15,7 +15,7 @@ const FornecSchema = mongoose.Schema({
     fornec_cnpj :{ 
         type: String,
         unique: true,  
-        required: true 
+        required: false 
     },
     fornec_muni :{ 
         type: String, 

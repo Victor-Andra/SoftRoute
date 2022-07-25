@@ -51,67 +51,24 @@
 										<div class="widget-body">
 											<div class="widget-main">
 
-
-				
-												<label> Atendimento</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="debitAtendid" placeholder="" class="form-control" />
+												<div>
+													<label>Data Evento</label>
+													<div class="input-group">
+														<!--<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
+														<input style="height: 30px;" id="debitDataevento" name="debitDataevento" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
 
-												<label>Categoria</label>
+												<label>Fornecedor</label>
 												<div class="form-group">
-													<div class="col-sm-9">
-														<select name="debitCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="Padrão">Padrão</option>
-															<option value="Falta">Falta</option>						
-															<option value="Apoio">Apoio</option>
-															<option value="Supervisão">Supervisão</option>																											<option value="AC">Apoio</option>
-															<option value="Pais">Pais</option>
-															<option value="Substituto">Substituto</option>
-															<option value="Glosa">Glosa</option>
-															<option value="Extra">Extra</option>																	
-														</select>
-													</div>
-												</div>
-
-
-												
-												<div class="col-xs-6">													
-													<label>Terapia</label>
-													<div class="form-group">
-														<div class="col-sm-4" style="width: 600px;">
-															<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
-																	{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{/each}}
+														<div class="col-xs-12 col-sm-4" >
+															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
+																<option value="Sim">Celpe</option>
+																<option value="Não">Compesa</option>						
+																<option value="Sim">Tim</option>
+																<option value="Não">Oi</option>
 															</select>
 														</div>
-													</div>
-												</div>
-
-
-												<label> Convenio</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
-															{{#each convs}}
-																	<option value="{{_id}}">{{conv_nome}}</option>
-															{{/each}}
-														</select>
-													</div>
-												</div>
-
-												<label> Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
-															{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
-															{{/each}}
-														</select>
-													</div>
 												</div>
 
 												<label> Cpf / Cnpj</label>
@@ -121,12 +78,16 @@
 													</div>
 												</div>
 
-												<div>
-													<label>Data Evento</label>
-													<div class="input-group">
-														<!--<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
-														<input style="height: 30px;" id="debitDataevento" name="debitDataevento" type="date" onchange="javascript:formataData()">
-													</div>
+												<label>Conta recorrente?</label>
+												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
+												<div class="form-group">
+														<div class="col-sm-2">
+															<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Não">Não</option>
+																<option value="Sim">Sim</option>
+															</select>
+														</div>
+
 												</div>
 
 				
@@ -138,14 +99,6 @@
 													</div>
 												</div>
 
-											
-												<div>
-													<label>Data Pagamento</label>							
-													<div class="input-group">
-														<!--<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
-														<input style="height: 30px;" id="debitDatapg" name="debitDatapg" type="date" onchange="javascript:formataData()">
-													</div>
-												</div>
 
 				
 												<label> Valor Previsto </label>
@@ -172,21 +125,28 @@
 												</div>
 
 
-												<label> Valor Adiantado </label>
+												<label>Valor Adiantado </label>
 												<div class="form-group">
 													<div class="col-sm-3">
 														<input type="text" name="debitAdianta" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
+											
+												<div>
+													<label>Data Pagamento</label>							
+													<div class="input-group">
+														<!--<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" />-->
+														<input style="height: 30px;" id="debitDatapg" name="debitDatapg" type="date" onchange="javascript:formataData()">
+													</div>
+												</div>
 
-												<label> Valor Pago </label>
+												<label>Valor Pago </label>
 												<div class="form-group">
 													<div class="col-sm-3">
 														<input type="text" name="debitValorpg" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
-
 
 												<label>Pago?</label>
 												<div class="form-group">
@@ -198,39 +158,14 @@
 														</div>
 												</div>
 
-												<label>Fornecedor</label>
-												<div class="form-group">
-														<div class="col-sm-8">
-															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
-																<option value="Sim">Celpe</option>
-																<option value="Não">Compesa</option>						
-																<option value="Sim">Tim</option>
-																<option value="Não">Oi</option>
-															</select>
-														</div>
-												</div>
-
-												<label> Parcelado</label>
+												<label>Parcelado</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="debitParcelado" placeholder="" class="form-control" />
 													</div>
 												</div>
 
-												<label>Conta recorrente?</label>
-												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
-												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
-																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>
-															</select>
-														</div>
-
-												</div>
-
-
-												<label> Observações </label>
+												<label>Observações </label>
 												<div class="form-group">
 													<div class="col-sm-9">
 														<input type="text" line="3" name="debitDescr" placeholder="" class="form-control" />
@@ -242,7 +177,99 @@
 										</div>
 									</div>
 								</div>
-							
+								
+								<div class="col-sm-12">
+									<div class="widget-box collapsed">
+										<div class="widget-header">
+											<h4 class="widget-title">Informações Adcionais em Caso de Despesas de Técnicos</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+
+												<label> Atendimento</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="debitAtendid" placeholder="" class="form-control" />
+													</div>
+												</div>
+
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select name="debitCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+															<option value="">&nbsp;</option>
+															<option value="Padrão">Padrão</option>
+															<option value="Falta">Falta</option>						
+															<option value="Apoio">Apoio</option>
+															<option value="Supervisão">Supervisão</option>																											<option value="AC">Apoio</option>
+															<option value="Pais">Pais</option>
+															<option value="Substituto">Substituto</option>
+															<option value="Glosa">Glosa</option>
+															<option value="Extra">Extra</option>																	
+														</select>
+													</div>
+												</div>
+
+
+												
+												<div class="col-xs-6">													
+													<label>Terapia</label>
+													<div class="form-group">
+														<div class="col-sm-4" style="width: 600px;">
+															<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<option value="">&nbsp;</option>
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+															</select>
+														</div>
+													</div>
+												</div>
+
+
+												<label> Convenio</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
+															<option value="">&nbsp;</option>
+															{{#each convs}}
+																	<option value="{{_id}}">{{conv_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+
+												<label> Terapeuta</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+															<option value="">&nbsp;</option>
+															{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+									</div>
+								</div>							
 							
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
