@@ -19,7 +19,6 @@ const FornecSchema = mongoose.Schema({
     },
     fornec_muni :{ 
         type: String, 
-        unique: true, 
         required: false 
     },
     fornec_estad :{ 
@@ -203,11 +202,11 @@ module.exports = {FornecModel,FornecSchema,
 
 
     fornecAdicionar: async (req,res) => {
-        let fornecExiste =  await FornecModel.findOne({fornec_nome: req.body.fornecNome});//quando não acha fica null
+        let fornecExiste =  await FornecModel.findOne({fornec_nome: req.body.fornecNome, fornec_cnpj: req.body.fornecCnpj});//quando não acha fica null
         let dataAtual = new Date();
         
         if(fornecExiste){//se tiver null cai no else
-            return "O nome da fornec já existe";
+            return "O fornecedor já existe";
         } else {
             console.log("fornecmodel");
             const newFornec = new FornecModel({

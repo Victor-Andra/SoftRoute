@@ -450,16 +450,7 @@ router.get('/financeiro/despesa/cad',(req,res) =>{//direciona o cadstro de debit
 })
 
 router.post('/financeiro/despesa/add',(req,res) =>{//adiciona debit
-
-    let cadastro = debitClass.debitAdicionar(req,res);//variavel para armazenar a função que armazena o async
-
-    if(cadastro == true){
-        console.log('verdadeiro')
-        res.render('financeiro/despesa/debitCad');
-    } else {
-        console.log(cadastro)
-        res.render('admin/erro');
-    }
+    fncDebit.adicionar(req,res);
 })
 
 router.get('/financeiro/despesa/del/:id', (req,res) =>{//deleta debit

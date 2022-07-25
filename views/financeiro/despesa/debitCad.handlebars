@@ -63,10 +63,10 @@
 												<div class="form-group">
 														<div class="col-xs-12 col-sm-4" >
 															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
-																<option value="Sim">Celpe</option>
-																<option value="Não">Compesa</option>						
-																<option value="Sim">Tim</option>
-																<option value="Não">Oi</option>
+																{{#each fornecs}}
+																<option value="{{_id}}">{{fornec_fantasia}}</option>
+																{{else}}
+																{{/each}}
 															</select>
 														</div>
 												</div>

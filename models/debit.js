@@ -67,7 +67,7 @@ const DebitSchema = mongoose.Schema({
         required: false 
     },
     debit_fornecid :{ 
-        type: String, 
+        type: ObjectId, 
         required: false 
     },
     debit_parcelado :{ 
@@ -228,7 +228,7 @@ module.exports = {DebitModel,DebitSchema,
             console.log("newDebit save");
             await newDebit.save().then(()=>{
                 console.log("Cadastro realizado!");
-                return true;
+                return "Cadastro realizado!";
             }).catch((err) => {
                 console.log(err)
                 return err;

@@ -7,12 +7,14 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
+const fornecClass = require("../models/fornec")
 
 const Debit = mongoose.model("tb_debit")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
+const Fornec = mongoose.model("tb_fornec")
 
 module.exports = {
     debitAdicionarApoio: async (req,res) => {
@@ -393,14 +395,24 @@ module.exports = {
         }
     },
     adicionar(req,res){
+        let resultado
         let cadastro = debitClass.debitAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        if(cadastro == true){
-            console.log('verdadeiro')
-            res.render('financeiro/receita/debitCad');
-        } else {
-            console.log(cadastro)
-            res.render('admin/erro');
-        }
+        
+        cadastro.then((res)=>{
+            console.log(res)
+            retorno = true;
+        }).catch((err) => {
+            console.log(err)
+            retorno = err;
+        }).finally(() => {
+            if(resposta){
+                console.log('verdadeiro')
+                this.listar(req,res);
+            } else {
+                console.log(cadastro)
+                res.render('admin/erro');
+            }
+        })
     },
     listar(req,res){
         Debit.find().then((debit) =>{
@@ -421,8 +433,10 @@ module.exports = {
                     console.log("Listagem Realizada de Usuário")
                     Terapia.find().then((terapia)=>{
                         console.log("Listagem Realizada de Convenios")
-                        res.render("financeiro/despesa/debitCad", {convs: conv, usuarios: usuario, terapias: terapia})
-        })})})}).catch((err) =>{
+                            Fornec.find().sort({fornec_nome: 1}).then((fornec)=>{
+                                console.log("Listagem Realizada de Fornecedores")
+                        res.render("financeiro/despesa/debitCad", {convs: conv, usuarios: usuario, terapias: terapia, fornecs: fornec})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
