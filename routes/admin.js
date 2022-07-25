@@ -402,8 +402,6 @@ router.post('/financeiro/fornecedor/atualizar',(req,res) =>{//atualiza o cadastr
     fncFornec.atualizaFornec(req, res);
 })
 
-
-
 //Financeiro / Crédito
 //Menu Crédito   
 router.get('/financeiro/receita/lis',(req,res) =>{//lista todas credits
@@ -432,17 +430,12 @@ router.post('/financeiro/receita/atualizar',(req,res) =>{//atualiza o cadastro d
 
 //Financeiro / Débito
 //Menu Débito   
-router.get('/financeiro/despesa/lis',(req,res) =>{//lista todas debits
-            
-    Debit.find().then((debit) =>{
-        console.log("Listagem Realizada!")
-        res.render('financeiro/despesa/debitLis', {debits: debit})
-    }).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao listar Debits")
-        res.redirect('admin/erro')
-    })
-    
+router.get('/financeiro/despesa/lis',(req,res) =>{//lista todas debits      
+    fncDebit.listar(req,res);
+})
+
+router.get('/financeiro/despesa/ges',(req,res) =>{//lista todas debits      
+    res.render('financeiro/despesa/debitGes')
 })
 
 router.get('/financeiro/despesa/cad',(req,res) =>{//direciona o cadstro de debit
@@ -454,61 +447,15 @@ router.post('/financeiro/despesa/add',(req,res) =>{//adiciona debit
 })
 
 router.get('/financeiro/despesa/del/:id', (req,res) =>{//deleta debit
-    Debit.deleteOne({_id: req.params.id}).then(() =>{
-        Debit.find().then((debit) =>{
-            req.flash("success_message", "Credit deletada!")
-            res.render('financeiro/despesa/debitLis', {debits: debit})
-        }).catch((err) =>{
-            console.log(err)
-            res.render('admin/erro')
-        })
-    })
+    fncDebit.listar(req,res)
 })
 
 router.get('/financeiro/despesa/edi/:id', (req,res) =>{//direciona a edição de debit
-    Debit.findById(req.params.id).then((debit) =>{
-        res.render('financeiro/despesa/debitEdi', debit)
-    }).catch((err) =>{
-        console.log(err)
-        res.render('admin/erro')
-    })
+    fncDebit.carregaEditar(req,res)
 })
 
-
-
 router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro da Debitimento
-    let resposta;
-    try{
-        debitClass.debitEditar(req,res).then((res)=>{
-            console.log("Atualização Realizada!")
-            console.log(res)
-            resposta = res;
-        }).catch((err) =>{
-            console.log("error1")
-            console.log(err)
-            resposta = err;
-            res.render('admin/erro')
-        }).finally(() =>{
-            if(resposta){
-                //Volta para a debit de listagem
-                Debit.find().then((debit) =>{
-                    console.log("Listagem Realizada!")
-                    res.render('financeiro/despesa/debitLis', {debits: debit})
-                }).catch((err) =>{
-                    console.log("err:")
-                    console.log(err)
-                    res.render('admin/erro')
-                })
-            }else{
-                //passar classe de erro
-                console.log("error")
-                console.log(resposta)
-                res.render('admin/erro')
-            }
-        })
-    } catch(err1){
-        console.log(err1)
-    }
+    fncDebit.atualizar(req,res)
 })
 
 //Menu Beneficiario

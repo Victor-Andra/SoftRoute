@@ -54,8 +54,7 @@
 						let valor = e.value;
 						console.log("id:"+id)
 						console.log("valor:"+valor)
-						let val = document.getElementById(valor).value;
-						console.log("value2:"+val)
+						let val = document.getElementById(valor);
 						document.getElementById(id).append(val);
 					})
 /*					document.getElementsByName(dia).forEach((e)=>{
@@ -321,19 +320,29 @@
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 											<div class="hidden" id="divHoraage" name="divHoraage">
 												{{#each salas}}
-													<input id="{{_id}}" value="{{sala_nome}}" />
+													<a class="Blue" id="{{_id}}" href="#">
+														<i class="ace-icon fa fa-user bigger-130"></i>{{sala_nome}}
+													</a>
 												{{/each}}
 												{{#each benes}}
-													<input id="{{_id}}" value="{{bene_apelido}}" />
+													<a class="Blue" id="{{_id}}" href="#">
+														<i class="ace-icon fa fa-user bigger-130"></i>{{bene_apelido}}
+													</a>
 												{{/each}}
 												{{#each convs}}
-													<input id="{{_id}}" value="{{conv_nome}}" />
+													<a class="Blue" id="{{_id}}" href="#">
+														<i class="ace-icon fa fa-user bigger-130"></i>{{conv_nome}}
+													</a>
 												{{/each}}
 												{{#each terapeutas}}
-													<input id="{{_id}}" value="{{usuario_nome}}" />
+													<a class="Blue" id="{{_id}}" href="#">
+														<i class="ace-icon fa fa-user bigger-130"></i>{{usuario_nome}}
+													</a>
 												{{/each}}
 												{{#each terapias}}
-													<input id="{{_id}}" value="{{terapia_nome}}" />
+													<a class="Blue" id="{{_id}}" href="#">
+														<i class="ace-icon fa fa-user bigger-130"></i>{{terapia_nome}}
+													</a>
 												{{/each}}
 											</div>
 											<div class="tabbable">
