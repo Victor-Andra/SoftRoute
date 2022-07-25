@@ -41,14 +41,21 @@ module.exports = {
 
     cadastraFornec(req,res){
         let cadastro = fornecClass.fornecAdicionar(req,res);//variavel para armazenar a função que armazena o async
-
-        if(cadastro == true){
-            console.log('verdadeiro')
-            res.render('financeiro/fornecedor/fornecCad');
-        } else {
+        let resposta;
+        cadastro.then((res)=>{
+            resposta = res
+        }).catch((err)=>{
             console.log(cadastro)
             res.render('admin/erro');
-        }
+        }).finally(()=>{
+            if(resposta == true){
+                console.log('verdadeiro')
+                this.listaFornec(req, res);
+            } else {
+                console.log(cadastro)
+                res.render('admin/erro');
+            }
+        })
     },
 
     deletaFornec(req, res){
