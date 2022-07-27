@@ -90,31 +90,39 @@ module.exports = {
     },
 
     atualizaEspecialidade(req,res){
-        let resposta;
+        let resposta = new Resposta();
+        let resultado;
         try{
             especialidadeClass.especialidadeEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resposta = res;
+                resultado = true;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resposta = err;
+                resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
+                if(resultado == true){
+                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.sucesso = "true"
                     //Volta para a especialidade de listagem
                     console.log('verdadeiro')
-                    this.listaEspecialidade(req,res)
+                    this.listaEspecialidade(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+                    console.log(resultado)
+                    resposta.texto = err
+                    resposta.sucesso = "false"
+                    //Volta para a especialidade de listagem
+                    console.log('false')
+                    this.listaEspecialidade(req,res,resposta)
                 }
             })
         } catch(err1){
             console.log(err1)
+            res.render('admin/erro')
         }
     },
 

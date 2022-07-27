@@ -45,7 +45,7 @@ module.exports = {
     carregaEspecializacaoEdi(req,res){
         Especializacao.findById(req.params.id).then((especializacao) =>{
             console.log(especializacao)
-            res.render('ferramentas/especializacao/especializacaoEdi', {especializacaos: especializacao})
+            res.render('ferramentas/especializacao/especializacaoEdi', {especializacao})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -81,31 +81,36 @@ module.exports = {
     },
 
     atualizaEspecializacao(req,res){
-        let resposta;
+        let resultado
+        let resposta = new Resposta()
         try{
             especializacaoClass.especializacaoEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resposta = res;
+                resultado = res;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resposta = err;
+                resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
-                    //Volta para a especializacao de listagem
-                    console.log("true")
-                    this.listaEspecializacao(req,res)
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+                if (resultado == true){
+                    console.log('verdadeiro')
+                    req.flash("success_message", "Cadastro realizado com sucesso!")
+                    resposta.texto = "Atualizado com sucesso!"
+                    resposta.sucesso = "true"
+                    this.listaEspecializacao(req,res,resposta)
+                } else {
+                    console.log('falso')
+                    resposta.texto = err
+                    resposta.sucesso = "false"
+                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                    this.listaEspecializacao(req,res,resposta)
                 }
             })
         } catch(err1){
-            console.log(err1)
+            console.log("Erro TryCatch:"+err1)
+            res.render('admin/erro');
         }
     },
 
