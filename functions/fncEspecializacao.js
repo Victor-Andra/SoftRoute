@@ -6,16 +6,29 @@ const Estado = mongoose.model("tb_estado")
 
 //especializacaos
 const especializacaoClass = require("../models/especializacao")
+const respostaClass = require("../models/resposta")
 
 //especializacao, tipos de especializacao 
 const Especializacao = mongoose.model("tb_especializacao")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    listaEspecializacao(req,res){
+    listaEspecializacao(req,res,resposta){
+        let flash = new Resposta()
         console.log('listando especializacaos')
         Especializacao.find().then((especializacao) =>{
             console.log("Listagem Realizada!")
-            res.render('ferramentas/especializacao/especializacaoLis', {especializacaos: especializacao})
+
+            if(resposta.sucesso == ""){
+                console.log(' objeto vazio');
+                flash.texto = ""
+                flash.sucesso = ""
+            } else {
+                flash.texto = resposta.texto
+                flash.sucesso = resposta.sucesso
+            }
+
+            res.render('ferramentas/especializacao/especializacaoLis', {especializacaos: especializacao, resposta, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Especializacaos")
@@ -25,25 +38,15 @@ module.exports = {
     },
 
     carregaEspecializacao(req,res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs!")
-            res.render("ferramentas/especializacao/especializacaoCad", {estados: estado})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Especializacaos")
-            res.redirect('admin/erro')
-        })
-
+        res.render("ferramentas/especializacao/especializacaoCad")
     },
 
 
     carregaEspecializacaoEdi(req,res){
         Especializacao.findById(req.params.id).then((especializacao) =>{
             console.log(especializacao)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/especializacao/especializacaoEdi', {especializacao, estados: estado})
-        })}).catch((err) =>{
+            res.render('ferramentas/especializacao/especializacaoEdi', {especializacaos: especializacao})
+        }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -51,16 +54,30 @@ module.exports = {
     },
 
     cadastraEspecializacao(req,res){
+        let resultado
+        let resposta = new Resposta()
         let cadastro = especializacaoClass.especializacaoAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('ferramentas/especializacao/especializacaoCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
-        }
+        cadastro.then((result)=>{
+            resultado = true;
+        }).catch((err)=>{
+            resultado = err
+            console.log("ERRO:"+err)
+        }).finally(()=>{
+            if (resultado == true){
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
+                this.listaEspecializacao(req,res,resposta)
+            } else {
+                console.log('falso')
+                resposta.texto = err
+                resposta.sucesso = "false"
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', resposta);
+            }
+        })
     },
 
     atualizaEspecializacao(req,res){
@@ -78,14 +95,8 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a especializacao de listagem
-                    Especializacao.find().then((especializacao) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('ferramentas/especializacao/especializacaoLis', {especializacaos: especializacao})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    console.log("true")
+                    this.listaEspecializacao(req,res)
                 }else{
                     //passar classe de erro
                     console.log("error")

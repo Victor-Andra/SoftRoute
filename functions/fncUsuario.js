@@ -47,7 +47,7 @@ module.exports = {
                                     console.log("Listagem Realizada de Ufs!")
                                         Especialidade.find().then((especialidade)=>{
                                             console.log("Listagem Realizada de Especialidade!")
-                                                Especializacao.then((especializacao)=>{
+                                                Especializacao.find().then((especializacao)=>{
                                                     console.log("Listagem Realizada de Especializacao!")
             res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
         })})})})})}).catch((err) =>{
@@ -68,9 +68,9 @@ module.exports = {
                             console.log("Listagem Realizada de Ufs!")
                                 Funcao.find().then((funcao)=>{
                                     console.log("Listagem Realizada de Ufs!")
-                                        Especialidade.find().then((especialidade)=>{
+                                        Especialidade.find().then((especialidade)=>{//Graduação
                                             console.log("Listagem Realizada de Ufs!")
-                                            Especializacao.then((especializacao)=>{
+                                            Especializacao.find().then((especializacao)=>{
                                                 console.log("Listagem Realizada de Especializacao!")
             res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
         })})})})})}).catch((err) =>{

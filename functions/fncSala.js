@@ -53,16 +53,25 @@ module.exports = {
     },
 
     cadastraSala(req,res){
+        let resposta
         let cadastro = salaClass.salaAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('ferramentas/sala/salaCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
-        }
+        cadastro.then((result)=>{
+            resposta = true;
+        }).catch((err)=>{
+            resposta = err
+            console.log("ERRO:"+err)
+        }).finally(()=>{
+            if (resposta == true){
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.listaSala(req,res)
+            } else {
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro');
+            }
+        })
     },
 
     atualizaSala(req,res){
@@ -80,14 +89,8 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a sala de listagem
-                    Sala.find().then((sala) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('ferramentas/sala/salaLis', {salas: sala})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    console.log('verdadeiro')
+                    this.listaSala(req,res)
                 }else{
                     //passar classe de erro
                     console.log("error")

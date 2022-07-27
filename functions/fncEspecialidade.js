@@ -6,22 +6,35 @@ const Estado = mongoose.model("tb_estado")
 
 //especialidades
 const especialidadeClass = require("../models/especialidade")
+const respostaClass = require("../models/resposta")
 
 //especialidade, tipos de especialidade 
 const Especialidade = mongoose.model("tb_especialidade")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    listaEspecialidade(req,res){
+    listaEspecialidade(req,res,resposta){
+        let flash = new Resposta()
         console.log('listando especialidades')
         Especialidade.find().then((especialidade) =>{
             console.log("Listagem Realizada!")
-            res.render('ferramentas/especialidade/especialidadeLis', {especialidades: especialidade})
+            
+            if(resposta.sucesso == ""){
+                console.log(' objeto vazio');
+                flash.texto = ""
+                flash.sucesso = ""
+            } else {
+                console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                flash.texto = resposta.texto
+                flash.sucesso = resposta.sucesso
+            }
+            
+            res.render('ferramentas/especialidade/especialidadeLis', {especialidades: especialidade, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Especialidades")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaEspecialidade(req,res){
@@ -33,7 +46,6 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Especialidades")
             res.redirect('admin/erro')
         })
-
     },
 
 
@@ -51,16 +63,30 @@ module.exports = {
     },
 
     cadastraEspecialidade(req,res){
+        let resultado
+        let resposta = new Resposta()
         let cadastro = especialidadeClass.especialidadeAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('ferramentas/especialidade/especialidadeCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
-        }
+        cadastro.then((result)=>{
+            resultado = true;
+        }).catch((err)=>{
+            resultado = err
+            console.log("ERRO:"+err)
+        }).finally(()=>{
+            if (resultado == true){
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.listaEspecialidade(req,res,resposta)
+            } else {
+                resposta.texto = err
+                resposta.sucesso = "false"
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', resposta);
+            }
+        })
     },
 
     atualizaEspecialidade(req,res){
@@ -78,14 +104,8 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a especialidade de listagem
-                    Especialidade.find().then((especialidade) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('ferramentas/especialidade/especialidadeLis', {especialidades: especialidade})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    console.log('verdadeiro')
+                    this.listaEspecialidade(req,res)
                 }else{
                     //passar classe de erro
                     console.log("error")

@@ -16,6 +16,11 @@ const especialidadeClass = require("../models/especialidade")
 const Especialidade = mongoose.model("tb_especialidade")
 const fncEspecialidade = require("../functions/fncEspecialidade")
 
+//especializacao
+const especializacaoClass = require("../models/especializacao")
+const Especializacao = mongoose.model("tb_especializacao")
+const fncEspecializacao = require("../functions/fncEspecializacao")
+
 //funções, cargos dos funcionários
 const funcaoClass = require("../models/funcao")
 const Funcao = mongoose.model("tb_funcao")
@@ -115,6 +120,10 @@ const Tabil = mongoose.model("tb_tabil")
 const correnteClass = require("../models/corrente")
 const Corrente = mongoose.model("tb_corrente")
 const fncCorrente = require("../functions/fncCorrente")
+
+//RESPOSTA
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
 
 //Fornecedor, Para cadastrar novas Depesas independentemente dos Atendimentos
 const fornecClass = require("../models/fornec")
@@ -681,8 +690,6 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
             fncSala.carregaSalaEdi(req, res);
         })
 
-
-
         router.post('/ferramentas/sala/atualizar',(req,res) =>{//atualiza o cadastro da Salaimento
             fncSala.atualizaSala(req, res);
         })
@@ -693,9 +700,7 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
     //Empresa
         router.get('/ferramentas/empresa/lis',(req,res) =>{//lista todas empresas
             fncEmpresa.listaEmpresa(req, res);
-            
         })
-
         
         router.get('/ferramentas/empresa/cad',(req,res) =>{//direciona o cadstro de empresa.
             fncEmpresa.carregaEmpresa(req, res);
@@ -713,21 +718,18 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         router.get('/ferramentas/empresa/edi/:id', (req, res) =>{//direciona a edição de empresa
             fncEmpresa.carregaEmpresaEdi(req, res);
         })
-        
-
    
         router.post('/ferramentas/empresa/atualizar',(req,res) =>{//atualiza o cadastro da Empresa
             fncEmpresa.atualizaEmpresa(req, res);
         })
-        
-        
-   
-
 
 //Menu Ferramentas
     //Especialidade
         router.get('/ferramentas/especialidade/lis',(req,res) =>{//lista todas especialidades
-            fncEspecialidade.listaEspecialidade(req, res);
+            let resposta = new Resposta()
+            resposta.texto = ""
+            resposta.sucesso = ""
+            fncEspecialidade.listaEspecialidade(req, res, resposta);
             
         })
 
@@ -736,8 +738,7 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         })
         
         router.post('/ferramentas/especialidade/add',(req,res) =>{//adiciona especialidade
-            fncEspecialidade.atualizaEspecialidade(req, res);
-
+            fncEspecialidade.cadastraEspecialidade(req, res);
         })
         
         router.get('/ferramentas/especialidade/del/:id', (req,res) =>{//deleta especialidade
@@ -754,7 +755,35 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
             fncEspecialidade.atualizaEspecialidade(req, res);
         })
 
+//Menu Ferramentas
+    //Especializacao
+    router.get('/ferramentas/especializacao/lis',(req,res) =>{//lista todas especializacaos
+        let resposta = new Resposta()
+        resposta.texto = ""
+        resposta.sucesso = ""
+        fncEspecializacao.listaEspecializacao(req, res, resposta);
+        
+    })
 
+    router.get('/ferramentas/especializacao/cad',(req,res) =>{//direciona o cadstro de especializacao
+        fncEspecializacao.carregaEspecializacao(req, res);
+    })
+    
+    router.post('/ferramentas/especializacao/add',(req,res) =>{//adiciona especializacao
+        fncEspecializacao.cadastraEspecializacao(req, res);
+    })
+    
+    router.get('/ferramentas/especializacao/del/:id', (req,res) =>{//deleta especializacao
+        fncEspecializacao.deletaEspecializacao(req, res);
+    })
+    
+    router.get('/ferramentas/especializacao/edi/:id', (req,res) =>{//direciona a edição de especializacao
+        fncEspecializacao.carregaEspecializacaoEdi(req, res);
+    })
+
+    router.post('/ferramentas/especializacao/atualizar',(req,res) =>{//atualiza o cadastro da Especializacaoimento
+        fncEspecializacao.atualizaEspecializacao(req, res);
+    })
 
 //Menu Ferramentas
     //Terapia
@@ -943,10 +972,6 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         router.post('/ferramentas/usuario/atualizar',(req,res) =>{//atualiza o cadastro da Usuarioimento
            fncUsuario.atualizaUsuario(req, res); 
         })
-        
-        
-   
-
 
 //Menu Ferramentas
     //Ajuda
