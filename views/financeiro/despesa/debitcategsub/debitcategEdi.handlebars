@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Debitcategsubs</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Debitcategsub Editar</a>
+							</li>
+							<li class="active">Debitcategsub Editar</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/debitcategsub/atualizar" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Debitcategsubs</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+											
+												<label> Nome da Debitcategsub</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="debitcategsubNome" id="debitcategsubNome" class="form-control" value="{{debitcategsub.debitcategsub_nome}}" />
+													</div>
+												</div>
+											
+												<div class="space space-8"></div>
+											
+												<label> Descrição</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="debitcategsubDescricao"  id="debitcategsubDescricao" class="form-control" value="{{debitcategsub.debitcategsub_descricao}}" />
+													</div>
+												</div>
+											
+												<div class="hidden">
+													<input name="debitcategsubId"value="{{debitcategsub._id}}" />
+												</div>
+											
+											
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/financeiro/despesa/debitcategsub/lis"/>
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>
