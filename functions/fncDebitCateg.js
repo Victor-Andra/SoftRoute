@@ -2,7 +2,7 @@
 const mongoose = require("mongoose")
 
 //debitcategs
-const debitcategClass = require("../models/debitcateg")
+const debitcategClass = require("../models/debitCateg")
 const Debitcateg = mongoose.model("tb_debitcateg")
 
 //Funções Auxiliares

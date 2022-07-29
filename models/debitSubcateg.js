@@ -21,7 +21,6 @@ const DebitsubcategSchema = mongoose.Schema({
     debitsubcateg_dataedi: {
         type: Date
     }
-    
 })
 
 class Debitsubcateg{
@@ -40,9 +39,14 @@ class Debitsubcateg{
     }
 }
 
-
+let DebitsubcategModel
 DebitsubcategSchema.loadClass(Debitsubcateg)
-const DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
+try {
+    DebitcategModel = mongoose.model('tb_debitsubcateg')
+} catch (error) {
+    DebitcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
+}
+//const DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
 module.exports = {DebitsubcategModel,DebitsubcategSchema,
     debitsubcategEditar: async (req, res) => {
         let dataAtual = new Date();

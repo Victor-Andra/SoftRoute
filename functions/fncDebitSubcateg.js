@@ -2,11 +2,11 @@
 const mongoose = require("mongoose")
 
 //Subcategorias
-const debitsubcategClass = require("../models/debitsubcateg")
+const debitsubcategClass = require("../models/debitSubcateg")
 const Debitsubcateg = mongoose.model("tb_debitsubcateg")
 
 //Categorias
-const debitcategClass = require("../models/debitcateg")
+const debitcategClass = require("../models/debitCateg")
 const Debitcateg = mongoose.model("tb_debitcateg")
 
 //Classes Extrangeiras
