@@ -3,13 +3,8 @@
 	<head>
 		<title>Despesas</title>
 	</head>
-
 	<body class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -18,39 +13,28 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
 							<li class="active">Despesas Cadastro</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/financeiro/despesa/add" method="POST">
-
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Dados</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
-
 										<div class="widget-body">
 											<div class="widget-main">
-
 												<div>
 													<label>Data Evento</label>
 													<div class="input-group">
@@ -58,39 +42,55 @@
 														<input style="height: 30px;" id="debitDataevento" name="debitDataevento" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
-
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitCategoriaid" name="debitCategoriaid" class="chosen-select">
+															{{#each categorias}}
+																<option value="{{_id}}">{{debitcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Subcategoria</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="chosen-select">
+															{{#each subcategorias}}
+																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
 												<label>Fornecedor</label>
 												<div class="form-group">
-														<div class="col-xs-12 col-sm-4" >
-															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
-																{{#each fornecs}}
+													<div class="col-xs-12 col-sm-4" >
+														<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
+															{{#each fornecs}}
 																<option value="{{_id}}">{{fornec_fantasia}}</option>
-																{{else}}
-																{{/each}}
-															</select>
-														</div>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
 												</div>
-
 												<label> Cpf / Cnpj</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="debitCpfcnpj" placeholder="" class="form-control" />
 													</div>
 												</div>
-
 												<label>Conta recorrente?</label>
 												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
 												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
-																<option value="Não">Não</option>
-																<option value="Sim">Sim</option>
-															</select>
-														</div>
-
+													<div class="col-sm-2">
+														<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
+															<option value="Não">Não</option>
+															<option value="Sim">Sim</option>
+														</select>
+													</div>
 												</div>
-
-				
 												<div>
 													<label>Data Vencimento</label>
 													<div class="input-group">
@@ -98,41 +98,30 @@
 														<input style="height: 30px;" id="debitDatavenci" name="debitDatavenci" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
-
-
-				
 												<label> Valor Previsto </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitValorprev" placeholder="" class="form-control" value="0,00"/>
+														<input type="text" name="debitValorprev" placeholder="" class="form-control" value="{{debit.debit_valorprev}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Juros </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitJuros" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="debitJuros" placeholder="0,00" class="form-control" value="{{debit.debit_juros}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Multa </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitMulta" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="debitMulta" placeholder="0,00" class="form-control" value="{{debit.debit_multa}}"/>
 													</div>
 												</div>
-
-
 												<label>Valor Adiantado </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitAdianta" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="debitAdianta" placeholder="0,00" class="form-control" value="{{debit.debit_adianta}}"/>
 													</div>
 												</div>
-
-											
 												<div>
 													<label>Data Pagamento</label>							
 													<div class="input-group">
@@ -140,74 +129,66 @@
 														<input style="height: 30px;" id="debitDatapg" name="debitDatapg" type="date" onchange="javascript:formataData()">
 													</div>
 												</div>
-
-												<label>Valor Pago </label>
+												<label>Nota Fiscal</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitValorpg" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" id="debitNotafiscal" name="debitNotafiscal" class="form-control" value="{{debit.debit_notafiscal}}" />
 													</div>
 												</div>
-
+												<label>Valor Pago</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" id="debitValorpg" name="debitValorpg" placeholder="0,00" class="form-control" value="{{debit.debit_valorpg}}"/>
+													</div>
+												</div>
 												<label>Pago?</label>
 												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="debitPg" class="chosen-select" data-placeholder="Escolha...">
-																<option value="Não">Não</option>
-																<option value="Sim">Sim</option>
-															</select>
-														</div>
+													<div class="col-sm-2">
+														<select id="debitPg" name="debitPg" class="chosen-select" data-placeholder="Escolha...">
+															<option value="Não">Não</option>
+															<option value="Sim">Sim</option>
+														</select>
+													</div>
 												</div>
-
 												<label>Parcelado</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="debitParcelado" placeholder="" class="form-control" />
 													</div>
 												</div>
-
 												<label>Observações </label>
 												<div class="form-group">
 													<div class="col-sm-9">
 														<input type="text" line="3" name="debitDescr" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
 											</div>
 										</div>
 									</div>
 								</div>
-								
 								<div class="col-sm-12">
 									<div class="widget-box collapsed">
 										<div class="widget-header">
 											<h4 class="widget-title">Informações Adcionais em Caso de Despesas de Técnicos</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
-
 										<div class="widget-body">
 											<div class="widget-main">
-
-
+												<!--
 												<label> Atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="debitAtendid" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-												<label>Categoria</label>
+												<label>Categoria atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-9">
 														<select name="debitCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
@@ -223,24 +204,19 @@
 														</select>
 													</div>
 												</div>
-
-
-												
 												<div class="col-xs-6">													
 													<label>Terapia</label>
 													<div class="form-group">
 														<div class="col-sm-4" style="width: 600px;">
 															<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
-																	<option value="">&nbsp;</option>
-																	{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{/each}}
+																<option value="">&nbsp;</option>
+																{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																{{/each}}
 															</select>
 														</div>
 													</div>
 												</div>
-
-
 												<label> Convenio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
@@ -252,7 +228,6 @@
 														</select>
 													</div>
 												</div>
-
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
@@ -264,23 +239,19 @@
 														</select>
 													</div>
 												</div>
-
-
+												-->
 											</div>
 										</div>
 									</div>
 								</div>							
-							
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-	
 								<div class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-	
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  type="reset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -288,27 +259,11 @@
 										</button>
 									</div>
 								</div>
-
 							</form>
-
-
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
-	</body>
+	</body><!-- basic scripts -->
 </html>

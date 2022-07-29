@@ -6,6 +6,7 @@ const DebitSchema = mongoose.Schema({
         type: Number, 
         required: false 
     },
+/*
     debit_categoria :{ 
         type: String, 
         required: false 
@@ -22,6 +23,7 @@ const DebitSchema = mongoose.Schema({
         type: ObjectId, 
         required: false 
     },
+    */
     debit_nome :{ 
         type: String, 
         required: false 
@@ -82,6 +84,18 @@ const DebitSchema = mongoose.Schema({
         type: String, 
         required: false 
     },
+    debit_categoriaid :{ 
+        type: ObjectId, 
+        required: false 
+    },
+    debit_subcategoriaid :{ 
+        type: ObjectId, 
+        required: false 
+    },
+    debit_notafiscal :{ 
+        type: String, 
+        required: false 
+    },
     debit_datacad :{ 
         type: String, 
         required: false 
@@ -97,10 +111,12 @@ const DebitSchema = mongoose.Schema({
 class Debit{
     constructor(
         debit_atendnum,
+        /*
         debit_categoria,
         debit_terapiaid,
         debit_terapeutaid,
         debit_convid,
+        */
         debit_nome,
         debit_cpfcnpj,
         debit_dataevento,
@@ -116,15 +132,20 @@ class Debit{
         debit_parcelado,
         debit_recorrente,
         debit_descr,
+        debit_categoriaid,
+        debit_subcategoriaid,
+        debit_notafiscal,
         debit_datacad,
         debit_dataedi
         
         ){
             this.debit_atendnum = debit_atendnum,
+            /*
             this.debit_categoria = debit_categoria,
             this.debit_terapiaid = debit_terapiaid,
             this.debit_terapeutaid = debit_terapeutaid,
             this.debit_convid = debit_convid,
+            */
             this.debit_nome = debit_nome,
             this.debit_cpfcnpj = debit_cpfcnpj,
             this.debit_dataevento = debit_dataevento,
@@ -140,6 +161,9 @@ class Debit{
             this.debit_parcelado = debit_parcelado,
             this.debit_recorrente = debit_recorrente,
             this.debit_descr = debit_descr,
+            this.debit_categoriaid = debit_categoriaid,
+            this.debit_subcategoriaid = debit_subcategoriaid,
+            this.debit_notafiscal = debit_notafiscal,
             this.debit_datacad = debit_datacad,
             this.debit_dataedi = debit_dataedi
             
@@ -153,14 +177,16 @@ module.exports = {DebitModel,DebitSchema,
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
-        
+        console.log(req.body.debitId)
         //Realiza Atualização
-        await DebitModel.findByIdAndUpdate(req.body.debitId, 
+        await DebitModel.findByIdAndUpdate(ObjectId(req.body.debitId), 
             {$set: {
+                /*
                 debit_categoria : req.body.debitCategoria ,
                 debit_terapiaid : req.body.debitTerapiaid ,
-                debit_terapeutaid : req.body.s,
+                debit_terapeutaid : req.body.debitTerapeutaid,
                 debit_convid : req.body.debitConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -176,6 +202,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_dataedi : dataAtual
                 }}
                 
@@ -192,13 +221,21 @@ module.exports = {DebitModel,DebitSchema,
     },
     debitAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let atendnum
+        if(req.body.nextNum == undefined || req.body.nextNum == "undefined"){
+            atendnum = 0
+        } else {
+            atendnum = req.body.nextNum
+        }
         
         console.log("debitmodel");
         const newDebit = new DebitModel({
-            debit_atendnum : req.body.nextNum ,
+            debit_atendnum : atendnum ,
+            /*
             debit_categoria : req.body.debitCategoria ,
             debit_terapiaid : req.body.debitTerapiaid ,
             debit_convid : req.body.debitConvid ,
+            */
             debit_nome : req.body.debitNome ,
             debit_cpfcnpj : req.body.debitCpfcnpj ,
             debit_dataevento : req.body.debitDataevento ,
@@ -214,6 +251,8 @@ module.exports = {DebitModel,DebitSchema,
             debit_parcelado : req.body.debitParcelado ,
             debit_recorrente : req.body.debitRecorrente ,
             debit_descr : req.body.debitDescr ,
+            debit_categoriaid : req.body.debitCategoriaid,
+            debit_subcategoriaid : req.body.debitSubcategoriaid,
             debit_datacad : dataAtual
         });
         console.log("newDebit save");
@@ -240,10 +279,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Apoio" ,
                 debit_terapiaid : req.body.atendMergeterapiaid ,
                 debit_terapeutaid : req.body.atendMergeTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -259,6 +300,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -286,10 +330,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Extra" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -305,6 +351,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -332,10 +381,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Falta" ,
                 debit_terapiaid : req.body.debitTerapiaid ,
                 debit_terapeutaid: req.body.atendMergeTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -351,6 +402,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -378,10 +432,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Glosa" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -397,6 +453,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -424,10 +483,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Pais" ,
                 debit_terapiaid : req.body.atendMergeTerapiaid ,
                 debit_terapeutaid : req.body.atendMergeTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -443,6 +504,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -470,10 +534,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Substituto" ,
                 debit_terapiaid : req.body.atendMergeTerapiaid ,
                 debit_terapeutaid : req.body.atendMergeTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -489,6 +555,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -516,10 +585,12 @@ module.exports = {DebitModel,DebitSchema,
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Supervisao" ,
                 debit_terapiaid : req.body.debitTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.debitConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.debitDataevento ,
@@ -535,6 +606,9 @@ module.exports = {DebitModel,DebitSchema,
                 debit_parcelado : req.body.debitParcelado ,
                 debit_recorrente : req.body.debitRecorrente ,
                 debit_descr : req.body.debitDescr ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");

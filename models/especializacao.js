@@ -61,12 +61,6 @@ module.exports = {EspecializacaoModel,EspecializacaoSchema,
         })
         return resultado;
     },
-
-
-
-
-
-
     especializacaoAdicionar: async (req,res) => {
          let dataAtual = new Date();
             console.log("especializacaomodel");

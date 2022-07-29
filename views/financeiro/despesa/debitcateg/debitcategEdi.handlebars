@@ -11,15 +11,15 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Debitcateg Editar</a>
+								<a href="#">Categoria Editar</a>
 							</li>
-							<li class="active">Debitcateg Editar</li>
+							<li class="active">Categoria Editar</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/debitcateg/atualizar" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/financeiro/despesa/categoria/atualizar" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -39,24 +39,19 @@
 												<label> Nome da Debitcateg</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitcategNome" id="debitcategNome" class="form-control" value="{{debitcateg.debitcateg_nome}}" />
+														<input type="text" name="categoriaNome" id="categoriaNome" class="form-control" value="{{categoria.debitcateg_nome}}" />
 													</div>
 												</div>
-											
 												<div class="space space-8"></div>
-											
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitcategDescricao"  id="debitcategDescricao" class="form-control" value="{{debitcateg.debitcateg_descricao}}" />
+														<input type="text" name="categoriaDescricao"  id="categoriaDescricao" class="form-control" value="{{categoria.debitcateg_descricao}}" />
 													</div>
 												</div>
-											
 												<div class="hidden">
-													<input name="debitcategId"value="{{debitcateg._id}}" />
+													<input id="categoriaId" name="categoriaId" value="{{categoria._id}}" />
 												</div>
-											
-											
 											</div>
 										</div>
 									</div>

@@ -5,6 +5,8 @@ const mongoose = require("mongoose")
 const debitClass = require("../models/debit")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
+const debitsubcategClass = require("../models/debitsubcateg")
+const debitcategClass = require("../models/debitcateg")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const fornecClass = require("../models/fornec")
@@ -12,6 +14,8 @@ const fornecClass = require("../models/fornec")
 const Debit = mongoose.model("tb_debit")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
+const Debitsubcateg = mongoose.model("tb_debitsubcateg")
+const Debitcateg = mongoose.model("tb_debitcateg")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Fornec = mongoose.model("tb_fornec")
@@ -32,10 +36,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Apoio" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -47,6 +53,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -74,10 +82,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Extra" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -89,6 +99,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -116,10 +128,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Falta" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -131,6 +145,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -158,10 +174,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Glosa" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -173,6 +191,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -200,10 +220,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Padrão" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -215,6 +237,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -242,10 +266,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Pais" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -257,6 +283,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -284,10 +312,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Substituto" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -299,6 +329,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -326,10 +358,12 @@ module.exports = {
             console.log("debitmodel");
             const newDebit = new DebitModel({
                 debit_atendnum : req.body.nextNum ,
+                /*
                 debit_categoria : "Supervisao" ,
                 debit_terapiaid : req.body.atendTerapiaid ,
                 debit_terapeutaid : req.body.atendTerapeutaid ,
                 debit_convid : req.body.atendConvid ,
+                */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
                 debit_dataevento : req.body.atendAtenddata ,
@@ -341,6 +375,8 @@ module.exports = {
                 debit_adianta : req.body.debitAdianta ,
                 debit_valorpg : req.body.debitValorpg ,
                 debit_pg : req.body.debitPg ,
+                debit_categoriaid : req.body.debitCategoriaid,
+                debit_subcategoriaid : req.body.debitSubcategoriaid,
                 debit_datacad : dataAtual
             });
             console.log("newDebit save");
@@ -361,8 +397,14 @@ module.exports = {
     },
     carregaEditar(req,res){
         Debit.findById(req.params.id).then((debit) =>{
-            res.render('financeiro/despesa/debitEdi', debit)
-        }).catch((err) =>{
+            Fornec.find().then((fornec)=>{
+                console.log("Listagem Realizada de Fornecedores!")
+                Debitcateg.find().then((categoria)=>{
+                    console.log("Listagem Realizada de Categorias")
+                    Debitsubcateg.find().then((subcategoria)=>{
+                        console.log("Listagem Realizada de Subcategorias")
+                        res.render('financeiro/despesa/debitEdi', {debit,categorias: categoria,subcategorias: subcategoria, fornecs: fornec})
+        })})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -422,8 +464,13 @@ module.exports = {
         Debit.find().then((debit) =>{
             console.log("Listagem Realizada!")
             Fornec.find().then((fornec)=>{
-                res.render('financeiro/despesa/debitLis', {debits: debit, fornecs: fornec})
-        })}).catch((err) =>{
+                console.log("Listagem Realizada de Fornecedores!")
+                Debitcateg.find().then((categoria)=>{
+                    console.log("Listagem Realizada de Categorias")
+                    Debitsubcateg.find().then((subcategoria)=>{
+                        console.log("Listagem Realizada de Subcategorias")
+                res.render('financeiro/despesa/debitLis', {debits: debit, fornecs: fornec, categorias: categoria, subcategorias: subcategoria})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Debits")
             res.redirect('admin/erro')
@@ -440,8 +487,12 @@ module.exports = {
                         console.log("Listagem Realizada de Convenios")
                             Fornec.find().sort({fornec_nome: 1}).then((fornec)=>{
                                 console.log("Listagem Realizada de Fornecedores")
-                        res.render("financeiro/despesa/debitCad", {convs: conv, usuarios: usuario, terapias: terapia, fornecs: fornec})
-        })})})})}).catch((err) =>{
+                                Debitcateg.find().then((categoria)=>{
+                                    console.log("Listagem Realizada de Categorias")
+                                    Debitsubcateg.find().then((subcategoria)=>{
+                                        console.log("Listagem Realizada de Subcategorias")
+                        res.render("financeiro/despesa/debitCad", {convs: conv, usuarios: usuario, terapias: terapia, fornecs: fornec, categorias: categoria, subcategorias: subcategoria})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

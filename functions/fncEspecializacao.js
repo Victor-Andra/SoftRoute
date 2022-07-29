@@ -1,9 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
 
-//estados e unidades federativas
-const Estado = mongoose.model("tb_estado")
-
 //especializacaos
 const especializacaoClass = require("../models/especializacao")
 const respostaClass = require("../models/resposta")

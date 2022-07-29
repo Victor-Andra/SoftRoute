@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Debitcategsubs</title>
+		<title>Subcategorias</title>
+		<script type="text/javascript">
+			function carregabody(){
+				document.getElementById("debitsubcateg_debitcategid").value = document.getElementById("categoriaIdEdi").value
+			}
+		</script>
 	</head>
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregabody()">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -19,11 +24,11 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/debitcategsub/atualizar" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/subcategoria/atualizar" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Debitcategsubs</h4>
+											<h4 class="widget-title">Subcategoria</h4>
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
@@ -35,11 +40,20 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-											
+												<label> Categoria</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="subcategoria_categoriaid" id="subcategoria_categoriaid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each categorias}}
+																<option value="{{_id}}">{{debitcateg_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
 												<label> Nome da Debitcategsub</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitcategsubNome" id="debitcategsubNome" class="form-control" value="{{debitcategsub.debitcategsub_nome}}" />
+														<input type="text" name="subcategoriaNome" id="subcategoriaNome" class="form-control" value="{{subcategoria.debitsubcateg_nome}}" />
 													</div>
 												</div>
 											
@@ -48,15 +62,14 @@
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitcategsubDescricao"  id="debitcategsubDescricao" class="form-control" value="{{debitcategsub.debitcategsub_descricao}}" />
+														<input type="text" name="subcategoriaDescricao"  id="subcategoriaDescricao" class="form-control" value="{{subcategoria.debitsubcateg_descricao}}" />
 													</div>
 												</div>
 											
 												<div class="hidden">
-													<input name="debitcategsubId"value="{{debitcategsub._id}}" />
+													<input id="subcategoriaId" name="subcategoriaId" value="{{subcategoria._id}}" />
+													<input id="categoriaIdEdi" name="categoriaIdEdi" value="{{subcategoria.debitsubcateg_debitcategid}}" />
 												</div>
-											
-											
 											</div>
 										</div>
 									</div>
@@ -69,7 +82,7 @@
 											Salvar
 										</button>
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/financeiro/despesa/debitcategsub/lis"/>
+										<button class="btn btn-warning"  href="/menu/financeiro/despesa/debitsubcateg/lis"/>
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>

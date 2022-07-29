@@ -54,13 +54,42 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Debitcategs</li>
+							<li class="active">Lista de Categorias</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					{{#each error}}
-						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					<!--//MENSAGEM FLASH-->
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+							
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
-					{{/each}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
+					<!--//MENSAGEM FLASH-->
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
@@ -96,7 +125,7 @@
 												</thead>
 												
 												<tbody>
-													{{#each debitcategs}}
+													{{#each categorias}}
 														<tr>
 															<th class="center">
 																<label class="pos-rel">
@@ -108,10 +137,10 @@
 															<td>{{debitcateg_descricao}}</td>
 															<td>
 																<div class="action-buttons">
-																	<a class="green" href="/menu/financeiro/despesa/debitcateg/edi/{{_id}}">
+																	<a class="green" href="/menu/financeiro/despesa/categoria/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																	<a class="red" href="/menu/financeiro/despesa/debitcateg/del/{{_id}}">
+																	<a class="red" href="/menu/financeiro/despesa/categoria/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
 																</div>

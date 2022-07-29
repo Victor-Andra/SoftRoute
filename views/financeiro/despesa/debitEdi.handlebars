@@ -2,14 +2,24 @@
 <html lang="pt-br">
 	<head>
 		<title>Despesas</title>
+		<script type="text/javascript">
+			function carregaBody(){
+				document.getElementById("debitCategoriaid").value = document.getElementById("debit_categoriaidEdi").value
+				document.getElementById("debitSubcategoriaid").value = document.getElementById("debit_subcategoriaidEdi").value
+				document.getElementById("debitFornecid").value = document.getElementById("debit_fornecidEdi").value
+				try{
+					if(document.getElementById("debit_categoriaEdi").value == undefined || document.getElementById("debit_categoriaEdi").value == "undefined" || document.getElementById("debit_categoriaEdi").value == ''){
+					} else {
+						document.getElementById("atendCategoria").value = document.getElementById("debit_categoriaEdi").value
+					}
+				} catch (err){
+					console.log(err);
+				}
+			}
+		</script>
 	</head>
-
-	<body class="no-skin">
-
-
+	<body class="no-skin" onload="javascript:carregaBody()">
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -18,53 +28,45 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
 							<li class="active">Despesas Editar</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/financeiro/despesa/atualizar" method="POST">
-
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Dados</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
-
+										<div id="divCarrega" name="divCarrega" class="hidden">
+											<input id="debit_categoriaidEdi" name="debit_categoriaidEdi" value="{{debit.debit_categoriaid}}" />
+											<input id="debit_subcategoriaidEdi" name="debit_subcategoriaidEdi" value="{{debit.debit_subcategoriaid}}" />
+											<input id="debit_categoriaEdi" name="debit_categoriaEdi" value="{{debit.debit_categoria}}" />
+											<input id="debit_fornecid" name="debit_fornecidEdi" value="{{debit.debit_fornecid}}" />
+										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-
-
-				
+												<!--
 												<label> Atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="debitAtendid" placeholder="" class="form-control" value="{{debit_atendid}}"/>
+														<input type="text" name="debitAtendid" placeholder="" class="form-control" value="{{debit.debit_atendid}}"/>
 													</div>
 												</div>
-
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-sm-9">
 														<select name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="{{debit_categoria}}">{{debit_categoria}}</option>
 															<option value="Padrão">Padrão</option>
 															<option value="Falta">Falta</option>						
 															<option value="Apoio">Apoio</option>
@@ -76,49 +78,40 @@
 														</select>
 													</div>
 												</div>
-
-
 												<label> Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitTerapiaid" placeholder="" class="form-control" value="{{debit_terapiaid}}"/>
+														<input type="text" name="debitTerapiaid" placeholder="" class="form-control" value="{{debit.debit_terapiaid}}"/>
 													</div>
 												</div>
-
-
 												<label> Convenio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitConvid" placeholder="" class="form-control" value="{{debit_convid}}" />
+														<input type="text" name="debitConvid" placeholder="" class="form-control" value="{{debit.debit_convid}}" />
 													</div>
 												</div>
-
 												<label> Cliente</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitNome" placeholder="" class="form-control" value="{{debit_nome}}"/>
+														<input type="text" name="debitNome" placeholder="" class="form-control" value="{{debit.debit_nome}}"/>
 													</div>
 												</div>
-
 												<label> Cpf / Cnpj</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitCpfcnpj" placeholder="" class="form-control" value="{{debit_cpfcnpj}}"/>
+														<input type="text" name="debitCpfcnpj" placeholder="" class="form-control" value="{{debit.debit_cpfcnpj}}"/>
 													</div>
 												</div>
-
+												-->
 												<div>
 													<label>Data Evento</label>
 													<div class="input-group">
 														<span class="input-group-addon">
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
-									
-														<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit_dataevento}}"/>
+														<input name="debitDataevento" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit.debit_dataevento}}"/>
 													</div>
 												</div>
-
-				
 												<div>
 													<label>Data Vencimento</label>
 													<div class="input-group">
@@ -126,11 +119,9 @@
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
 									
-														<input name="debitDatavenci" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit_datavenci}}" />
+														<input name="debitDatavenci" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit.debit_datavenci}}" />
 													</div>
 												</div>
-
-											
 												<div>
 													<label>Data Pagamento</label>							
 													<div class="input-group">
@@ -138,124 +129,126 @@
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
 									
-														<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit_datapg}}"/>
+														<input name="debitDatapg" class="col-sm-4" class="form-control" type="text" id="debitDatapg" value="{{debit.debit_datapg}}"/>
 													</div>
 												</div>
-
-				
 												<label> Valor Previsto </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitValorprev" placeholder="" class="form-control" value="{{debit_valorprev}}"/>
+														<input type="text" name="debitValorprev" placeholder="" class="form-control" value="{{debit.debit_valorprev}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Juros </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitJuros" placeholder="0,00" class="form-control" value="{{debit_juros}}"/>
+														<input type="text" name="debitJuros" placeholder="0,00" class="form-control" value="{{debit.debit_juros}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Multa </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitMulta" placeholder="0,00" class="form-control" value="{{debit_multa}}"/>
+														<input type="text" name="debitMulta" placeholder="0,00" class="form-control" value="{{debit.debit_multa}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Adiantado </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitAdianta" placeholder="0,00" class="form-control" value="{{debit_adianta}}"/>
+														<input type="text" name="debitAdianta" placeholder="0,00" class="form-control" value="{{debit.debit_adianta}}"/>
 													</div>
 												</div>
-
-
 												<label> Valor Pago </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="debitValorpg" placeholder="0,00" class="form-control" value="{{debit_valorpg}}"/>
+														<input type="text" name="debitValorpg" placeholder="0,00" class="form-control" value="{{debit.debit_valorpg}}"/>
 													</div>
 												</div>
-
-
 												<label>Pago?</label>
 												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="debitPg" class="chosen-select" data-placeholder="Escolha..." value="{{debit_pg}}">
-																<option value="{{debit_pg}}">{{debit_pg}}</option>
-																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>						
-															</select>
-														</div>
+													<div class="col-sm-2">
+														<select name="debitPg" class="chosen-select" data-placeholder="Escolha..." value="{{debit.debit_pg}}">
+															<option value="{{debit.debit_pg}}">{{debit.debit_pg}}</option>
+															<option value="Sim">Sim</option>
+															<option value="Não">Não</option>						
+														</select>
+													</div>
 												</div>
-
-
+												<label>Nota Fiscal</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" id="debitNotafiscal" name="debitNotafiscal" class="form-control" value="{{debit.debit_notafiscal}}" />
+													</div>
+												</div>
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitCategoriaid" name="debitCategoriaid" class="chosen-select">
+															{{#each categorias}}
+																<option value="{{_id}}">{{debitcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Subcategoria</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="chosen-select">
+															{{#each subcategorias}}
+																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
 												<label>Fornecedor</label>
 												<div class="form-group">
-														<div class="col-sm-8">
-															<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
-																<option value="">&nbsp;</option>
-																<option value="Sim">Celpe</option>
-																<option value="Não">Compesa</option>						
-																<option value="Sim">Tim</option>
-																<option value="Não">Oi</option>	
-
-															</select>
-														</div>
+													<div class="col-sm-8">
+														<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
+															{{#each fornecs}}
+																<option value="{{_id}}">{{fornec_fantasia}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
 												</div>
-
 												<label> Parcelado</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="debitParcelado" placeholder="" class="form-control"  value="{{debit_parcelado}}"/>
+														<input type="text" name="debitParcelado" placeholder="" class="form-control"  value="{{debit.debit_parcelado}}"/>
 													</div>
 												</div>
-
 												<label>Conta recorrente?</label>
 												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
 												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
-																<option value="{{debit_recorrente}}">{{debit_recorrente}}</option>
-																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>						
-															</select>
-														</div>
-
+													<div class="col-sm-2">
+														<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
+															<option value="{{debit.debit_recorrente}}">{{debit.debit_recorrente}}</option>
+															<option value="Sim">Sim</option>
+															<option value="Não">Não</option>						
+														</select>
+													</div>
 												</div>
-
 												<label> Observações </label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<input type="text" name="debitDescr" placeholder="" class="form-control" value="{{debit_desscr}}"/>
+														<input type="text" name="debitDescr" placeholder="" class="form-control" value="{{debit.debit_descr}}"/>
 													</div>
 												</div>
-
 												<div class="hidden">
-													<input name="debitId" value="{{_id}}" />
+													<input name="debitId" value="{{debit._id}}" />
 												</div>
-
 											</div>
 										</div>
 									</div>
 								</div>
-							
-							
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-	
 								<div class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-	
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  href="/menu/financeiro/despesa/lis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -263,27 +256,11 @@
 										</button>
 									</div>
 								</div>
-
 							</form>
-
-
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
-	</body>
+	</body><!-- basic scripts -->
 </html>

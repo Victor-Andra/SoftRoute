@@ -84,13 +84,14 @@
 															</label>
 														</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Nome</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Cpf/CNPJ: activate to sort column ascending">Cpf/CNPJ</th>
-														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vencimento:     activate to sort column ascending">Vencimento</th>
-														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Pagamento:     activate to sort column ascending">Pagamento</th>
-														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vlr.prev: activate to sort column ascending">Vlr.prev</th>
-														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vlr.pago:     activate to sort column ascending">Vlr.pago</th>
-														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Pago:     activate to sort column ascending">Pago?</th>														
-														<th>Ação</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Categoria: activate to sort column ascending">Categoria</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Subcategoria:     activate to sort column ascending">Subcategoria</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vencimento:     activate to sort column ascending">Vencimento</th>
+														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Pagamento: activate to sort column ascending">Pagamento</th>
+														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vlr.prev:     activate to sort column ascending">Vlr.prev</th>
+														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vlr.pago:     activate to sort column ascending">Vlr.pago</th>
+														<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Pago:     activate to sort column ascending">Pago?</th>
+														<th style="width: 60px;">Ação</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -103,20 +104,37 @@
 																</label>
 															</td>
 															<td>
-																-
+																{{#each ../fornecs}}
+																	{{#ifEqual this._id ../debit_fornecid}}
+																		{{fornec_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															<td>
+																{{#each ../categorias}}
+																	{{#ifEqual this._id ../debit_categoriaid}}
+																		{{debitcateg_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															<td>
+																{{#each ../subcategorias}}
+																	{{#ifEqual this._id ../debit_subcategoriaid}}
+																		{{debitsubcateg_nome}}
+																	{{/ifEqual}}
+																{{/each}}
 															</td>
 															<td>{{debit_datavenci}}</td>
 															<td>{{debit_datapg}}</td>
 															<th>{{debit_valorprev}}</th>
 															<th>{{debit_valorpg}}</th>
 															<th>{{debit_pg}}</th>					
-															<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
 															<td>
 																<div class="action-buttons">
-																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/financeiro/atendadm/edi/{{_id}}">
+																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/financeiro/despesa/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																	<a class="red" name="acaoDel" id="acaoDel" href="/menu/financeiro/atendadm/del/{{_id}}">
+																	<a class="red" name="acaoDel" id="acaoDel" href="/menu/financeiro/despesa/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
 																</div>

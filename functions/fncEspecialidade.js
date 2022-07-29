@@ -1,9 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
 
-//estados e unidades federativas
-const Estado = mongoose.model("tb_estado")
-
 //especialidades
 const especialidadeClass = require("../models/especialidade")
 const respostaClass = require("../models/resposta")
@@ -36,32 +33,20 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaEspecialidade(req,res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs!")
-            res.render("ferramentas/especialidade/especialidadeCad", {estados: estado})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Especialidades")
-            res.redirect('admin/erro')
-        })
+        res.render("ferramentas/especialidade/especialidadeCad")
     },
-
-
     carregaEspecialidadeEdi(req,res){
         Especialidade.findById(req.params.id).then((especialidade) =>{
             console.log(especialidade)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/especialidade/especialidadeEdi', {especialidade, estados: estado})
-        })}).catch((err) =>{
+                console.log("Listagem Realizada de Estados")
+                res.render('ferramentas/especialidade/especialidadeEdi', {especialidade})
+        }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
     },
-
     cadastraEspecialidade(req,res){
         let resultado
         let resposta = new Resposta()
@@ -88,7 +73,6 @@ module.exports = {
             }
         })
     },
-
     atualizaEspecialidade(req,res){
         let resposta = new Resposta();
         let resultado;
@@ -125,8 +109,6 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaEspecialidade(req,res){
         Especialidade.deleteOne({_id: req.params.id}).then(() =>{
             Especialidade.find().then((especialidade) =>{
@@ -139,6 +121,4 @@ module.exports = {
             })
         })
     }
-
-
 }

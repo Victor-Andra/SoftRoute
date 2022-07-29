@@ -19,7 +19,7 @@
 								<a href="#">Home</a>
 							</li>
 
-							<li class="active">Debitcategsub Cadastro</li>
+							<li class="active">Subcategoria Cadastro</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,7 +27,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/debitcategsub/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/financeiro/despesa/subcategoria/add" method="POST">
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
@@ -48,18 +48,27 @@
 											</div>
 											<div class="widget-body">
 												<div class="widget-main">
-
-													<label> Nome da Debitcategsub</label>
+													<label> Categoria</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="subcategoria_categoriaid" id="subcategoria_categoriaid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each categorias}}
+																	<option value="{{_id}}">{{debitcateg_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+													<label> Nome da Subcategoria</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="debitcategsubNome" id="debitcategsubNome" class="form-control" />
+															<input type="text" name="subcategoriaNome" id="subcategoriaNome" class="form-control" />
 														</div>
 													</div>
 													<div class="space space-8"></div>
 													<label> Descrição</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="debitcategsubDescricao" id="debitcategsubDescricao" class="form-control" />
+															<input type="text" name="subcategoriaDescricao" id="subcategoriaDescricao" class="form-control" />
 														</div>
 													</div>
 												</div>

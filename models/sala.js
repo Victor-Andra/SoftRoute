@@ -17,7 +17,6 @@ const SalaSchema = mongoose.Schema({
     sala_dataedi: {
         type: Date
     }
-    
 })
 
 class Sala{
@@ -33,8 +32,6 @@ class Sala{
         this.sala_dataedi = sala_dataedi
     }
 }
-
-
 
 SalaSchema.loadClass(Sala)
 const SalaModel = mongoose.model('tb_sala', SalaSchema)

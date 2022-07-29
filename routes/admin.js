@@ -129,6 +129,17 @@ const Resposta = mongoose.model("tb_resposta")
 const fornecClass = require("../models/fornec")
 const Fornec = mongoose.model("tb_fornec")
 const fncFornec = require("../functions/fncFornec")
+
+//Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
+const debitCategClass = require("../models/debitCateg")
+const debitCateg = mongoose.model("tb_debitcateg")
+const fncDebitCateg = require("../functions/fncDebitCateg")
+
+//Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
+const debitSubcategClass = require("../models/debitsubcateg")
+const debitSubcateg = mongoose.model("tb_debitsubcateg")
+const fncDebitSubcateg = require("../functions/fncDebitSubcateg")
+
 const fncSessao = require('../functions/fncSessao')
 const passport = require('passport')
 
@@ -387,7 +398,6 @@ router.get('/financeiro/fornecedor/lis',(req,res) =>{//lista todas fornecs
     fncFornec.listaFornec(req, res);
 })
 
-
 router.get('/financeiro/fornecedor/cad',(req,res) =>{//direciona o cadstro de fornec.
     fncFornec.carregaFornecCad(req, res);
 })
@@ -407,6 +417,62 @@ router.get('/financeiro/fornecedor/edi/:id', (req,res) =>{//direciona a edição
 
 router.post('/financeiro/fornecedor/atualizar',(req,res) =>{//atualiza o cadastro da Fornecimento
     fncFornec.atualizaFornec(req, res);
+})
+
+//Financeiro / categoria
+router.get('/financeiro/despesa/categoria/lis',(req,res) =>{//lista todas categorias
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncDebitCateg.listaDebitcateg(req, res, resposta);
+})
+
+router.get('/financeiro/despesa/categoria/cad',(req,res) =>{//direciona o cadstro de categoria
+    fncDebitCateg.carregaDebitcateg(req, res);
+})
+
+router.post('/financeiro/despesa/categoria/add',(req,res) =>{//adiciona categoria
+    fncDebitCateg.cadastraDebitcateg(req, res);
+})
+
+router.get('/financeiro/despesa/categoria/del/:id', (req,res) =>{//deleta categoria
+    fncDebitCateg.deletaDebitcateg(req, res);
+})
+
+router.get('/financeiro/despesa/categoria/edi/:id', (req,res) =>{//direciona a edição de categoria
+    fncDebitCateg.carregaDebitcategEdi(req, res);
+})
+
+router.post('/financeiro/despesa/categoria/atualizar',(req,res) =>{//atualiza o cadastro da categoria
+    fncDebitCateg.atualizaDebitcateg(req, res);
+})
+
+//Financeiro / sub-categoria
+router.get('/financeiro/despesa/subcategoria/lis',(req,res) =>{//lista todas subcategorias
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncDebitSubcateg.listaDebitsubcateg(req, res, resposta);
+})
+
+router.get('/financeiro/despesa/subcategoria/cad',(req,res) =>{//direciona o cadstro de subcategoria
+    fncDebitSubcateg.carregaDebitsubcateg(req, res);
+})
+
+router.post('/financeiro/despesa/subcategoria/add',(req,res) =>{//adiciona subcategoria
+    fncDebitSubcateg.cadastraDebitsubcateg(req, res);
+})
+
+router.get('/financeiro/despesa/subcategoria/del/:id', (req,res) =>{//deleta subcategoria
+    fncDebitSubcateg.deletaDebitsubcateg(req, res);
+})
+
+router.get('/financeiro/despesa/subcategoria/edi/:id', (req,res) =>{//direciona a edição de subcategoria
+    fncDebitSubcateg.carregaDebitsubcategEdi(req, res);
+})
+
+router.post('/financeiro/despesa/subcategoria/atualizar',(req,res) =>{//atualiza o cadastro da subcategoria
+    fncDebitSubcateg.atualizaDebitsubcateg(req, res);
 })
 
 //Financeiro / Crédito
@@ -748,8 +814,6 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         router.get('/ferramentas/especialidade/edi/:id', (req,res) =>{//direciona a edição de especialidade
             fncEspecialidade.carregaEspecialidadeEdi(req, res);
         })
-        
- 
 
         router.post('/ferramentas/especialidade/atualizar',(req,res) =>{//atualiza o cadastro da Especialidadeimento
             fncEspecialidade.atualizaEspecialidade(req, res);
@@ -762,7 +826,6 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         resposta.texto = ""
         resposta.sucesso = ""
         fncEspecializacao.listaEspecializacao(req, res, resposta);
-        
     })
 
     router.get('/ferramentas/especializacao/cad',(req,res) =>{//direciona o cadstro de especializacao
