@@ -136,7 +136,7 @@ const debitCateg = mongoose.model("tb_debitcateg")
 const fncDebitCateg = require("../functions/fncDebitCateg")
 
 //Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
-const debitSubcategClass = require("../models/debitsubcateg")
+const debitSubcategClass = require("../models/debitSubcateg")
 const debitSubcateg = mongoose.model("tb_debitsubcateg")
 const fncDebitSubcateg = require("../functions/fncDebitSubcateg")
 
