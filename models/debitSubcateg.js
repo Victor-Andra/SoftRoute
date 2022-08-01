@@ -11,6 +11,18 @@ const DebitsubcategSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    debitsubcateg_codigoreduzidocredit: {
+        type: String,
+        required: true
+    },
+    debitsubcateg_codigoreduzidodebit: {
+        type: String,
+        required: true
+    },
+    debitsubcateg_planoconta: {
+        type: String,
+        required: true
+    },
     debitsubcateg_debitcategid: {
         type: ObjectId,
         required: true
@@ -28,12 +40,18 @@ class Debitsubcateg{
         debitsubcateg_nome,
         debitsubcateg_descricao,
         debitsubcateg_debitcategid,
+        debitsubcateg_codigoreduzidocredit,
+        debitsubcateg_codigoreduzidodebit,
+        debitsubcateg_planoconta,
         debitsubcateg_datacad,
         debitsubcateg_dataedi
         ){
         this.debitsubcateg_nome = debitsubcateg_nome,
         this.debitsubcateg_descricao = debitsubcateg_descricao,
         this.debitsubcateg_debitcategid = debitsubcateg_debitcategid,
+        this.debitsubcateg_codigoreduzidocredit = debitsubcateg_codigoreduzidocredit,
+        this.debitsubcateg_codigoreduzidodebit = debitsubcateg_codigoreduzidodebit,
+        this.debitsubcateg_planoconta = debitsubcateg_planoconta,
         this.debitsubcateg_datacad = debitsubcateg_datacad,
         this.debitsubcateg_dataedi = debitsubcateg_dataedi
     }
@@ -59,6 +77,9 @@ module.exports = {DebitsubcategModel,DebitsubcategSchema,
                 debitsubcateg_nome: req.body.subcategoriaNome,
                 debitsubcateg_descricao: req.body.subcategoriaDescricao,
                 debitsubcateg_debitcategid: ObjectId(req.body.subcategoria_categoriaid),
+                debitsubcateg_codigoreduzidocredit : req.body.subcategoriaCodigoReduzidoC,
+                debitsubcateg_codigoreduzidodebit : req.body.subcategoriaCodigoReduzidoD,
+                debitsubcateg_planoconta : req.body.subcategoriaPlanoconta,
                 debitsubcateg_edi: dataAtual
                 }}
         ).then((res) =>{
@@ -79,6 +100,9 @@ module.exports = {DebitsubcategModel,DebitsubcategSchema,
             debitsubcateg_nome: req.body.subcategoriaNome,
             debitsubcateg_descricao: req.body.subcategoriaDescricao,
             debitsubcateg_debitcategid: req.body.subcategoria_categoriaid,
+            debitsubcateg_codigoreduzidocredit : req.body.subcategoriaCodigoReduzidoC,
+            debitsubcateg_codigoreduzidodebit : req.body.subcategoriaCodigoReduzidoD,
+            debitsubcateg_planoconta : req.body.subcategoriaPlanoconta,
             debitsubcateg_datacad: dataAtual
         });
         console.log("newDebitsubcateg save");
