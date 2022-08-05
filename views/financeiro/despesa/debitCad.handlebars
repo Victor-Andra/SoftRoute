@@ -150,6 +150,40 @@
 														</select>
 													</div>
 												</div>
+												<label>De onde saiu pagamento</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitCategoriaid2" name="debitCategoriaid2" class="chosen-select">
+															{{#each categorias}}
+																<option value="{{_id}}">{{debitcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Conta</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="chosen-select">
+															{{#each subcategorias}}
+																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Tipo pagamento</label>
+												<div class="form-group">
+													<div class="col-xs-12 col-sm-4" >
+														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="chosen-select">
+															<option value="1">Espécie</option>
+															<option value="2">Transferencia</option>
+															<option value="3">Cheque</option>
+															<option value="4">Pix</option>
+															<option value="5">Boleto</option>
+														</select>
+													</div>
+												</div>
 												<label>Parcelado</label>
 												<div class="form-group">
 													<div class="col-sm-6">

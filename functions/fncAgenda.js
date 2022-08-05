@@ -261,8 +261,8 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCDate(seg.getUTCDate() - 15);
-        sex.setUTCDate(sex.getUTCDate() - 15);
+        //seg.setUTCDate(seg.getUTCDate() - 15);
+        //sex.setUTCDate(sex.getUTCDate() - 15);
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
