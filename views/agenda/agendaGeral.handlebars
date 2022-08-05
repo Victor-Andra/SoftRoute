@@ -70,12 +70,14 @@
 								console.log(e.id)
 								document.getElementById(id).append(e);
 							});
+							/*
 							dis = ""+dia+"d";
 							document.getElementsByName(dis).forEach((e)=>{
 								let id = "hora"+e.id;
 								console.log(e.id)
 								document.getElementById(id).append(e);
 							});
+							*/
 						})
 					})
 					
@@ -260,22 +262,19 @@
 																	<input id="{{agenda_data_semana}}ConvId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
 																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-																{{/each}}
-																{{#each semanas}}
-																	{{#each ../agendas}}
-																		{{#compareString agenda_data_semana ../dia}}
-																			<div class="hidden">{{agenda_hora}}</div>
-																			<a class="Blue" name="{{agenda_data_semana}}c" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/cadF/{{agenda_data_dia}}/{{agenda_hora}}">
+																	{{#each ../semanas}}
+																		{{#compareString dia ../agenda_data_semana}}
+																			<a class="Blue" name="{{../agenda_data_semana}}c" id="{{../agenda_data_semana}}acao_{{../agenda_aux}}" href="/menu/agenda/cadF/{{data}}/{{../agenda_hora}}">
 																				<i class="ace-icon fa fa-plus bigger-130"></i>
 																			</a>
-																			<a class="green" name="{{agenda_data_semana}}e" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/edi/{{_id}}">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																			<a class="red" name="{{agenda_data_semana}}d" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/del/{{_id}}" style="padding-left: 5px;">
-																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																			</a>
-																		{{/compareString}}
+																		{{/compareString }}
 																	{{/each}}
+																	<a class="green" name="{{agenda_data_semana}}e" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/edi/{{_id}}">
+																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	</a>
+																	<a class="red" name="{{agenda_data_semana}}d" id="{{agenda_data_semana}}acao_{{agenda_aux}}" href="/menu/agenda/del/{{_id}}" style="padding-left: 5px;">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
 																{{/each}}
 															</div>
 														</table>

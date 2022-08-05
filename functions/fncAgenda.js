@@ -136,17 +136,21 @@ module.exports = {
                 return "dom"
         }
     },
-    carregaAgendaG(req,res){//AbreAgendaFiltro
+    carregaAgendaGAntiga(req,res){//AbreAgendaFiltro
         let dtFill;
         let seg = new Date();
         let sex = new Date();
+        //seg.setUTCDate(seg.getUTCDate() - 15);
+        //sex.setUTCDate(sex.getUTCDate() - 15);
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        seg.setUTCDate(seg.getUTCDate() - 7);
+        
+        console.log("seg::")
+        console.log(seg)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -244,19 +248,21 @@ module.exports = {
                                 console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
-                                    res.render("agenda/agendaGeralNova", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
+                                    res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
     },
-    carregaAgendaGAntiga(req,res){//AbreAgendaGeralAntiga
+    carregaAgendaG(req,res){//AbreAgendaGeralAntiga
         let aux = 1;
         let is = false;
         let dtFill;
         let seg = new Date();
         let sex = new Date();
+        seg.setUTCDate(seg.getUTCDate() - 15);
+        sex.setUTCDate(sex.getUTCDate() - 15);
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -390,7 +396,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -416,7 +422,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -458,7 +464,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -484,7 +490,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -526,7 +532,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -552,7 +558,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -594,7 +600,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -620,7 +626,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -662,7 +668,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -688,7 +694,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -893,7 +899,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -919,7 +925,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -961,7 +967,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -987,7 +993,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1029,7 +1035,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1055,7 +1061,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1097,7 +1103,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1123,7 +1129,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1165,7 +1171,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1191,7 +1197,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1401,7 +1407,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1427,7 +1433,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1469,7 +1475,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1495,7 +1501,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1537,7 +1543,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1563,7 +1569,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1605,7 +1611,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1631,7 +1637,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1673,7 +1679,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1699,7 +1705,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1912,7 +1918,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -1938,7 +1944,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -1981,7 +1987,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -2007,7 +2013,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -2050,7 +2056,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -2076,7 +2082,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -2118,7 +2124,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -2144,7 +2150,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
@@ -2186,7 +2192,7 @@ module.exports = {
                                                 }
                                             });
 
-                                            let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                             
                                             agendaVoid = new Agenda({
                                                 agenda_hora : h.horaage_hora,
@@ -2212,7 +2218,7 @@ module.exports = {
                                             }
                                         });
 
-                                        let dty = new Date(this.formataData(daty));//this.getDataFMT(daty)formataData
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
                                         
                                         agendaVoid = new Agenda({
                                             agenda_hora : h.horaage_hora,
