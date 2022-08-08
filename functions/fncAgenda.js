@@ -261,8 +261,8 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        //seg.setUTCDate(seg.getUTCDate() - 15);
-        //sex.setUTCDate(sex.getUTCDate() - 15);
+        seg.setUTCDate(seg.getUTCDate() - 22);
+        sex.setUTCDate(sex.getUTCDate() - 22);
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -375,7 +375,7 @@ module.exports = {
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
                                 console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
+                                if(haddia){//Verifica se tem ao menos 1 registro no dia
                                     horaage.forEach((h)=>{
                                         is = true
                                         
@@ -734,7 +734,8 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
-                                    res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
+                                    let tela = "agenda/agendaGeral"
+                                    res.render(tela, {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
