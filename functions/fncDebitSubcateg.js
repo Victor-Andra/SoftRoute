@@ -80,7 +80,7 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 this.listaDebitsubcateg(req,res,resposta)
             } else {
-                resposta.texto = err
+                resposta.texto = resultado
                 resposta.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")

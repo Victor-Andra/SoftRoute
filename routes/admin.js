@@ -460,6 +460,7 @@ router.get('/financeiro/despesa/subcategoria/cad',(req,res) =>{//direciona o cad
 })
 
 router.post('/financeiro/despesa/subcategoria/add',(req,res) =>{//adiciona subcategoria
+    console.log("passando")
     fncDebitSubcateg.cadastraDebitsubcateg(req, res);
 })
 
@@ -566,6 +567,34 @@ router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro d
         fncEvolucao.listaEvolucao(req, res); 
     })
 
+//Menu Beneficiario Escola
+router.get('/escola/lis',(req,res) =>{//lista todas escolas
+    fncBene.listaBene(req, res);        
+})
+
+router.get('/escola/cad',(req,res) =>{//direciona o cadastro de escola
+    fncBene.carregaBene(req, res); 
+})
+
+router.get('/escola/imp/:id', (req,res) =>{//direciona a edição de escola
+    fncBene.listaBeneImp(req, res); 
+})
+
+router.post('/escola/add',(req,res) =>{//adiciona escola
+  fncBene.cadastraBene(req, res); 
+})
+
+router.get('/escola/del/:id', (req,res) =>{//deleta escola
+  fncBene.deletaBene(req, res); 
+})
+
+router.get('/escola/edi/:id', (req,res) =>{//direciona a edição de escola
+   fncBene.carregaBeneEdi(req, res); 
+})
+
+router.post('/escola/atualizar',(req,res) =>{//atualiza o cadastro da escola
+    fncBene.atualizaBene(req, res); 
+})
 
 //Menu Beneficiario /Sessao
 //Tabela de Requisição de Atendimentos.

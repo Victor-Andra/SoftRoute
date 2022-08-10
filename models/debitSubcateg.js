@@ -11,11 +11,7 @@ const DebitsubcategSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    debitsubcateg_codigoreduzidocredit: {
-        type: String,
-        required: true
-    },
-    debitsubcateg_codigoreduzidodebit: {
+    debitsubcateg_codigoreduzido: {
         type: String,
         required: true
     },
@@ -40,8 +36,7 @@ class Debitsubcateg{
         debitsubcateg_nome,
         debitsubcateg_descricao,
         debitsubcateg_debitcategid,
-        debitsubcateg_codigoreduzidocredit,
-        debitsubcateg_codigoreduzidodebit,
+        debitsubcateg_codigoreduzido,
         debitsubcateg_planoconta,
         debitsubcateg_datacad,
         debitsubcateg_dataedi
@@ -49,8 +44,7 @@ class Debitsubcateg{
         this.debitsubcateg_nome = debitsubcateg_nome,
         this.debitsubcateg_descricao = debitsubcateg_descricao,
         this.debitsubcateg_debitcategid = debitsubcateg_debitcategid,
-        this.debitsubcateg_codigoreduzidocredit = debitsubcateg_codigoreduzidocredit,
-        this.debitsubcateg_codigoreduzidodebit = debitsubcateg_codigoreduzidodebit,
+        this.debitsubcateg_codigoreduzido = debitsubcateg_codigoreduzido,
         this.debitsubcateg_planoconta = debitsubcateg_planoconta,
         this.debitsubcateg_datacad = debitsubcateg_datacad,
         this.debitsubcateg_dataedi = debitsubcateg_dataedi
@@ -59,11 +53,11 @@ class Debitsubcateg{
 
 let DebitsubcategModel
 DebitsubcategSchema.loadClass(Debitsubcateg)
-try {
-    DebitcategModel = mongoose.model('tb_debitsubcateg')
-} catch (error) {
-    DebitcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
-}
+//try {
+//    DebitsubcategModel = mongoose.model('tb_debitsubcateg')
+//} catch (error) {
+    DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
+//}
 //const DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
 module.exports = {DebitsubcategModel,DebitsubcategSchema,
     debitsubcategEditar: async (req, res) => {
@@ -77,8 +71,7 @@ module.exports = {DebitsubcategModel,DebitsubcategSchema,
                 debitsubcateg_nome: req.body.subcategoriaNome,
                 debitsubcateg_descricao: req.body.subcategoriaDescricao,
                 debitsubcateg_debitcategid: ObjectId(req.body.subcategoria_categoriaid),
-                debitsubcateg_codigoreduzidocredit : req.body.subcategoriaCodigoReduzidoC,
-                debitsubcateg_codigoreduzidodebit : req.body.subcategoriaCodigoReduzidoD,
+                debitsubcateg_codigoreduzido: req.body.subcategoriaCodigoReduzido,
                 debitsubcateg_planoconta : req.body.subcategoriaPlanoconta,
                 debitsubcateg_edi: dataAtual
                 }}
@@ -100,8 +93,7 @@ module.exports = {DebitsubcategModel,DebitsubcategSchema,
             debitsubcateg_nome: req.body.subcategoriaNome,
             debitsubcateg_descricao: req.body.subcategoriaDescricao,
             debitsubcateg_debitcategid: req.body.subcategoria_categoriaid,
-            debitsubcateg_codigoreduzidocredit : req.body.subcategoriaCodigoReduzidoC,
-            debitsubcateg_codigoreduzidodebit : req.body.subcategoriaCodigoReduzidoD,
+            debitsubcateg_codigoreduzido : req.body.subcategoriaCodigoReduzido,
             debitsubcateg_planoconta : req.body.subcategoriaPlanoconta,
             debitsubcateg_datacad: dataAtual
         });

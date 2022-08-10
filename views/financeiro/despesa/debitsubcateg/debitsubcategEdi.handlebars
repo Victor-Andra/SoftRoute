@@ -4,7 +4,7 @@
 		<title>Subcategorias</title>
 		<script type="text/javascript">
 			function carregabody(){
-				document.getElementById("debitsubcateg_debitcategid").value = document.getElementById("categoriaIdEdi").value
+				document.getElementById("subcategoria_categoriaid").value = document.getElementById("categoriaIdEdi").value
 			}
 		</script>
 	</head>
@@ -69,21 +69,13 @@
 												<label> Código Reduzido </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="subcategoriaCodigoReduzidoC" id="subcategoriaCodigoReduzidoC" class="form-control" value="{{subcategoria.subcategoriaCodigoReduzidoC}}"/>
+														<input type="text" name="subcategoriaCodigorReduzido" id="subcategoriaCodigoReduzido" class="form-control" value="{{subcategoria.debitsubcateg_codigoreduzido}}"/>
 													</div>
 												</div>
-												<!--
-												<label> Código Reduzido Débito </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="subcategoriaCodigoReduzidoD" id="subcategoriaCodigoReduzidoD" class="form-control" value="{{subcategoria.subcategoriaCodigoReduzidoD}}"/>
-													</div>
-												</div>
-												-->
 												<label> Plano Conta </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="subcategoriaPlanoconta" id="subcategoriaPlanoconta" class="form-control" value="{{subcategoria.subcategoriaPlanoconta}}"/>
+														<input type="text" name="subcategoriaPlanoconta" id="subcategoriaPlanoconta" class="form-control" value="{{subcategoria.debitsubcateg_planoconta}}"/>
 													</div>
 												</div>
 											
