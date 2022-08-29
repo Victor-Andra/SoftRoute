@@ -92,6 +92,14 @@ const DebitSchema = mongoose.Schema({
         type: ObjectId, 
         required: false 
     },
+    debit_credcategoriaid :{ 
+        type: ObjectId, 
+        required: false 
+    },
+    debit_credsubcategoriaid :{ 
+        type: ObjectId, 
+        required: false 
+    },
     debit_notafiscal :{ 
         type: String, 
         required: false 
@@ -134,6 +142,8 @@ class Debit{
         debit_descr,
         debit_categoriaid,
         debit_subcategoriaid,
+        debit_credcategoriaid,
+        debit_credsubcategoriaid,
         debit_notafiscal,
         debit_datacad,
         debit_dataedi
@@ -163,6 +173,8 @@ class Debit{
             this.debit_descr = debit_descr,
             this.debit_categoriaid = debit_categoriaid,
             this.debit_subcategoriaid = debit_subcategoriaid,
+            this.debit_credcategoriaid = debit_credcategoriaid,
+            this.debit_credsubcategoriaid = debit_credsubcategoriaid,
             this.debit_notafiscal = debit_notafiscal,
             this.debit_datacad = debit_datacad,
             this.debit_dataedi = debit_dataedi
@@ -204,6 +216,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_dataedi : dataAtual
                 }}
@@ -253,6 +267,8 @@ module.exports = {DebitModel,DebitSchema,
             debit_descr : req.body.debitDescr ,
             debit_categoriaid : req.body.debitCategoriaid,
             debit_subcategoriaid : req.body.debitSubcategoriaid,
+            debit_credcategoriaid : req.body.debitCategoriaid,
+            debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
             debit_datacad : dataAtual
         });
         console.log("newDebit save");
@@ -302,6 +318,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -353,6 +371,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -404,6 +424,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -455,6 +477,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -506,6 +530,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -557,6 +583,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });
@@ -608,6 +636,8 @@ module.exports = {DebitModel,DebitSchema,
                 debit_descr : req.body.debitDescr ,
                 debit_categoriaid : req.body.debitCategoriaid,
                 debit_subcategoriaid : req.body.debitSubcategoriaid,
+                debit_credcategoriaid : req.body.debitCategoriaid,
+                debit_credsubcategoriaid : req.body.debitCreSubcategoriaid,
                 debit_notafiscal : req.body.debitNotafiscal,
                 debit_datacad : dataAtual
             });

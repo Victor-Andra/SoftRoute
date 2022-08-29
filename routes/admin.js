@@ -21,6 +21,11 @@ const especializacaoClass = require("../models/especializacao")
 const Especializacao = mongoose.model("tb_especializacao")
 const fncEspecializacao = require("../functions/fncEspecializacao")
 
+//escola
+const escolaClass = require("../models/escola")
+const Escola = mongoose.model("tb_escola")
+const fncEscola = require("../functions/fncEscola")
+
 //funções, cargos dos funcionários
 const funcaoClass = require("../models/funcao")
 const Funcao = mongoose.model("tb_funcao")
@@ -208,12 +213,12 @@ router.get("/agenda/cadF/:dia/:mes/:ano/:hora",(req,res) =>{//direciona o cadast
     fncAgenda.carregaAgendaEdiF(req, res);
 })
 
-router.get("/agenda/cadL/",(req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
+router.get("/agenda/lisL/",(req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
     console.log("lista")
     fncAgenda.carregaAgendaL(req, res);
 })
 
-router.get("/agenda/cadG/",(req,res) =>{//direciona a listagem de Agenda Geral.
+router.get("/agenda/lisG/",(req,res) =>{//direciona a listagem de Agenda Geral.
     console.log("lista")
     fncAgenda.carregaAgendaG(req, res);
 })
@@ -223,7 +228,7 @@ router.post("/agenda/filG/",(req,res) =>{//direciona a listagem de Agenda Geral.
     fncAgenda.carregaAgendaFilG(req, res);
 })
 
-router.get("/agenda/cadS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
+router.get("/agenda/lisS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
     console.log("Agenda Semanal")
     fncAgenda.carregaAgendaS(req, res);
 })
@@ -231,6 +236,39 @@ router.get("/agenda/cadS/",(req,res) =>{//direciona a listagem de Agenda Semanal
 router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Geral.
     console.log("lista")
     fncAgenda.carregaAgendaFilS(req, res);
+})
+
+router.get("/agenda/lisB",(req,res) =>{//direciona a listagem agendamento de beneficiarios.
+    console.log("Agenda Bene")
+    fncAgenda.carregaAgendaB(req, res);
+})
+
+router.post("/agenda/filB",(req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.get("/agenda/lisT",(req,res) =>{//direciona a listagem agendamento de terapeutas.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.post("/agenda/filT",(req,res) =>{//direciona a listagem agendamento de filtro de terapeutas.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.get("/agenda/lisA",(req,res) =>{//direciona a listagem de laudos.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.post("/agenda/filA",(req,res) =>{//direciona a listagem de filtro de laudos.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.get("/agenda/lisV",(req,res) =>{//direciona a listagem de laudos.
+    fncAgenda.filtraAgendaL(req, res);
+})
+
+router.post("/agenda/filV",(req,res) =>{//direciona a listagem de filtro de laudos.
+    fncAgenda.filtraAgendaL(req, res);
 })
 
 router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
@@ -568,32 +606,36 @@ router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro d
     })
 
 //Menu Beneficiario Escola
-router.get('/escola/lis',(req,res) =>{//lista todas escolas
-    fncBene.listaBene(req, res);        
+router.get('/beneficiario/escola/lis',(req,res) =>{//lista todas escolas
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncEscola.listaEscola(req, res, resposta);        
 })
 
-router.get('/escola/cad',(req,res) =>{//direciona o cadastro de escola
-    fncBene.carregaBene(req, res); 
+router.get('/beneficiario/escola/cad',(req,res) =>{//direciona o cadastro de escola
+    fncEscola.carregaEscola(req, res); 
 })
 
-router.get('/escola/imp/:id', (req,res) =>{//direciona a edição de escola
-    fncBene.listaBeneImp(req, res); 
+router.get('/beneficiario/escola/imp/:id', (req,res) =>{//direciona a edição de escola
+    fncEscola.listaEscola(req, res); 
 })
 
-router.post('/escola/add',(req,res) =>{//adiciona escola
-  fncBene.cadastraBene(req, res); 
+router.post('/beneficiario/escola/add',(req,res) =>{//adiciona escola
+    console.log("post")
+    fncEscola.cadastraEscola(req, res); 
 })
 
-router.get('/escola/del/:id', (req,res) =>{//deleta escola
-  fncBene.deletaBene(req, res); 
+router.get('/beneficiario/escola/del/:id', (req,res) =>{//deleta escola
+    fncEscola.deletaEscola(req, res); 
 })
 
-router.get('/escola/edi/:id', (req,res) =>{//direciona a edição de escola
-   fncBene.carregaBeneEdi(req, res); 
+router.get('/beneficiario/escola/edi/:id', (req,res) =>{//direciona a edição de escola
+    fncEscola.carregaEscolaEdi(req, res); 
 })
 
-router.post('/escola/atualizar',(req,res) =>{//atualiza o cadastro da escola
-    fncBene.atualizaBene(req, res); 
+router.post('/beneficiario/escola/atualizar',(req,res) =>{//atualiza o cadastro da escola
+    fncEscola.atualizaEscola(req, res); 
 })
 
 //Menu Beneficiario /Sessao

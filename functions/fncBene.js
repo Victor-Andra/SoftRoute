@@ -7,24 +7,28 @@ const beneClass = require("../models/bene")
 
 //Classes Extrangeiras
 const convClass = require("../models/conv")
+const { EscolaModel } = require("../models/escola")
 const estadoClass = require("../models/estado")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
+const escolaClass = require("../models/escola")
 
 //Tabelas Extrangeiras
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Estado = mongoose.model("tb_estado")
+const Escola = mongoose.model("tb_escola")
 
 module.exports = {
     carregaBene(req,res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs")
-            Conv.find().sort({conv_nome: 1}).then((conv)=>{
-            console.log("Listagem Realizada de Convenios")
-            res.render("beneficiario/beneCad", {estados: estado, convs: conv})
-        })}).catch((err) =>{
+        Escola.find().then((escola)=>{
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Ufs")
+                Conv.find().sort({conv_nome: 1}).then((conv)=>{
+                console.log("Listagem Realizada de Convenios")
+                res.render("beneficiario/beneCad", {escolas: escola, estados: estado, convs: conv})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -86,13 +90,14 @@ module.exports = {
 
     },
     carregaBeneEdi(req, res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs")
-                Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
-                    Bene.findById(req.params.id).then((beneEdi) =>{
-                        res.render("beneficiario/beneEdi", {estados: estado, convs: conv, beneEdi})
-                    })})}).catch((err) =>{
+        Escola.find().then((escola)=>{
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Ufs")
+                    Conv.find().sort({conv_nome: 1}).then((conv)=>{
+                        console.log("Listagem Realizada de Convenios")
+                        Bene.findById(req.params.id).then((beneEdi) =>{
+                            res.render("beneficiario/beneEdi", {escolas: escola, estados: estado, convs: conv, beneEdi})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -100,8 +105,6 @@ module.exports = {
     },
 
     listaBene(req, res){
-
- 
         let convs = new Array();
         console.log('listando benes')
         Bene.find().then((bene) =>{
@@ -149,5 +152,4 @@ module.exports = {
             res.render('admin/erro')
         })
     }
-
 }

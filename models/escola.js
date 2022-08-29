@@ -2,35 +2,31 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const EscolaSchema = mongoose.Schema({
-    escola_beneid : { type: ObjectId, required: true, },
-    escola_nome : { type: String, },
-    escola_fantasia : { type: String, },
-    escola_end : { type: String, },
-    escola_endcompl : { type: String, },
-    escola_endbairro : { type: String, },
-    escola_endcidade : { type: String, },
-    escola_enduf : { type: String, },
-    escola_endcep : { type: String, },
-    escola_coordenador : { type: String, },
-    escola_coorwhatsapp : { type: String, },
-    escola_professor : { type: String, },
-    escola_profwhatsapp : { type: String, },
-    escola_fixo : { type: String, },
-    escola_obs : { type: String, },
-    escola_datacad : { type: date, },
-    escola_dataedi : { type: date, },
-   
-    
+    escola_nome : { type: String },
+    escola_fantasia : { type: String },
+    escola_end : { type: String },
+    escola_endcompl : { type: String },
+    escola_endbairro : { type: String },
+    escola_endcidade : { type: String },
+    escola_enduf : { type: String },
+    escola_endcep : { type: String },
+    escola_coordenador : { type: String },
+    escola_coorwhatsapp : { type: String },
+    escola_professor : { type: String },
+    escola_profwhatsapp : { type: String },
+    escola_fixo : { type: String },
+    escola_obs : { type: String },
+    escola_datacad : { type: Date },
+    escola_dataedi : { type: Date }    
 })
 
 class Escola{
-    constructor(escola_beneid ,	escola_nome ,	escola_fantasia ,	
+    constructor(escola_nome ,	escola_fantasia ,	
         escola_end ,	escola_endcompl ,	escola_endbairro ,	escola_endcidade ,	
         escola_enduf ,	escola_endcep ,	escola_coordenador ,	escola_coorwhatsapp ,	
         escola_professor ,	escola_profwhatsapp ,	escola_fixo ,	escola_obs ,	
         escola_datacad ,	escola_dataedi
         ){
-            this.escola_beneid = escola_beneid ,
             this.escola_nome = escola_nome ,
             this.escola_fantasia = escola_fantasia ,
             this.escola_end = escola_end ,
@@ -63,7 +59,6 @@ module.exports = {EscolaModel,EscolaSchema,
         //Realiza Atualização
         await EscolaModel.findByIdAndUpdate(req.body.escolaId, 
             {$set: {
-                escola_beneid : req.body.escolaBeneid ,
                 escola_nome : req.body.escolaNome ,
                 escola_fantasia : req.body.escolaFantasia ,
                 escola_end : req.body.escolaEnd ,
@@ -78,7 +73,6 @@ module.exports = {EscolaModel,EscolaSchema,
                 escola_profwhatsapp : req.body.escolaProfwhatsapp ,
                 escola_fixo : req.body.escolaFixo ,
                 escola_obs : req.body.escolaObs ,
-                escola_datacad : req.body.escolaDatacad ,
                 escola_dataedi: dataAtual
                 }}
                 

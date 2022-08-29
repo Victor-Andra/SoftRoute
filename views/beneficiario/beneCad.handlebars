@@ -113,7 +113,13 @@
 														<a data-toggle="tab" href="#out" aria-expanded="false">
 															<i class="brown ace-icon fa fa-gavel bigger-120"></i>
 															Responsável
-															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#obs" aria-expanded="false">
+															<i class="brown ace-icon fa fa-comment-o bigger-120"></i>
+															Observação
 														</a>
 													</li>
 												</ul>
@@ -204,18 +210,38 @@
 																</div>
 															</div>
 														</div>
-
+														<label> Supervisor/a </label>
+														<div class="input-group">
+															<div>
+																<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 500px;"/>
+															</div>
+														</div>
 														<label>Status</label>
 														<div class="input-group">
-																<div >
-																	<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																			<option value="Ativo">Ativo</option>
-																			<option value="Inativo">Inativo</option>
-																	</select>
-																</div>
+															<div >
+																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="Ativo">Ativo</option>
+																		<option value="Inativo">Inativo</option>
+																</select>
+															</div>
 														</div>
 
-				
+														<label> Escola </label>
+														<div>
+															<select name="beneEscola" id="beneEscola" class="chosen-select" data-placeholder="Escolha...">
+																{{#each escolas}}
+																	<option value="{{_id}}">{{escola_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+
+														<label> Observação Escola </label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+															</div>
+														</div>
+
 													</div>
 
 													<div id="end" class="tab-pane fade">
@@ -767,18 +793,18 @@
 																<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" />
 															</div>
 														</div>
-
-
-
 													</div>
-
-
-
-
+													<div id="obs" class="tab-pane fade">
+														<label> Observação </label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-								
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
 

@@ -71,6 +71,18 @@ const BeneSchema = mongoose.Schema({
          type: String, 
          required: true 
         },
+    bene_supervisor:{
+        type: String, 
+        required: false 
+        },
+        bene_escola:{
+            type: ObjectId,
+            required: false
+        },
+        bene_escolaobs:{
+            type: String,
+            required: false
+        },
     bene_outprof:{
          type: String, 
          required: true 
@@ -223,6 +235,10 @@ const BeneSchema = mongoose.Schema({
          type: String, 
          required: false 
         },
+    bene_obs:{
+        type: String,
+        required: false
+    },
     bene_datacad:{
          type: Date, 
          required: false 
@@ -239,12 +255,12 @@ class Bene{
     constructor(
         bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
         bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out, bene_graupar,
-        bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, bene_outendcidade,
-        bene_outenduf, bene_outendcep,	bene_outcel, bene_outcel2, bene_outemail, bene_pai, bene_paiprof, bene_paiident,
-        bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, bene_paienduf, bene_paiendcep,
-        bene_paicel, bene_paicel2, bene_paiemail, bene_mae, bene_maeprof, bene_maeident, bene_maecpf, bene_maeend,
-        bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, bene_maecel,bene_maecel2,
-        bene_maeemail, bene_datacad, bene_dataedi
+        bene_supervisor, bene_escola, bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, 
+        bene_outendcidade,bene_outenduf, bene_outendcep,	bene_outcel, bene_outcel2, bene_outemail, bene_pai, 
+        bene_paiprof, bene_paiident, bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, 
+        bene_paienduf, bene_paiendcep, bene_paicel, bene_paicel2, bene_paiemail, bene_mae, bene_maeprof, bene_maeident, 
+        bene_maecpf, bene_maeend, bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, 
+        bene_maecel, bene_maecel2, bene_maeemail, bene_obs, bene_datacad, bene_dataedi
          ){
             this.bene_nome = bene_nome,
             this.bene_apelido = bene_apelido,
@@ -263,6 +279,9 @@ class Bene{
             this.bene_convid = bene_convid,
             this.bene_out = bene_out,
             this.bene_graupar = bene_graupar,
+            this.bene_supervisor = bene_supervisor,
+            this.bene_escola = bene_escola,
+            this.bene_escolaobs = bene_escolaobs,
             this.bene_outprof = bene_outprof,
             this.bene_outident = bene_outident,
             this.bene_outcpf = bene_outcpf,
@@ -301,6 +320,7 @@ class Bene{
             this.bene_maecel = bene_maecel,
             this.bene_maecel2 = bene_maecel2,
             this.bene_maeemail = bene_maeemail,
+            this.bene_obs = bene_obs,
             this.bene_datacad = bene_datacad,
             this.bene_dataedi = bene_dataedi
             
@@ -336,6 +356,9 @@ module.exports = {BeneModel,BeneSchema,
                 bene_convid: req.body.beneConvid,
                 bene_out: req.body.beneOut,
                 bene_graupar: req.body.beneGraupar,
+                bene_supervisor: req.body.beneSupervisor,
+                bene_escola: req.body.beneEscola,
+                bene_escolaobs: req.body.beneEscolaObs,
                 bene_outprof: req.body.beneOutprof,
                 bene_outident: req.body.beneOutident,
                 bene_outcpf: req.body.beneOutcpf,
@@ -374,6 +397,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_maecel: req.body.beneMaecel,
                 bene_maecel2: req.body.beneMaecel2,
                 bene_maeemail: req.body.beneMaeemail,
+                bene_obs: req.body.beneObs,
                 bene_dataedi: dataAtual
                 }}
         ).then((res) =>{
@@ -387,13 +411,6 @@ module.exports = {BeneModel,BeneSchema,
         })
         return resultado;
     },
-
-
-
-
-
-
-    
     beneAdicionar: async (req,res) => {
         let beneExiste =  await BeneModel.findOne({bene_nome: req.body.beneNome});//quando não acha fica null
         let dataAtual = new Date();
@@ -420,6 +437,9 @@ module.exports = {BeneModel,BeneSchema,
                 bene_convid: req.body.beneConvid,
                 bene_out: req.body.beneOut,
                 bene_graupar: req.body.beneGraupar,
+                bene_supervisor: req.body.beneSupervisor,
+                bene_escola: req.body.beneEscola,
+                bene_escolaobs: req.body.beneEscolaObs,
                 bene_outprof: req.body.beneOutprof,
                 bene_outident: req.body.beneOutident,
                 bene_outcpf: req.body.beneOutcpf,
@@ -458,9 +478,8 @@ module.exports = {BeneModel,BeneSchema,
                 bene_maecel: req.body.beneMaecel,
                 bene_maecel2: req.body.beneMaecel2,
                 bene_maeemail: req.body.beneMaeemail,
-                bene_datacad: dataAtual
-,
-                
+                bene_obs: req.body.beneObs,
+                bene_datacad: dataAtual                
             });
             console.log("newBene save");
             await newBene.save().then(()=>{

@@ -69,7 +69,7 @@ module.exports = {
                 this.listaEspecializacao(req,res,resposta)
             } else {
                 console.log('falso')
-                resposta.texto = err
+                resposta.texto = resultado
                 resposta.sucesso = "false"
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
                 res.render('admin/erro', resposta);
@@ -99,7 +99,7 @@ module.exports = {
                     this.listaEspecializacao(req,res,resposta)
                 } else {
                     console.log('falso')
-                    resposta.texto = err
+                    resposta.texto = resultado
                     resposta.sucesso = "false"
                     req.flash("error_message", "houve um erro ao abrir o cadastro!")
                     this.listaEspecializacao(req,res,resposta)

@@ -27,7 +27,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/escola/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/escola/add" method="POST">
 
 
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
@@ -50,20 +50,6 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-
-
-												<label>Beneficiário</label>
-												<div class="form-group">
-														<div class="col-sm-6">
-															<select name="escola_beneid" class="chosen-select" data-placeholder="Escolha o Beneficiário..." >
-																{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-										
-															</select>
-														</div>
-												</div>
-				
 												<label> Nome</label>
 												<div class="form-group">
 													<div class="col-sm-12">
@@ -77,10 +63,6 @@
 														<input type="text" name="escolaFantasia" id="escolaFantasia" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-			
-
 												<label > Endereço </label>
 												<div class="form-group">
 													<div class="col-sm-12">
@@ -113,10 +95,8 @@
 												<div class="form-group">
 														<div class="col-sm-4">
 															<select name="escolaEnduf"  id="escolaEnduf"  class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
 																	{{#each estados}}
 																	<option value="{{_id}}">{{estado_uf}}</option>
-																	{{else}}
 																	{{/each}}
 															</select>
 														</div>
@@ -134,34 +114,34 @@
 												<label>Coordenador</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="escola_coordenador " class="form-control" />
+														<input type="text" name="escolaCoordenador " class="form-control" />
 													</div>
 												</div>
 												
 												<label>Whatsapp</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="escola_coorwhatsapp " class="form-control"/>
+														<input type="text" name="escolaCoorwhatsapp " class="form-control"/>
 													</div>
 												</div>
 												
 												<label>Professor(a)</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="escola_professor " class="form-control" />
+														<input type="text" name="escolaProfessor " class="form-control" />
 													</div>
 												</div>
 												
 												<label>Whatsapp</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="escola_profwhatsapp " class="form-control" />
+														<input type="text" name="escolaProfwhatsapp " class="form-control" />
 													</div>
 												</div>
 												<label>Telefone Fixo</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="escola_fixo " class="form-control"/>
+														<input type="text" name="escolaFixo " class="form-control"/>
 													</div>
 												</div>
 												

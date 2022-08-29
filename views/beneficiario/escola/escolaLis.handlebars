@@ -58,75 +58,88 @@
 						
 						</ul><!-- /.breadcrumb -->
 					</div>
-					{{#each error}}
-						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					<!--//MENSAGEM FLASH-->
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
-					{{/each}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
+					<!--//MENSAGEM FLASH-->
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-											<div class="clearfix" >
-												<div class="pull-right tableTools-container">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
 
 
-												</div>
 											</div>
+										</div>
 
-											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-											</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
+										
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											
-											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-												
-												<thead>
-													<tr role="row">
+											<thead>
+												<tr role="row">
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Escola: activate to sort column ascending">Escola</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Coordenador:     activate to sort column ascending">Coordenador</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Professor(a):     activate to sort column ascending">Professor(a)</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
+													<th>Ação</th>
 
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Escola: activate to sort column ascending">Escola</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Beneficiário</th>
-														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Coordenador:     activate to sort column ascending">Coordenador</th>
-														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
-														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Professor(a):     activate to sort column ascending">Professor(a)</th>
-														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Whatsapp:     activate to sort column ascending">WhatsApp</th>														
-														<th>Ação</th>
-
+												</tr>
+											</thead>
+											<tbody>
+												{{#each escolas}}
+													<tr role="row" class="odd">
+														<td>{{escola_nome}}</td>
+														<td>{{escola_coordenador}}</td>
+														<td>{{escola_coorwhatsapp}}</td>
+														<td>{{escola_professor}}</td>
+														<td>{{escola_profwhatsapp}}</td>															
+														<td>
+															<div class="action-buttons">
+																<a class="green" href="/menu/beneficiario/escola/edi/{{_id}}">
+																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+															</div>
+															<div class="hidden-md hidden-lg">
+															</div>
+														</td>
 													</tr>
-													
-												</thead>
-												
-												<tbody>
-													{{#each escolas}}
-														<tr role="row" class="odd">
-
-	
-															<td>{{escola_nome}}</td>
-															<td>{{escola_bene}}</td>
-															<td>{{escola_coordenador}}</td>
-															<td>{{escola_coorwhatsapp}}</td>
-															<td>{{escola_professor}}</td>
-															<td>{{escola_profwhatsapp}}</td>															
-															<td>
-																<div class="action-buttons">
-																	<a class="green" href="/menu/beneficiario/escola/edi/{{_id}}">
-																			<i class="ace-icon fa fa-pencil bigger-130"></i>
-																	</a>
-																</div>
-																<div class="hidden-md hidden-lg">
-																	
-																</div>
-										
-															</td>
-												
-														</tr>
-													{{/each}}
-												</tbody>
-
-											</table>
-
-													
-										
-										
+												{{/each}}
+											</tbody>
+										</table>
 									</div>
 								</div>				
 							</div>
@@ -202,7 +215,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, { "bSortable": false }],
+					"aoColumns": [ null, null, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

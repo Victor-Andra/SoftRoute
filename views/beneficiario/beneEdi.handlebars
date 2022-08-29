@@ -46,6 +46,7 @@
 			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
 			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
 			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
+			document.getElementById("beneSupervisor").value = document.getElementById("beneSupervisorEdi").value;
 			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
 			let dia = (dtnsc.getUTCDate()).toString();
@@ -108,6 +109,7 @@
 			document.getElementById("beneMaecel").value = document.getElementById("beneMaecelEdi").value;
 			document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
 			document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
+			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
 		}
 	</script>
 	</head>
@@ -189,6 +191,12 @@
 															
 														</a>
 													</li>
+													<li class="">
+														<a data-toggle="tab" href="#obs" aria-expanded="false">
+															<i class="brown ace-icon fa fa-comment-o bigger-120"></i>
+															Observação
+														</a>
+													</li>
 												</ul>
 
 												<div class="tab-content">
@@ -254,36 +262,58 @@
 														<label> Nacionalidade</label>
 														<div class="input-group">
 															<div >
-																<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 500px;" value="{{bene_nacionalidade}}"/>
+																<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 200px;" value="{{bene_nacionalidade}}"/>
 															</div>
 														</div>
-														
-														<label> identidade </label>
-														<div class="input-group">
-															<div >
-																<input type="text" name="beneIdent" id="beneIdent" placeholder="" class="form-control" value="{{bene_ident}}"/>
+														<div class="row">
+															<div class="col-xs-10 col-sm-5">
+																<label> identidade </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneIdent" id="beneIdent" placeholder="" class="form-control" value="{{bene_ident}}"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-10 col-sm-5">
+																<label> CPF </label>
+																<div class="input-group">
+																	<div>
+																		<input type="text" name="beneCpf" id="beneCpf" placeholder="" class="form-control" value="{{bene_cpf}}"/>
+																	</div>
+																</div>
 															</div>
 														</div>
-						
-														<label> CPF </label>
+														<label> Supervisor/a </label>
 														<div class="input-group">
 															<div>
-																<input type="text" name="beneCpf" id="beneCpf" placeholder="" class="form-control" value="{{bene_cpf}}"/>
+																<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 500px;" value="{{bene_supervisor}}" />
 															</div>
 														</div>
-
-
 														<label>Status</label>
 														<div class="input-group">
-																<div >
-																	<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																			<option value="Ativo">Ativo</option>
-																			<option value="Inativo">Inativo</option>
-																	</select>
-																</div>
+															<div >
+																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="Ativo">Ativo</option>
+																		<option value="Inativo">Inativo</option>
+																</select>
+															</div>
 														</div>
+													</div>
 
-				
+													<label> Escola </label>
+													<div>
+														<select name="beneEscola" id="beneEscola" class="chosen-select" data-placeholder="Escolha...">
+															{{#each escolas}}
+																<option value="{{_id}}">{{escola_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+
+													<label> Observação Escola </label>
+													<div class="input-group">
+														<div>
+															<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+														</div>
 													</div>
 
 													<div id="end" class="tab-pane fade">
@@ -724,6 +754,14 @@
 															</div>
 														</div>
 													</div>
+													<div id="obs" class="tab-pane fade active in">
+														<label> Observação </label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 											<div id="divCarrega" name="divCarrega" class="hidden">
@@ -745,6 +783,7 @@
 												<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
 												<input id="beneOutEdi" name="beneOutEdi" value="{{beneEdi.bene_out}}"/>
 												<input id="beneGrauparEdi" name="beneGrauparEdi" value="{{beneEdi.bene_graupar}}"/>
+												<input id="beneSupervisorEdi" name="beneSupervisorEdi" value="{{beneEdi.bene_supervisor}}"/>
 												<input id="beneOutprofEdi" name="beneOutprofEdi" value="{{beneEdi.bene_outprof}}"/>
 												<input id="beneOutidentEdi" name="beneOutidentEdi" value="{{beneEdi.bene_outident}}"/>
 												<input id="beneOutcpfEdi" name="beneOutcpfEdi" value="{{beneEdi.bene_outcpf}}"/>
@@ -783,6 +822,7 @@
 												<input id="beneMaecelEdi" name="beneMaecelEdi" value="{{beneEdi.bene_maecel}}"/>
 												<input id="beneMaecel2Edi" name="beneMaecel2Edi" value="{{beneEdi.bene_maecel2}}"/>
 												<input id="beneMaeemailEdi" name="beneMaeemailEdi" value="{{beneEdi.bene_maeemail}}"/>
+												<input id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
 											</div>
 										</div>
 									<br>

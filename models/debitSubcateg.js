@@ -4,7 +4,6 @@ const ObjectId = mongoose.Types.ObjectId
 const DebitsubcategSchema = mongoose.Schema({
     debitsubcateg_nome: {
         type: String,
-        unique: true,
         required: true
     },
     debitsubcateg_descricao: {
@@ -13,10 +12,12 @@ const DebitsubcategSchema = mongoose.Schema({
     },
     debitsubcateg_codigoreduzido: {
         type: String,
+        unique: true,
         required: true
     },
     debitsubcateg_planoconta: {
         type: String,
+        unique: true,
         required: true
     },
     debitsubcateg_debitcategid: {
