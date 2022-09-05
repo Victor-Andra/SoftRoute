@@ -613,8 +613,8 @@ router.get('/beneficiario/escola/lis',(req,res) =>{//lista todas escolas
     fncEscola.listaEscola(req, res, resposta);        
 })
 
-router.get('/beneficiario/escola/cad',(req,res) =>{//direciona o cadastro de escola
-    fncEscola.carregaEscola(req, res); 
+router.get('/beneficiario/escola/cad',(req,res) =>{//direciona o cadastro de escolas
+    fncEscola.carregaEscola(req, res);//coment
 })
 
 router.get('/beneficiario/escola/imp/:id', (req,res) =>{//direciona a edição de escola
