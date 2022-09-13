@@ -14,6 +14,9 @@ const AgendaSchema = mongoose.Schema({
     agenda_migrado :{ type: String, required: false }, //Status se o agendamento gerou agendamento
     agenda_datacad :{ type: String, required: false },
     agenda_dataedi :{ type: String, required: false },
+    agenda_categoria :{ type: String, required: true },
+    agenda_org :{ type: String, required: true },
+    agenda_obs :{ type: String, required: false },
     agenda_aux :{ type: String, required: false }
 })
 
@@ -31,6 +34,9 @@ class Agenda{
         agenda_migrado,
         agenda_datacad,
         agenda_dataedi,
+        agenda_categoria,
+        agenda_org,
+        agenda_obs,
         agenda_aux
 
         ){
@@ -45,7 +51,10 @@ class Agenda{
         this.agenda_usuid = agenda_usuid,
         this.agenda_migrado = agenda_migrado,
         this.agenda_datacad = agenda_datacad,
-        this.agenda_dataedi = agenda_dataedi
+        this.agenda_dataedi = agenda_dataedi,
+        this.agenda_categoria = agenda_categoria
+        this.agenda_org = agenda_org,
+        this.agenda_obs = agenda_obs,
         this.agenda_aux = agenda_aux
     }
 }
@@ -71,6 +80,9 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
                 agenda_migrado : req.body.agendaMigrado ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
                 agenda_dataedi : dataAtual
 
                 }}
@@ -102,6 +114,9 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
                 agenda_migrado : req.body.agendaMigrado ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
                 agenda_datacad : dataAtual
             });
             console.log("newAgenda save");

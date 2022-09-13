@@ -265,7 +265,13 @@
 										Agenda
 										</strong>
 										<br>
-											Change a few things up and try submitting again.
+										{{#each agendas}}
+											{{#isNull agenda_obs}}
+											{{else}}
+												<label>{{agenda_data_semana}} : {{agenda_hora}} - {{agenda_obs}}</label>
+												<br>
+											{{/isNull}}
+										{{/each}}
 										<br>
 									</div>
 								</div>
@@ -275,20 +281,22 @@
 										Beneficiário
 										</strong>
 										<br>
-										Change a few things up and try submitting again.
+										{{bene.bene_obs}}
 										<br>
 									</div>
 								</div>
+								<!--
 								<div class="col-xs-16 col-sm-3">	
 									<div class="alert alert-info">
 										<strong>
 										Técnico
 										</strong>
 										<br>
-										Change a few things up and try submitting again.
+										
 										<br>
 									</div>
 								</div>
+								-->
 							</div>
 						</div>
 			</div><!-- /.main-content -->

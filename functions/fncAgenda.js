@@ -2258,7 +2258,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
-                                    let benenomeconv = nomeBene+" / "+nomeConv;
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
                                     console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
@@ -2271,6 +2271,7 @@ module.exports = {
         let aux = 1;
         let is = false;
         let nomeBene;
+        let nomeSup;
         let nomeConv;
         let segunda;
         let terca;
@@ -2389,6 +2390,7 @@ module.exports = {
             Bene.find({_id: req.body.agendaBeneid}).then((bene)=>{
                 bene.forEach(e => {
                     nomeBene = e.bene_nome
+                    nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
                 console.log("Listagem Realizada de Beneficiários!")
@@ -2771,9 +2773,9 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
-                                    benenomeconv = nomeBene+" / "+nomeConv + "("+this.getData(seg)+"/"+this.getData(sex)+")";
+                                    benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
                                     console.log("benenomeconv:"+benenomeconv)
-                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

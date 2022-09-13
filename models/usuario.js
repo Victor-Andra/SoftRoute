@@ -147,13 +147,15 @@ const UsuarioSchema = mongoose.Schema({
     usuario_tipopix :{
         type: String,
     },
+    usuario_obs :{
+        type: String,
+    },
     usuario_datacad: {
         type: Date
     },
     usuario_dataedi: {
         type: Date
     }
-    
 })
 
 class Usuario{
@@ -164,8 +166,9 @@ class Usuario{
         usuario_nomepai, usuario_nomemae, usuario_email, usuario_cel1, usuario_cel2,
         usuario_banco, usuario_agencia, usuario_conta, usuario_contatipo, usuario_contrato,
         usuario_funcaoid, usuario_perfilid, usuario_status,
-        usuario_senha, usuario_img, usuario_filhos, usuario_filhosqt, usuario_numconselho, usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix, usuario_datacad, usuario_dataedi
-
+        usuario_senha, usuario_img, usuario_filhos, usuario_filhosqt, usuario_numconselho, 
+        usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix, usuario_obs,
+        usuario_datacad, usuario_dataedi
         ){
 
         this.usuario_login = usuario_login ,
@@ -208,16 +211,11 @@ class Usuario{
         this.usuario_especializacao = usuario_especializacao ,
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
-
+        this.usuario_obs = usuario_obs ,
         this.usuario_datacad = usuario_datacad ,
         this.usuario_dataedi = usuario_dataedi
-
-         
-            
     }
 }
-
-
 
 UsuarioSchema.loadClass(Usuario)
 const UsuarioModel = mongoose.model('tb_usuario', UsuarioSchema)
@@ -270,9 +268,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 usuario_especializacao : req.body.usuarioEspecializacao ,
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
-
-
-
+                usuario_obs : req.body.usuarioObs,
                 usuario_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -286,12 +282,6 @@ module.exports = {UsuarioModel,UsuarioSchema,
         })
         return resultado;
     },
-
-
-
-
-
-
     usuarioAdicionar: async (req,res) => {
         let usuarioExiste =  await UsuarioModel.findOne({usuario_nome: req.body.usuarioNome});//quando não acha fica null
         let dataAtual = new Date();
@@ -301,7 +291,6 @@ module.exports = {UsuarioModel,UsuarioSchema,
         } else {
             console.log("usuariomodel");
             const newUsuario = new UsuarioModel({
-
             usuario_login : req.body.usuarioLogin ,
             usuario_nome : req.body.usuarioNome ,
             usuario_nomecompleto : req.body.usuarioNomeCompleto,
@@ -342,10 +331,8 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_especializacao : req.body.usuarioEspecializacao ,
             usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
-
+            usuario_obs : req.body.usuarioObs,
             usuario_datacad : dataAtual
-
-            
             });
             console.log("newUsuario save");
             await newUsuario.save().then(()=>{
