@@ -202,37 +202,34 @@ router.get("/logout",(req,res)=>{
 
 //Menu Agenda
 router.get("/agenda/lis",(req,res) =>{//direciona o cadstro de Agenda, com Ufs e Convênios.
-    console.log("agenda/lis")
-    fncAgenda.listaAgenda(req, res);
+    fncAgenda.listaAgenda(req, res);//
 })
 
 router.get("/agenda/cadT",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    console.log("agenda/cadT")
     fncAgenda.carregaAgendaCadastro(req, res);
 })
 
 router.get("/agenda/cadF/:dia/:mes/:ano/:hora",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    console.log("agenda/cadF")
     fncAgenda.carregaAgendaEdiF(req, res);
 })
 
 router.get("/agenda/lisL/",(req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
-    console.log("agenda/lisL")
+    console.log("lista")
     fncAgenda.carregaAgendaL(req, res);
 })
 
 router.get("/agenda/lisG/",(req,res) =>{//direciona a listagem de Agenda Geral.
-    console.log("agenda/lisG")
+    console.log("lista")
     fncAgenda.carregaAgendaG(req, res);
 })
 
 router.post("/agenda/filG/",(req,res) =>{//direciona a listagem de Agenda Geral.
-    console.log("agenda/filG")
+    console.log("lista")
     fncAgenda.carregaAgendaFilG(req, res);
 })
 
 router.get("/agenda/lisS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
-    console.log("agenda/lisS")
+    console.log("Agenda Semanal")
     fncAgenda.carregaAgendaS(req, res);
 })
 
@@ -242,47 +239,44 @@ router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Geral.
 })
 
 router.get("/agenda/lisB",(req,res) =>{//direciona a listagem agendamento de beneficiarios.
-    console.log("agenda/lisB")
-    fncAgenda.carregaAgendaB(req, res);
+    console.log("Agenda Bene")
+    fncAgenda.carregaAgendaB(req, res);//CARREGAAGENDABENE
+})
+
+router.get("/agenda/lisB2",(req,res) =>{//direciona a listagem agendamento de beneficiarios.
+    console.log("Agenda Bene")
+    fncAgenda.carregaAgendaB2(req, res);//CARREGAAGENDABENE
 })
 
 router.post("/agenda/filB",(req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
-    console.log("agenda/filB")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.get("/agenda/lisT",(req,res) =>{//direciona a listagem agendamento de terapeutas.
-    console.log("agenda/lisT")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.post("/agenda/filT",(req,res) =>{//direciona a listagem agendamento de filtro de terapeutas.
-    console.log("agenda/filT")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.get("/agenda/lisA",(req,res) =>{//direciona a listagem de laudos.
-    console.log("agenda/lisA")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.post("/agenda/filA",(req,res) =>{//direciona a listagem de filtro de laudos.
-    console.log("agenda/filA")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.get("/agenda/lisV",(req,res) =>{//direciona a listagem de laudos.
-    console.log("agenda/lisV")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.post("/agenda/filV",(req,res) =>{//direciona a listagem de filtro de laudos.
-    console.log("agenda/filV")
     fncAgenda.filtraAgendaL(req, res);
 })
 
 router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    console.log("agenda/filL")
     fncAgenda.filtraAgendaL(req, res);
 })
 
