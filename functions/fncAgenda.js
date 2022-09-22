@@ -264,8 +264,8 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCDate(seg.getUTCDate() - 22);
-        sex.setUTCDate(sex.getUTCDate() - 22);
+        //seg.setUTCDate(seg.getUTCDate() - 22);
+        //sex.setUTCDate(sex.getUTCDate() - 22);
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -363,8 +363,6 @@ module.exports = {
             console.log(agenda)
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
-                Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
@@ -408,7 +406,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -434,7 +431,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -476,7 +472,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -502,7 +497,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -544,7 +538,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -570,7 +563,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -612,7 +604,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -638,7 +629,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -680,7 +670,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -706,7 +695,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -738,8 +726,8 @@ module.exports = {
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
                                     let tela = "agenda/agendaGeral"
-                                    res.render(tela, {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
-        })})})})})})})}).catch((err) =>{
+                                    res.render(tela, {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -867,8 +855,6 @@ module.exports = {
             console.log(agenda)
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
-                Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
@@ -912,7 +898,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -938,7 +923,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -980,7 +964,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -1006,7 +989,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -1048,7 +1030,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -1074,7 +1055,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -1116,7 +1096,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -1142,7 +1121,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -1184,7 +1162,6 @@ module.exports = {
                                                 agenda_aux : aux,
                                                 agenda_salaid : voidId,
                                                 agenda_beneid : voidId,
-                                                agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId
                                             });
@@ -1210,7 +1187,6 @@ module.exports = {
                                             agenda_aux : aux,
                                             agenda_salaid : voidId,
                                             agenda_beneid : voidId,
-                                            agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId
                                         });
@@ -1241,8 +1217,8 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     console.log("Listagem Realizada de Terapia")
-                                    res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
-        })})})})})})})}).catch((err) =>{
+                                    res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

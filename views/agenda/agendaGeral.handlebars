@@ -154,10 +154,7 @@
 													<input id="766f69643132333435366964" value="&nbsp;" />
 												{{/each}}
 												{{#each benes}}
-													<input id="{{_id}}" name="BENENOMES" value="{{bene_nome}}" />
-												{{/each}}
-												{{#each convs}}
-													<input id="{{_id}}" value="{{conv_nome}}" />
+													<input id="{{_id}}" name="BENENOMES" value="{{bene_apelido}}" />
 												{{/each}}
 												{{#each terapeutas}}
 													<input id="{{_id}}" name="TERAPEUTANOMES" value="{{usuario_nome}}" />
@@ -232,11 +229,10 @@
 																</tr>
 																<tr  role="row">
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -247,7 +243,6 @@
 																			<td style="width: 50px;">{{agenda_hora}}</td>
 																			<td id="horasegSalaId_{{agenda_aux}}"></td>
 																			<td id="horasegBeneId_{{agenda_aux}}"></td>
-																			<td id="horasegConvId_{{agenda_aux}}"></td>
 																			<td id="horasegTerapiaId_{{agenda_aux}}"></td>
 																			<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
 																			<td id="horasegacao_{{agenda_aux}}" style="width: 70px;"></td>
@@ -259,7 +254,6 @@
 																{{#each agendas}}
 																	<input id="{{agenda_data_semana}}SalaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
 																	<input id="{{agenda_data_semana}}BeneId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
-																	<input id="{{agenda_data_semana}}ConvId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
 																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
 																	{{#each ../semanas}}
@@ -309,11 +303,10 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -324,7 +317,6 @@
 																			<td style="width: 50px;">{{agenda_hora}}</td>
 																			<td id="horaterSalaId_{{agenda_aux}}"></td>
 																			<td id="horaterBeneId_{{agenda_aux}}"></td>
-																			<td id="horaterConvId_{{agenda_aux}}"></td>
 																			<td id="horaterTerapiaId_{{agenda_aux}}"></td>
 																			<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
 																			<td id="horateracao_{{agenda_aux}}" style="width: 70px;"></td>
@@ -364,11 +356,10 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -379,7 +370,6 @@
 																			<td style="width: 50px;">{{agenda_hora}}</td>
 																			<td id="horaquaSalaId_{{agenda_aux}}"></td>
 																			<td id="horaquaBeneId_{{agenda_aux}}"></td>
-																			<td id="horaquaConvId_{{agenda_aux}}"></td>
 																			<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
 																			<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
 																			<td id="horaquaacao_{{agenda_aux}}" style="width: 70px;"></td>
@@ -419,11 +409,10 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -434,7 +423,6 @@
 																			<td style="width: 50px;">{{agenda_hora}}</td>
 																			<td id="horaquiSalaId_{{agenda_aux}}"></td>
 																			<td id="horaquiBeneId_{{agenda_aux}}"></td>
-																			<td id="horaquiConvId_{{agenda_aux}}"></td>
 																			<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
 																			<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
 																			<td id="horaquiacao_{{agenda_aux}}" style="width: 70px;"></td>
@@ -474,11 +462,10 @@
 																</tr>
 																<tr  role="row">	
 																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
+																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 55px;">Sala</th>
 																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 																	<th style="width: 70px;">Ação</th>
 																</tr>
 															</thead>
@@ -489,7 +476,6 @@
 																			<td style="width: 50px;">{{agenda_hora}}</td>
 																			<td id="horasexSalaId_{{agenda_aux}}"></td>
 																			<td id="horasexBeneId_{{agenda_aux}}"></td>
-																			<td id="horasexConvId_{{agenda_aux}}"></td>
 																			<td id="horasexTerapiaId_{{agenda_aux}}"></td>
 																			<td id="horasexTerapeutaId_{{agenda_aux}}"></td>
 																			<td id="horasexacao_{{agenda_aux}}" style="width: 70px;"></td>
