@@ -33,6 +33,9 @@ const Atend = mongoose.model("tb_atend")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 
+//Funções Auxiliares
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
     getData(data){
@@ -4428,26 +4431,34 @@ module.exports = {
         })
     },
     cadastraAgenda(req,res){//AdicionaAgenda
-        let resposta;
-        let respostaLis;
+        let flash = new Resposta()
+        let resultado;
         console.log(req.body.dataAg)
         console.log(req.body.agendaHora)
         let cadastro = agendaClass.agendaAdicionar(req,res);
         cadastro.then((res) =>{
-            resposta = true;
+            console.log(res)
+            resultado = true;
         }).catch((err) =>{
             console.log(err)
-            resposta = false;
+            resultado = false;
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         }).finally(() =>{
-            console.log("resposta")
-            console.log(resposta);
-            if(resposta){
-                this.carregaAgendaL(req,res);
+            console.log("resultado")
+            console.log(resultado);
+            if (resultado == true){
+                flash.texto = "Cadastrado com sucesso!"
+                flash.sucesso = "true"
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.carregaAgendaCadastro(req,res,flash);
             } else {
-                console.log(resposta)
-                res.render('admin/erro');
+                flash.texto = resultado
+                flash.sucesso = "false"
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', flash);
             }
         })
     },
@@ -4555,7 +4566,8 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    carregaAgendaCadastro(req,res){
+    carregaAgendaCadastro(req,res,resposta){
+        let flash = new Resposta()
         Bene.find().then((bene) =>{
             console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
@@ -4567,7 +4579,16 @@ module.exports = {
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                             console.log("Listagem terapeutas!")
                             Horaage.find().then((horaage)=>{
-        res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
+                                if(resposta.sucesso == ""){
+                                    console.log(' objeto vazio');
+                                    flash.texto = ""
+                                    flash.sucesso = ""
+                                } else {
+                                    console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                                    flash.texto = resposta.texto
+                                    flash.sucesso = resposta.sucesso
+                                }
+                                res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, flash})
         })})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

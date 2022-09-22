@@ -206,7 +206,10 @@ router.get("/agenda/lis",(req,res) =>{//direciona o cadstro de Agenda, com Ufs e
 })
 
 router.get("/agenda/cadT",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    fncAgenda.carregaAgendaCadastro(req, res);
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncAgenda.carregaAgendaCadastro(req, res, resposta);
 })
 
 router.get("/agenda/cadF/:dia/:mes/:ano/:hora",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
