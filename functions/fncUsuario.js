@@ -25,7 +25,7 @@ const Especializacao = mongoose.model("tb_especializacao")
 module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
-            console.log(usuario)
+            //console.log(usuario)
             Funcao.find().then((funcao) =>{
                 res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
             })}).catch((err) =>{

@@ -224,12 +224,25 @@ module.exports = {UsuarioModel,UsuarioSchema,
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
+        let nome = req.body.usuarioNome;
+
+        while((nome.substring(nome.length - 1))==" "){
+            nome = nome.substring(0, nome.length - 1)
+        }
+
+        let palavras = nome.split(" ");
         
+        for (let i = 0; i < palavras.length; i++) {
+            palavras[i] = palavras[i][0].toUpperCase() + palavras[i].substr(1).toLowerCase();
+        }
+        
+        let nomeFinal = palavras.join(" ");
+
         //Realiza Atualização
         await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
             {$set: {
                 usuario_login : req.body.usuarioLogin ,
-                usuario_nome : req.body.usuarioNome ,
+                usuario_nome : nomeFinal ,
                 usuario_nomecompleto : req.body.usuarioNomeCompleto,
                 usuario_end : req.body.usuarioEnd ,
                 usuario_endcompl : req.body.usuarioEndcompl ,

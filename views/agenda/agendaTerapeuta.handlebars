@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Semanal por Beneficiário ou Terapeuta</title>
+		<title>Agenda Semanal por Terapeuta</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -64,35 +64,6 @@
 					console.log(chck.value);
 				}
 			}
-			function selectFil(){
-				let origem = document.getElementById("tipoFil").value;
-				switch (origem) {
-					case "bene":
-						document.getElementById("beneFilDiv").style.display = "";
-						document.getElementById("agendaBeneid").style.display = "";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "sala":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "";
-						document.getElementById("agendaSalaid").style.display = "";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "tera":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "";
-						document.getElementById("agendaTerapeutaid").style.display = "";
-						break;
-				}
-			}
 			function formataData(){
 				let dat = new Date(document.getElementById('dataFil').value);
 				let mes = (dat.getMonth()+1).toString();
@@ -119,7 +90,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Semanal por Beneficiário ou Terapeuta</li>
+							<li class="active">Agenda Semanal por Terapeuta</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -128,31 +99,24 @@
 					{{/if}}
 					<form class="form-horizontal" role="form" action="/menu/agenda/filS" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
-							<div>
-								<label>Tipo Filtro:</label>
-								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
-									<option value="bene">Beneficiário</option>
-									<option value="tera">Terapeuta</option>
-								</select>
-							</div>
 							<div class="hidden" id="divCarrega" name="divCarrega">
 								<input id="766f69643132333435366964" value="&nbsp;" />
 								{{#each agendas}}
-									<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+									<input id="{{agenda_data_semana}}SalaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+									<input id="{{agenda_data_semana}}BeneId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
 								{{/each}}
-								{{#each terapeutas}}
-									<input id="{{_id}}" value="{{usuario_nome}}" />
+								{{#each salas}}
+									<input id="{{_id}}" value="{{sala_nome}}" />
 								{{/each}}
-								{{#each terapias}}
-									<input id="{{_id}}" value="{{terapia_nome}}" />
+								{{#each benes}}
+									<input id="{{_id}}" value="{{bene_nome}}" />
 								{{/each}}
 							</div>
 							<div c >
-								<label id="beneFilDiv">Beneficiário:</label>
-								<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
+								<label id="teraFilDiv">Terapeuta:</label>
+								<select id="agendaTeraid" name="agendaTeraid" data-placeholder="Escolha...">
+									{{#each terapeutas}}
+										<option value="{{_id}}">{{usuario_nome}}</option>
 									{{/each}}
 								</select>
 								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
@@ -182,7 +146,7 @@
 														<b>	
 															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
 																<input class="hidden" id="data" name="data" value="" />
-																<div>{{benenomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
+																<div>{{usunomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
 															</form>
 														</b> 
 													</th>
@@ -197,16 +161,16 @@
 												</tr>
 												<tr  role="row">	
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 												</tr>
 											</thead>
 											{{#each horaages}}
@@ -216,40 +180,40 @@
 													{{#each ../agendas}}
 													{{#compareString ../horaage_hora agenda_hora}}
 													{{#compareString "seg" agenda_data_semana}}
-													<td id="horasegTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
+													<td id="horasegSalaId_{{agenda_aux}}"></td>
+													<td id="horasegBeneId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
 													{{#each ../agendas}}
 													{{#compareString ../horaage_hora agenda_hora}}
 													{{#compareString "ter" agenda_data_semana}}
-													<td id="horaterTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
+													<td id="horasegSalaId_{{agenda_aux}}"></td>
+													<td id="horasegBeneId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
 													{{#each ../agendas}}
 													{{#compareString ../horaage_hora agenda_hora}}
 													{{#compareString "qua" agenda_data_semana}}
-													<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
+													<td id="horasegSalaId_{{agenda_aux}}"></td>
+													<td id="horasegBeneId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
 													{{#each ../agendas}}
 													{{#compareString ../horaage_hora agenda_hora}}
 													{{#compareString "qui" agenda_data_semana}}
-													<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
+													<td id="horasegSalaId_{{agenda_aux}}"></td>
+													<td id="horasegBeneId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
 													{{#each ../agendas}}
 													{{#compareString ../horaage_hora agenda_hora}}
 													{{#compareString "sex" agenda_data_semana}}
-													<td id="horasexTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasexTerapeutaId_{{agenda_aux}}"></td>											
+													<td id="horasegSalaId_{{agenda_aux}}"></td>
+													<td id="horasegBeneId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}

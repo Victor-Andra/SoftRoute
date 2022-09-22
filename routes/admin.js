@@ -243,36 +243,31 @@ router.get("/agenda/lisB",(req,res) =>{//direciona a listagem agendamento de ben
     fncAgenda.carregaAgendaB(req, res);//CARREGAAGENDABENE
 })
 
-router.get("/agenda/lisB2",(req,res) =>{//direciona a listagem agendamento de beneficiarios.
-    console.log("Agenda Bene")
-    fncAgenda.carregaAgendaB2(req, res);//CARREGAAGENDABENE
-})
-
 router.post("/agenda/filB",(req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
-    fncAgenda.filtraAgendaL(req, res);
+    fncAgenda.carregaAgendaFilB(req, res);
 })
 
 router.get("/agenda/lisT",(req,res) =>{//direciona a listagem agendamento de terapeutas.
-    fncAgenda.filtraAgendaL(req, res);
+    fncAgenda.carregaAgendaT(req, res);
 })
 
 router.post("/agenda/filT",(req,res) =>{//direciona a listagem agendamento de filtro de terapeutas.
-    fncAgenda.filtraAgendaL(req, res);
+    fncAgenda.carregaAgendaFilT(req, res);
 })
 
 router.get("/agenda/lisA",(req,res) =>{//direciona a listagem de laudos.
-    fncAgenda.filtraAgendaL(req, res);
+    fncAgenda.filtraAgendaA(req, res);
 })
 
 router.post("/agenda/filA",(req,res) =>{//direciona a listagem de filtro de laudos.
+    fncAgenda.filtraAgendaA(req, res);
+})
+
+router.get("/agenda/lisV",(req,res) =>{//direciona a listagem de Fixa.
     fncAgenda.filtraAgendaL(req, res);
 })
 
-router.get("/agenda/lisV",(req,res) =>{//direciona a listagem de laudos.
-    fncAgenda.filtraAgendaL(req, res);
-})
-
-router.post("/agenda/filV",(req,res) =>{//direciona a listagem de filtro de laudos.
+router.post("/agenda/filV",(req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.filtraAgendaL(req, res);
 })
 
