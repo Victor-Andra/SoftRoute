@@ -36,8 +36,8 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
-															<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Nome</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Login: activate to sort column ascending">Login</th>
+															<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome Completo: activate to sort column ascending">Nome Completo</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Nome</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Função</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending">Status</th>
 														<th>Ação</th>
@@ -53,7 +53,7 @@
 																</label>
 															</td>
 															<td>{{usuario_nomecompleto}}</td>
-															<td>{{usuario_login}}</td>
+															<td>{{usuario_nome}}</td>
 															{{#each ../funcaos}}
 																{{#ifEqual _id ../usuario_funcaoid}}
 																	<td>{{funcao_nome}}</td>

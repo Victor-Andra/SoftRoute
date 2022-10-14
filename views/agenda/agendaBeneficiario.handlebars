@@ -47,6 +47,21 @@
 							let val = document.getElementById(valor).value;
 							console.log("value2:"+val)
 							document.getElementById(id).append(val);
+
+							let dis = ""+dia+"e";
+							document.getElementsByName(dis).forEach((e)=>{
+								let id = "hora"+e.id;
+								console.log("e.id:"+e.id)
+								console.log("e:"+e)
+								document.getElementById(id).append(e);
+							});
+
+							dis = ""+dia+"d";
+							document.getElementsByName(dis).forEach((e)=>{
+								let id = "hora"+e.id;
+								console.log(e.id)
+								document.getElementById(id).append(e);
+							});
 						})
 					})
 					//horasegTerapiaId_
@@ -133,6 +148,14 @@
 								{{#each agendas}}
 									<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+									<a class="green" id="{{agenda_data_semana}}AcaoId_{{agenda_aux}}" name="{{agenda_data_semana}}e" href="/menu/agenda/edi/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+									<!--
+									<a class="red" id="{{agenda_data_semana}}AcaoId_{{agenda_aux}}" name="{{agenda_data_semana}}d" href="/menu/agenda/del/{{_id}}">
+										<i class="ace-icon fa fa-trash-o bigger-130"></i>
+									</a>
+									-->
 								{{/each}}
 								{{#each terapeutas}}
 									<input id="{{_id}}" value="{{usuario_nome}}" />
@@ -171,7 +194,7 @@
 										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="11">
+													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
 														<b>	
 															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
 																<input class="hidden" id="data" name="data" value="" />
@@ -182,24 +205,29 @@
 												</tr>
 												<tr role="row">
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
 												</tr>
 												<tr role="row">	
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ação</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ação</th>
 													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ação</th>
+													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ação</th>
+													<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ação</th>
 												</tr>
 											</thead>
 											{{#each horaages}}
@@ -211,6 +239,7 @@
 													{{#compareString "seg" agenda_data_semana}}
 													<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
 													<td id="horasegTerapiaId_{{agenda_aux}}"></td>
+													<td id="horasegAcaoId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
@@ -219,6 +248,7 @@
 													{{#compareString "ter" agenda_data_semana}}
 													<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
 													<td id="horaterTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaterAcaoId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
@@ -227,6 +257,7 @@
 													{{#compareString "qua" agenda_data_semana}}
 													<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
 													<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaquaAcaoId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
@@ -235,6 +266,7 @@
 													{{#compareString "qui" agenda_data_semana}}
 													<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
 													<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
+													<td id="horaquiAcaoId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}
@@ -243,6 +275,7 @@
 													{{#compareString "sex" agenda_data_semana}}
 													<td id="horasexTerapeutaId_{{agenda_aux}}"></td>											
 													<td id="horasexTerapiaId_{{agenda_aux}}"></td>
+													<td id="horasexAcaoId_{{agenda_aux}}"></td>
 													{{/compareString}}
 													{{/compareString}}
 													{{/each}}

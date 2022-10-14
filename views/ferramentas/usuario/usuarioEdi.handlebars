@@ -8,10 +8,13 @@
 				let funcaoId = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
+				console.log("usuperfdilid:"+document.getElementById("usuPerfilId").value);
 				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
-				document.getElementById("usuarioContatipo").value = document.getElementById("usuContaTipo").value;
+				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
 				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
+				console.log("IDasdasdasd:"+document.getElementById("usuEspecializacao").value);
+				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
 				console.log("termina");
 			}
 		</script>
@@ -314,7 +317,7 @@
 																<label> Graduação</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuariograduacao" id="usuariograduacao" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioGraduacao" id="usuarioGraduacao" class="chosen-select" data-placeholder="Escolha..."><!--  GRADUAÇÃO == ESPECIALIDADE -->
 																			{{#each especialidades}}
 																			<option value="{{_id}}">{{especialidade_nome}}</option>
 																			{{else}}
@@ -743,6 +746,7 @@
 																						<input id="usuContaTipo" name="usuContaTipo" value="{{usuario.usuario_contatipo}}" />
 																						<input id="usuTipoPix" name="usuTipoPix" value="{{usuario.usuario_tipopix}}" />
 																						<input id="usuEspecializacao" name="usuEspecializacao" value="{{usuario.usuario_especializacao}}" />
+																						<input id="usuGraduacao" name="usuGraduacao" value="{{usuario.usuario_graduacao}}" />
 																					</div>
 
 																				</div>
@@ -761,7 +765,7 @@
 																					<label>Perfil</label>
 																					<div class="form-group">
 																							<div class="col-sm-4">
-																								<select name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																								<select id="usuarioPerfilid" name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
 																										{{#each perfils}}
 																										<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
 																										{{else}}

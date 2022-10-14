@@ -236,7 +236,7 @@ router.get("/agenda/lisS/",(req,res) =>{//direciona a listagem de Agenda Semanal
     fncAgenda.carregaAgendaS(req, res);
 })
 
-router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Geral.
+router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
     console.log("lista")
     fncAgenda.carregaAgendaFilS(req, res);
 })
