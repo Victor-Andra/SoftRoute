@@ -45,6 +45,7 @@
 		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 		<link rel="stylesheet" href="/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="/css/estilo_navbar.css" type="text/css" />
 		<!-- Carrega div Conteudo com paginas html -->
 		<script type = "text/javascript">
  			function carregar(pagina){ $("#conteudo").load(pagina);	}
@@ -57,9 +58,22 @@
 					doc.value += texto.substring(0,1);
 				}
 			}
+			function ocultaMenu(){
+				console.log("TESTANDO");
+				document.getElementById("main-container").hidden = true;
+			}
+			function toggleMenu(){
+				console.log("TESTANDOOOOO"+document.getElementById("main-container").hidden);
+				if (document.getElementById("main-container").hidden){
+					document.getElementById("main-container").hidden = false;
+				} else {
+					document.getElementById("main-container").hidden = true;
+				}
+				
+			}
 		</script>
 	</head>
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:ocultaMenu();">
 		
 
         {{>_navbar}}
@@ -68,7 +82,7 @@
 		{{#if success_msg}}
 			<div class="alert alert-danger">{{success_msg}}</div>
 		{{/if}}
-		<div id="containet-principal-side-nav" class="container" style="padding-left: 125px;margin-right: 50.000;">
+		<div id="containet-principal-side-nav" class="container" style="padding-top: 50px;margin-right: 50.000;">
             {{{body}}}
         </div>
 		
