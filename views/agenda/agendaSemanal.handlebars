@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Semanal por Beneficiário ou Terapeuta</title>
+		<title>Agenda Semanal</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -32,24 +32,35 @@
 			}
 			function carregaBody(){
 				let dias = ["seg","ter","qua","qui","sex"];
+				let ds = [];
 				try{
-					dias.forEach((dia)=>{
-						console.log("dia:"+dia)
-						document.getElementsByName(dia).forEach((e)=>{
-							console.log("e.value")
-							console.log(e.value)
-							console.log("e.id")
-							console.log(e.id)
-							let id = "hora"+e.id;
-							let valor = e.value;
-							console.log("hora+e.id/id:"+id)
-							console.log("valor:"+valor)
-							let val = document.getElementById(valor).value;
-							console.log("value2:"+val)
-							document.getElementById(id).append(val);
+					document.getElementsByName("sala_id").forEach((si)=>{
+						//console.log(si);
+						dias.forEach((dia)=>{
+							//console.log("dia_salaid:"+dia+"_"+si)
+							ds.push(dia+"_"+si.value);
 						})
 					})
-					//horasegTerapiaId_
+					document.getElementsByName(ds).forEach((e)=>{
+						console.log("e.value")
+						console.log(e.value)
+						console.log("e.id")
+						console.log(e.id)
+						let id = "hora"+e.id+"_"+si;//td para receber o append
+						let valor = e.value;//valor para indexar no td
+						console.log("id:"+id)
+						console.log("valor:"+valor)
+						let val = document.getElementById(valor).value;
+						console.log("value2:"+val);
+						//segTerapeutaId_08:00 / seg_1dsg1fg2df1g651dfg
+						//horasegTerapeutaId_08:00
+						document.getElementById(id).append(val);
+						//segTerapeutaId_08:00
+						//seg_623635b86a6e25ef1019ec2e
+						//62dff2e7ea444f5b7a02bd23
+
+						//horasegTerapeutaId_08:00
+					})
 				} catch(err){
 					console.log(err)
 				}
@@ -119,7 +130,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Semanal por Beneficiário ou Terapeuta</li>
+							<li class="active">Agenda Semanal</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -128,34 +139,16 @@
 					{{/if}}
 					<form class="form-horizontal" role="form" action="/menu/agenda/filS" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
-							<div>
-								<label>Tipo Filtro:</label>
-								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
-									<option value="bene">Beneficiário</option>
-									<option value="tera">Terapeuta</option>
-								</select>
-							</div>
 							<div class="hidden" id="divCarrega" name="divCarrega">
 								<input id="766f69643132333435366964" value="&nbsp;" />
 								{{#each agendas}}
-									<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+									<!--  -->
+									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
+									<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_beneid}}" />
 								{{/each}}
 								{{#each terapeutas}}
 									<input id="{{_id}}" value="{{usuario_nome}}" />
 								{{/each}}
-								{{#each terapias}}
-									<input id="{{_id}}" value="{{terapia_nome}}" />
-								{{/each}}
-							</div>
-							<div c >
-								<label id="beneFilDiv">Beneficiário:</label>
-								<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
-								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 							</div>
 							<div >
 								<label>Data:</label>
@@ -175,88 +168,54 @@
 							<div class="row">
 								<div class="col-xs-16 col-sm-9">
 									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+										{{#each salas}}
+										<input class="hidden" name="sala_id" value="{{_id}}" />
 										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="11">
-														<b>	
-															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
-																<input class="hidden" id="data" name="data" value="" />
-																<div>{{benenomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
-															</form>
-														</b> 
-													</th>
+													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="11">{{sala_nome}}</th>
 												</tr>
 												<tr  role="row">
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{../segunda}}</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{../terca}}</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{../quarta}}</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{../quinta}}</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{../sexta}}</th>
 												</tr>
 												<tr  role="row">	
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												</tr>
 											</thead>
-											{{#each horaages}}
+											{{#each ../horaages}}
 											<tbody>
 												<tr role="row" class="odd">
 													<td style="width: 50px;">{{horaage_hora}}</td>
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "seg" agenda_data_semana}}
-													<td id="horasegTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "ter" agenda_data_semana}}
-													<td id="horaterTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "qua" agenda_data_semana}}
-													<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "qui" agenda_data_semana}}
-													<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "sex" agenda_data_semana}}
-													<td id="horasexTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasexTerapeutaId_{{agenda_aux}}"></td>											
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
+													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>											
 												</tr>
 											</tbody>
 											{{/each}}
 										</table>
+										{{/each}}
 									</div>
 								</div>
 								<div class="col-xs-16 col-sm-3">	

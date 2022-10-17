@@ -3318,14 +3318,11 @@ module.exports = {
         let aux = 1;
         let is = false;
         let dtFill;
-        let nomeBene;
-        let nomeConv;
         let segunda;
         let terca;
         let quarta;
         let quinta;
         let sexta;
-        let beneConvid;
         let seg = new Date();
         let sex = new Date();
         seg.setUTCHours(0);
@@ -3387,8 +3384,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -3431,24 +3427,14 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
-            Bene.find({_id: b._id}).then((bene)=>{
-                bene.forEach(e => {
-                    nomeBene = e.bene_nome
-                    beneConvid = e.bene_convid
-                });
+            Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
-                Conv.find({_id: beneConvid}).then((conv)=>{
-                    conv.forEach(e => {
-                        nomeConv = e.conv_nome
-                    });
-                    console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
-                        Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
+                                //Caso o horaage se desconfigure efetuar sort
+                                //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
@@ -3814,11 +3800,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
-                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
-                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
-        })})})})})})})})}).catch((err) =>{
+                                    console.log("Listagem Realizada de Salas")
+                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -3827,16 +3811,11 @@ module.exports = {
     carregaAgendaFilS(req,res){
         let aux = 1;
         let is = false;
-        let nomeBene;
-        let nomeSup;
-        let nomeConv;
         let segunda;
         let terca;
         let quarta;
         let quinta;
         let sexta;
-        let beneConvid;
-        let benenomeconv;
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -3899,8 +3878,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -3943,23 +3921,10 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
-            Bene.find({_id: req.body.agendaBeneid}).then((bene)=>{
-                bene.forEach(e => {
-                    nomeBene = e.bene_nome
-                    nomeSup = e.bene_supervisor
-                    beneConvid = e.bene_convid
-                });
+            Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
-                Conv.find({_id: beneConvid}).then((conv)=>{
-                    conv.forEach(e => {
-                        nomeConv = e.conv_nome
-                    });
-                    console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
-                        Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -4329,11 +4294,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
-                                    benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
-                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
-        })})})})})})})})}).catch((err) =>{
+                                    console.log("Listagem Realizada de Salas")
+                                    res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
