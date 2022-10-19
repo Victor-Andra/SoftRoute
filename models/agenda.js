@@ -17,7 +17,9 @@ const AgendaSchema = mongoose.Schema({
     agenda_categoria :{ type: String, required: true },
     agenda_org :{ type: String, required: true },
     agenda_obs :{ type: String, required: false },
-    agenda_aux :{ type: String, required: false }
+    agenda_aux :{ type: String, required: false },
+    agenda_temp :{ type: Boolean, required: false },
+    agenda_tempId :{ type: ObjectId, required: false }
 })
 
 class Agenda{
@@ -37,8 +39,9 @@ class Agenda{
         agenda_categoria,
         agenda_org,
         agenda_obs,
-        agenda_aux
-
+        agenda_aux,
+        agenda_temp,
+        agenda_tempId
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -55,7 +58,9 @@ class Agenda{
         this.agenda_categoria = agenda_categoria
         this.agenda_org = agenda_org,
         this.agenda_obs = agenda_obs,
-        this.agenda_aux = agenda_aux
+        this.agenda_aux = agenda_aux, 
+        this.agenda_temp = agenda_temp, 
+        this.agenda_tempId = agenda_tempId
     }
 }
 
@@ -70,7 +75,7 @@ module.exports = {AgendaModel,AgendaSchema,
         let resultado;
         //Pega data atual
         
-        //Realiza Atualização
+        //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findByIdAndUpdate(req.body.agendaId, 
             {$set: {
                 agenda_data : dataAgenda ,
@@ -99,6 +104,7 @@ module.exports = {AgendaModel,AgendaSchema,
     },
     agendaAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let agenda_temp = false;
         console.log("req.body.agendaData:"+req.body.agendaData)
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
@@ -106,27 +112,62 @@ module.exports = {AgendaModel,AgendaSchema,
         console.log("data:"+data);
         console.log("dataAgenda:"+dataAgenda);
         console.log("agendamodel");
-            const newAgenda = new AgendaModel({
-                agenda_data : dataAgenda ,
-                agenda_beneid : req.body.agendaBeneid ,
-                agenda_convid : req.body.agendaConvid ,
-                agenda_salaid : req.body.agendaSalaid ,
-                agenda_terapiaid : req.body.agendaTerapiaid ,
-                agenda_usuid : req.body.agendaUsuid ,
-                agenda_migrado : req.body.agendaMigrado ,
-                agenda_categoria : req.body.agendaCateg ,
-                agenda_org : req.body.agendaOrg ,
-                agenda_obs : req.body.agendaObs ,
-                agenda_datacad : dataAtual
-            });
-            console.log("newAgenda save");
-            await newAgenda.save().then(()=>{
-                console.log("Cadastro realizado!");
-                return true;
-            }).catch((err) => {
-                console.log(err)
-                return err;
-            });
-        
+        const newAgenda = new AgendaModel({
+            agenda_data : dataAgenda ,
+            agenda_beneid : req.body.agendaBeneid ,
+            agenda_convid : req.body.agendaConvid ,
+            agenda_salaid : req.body.agendaSalaid ,
+            agenda_terapiaid : req.body.agendaTerapiaid ,
+            agenda_usuid : req.body.agendaUsuid ,
+            agenda_migrado : req.body.agendaMigrado ,
+            agenda_categoria : req.body.agendaCateg ,
+            agenda_org : req.body.agendaOrg ,
+            agenda_obs : req.body.agendaObs ,
+            agenda_temp : false ,
+            agenda_datacad : dataAtual
+        });
+        console.log("newAgenda save");
+        await newAgenda.save().then(()=>{
+            console.log("Cadastro realizado!");
+            return true;
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
+    },
+    agendaAdicionarTemp: async (req,res) => {
+        let dataAtual = new Date();
+        let agenda_temp = true;
+        let agenda_tempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+        console.log("req.body.agendaData:"+req.body.agendaData)
+        let data = new Date(req.body.agendaData);
+        let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
+        //console.log(dataAgenda);
+        console.log("data:"+data);
+        console.log("dataAgenda:"+dataAgenda);
+        console.log("agendamodel");
+        const newAgenda = new AgendaModel({
+            agenda_data : dataAgenda ,
+            agenda_beneid : req.body.agendaBeneid ,
+            agenda_convid : req.body.agendaConvid ,
+            agenda_salaid : req.body.agendaSalaid ,
+            agenda_terapiaid : req.body.agendaTerapiaid ,
+            agenda_usuid : req.body.agendaUsuid ,
+            agenda_migrado : req.body.agendaMigrado ,
+            agenda_categoria : req.body.agendaCateg ,
+            agenda_org : req.body.agendaOrg ,
+            agenda_obs : req.body.agendaObs ,
+            agenda_temp : agenda_temp ,
+            agenda_tempId : agenda_tempId ,
+            agenda_datacad : dataAtual
+        });
+        console.log("newAgenda save");
+        await newAgenda.save().then(()=>{
+            console.log("Cadastro realizado!");
+            return true;
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
     }
 };

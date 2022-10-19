@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Semanal</title>
+		<title>Agenda Fixa</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -73,13 +73,8 @@
 							console.log("e.id:"+e.id)
 							console.log("id:"+id)
 							console.log("e:"+e)
-							let hrefadd = "/menu/agenda/cadTemp/" + e.value;
-							let hrefedi = "/menu/agenda/ediTemp/" + e.value;
-							console.log("hrefadd:"+hrefadd);
-							let elementoAcaoAdd = document.getElementById(id+"a");
+							let hrefedi = "/menu/agenda/edi/" + e.value;
 							let elementoAcaoEdi = document.getElementById(id+"e");
-							console.log("elementoAcaoAdd:"+elementoAcaoAdd)
-							elementoAcaoAdd.href = hrefadd;
 							elementoAcaoEdi.href = hrefedi;
 						});
 						console.log("enddis");
@@ -153,14 +148,14 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Semanal</li>
+							<li class="active">Agenda Fixa</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
 						<div class="alert alert-danger">{{error}}</div>
 					{{else}}
 					{{/if}}
-					<form class="form-horizontal" role="form" action="/menu/agenda/filS" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
 							<div class="hidden" id="divCarrega" name="divCarrega">
 								<input id="766f69643132333435366964" value="&nbsp;" />
@@ -236,9 +231,6 @@
 													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horasegAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
 														<a class="green" id="horasegAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
@@ -246,9 +238,6 @@
 													<td id="horaterTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaterBeneId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaterAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
 														<a class="green" id="horaterAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
@@ -256,9 +245,6 @@
 													<td id="horaquaTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquaBeneId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaquaAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
 														<a class="green" id="horaquaAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
@@ -266,9 +252,6 @@
 													<td id="horaquiTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquiBeneId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaquiAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
 														<a class="green" id="horaquiAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>
@@ -276,9 +259,6 @@
 													<td id="horasexTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasexBeneId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horasexAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
 														<a class="green" id="horasexAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
 														</a>

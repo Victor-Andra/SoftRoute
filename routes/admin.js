@@ -258,6 +258,16 @@ router.post("/agenda/filT",(req,res) =>{//direciona a listagem agendamento de fi
     fncAgenda.carregaAgendaFilT(req, res);
 })
 
+router.get("/agenda/lisSala/",(req,res) =>{//direciona a listagem de Agenda Sala.
+    console.log("Agenda Sala")
+    fncAgenda.carregaAgendaSala(req, res);
+})
+
+router.post("/agenda/filSala/",(req,res) =>{//direciona a listagem de Agenda Sala.
+    console.log("Agenda Filtra Sala")
+    fncAgenda.carregaAgendaFilSala(req, res);
+})
+
 router.get("/agenda/lisA",(req,res) =>{//direciona a listagem de laudos.
     fncAgenda.filtraAgendaA(req, res);
 })
@@ -266,12 +276,12 @@ router.post("/agenda/filA",(req,res) =>{//direciona a listagem de filtro de laud
     fncAgenda.filtraAgendaA(req, res);
 })
 
-router.get("/agenda/lisV",(req,res) =>{//direciona a listagem de Fixa.
-    fncAgenda.filtraAgendaL(req, res);
+router.get("/agenda/lisF",(req,res) =>{//direciona a listagem de Fixa.
+    fncAgenda.carregaAgendaF(req, res);
 })
 
-router.post("/agenda/filV",(req,res) =>{//direciona a listagem de filtro de Fixa.
-    fncAgenda.filtraAgendaL(req, res);
+router.post("/agenda/filF",(req,res) =>{//direciona a listagem de filtro de Fixa.
+    fncAgenda.carregaAgendaFilF(req, res);
 })
 
 router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
@@ -291,7 +301,23 @@ router.get('/agenda/edi/:id', (req,res) =>{//direciona para a edição de agenda
     fncAgenda.carregaAgendaEdi(req, res);
 })
 
-router.post('/agenda/CadE/atualiza', (req,res) =>{//direciona para a edição de agenda
+router.get('/agenda/ediTemp/:id', (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.carregaAgendaEdiTemp(req, res);
+})
+
+router.post('/agenda/atualizaTemp', (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.atualizaAgendaTemp(req, res);
+})
+
+router.get('/agenda/cadTemp/:id', (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.carregaAgendaTemp(req, res);
+})
+
+router.get('/agenda/addTemp', (req,res) =>{//direciona para salvar a edição de agenda diária
+    fncAgenda.cadastraAgendaTemp(req, res);
+})
+
+router.post('/agenda/cadE/atualiza', (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaAgenda(req, res);
 })
 
