@@ -46,85 +46,35 @@
 					ds.forEach((dia_sala)=>{
 						console.log(dia_sala)
 						document.getElementsByName(dia_sala).forEach((e)=>{
-							console.log("e.value")
-							console.log(e.value)
-							console.log("e.id")
-							console.log(e.id)
 							let id = "hora"+e.id;//td para receber o append
-							let valor = e.value;//valor para indexar no td
-							console.log("id:"+id)
-							console.log("valor:"+valor)
-							let val = document.getElementById(valor).value;
-							console.log("value2:"+val);
-							//segTerapeutaId_08:00 / seg_1dsg1fg2df1g651dfg
-							//horasegTerapeutaId_08:00
-							document.getElementById(id).append(val+".");
-							//segTerapeutaId_08:00
-							//seg_623635b86a6e25ef1019ec2e
-							//62dff2e7ea444f5b7a02bd23
-
-							//horasegTerapeutaId_08:00
+							
+							if(e.id.indexOf("BeneId_") != -1){
+								let valor = e.value;//valor para indexar no td
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
+							} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+								let valor = e.value;//valor para indexar no td
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
+							}
 						})
-						let dis = ""+dia_sala+"_AgendaId";
-						console.log("dis:"+dis);
-						document.getElementsByName(dis).forEach((e)=>{
-							console.log("e:"+e)
-							let id = "hora"+e.id;
-							console.log("e.id:"+e.id)
-							console.log("id:"+id)
-							console.log("e:"+e)
-							let hrefadd = "/menu/agenda/cadTemp/" + e.value;
-							let hrefedi = "/menu/agenda/ediTemp/" + e.value;
-							console.log("hrefadd:"+hrefadd);
-							let elementoAcaoAdd = document.getElementById(id+"a");
-							let elementoAcaoEdi = document.getElementById(id+"e");
-							console.log("elementoAcaoAdd:"+elementoAcaoAdd)
-							elementoAcaoAdd.href = hrefadd;
-							elementoAcaoEdi.href = hrefedi;
-						});
-						console.log("enddis");
+					})
+					ds.forEach((dia_sala)=>{
+						document.getElementsByName(dia_sala).forEach((e)=>{
+							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
+								let id = "hora"+e.id;//td para receber o append
+								console.log("id:"+id)
+								let el = document.getElementById(e.id);//elemento da acao
+								console.log("el:"+el)
+								document.getElementById(id).append(el);
+								//elemento td recebendo acao
+							}
+						})
 					})
 				} catch(err){
 					console.log(err)
-				}
-			}
-			function alteraMigrado(){
-				let chck = document.getElementById("agendaMigrado");
-				if(chck.checked){
-					chck.value="true";
-					console.log(chck.value);
-				} else {
-					chck.value="false";
-					console.log(chck.value);
-				}
-			}
-			function selectFil(){
-				let origem = document.getElementById("tipoFil").value;
-				switch (origem) {
-					case "bene":
-						document.getElementById("beneFilDiv").style.display = "";
-						document.getElementById("agendaBeneid").style.display = "";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "sala":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "";
-						document.getElementById("agendaSalaid").style.display = "";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "tera":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "";
-						document.getElementById("agendaTerapeutaid").style.display = "";
-						break;
 				}
 			}
 			function formataData(){
@@ -167,14 +117,23 @@
 								<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
 								{{#each agendas}}
 									<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_beneid}}" />
-									<input id="{{agenda_data_semana}}AgendaId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_AgendaId" value="{{_id}}" />
-									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
+									<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
+									<div style="display: block;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}">
+										<a class="blue" href="/menu/agenda/cadTemp/{{_id}}">
+											<i class="ace-icon fa fa-plus bigger-130"></i>
+										</a>
+										<a class="green" href="/menu/agenda/ediTemp/{{_id}}">
+											<i class="ace-icon fa fa-pencil bigger-130"></i>
+										</a>
+									</div>
 								{{/each}}
-								{{#each terapeutas}}
-									<input id="{{_id}}" value="{{usuario_nome}}" />
-								{{/each}}
+								
 								{{#each benes}}
-									<input id="{{_id}}" value="{{bene_apelido}}" />
+									<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{bene_apelido}}" />
+								{{/each}}
+
+								{{#each terapeutas}}
+									<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
 								{{/each}}
 							</div>
 							<div>
@@ -200,7 +159,7 @@
 										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">{{sala_nome}}</th>
+													<th id="{{_id}}_SALA" class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">{{sala_nome}}</th>
 												</tr>
 												<tr  role="row">
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
@@ -233,56 +192,21 @@
 											<tbody>
 												<tr role="row" class="odd">
 													<td style="width: 50px;">{{horaage_hora}}</td>
-													<td id="horasegTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegTeraId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horasegAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
-														<a class="green" id="horasegAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
-															<i class="ace-icon fa fa-pencil bigger-130"></i>
-														</a>
-													</td>
-													<td id="horaterTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaterTeraId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaterBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaterAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
-														<a class="green" id="horaterAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
-															<i class="ace-icon fa fa-pencil bigger-130"></i>
-														</a>
-													</td>
-													<td id="horaquaTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquaTeraId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquaBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaquaAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
-														<a class="green" id="horaquaAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
-															<i class="ace-icon fa fa-pencil bigger-130"></i>
-														</a>
-													</td>
-													<td id="horaquiTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquiTeraId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horaquiBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horaquiAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
-														<a class="green" id="horaquiAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
-															<i class="ace-icon fa fa-pencil bigger-130"></i>
-														</a>
-													</td>
-													<td id="horasexTerapeutaId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasexTeraId_{{horaage_hora}}_{{../_id}}"></td>
 													<td id="horasexBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}x">
-														<a class="blue" id="horasexAgendaId_{{horaage_hora}}_{{../_id}}a" name="{{agenda_data_semana}}_{{agenda_salaid}}a">
-															<i class="ace-icon fa fa-plus bigger-130"></i>
-														</a>
-														<a class="green" id="horasexAgendaId_{{horaage_hora}}_{{../_id}}e" name="{{agenda_data_semana}}_{{agenda_salaid}}e">
-															<i class="ace-icon fa fa-pencil bigger-130"></i>
-														</a>
-													</td>										
+													<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}"></td>										
 												</tr>
 											</tbody>
 											{{/each}}
@@ -290,45 +214,6 @@
 										{{/each}}
 									</div>
 								</div>
-								<!--
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert">
-										<br>
-										<br>
-										<br>
-									</div>
-								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-danger">
-										<strong>
-										Agenda
-										</strong>
-										<br>
-											Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-warning">
-										<strong>
-										Beneficiário
-										</strong>
-										<br>
-										Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-info">
-										<strong>
-										Técnico
-										</strong>
-										<br>
-										Change a few things up and try submitting again.
-										<br>
-									</div>
-								</div>
-								-->
 							</div>
 						</div>
 			</div><!-- /.main-content -->

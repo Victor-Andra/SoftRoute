@@ -1727,6 +1727,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Terapia");
                                     if(nomeFnc == "Não possui" && nomeFisio == "Não possui"){
                                         usunomefnc = nomeUsu;
@@ -2256,6 +2257,7 @@ module.exports = {
                                 }
                             });
                             Sala.find().then((sala)=>{
+                                sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                 console.log("Listagem Realizada de Terapia")
                                 Especialidade.find().then((especialidade)=>{
                                     
@@ -4782,6 +4784,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaFixa", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
@@ -5275,6 +5278,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaFixa", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
@@ -5768,6 +5772,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSala", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
@@ -6261,6 +6266,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSala", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{

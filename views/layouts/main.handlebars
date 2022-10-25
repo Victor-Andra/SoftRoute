@@ -64,11 +64,10 @@
 
         {{>_navbar}}
 		<!--validação-->
-        {{>_sidebar}}
 		{{#if success_msg}}
 			<div class="alert alert-danger">{{success_msg}}</div>
 		{{/if}}
-		<div id="containet-principal-side-nav" class="container" style="padding-left: 125px;margin-right: 50.000;">
+		<div id="containet-principal-side-nav" class="container"> <!-- style="padding-left: 125px;margin-right: 50.000;" -->
             {{{body}}}
         </div>
 		
