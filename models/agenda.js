@@ -137,7 +137,6 @@ module.exports = {AgendaModel,AgendaSchema,
     },
     agendaAdicionarTemp: async (req,res) => {
         let dataAtual = new Date();
-        let agenda_temp = true;
         let agenda_tempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
         console.log("req.body.agendaData:"+req.body.agendaData)
         let data = new Date(req.body.agendaData);
@@ -157,7 +156,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
-            agenda_temp : agenda_temp ,
+            agenda_temp : true ,
             agenda_tempId : agenda_tempId ,
             agenda_datacad : dataAtual
         });
@@ -169,5 +168,20 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log(err)
             return err;
         });
+    },
+    agendaAddNovosCampos: async (req,res) => {
+        let resultado;
+        await AgendaModel.updateMany(
+            {},
+            {$set: {'agenda_temp': false}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
     }
 };

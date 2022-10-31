@@ -202,7 +202,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -321,7 +321,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -794,7 +794,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -1301,7 +1301,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -1824,26 +1824,20 @@ module.exports = {
         Usuario.find({_id:req.body.agendaTeraid}).then((usu) =>{
             usu.forEach((u)=>{
                 if(typeof u.usuario_nome === undefined){
-                    console.log("Q MERDA É ESSA???"+u.usuario_nomecompleto)
                     usunomefnc = u.usuario_nomecompleto;
                 } else {
-                    console.log("Q PORRA É ESSA???"+u.usuario_nome)
                     usunomefnc = u.usuario_nome;
                 }
                 if(!(typeof u.usuario_graduacao === undefined)){
-                    console.log("id_usuario_graduacao" + u.usuario_graduacao)
                     idFnc = u.usuario_graduacao;
                 }
                 if(!(typeof u.usuario_especializacao === undefined)){
-                    console.log("id_usuario_especializacao" + u.usuario_especializacao)
                     idEsp = u.usuario_especializacao;
                 }
-                console.log("Usu:"+req.body.agendaTeraid)
-                console.log(u)
             })
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -2364,7 +2358,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -2876,7 +2870,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -3382,7 +3376,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -3875,7 +3869,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -4368,7 +4362,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -4862,7 +4856,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -5288,6 +5282,19 @@ module.exports = {
         })
     },
     carregaAgendaSala(req,res){
+
+        let atualizar = agendaClass.agendaAddNovosCampos(req,res);
+        atualizar.then((res) =>{
+            console.log(res)
+            resultado = true;
+        }).catch((err) =>{
+            console.log(err)
+            resultado = false;
+        }).finally(() =>{
+            console.log("resultado")
+            console.log(resultado);
+        })
+
         let aux = 1;
         let is = false;
         let dtFill;
@@ -5356,7 +5363,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -5850,7 +5857,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -6265,6 +6272,12 @@ module.exports = {
                                         }
                                     }
                                 });
+
+                                agenda.forEach((e)=>{
+                                    if (e.agenda_temp) {
+
+                                    }
+                                })
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Salas")
@@ -6331,7 +6344,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -6458,13 +6471,13 @@ module.exports = {
         let filtro;
         switch (req.body.tipoFil){
             case "bene":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: false }
                 break;
             case "sala":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: false }
                 break;
             case "tera":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: false }
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
@@ -6581,7 +6594,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -6706,13 +6719,13 @@ module.exports = {
         let filtro;
         switch (req.body.tipoFil){
             case "bene":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: false }
                 break;
             case "sala":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: false }
                 break;
             case "tera":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid}
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: false }
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
@@ -7054,7 +7067,7 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    converteAgendaEmAtend(req,res){
+    converteAgendaEmAtend(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
         console.log("----------CÓPIA----------")
         console.log("dia:"+req.body.data2)
 
@@ -7157,7 +7170,7 @@ module.exports = {
             return err;
         });
     },
-    copiaDiaAgendaFill(req,res){
+    copiaDiaAgendaFill(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
         console.log("----------CÓPIA----------")
         console.log("dia:"+req.body.data)
 
@@ -7203,7 +7216,7 @@ module.exports = {
             this.carregaAgendaL(req,res);
         })
     },
-    copiaDiaAgendaGeral(req,res){
+    copiaDiaAgendaGeral(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
         console.log("----------CÓPIA----------")
         console.log("dia:"+req.body.data)
 
