@@ -110,39 +110,50 @@
 						<div class="alert alert-danger">{{error}}</div>
 					{{else}}
 					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
+						{{#each agendas}}
+							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_beneid}}" />
+							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
+							<div style="display: block;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}">
+								<a class="blue" href="/menu/agenda/edi/{{_id}}">
+									<i class="ace-icon fa fa-pencil bigger-130"></i>
+								</a>
+								<a class="red" href="/menu/agenda/del/{{_id}}">
+									<i class="ace-icon fa fa-trash-o bigger-130"></i>
+								</a>
+							</div>
+						{{/each}}
+						
+						{{#each benes}}
+							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{bene_apelido}}" />
+						{{/each}}
+
+						{{#each terapeutas}}
+							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
+						{{/each}}
+					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
-							<div class="hidden" id="divCarrega" name="divCarrega">
-								<input id="766f69643132333435366964" value="&nbsp;" />
-								<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
-								{{#each agendas}}
-									<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_beneid}}" />
-									<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
-									<label id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}">
-										<a class="green" href="/menu/agenda/edi/{{_id}}">
-											<i class="ace-icon fa fa-pencil bigger-130"></i>
-										</a>
-									</label>
-								{{/each}}
-								
-								{{#each benes}}
-									<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{bene_apelido}}" />
-								{{/each}}
-
-								{{#each terapeutas}}
-									<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
-								{{/each}}
-							</div>
-							<div>
+							<div style="text-align: center;">
 								<label>Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus "></i>
+								</button>
+								<button name="acaoCopiar" id="acaoCopiar" type="submit" style="margin-left: 150px;">
+									Copiar dia
+								</button>
+								<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
+								<button name="acaoConverte" id="acaoConverte" type="submit" style="margin-left: 25px;">
+									Converter dia em Atendimento
+								</button>
 							</div>
 							<div>
 								<div>
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
+									
 								</div>
 							</div>
 						</div>

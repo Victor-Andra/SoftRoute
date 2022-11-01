@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Semanal por Beneficiário</title>
+		<title>Agenda Beneficiário</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -36,76 +36,42 @@
 					dias.forEach((dia)=>{
 						console.log("dia:"+dia)
 						document.getElementsByName(dia).forEach((e)=>{
-							console.log("e.value")
-							console.log(e.value)
-							console.log("e.id")
-							console.log(e.id)
 							let id = "hora"+e.id;
 							let valor = e.value;
-							console.log("hora+e.id/id:"+id)
-							console.log("valor:"+valor)
-							let val = document.getElementById(valor).value;
-							console.log("value2:"+val)
-							document.getElementById(id).append(val);
-
-							let dis = ""+dia+"e";
-							document.getElementsByName(dis).forEach((e)=>{
-								let id = "hora"+e.id;
-								console.log("e.id:"+e.id)
-								console.log("e:"+e)
-								document.getElementById(id).append(e);
-							});
-
-							dis = ""+dia+"d";
-							document.getElementsByName(dis).forEach((e)=>{
-								let id = "hora"+e.id;
-								console.log(e.id)
-								document.getElementById(id).append(e);
-							});
+							console.log("valor")
+							console.log(valor)
+							//console.log("id")
+							//console.log(id)
+							if(valor != "766f69643132333435366964"){
+								if(e.id.indexOf("TerapiaId_") != -1){
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									//console.log("val")
+									//console.log(val)
+									document.getElementById(id).append(val);
+								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									//console.log("val")
+									//console.log(val)
+									document.getElementById(id).append(val);
+								}
+							}
+						})
+						document.getElementsByName(dia).forEach((e)=>{
+							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
+								let id = "hora"+e.id;//td para receber o append
+								console.log("id:"+id)
+								let el = document.getElementById(e.id);//elemento da acao
+								console.log("el:"+el)
+								document.getElementById(id).append(el);
+								//elemento td recebendo acao
+							}
 						})
 					})
 					//horasegTerapiaId_
 				} catch(err){
 					console.log(err)
-				}
-			}
-			function alteraMigrado(){
-				let chck = document.getElementById("agendaMigrado");
-				if(chck.checked){
-					chck.value="true";
-					console.log(chck.value);
-				} else {
-					chck.value="false";
-					console.log(chck.value);
-				}
-			}
-			function selectFil(){
-				let origem = document.getElementById("tipoFil").value;
-				switch (origem) {
-					case "bene":
-						document.getElementById("beneFilDiv").style.display = "";
-						document.getElementById("agendaBeneid").style.display = "";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "sala":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "";
-						document.getElementById("agendaSalaid").style.display = "";
-						document.getElementById("terapeutaFilDiv").style.display = "none";
-						document.getElementById("agendaTerapeutaid").style.display = "none";
-						break;
-					case "tera":
-						document.getElementById("beneFilDiv").style.display = "none";
-						document.getElementById("agendaBeneid").style.display = "none";
-						document.getElementById("salaFilDiv").style.display = "none";
-						document.getElementById("agendaSalaid").style.display = "none";
-						document.getElementById("terapeutaFilDiv").style.display = "";
-						document.getElementById("agendaTerapeutaid").style.display = "";
-						break;
 				}
 			}
 			function formataData(){
@@ -124,7 +90,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody()">
+	<body class="no-skin" onload="javascript:carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -134,55 +100,85 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Semanal por Beneficiário</li>
+							<li class="active">Agenda Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
 						<div class="alert alert-danger">{{error}}</div>
 					{{else}}
 					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						{{#each agendas}}
+							{{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+							<!-- VOID -->
+							{{else}}
+							<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
+							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+							<div id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}" style="display: block;">
+								<a class="blue" href="/menu/agenda/edi/{{_id}}">
+									<i class="ace-icon fa fa-pencil bigger-130"></i>
+								</a>
+								<a class="red" href="/menu/agenda/del/{{_id}}">
+									<i class="ace-icon fa fa-trash-o bigger-130"></i>
+								</a>
+							</div>
+							{{/compareThis}}
+						{{/each}}
+						{{#each terapeutas}}
+							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
+						{{/each}}
+						{{#each terapias}}
+							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{terapia_nome}}" />
+						{{/each}}
+					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filB" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge">
-							<div class="hidden" id="divCarrega" name="divCarrega">
-								<input id="766f69643132333435366964" value="&nbsp;" />
-								{{#each agendas}}
-									<input id="{{agenda_data_semana}}TerapiaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-									<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_aux}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-									<a class="green" id="{{agenda_data_semana}}AcaoId_{{agenda_aux}}" name="{{agenda_data_semana}}e" href="/menu/agenda/edi/{{_id}}">
-										<i class="ace-icon fa fa-pencil bigger-130"></i>
-									</a>
-									<!--
-									<a class="red" id="{{agenda_data_semana}}AcaoId_{{agenda_aux}}" name="{{agenda_data_semana}}d" href="/menu/agenda/del/{{_id}}">
-										<i class="ace-icon fa fa-trash-o bigger-130"></i>
-									</a>
-									-->
-								{{/each}}
-								{{#each terapeutas}}
-									<input id="{{_id}}" value="{{usuario_nome}}" />
-								{{/each}}
-								{{#each terapias}}
-									<input id="{{_id}}" value="{{terapia_nome}}" />
-								{{/each}}
-							</div>
-							<div>
-								<label id="beneFilDiv">Beneficiário:</label>
-								<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
-								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
-							</div>
-							<div >
-								<label>Data:</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
-							</div>
-							<div>
+						<div class="breadcrumbs" id="pesquisaAge" style="height: 125px;">
+							<div class="col-xs-20 col-sm-3">
 								<div>
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
+									<label id="beneFilDiv">Beneficiário:</label>
+									<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
+										{{#each benes}}
+											<option value="{{_id}}">{{bene_apelido}}</option>
+										{{/each}}
+									</select>
+									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+								</div>
+								<div>
+									<label>Data:</label>
+									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+									<input class="hidden" id="dataFinal" name="dataFinal" />
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
 									</button>
+								</div>
+							</div>
+							<!--
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert-danger">
+									<strong>
+									Agenda
+									</strong>
+									<br>
+									{{#each agendas}}
+										{{#isNull agenda_obs}}
+										{{else}}
+											<label>{{agenda_data_semana}} : {{agenda_hora}} - {{agenda_obs}}</label>
+											<br>
+										{{/isNull}}
+									{{/each}}
+									<br>
+								</div>
+							</div>
+							-->
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert-warning">
+									<strong>
+									Beneficiário
+									</strong>
+									<br>
+									{{bene.bene_obs}}
+									<br>
 								</div>
 							</div>
 						</div>
@@ -234,51 +230,21 @@
 											<tbody>
 												<tr role="row" class="odd">
 													<td style="width: 50px;">{{horaage_hora}}</td>
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "seg" agenda_data_semana}}
-													<td id="horasegTerapeutaId_{{agenda_aux}}"></td>
-													<td id="horasegTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasegAcaoId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "ter" agenda_data_semana}}
-													<td id="horaterTerapeutaId_{{agenda_aux}}"></td>
-													<td id="horaterTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaterAcaoId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "qua" agenda_data_semana}}
-													<td id="horaquaTerapeutaId_{{agenda_aux}}"></td>
-													<td id="horaquaTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquaAcaoId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "qui" agenda_data_semana}}
-													<td id="horaquiTerapeutaId_{{agenda_aux}}"></td>
-													<td id="horaquiTerapiaId_{{agenda_aux}}"></td>
-													<td id="horaquiAcaoId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
-													{{#each ../agendas}}
-													{{#compareString ../horaage_hora agenda_hora}}
-													{{#compareString "sex" agenda_data_semana}}
-													<td id="horasexTerapeutaId_{{agenda_aux}}"></td>											
-													<td id="horasexTerapiaId_{{agenda_aux}}"></td>
-													<td id="horasexAcaoId_{{agenda_aux}}"></td>
-													{{/compareString}}
-													{{/compareString}}
-													{{/each}}
+													<td id="horasegTeraId_{{horaage_hora}}"></td>
+													<td id="horasegTerapiaId_{{horaage_hora}}"></td>
+													<td id="horasegAcaoId_{{horaage_hora}}"></td>
+													<td id="horaterTeraId_{{horaage_hora}}"></td>
+													<td id="horaterTerapiaId_{{horaage_hora}}"></td>
+													<td id="horaterAcaoId_{{horaage_hora}}"></td>
+													<td id="horaquaTeraId_{{horaage_hora}}"></td>
+													<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
+													<td id="horaquaAcaoId_{{horaage_hora}}"></td>
+													<td id="horaquiTeraId_{{horaage_hora}}"></td>
+													<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
+													<td id="horaquiAcaoId_{{horaage_hora}}"></td>
+													<td id="horasexTeraId_{{horaage_hora}}"></td>
+													<td id="horasexTerapiaId_{{horaage_hora}}"></td>
+													<td id="horasexAcaoId_{{horaage_hora}}"></td>										
 												</tr>
 											</tbody>
 											{{/each}}
@@ -289,32 +255,6 @@
 									<div class="alert alert">
 										<br>
 										<br>
-										<br>
-									</div>
-								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-danger">
-										<strong>
-										Agenda
-										</strong>
-										<br>
-										{{#each agendas}}
-											{{#isNull agenda_obs}}
-											{{else}}
-												<label>{{agenda_data_semana}} : {{agenda_hora}} - {{agenda_obs}}</label>
-												<br>
-											{{/isNull}}
-										{{/each}}
-										<br>
-									</div>
-								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert-warning">
-										<strong>
-										Beneficiário
-										</strong>
-										<br>
-										{{bene.bene_obs}}
 										<br>
 									</div>
 								</div>

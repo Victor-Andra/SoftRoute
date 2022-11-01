@@ -66,6 +66,14 @@ require("./config/auth")(passport)
                         return options.inverse(this);
                     }
                 },
+                isTrue: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
+                    //console.log("/"+v1+"="+v2+"/")
+                    if (v1) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                },
                 isNull: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
                     //console.log("/"+v1+"="+v2+"/")
                     if (v1 === null || v1 === "" || v1 === undefined || v1 === "undefined") {
