@@ -42,35 +42,40 @@
 							ds.push(dia+"_"+si.value);
 						})
 					})
-					console.log("pos foreche")
 					ds.forEach((dia_sala)=>{
-						console.log(dia_sala)
-						document.getElementsByName(dia_sala).forEach((e)=>{
+						let dia_sala_tipo = dia_sala + "_Bene"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
 							let id = "hora"+e.id;//td para receber o append
 							
-							if(e.id.indexOf("BeneId_") != -1){
 								let valor = e.value;//valor para indexar no td
-								let val = document.getElementById(valor).cloneNode(true);
-								val.id = val.id+"x";
-								document.getElementById(id).append(val);
-							} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
-								let valor = e.value;//valor para indexar no td
-								let val = document.getElementById(valor).cloneNode(true);
-								val.id = val.id+"x";
-								document.getElementById(id).append(val);
-							}
+								console.log("valor:"+valor)
+								console.log("ELEMENTO VALOR:"+document.getElementById(valor))
+								if(document.getElementById(valor) != null){
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementById(id).append(val);
+								}
 						})
-					})
-					ds.forEach((dia_sala)=>{
-						document.getElementsByName(dia_sala).forEach((e)=>{
-							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
-								let id = "hora"+e.id;//td para receber o append
-								console.log("id:"+id)
-								let el = document.getElementById(e.id);//elemento da acao
-								console.log("el:"+el)
-								document.getElementById(id).append(el);
-								//elemento td recebendo acao
-							}
+								
+					
+						dia_sala_tipo = dia_sala + "_Tera"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+							
+								let valor = e.value;//valor para indexar no td
+								console.log("valor:"+valor)
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
+						})
+					
+						dia_sala_tipo = dia_sala + "_Acao"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+
+								let val = e.cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
 						})
 					})
 				} catch(err){
@@ -114,9 +119,9 @@
 						<input id="766f69643132333435366964" value="&nbsp;" />
 						<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
 						{{#each agendas}}
-							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_beneid}}" />
-							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}" value="{{agenda_usuid}}" />
-							<div style="display: block;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}">
+							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Bene" value="{{agenda_beneid}}" />
+							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Tera" value="{{agenda_usuid}}" />
+							<div style="display: block;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Acao">
 								{{#isTrue agenda_temp}}
 								<a class="blue" href="/menu/agenda/ediTemp/{{_id}}">
 									<i class="ace-icon fa fa-pencil bigger-130"></i>

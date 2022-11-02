@@ -1302,8 +1302,25 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Usuario.findOne({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usu)=>{
+            console.log("usu.usuario_obs:"+usu.usuario_obs)
+            if(typeof usu.usuario_nome === undefined){
+                usunomefnc = usu.usuario_nomecompleto;
+            } else {
+                usunomefnc = usu.usuario_nome;
+            }
+            if(!(typeof usu.usuario_graduacao === undefined)){
+                idFnc = usu.usuario_graduacao;
+            }
+            if(!(typeof usu.usuario_especializacao === undefined)){
+                idEsp = usu.usuario_especializacao;
+            }
+            if(!(typeof usu.usuario_obs === undefined)){
+                usuObs = usu.usuario_obs;
+            } else {
+                usuObs = " - "
+            }
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -1729,7 +1746,7 @@ module.exports = {
                                         
                                             especialidade.forEach((e)=>{//graduação
                                                 console.log("Listagem Realizada de Especialidade")
-                                                console.log("TESTE:"+e._id+"/"+idFnc)
+                                                //console.log("TESTE:"+e._id+"/"+idFnc)
                                                 if(e._id == idFnc){
                                                     nomeFnc = e.especialidade_nome;
                                                 }
@@ -1737,7 +1754,7 @@ module.exports = {
                                             Especializacao.find().then((especializacao)=>{//Terapia
                                                 console.log("Listagem Realizada de Especializacao")
                                                 especializacao.forEach((ez)=>{//especializacao
-                                                    console.log("TESTE:"+ez._id+"/"+idEsp)
+                                                    //console.log("TESTE:"+ez._id+"/"+idEsp)
                                                     if(ez._id == idEsp){
                                                         nomeEsp = ez.especializacao_nome;
                                                     }
@@ -1749,7 +1766,7 @@ module.exports = {
                                                     usunomefnc += " ("+nomeEsp+")"
                                                 }
                                                 console.log("benenomeconv:"+usunomefnc)
-                                                res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usunomefnc, segunda, terca, quarta, quinta, sexta})
+                                                res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usu ,usunomefnc, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -1832,25 +1849,24 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Usuario.find({_id:req.body.agendaTeraid}).then((usu) =>{
-            usu.forEach((u)=>{
-                if(typeof u.usuario_nome === undefined){
-                    usunomefnc = u.usuario_nomecompleto;
-                } else {
-                    usunomefnc = u.usuario_nome;
-                }
-                if(!(typeof u.usuario_graduacao === undefined)){
-                    idFnc = u.usuario_graduacao;
-                }
-                if(!(typeof u.usuario_especializacao === undefined)){
-                    idEsp = u.usuario_especializacao;
-                }
-                if(!(typeof u.usuario_obs === undefined)){
-                    usuObs = u.usuario_obs;
-                } else {
-                    usuObs = " - "
-                }
-            })
+        Usuario.findOne({_id:req.body.agendaTeraid, usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usu) =>{
+            console.log("usu:"+usu)
+            if(typeof usu.usuario_nome === undefined){
+                usunomefnc = usu.usuario_nomecompleto;
+            } else {
+                usunomefnc = usu.usuario_nome;
+            }
+            if(!(typeof usu.usuario_graduacao === undefined)){
+                idFnc = usu.usuario_graduacao;
+            }
+            if(!(typeof usu.usuario_especializacao === undefined)){
+                idEsp = usu.usuario_especializacao;
+            }
+            if(!(typeof usu.usuario_obs === undefined)){
+                usuObs = usu.usuario_obs;
+            } else {
+                usuObs = " - "
+            }
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2273,7 +2289,7 @@ module.exports = {
                                     
                                     especialidade.forEach((e)=>{//graduação
                                         console.log("Listagem Realizada de Especialidade")
-                                        console.log("TESTE:"+e._id+"/"+idFnc)
+                                        //console.log("TESTE:"+e._id+"/"+idFnc)
                                         if(e._id == idFnc){
                                             nomeFnc = e.especialidade_nome;
                                         }
@@ -2281,7 +2297,7 @@ module.exports = {
                                     Especializacao.find().then((especializacao)=>{//Terapia
                                         console.log("Listagem Realizada de Especializacao")
                                         especializacao.forEach((ez)=>{//especializacao
-                                            console.log("TESTE:"+ez._id+"/"+idEsp)
+                                            //console.log("TESTE:"+ez._id+"/"+idEsp)
                                             if(ez._id == idEsp){
                                                 nomeEsp = ez.especializacao_nome;
                                             }
@@ -2292,8 +2308,8 @@ module.exports = {
                                         if(!(typeof nomeEsp === "undefined")){
                                             usunomefnc += " ("+nomeEsp+")"
                                         }
-                                        console.log("benenomeconv:"+usunomefnc)
-                                        res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usunomefnc, segunda, terca, quarta, quinta, sexta})
+                                        console.log("usunomefnc:"+usunomefnc)
+                                        res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usu, usunomefnc, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

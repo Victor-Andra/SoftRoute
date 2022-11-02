@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Beneficiário</title>
+		<title>Agenda Terapeuta</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -90,7 +90,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Beneficiário</li>
+							<li class="active">Agenda Terapeuta</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -114,14 +114,14 @@
 							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{sala_nome}}" />
 						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filB" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filT" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" style="height: 125px;">
 							<div class="col-xs-20 col-sm-3">
 								<div>
-									<label id="beneFilDiv">Beneficiário:</label>
-									<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-										{{#each benes}}
-											<option value="{{_id}}">{{bene_apelido}}</option>
+									<label id="beneFilDiv">Terapeuta:</label>
+									<select id="agendaTeraid" name="agendaTeraid" data-placeholder="Escolha...">
+										{{#each terapeutas}}
+											<option value="{{_id}}">{{usuario_nome}}</option>
 										{{/each}}
 									</select>
 									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
@@ -156,10 +156,10 @@
 							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert-warning">
 									<strong>
-									Beneficiário
+									Terapeuta
 									</strong>
 									<br>
-									{{bene.bene_obs}}
+									{{usu.usuario_obs}}
 									<br>
 								</div>
 							</div>
