@@ -3843,6 +3843,7 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
+        let idsAgendasEx = [];
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -3901,7 +3902,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -3942,7 +3943,16 @@ module.exports = {
                         console.log("erro");
                         break;
                 }
+
+                if(e.agenda_temp){
+                    idsAgendasEx.push(e.agenda_tempId.toString());
+                }
             })
+            idsAgendasEx.forEach((i)=>{
+                agenda = agenda.filter(a => a.id != i);
+                //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
+            })
+            console.log(idsAgendasEx)
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")

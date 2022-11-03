@@ -313,7 +313,7 @@ router.get('/agenda/cadTemp/:id', (req,res) =>{//direciona para a edição de ag
     fncAgenda.carregaAgendaTemp(req, res);
 })
 
-router.get('/agenda/addTemp', (req,res) =>{//direciona para salvar a edição de agenda diária
+router.post('/agenda/addTemp', (req,res) =>{//direciona para salvar a edição de agenda diária
     fncAgenda.cadastraAgendaTemp(req, res);
 })
 

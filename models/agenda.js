@@ -19,7 +19,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_obs :{ type: String, required: false },
     agenda_aux :{ type: String, required: false },
     agenda_temp :{ type: Boolean, required: false },
-    agenda_tempId :{ type: ObjectId, required: false }
+    agenda_tempId :{ type: ObjectId, required: false },
+    agenda_tempmotivo :{ type: String, required: false }
 })
 
 class Agenda{
@@ -41,7 +42,8 @@ class Agenda{
         agenda_obs,
         agenda_aux,
         agenda_temp,
-        agenda_tempId
+        agenda_tempId,
+        agenda_tempmotivo
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -60,7 +62,8 @@ class Agenda{
         this.agenda_obs = agenda_obs,
         this.agenda_aux = agenda_aux, 
         this.agenda_temp = agenda_temp, 
-        this.agenda_tempId = agenda_tempId
+        this.agenda_tempId = agenda_tempId,
+        this.agenda_tempmotivo = agenda_tempmotivo
     }
 }
 
@@ -89,7 +92,6 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
                 agenda_dataedi : dataAtual
-
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -158,6 +160,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : true ,
             agenda_tempId : agenda_tempId ,
+            agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -168,7 +171,9 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log(err)
             return err;
         });
-    },
+    }
+    /*
+    ,
     agendaAddNovosCampos: async (req,res) => {
         let resultado;
         await AgendaModel.updateMany(
@@ -184,4 +189,5 @@ module.exports = {AgendaModel,AgendaSchema,
         });
         return resultado;
     }
+    */
 };
