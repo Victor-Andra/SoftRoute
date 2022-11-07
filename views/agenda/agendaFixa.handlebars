@@ -24,6 +24,9 @@
 		<script src="../../assets/js/respond.min.js"></script>
 
 		<script type="text/javascript">
+			function mudaAcao(acaoNome){
+				document.getElementById("acaoForm").action = acaoNome;
+			}
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
 				var dataFmt = new Date(dataIso);
@@ -141,96 +144,95 @@
 							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
 						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
+					<form id="acaoForm" class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
 							<div style="text-align: center;">
 								<label>Data:</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();mudaAcao('/menu/agenda/filF');">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
 								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" style="margin-left: 25px;">
 									<i class="ace-icon fa fa-search-plus "></i>
 								</button>
-								<button name="acaoCopiar" id="acaoCopiar" type="submit" style="margin-left: 150px;">
-									Copiar dia
+								<input class="hidden" id="data" name="data" value="{{data}}" />
+								{{data}}
+									- / - 
+								<button name="acaoCopiar" id="acaoCopiar" type="submit" onclick="javacript:mudaAcao('/menu/agenda/copiaDia')">
+									Copiar Semana
 								</button>
 								<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
-								<button name="acaoConverte" id="acaoConverte" type="submit" style="margin-left: 25px;">
+								<button name="acaoConverte" id="acaoConverte" type="submit" style="margin-left: 25px;" onclick="javacript:mudaAcao('/menu/agenda/converteDia')">
 									Converter dia em Atendimento
 								</button>
 							</div>
-							<div>
-								<div>
-									
-								</div>
-							</div>
 						</div>
 					</form>
-						<div class="tab-content"><!-- .tab-contente -->
-							<div class="row">
-								<div class="col-xs-16 col-sm-9">
-									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-										{{#each salas}}
-										<input class="hidden" name="sala_id" value="{{_id}}" />
-										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
-												<tr role="row">
-													<th id="{{_id}}_SALA" class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">{{sala_nome}}</th>
-												</tr>
-												<tr  role="row">
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-													<th style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../segunda}}</th>
-													<th style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../terca}}</th>
-													<th style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../quarta}}</th>
-													<th style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../quinta}}</th>
-													<th style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../sexta}}</th>
-												</tr>
-												<tr  role="row">	
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
-													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
-													<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
-												</tr>
-											</thead>
-											{{#each ../horaages}}
-											<tbody>
-												<tr role="row" class="odd">
-													<td style="width: 50px;">{{horaage_hora}}</td>
-													<td id="horasegTeraId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaterTeraId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaterBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquaTeraId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquaBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquiTeraId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquiBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasexTeraId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasexBeneId_{{horaage_hora}}_{{../_id}}"></td>
-													<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}"></td>										
-												</tr>
-											</tbody>
-											{{/each}}
-										</table>
+					<div class="tab-content"><!-- .tab-contente -->
+						<div class="row">
+							<div class="col-xs-16 col-sm-9">
+								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+									{{#each salas}}
+									<input class="hidden" name="sala_id" value="{{_id}}" />
+									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+										<thead>
+											<tr role="row">
+												<th id="{{_id}}_SALA" class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">{{sala_nome}}</th>
+											</tr>
+											<tr  role="row">
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+												<th style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../segunda}}</th>
+												<th style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../terca}}</th>
+												<th style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../quarta}}</th>
+												<th style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../quinta}}</th>
+												<th style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{../sexta}}</th>
+											</tr>
+											<tr  role="row">	
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+												<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+												<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+												<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+												<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+												<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+												<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+												<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+												<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+												<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+												<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+												<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+												<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+												<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+											</tr>
+										</thead>
+										{{#each ../horaages}}
+										<tbody>
+											<tr role="row" class="odd">
+												<td style="width: 50px;">{{horaage_hora}}</td>
+												<td id="horasegTeraId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaterTeraId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaterBeneId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquaTeraId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquaBeneId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquiTeraId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquiBeneId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horasexTeraId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horasexBeneId_{{horaage_hora}}_{{../_id}}"></td>
+												<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}"></td>										
+											</tr>
+										</tbody>
 										{{/each}}
-									</div>
+									</table>
+									{{/each}}
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->

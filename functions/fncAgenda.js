@@ -5324,19 +5324,6 @@ module.exports = {
         })
     },
     carregaAgendaSala(req,res){
-
-        let atualizar = agendaClass.agendaAddNovosCampos(req,res);
-        atualizar.then((res) =>{
-            console.log(res)
-            resultado = true;
-        }).catch((err) =>{
-            console.log(err)
-            resultado = false;
-        }).finally(() =>{
-            console.log("resultado")
-            console.log(resultado);
-        })
-
         let aux = 1;
         let is = false;
         let dtFill;
@@ -7116,17 +7103,17 @@ module.exports = {
     },
     converteAgendaEmAtend(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
         console.log("----------CÓPIA----------")
-        console.log("dia:"+req.body.data2)
+        console.log("dia:"+req.body.dataFil)
 
         let convcreval;
         let convdebval;
-        let dataIni = new Date(this.formataData(req.body.data2));
+        let dataIni = new Date(this.formataData(req.body.dataFil));
         
         dataIni.setUTCHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
         dataIni = dataIni.toISOString();
-        let dataFim = new Date(this.formataData(req.body.data2));
+        let dataFim = new Date(this.formataData(req.body.dataFil));
         
         dataFim.setUTCHours(23);
         dataFim.setMinutes(59);
@@ -7204,7 +7191,7 @@ module.exports = {
             console.log(err)
             res.render('admin/erro')
         }).finally(()=>{
-            this.carregaAgendaL(req,res);
+            this.carregaAgendaF(req,res);
         })
     }, 
     geraAtend: async (newAtend,res) => {
@@ -7284,7 +7271,7 @@ module.exports = {
         let nextNum;
         console.log("dataIni"+dataIni);
         console.log("dataFim"+dataFim);
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false}).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setUTCDate(dataaux.getUTCDate()+7);
@@ -7304,9 +7291,9 @@ module.exports = {
             })
         }).catch((err)=>{
             console.log(err)
-            res.render('admin/erro')
+            res.render('admin/erro');
         }).finally(()=>{
-            this.carregaAgendaL(req,res);
+            this.carregaAgendaF(req,res);
         })
     },
     salvaAgenda: async (newAgenda,res) => {
@@ -7320,3 +7307,16 @@ module.exports = {
         });
     }
 }
+/*
+let atualizar = agendaClass.agendaAddNovosCampos(req,res);
+atualizar.then((res) =>{
+    console.log(res)
+    resultado = true;
+}).catch((err) =>{
+    console.log(err)
+    resultado = false;
+}).finally(() =>{
+    console.log("resultado")
+    console.log(resultado);
+})
+*/
