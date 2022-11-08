@@ -9,7 +9,7 @@ const BeneSchema = mongoose.Schema({
     },
     bene_apelido:{
         type: String,
-        required: false
+        required: true
     },
     bene_idade:{
         type: String, 
@@ -21,11 +21,11 @@ const BeneSchema = mongoose.Schema({
     },
     bene_nacionalidade:{
         type: String,
-        required: true 
+        required: false 
     },
     bene_end:{
         type: String,
-        required: true 
+        required: false 
     },
     bene_endcompl:{
         type: String,
@@ -33,215 +33,215 @@ const BeneSchema = mongoose.Schema({
     },
     bene_endbairro:{
         type: String,
-        required: true 
+        required: false 
     },
     bene_endcidade:{
         type: String,
         required: true
     },
     bene_enduf:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_endcep:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_ident:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_cpf:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_status:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_convid:{
-         type: ObjectId, 
-         required: true 
-        },
+        type: ObjectId, 
+        required: true 
+    },
     bene_out:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_graupar:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_supervisor:{
         type: String, 
         required: false 
-        },
-        bene_escola:{
-            type: ObjectId,
-            required: false
-        },
-        bene_escolaobs:{
-            type: String,
-            required: false
-        },
+    },
+    bene_escola:{
+        type: ObjectId,
+        required: false
+    },
+    bene_escolaobs:{
+        type: String,
+        required: false
+    },
     bene_outprof:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outident:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outcpf:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outend:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outendcompl:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outendbairro:{
-         type: String,
-          required: true 
-        },
+        type: String,
+        required: false 
+    },
     bene_outendcidade:{
-         type: String,
-          required: true 
-        },
+        type: String,
+        required: false 
+    },
     bene_outenduf:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outendcep:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outcel:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outcel2:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_outemail:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_pai:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiprof:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiident:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paicpf:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiend:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiendcompl:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiendbairro:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiendcidade:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paienduf:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiendcep:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paicel:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paicel2:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_paiemail:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_mae:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeprof:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeident:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maecpf:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeend:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeendcompl:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeendbairro:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeendcidade:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeenduf:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeendcep:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maecel:{
-         type: String, 
-         required: true 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maecel2:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_maeemail:{
-         type: String, 
-         required: false 
-        },
+        type: String, 
+        required: false 
+    },
     bene_obs:{
         type: String,
         required: false
     },
     bene_datacad:{
-         type: Date, 
-         required: false 
+        type: Date, 
+        required: false 
         },
     bene_dataedi:{
         type: Date, 

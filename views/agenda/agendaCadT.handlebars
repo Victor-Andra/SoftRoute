@@ -4,9 +4,9 @@
 		<title>Agendamentos</title>
 		<script type="text/javascript">
 			function controlaCategoria(){
-				let origem = document.getElementById("atendOrg").value;
+				let origem = document.getElementById("agendaOrg").value;
 				if(origem == "Padrão"){
-					document.getElementById("atendCategoria").value = "Padrão";
+					document.getElementById("agendaCateg").value = "Padrão";
 					document.getElementById("Padrão").style.display = "";
 					document.getElementById("Falta").style.display = "none";
 					document.getElementById("Apoio").style.display = "none";
@@ -16,7 +16,7 @@
 					document.getElementById("Glosa").style.display = "none";
 					document.getElementById("Extra").style.display = "none";
 				} else {
-					document.getElementById("atendCategoria").value = "Apoio";
+					document.getElementById("agendaCateg").value = "Apoio";
 					document.getElementById("Padrão").style.display = "none";
 					document.getElementById("Falta").style.display = "";
 					document.getElementById("Apoio").style.display = "";
@@ -62,7 +62,7 @@
 		</script>
 	</head>
 
-	<body class="no-skin" onload="javascript:carregaBody()">
+	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -154,9 +154,6 @@
 															</div>
 														</div>
 													</div><!-- /.span -->
-													<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
-														<label for="form-field-select-1"></label>
-													</div><!-- /.span -->
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
@@ -164,8 +161,8 @@
 														<div class="form-group">
 															<div class="col-sm-9">
 																<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																	<option value="Administrativo">Administrativo</option>
 																	<option value="Padrão">Padrão</option>
+																	<option value="Administrativo">Administrativo</option>
 																</select>
 															</div>
 														</div>
@@ -224,19 +221,6 @@
 																	{{/each}}
 																</select>
 															</div>
-														</div>
-													</div><!-- /.span -->
-													<div class="col-xs-12 col-sm-4">
-														<div class="alert alert-danger">
-															<button type="button" class="close" data-dismiss="alert">
-																<i class="ace-icon fa fa-times"></i>
-															</button>
-															<strong>
-																<i class="ace-icon fa fa-times"></i>
-																Importante!
-															</strong>
-															O Convênio é preenchido automaticamente.
-															<br>
 														</div>
 													</div><!-- /.span -->
 												</div>

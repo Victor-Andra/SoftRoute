@@ -325,13 +325,15 @@ router.get('/agenda/atualiza/:id', (req,res) =>{//direciona para a edição de a
     fncAgenda.atualizaAgendaCadE(req, res);
 })
 
-router.post('/agenda/copiaDia', (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.copiaDiaAgendaGeral(req, res);
+router.post('/agenda/copiaSemana', (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.copiaSemanaAgendaGeral(req, res);
 })
 
+/*
 router.post('/agenda/converteDia', (req,res) =>{//direciona para a edição de agenda
     fncAgenda.converteAgendaEmAtend(req, res);
 })
+*/
 // Visualizar Agenda
 /*
 router.get("/agenda/vis",(req,res) =>{//direciona o cadstro A AGENDA.

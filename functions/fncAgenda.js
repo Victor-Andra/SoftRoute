@@ -4395,6 +4395,7 @@ module.exports = {
         let agora = seg.toISOString();
         let depois = sex.toISOString();
         let diaSemana = seg;
+        dtFill = seg.toISOString();
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
@@ -4837,7 +4838,7 @@ module.exports = {
         let quarta;
         let quinta;
         let sexta;
-        let dtFill = new Date(req.body.dataFinal);
+        let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
         seg.setUTCHours(0);
@@ -4849,35 +4850,28 @@ module.exports = {
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 5);
                 break;
             case 1://SEG
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 4);
                 break;
             case 2://TER
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 1);
                 sex.setUTCDate(sex.getUTCDate() + 3);
                 break;
             case 3://QUA
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 2);
                 sex.setUTCDate(sex.getUTCDate() + 2);
                 break;
             case 4://QUI
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 3);
                 sex.setUTCDate(sex.getUTCDate() + 1);
                 break;
             case 5://SEX
-                dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 4);
                 break;
             case 6://SAB
                 seg.setUTCDate(seg.getUTCDate() - 5);
-                dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() - 1);
                 break;
             default:
@@ -4888,6 +4882,7 @@ module.exports = {
         }
         let agora = seg.toISOString();
         let depois = sex.toISOString();
+        dtFill = seg.toISOString();
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
@@ -7011,14 +7006,17 @@ module.exports = {
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
             Bene.find().then((bene) =>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
                     console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
                         console.log("Listagem salas!")
-                        Terapia.find().then((terapia)=>{ 
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             console.log("Listagem terapia!")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
+                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                                 console.log("Listagem terapeutas!")
                                 Horaage.find().then((horaage)=>{
         res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
@@ -7076,14 +7074,17 @@ module.exports = {
     carregaAgendaCadastro(req,res,resposta){
         let flash = new Resposta()
         Bene.find().then((bene) =>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
             console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
                 console.log("Listagem Convenios!")
                 Sala.find().then((sala)=>{ 
                     console.log("Listagem salas!")
                     Terapia.find().then((terapia)=>{ 
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         console.log("Listagem terapia!")
-                        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
+                        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                             console.log("Listagem terapeutas!")
                             Horaage.find().then((horaage)=>{
                                 if(resposta.sucesso == ""){
@@ -7250,22 +7251,24 @@ module.exports = {
             this.carregaAgendaL(req,res);
         })
     },
-    copiaDiaAgendaGeral(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
+    copiaSemanaAgendaGeral(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
+        console.log("-------------------------")
         console.log("----------CÓPIA----------")
+        console.log("-------------------------")
         console.log("dia:"+req.body.data)
 
         let dataaux;
-        let dataIni = new Date(this.formataData(req.body.data));
-        
+        let dataIni = new Date(req.body.data);//deve retornar uma segunda-feira
         dataIni.setUTCHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
         dataIni = dataIni.toISOString();
-        let dataFim = new Date(this.formataData(req.body.data));
+        let dataFim = new Date(req.body.data);
         
         dataFim.setUTCHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
+        dataFim.setDate(dataFim.getDate()+4)//+4 dias na segunda-feira para chegar a sexta
         dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
@@ -7274,7 +7277,7 @@ module.exports = {
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false}).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
-                dataaux.setUTCDate(dataaux.getUTCDate()+7);
+                dataaux.setDate(dataaux.getDate()+7);
                 console.log("date")
                 console.log(dataaux)
                 a.agenda_data = dataaux.toISOString();
@@ -7285,14 +7288,22 @@ module.exports = {
                     agenda_salaid : a.agenda_salaid,//
                     agenda_terapiaid : a.agenda_terapiaid,//
                     agenda_usuid : a.agenda_usuid,//
+                    agenda_categoria : a.agenda_categoria,//
+                    agenda_org : a.agenda_org,//
+                    agenda_obs : a.agenda_obs,//
+                    agenda_temp : a.agenda_temp,//
                     agenda_datacad: dataAtual//
                 });
                 this.salvaAgenda(newAgenda);
             })
+            console.log(agenda)
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro');
         }).finally(()=>{
+            console.log("-------------------------")
+            console.log("-----------FIM-----------")
+            console.log("-------------------------")
             this.carregaAgendaF(req,res);
         })
     },

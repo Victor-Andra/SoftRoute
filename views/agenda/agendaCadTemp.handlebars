@@ -96,54 +96,27 @@
 											<div class="widget-main">
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<div >
-															<div>
-																<div>
-																	<div>
-																		<label for="id-date-picker-1">Data Agendamento</label>
-																		<div class="row">
-																			<div class="col-sm-4">
-																				<div class="input-group">
-																					<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
-																				</div>
-																			</div>
-																		</div>
-																	</div>
+														<label for="id-date-picker-1">Data Agendamento</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
 																</div>
 															</div>
 														</div>
-													</div><!-- /.span -->
+													</div>
 													<div class="col-xs-12 col-sm-6">
-														<div >
-															<div>
-																<div>
-																	<div>
-																		<label for="id-date-picker-1">Hora Agendamento</label>
-																		<div class="form-group">
-																			<div class="col-sm-8">
-																				<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
-																					{{#each horaages}}
-																						<option value="{{horaage_hora}}">{{horaage_hora}}</option>
-																					{{/each}}
-																				</select>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+														<label for="id-date-picker-1">Hora Agendamento</label>
+														<div class="form-group">
+															<div class="col-sm-8">
+																<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																	{{#each horaages}}
+																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+																	{{/each}}
+																</select>
 															</div>
 														</div>
-													</div><!-- /.span -->
-													<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
-														<div >
-															<div >
-																<div>
-																	<div>
-																		<label for="form-field-select-1"></label>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div><!-- /.span -->
+													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
@@ -177,135 +150,108 @@
 												</div>
 												<div class="row" >
 													<div class="col-xs-12 col-sm-6">
-														<div >
-															<div>
-																<div>
-																	<div>
-																		<label>Beneficiário</label>
-																			<div class="hidden" class="col-sm-5">
-																				{{#each benes}}
-																					{{#each ../convs}}
-																						{{#ifEqual ../bene_convid _id}}
-																							<input value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
-																						{{/ifEqual}}
-																					{{/each}}
-																				{{/each}}
-																				<input value="X" id="X" name="refAgendaConv" />
-																			</div>
-																			<div class="form-group" >
-																				<div class="col-sm-5">
-																					<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
-																							{{#each benes}}
-																								<option value="{{_id}}">{{bene_nome}}</option>
-																							{{/each}}
-																					</select>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div><!-- /.span -->
-														<div class="col-xs-12 col-sm-2">
-															<div >
-																<div >
-																	<div>
-																		<div>
-																			<label>Convênio</label>
-																			<div class="form-group"  >
-																				<div class="col-sm-6" style="width: 500px;">
-																					<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
-																						{{#each benes}}
-																							{{#each ../convs}}
-																								{{#ifEqual ../bene_convid _id}}
-																									<option value="{{../bene_convid}}">{{conv_nome}}</option>
-																								{{/ifEqual}}
-																							{{/each}}
-																						{{/each}}
-																					</select>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div><!-- /.span -->
-														<div class="col-xs-12 col-sm-4">
-															<div >
-																<div >
-																	<div>
-																		<div>
-																			<div class="alert alert-danger">
-																				<button type="button" class="close" data-dismiss="alert">
-																					<i class="ace-icon fa fa-times"></i>
-																				</button>
-																				<strong>
-																					<i class="ace-icon fa fa-times"></i>
-																					Importante!
-																				</strong>
-																				O Convênio é preenchido automaticamente.
-																				<br>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div><!-- /.span -->
-													</div>
-													<div class="row">
-														<div class="col-xs-6">
-															<label>Terapeuta</label>
-															<div class="form-group">
-																<div class="col-sm-4" style="width: 500px;">
-																	<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
-																		{{#each terapeutas}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>												
+														<label>Beneficiário</label>
+														<div class="hidden" class="col-sm-5">
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<input value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
 														</div>
-														<div class="col-xs-6">													
-															<label>Terapia</label>
-															<div class="form-group">
-																<div class="col-sm-4" style="width: 600px;">
-																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
-																		{{#each terapias}}
-																			<option value="{{_id}}">{{terapia_nome}}</option>
+														<div class="form-group" >
+															<div class="col-sm-5">
+																<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div><!-- /.span -->
+													<div class="col-xs-12 col-sm-2">
+														<label>Convênio</label>
+														<div class="form-group"  >
+															<div class="col-sm-6" style="width: 500px;">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each benes}}
+																		{{#each ../convs}}
+																			{{#ifEqual ../bene_convid _id}}
+																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																			{{/ifEqual}}
 																		{{/each}}
-																	</select>
-																</div>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div><!-- /.span -->
+												</div>
+												<div class="row">
+													<div class="col-xs-6">
+														<label>Terapeuta</label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 500px;">
+																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each terapeutas}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>												
+													</div>
+													<div class="col-xs-6">													
+														<label>Terapia</label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 600px;">
+																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+																</select>
 															</div>
 														</div>
 													</div>
-													<div class="row">
-														<div class="col-xs-6">
-															<label>Salas</label>
-															<div class="form-group">
-																<div class="col-sm-4" style="width: 300px;">
-																	<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
-																		{{#each salas}}
-																			<option value="{{_id}}">{{sala_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-6">
+														<label>Salas</label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 300px;">
+																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+																	{{#each salas}}
+																		<option value="{{_id}}">{{sala_nome}}</option>
+																	{{/each}}
+																</select>
 															</div>
+														</div>
+													</div>
+
 															<!--<label class="pos-rel">
 																<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
 																Realizado? 
 															</label>-->
+													<div class="col-xs-6">
+														<label>Motivo</label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 300px;">
+																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectmuda()">
+																	<option id="yellow" style="background-color: yellow;" value="yellow">Falta</option>
+																	<option id="orange" style="background-color: orange;" value="orange">Falta Justificada</option>
+																	<option id="cyan" style="background-color: cyan;" value="cyan">Substituição</option>
+																	<option id="salmon" style="background-color: salmon;" value="salmon">Roberta Disponpivel</option>
+																	<option id="lightgreen" style="background-color: lightgreen;" value="lightgreen">Nenhuma Observação</option>
+																</select>
+															</div>
 														</div>
-														<div class="col-xs-6">
-															<label>Motivo</label>
-															<div class="form-group">
-																<div class="col-sm-4" style="width: 300px;">
-																	<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectmuda()">
-																		<option id="yellow" style="background-color: yellow;" value="yellow">Falta</option>
-																		<option id="cyan" style="background-color: cyan;" value="cyan">Substituição</option>
-																		<option id="salmon" style="background-color: salmon;" value="salmon">Roberta Disponpivel</option>
-																		<option id="lightgreen" style="background-color: lightgreen;" value="lightgreen">Nenhuma Observação</option>
-																	</select>
-																</div>
+													</div>
+												</div>
+												<div class="row" >
+													<div class="col-xs-12 col-sm-6">													
+														<label> Notificação de agenda</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea style="width: 400px;" id="agendaObs" name="agendaObs" placeholder="" class="form-control"></textarea>
 															</div>
 														</div>
 													</div>
