@@ -2434,6 +2434,7 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
             Bene.find({_id: b._id}).then((bene)=>{
                 bene.forEach(e => {
                     nomeBene = e.bene_apelido
@@ -2447,8 +2448,10 @@ module.exports = {
                     });
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
@@ -2959,8 +2962,10 @@ module.exports = {
                     });
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
@@ -3452,8 +3457,10 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
@@ -3955,8 +3962,10 @@ module.exports = {
             console.log(idsAgendasEx)
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
@@ -4449,8 +4458,10 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
@@ -4937,8 +4948,10 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
