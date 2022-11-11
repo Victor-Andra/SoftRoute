@@ -139,7 +139,8 @@ module.exports = {AgendaModel,AgendaSchema,
     },
     agendaAdicionarTemp: async (req,res) => {
         let dataAtual = new Date();
-        let agenda_tempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+        let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+        console.log("agendaTempId:"+agendaTempId)
         console.log("req.body.agendaData:"+req.body.agendaData)
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
@@ -159,7 +160,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : true ,
-            agenda_tempId : req.body.agenda_tempId ,
+            agenda_tempId : agendaTempId ,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_datacad : dataAtual
         });

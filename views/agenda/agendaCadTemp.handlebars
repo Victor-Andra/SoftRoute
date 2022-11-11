@@ -36,6 +36,7 @@
 				var dataFmt = new Date(dataIso);
 				console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
+				console.log(dataFmt);
 			}
 			function carregaBody(){
 				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
@@ -46,7 +47,7 @@
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
 				document.getElementById("agendaTempMotivo").value = "Nenhuma Observação";//document.getElementById("agendaTempMotivoEdi").value;
-				selectmuda();
+				ajustaOption();
 				atualizaData();
 			}
 			function alteraMigrado(){
@@ -235,7 +236,7 @@
 														<label>Motivo</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectmuda()">
+																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
 																	<option style="background-color: yellow;" value="Falta">Falta</option>
 																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
 																	<option style="background-color: cyan;" value="Substituição">Substituição</option>
