@@ -6944,28 +6944,27 @@ module.exports = {
         let flash = new Resposta()
         let resposta;
         try{
-            agendaClass.agendaEditar(req,res).then((res)=>{
+            agendaClass.agendaEditarTemp(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resposta = res;
+                resposta = true;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
                 resposta = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
+                if(resposta== true){
                     //Volta para a agenda de listagem
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
                     console.log('verdadeiro')
-                    req.flash("success_message", "Edição de Agenda Diária realizada com sucesso!")
                     this.carregaAgendaCadastro(req,res,flash);
                 }else{
                     //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+                    flash.texto = "Erro ao editar agenda!"
+                    flash.sucesso = "false"
+                    this.carregaAgendaCadastro(req,res,flash);
                 }
             })
         } catch(err1){
@@ -6981,9 +6980,10 @@ module.exports = {
         let flash = new Resposta()
         let resultado;
         try{
+            console.log("TRY")
             agendaClass.agendaEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
-                console.log(res)
+                console.log("res")
                 resultado = true;
             }).catch((err) =>{
                 console.log("error1")
@@ -6991,15 +6991,16 @@ module.exports = {
                 resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
+                console.log("Finally")
                 if(resultado == true){
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
                     //Volta para a agenda de listagem
                     this.carregaAgendaCadastro(req,res,flash);
                 }else{
-                    flash.texto = "Cadastrado com sucesso!"
-                    flash.sucesso = "true"
-                    //Volta para a agenda de listagem
+                    console.log("ERROR")
+                    flash.texto = "Erro ao editar agenda!"
+                    flash.sucesso = "false"
                     this.carregaAgendaCadastro(req,res,flash);
                 }
             })

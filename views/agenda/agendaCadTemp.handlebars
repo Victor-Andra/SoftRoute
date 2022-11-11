@@ -5,19 +5,19 @@
 		<script type="text/javascript">
 			function ajustaOption(){
 				let valor;
-				let categ = document.getElementById("agendaCateg").value;
+				let categ = document.getElementById("agendaTempMotivo").value;
+				console.log("categ: "+categ)
 				if (categ == "Falta") {
-					valor = "yellow";
-				} else if (categ == "Substituto") {
-					valor = "cyan";
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "yellow";
+				} else if (categ == "Falta Justificada") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "orange";
+				} else if (categ == "Substituição") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "cyan";
+				} else if (categ == "Roberta Disponpivel") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "salmon";
 				} else {
-					valor = "lightgreen";
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "lightgreen";
 				}
-				document.getElementById("agendaTempMotivo").value = valor;
-				selectmuda();
-			}
-			function selectmuda(){
-				document.getElementById("agendaTempMotivo").style.backgroundColor = document.getElementById("agendaTempMotivo").value;
 			}
 			function mudamuda(cor){
 				document.getElementById(cor).style.backgroundColor = cor;
@@ -45,7 +45,7 @@
 				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
-				document.getElementById("agendaTempMotivo").value = "lightgreen";//document.getElementById("agendaTempMotivoEdi").value;
+				document.getElementById("agendaTempMotivo").value = "Nenhuma Observação";//document.getElementById("agendaTempMotivoEdi").value;
 				selectmuda();
 				atualizaData();
 			}
@@ -236,11 +236,11 @@
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
 																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectmuda()">
-																	<option id="yellow" style="background-color: yellow;" value="yellow">Falta</option>
-																	<option id="orange" style="background-color: orange;" value="orange">Falta Justificada</option>
-																	<option id="cyan" style="background-color: cyan;" value="cyan">Substituição</option>
-																	<option id="salmon" style="background-color: salmon;" value="salmon">Roberta Disponpivel</option>
-																	<option id="lightgreen" style="background-color: lightgreen;" value="lightgreen">Nenhuma Observação</option>
+																	<option style="background-color: yellow;" value="Falta">Falta</option>
+																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
+																	<option style="background-color: cyan;" value="Substituição">Substituição</option>
+																	<option style="background-color: salmon;" value="Roberta Disponpivel">Roberta Disponpivel</option>
+																	<option style="background-color: lightgreen;" value="Nenhuma Observação">Nenhuma Observação</option>
 																</select>
 															</div>
 														</div>

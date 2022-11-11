@@ -159,7 +159,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : true ,
-            agenda_tempId : agenda_tempId ,
+            agenda_tempId : req.body.agenda_tempId ,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_datacad : dataAtual
         });
@@ -171,6 +171,43 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log(err)
             return err;
         });
+    },
+    agendaEditarTemp: async (req, res) => {
+        let dataAtual = new Date();
+        let data = new Date(req.body.agendaData);
+        let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
+        console.log(dataAgenda);
+        let resultado;
+        //Pega data atual
+        
+        //Realiza Atualização - Atualização não faz alteração temporaria
+        await AgendaModel.findByIdAndUpdate(req.body.agendaId, 
+            {$set: {
+                agenda_data : dataAgenda ,
+                agenda_beneid : req.body.agendaBeneid ,
+                agenda_convid : req.body.agendaConvid ,
+                agenda_salaid : req.body.agendaSalaid ,
+                agenda_terapiaid : req.body.agendaTerapiaid ,
+                agenda_usuid : req.body.agendaUsuid ,
+                agenda_migrado : req.body.agendaMigrado ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
+                agenda_temp : true ,
+                agenda_tempId : req.body.agenda_tempId ,
+                agenda_tempmotivo : req.body.agendaTempMotivo ,
+                agenda_dataedi : dataAtual
+                }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
     }
     /*
     ,
