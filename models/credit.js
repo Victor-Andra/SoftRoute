@@ -31,15 +31,15 @@ const CreditSchema = mongoose.Schema({
         required: false 
     },
     credit_dataevento :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     credit_datavenci :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     credit_datapg :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     credit_valorprev :{ 

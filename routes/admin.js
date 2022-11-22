@@ -148,6 +148,8 @@ const fncDebitSubcateg = require("../functions/fncDebitSubcateg")
 const fncSessao = require('../functions/fncSessao')
 const passport = require('passport')
 
+//Financeiro
+const fncFinanceiro = require("../functions/fncFinanceiro")
 
 
 /*
@@ -578,7 +580,7 @@ router.get('/financeiro/despesa/lis',(req,res) =>{//lista todas debits
 })
 
 router.get('/financeiro/despesa/ges',(req,res) =>{//lista todas debits      
-    res.render('financeiro/despesa/debitGes')
+    fncFinanceiro.listaRelContasAPagar(req,res);
 })
 
 router.get('/financeiro/despesa/cad',(req,res) =>{//direciona o cadstro de debit

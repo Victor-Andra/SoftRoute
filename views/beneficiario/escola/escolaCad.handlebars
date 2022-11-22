@@ -10,9 +10,9 @@
 		<div class="main-container ace-save-state" id="main-container">
 
 
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+			<div class="main-content-inner">
+				
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -22,143 +22,137 @@
 							<li class="active">Escola Cadastro</li>
 						</ul><!-- /.breadcrumb -->
 
-					</div>
-
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/beneficiario/escola/add" method="POST">
+				</div>
 
 
-								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Dados</h4>
 
-											<span class="widget-toolbar">
 
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
 
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
 
-											</span>
-										</div>
+						<form class="form-horizontal" role="form" action="/menu/beneficiario/escola/add" method="POST">
+						<div class="col-sm-12">
+							<div class="tabbable">
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active">
+										<a data-toggle="tab" href="#dados">
+											<i class="red ace-icon fa fa-heartbeat bigger-120"></i>
+											Dados Básicos
+										</a>
+									</li>
 
-										<div class="widget-body">
-											<div class="widget-main">
-												<label> Nome</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="escolaNome" id="escolaNome"  class="form-control" />
+									<li>
+										<a data-toggle="tab" href="#contato">
+											Contato
+											<i class="orange ace-icon fa fa-phone bigger-120"></i>
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#obs">
+											Observações
+												<i class="blue ace-icon fa fa-commenting-o bigger-120"></i>
+										</a>
+									</li>
+
+								</ul>
+
+								<div class="tab-content">
+									<div id="dados" class="tab-pane fade in active">
+
+
+											<label> Nome</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="text" name="escolaNome" id="escolaNome"  class="form-control" />
+												</div>
+											</div>
+
+											<label> Nome Fantasia</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="text" name="escolaFantasia" id="escolaFantasia" placeholder="" class="form-control" />
+												</div>
+											</div>
+
+									</div>
+
+
+
+
+									<div id="contato" class="tab-pane fade">
+
+										<div class="row">
+											<div class="col-xs-10 col-sm-5">
+												<label>Diretor(a)</label>
+												<div class="input-group">
+													<div >
+														<input type="text" name="escolaCoordenador " class="form-control" style="width: 450px;" />
 													</div>
 												</div>
-
-												<label> Nome Fantasia</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="escolaFantasia" id="escolaFantasia" placeholder="" class="form-control" />
-													</div>
-												</div>
-												<label > Endereço </label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="escolaEnd" id="escolaEnd" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Complemento </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaEndcompl" id="escolaEndcompl" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Bairro </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="escolaEndbairro" id="escolaEndbairro" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Cidade </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="escolaEndcidade" id="escolaEndcidade" class="form-control" />
-													</div>
-												</div>
-
-												<label>UF</label>
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select name="escolaEnduf"  id="escolaEnduf"  class="chosen-select" data-placeholder="Escolha...">
-																	{{#each estados}}
-																	<option value="{{_id}}">{{estado_uf}}</option>
-																	{{/each}}
-															</select>
-														</div>
-												</div>
-				
-												<label>CEP
-													<small class="text-warning">00000-000</small>
-												</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input type="text" name="escolaEndcep" id="escolaEndcep" class="form-control" />
-													</div>
-												</div>
-
-												<label>Coordenador</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaCoordenador " class="form-control" />
-													</div>
-												</div>
-												
+											</div>
+											<div class="col-xs-10 col-sm-5">
 												<label>Whatsapp</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaCoorwhatsapp " class="form-control"/>
+												<div class="input-group">
+													<div>
+														<input type="text" name="escolaCoorwhatsapp " class="form-control"  style="width: 200px;"/>
 													</div>
 												</div>
-												
-												<label>Professor(a)</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaProfessor " class="form-control" />
-													</div>
-												</div>
-												
-												<label>Whatsapp</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaProfwhatsapp " class="form-control" />
-													</div>
-												</div>
-												<label>Telefone Fixo</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="escolaFixo " class="form-control"/>
-													</div>
-												</div>
-												
-
-												<label> Observações </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="escolaObs" id="escolaObs" class="form-control" />
-													</div>
-												</div>
-
-
 											</div>
 										</div>
+
+										<div class="row">
+											<div class="col-xs-10 col-sm-5">
+												<label>Coordenador(a)</label>
+												<div class="input-group">
+													<div >
+														<input type="text" name="escolaProfessor " class="form-control" style="width: 450px;" />
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-10 col-sm-5">
+												<label>Whatsapp</label>
+												<div class="input-group">
+													<div>
+														<input type="text" name="escolaProfwhatsapp " class="form-control"  style="width: 200px;"/>
+													</div>
+												</div>
+											</div>
+										</div>			
+												
+		
+										<label>Telefone Fixo</label>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<input type="text" name="escolaFixo " class="form-control"/>
+											</div>
+										</div>
+
+
 									</div>
+
+									<div id="obs" class="tab-pane fade">
+
+										<label> Observações </label>
+										<div class="input-group">
+											<div>
+												<textarea type="text" name="escolaObs" id="escolaObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+											</div>
+										</div>
+
+									
+									</div>
+
+
+
+
 								</div>
-							
+							</div>
+						</div>
+
+
 							
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
@@ -178,24 +172,17 @@
 									</div>
 								</div>
 
-							</form>
 
 
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+						</form>
+					</div>
+				</div><!-- /.main-content -->
 
 
-
-
-				</div>
-			</div><!-- /.main-content -->
+			</div><!-- /.main-container -->
 
 
 		</div><!-- /.main-container -->
-
-
-
-
 
 		<!-- basic scripts -->
 

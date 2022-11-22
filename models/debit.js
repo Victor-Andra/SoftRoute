@@ -33,15 +33,15 @@ const DebitSchema = mongoose.Schema({
         required: false 
     },
     debit_dataevento :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     debit_datavenci :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     debit_datapg :{ 
-        type: String, 
+        type: Date, 
         required: false 
     },
     debit_valorprev :{ 

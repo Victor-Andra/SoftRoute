@@ -133,26 +133,22 @@
 						{{/each}}
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filB" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" style="height: 125px;">
-							<div class="col-xs-20 col-sm-3">
-								<div>
-									<label id="beneFilDiv">Beneficiário:</label>
-									<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-										{{#each benes}}
-											<option value="{{_id}}">{{bene_apelido}}</option>
-										{{/each}}
-									</select>
-									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+						<div class="breadcrumbs" id="pesquisaAge" >
+								<div style="text-align: center;">
+										<label id="beneFilDiv">Beneficiário:</label>
+										<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_apelido}}</option>
+											{{/each}}
+										</select>
+										<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+										<label style="margin-left: 25px;">Data:</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+										<button name="acaoPesquisar" id="acaoPesquisar" type="submit" style="margin-left: 25px;">
+											<i class="ace-icon fa fa-search-plus "></i>
+										</button>
 								</div>
-								<div>
-									<label>Data:</label>
-									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
-									<input class="hidden" id="dataFinal" name="dataFinal" />
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
-								</div>
-							</div>
 							<!--
 							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert-danger">
@@ -170,7 +166,7 @@
 									<br>
 								</div>
 							</div>
-							-->
+							
 							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert-warning">
 									<strong>
@@ -181,6 +177,7 @@
 									<br>
 								</div>
 							</div>
+							-->
 						</div>
 					</form>
 						<div class="tab-content"><!-- .tab-contente -->

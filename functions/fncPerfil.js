@@ -23,9 +23,9 @@ module.exports = {
     },
 
     carregaPerfil(req,res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs!")
-            res.render("ferramentas/perfil/perfilCad", {estados: estado})
+        Perfil.find().then((perfil)=>{
+            console.log("Listagem de perfis realizada!")
+            res.render("ferramentas/perfil/perfilCad", {perfils: perfil})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Perfils")
@@ -38,10 +38,8 @@ module.exports = {
     carregaPerfilEdi(req,res){
         Perfil.findById(req.params.id).then((perfil) =>{
             console.log(perfil)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/perfil/perfilEdi', {perfils: perfil, estados: estado})
-        })}).catch((err) =>{
+                 res.render('ferramentas/perfil/perfilEdi', {perfil})
+        }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

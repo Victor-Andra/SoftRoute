@@ -9,6 +9,7 @@ const Credit = mongoose.model("tb_credit")
 module.exports = {
     creditAdicionarApoio: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -28,7 +29,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendMergevalorcre ,
@@ -51,6 +52,7 @@ module.exports = {
     },
     creditAdicionarExtra: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -70,7 +72,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -93,6 +95,7 @@ module.exports = {
     },
     creditAdicionarFalta: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -112,7 +115,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -135,6 +138,7 @@ module.exports = {
     },
     creditAdicionarGlosa: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -154,7 +158,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -177,6 +181,7 @@ module.exports = {
     },
     creditAdicionarPadrão: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -196,7 +201,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -219,6 +224,7 @@ module.exports = {
     },
     creditAdicionarPais: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -238,7 +244,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -261,6 +267,7 @@ module.exports = {
     },
     creditAdicionarSubstituto: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -280,7 +287,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,
@@ -303,6 +310,7 @@ module.exports = {
     },
     creditAdicionarSupervisao: async (req,res) => {
         let creditExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
             creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -322,7 +330,7 @@ module.exports = {
                 credit_convid : req.body.atendConvid ,
                 credit_nome : req.body.creditNome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.atendAtenddata ,
+                credit_dataevento : dtEvento ,
                 credit_datavenci : req.body.creditDatavenci ,
                 credit_datapg : req.body.creditDatapg ,
                 credit_valorprev : req.body.atendValorcre ,

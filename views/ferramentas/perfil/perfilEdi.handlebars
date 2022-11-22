@@ -39,7 +39,7 @@
 												<label> Perfil</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="perfilNome" id="perfilNome"  class="form-control" value="{{perfil_nome}}" />
+														<input type="text" name="perfilNome" id="perfilNome"  class="form-control" value="{{perfil.perfil_nome}}" />
 													</div>
 												</div>
 											
@@ -48,16 +48,13 @@
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="perfilDescricao" id="perfilDescricao"  class="form-control" value="{{perfil_descricao}}" />
+														<input type="text" name="perfilDescricao" id="perfilDescricao"  class="form-control" value="{{perfil.perfil_descricao}}" />
 													</div>
 												</div>
 											
 												<div class="hidden">
 													<input name="perfilId"value="{{_id}}" />
 												</div>
-											
-											
-											</div>
 										</div>
 									</div>
 								</div>

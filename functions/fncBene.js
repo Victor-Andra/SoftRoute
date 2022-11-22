@@ -23,6 +23,7 @@ const Escola = mongoose.model("tb_escola")
 module.exports = {
     carregaBene(req,res){
         Escola.find().then((escola)=>{
+            escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena Escola por nome 
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
                 Conv.find().sort({conv_nome: 1}).then((conv)=>{
@@ -94,6 +95,7 @@ module.exports = {
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
                     Conv.find().sort({conv_nome: 1}).then((conv)=>{
+                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
                         console.log("Listagem Realizada de Convenios")
                         Bene.findById(req.params.id).then((beneEdi) =>{
                             res.render("beneficiario/beneEdi", {escolas: escola, estados: estado, convs: conv, beneEdi})
@@ -126,8 +128,10 @@ module.exports = {
 
         console.log("Listagem Realizada Bene!")
                 Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
                 console.log("Listagem Realizada Convênio!")
                         Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         console.log("Listagem Realizada Terapia!")
                                 Usuario.find().then((usuario)=>{
                                 console.log("Listagem Realizada Usuário!")

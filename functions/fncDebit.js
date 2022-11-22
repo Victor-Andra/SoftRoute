@@ -23,6 +23,9 @@ const Fornec = mongoose.model("tb_fornec")
 module.exports = {
     debitAdicionarApoio: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -44,9 +47,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendMergevalorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -69,6 +72,9 @@ module.exports = {
     },
     debitAdicionarExtra: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -90,9 +96,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -115,6 +121,9 @@ module.exports = {
     },
     debitAdicionarFalta: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -136,9 +145,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -161,6 +170,9 @@ module.exports = {
     },
     debitAdicionarGlosa: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -182,9 +194,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -207,6 +219,9 @@ module.exports = {
     },
     debitAdicionarPadrão: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -228,9 +243,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -253,6 +268,9 @@ module.exports = {
     },
     debitAdicionarPais: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -274,9 +292,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -299,6 +317,9 @@ module.exports = {
     },
     debitAdicionarSubstituto: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -320,9 +341,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
@@ -345,6 +366,9 @@ module.exports = {
     },
     debitAdicionarSupervisao: async (req,res) => {
         let debitExiste;
+        let dtEvento = new Date(req.body.atendAtenddata);
+        let dtVenci = new Date(req.body.debitDatavenci);
+        let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
@@ -366,9 +390,9 @@ module.exports = {
                 */
                 debit_nome : req.body.debitNome ,
                 debit_cpfcnpj : req.body.debitCpfcnpj ,
-                debit_dataevento : req.body.atendAtenddata ,
-                debit_datavenci : req.body.debitDatavenci ,
-                debit_datapg : req.body.debitDatapg ,
+                debit_dataevento : dtEvento ,
+                debit_datavenci : dtVenci ,
+                debit_datapg : dtPg ,
                 debit_valorprev : req.body.atendValorcre ,
                 debit_juros : req.body.debitJuros ,
                 debit_multa : req.body.debitMulta ,
