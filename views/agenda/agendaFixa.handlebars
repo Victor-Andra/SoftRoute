@@ -137,11 +137,11 @@
 						{{/each}}
 						
 						{{#each benes}}
-							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{bene_apelido}}" />
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}</label>
 						{{/each}}
 
 						{{#each terapeutas}}
-							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
 						{{/each}}
 					</div>
 					<form id="acaoForm" class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">

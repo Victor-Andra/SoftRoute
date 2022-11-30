@@ -126,10 +126,10 @@
 							{{/compareThis}}
 						{{/each}}
 						{{#each terapeutas}}
-							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{usuario_nome}}" />
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
 						{{/each}}
 						{{#each terapias}}
-							<input style="width:85px;border:0px;margin-bottom: 2px;" readonly="true" id="{{_id}}" value="{{terapia_nome}}" />
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{terapia_nome}}</label>
 						{{/each}}
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filB" method="POST">
