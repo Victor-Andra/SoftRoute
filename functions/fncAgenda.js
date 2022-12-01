@@ -6995,7 +6995,8 @@ module.exports = {
     },
     deletaAgenda(req, res){
         Agenda.deleteOne({_id: req.params.id}).then(() =>{
-            this.carregaAgendaF(req,res);
+            //this.carregaAgendaF(req,res);
+            console.log("Deletado:"+req.params.id);
         })
     },
     atualizaAgenda(req, res){//EditaAgenda
