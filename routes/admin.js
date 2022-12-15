@@ -66,6 +66,23 @@ const beneClass = require("../models/bene")
 const Bene = mongoose.model("tb_bene")
 const fncBene = require("../functions/fncBene")
 
+//Anamnese
+const anamnClass = require("../models/anamn")
+const Anamn = mongoose.model("tb_anamn")
+const fncAnamn = require("../functions/fncAnamn")
+
+//Diário de Bordo
+const bordoClass = require("../models/bordo")
+const Bordo = mongoose.model("tb_bordo")
+const fncBordo = require("../functions/fncBordo")
+
+
+//plano Tratamento
+const tratClass = require("../models/trat")
+const Trat = mongoose.model("tb_trat")
+const fncTrat = require("../functions/fncTrat")
+
+
 //Evolucao
 const evolucaoClass = require("../models/atend")
 const Evolucao = mongoose.model("tb_atend")
@@ -715,9 +732,51 @@ fncSessao.listaSessaoTab(req, res);
 })
 
 
+//Menu Anamnese ** Area Tecnicos   
+//Lista Todos as anamneses por Data, Beneficiário
+router.get('/area/anamn/anamnlis',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncAnamn.listaAnamn(req, res);
+})
+//Carrega Cadastro
+router.get('/area/anamn/anamncad',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncAnamn.carregaAnamn(req, res);
+})
+
+//Menu Bordo ** Area Tecnicos   
+//Lista Todos os Diários de Bordo por Data, Beneficiário
+router.get('/area/bordo/bordolis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncBordo.listaBordo(req, res);
+})
+//Carrega Cadastro
+router.get('/area/bordo/bordocad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncBordo.carregaBordo(req, res);
+})
+
+//Menu Plano de Tratamentos ** Area Tecnicos   
+//Lista Todos os Tipos de Tratamento num Relatório Só categorizado por Tipo, Data, Beneficiário
+router.get('/area/plano/tratlis',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncTrat.listaTrat(req, res);
+})
+//Carrega Cadastro
+router.get('/area/plano/tratcad',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncTrat.carregaTrat(req,res);
+})
+//Adiciona Registro
+router.post('/area/plano/tratadd',(req,res) =>{//adiciona Plano de Tratamentos Padrao
+    fncTrat.cadastraTrat(req,res);
+})
+//Atualiza Regitros
+router.post('/area/plano/tratatualizar',(req,res) =>{//atualiza o Plano de Tratamentos Padrao
+    fncTrat.atualizaTrat(req , res);
+})
+
+//Deleta Exclui Registros
+router.get('/area/plano/tratdel/:id', (req,res) =>{//deleta Plano de Tratamentos Padrao
+    fncTrat.deletaTrat(req, res);
+})
 
 
- //Menu Convenio
+//Menu Convenio
 //Sub Menu Conv
     
 router.get('/convenio/conv/lis',(req,res) =>{//lista todas os registros dos convênios

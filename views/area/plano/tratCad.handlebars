@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Plano de Tratamentos</title>
+		<script type="text/javascript">
+			function selectConv(){
+				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("atendConvid").value = v1;
+			}
+			function carregaValores(){
+				let teraId = document.getElementById("atendTerapiaid").value;
+				
+				document.getElementById("creditTerapiaid").value = teraId;
+				document.getElementById("debitTerapiaid").value = teraId;
+				document.getElementById("tabilTerapiaid").value = teraId;
+
+				try{
+					let convId = document.getElementById("atendConvid").value;
+					document.getElementById("atendValorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+					document.getElementById("atendValordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+					document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+					document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+				} catch(err){
+					document.getElementById("atendValorcre").value = "0,00";
+					document.getElementById("atendValordeb").value = "0,00";
+					document.getElementById("tabilValorcredit").value = "0,00";
+					document.getElementById("tabilValordebit").value = "0,00";
+				}
+			}
+			function atualizaConvId(){
+				let convId = document.getElementById("atendConvid").value;
+				console.log(convId)
+				document.getElementById("creditConvid").value = convId;
+				document.getElementById("debitConvid").value = convId;
+				document.getElementById("tabilConvid").value = convId;
+			}
+			function atualizaTerapeutaId(){
+				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+		</script>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Route</a>
+							</li>
+
+							<li class="active">Plano de Tratamentos </li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/tratfisioCad" method="POST">
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Plano de Tratamentos</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="hidden">
+													<input id="nextNum" name="nextNum" type="number"  value="{{planFisio.planFisio_num}}" />
+												</div>
+
+											
+												<div class="form-group" class="hidden">
+													<div class="col-sm-6" class="hidden">
+														<input class="hidden" type="text" name="planFisioUsuid" id="planFisioUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
+													</div>
+												</div>
+
+
+												<label>Tipo de Plano</label>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select name="planFisioTerapeutaid" id="planFisioTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+																<option value="Plano de Tratamento Padrão">Padrão</option>
+																<option value="Plano de Tratamento Fisioterápico">Fisioterápico</option>
+																<option value="Plano de Tratamento Terapêutico Ocupacional">Ocupacional</option>
+															</select>
+														</div>
+												</div>	
+
+												<label for="id-date-picker-1">Data Plano</label>
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="input-group">
+															<input name="planFisioData" id="planFisioData" type="date" onchange="javascript:atualizaData()" />
+														</div>
+													</div>
+												</div>
+
+												<label>Terapeuta</label>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select name="planFisioTerapeutaid" id="planFisioTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+																{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+												</div>		
+												
+												<label>Beneficiário</label>
+												<div class="hidden">
+													{{#each benes}}
+														{{#each ../convs}}
+															{{#ifEqual ../bene_convid _id}}
+																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+															{{/ifEqual}}
+														{{/each}}
+													{{/each}}
+												</div>
+												<div class="form-group">
+														<div class="col-sm-8">
+															<select name="planFisioBeneid" id="planFisioBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+												</div>
+												<label>Idade </label>
+												<div class="input-group">
+													<div>
+														<input type="text" name="planFisioIdade" id="planFisioIdade" placeholder="" class="form-control" style="width: 500px;"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="planFisioConvid"  id="planFisioConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+
+										
+																								
+		
+									
+												<label>Diagnóstico</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioDiag" id="planFisioDiag" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+
+												<label>Plano de Tratamento</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioPlanTrat" id="planFisioPlanTrat" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+
+												<label>Histórico Clínico</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioHistClinico" id="planFisioJistClinico" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>			
+		
+									
+												<label>Metas a Curto Prazo</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioMetaCurto" id="planFisioMetaCurto" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+
+												<label>Metas a Médio Prazo</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioMetaMedio" id="planFisioMetaMedio" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+
+												<label>Metas a Longo Prazo</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioMetaLongo" id="planFisioMetaLongo" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>			
+												
+												<label>Estratégias e objetivos</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<textarea type="text" name="planFisioObjetivo" id="planFisioObjetivo" placeholder="" class="form-control" rows="3" class="col-sm-9" data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>													
+											</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<input class="hidden" id="atendAtenddata"  name="atendAtenddata" />
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>
