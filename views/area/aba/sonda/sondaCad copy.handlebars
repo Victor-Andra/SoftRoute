@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Folha de Dados de Sonda</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="page-header">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-sm-5">
+									<div class="row">
+										<h1>
+											Folha de Dados da Sonda
+											<small>
+												<i class="ace-icon fa fa-angle-double-right"></i>
+												Linha de Base e/ou Sondas Domínio
+											</small>
+										</h1>
+									</div>
+								</div>
+								<div class="col-sm-7">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Observação! </strong>
+										Vale salientar que a Folha de sonda é destinada a beneficiários que não possuem, seu programa ABA definido.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/sonda/add" method="POST">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Beneficiário</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Terapeuta Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
+																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-2">
+												<div class="row">
+													<label>Data Sonda</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="beneDatanasc" name="beneDatanasc" type="date">
+													</div>
+												</div>
+											</div>
+																			
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Programa</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+													<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Nível</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Materiais</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>												
+										</div>
+									</div>
+								
+									
+									<div class="col-xs-12">
+										<hr>
+									</div>
+									<div class="col-md-offset-3 col-md-12">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

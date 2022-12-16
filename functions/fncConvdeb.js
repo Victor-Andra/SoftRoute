@@ -49,15 +49,17 @@ module.exports = {
     },
     carregaConvdebEdi(req,res){
         Convdeb.findById(req.params.id).then((convdeb) =>{
-            res.render('convenio/convdeb/convDebEdi', convdeb)
-        }).catch((err) =>{
+            Terapia.find().then((terapia)=>{
+                Conv.find().then((conv)=>{
+                    res.render('convenio/convdeb/convDebEdi', {convdeb, terapias: terapia, convs: conv})
+        })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
     },
     cadastraConvdeb(req,res){
         let cadastro = convdebClass.convdebAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        if(cadastro == true){
+        if(cadastro){
             console.log('verdadeiro')
             res.render('convenio/convdeb/convDebCad');
         } else {
@@ -88,15 +90,13 @@ module.exports = {
             }
         })
     },
-    deleteConvdeb(req,res){
+    deletaConvdeb(req,res){
         Convdeb.deleteOne({_id: req.params.id}).then(() =>{
-            Convdeb.find().then((convdeb) =>{
-                req.flash("success_message", "Convdeb deletada!")
-                res.render('convenio/convdeb/convDebLis', {convdebs: convdeb})
-            }).catch((err) =>{
-                console.log(err)
-                res.render('admin/erro')
-            })
+            console.log("Convdeb deletada!");
+            this.listaConvdeb(req,res);
+        }).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
         })
     }
 }

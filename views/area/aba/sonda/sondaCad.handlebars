@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Folha de Dados de Sonda</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="page-header">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-sm-5">
+									<div class="row">
+										<h1>
+											Folha de Dados da Sonda
+											<small>
+												<i class="ace-icon fa fa-angle-double-right"></i>
+												Linha de Base e/ou Sondas Domínio
+											</small>
+										</h1>
+									</div>
+								</div>
+								<div class="col-sm-7">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Observação! </strong>
+										Vale salientar que a Folha de sonda é destinada a beneficiários que não possuem, seu programa ABA definido.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/sonda/add" method="POST">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Beneficiário</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Terapeuta Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
+																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-2">
+												<div class="row">
+													<label>Data Sonda</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="beneDatanasc" name="beneDatanasc" type="date">
+													</div>
+												</div>
+											</div>
+																			
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Programa</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+													<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Nível</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-4">
+												<div class="row">
+													<label>Materiais</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+													</div>
+												</div>
+											</div>												
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<hr>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												<thead>
+													<tr role="row">
+														<th tabindex="1" aria-controls="dynamic-table" rowspan="2" colspan="1">N</th>
+														<th tabindex="1" aria-controls="dynamic-table" rowspan="2" colspan="1">Ação</th>
+														<th tabindex="1" aria-controls="dynamic-table" rowspan="2" colspan="1">Estímulo Apresentado</th>
+														<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2">S1</th>
+														<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="2">S2</th>
+														<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="2">S3</th>
+														<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="2">S4</th>
+														<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="2">S5</th>
+														<th tabindex="7" aria-controls="dynamic-table" rowspan="2" colspan="1">Conclusão</th>
+													</tr>
+													<tr role="row">
+														<th class="hidden" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1"></th>
+														<th class="hidden" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1"></th>
+														<th class="hidden" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1"></th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Par</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Par</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Par</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Par</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Par</th>
+														<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr role="row" class="odd"><!-- Linha 01 -->
+														<td><label>1</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 02 -->
+														<td><label>2</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 03 -->
+														<td><label>3</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 04 -->
+														<td><label>4</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 05 -->
+														<td><label>5</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 06 -->
+														<td><label>6</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 07 -->
+														<td><label>7</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 08 -->
+														<td><label>8</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 09 -->
+														<td><label>9</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 10 -->
+														<td><label>10</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 11 -->
+														<td><label>11</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 12 -->
+														<td><label>12</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 13 -->
+														<td><label>13</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 14 -->
+														<td><label>14</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 15 -->
+														<td><label>15</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 16 -->
+														<td><label>16</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 17 -->
+														<td><label>17</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 18 -->
+														<td><label>18</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 19 -->
+														<td><label>19</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 20 -->
+														<td><label>20</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 21 -->
+														<td><label>21</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 22 -->
+														<td><label>22</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>												
+													<tr role="row" class="odd"><!-- Linha 23 -->
+														<td><label>23</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>
+													<tr role="row" class="odd"><!-- Linha 24 -->
+														<td><label>24</label></td>
+														<td class="center">
+															<a class="green" href="">
+																<i class="ace-icon fa fa-plus bigger-150"></i>
+															</a>
+														</td>
+														<td name="Obs" rowspan="1"><input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control"/></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="I">-</option>
+																<option value="I">I</option>
+																<option value="D">D</option>
+															</select>
+														</td>
+														<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+														<td name="dia" rowspan="1" style="width: 40px;">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Nd">Nd</option>
+																<option value="Master">Master</option>
+																<option value="Reintro">Reintro</option>
+															</select>
+														</td>
+													</tr>																										
+												</tbody>
+											</table>
+										</div>
+																									
+									</div>								
+									
+									<div class="col-xs-12">
+										<hr>
+									</div>
+									<div class="col-md-offset-3 col-md-12">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

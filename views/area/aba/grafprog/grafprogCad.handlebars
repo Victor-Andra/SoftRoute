@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Laudos Diversos</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Laudos Diversos
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro e Índice Geral Laudos para Upload
+							</small>
+						</h1>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="" method="POST">
+								<div class="col-xs-12">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Observação! </strong>
+										Aqui você cadastra informações básicas sobre o laudo, indexa e realiza o upload do arquivo.
+										<br>
+									</div>
+									<div class="col-xs-12">
+
+										<div class="col-xs-12">
+											<div class="row">
+												<div class="col-sm-5">
+													<div class="row">
+														<label>Beneficiário</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+															<div class="input-group">
+																<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+																		<option value="Não">APOLO DE ARAÚJO ALVES</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-7">
+													<div class="row">
+														<label>Terapeuta Responsável</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+															<div class="input-group">
+																<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">RINALDA ADRIANA DE MELO</option>
+																		<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<div class="row">
+														<label>Data Gráfico Inicio</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+																<input id="beneDatanasc" name="beneDatanasc" type="date">
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<div class="row">
+														<label>Revisão do Programa</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+																<input id="beneDatanasc" name="beneDatanasc" type="date">
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-8">
+													<div class="row">
+														<label>Data Programa Adquirido</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+																<input id="beneDatanasc" name="beneDatanasc" type="date">
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="row">
+														<label>Programa</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
+														<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 300px;"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12">
+											<hr>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<div class="col-xs-6">
+														<table class="table table-sm table-bordered" style="font-size: 9px;" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">	
+																	<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+
+															</tbody>
+								
+														</table>
+												</div>
+												<div class="col-xs-6">
+														<table class="table table-sm table-bordered" style="font-size: 9px;" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">	
+																	<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																	<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>													
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																	<td name="dia" rowspan="1" style="width: 40px;">
+																		<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="+d">+d</option>
+																			<option value="E">E</option>
+																			<option value="-d">-d</option>
+																		</select>
+																	</td>
+																</tr>
+
+															</tbody>
+								
+														</table>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12">
+											<br>
+										</div>
+										<div class="col-md-offset-3 col-md-12">
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									
+									
+									
+									
+									</div>
+								</div>						
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

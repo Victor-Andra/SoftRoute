@@ -2,8 +2,14 @@
 <html lang="pt-br">
 	<head>
 		<title>Débitos de Convênios Edição</title>
+		<script>
+			function carregaBody(){
+				document.getElementById("convdebTerapiaid").value = document.getElementById("convdebTerapiaidEdi").value;
+				document.getElementById("convdebConvid").value = document.getElementById("convdebConvidEdi").value;
+			}
+		</script>
 	</head>
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -16,12 +22,10 @@
 							<li class="active">Débitos de Convênios Edição</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/convenio/convdeb/atualizar" method="POST">
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -35,64 +39,63 @@
 												</a>
 											</span>
 										</div>
-
 										<div class="widget-body">
 											<div class="widget-main">
-												<input name="convdebId" class="hidden" value="{{_id}}"/>
-												<label> Convênio Id</label>
+												<input name="convdebId" class="hidden" value="{{convdeb._id}}"/>
+												<label> Convênio </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convdebConvid" id="convdebConvid" placeholder="" class="form-control" value="{{convdeb_convid}}"/>
+														<select name="convdebConvid" id="convdebConvid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each convs}}
+																<option value="{{_id}}">{{conv_nome}}</option>
+															{{/each}}
+														</select>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
-												<label> Terapia</label>
+												<label>Terapia</label>
 												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="convdebTerapiaid"  id="convdebTerapiaid" placeholder="" class="form-control" value="{{convdeb_terapiaid}}"/>
+													<div class="col-sm-4">
+														<select name="convdebTerapiaid" id="convdebTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each terapias}}
+																<option value="{{_id}}">{{terapia_nome}}</option>
+															{{/each}}
+														</select>
 													</div>
 												</div>
-
 												<label for="id-date-picker-1">Data</label>
 												<div class="row">
 													<div class="col-sm-3">
 														<div class="input-group">
-															<input name="convdebData" id="convdebData"  type="date" value="{{convdeb_data}}"/>
+															<input name="convdebData" id="convdebData"  type="date" value="{{convdeb.convdeb_data}}"/>
 														</div>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label> Valor a Débito</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convdebValor" id="convdebValor" placeholder="" class="form-control" value="{{convdeb_valor}}"/>
+														<input type="text" name="convdebValor" id="convdebValor" placeholder="" class="form-control" value="{{convdeb.convdeb_valor}}"/>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label> Observações</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convdebObs" id="convdebObs" placeholder="" class="form-control" value="{{convdeb_obs}}"/>
+														<input type="text" name="convdebObs" id="convdebObs" placeholder="" class="form-control" value="{{convdeb.convdeb_obs}}"/>
 													</div>
 												</div>
-
 											</div>
 										</div>
 									</div>
 								</div>
-							
 								<div class="space-6"></div>
-
 								<div class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info" name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  href="/menu/convenio/convdeb/lis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -100,25 +103,15 @@
 										</button>
 									</div>
 								</div>
-
 							</form>
+							<div class="hidden">
+								<input id="convdebTerapiaidEdi" name="convdebTerapiaidEdi" value="{{convdeb.convdeb_terapiaid}}" />
+								<input id="convdebConvidEdi" name="convdebConvidEdi" value="{{convdeb.convdeb_convid}}" />
+							</div>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
-	</body>
+	</body><!-- basic scripts -->
 </html>

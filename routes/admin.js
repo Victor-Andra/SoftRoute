@@ -82,6 +82,50 @@ const tratClass = require("../models/trat")
 const Trat = mongoose.model("tb_trat")
 const fncTrat = require("../functions/fncTrat")
 
+//Laudo
+const laudoClass = require("../models/laudo")
+const Laudo = mongoose.model("tb_laudo")
+const fncLaudo = require("../functions/fncLaudo")
+
+//VB-Mapp's
+const mappClass = require("../models/mapp")
+const Mapp = mongoose.model("tb_mapp")
+const fncMapp = require("../functions/fncMapp")
+
+//Laudo
+const evolClass = require("../models/evol")
+const Evol = mongoose.model("tb_evol")
+const fncEvol = require("../functions/fncEvol")
+
+//Sonda - ABA
+const sondaClass = require("../models/sonda")
+const Sonda = mongoose.model("tb_sonda")
+const fncSonda = require("../functions/fncSonda")
+
+//Programa - ABA
+const progClass = require("../models/prog")
+const Prog = mongoose.model("tb_prog")
+const fncProg = require("../functions/fncProg")
+
+//Gráfico do Programa - ABA
+const grafprogClass = require("../models/grafprog")
+const Grafprog = mongoose.model("tb_grafprog")
+const fncGrafprog = require("../functions/fncGrafprog")
+
+//SET - ABA
+const setClass = require("../models/set")
+const Set = mongoose.model("tb_set")
+const fncSet = require("../functions/fncSet")
+
+//Folha Registro - ABA
+const folregClass = require("../models/folreg")
+const Folreg = mongoose.model("tb_folreg")
+const fncFolreg = require("../functions/fncFolreg")
+
+//Gráfico ABC - ABA
+const grafabcClass = require("../models/grafabc")
+const Grafabc = mongoose.model("tb_grafabc")
+const fncGrafabc = require("../functions/fncGrafabc")
 
 //Evolucao
 const evolucaoClass = require("../models/atend")
@@ -775,6 +819,104 @@ router.get('/area/plano/tratdel/:id', (req,res) =>{//deleta Plano de Tratamentos
     fncTrat.deletaTrat(req, res);
 })
 
+//Menu Laudos ** Area Tecnicos   
+//Carrega Cadastro
+router.get('/area/laudo/laudocad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncLaudo.carregaLaudo(req, res);
+})
+
+//Lista Todos os Laudispor Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/laudo/laudolis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncLaudo.listaLaudo(req, res);
+})
+
+//Menu Evoluções ** Area Tecnicos   
+//Carrega Cadastro
+router.get('/area/evol/evolcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncEvol.carregaEvol(req, res);
+})
+
+//Lista Todos os Laudispor Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/evol/evollis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncEvol.listaEvol(req, res);
+})
+
+//Menu VB-MAPPS ** Area Tecnicos   
+//Carrega Cadastro
+router.get('/area/mapp/mappcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncMapp.carregaMapp(req, res);
+})
+
+//Lista Todos os VB-MAPP's Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/mapp/mapplis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncMapp.listaMapp(req, res);
+})
+
+//Menu Sonda ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/sonda/sondacad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncSonda.carregaSonda(req, res);
+})
+
+//Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/sonda/sondalis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncSonda.listaSonda(req, res);
+})
+
+//Menu Programas ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/prog/progcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncProg.carregaProg(req, res);
+})
+
+//Lista Progrmas por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/prog/proglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncProg.listaProg(req, res);
+})
+
+//Menu Gráfico do Programa ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/grafprog/grafprogcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncGrafprog.carregaGrafprog(req, res);
+})
+
+//Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/grafprog/grafproglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncGrafprog.listaGrafprog(req, res);
+})
+
+//Menu SET ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/set/setcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncSet.carregaSet(req, res);
+})
+
+//Lista SET por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/set/setlis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncSet.listaSet(req, res);
+})
+
+//Menu Folha de Registro ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/folreg/folregcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncFolreg.carregaFolreg(req, res);
+})
+
+//Lista Folha Registro ** Area Tecnicos e ABA
+router.get('/area/aba/folreg/folreglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncFolreg.listaFolreg(req, res);
+})
+
+//Menu Gráfico ABC ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/grafabc/grafabccad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncGrafabc.carregaGrafabc(req, res);
+})
+
+//Lista Gráfico ABC por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/grafabc/grafabclis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncGrafabc.listaGrafabc(req, res);
+})
 
 //Menu Convenio
 //Sub Menu Conv

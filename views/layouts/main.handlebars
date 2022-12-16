@@ -51,6 +51,7 @@
 		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 		<link rel="stylesheet" href="/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="/css/chosen.min.css" />
 		<!-- Carrega div Conteudo com paginas html -->
 		<script type = "text/javascript">
  			function carregar(pagina){ $("#conteudo").load(pagina);	}
@@ -70,7 +71,7 @@
 
         {{>_navbar}}
 		<!--DIV para espaçamento entre nav e body-->
-		<div style="margin-bottom: 80px;"></div>
+		<div style="margin-bottom: 70px;"></div>
 		<!--validação-->
 		{{#if success_msg}}
 			<div class="alert alert-danger">{{success_msg}}</div>
@@ -123,6 +124,7 @@
     <script type="text/javascript" src="/js/jquery.flot.min.js"></script>
     <script type="text/javascript" src="/js/jquery.flot.pie.min.js"></script>
     <script type="text/javascript" src="/js/jquery.flot.resize.min.js"></script>
+	<script type="text/javascript" src="/js/chosen.jquery.min.js"></script>
     <!-- Editor de Textos plugin scripts -->
     <script type="text/javascript" src="/js/markdown.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap-markdown.min.js"></script>

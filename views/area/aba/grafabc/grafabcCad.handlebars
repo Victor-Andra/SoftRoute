@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Laudos Diversos</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Laudos Diversos
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro e Índice Geral Laudos para Upload
+							</small>
+						</h1>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
+								<div class="col-xs-12">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Observação! </strong>
+										Aqui você cadastra informações básicas sobre o laudo, indexa e realiza o upload do arquivo.
+										<br>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Beneficiário</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Terapeuta Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
+																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Tipo de Laudo</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ESCOLA PEQUENOS AERONAUTAS</option>
+																	<option value="Não">COLÉGIO MADRE DE DEUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-6">
+												<div class="row">
+													<label >Médico Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="atendOrg" id="atendOrg" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-2">
+												<div class="row">
+													<label>Data Laudo</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="beneDatanasc" name="beneDatanasc" type="date">
+													</div>
+												</div>
+											</div>													
+										</div>
+										<div class="row">
+										<div class="col-sm-5">
+											<div class="row">
+												<label>Upload de Laudo</label>
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-5">
+											<label class="ace-file-input">
+												<input type="file" id="id-input-file-2">
+												<span class="ace-file-container" data-title="Escolha">
+													<span class="ace-file-name" data-title="Nenhum arquivo ...">
+														<i class=" ace-icon fa fa-upload"></i>
+													</span>
+												</span>
+												<a class="remove" href="#">
+													<i class=" ace-icon fa fa-times"></i>
+												</a>
+											</label>
+										</div>
+									</div>
+									
+									<div class="col=xs=12">
+										<hr>
+									</div>
+									<div class="col-md-offset-3 col-md-12">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

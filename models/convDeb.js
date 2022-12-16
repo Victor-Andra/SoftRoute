@@ -90,14 +90,11 @@ module.exports = {ConvdebModel,ConvdebSchema,
 
     convdebAdicionar: async (req,res) => {
         let dataAtual = new Date();
-        console.log("req.body.convdebConvnome")
-        console.log(req.body.convdebConvnome)
         let convdebExiste =  await ConvdebModel.findOne({
-            convdeb_nome: req.body.convdebConvnome ,
+            convdeb_convid : req.body.convdebConvid ,
             convdeb_terapiaid : req.body.convdebTerapiaid ,
             convdeb_data : req.body.convdebData ,
-            convdeb_valor : req.body.convdebValor ,
-            convdeb_obs : req.body.convdebObs
+            convdeb_valor : req.body.convdebValor
         });//quando não acha fica null
         
         if(convdebExiste){//se tiver null cai no else
