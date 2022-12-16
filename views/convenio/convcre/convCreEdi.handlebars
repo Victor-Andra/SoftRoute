@@ -6,9 +6,9 @@
 			function carregaBody(){
 				let data = document.getElementById("dataEdi").value;
 
-				let dia = data.substring(0,2);
-				let mes = data.substring(3,5);
-				let ano = data.toString().substring(6,10);
+				let ano = data.substring(0,4);
+				let mes = data.substring(5,7);
+				let dia = data.toString().substring(8,10);
 				/*
 				let prs = parseInt(mes,10);
 				prs=prs-1;
@@ -19,15 +19,13 @@
 				} else {
 					mesformat = ""+prs+""
 				}
-				*/
 				
-				//let dt = new Date(ano,mesformat,dia,0,0,0,0)
-				//dt.setUTCHours(0);
-				//dt.setMinutes(0);
-				///dt.setSeconds(0);
-
+				let dt = new Date(ano,mesformat,dia,0,0,0,0)
+				dt.setUTCHours(0);
+				dt.setMinutes(0);
+				dt.setSeconds(0);
+				*/
 				let fulldate=(ano+"-"+mes+"-"+dia).toString();
-				console.log(fulldate)
 				document.getElementById("convcreData").value = fulldate;
 				document.getElementById("convcreConvid").value = document.getElementById("convIdEdi").value;
 				document.getElementById("convcreTerapiaid").value = document.getElementById("terapiaIdEdi").value;
@@ -87,8 +85,8 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-												<input name="convcreId" id="convcreId" class="hidden" value="{{_id}}"/>
-												<label> Convênio Id</label>
+												<input name="convcreId" id="convcreId" class="hidden" value="{{convcre._id}}"/>
+												<label> Convênio </label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">

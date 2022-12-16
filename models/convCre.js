@@ -69,7 +69,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
         await ConvcreModel.findByIdAndUpdate(req.body.convcreId, 
             {$set: {
                 convcre_nome: req.body.convcreConvnome,
-                convcre_convnome : req.body.convcreConvnome ,
+                convcre_convid : req.body.convcreConvid ,
                 convcre_terapiaid : req.body.convcreTerapiaid ,
                 convcre_data : req.body.convcreData ,
                 convcre_valor : req.body.convcreValor ,
@@ -91,7 +91,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
         let dataAtual = new Date();
         let convcreExiste =  await ConvcreModel.findOne({
             convcre_nome: req.body.convcreNome, 
-            convcre_convnome : req.body.convcreConvnome ,
+            convcre_convnome : req.body.convcreConvid ,
             convcre_terapiaid : req.body.convcreTerapiaid ,
             convcre_data : req.body.convcreData ,
             convcre_valor : req.body.convcreValor ,

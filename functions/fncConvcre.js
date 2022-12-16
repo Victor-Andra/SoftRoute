@@ -103,13 +103,10 @@ module.exports = {
     },
     deletaConvcre(req,res){
         Convcre.deleteOne({_id: req.params.id}).then(() =>{
-            Convcre.find().then((convcre) =>{
-                req.flash("success_message", "Convcre deletada!")
-                res.render('convenio/convcre/convCreLis', {convcres: convcre})
-            }).catch((err) =>{
-                console.log(err)
-                res.render('admin/erro')
-            })
+            this.listaConvcre(req,res);
+        }).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
         })
     }
 }
