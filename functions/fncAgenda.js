@@ -3835,6 +3835,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                     console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
@@ -6998,6 +6999,27 @@ module.exports = {
             //this.carregaAgendaF(req,res);
             console.log("Deletado:"+req.params.id);
         })
+        /*
+        let antes = new Date();
+        let depois = new Date();
+        antes.setUTCHours(0);
+        antes.setMinutes(0);
+        antes.setSeconds(0);
+        depois.setUTCHours(23);
+        depois.setMinutes(59);
+        depois.setSeconds(59);
+        antes.setUTCDate(antes.getUTCDate() - 9);
+        depois.setUTCDate(depois.getUTCDate() + 3);
+        console.log(" Antes " + antes + " / Depois " + depois);
+        Agenda.find({agenda_data: { $gte : antes, $lte:  depois }}).then((agendas) =>{
+            agendas.forEach(dia => {
+                Agenda.deleteOne({_id: dia._id}).then(() =>{
+                    //this.carregaAgendaF(req,res);
+                    console.log("Deletado:"+dia._id);
+                }) 
+            });
+        })
+        */
     },
     atualizaAgenda(req, res){//EditaAgenda
         let flash = new Resposta()

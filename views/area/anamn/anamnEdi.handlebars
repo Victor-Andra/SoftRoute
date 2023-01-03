@@ -2,14 +2,6 @@
 <html lang="pt-br">
 	<head>
 		<title>Anamnese</title>
-			<script type="text/javascript">
-				function atualizaData(){
-					var hora = "00:00"
-					var data = document.getElementById("anamndatacad").value+"T"+hora+":00.000Z";
-					var datafmt = new Date(data);
-					document.getElementById("anamndatacad").value = datafmt.toISOString();
-				}
-			</script>
 	</head>
 	<body class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -230,15 +222,6 @@
 													<label> Nome </label>
 													<div class="input-group">
 														<div>
-															<div class="form-group">
-																<div class="col-sm-8">
-																	<select name="planFisioBeneid" id="planFisioBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
 															<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>

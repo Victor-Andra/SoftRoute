@@ -25,65 +25,107 @@ const Terapia = mongoose.model("tb_terapia")
 
 module.exports = {
     carregaAnamn(req, res){
-            res.render('area/anamn/anamnCad')
-       
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    console.log("Listagem Realizada de Usuário")
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                                res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})
+                })}).catch((err) =>{
+                    console.log(err)
+                    req.flash("error_message", "houve um erro ao listar escolas")
+                    res.redirect('admin/erro')
+                })
+            
         },
     
+        cadastraAnamn(req,res){
+            console.log("chegou")
+            let resultado
+            let resposta = new Resposta()
+            
+            laudoClass.cadastraAnamn(req,res).then((result)=>{
+                console.log("Cadastro Realizado!")
+                console.log(res)
+                resultado = true;
+            }).catch((err)=>{
+                resultado = err
+                console.log("ERRO:"+err)
+            }).finally(()=>{
+                if (resultado == true){
+                    resposta.texto = "Cadastrado com sucesso!"
+                    resposta.sucesso = "true"
+                    console.log('verdadeiro')
+                    req.flash("success_message", "Cadastro realizado com sucesso!")
+                    this.listaAnamn(req,res,resposta)
+                } else {
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    console.log('falso')
+                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                    res.render('admin/erro', resposta);
+                }
+            })
+        },
 
 
-    cadastraAnamn(req,res){
-        let cadastro = anamnClass.anamnAdicionar(req,res);//variavel para armazenar a função que armazena o async
 
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('area/anamn/anamnCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
-        }
-    },
-
-    deletaAnamn(req, res){
+    deletaAnamn(req,res){
         Anamn.deleteOne({_id: req.params.id}).then(() =>{
-            Anamn.find().then((anamn) =>{
-                req.flash("success_message", "Anamnese deletada!")
-                res.render('area/anamn/anamnLis', {anamns: anamn})
-            }).catch((err) =>{
+            Conv.find().then((conv)=>{
+                Terapia.find().then((terapia)=>{
+                    console.log("Listagem Realizada de terapias")
+                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                            console.log("Listagem Realizada de Usuário")
+                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                                    console.log("Listagem Realizada de beneficiarios")
+                req.flash("success_message", "Laudoamento Fisioterapêutico deletado!")
+                res.render('area/laudo/laudoLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
+            })})})}).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar as anamneses")
+                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
                 res.render('admin/erro')
             })
         })
     },
-    atualizaAnamn(req, res){
-        let resposta;
+    
+    
+
+
+    atualizaAnamn(req,res){
+        let resultado
+        let resposta = new Resposta()
         try{
             anamnClass.anamnEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resposta = res;
+                resultado = res;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resposta = err;
+                resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
-                    //Volta para a Anamn de listagem
-                    this.listaAnamn(req,res);
+                if(resultado == true){
+                    //Volta para a debitsubcateg de listagem
+                    console.log("Listagem Realizada!")
+                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.sucesso = "true"
+                    this.listaAnamn(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+                    console.log(resultado)
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    this.listaAnamn(req,res,resposta)
                 }
             })
         } catch(err1){
             console.log(err1)
+            res.render('admin/erro')
         }
-
     },
+
     carregaAnamnEdi(req, res){
             Anamn.findById(req.params.id).then((anamnEdi) =>{
             res.render('area/anamn/anamnEdi')
@@ -95,7 +137,7 @@ module.exports = {
     },
 
     listaAnamn(req, res){
-        let convs = new Array();
+        let anamn = new Array();
         console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
             console.log("Listagem Realizada das Anamneses!")
@@ -106,7 +148,7 @@ module.exports = {
             res.render('area/anamn/anamnLis', {Anamns: anamn, Usuarios: usuario, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Anamnses")
+            req.flash("error_message", "houve um erro ao listar as Anamneses")
             res.redirect('admin/erro')
         })
     },
@@ -116,7 +158,7 @@ module.exports = {
             console.log(anamn)
             Bene.findById(req.params.id).then((bene) =>{
                 console.log("Listagem Realizada bene!")
-                res.render('beneficiario/beneLis', {Anamns: anamn, Benes: bene})
+                res.render('area/anamn/anamnLis', {Anamns: anamn, Benes: bene})
         })}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

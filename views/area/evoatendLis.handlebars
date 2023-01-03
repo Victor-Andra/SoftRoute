@@ -2,7 +2,7 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Anamneses</title>
+		<title>agendamentos do Dia</title>
 
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -54,8 +54,16 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Route</a>
 							</li>
-							<li class="active">Lista de Anamneses</li>
+							<li class="active">Lista de Atendimentos Diário</li>
 						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="alert alert-warning">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<strong>Lista de Atendimentos Diário</strong>
+							Aqui está a lista de atendimentos a realizar hoje.
+						<br>
 					</div>
 					{{#each error}}
 						<div class="alert alert-danger">{{texto}}{{error}}</div>
@@ -76,55 +84,32 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"></span>
-														</label>
-													</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Benficiário: activate to sort column ascending">Beneficiário</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data Anamnese: activate to sort column ascending">Data</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Idade</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta: activate to sort column ascending">Terapeuta</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Status:     activate to sort column ascending">Status</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Apelido</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Nascimento</th>
 													<th>Ação</th>
 												</tr>
 											</thead>
 											<tbody>
-												{{#each anamns}}
+												{{#each benes}}
 
 													<tr role="row" class="odd">
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-														<td>{{anamn_benenome}}</td>
-														<td>{{anamn_datacad}}</td>
-														<td>{{anamn_beneidade}}</td>
-														<td>{{anamn_datacad}}</td>
-														<td>{{anamn_datacad}}</td>
-														
-														<!--[if IE]>
-														{{#each ../usuarios}}
-															{{#ifEqual this._id ../anamn_usuid}}
-																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														{{#each ../benes}}
-															{{#ifEqual this._id ../anamn_beneid}}
-																<td>{{bene_status}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<![endif]-->
+														<td>{{bene_nome}}</td>
+														<td>{{bene_nome}}</td>
+														<td>{{bene_apelido}}</td>
+														<td>{{bene_nome}}</td>
+														<td>{{bene_conv}}</td>
+														<td>{{bene_datanasc}}</td>
 														<td>
 															<div class="action-buttons">
-																<a class="blue" href="/menu/area/anamn/anamnimp/{{_id}}">
-																	<i class="ace-icon fa fa-print bigger-130"></i>
+																<a class="blue" href="/menu/area/evoatendcad/{{_id}}">
+																	<i class="ace-icon fa fa-plus bigger-130"></i>
 																</a>
-																<a class="green" href="/menu/area/anamn/anamnedi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																<a class="green" href="/menu/area/evoatendlis/{{_id}}">
+																	<i class="ace-icon fa fa-list bigger-130"></i>
 																</a>
 															</div>
 														</td>
@@ -140,7 +125,27 @@
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Soft</span>
+							Route
+						</span>
 
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>

@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Diário de Bordo</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Diário de Bordo
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro Geral dos Diários de Bordo
+							</small>
+						</h1>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
+								<div class="col-xs-12">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Observação! </strong>
+										O Diário de bordo é semanal, toda nova semana, deve-se cadastrar um novo diário, não deve por datas diferentes das previstas na semana vigente.
+										<br>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Beneficiário</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Terapeuta</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
+																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Escola</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">ESCOLA PEQUENOS AERONAUTAS</option>
+																	<option value="Não">COLÉGIO MADRE DE DEUS</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-2">
+												<div class="row">
+													<label >Data Inicial</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="beneDatanasc" name="beneDatanasc" type="date">
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-2">
+												<div class="row">
+													<label>Data Final</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="beneDatanasc" name="beneDatanasc" type="date">
+													</div>
+												</div>
+											</div>													
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<hr>
+									</div>
+										
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="tabbable">
+												<ul class="nav nav-tabs" id="myTab">
+
+													<li class="dropdown">
+														<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+															<i class="green ace-icon fa fa-check bigger-120"></i>
+															Pontuações &nbsp;
+															<i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+														</a>
+														<ul class="dropdown-menu dropdown-info">
+															<li class="active">
+																<a data-toggle="tab" href="#pon1">@pon1</a>
+															</li>
+															<li>
+																<a data-toggle="tab" href="#pon2">@pon2</a>
+															</li>
+														</ul>
+													</li>
+													<li class="dropdown">
+														<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+															<i class="pink ace-icon fa fa-cogs bigger-120"></i>
+															Atividades &nbsp;
+															<i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+														</a>
+														<ul class="dropdown-menu dropdown-info">
+															<li>
+																<a data-toggle="tab" href="#ati1">@ati1</a>
+															</li>
+															<li>
+																<a data-toggle="tab" href="#ati2">@ati2</a>
+															</li>
+														</ul>
+													</li>
+													<li>
+														<a data-toggle="tab" href="#inf">
+															<i class="pink ace-icon fa fa-commenting-o bigger-120"></i>
+															Informações Adicionais
+														</a>
+													</li>
+												</ul>
+
+												<div class="tab-content">
+													<div id="pon1" class="tab-pane fade in active">
+														<div class="row">
+															<div class="col-xs-12 col-sm-6">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																	<thead>
+																		<tr role="row">
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Segue Rotina</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Dia</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="7" style="width: 250px;">
+																				<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="Aqui voce pode inserir alguma observação sobre a rotina." class="form-control" style="overflow: hidden; overflow-wrap: break-word; resize:false; width:290px; height:320px;"></textarea> 
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 50px;">Dom</td>
+																			<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>	
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Seg</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Ter</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Qua</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Qui</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Sex</td>
+																			<td name="data"  style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Sab</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																	<thead>
+																		<tr role="row">
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Ecolalia</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Dia</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="7" style="width: 250px;">
+																				<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="Aqui voce pode inserir alguma observação sobre a rotina." class="form-control" style="overflow: hidden; overflow-wrap: break-word; resize:false; width:290px; height:320px;"></textarea> 
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 50px;">Dom</td>
+																			<td type="date" name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>	
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Seg</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Ter</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Qua</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Qui</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Sex</td>
+																			<td name="data"  style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																			<tr role="row" class="odd">
+																			<td name="Obs" rowspan="1" class="hidden">
+																				<a href="#"></a>
+																			</td>
+																			<td name="dia" rowspan="1" style="width: 4px;">Sab</td>
+																			<td name="data" style="width: 110px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="Pontua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="00">00</option>
+																					<option value="01">01</option>
+																					<option value="02">02</option>
+																					<option value="03">03</option>
+																					<option value="04">04</option>
+																					<option value="05">05</option>
+																					<option value="06">06</option>
+																					<option value="07">07</option>
+																					<option value="08">08</option>
+																					<option value="09">09</option>
+																					<option value="10">10</option>
+																				</select>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>																	
+														</div>
+													</div>
+
+													<div id="pon2" class="tab-pane fade">
+														<p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin.</p>
+													</div>
+													<div id="ati1" class="tab-pane fade">
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																	<thead>
+																		<tr role="row">
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Problemas de Comportamento</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Dom</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Seg</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Ter</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Qua</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Qui</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sex</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sab</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Data</td>
+																			<td name="dom" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="seg" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="ter" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="qua" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="qui" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="sex" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="sab" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																		</tr>
+																
+														
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Autoagressão (Bater em si mesmo):</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Agredir adultos</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Agredir pares:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Destruição de objetos:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Gritos:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Choros:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Biras:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>																																																																																															
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+													<div id="ati2" class="tab-pane fade">
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																	<thead>
+																		<tr role="row">
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Ccolaboração para execução das atividades</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Dom</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Seg</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Ter</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Qua</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Qui</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sex</th>
+																			<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sab</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Data</td>
+																			<td name="dom" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="seg" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="ter" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="qua" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="qui" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="sex" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																			<td name="sab" rowspan="1" style="width: 50px;"><input id="beneDatanasc" name="beneDatanasc" type="date"></td>
+																		</tr>	
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">O beneficiário foi colaborativo todo o tempo:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Foi colaborativa a maior parte do tempo:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Foi colaborativa na metade do tempo:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Foi colaborativa menos da metade do tempo:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																		<tr role="row" class="odd">
+																			<td name="Desc" rowspan="1" style="width: 250px;">Não colaborou:</td>
+																			<td name="dom">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="seg">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="ter">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qua">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="qui">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sex">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																			<td name="sab">
+																				<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="nd">nd</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>		
+													</div>													
+													<div id="inf" class="tab-pane fade">
+														<label>O Beneficiário apresentou algum comportamento fora do normal (positivo ou Negativo)?</label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+															</div>
+														</div>
+														<label>O Beneficiário demonstrou alguma habilidade nova?</label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+															</div>
+														</div>
+														<label>Ouve algum incidente (Machucados, brigas, dores, etc) que precisou ser relatado aos pais? explique. </label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+															</div>
+														</div>
+														<label>Informações adicionais não categorizado nas três seções acima.</label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div><!-- /.col -->
+									</div>
+				
+									<div class="col-md-offset-3 col-md-12">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

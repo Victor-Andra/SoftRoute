@@ -67,6 +67,11 @@ const Bene = mongoose.model("tb_bene")
 const fncBene = require("../functions/fncBene")
 
 //Anamnese
+const evoatendClass = require("../models/evoatend")
+const Evoatend = mongoose.model("tb_evoatend")
+const fncEvoatend = require("../functions/fncEvoatend")
+
+//Anamnese
 const anamnClass = require("../models/anamn")
 const Anamn = mongoose.model("tb_anamn")
 const fncAnamn = require("../functions/fncAnamn")
@@ -775,6 +780,11 @@ router.get('/beneficiario/sessao/listab/:id',(req,res) =>{
 fncSessao.listaSessaoTab(req, res); 
 })
 
+//Menu Evolução dos Atendimentos ** Area Tecnicos   
+//Lista Todos os Atendimentos por Data Atual e Beneficiário vinculados pela AGENDA do Dia
+router.get('/area/evoatendlis',(req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncEvoatend.listaEvoatend(req, res);
+})
 
 //Menu Anamnese ** Area Tecnicos   
 //Lista Todos as anamneses por Data, Beneficiário
@@ -784,6 +794,15 @@ router.get('/area/anamn/anamnlis',(req,res) =>{//direciona o cadstro de Plano de
 //Carrega Cadastro
 router.get('/area/anamn/anamncad',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     fncAnamn.carregaAnamn(req, res);
+})
+
+router.post('/area/anamn/add',(req,res) =>{//adiciona escola
+    console.log("post")
+    fncAnamn.cadastraAnamn(req, res); 
+})
+
+router.get('/area/anamn/edi/:id', (req,res) =>{//direciona a edição de escola
+    fncAnamn.carregaAnamnEdi(req, res); 
 })
 
 //Menu Bordo ** Area Tecnicos   
