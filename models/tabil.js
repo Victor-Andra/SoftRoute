@@ -150,7 +150,7 @@ module.exports = {TabilModel,TabilSchema,
         console.log("tabilmodel");
         const newTabil = new TabilModel({
             tabil_atendnum : req.body.nextNum ,
-            tabil_convid : req.body.tabilConvid ,
+            //tabil_convid : req.body.tabilConvid ,
             tabil_terapeutaid : req.body.tabilTerapeutaId ,
             tabil_fornecid : req.body.tabilFornecId ,
             tabil_dataevento : req.body.tabilDataevento ,

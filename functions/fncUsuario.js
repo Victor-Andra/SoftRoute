@@ -20,8 +20,6 @@ const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 
-
-
 module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
@@ -33,9 +31,7 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
-
     },
-
     carregaUsuario(req,res){
         Usuario.find().then((usuario) =>{
             console.log("Listagem Realizada!")
@@ -55,10 +51,7 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
-
     },
-
-
     carregaUsuarioEdi(req,res){
         Usuario.findById(req.params.id).then((usuario) =>{
             console.log("Listagem Realizada!")
@@ -79,7 +72,6 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
     cadastraUsuario(req,res){
         let cadastro = usuarioClass.usuarioAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
@@ -89,7 +81,6 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
     atualizaUsuario(req,res){
         let resposta;
         try{
@@ -117,8 +108,6 @@ module.exports = {
             console.log(err1)
         }
     },
-
-
     deletaUsuario(req, res){
         Usuario.deleteOne({_id: req.params.id}).then(() =>{
             Usuario.find().then((usuario) =>{
@@ -130,7 +119,36 @@ module.exports = {
                 res.render('admin/erro')
             })
         })
+    },
+    getNivelUsuario(req,res){
+        let usuPerfil;
+        let lvl;
+        Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
+            usuPerfil = usu.usuario_perfilid
+            switch (usuPerfil){
+                case "62421801a12aa557219a0fb9":
+                    lvl = 0;
+                    break;
+                case "62421857a12aa557219a0fc1":
+                    lvl = 1;
+                    break;
+                case "624218f5a12aa557219a0fd0":
+                    lvl = 2;
+                    break;
+                case "62421903a12aa557219a0fd3":
+                    lvl = 3;
+                    break;
+                case "6242190fa12aa557219a0fd6":
+                    lvl = 4;
+                    break;
+                //case "6242191fa12aa557219a0fd9":
+                //    break;
+            }
+            console.log("LVL: "+lvl)
+
+            return lvl;
+        }).catch((err) =>{
+            console.log(err)
+        })
     }
-
-
 }

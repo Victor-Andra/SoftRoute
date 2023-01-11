@@ -57,10 +57,36 @@
 							<li class="active">Lista de Anamneses</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					{{#each error}}
-						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
-					{{/each}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
@@ -101,23 +127,20 @@
 															</label>
 														</td>
 														<td>{{anamn_benenome}}</td>
-														<td>{{anamn_datacad}}</td>
+														<td>{{datacad}}</td>
 														<td>{{anamn_beneidade}}</td>
-														<td>{{anamn_datacad}}</td>
-														<td>{{anamn_datacad}}</td>
-														
-														<!--[if IE]>
-														{{#each ../usuarios}}
-															{{#ifEqual this._id ../anamn_usuid}}
+														<td>{{_id}}</td>
+														<td>{{anamn_usuid}}</td>
+														<!--{{#each ../usuarios}}
+															{{#compareThis this._id ../anamn_usuid}}
 																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
+															{{/compareThis}}
 														{{/each}}
 														{{#each ../benes}}
-															{{#ifEqual this._id ../anamn_beneid}}
-																<td>{{bene_status}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<![endif]-->
+															{{#compareThis this._id ../anamn_beneid}}
+																<td>{{bene_nome}}</td>
+															{{/compareThis}}
+														{{/each}}-->
 														<td>
 															<div class="action-buttons">
 																<a class="blue" href="/menu/area/anamn/anamnimp/{{_id}}">
@@ -125,6 +148,9 @@
 																</a>
 																<a class="green" href="/menu/area/anamn/anamnedi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+																<a class="red" href="/menu/area/anamn/anamndel/{{_id}}">
+																	<i class="ace-icon fa fa-trash bigger-130"></i>
 																</a>
 															</div>
 														</td>

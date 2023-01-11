@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
 const {autenticador} = require("../helpers/autenticador")
+let application = require('../routes/admin')
 
 //funções gerais
 const fncGeral = require("../functions/fncGeral")
@@ -250,8 +251,14 @@ router.get('/usuarioCad',(req,res)=>{
 router.get('/login',(req,res)=>{
     res.render("ferramentas/usuario/login")
 })
-
+/*
 router.post('/login',(req,res,next)=>{
+    console.log("---------")
+    console.log("email:")
+    console.log(req.body.email)
+    console.log("senha:")
+    console.log(req.body.senha)
+    console.log("---------")
     console.log("routerLogin")
     passport.authenticate("local", {
         successRedirect: "/menu/",
@@ -259,152 +266,192 @@ router.post('/login',(req,res,next)=>{
         failureFlash: true
     })(req,res,next)
 })
-
-router.get("/logout",(req,res)=>{
-    req.logout()
-    req.flash("success_msg", "Deslogado com sucesso!")
-    res.redirect("/menu/login")
+*/
+router.post('/login',(req,res,next)=>{
+    
+    passport.authenticate("local", {
+        successRedirect: "/menu/",
+        failureRedirect: "/menu/login",
+        failureFlash: true
+    })(req,res,next)
 })
+/*
+    passport.authenticate('local', { failureRedirect: '/login', failureMessage: true }),
+    function(req, res) {
+        console.log("EXECUTANDO")
+        let lvl = fncUsuario.getNivelUsuario(req,res);
+        let treco;
+        
+        //lvl.then((resposta)=>{
+        //    console.log(resposta)
+        //    treco = resposta;
+        //})
+        
+        if (lvl == 0) {
+            res.redirect('/menu/');
+        } else if (lvl == 2) {
+            res.redirect('/menuTerapeuta/');
+        } else {
+            res.redirect("/menu/branco")
+        }
+        
+    });
+
+*/
+
+
+router.get('/logout', function(req, res, next) {
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/menu/login');
+    });
+});
 
 //Menu DashBoard
 
 //Menu Agenda
-router.get("/agenda/lis",(req,res) =>{//direciona o cadstro de Agenda, com Ufs e Convênios.
-    fncAgenda.listaAgenda(req, res);//
+router.get("/agenda/lis", fncGeral.IsAuthenticated, function(req,res){//direciona o cadstro de Agenda, com Ufs e Convênios.
+    fncAgenda.listaAgenda(req, res);
 })
 
-router.get("/agenda/cadT",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
+router.get("/auth", fncGeral.IsAuthenticated, (req,res)=>{
+    res.render("admin/index")
+})
+
+router.get("/agenda/cadT", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     fncAgenda.carregaAgendaCadastro(req, res, resposta);
 })
 
-router.get("/agenda/cadF/:dia/:mes/:ano/:hora",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
+router.get("/agenda/cadF/:dia/:mes/:ano/:hora", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
     fncAgenda.carregaAgendaEdiF(req, res);
 })
 
-router.get("/agenda/lisL/",(req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
+router.get("/agenda/lisL/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
     console.log("lista")
     fncAgenda.carregaAgendaL(req, res);
 })
 
-router.get("/agenda/lisG/",(req,res) =>{//direciona a listagem de Agenda Geral.
+router.get("/agenda/lisG/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Geral.
     console.log("lista")
     fncAgenda.carregaAgendaG(req, res);
 })
 
-router.post("/agenda/filG/",(req,res) =>{//direciona a listagem de Agenda Geral.
+router.post("/agenda/filG/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Geral.
     console.log("lista")
     fncAgenda.carregaAgendaFilG(req, res);
 })
 
-router.get("/agenda/lisS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
+router.get("/agenda/lisS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
     console.log("Agenda Semanal")
     fncAgenda.carregaAgendaS(req, res);
 })
 
-router.post("/agenda/filS/",(req,res) =>{//direciona a listagem de Agenda Semanal.
+router.post("/agenda/filS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
     console.log("lista")
     fncAgenda.carregaAgendaFilS(req, res);
 })
 
-router.get("/agenda/lisB",(req,res) =>{//direciona a listagem agendamento de beneficiarios.
+router.get("/agenda/lisB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
     console.log("Agenda Bene")
     fncAgenda.carregaAgendaB(req, res);//CARREGAAGENDABENE
 })
 
-router.post("/agenda/filB",(req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
+router.post("/agenda/filB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
     fncAgenda.carregaAgendaFilB(req, res);
 })
 
-router.get("/agenda/lisT",(req,res) =>{//direciona a listagem agendamento de terapeutas.
+router.get("/agenda/lisT", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de terapeutas.
     fncAgenda.carregaAgendaT(req, res);
 })
 
-router.post("/agenda/filT",(req,res) =>{//direciona a listagem agendamento de filtro de terapeutas.
+router.post("/agenda/filT", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de terapeutas.
     fncAgenda.carregaAgendaFilT(req, res);
 })
 
-router.get("/agenda/lisSala/",(req,res) =>{//direciona a listagem de Agenda Sala.
+router.get("/agenda/lisSala/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Sala.
     console.log("Agenda Sala")
     fncAgenda.carregaAgendaSala(req, res);
 })
 
-router.post("/agenda/filSala/",(req,res) =>{//direciona a listagem de Agenda Sala.
+router.post("/agenda/filSala/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Sala.
     console.log("Agenda Filtra Sala")
     fncAgenda.carregaAgendaFilSala(req, res);
 })
 
-router.get("/agenda/lisA",(req,res) =>{//direciona a listagem de laudos.
+router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de laudos.
     fncAgenda.filtraAgendaA(req, res);
 })
 
-router.post("/agenda/filA",(req,res) =>{//direciona a listagem de filtro de laudos.
+router.post("/agenda/filA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de laudos.
     fncAgenda.filtraAgendaA(req, res);
 })
 
-router.get("/agenda/lisF",(req,res) =>{//direciona a listagem de Fixa.
+router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
     fncAgenda.carregaAgendaF(req, res);
 })
 
-router.post("/agenda/filF",(req,res) =>{//direciona a listagem de filtro de Fixa.
+router.post("/agenda/filF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.carregaAgendaFilF(req, res);
 })
 
-router.post("/agenda/filL",(req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
+router.post("/agenda/filL", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
     fncAgenda.filtraAgendaL(req, res);
 })
 
-router.post('/agenda/add',(req,res) =>{//adiciona fornec
+router.post('/agenda/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona fornec
     fncAgenda.cadastraAgenda(req, res);
 })
 
 
-router.get('/agenda/del/:id', (req,res) =>{//deleta agenda
+router.get('/agenda/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta agenda
     fncAgenda.deletaAgenda(req, res);
 })
 
-router.get('/agenda/edi/:id', (req,res) =>{//direciona para a edição de agenda
+router.get('/agenda/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.carregaAgendaEdi(req, res);
 })
 
-router.get('/agenda/ediTemp/:id', (req,res) =>{//direciona para a edição de agenda diária
+router.get('/agenda/ediTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
     fncAgenda.carregaAgendaEdiTemp(req, res);
 })
 
-router.post('/agenda/atualizaTemp', (req,res) =>{//direciona para a edição de agenda diária
+router.post('/agenda/atualizaTemp', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
     fncAgenda.atualizaAgendaTemp(req, res);
 })
 
-router.get('/agenda/cadTemp/:id', (req,res) =>{//direciona para a edição de agenda diária
+router.get('/agenda/cadTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
     fncAgenda.carregaAgendaTemp(req, res);
 })
 
-router.post('/agenda/addTemp', (req,res) =>{//direciona para salvar a edição de agenda diária
+router.post('/agenda/addTemp', fncGeral.IsAuthenticated, (req,res) =>{//direciona para salvar a edição de agenda diária
     fncAgenda.cadastraAgendaTemp(req, res);
 })
 
-router.post('/agenda/cadE/atualiza', (req,res) =>{//direciona para a edição de agenda
+router.post('/agenda/cadE/atualiza', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaAgenda(req, res);
 })
 
-router.get('/agenda/atualiza/:id', (req,res) =>{//direciona para a edição de agenda
+/*
+router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaAgendaCadE(req, res);
 })
+*/
 
-router.post('/agenda/copiaSemana', (req,res) =>{//direciona para a edição de agenda
+router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.copiaSemanaAgendaGeral(req, res);
 })
 
-/*
-router.post('/agenda/converteDia', (req,res) =>{//direciona para a edição de agenda
+
+router.post('/agenda/converteDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.converteAgendaEmAtend(req, res);
 })
-*/
+
 // Visualizar Agenda
 /*
-router.get("/agenda/vis",(req,res) =>{//direciona o cadstro A AGENDA.
+router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro A AGENDA.
     fncAgenda.carregaAgendaVis(req, res);
 })
 */
@@ -706,9 +753,9 @@ router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro d
 
 //Menu Beneficiario Escola
 router.get('/beneficiario/escola/lis',(req,res) =>{//lista todas escolas
-    let resposta = new Resposta()
-    resposta.texto = ""
-    resposta.sucesso = ""
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
     fncEscola.listaEscola(req, res, resposta);        
 })
 
@@ -788,20 +835,23 @@ router.get('/area/evoatendlis',(req,res) =>{//direciona aLista de agendamentos c
 
 //Menu Anamnese ** Area Tecnicos   
 //Lista Todos as anamneses por Data, Beneficiário
-router.get('/area/anamn/anamnlis',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
-    fncAnamn.listaAnamn(req, res);
+router.get('/area/anamn/anamnlis',(req,res) =>{//direciona para a lista de anamneses
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncAnamn.listaAnamn(req, res, resposta);
 })
 //Carrega Cadastro
-router.get('/area/anamn/anamncad',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+router.get('/area/anamn/anamncad',(req,res) =>{//direciona o cadstro da Anamneses
     fncAnamn.carregaAnamn(req, res);
 })
 
-router.post('/area/anamn/add',(req,res) =>{//adiciona escola
+router.post('/area/anamn/add',(req,res) =>{//adiciona Anamnese
     console.log("post")
     fncAnamn.cadastraAnamn(req, res); 
 })
 
-router.get('/area/anamn/edi/:id', (req,res) =>{//direciona a edição de escola
+router.get('/area/anamn/edi/:id', (req,res) =>{//direciona a edição da Anemnese
     fncAnamn.carregaAnamnEdi(req, res); 
 })
 

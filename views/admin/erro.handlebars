@@ -25,36 +25,35 @@
 					</div>
 					<!--//MENSAGEM FLASH-->
 					{{#compareString flash.sucesso "true"}}
-					<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
-						<p>
-							<strong>
-								<i class="ace-icon fa fa-check"></i>
-								{{flash.texto}}
-							</strong>
-							<button type="button" class="close" onclick="javascript:OcultaMsg()">
-								<i class="ace-icon fa fa-times"></i>
-							</button>
-						</p>
-						
-					</div>
-						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
-					{{else}}
-						{{#compareString flash.sucesso "false"}}
-						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
-							<p>
-								<strong>
-									<i class="ace-icon fa fa-times"></i>
-									{{flash.texto}}
-								</strong>
-								<button type="button" class="close" onclick="javascript:OcultaMsg()">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-							</p>
-						</div>
-							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
-						{{else}}
-						{{/compareString}}
-					{{/compareString}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-check"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+							{{else}}
+								{{#compareString flash.sucesso "false"}}
+									<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+										<p>
+											<strong>
+												<i class="ace-icon fa fa-times"></i>
+												{{flash.texto}}
+											</strong>
+											<button type="button" class="close" onclick="javascript:OcultaMsg()">
+												<i class="ace-icon fa fa-times"></i>
+											</button>
+										</p>
+									</div>
+									<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+								{{else}}
+								{{/compareString}}
+							{{/compareString}}
 					<!--//MENSAGEM FLASH-->
 								<div class="error-container">
 									<div class="well">

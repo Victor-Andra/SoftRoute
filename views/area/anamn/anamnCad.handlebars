@@ -9,6 +9,9 @@
 					var datafmt = new Date(data);
 					document.getElementById("anamndatacad").value = datafmt.toISOString();
 				}
+				function OcultaMsg(){
+					document.getElementById("alertMsgFlash").hidden = true;
+				}
 			</script>
 	</head>
 	<body class="no-skin">
@@ -232,14 +235,13 @@
 														<div>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<select name="planFisioBeneid" id="planFisioBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																	<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" data-placeholder="Escolha..." value="Sem Info" onchange="javascript:selectConv()">
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
 																		{{/each}}
 																	</select>
 																</div>
 															</div>
-															<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 													<div class="row">
@@ -365,7 +367,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnHouvetratengrav" id="anamnHouvetratengrav" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnHouvetratengrav" id="anamnHouvetratengrav" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -387,7 +389,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnHouveplanfami" id="anamnHouveplanfami" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnHouveplanfami" id="anamnHouveplanfami" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -409,7 +411,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAmeacatenaborto" id="anamnAmeacatenaborto" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAmeacatenaborto" id="anamnAmeacatenaborto" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -431,7 +433,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnBebeoufumagesta" id="anamnBebeoufumagesta" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnBebeoufumagesta" id="anamnBebeoufumagesta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info" value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -453,7 +455,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnTraumafispsiinfec" id="anamnTraumafispsiinfec" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnTraumafispsiinfec" id="anamnTraumafispsiinfec" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -475,7 +477,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnUsotranquil" id="anamnUsotranquil" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnUsotranquil" id="anamnUsotranquil" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -519,7 +521,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnPartoqual" id="anamnPartoqual" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnPartoqual" id="anamnPartoqual" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Normal">Normal</option>
 																	<option value="Cesárea">Cesárea</option>
@@ -543,7 +545,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAnorexiaperiparto" id="anamnAnorexiaperiparto" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAnorexiaperiparto" id="anamnAnorexiaperiparto" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -565,7 +567,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnChorounasc" id="anamnChorounasc" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnChorounasc" id="anamnChorounasc" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -587,7 +589,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnApgar" id="anamnApgar" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnApgar" id="anamnApgar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -609,7 +611,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnIctericia" id="anamnIctericia" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnIctericia" id="anamnIctericia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -631,7 +633,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnFototerapia" id="anamnFototerapia" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnFototerapia" id="anamnFototerapia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -653,7 +655,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnUti" id="anamnUti" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnUti" id="anamnUti" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -675,7 +677,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnComplica" id="anamnComplica" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnComplica" id="anamnComplica" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -697,7 +699,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnPaipresentenasc" id="anamnPaipresentenasc" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnPaipresentenasc" id="anamnPaipresentenasc" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -771,7 +773,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMaetrab" id="anamnMaetrab" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMaetrab" id="anamnMaetrab" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -809,7 +811,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnPaisvivemjuntosbem" id="anamnPaisvivemjuntosbem" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnPaisvivemjuntosbem" id="anamnPaisvivemjuntosbem" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -831,7 +833,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDiscussoesfreq" id="anamnDiscussoesfreq" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDiscussoesfreq" id="anamnDiscussoesfreq" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -865,7 +867,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnQuemcedefacil" id="anamnQuemcedefacil" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnQuemcedefacil" id="anamnQuemcedefacil" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Pai">Pai</option>
 																	<option value="Mãe">Mãe</option>
@@ -888,7 +890,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnCriancatratdif" id="anamnCriancatratdif" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnCriancatratdif" id="anamnCriancatratdif" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -938,7 +940,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnHaeducarelig" id="anamnHaeducarelig" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnHaeducarelig" id="anamnHaeducarelig" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -960,7 +962,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDevpreccumpr" id="anamnDevpreccumpr" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDevpreccumpr" id="anamnDevpreccumpr" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -995,7 +997,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnSarampo" id="anamnSarampo" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSarampo" id="anamnSarampo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1008,7 +1010,7 @@
 														<label for="id-date-picker-1">Catapora</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnCatapora" id="anamnCatapora" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCatapora" id="anamnCatapora" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1020,7 +1022,7 @@
 														<label for="id-date-picker-1">Rubéola</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRubeola" id="anamnRubeola" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRubeola" id="anamnRubeola" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1032,7 +1034,7 @@
 														<label for="id-date-picker-1">Coqueluche</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnCpqueluche" id="anamnCpqueluche" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCpqueluche" id="anamnCpqueluche" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1044,7 +1046,7 @@
 														<label for="id-date-picker-1">Meningite</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnMeningite" id="anamnMeningite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnMeningite" id="anamnMeningite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1056,7 +1058,7 @@
 														<label for="id-date-picker-1">Otite</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnOtite" id="anamnOtite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnOtite" id="anamnOtite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1073,7 +1075,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnCaxumba" id="anamnCaxumba" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCaxumba" id="anamnCaxumba" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1089,7 +1091,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnAdenoide" id="anamnAdenoide" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAdenoide" id="anamnAdenoide" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1102,7 +1104,7 @@
 														<label for="id-date-picker-1">Amigdalite</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAmigdalites" id="anamnAmigdalites" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAmigdalites" id="anamnAmigdalites" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1114,7 +1116,7 @@
 														<label for="id-date-picker-1">Alergias</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAlergias" id="anamnAlergias" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAlergias" id="anamnAlergias" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1126,7 +1128,7 @@
 														<label for="id-date-picker-1">Accidentes</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAcidentes" id="anamnAcidentes" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAcidentes" id="anamnAcidentes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1138,7 +1140,7 @@
 														<label for="id-date-picker-1">Convulsões</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnConvulsoes" id="anamnConvulsoes" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnConvulsoes" id="anamnConvulsoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1150,7 +1152,7 @@
 														<label for="id-date-picker-1">Internações</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnInternacoes" id="anamnInternacoes" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnInternacoes" id="anamnInternacoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1167,7 +1169,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnCirurgia" id="anamnCirurgia" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCirurgia" id="anamnCirurgia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1180,7 +1182,7 @@
 														<label for="id-date-picker-1">Complicações com Vacinas</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnComplicavacina" id="anamnComplicavacina" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnComplicavacina" id="anamnComplicavacina" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1192,7 +1194,7 @@
 														<label for="id-date-picker-1">Doenças por Insetos, Dengue, Zica etc</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnZoonoses" id="anamnZoonoses" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnZoonoses" id="anamnZoonoses" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1218,7 +1220,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnAvaliacaoneuro" id="anamnAvaliacaoneuro" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAvaliacaoneuro" id="anamnAvaliacaoneuro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1250,7 +1252,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnAvaliacaopsico" id="anamnAvaliacaopsico" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAvaliacaopsico" id="anamnAvaliacaopsico" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1300,7 +1302,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnNervoso" id="anamnNervoso" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnNervoso" id="anamnNervoso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1313,7 +1315,7 @@
 														<label for="id-date-picker-1">Deficiente?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnDeficiente" id="anamnDeficiente" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnDeficiente" id="anamnDeficiente" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1325,7 +1327,7 @@
 														<label for="id-date-picker-1">Viciado?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnViciado" id="anamnViciado" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnViciado" id="anamnViciado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1337,7 +1339,7 @@
 														<label for="id-date-picker-1">Ataques?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAtaques" id="anamnAtaques" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAtaques" id="anamnAtaques" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1352,7 +1354,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnDislexia" id="anamnDislexia" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnDislexia" id="anamnDislexia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1365,7 +1367,7 @@
 														<label for="id-date-picker-1">TDAH?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnTdah" id="anamnTdah" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnTdah" id="anamnTdah" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1377,7 +1379,7 @@
 														<label for="id-date-picker-1">Esquizofrenia?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnEsquizofre" id="anamnEsquizofre" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnEsquizofre" id="anamnEsquizofre" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1392,7 +1394,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnOutros" id="anamnOutros" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnOutros" id="anamnOutros" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1457,7 +1459,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnInicioufalaparou" id="anamnInicioufalaparou" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnInicioufalaparou" id="anamnInicioufalaparou" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -1478,7 +1480,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnGdiscluverbalgagueira" id="anamnGdiscluverbalgagueira" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnGdiscluverbalgagueira" id="anamnGdiscluverbalgagueira" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1491,7 +1493,7 @@
 														<label for="id-date-picker-1">Dislalia / Troca de letras?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnDislalia" id="anamnDislalia" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnDislalia" id="anamnDislalia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1515,7 +1517,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnFalavocal" id="anamnFalavocal" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnFalavocal" id="anamnFalavocal" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1528,7 +1530,7 @@
 														<label for="id-date-picker-1">Compreende Ordens?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnCompreendeordem" id="anamnCompreendeordem" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCompreendeordem" id="anamnCompreendeordem" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1540,7 +1542,7 @@
 														<label for="id-date-picker-1">Cumpre ordens?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnCumpreordens" id="anamnCumpreordens" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCumpreordens" id="anamnCumpreordens" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1552,7 +1554,7 @@
 														<label for="id-date-picker-1">Escolalia Imediata?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnEcolaliaimediata" id="anamnEcolaliaimediata" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnEcolaliaimediata" id="anamnEcolaliaimediata" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1564,7 +1566,7 @@
 														<label for="id-date-picker-1">Escolalia Tardia?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnEcolaliatardia" id="anamnEcolaliatardia" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnEcolaliatardia" id="anamnEcolaliatardia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1576,7 +1578,7 @@
 														<label for="id-date-picker-1">Aponta</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAponta" id="anamnAponta" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAponta" id="anamnAponta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1591,7 +1593,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnPede" id="anamnPede" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnPede" id="anamnPede" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1604,7 +1606,7 @@
 														<label for="id-date-picker-1">Nomeia / descreve cenas?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnNomeiadescenas" id="anamnNomeiadescenas" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnNomeiadescenas" id="anamnNomeiadescenas" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1616,7 +1618,7 @@
 														<label for="id-date-picker-1">Faz Perguntas?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnPergunta" id="anamnPergunta" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnPergunta" id="anamnPergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1628,7 +1630,7 @@
 														<label for="id-date-picker-1">Responde Perguntas?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRespondepergunta" id="anamnRespondepergunta" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRespondepergunta" id="anamnRespondepergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1640,7 +1642,7 @@
 														<label for="id-date-picker-1">Solicitar para Brincar?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnSolicitabrincar" id="anamnSolicitabrincar" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSolicitabrincar" id="anamnSolicitabrincar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1652,7 +1654,7 @@
 														<label for="id-date-picker-1">Solicita para ir ao wc?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnSolicitairbanheiro" id="anamnSolicitairbanheiro" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSolicitairbanheiro" id="anamnSolicitairbanheiro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1667,7 +1669,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnSolicitabeber" id="anamnSolicitabeber" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSolicitabeber" id="anamnSolicitabeber" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1680,7 +1682,7 @@
 														<label for="id-date-picker-1">Solicita Alimento?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnSolicitacomer" id="anamnSolicitacomer" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSolicitacomer" id="anamnSolicitacomer" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1692,7 +1694,7 @@
 														<label for="id-date-picker-1">Realiza sons com a boca imotivadamente?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRealizasombocainativ" id="anamnRealizasombocainativ" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRealizasombocainativ" id="anamnRealizasombocainativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1707,7 +1709,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnRealizasombocaativ" id="anamnRealizasombocaativ" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRealizasombocaativ" id="anamnRealizasombocaativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1754,7 +1756,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnCuriosidadesex" id="anamnCuriosidadesex" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnCuriosidadesex" id="anamnCuriosidadesex" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -1776,7 +1778,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMasturbase" id="anamnMasturbase" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMasturbase" id="anamnMasturbase" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -1845,7 +1847,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDefendeseagressao" id="anamnDefendeseagressao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDefendeseagressao" id="anamnDefendeseagressao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -1867,7 +1869,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAutolesivo" id="anamnAutolesivo" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAutolesivo" id="anamnAutolesivo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -1887,7 +1889,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnDependente" id="anamnDependente" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnDependente" id="anamnDependente" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1900,7 +1902,7 @@
 														<label for="id-date-picker-1">Carinhoso?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnCarinho" id="anamnCarinho" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCarinho" id="anamnCarinho" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1912,7 +1914,7 @@
 														<label for="id-date-picker-1">Autoritário?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAutoritario" id="anamnAutoritario" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAutoritario" id="anamnAutoritario" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1924,7 +1926,7 @@
 														<label for="id-date-picker-1">Malcriado?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnMalcriado" id="anamnMalcriado" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnMalcriado" id="anamnMalcriado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1936,7 +1938,7 @@
 														<label for="id-date-picker-1">Exibicionista?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnExibicionista" id="anamnExibicionista" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnExibicionista" id="anamnExibicionista" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1948,7 +1950,7 @@
 														<label for="id-date-picker-1">Ansioso</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAnsioso" id="anamnAnsioso" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAnsioso" id="anamnAnsioso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1963,7 +1965,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnCalado" id="anamnCalado" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnCalado" id="anamnCalado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -1976,7 +1978,7 @@
 														<label for="id-date-picker-1">Falante?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnFalante" id="anamnFalante" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnFalante" id="anamnFalante" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2019,7 +2021,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnChupeta" id="anamnChupeta" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnChupeta" id="anamnChupeta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																<option value="Sem Info">Sem Informação</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -2041,7 +2043,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDedo" id="anamnDedo" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDedo" id="anamnDedo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2063,7 +2065,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnRoeuouroiunhas" id="anamnRoeuouroiunhas" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnRoeuouroiunhas" id="anamnRoeuouroiunhas" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2085,7 +2087,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnPuxaorelhascabelo" id="anamnPuxaorelhascabelo" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnPuxaorelhascabelo" id="anamnPuxaorelhascabelo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2107,7 +2109,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMordelabios" id="anamnMordelabios" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMordelabios" id="anamnMordelabios" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2129,7 +2131,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnBatepes" id="anamnBatepes" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnBatepes" id="anamnBatepes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2151,7 +2153,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnBatecabeca" id="anamnBatecabeca" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnBatecabeca" id="anamnBatecabeca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2173,7 +2175,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnTemmedos" id="anamnTemmedos" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnTemmedos" id="anamnTemmedos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2195,7 +2197,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMentejamentiu" id="anamnMentejamentiu" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMentejamentiu" id="anamnMentejamentiu" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2217,7 +2219,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAtiraobjetos" id="anamnAtiraobjetos" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAtiraobjetos" id="anamnAtiraobjetos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2239,7 +2241,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDesligase" id="anamnDesligase" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDesligase" id="anamnDesligase" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2261,7 +2263,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnObjetonuncalarga" id="anamnObjetonuncalarga" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnObjetonuncalarga" id="anamnObjetonuncalarga" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2283,7 +2285,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnRepeteacao" id="anamnRepeteacao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnRepeteacao" id="anamnRepeteacao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2305,7 +2307,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnTique" id="anamnTique" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnTique" id="anamnTique" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2350,7 +2352,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnVaissozinhocama" id="anamnVaissozinhocama" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnVaissozinhocama" id="anamnVaissozinhocama" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2378,7 +2380,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnVaiparacamapais" id="anamnVaiparacamapais" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnVaiparacamapais" id="anamnVaiparacamapais" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2406,7 +2408,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnChoranoite" id="anamnChoranoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnChoranoite" id="anamnChoranoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2420,7 +2422,7 @@
 															<span class="help-button" data-rel="popover" data-trigger="hover" data-placement="left" data-content="More details." title="" data-original-title="Popover on hover">?</span>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnFalanoite" id="anamnFalanoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnFalanoite" id="anamnFalanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2432,7 +2434,7 @@
 														<label for="id-date-picker-1">Grita</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnGritanoite" id="anamnGritanoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnGritanoite" id="anamnGritanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2444,7 +2446,7 @@
 														<label for="id-date-picker-1">Range os Dentes?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRangedenteanoite" id="anamnRangedenteanoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRangedenteanoite" id="anamnRangedenteanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2456,7 +2458,7 @@
 														<label for="id-date-picker-1">Insônia</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnInsonianoite" id="anamnInsonianoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnInsonianoite" id="anamnInsonianoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2468,7 +2470,7 @@
 														<label for="id-date-picker-1">Baba</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnBabanoite" id="anamnBabanoite" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnBabanoite" id="anamnBabanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2485,7 +2487,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnPesadelo" id="anamnPesadelo" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnPesadelo" id="anamnPesadelo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2498,7 +2500,7 @@
 														<label for="id-date-picker-1">Sudorese?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnSudorese" id="anamnSudorese" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSudorese" id="anamnSudorese" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2510,7 +2512,7 @@
 														<label for="id-date-picker-1">Terror Noturno?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnTerrornoturno" id="anamnTerrornoturno" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnTerrornoturno" id="anamnTerrornoturno" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2522,7 +2524,7 @@
 														<label for="id-date-picker-1">Ronca / Apneia?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRonca" id="anamnRonca" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRonca" id="anamnRonca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2534,7 +2536,7 @@
 														<label for="id-date-picker-1">Apresenta respiração:</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRespiraoral" id="anamnRespiraoral" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRespiraoral" id="anamnRespiraoral" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Oral">Oral</option>
 																			<option value="Nasal">Nasal</option>
@@ -2546,7 +2548,7 @@
 														<label for="id-date-picker-1">Ronquidão?</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnRonquidao" id="anamnRonquidao" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnRonquidao" id="anamnRonquidao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2569,7 +2571,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnSono" id="anamnSono" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnSono" id="anamnSono" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Tranquilo">Tranquilo</option>
 																			<option value="Entrecortado">Entrecortado</option>
@@ -2607,7 +2609,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAleitamaterno" id="anamnAleitamaterno" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAleitamaterno" id="anamnAleitamaterno" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2629,7 +2631,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnBoasuccaoamamenta" id="anamnBoasuccaoamamenta" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnBoasuccaoamamenta" id="anamnBoasuccaoamamenta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2671,7 +2673,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDurefeicao" id="anamnDurefeicao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDurefeicao" id="anamnDurefeicao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Guloso">Guloso</option>
 																	<option value="Normal">Normal</option>
@@ -2700,7 +2702,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAliso" id="anamnAliso" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAliso" id="anamnAliso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2722,7 +2724,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnUtilizatalher" id="anamnUtilizatalher" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnUtilizatalher" id="anamnUtilizatalher" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2744,7 +2746,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnUsacopo" id="anamnUsacopo" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnUsacopo" id="anamnUsacopo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2766,7 +2768,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMastiga" id="anamnMastiga" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMastiga" id="anamnMastiga" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Unilateral">Unilateral</option>
 																	<option value="Bilateral">Bilateral</option>
@@ -2795,7 +2797,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnAlimentasesolido" id="anamnAlimentasesolido" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAlimentasesolido" id="anamnAlimentasesolido" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2808,7 +2810,7 @@
 														<label for="id-date-picker-1">Líquido</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAlimentaseliqui" id="anamnAlimentaseliqui" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAlimentaseliqui" id="anamnAlimentaseliqui" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2820,7 +2822,7 @@
 														<label for="id-date-picker-1">Pastoso</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnAlimentasepasto" id="anamnAlimentasepasto" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnAlimentasepasto" id="anamnAlimentasepasto" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2840,7 +2842,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDificuldadetipocheiro" id="anamnDificuldadetipocheiro" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDificuldadetipocheiro" id="anamnDificuldadetipocheiro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2868,7 +2870,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDegluticaoquadroengasgo" id="anamnDegluticaoquadroengasgo" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDegluticaoquadroengasgo" id="anamnDegluticaoquadroengasgo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2890,7 +2892,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDificuldadetextura" id="anamnDificuldadetextura" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDificuldadetextura" id="anamnDificuldadetextura" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2936,7 +2938,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnControlefezesdiurna" id="anamnControlefezesdiurna" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnControlefezesdiurna" id="anamnControlefezesdiurna" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2949,7 +2951,7 @@
 														<label for="id-date-picker-1">Nortuno</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnControlefezesnoturna" id="anamnControlefezesnoturna" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnControlefezesnoturna" id="anamnControlefezesnoturna" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2977,7 +2979,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="anamnControleurinadiurna" id="anamnControleurinadiurna" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnControleurinadiurna" id="anamnControleurinadiurna" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -2990,7 +2992,7 @@
 														<label for="id-date-picker-1">Nortuno</label>
 														<div class="row">
 															<div class="input-group">
-																	<select name="anamnControleurinanoturna" id="anamnControleurinanoturna" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="anamnControleurinanoturna" id="anamnControleurinanoturna" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																			<option value="Sem Info">Sem Informação</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -3032,7 +3034,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnUsovaso" id="anamnUsovaso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnUsovaso" id="anamnUsovaso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3047,7 +3049,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnLimpaso" id="anamnLimpaso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnLimpaso" id="anamnLimpaso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3061,7 +3063,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnBanhoso" id="anamnBanhoso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBanhoso" id="anamnBanhoso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3075,7 +3077,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnEscovaso" id="anamnEscovaso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEscovaso" id="anamnEscovaso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3089,7 +3091,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnLavamaos" id="anamnLavamaos" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnLavamaos" id="anamnLavamaos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3103,7 +3105,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnPenteaso" id="anamnPenteaso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPenteaso" id="anamnPenteaso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3118,7 +3120,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnDespesvestese" id="anamnDespesvestese" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnDespesvestese" id="anamnDespesvestese" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3133,7 +3135,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnVestese" id="anamnVestese" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnVestese" id="anamnVestese" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3147,7 +3149,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnAbotoaso" id="anamnAbotoaso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAbotoaso" id="anamnAbotoaso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3161,7 +3163,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnCalcar" id="anamnCalcar" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnCalcar" id="anamnCalcar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3175,7 +3177,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnLacarso" id="anamnLacarso" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnLacarso" id="anamnLacarso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3189,7 +3191,7 @@
 															</div>
 															<div class="row">
 																<div class="input-group">
-																		<select name="anamnDeixacortarunhas" id="anamnDeixacortarunhas" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnDeixacortarunhas" id="anamnDeixacortarunhas" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3204,7 +3206,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnDeixacortarcabelo" id="anamnDeixacortarcabelo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnDeixacortarcabelo" id="anamnDeixacortarcabelo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3242,7 +3244,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnProblemavisao" id="anamnProblemavisao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnProblemavisao" id="anamnProblemavisao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3264,7 +3266,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnOlhaobjetivoatividade" id="anamnOlhaobjetivoatividade" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnOlhaobjetivoatividade" id="anamnOlhaobjetivoatividade" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3286,7 +3288,7 @@
 													<div class="row">
 														<div class="input-group">
 															<div class="input-group">
-																<select name="anamnUsaoculos" id="anamnUsaoculos" class="chosen-select" data-placeholder="Escolha...">
+																<select name="anamnUsaoculos" id="anamnUsaoculos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																		<option value="Sem Info">Sem Informação</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
@@ -3328,7 +3330,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPrefereambienteescuro" id="anamnPrefereambienteescuro" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPrefereambienteescuro" id="anamnPrefereambienteescuro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3344,7 +3346,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnImcomodamuitaluzcor" id="anamnImcomodamuitaluzcor" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnImcomodamuitaluzcor" id="anamnImcomodamuitaluzcor" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3362,7 +3364,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnFazconatatovisual" id="anamnFazconatatovisual" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnFazconatatovisual" id="anamnFazconatatovisual" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3378,7 +3380,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPermanececontatovisual" id="anamnPermanececontatovisual" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPermanececontatovisual" id="anamnPermanececontatovisual" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3424,7 +3426,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDuvidacapaccitaauditiva" id="anamnDuvidacapaccitaauditiva" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnDuvidacapaccitaauditiva" id="anamnDuvidacapaccitaauditiva" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3446,7 +3448,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnJaexpostoruidoexplosao" id="anamnJaexpostoruidoexplosao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnJaexpostoruidoexplosao" id="anamnJaexpostoruidoexplosao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3473,7 +3475,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnVoz" id="anamnVoz" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnVoz" id="anamnVoz" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Normal">Normal</option>																		
 																				<option value="Baixa">Baixa</option>
@@ -3490,7 +3492,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAudiometria" id="anamnAudiometria" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAudiometria" id="anamnAudiometria" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3508,7 +3510,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnLocalizasons" id="anamnLocalizasons" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnLocalizasons" id="anamnLocalizasons" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3524,7 +3526,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnTampaouvidosruido" id="anamnTampaouvidosruido" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnTampaouvidosruido" id="anamnTampaouvidosruido" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3543,7 +3545,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAproximaruidos" id="anamnAproximaruidos" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAproximaruidos" id="anamnAproximaruidos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3559,7 +3561,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAsustafacil" id="anamnAsustafacil" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAsustafacil" id="anamnAsustafacil" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3578,7 +3580,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnSeicomodapessoasfalando" id="anamnSeicomodapessoasfalando" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnSeicomodapessoasfalando" id="anamnSeicomodapessoasfalando" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3600,7 +3602,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnEscutachamado" id="anamnEscutachamado" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnEscutachamado" id="anamnEscutachamado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -3651,7 +3653,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnControlacabeca" id="anamnControlacabeca" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnControlacabeca" id="anamnControlacabeca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3667,7 +3669,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRolou" id="anamnRolou" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRolou" id="anamnRolou" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3683,7 +3685,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnEngatinhou" id="anamnEngatinhou" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEngatinhou" id="anamnEngatinhou" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3699,7 +3701,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnUsouandaja" id="anamnUsouandaja" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnUsouandaja" id="anamnUsouandaja" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3718,7 +3720,7 @@
 													<div class="row">
 														<div class="col-xs-2">
 															<div class="input-group">
-																<select name="anamnAndou" id="anamnAndou" class="chosen-select" data-placeholder="Escolha...">
+																<select name="anamnAndou" id="anamnAndou" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																		<option value="Sem Info">Sem Informação</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
@@ -3741,7 +3743,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnUsaescada" id="anamnUsaescada" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnUsaescada" id="anamnUsaescada" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3757,7 +3759,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPulacorre" id="anamnPulacorre" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPulacorre" id="anamnPulacorre" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3773,7 +3775,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAndapontadope" id="anamnAndapontadope" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAndapontadope" id="anamnAndapontadope" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3789,7 +3791,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnDesastrado" id="anamnDesastrado" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnDesastrado" id="anamnDesastrado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3805,7 +3807,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnSeescondeembaixoobj" id="anamnSeescondeembaixoobj" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnSeescondeembaixoobj" id="anamnSeescondeembaixoobj" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3821,7 +3823,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnEscalasobeobj" id="anamnEscalasobeobj" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEscalasobeobj" id="anamnEscalasobeobj" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3837,7 +3839,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnMedotirarpesdochao" id="anamnMedotirarpesdochao" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnMedotirarpesdochao" id="anamnMedotirarpesdochao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3853,7 +3855,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnMostramedoexp" id="anamnMostramedoexp" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnMostramedoexp" id="anamnMostramedoexp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3869,7 +3871,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnEvitanovasposicoes" id="anamnEvitanovasposicoes" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEvitanovasposicoes" id="anamnEvitanovasposicoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3885,7 +3887,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnReacaoemotivaexessi" id="anamnReacaoemotivaexessi" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnReacaoemotivaexessi" id="anamnReacaoemotivaexessi" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3901,7 +3903,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnMovisecuidado" id="anamnMovisecuidado" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnMovisecuidado" id="anamnMovisecuidado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3917,7 +3919,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnTemexpnegativamov" id="anamnTemexpnegativamov" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnTemexpnegativamov" id="anamnTemexpnegativamov" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3966,7 +3968,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusapisargrama" id="anamnRecusapisargrama" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusapisargrama" id="anamnRecusapisargrama" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3982,7 +3984,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusapisarmolhado" id="anamnRecusapisarmolhado" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusapisarmolhado" id="anamnRecusapisarmolhado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -3998,7 +4000,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusaareia" id="anamnRecusaareia" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusaareia" id="anamnRecusaareia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4014,7 +4016,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusatinta" id="anamnRecusatinta" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusatinta" id="anamnRecusatinta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4030,7 +4032,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusaplastilina" id="anamnRecusaplastilina" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusaplastilina" id="anamnRecusaplastilina" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4046,7 +4048,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRecusaamoeba" id="anamnRecusaamoeba" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRecusaamoeba" id="anamnRecusaamoeba" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4062,7 +4064,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnEvitatoqueleve" id="anamnEvitatoqueleve" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEvitatoqueleve" id="anamnEvitatoqueleve" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4078,7 +4080,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAceitaabreco" id="anamnAceitaabreco" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAceitaabreco" id="anamnAceitaabreco" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4095,7 +4097,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnTocapessoasobjconsta" id="anamnTocapessoasobjconsta" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnTocapessoasobjconsta" id="anamnTocapessoasobjconsta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4111,7 +4113,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBatecaisemnocao" id="anamnBatecaisemnocao" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBatecaisemnocao" id="anamnBatecaisemnocao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4127,7 +4129,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnSeguraobj" id="anamnSeguraobj" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnSeguraobj" id="anamnSeguraobj" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Muita força">Muita força</option>
 																				<option value="Pouca força">Pouca força</option>
@@ -4145,7 +4147,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBuscaatvpuxaremp" id="anamnBuscaatvpuxaremp" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBuscaatvpuxaremp" id="anamnBuscaatvpuxaremp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4161,7 +4163,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnMastigaobjroupa" id="anamnMastigaobjroupa" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnMastigaobjroupa" id="anamnMastigaobjroupa" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4207,7 +4209,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPreferebrincarcom" id="anamnPreferebrincarcom" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPreferebrincarcom" id="anamnPreferebrincarcom" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Meninas">Meminas</option>
 																				<option value="Meninos">Meninos</option>
@@ -4237,7 +4239,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnFazamigosfacil" id="anamnFazamigosfacil" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnFazamigosfacil" id="anamnFazamigosfacil" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4253,7 +4255,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnEmprestabrinquedos" id="anamnEmprestabrinquedos" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnEmprestabrinquedos" id="anamnEmprestabrinquedos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4269,7 +4271,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBrincacooperado" id="anamnBrincacooperado" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBrincacooperado" id="anamnBrincacooperado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4285,7 +4287,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnGostamandar" id="anamnGostamandar" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnGostamandar" id="anamnGostamandar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4301,7 +4303,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnGostasubmeter" id="anamnGostasubmeter" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnGostasubmeter" id="anamnGostasubmeter" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4317,7 +4319,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnGostamusica" id="anamnGostamusica" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnGostamusica" id="anamnGostamusica" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4348,7 +4350,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnSocializapares" id="anamnSocializapares" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnSocializapares" id="anamnSocializapares" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4364,7 +4366,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBrincaparque" id="anamnBrincaparque" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBrincaparque" id="anamnBrincaparque" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4380,7 +4382,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBrincarfuncional" id="anamnBrincarfuncional" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBrincarfuncional" id="anamnBrincarfuncional" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4396,7 +4398,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnCriabrincadeiras" id="anamnCriabrincadeiras" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnCriabrincadeiras" id="anamnCriabrincadeiras" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4412,7 +4414,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnBrinquedopreferidosquais" id="anamnBrinquedopreferidosquais" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnBrinquedopreferidosquais" id="anamnBrinquedopreferidosquais" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4541,7 +4543,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPaisestudamcomcrianca" id="anamnPaisestudamcomcrianca" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPaisestudamcomcrianca" id="anamnPaisestudamcomcrianca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4557,7 +4559,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnLocaladequadoestudo" id="anamnLocaladequadoestudo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnLocaladequadoestudo" id="anamnLocaladequadoestudo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4573,7 +4575,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnExecutatarefascaseiras" id="anamnExecutatarefascaseiras" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnExecutatarefascaseiras" id="anamnExecutatarefascaseiras" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4590,7 +4592,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnTemautonomiaestuda" id="anamnTemautonomiaestuda" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnTemautonomiaestuda" id="anamnTemautonomiaestuda" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4606,7 +4608,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnNecessitaorienta" id="anamnNecessitaorienta" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnNecessitaorienta" id="anamnNecessitaorienta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4622,7 +4624,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnUsamuitaborracha" id="anamnUsamuitaborracha" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnUsamuitaborracha" id="anamnUsamuitaborracha" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4638,7 +4640,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnRendimentoescolarbaixo" id="anamnRendimentoescolarbaixo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnRendimentoescolarbaixo" id="anamnRendimentoescolarbaixo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4654,7 +4656,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnReprovado" id="anamnReprovado" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnReprovado" id="anamnReprovado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4670,7 +4672,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnPulouserie" id="anamnPulouserie" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnPulouserie" id="anamnPulouserie" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4728,7 +4730,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnDificuldadeescolar" id="anamnDificuldadeescolar" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnDificuldadeescolar" id="anamnDificuldadeescolar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4761,7 +4763,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnLer" id="anamnLer" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnLer" id="anamnLer" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4783,7 +4785,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnEscreve" id="anamnEscreve" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnEscreve" id="anamnEscreve" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4805,7 +4807,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMotrici" id="anamnMotrici" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnMotrici" id="anamnMotrici" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4827,7 +4829,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnContar" id="anamnContar" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnContar" id="anamnContar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4849,7 +4851,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnCalcular" id="anamnCalcular" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnCalcular" id="anamnCalcular" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4871,7 +4873,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAtencao" id="anamnAtencao" class="chosen-select" data-placeholder="Escolha...">
+															<select name="anamnAtencao" id="anamnAtencao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -4894,7 +4896,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnProfparticular" id="anamnProfparticular" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnProfparticular" id="anamnProfparticular" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4938,7 +4940,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAtiviextra" id="anamnAtiviextra" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="anamnAtiviextra" id="anamnAtiviextra" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -5034,7 +5036,7 @@
 															<div class="input-group">
 																<div class="input-group">
 																	<div>
-																		<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control"  style="width: 1000px; height:500px"></textarea>
+																		<textarea type="text" name="anamnObsescola" id="anamnObsescola" placeholder="" class="form-control"  style="width: 1000px; height:500px"></textarea>
 																	</div>
 																</div>
 															</div>

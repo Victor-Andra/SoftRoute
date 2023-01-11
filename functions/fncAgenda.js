@@ -6910,26 +6910,20 @@ module.exports = {
         let cadastro = agendaClass.agendaAdicionarTemp(req,res);
         cadastro.then((res) =>{
             console.log(res)
-            resultado = true;
+            flash.sucesso = "true";
+            flash.texto = "Cadastro Agenda Diária realizado com sucesso!";
         }).catch((err) =>{
             console.log(err)
-            resultado = false;
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.redirect('admin/erro')
+            flash.sucesso = "false"
+            flash.texto = "houve um erro ao Realizar as listas!"
         }).finally(() =>{
             console.log("resultado")
             console.log(resultado);
-            if (resultado == true){
-                flash.texto = "Cadastrado com sucesso!"
-                flash.sucesso = "true"
+            if (flash.sucesso == "true"){
                 console.log('verdadeiro')
-                req.flash("success_message", "Cadastro Agenda Diária realizado com sucesso!")
                 this.carregaAgendaCadastro(req,res,flash);
             } else {
-                flash.texto = resultado
-                flash.sucesso = "false"
-                console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                console.log('ERRO')
                 res.render('admin/erro', flash);
             }
         })
@@ -7173,19 +7167,53 @@ module.exports = {
 
         let convcreval;
         let convdebval;
-        let dataIni = new Date(this.formataData(req.body.dataFil));
-        
-        dataIni.setUTCHours(0);
-        dataIni.setMinutes(0);
-        dataIni.setSeconds(0);
-        dataIni = dataIni.toISOString();
-        let dataFim = new Date(this.formataData(req.body.dataFil));
-        
-        dataFim.setUTCHours(23);
-        dataFim.setMinutes(59);
-        dataFim.setSeconds(59);
-        dataFim = dataFim.toISOString();
-        let dataAtual = new Date();
+
+        let seg = new Date(req.body.dataFil);
+        let sex = new Date(req.body.dataFil);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        console.log("seg:"+seg)
+        console.log("sex:"+sex)
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let dataIni = seg.toISOString();
+        let dataFim = sex.toISOString();
+
+
         let nextNum;
         console.log("dataIni"+dataIni);
         console.log("dataFim"+dataFim);

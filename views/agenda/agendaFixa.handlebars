@@ -102,11 +102,22 @@
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
-			function testeConfirm(acao){
+			function testeConfirmCopia(acao){
 				if(confirm("Tem certeza que quer copiar a semana?")){
 					alert("Aguarde alguns instantes, isso pode demorar um pouco");
 					this.mudaAcao(acao);
 					document.getElementById("acaoForm").submit();
+				}
+			}
+			function testeConfirmConvert(acao){
+				if(confirm("Tem certeza que quer converter a semana em atendimento?")){
+					if(document.getElementById("dataFil").value == ''){
+						alert("O campo de data é utilizado para determinar a semana e precisa ser preenchido!");
+					} else {
+						alert("Aguarde alguns instantes, isso pode demorar um pouco");
+						this.mudaAcao(acao);
+						document.getElementById("acaoForm").submit();
+					}
 				}
 			}
 		</script>
@@ -154,23 +165,41 @@
 					</div>
 					<form id="acaoForm" class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
-							<div style="text-align: center;">
-								<label>Data:</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
-								<button name="acaoPesquisar" id="acaoPesquisar" type="button" style="margin-left: 25px;" onclick="javascript:mudaAcao('/menu/agenda/filF');">
-									<i class="ace-icon fa fa-search-plus "></i>
-								</button>
-								<input class="hidden" id="data" name="data" value="{{dtFill}}" />
-								{{data}}
-									- / - 
-								<button name="acaoCopiar" id="acaoCopiar" type="button" onclick="javascript:testeConfirm('/menu/agenda/copiaSemana');">
-									Copiar Semana
-								</button>
-								<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
-								<button name="acaoConverte" id="acaoConverte" type="button" style="margin-left: 25px;" onclick="javascript:testeConfirm('/menu/agenda/converteDia');">
-									Converter dia em Atendimento
-								</button>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-2">
+										<div class="input-group">
+											
+										</div>
+									</div>
+									<div class="col-xs-4">
+										<div class="input-group">
+											<label>Data: </label>
+											<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+											<input class="hidden" id="dataFinal" name="dataFinal" />
+											<button name="acaoPesquisar" id="acaoPesquisar" type="button" class="btn btn-xs btn-info " style="margin-left: 25px;" onclick="javascript:mudaAcao('/menu/agenda/filF');">
+												<i class="ace-icon fa fa-search-plus "></i>
+											</button>
+											<input class="hidden" id="data" name="data" value="{{dtFill}}" />
+											{{data}}
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div class="input-group">
+											<button name="acaoCopiar" id="acaoCopiar" type="button" class="btn btn-xs btn-danger" onclick="javascript:testeConfirmCopia('/menu/agenda/copiaSemana');">
+											<i class="ace-icon fa fa-bolt bigger-110"></i>
+											Copiar Semana
+											</button>
+											<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
+										</div>
+									</div>
+									<div class="col-xs-4">
+										<button name="acaoConverte" id="acaoConverte" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:testeConfirmConvert('/menu/agenda/converteDia');">
+											<i class="ace-icon fa fa-fire bigger-110"></i>
+											Converter Semana em Atendimento
+										</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</form>
