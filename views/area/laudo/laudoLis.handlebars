@@ -91,7 +91,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each benes}}
+												{{#each laudos}}
 
 													<tr role="row" class="odd">
 														<td class="center">
@@ -100,22 +100,21 @@
 																<span class="lbl"></span>
 															</label>
 														</td>
-														<td>{{bene_nome}}</td>
-														<td>{{bene_apelido}}</td>
-														<td>{{datanasc}}</td>
-														{{#each ../convs}}
-															{{#ifEqual this._id ../bene_convid}}
-																<td>{{conv_nome}}</td> 
-															{{/ifEqual}}
-														{{/each}}
-														<td>{{bene_status}}</td>
+														<td>{{laudo_tipo}}</td>
+														<td>{{laudo_beneid}}</td>
+														<td>{{laudo_usuid}}</td>
+														<td>{{laudo_medico}}</td> 
+														<td>{{laudo_laudodata}}</td>
 														<td>
 															<div class="action-buttons">
-																<a class="blue" href="/menu/area/tratimp/{{_id}}">
+																<a class="blue" href="/menu/area/laudo/imp/{{_id}}">
 																	<i class="ace-icon fa fa-print bigger-130"></i>
 																</a>
-																<a class="green" href="/menu/area/tratedi/{{_id}}">
+																<a class="green" href="/menu/area/laudo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+																<a class="red" href="/menu/area/laudo/del/{{_id}}">
+																	<i class="ace-icon fa fa-trash bigger-130"></i>
 																</a>
 															</div>
 														</td>

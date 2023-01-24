@@ -231,28 +231,39 @@ router.get('/', (req,res) =>{
 })
 
 //Rota Página em Branco
-router.get('/branco',(req,res) =>{
-    res.render("admin/branco")
+router.get('/branco', (req,res) =>{
+    let lvl = 0;
+    res.render("admin/branco", {nivel: lvl})
 })
 
 //Rota Página com Erro!
-router.get('/erro',(req,res) =>{
+router.get('/erro', (req,res) =>{
     res.render("admin/erro")
 })
 
 //Rota cad usu
 /*
-router.get('/usuarioCad',(req,res)=>{
+router.get('/usuarioCad', fncGeral.IsAuthenticated, (req,res)=>{
     res.render("ferramentas/usuario/usuarioCad")
 })
 */
 
 //Rota Login
-router.get('/login',(req,res)=>{
-    res.render("ferramentas/usuario/login")
+router.get('/login', (req,res)=>{
+    console.log("LOGIN")
+    lvl = "x";
+    res.render("ferramentas/usuario/login", {nivel: lvl})
 })
+
+//Rota Alterar Senhas ou recuperar Senha ou Esqueci Senha
+router.get('/login', (req,res)=>{
+    console.log("LOGIN")
+    lvl = "x";
+    res.render("/menu/ferramentas/usuario/recuperaSenha", {nivel: lvl})
+})
+
 /*
-router.post('/login',(req,res,next)=>{
+router.post('/login', fncGeral.IsAuthenticated, (req,res,next)=>{
     console.log("---------")
     console.log("email:")
     console.log(req.body.email)
@@ -267,7 +278,8 @@ router.post('/login',(req,res,next)=>{
     })(req,res,next)
 })
 */
-router.post('/login',(req,res,next)=>{
+/* Login old
+router.post('/login', (req,res,next)=>{
     
     passport.authenticate("local", {
         successRedirect: "/menu/",
@@ -275,6 +287,77 @@ router.post('/login',(req,res,next)=>{
         failureFlash: true
     })(req,res,next)
 })
+*/
+
+router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/login', failureMessage: true }), function(req, res) {
+    let lvl;
+    let perfilId;
+//Gerar cookie vazio aqui...?
+    Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
+        console.log(usu)
+        perfilId = usu.usuario_perfilid;
+
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 900000), httpOnly: true });
+        
+        switch (perfilId){
+            case "62421801a12aa557219a0fb9":
+                //Admin
+                lvl = 0;
+                break;
+            case "62421857a12aa557219a0fc1":
+                //Sócios
+                lvl = 1;
+                break;
+            case "624218f5a12aa557219a0fd0":
+                //Administrador & Financeiro
+                lvl = 2;
+                break;
+            case "62421903a12aa557219a0fd3":
+                //terapeutas
+                lvl = 3;
+                break;
+            case "6242190fa12aa557219a0fd6":
+                //Recepcionistas
+                lvl = 4;
+                break;
+            case "6242191fa12aa557219a0fd9":
+                //Visitantes e Outros
+                lvl = 5;
+                break;
+            default:
+                //ERROR
+                res.redirect("/menu/admin/erro")
+                break;
+        }
+        if(lvl == 0){
+            res.redirect("/menu/branco")
+        } else if (lvl == 1){
+            res.redirect("/menuT/")
+        } else if (lvl == 2){
+            res.redirect("/menuT/")
+        } else if (lvl == 3){
+            res.redirect("/menuT/")
+        } else if (lvl == 4){
+            res.redirect("/menuT/")
+        } else if (lvl == 5){
+            res.redirect("/menuT/")
+        } else {
+            res.redirect("/menuV/")
+        }
+    })
+});
+
+router.get('/menuT', (req,res)=>{
+    let lvl = 3;
+    res.render("/menu", {nivel: lvl})
+})
+
+router.get('/menu/', (req,res)=>{
+    console.log("MENU")
+    let lvl = 0;
+    res.render("/menu", {nivel: lvl})
+})
+
 /*
     passport.authenticate('local', { failureRedirect: '/login', failureMessage: true }),
     function(req, res) {
@@ -302,8 +385,11 @@ router.post('/login',(req,res,next)=>{
 
 router.get('/logout', function(req, res, next) {
     req.logout(function(err) {
-      if (err) { return next(err); }
-      res.redirect('/menu/login');
+        if (err) {
+            return next(err);
+        } else {
+            res.redirect('/menu/login');
+        }
     });
 });
 
@@ -381,11 +467,11 @@ router.post("/agenda/filSala/", fncGeral.IsAuthenticated, (req,res) =>{//direcio
     fncAgenda.carregaAgendaFilSala(req, res);
 })
 
-router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de laudos.
+router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem.
     fncAgenda.filtraAgendaA(req, res);
 })
 
-router.post("/agenda/filA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de laudos.
+router.post("/agenda/filA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro.
     fncAgenda.filtraAgendaA(req, res);
 })
 
@@ -460,29 +546,29 @@ router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o c
 
 //Menu Atendimento   
 
-router.get("/atendimento/lis",(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+router.get("/atendimento/lis", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtend.listaAtend(req, res);
 })
 
 
 
-router.get('/atendimento/cad',(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+router.get('/atendimento/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtend.carregaAtend(req,res);
 })
 
-router.post('/atendimento/add',(req,res) =>{//adiciona atend
+router.post('/atendimento/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
     fncAtend.cadastraAtend(req,res);
 })
 
-router.get('/atendimento/del/:id', (req,res) =>{//deleta atend
+router.get('/atendimento/del/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
     fncAtend.deletaAtend(req, res);
 })
 
-router.get('/atendimento/edi/:id', (req,res) =>{//direciona para a edição de atend
+router.get('/atendimento/edi/:id', fncGeral.IsAuthenticated,(req,res) =>{//direciona para a edição de atend
     fncAtend.carregaAtendEdi(req, res);
 })
 
-router.post('/atendimento/atualizar',(req,res) =>{//atualiza o cadastro da Atendimento
+router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Atendimento
     fncAtend.atualizaAtend(req , res);
 })
 
@@ -491,17 +577,17 @@ router.post('/atendimento/atualizar',(req,res) =>{//atualiza o cadastro da Atend
 //Relatório Individual de Valores de Atendimento por Beneficiário.
 //Emite uma relação de todos os valores de atendimentos realizados pelo beneficiário
 //pagos pelos convênios, incluindo particular, num determinado período de tempo.
-    router.get('/atendimento/relatendval',(req,res) =>{
+    router.get('/atendimento/relatendval', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoVal(req,res)
     })
 
-    router.post('/atendimento/relatendvals',(req,res) =>{
+    router.post('/atendimento/relatendvals', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoValFiltro(req,res)
     })
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
-router.get('/atendimento/relatendInd/:id',(req,res) =>{
+router.get('/atendimento/relatendInd/:id', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.carregaAtendIndBene(req, res);
     })
 
@@ -510,7 +596,7 @@ router.get('/atendimento/relatendInd/:id',(req,res) =>{
 //Menu AtendAdm   
 
 
-router.get("/financeiro/atendadm/lis",(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+router.get("/atendimento/atendadm/lis", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtendAdm.listarAtendAdm(req,res);
 })
 
@@ -518,12 +604,12 @@ router.get("/financeiro/atendadm/lis",(req,res) =>{//direciona o cadstro de Aten
 
 
 
-router.get('/financeiro/atendadm/cad',(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+router.get('/atendimento/atendadm/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtendAdm.carregaAtendAdm(req,res);
 })
 
 
-router.post('/financeiro/atendadm/add',(req,res) =>{//adiciona atend
+router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
     
     switch (req.body.atendCategoria) {
         case 'Padrão':
@@ -556,11 +642,11 @@ router.post('/financeiro/atendadm/add',(req,res) =>{//adiciona atend
     }
 })
 
-router.get('/financeiro/atendadm/del/:id', (req,res) =>{//deleta atend
+router.get('/atendimento/atendadm/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta atend
     fncAtendAdm.deletaAtendAdm(req, res);
 })
 
-router.get('/financeiro/atendadm/edi/:id', (req,res) =>{//direciona a edição de atend
+router.get('/atendimento/atendadm/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de atend
     fncAtendAdm.carregaAtendAdmEdi(req,res);
     /*
     Atend.findById(req.params.id).then((atend) =>{
@@ -572,215 +658,215 @@ router.get('/financeiro/atendadm/edi/:id', (req,res) =>{//direciona a edição d
     */
 })
 
-router.post('/financeiro/atendadm/atualizar',(req,res) =>{//atualiza o cadastro da Atendimento
+router.post('/atendimento/atendadm/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Atendimento
     fncAtendAdm.atualizaAtendAdm(req, res);
 })
 
 //Financeiro / Fornecedor
 //Menu Fornecedor   
-router.get('/financeiro/fornecedor/lis',(req,res) =>{//lista todas fornecs
+router.get('/financeiro/fornecedor/lis', fncGeral.IsAuthenticated,(req,res) =>{//lista todas fornecs
     fncFornec.listaFornec(req, res);
 })
 
-router.get('/financeiro/fornecedor/cad',(req,res) =>{//direciona o cadstro de fornec.
+router.get('/financeiro/fornecedor/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de fornec.
     fncFornec.carregaFornecCad(req, res);
 })
 
-router.post('/financeiro/fornecedor/add',(req,res) =>{//adiciona fornec
+router.post('/financeiro/fornecedor/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona fornec
     fncFornec.cadastraFornec(req, res);
 
 })
 
-router.get('/financeiro/fornecedor/del/:id', (req,res) =>{//deleta fornec
+router.get('/financeiro/fornecedor/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta fornec
     fncFornec.deletaFornec(req, res);
 })
 
-router.get('/financeiro/fornecedor/edi/:id', (req,res) =>{//direciona a edição de fornec
+router.get('/financeiro/fornecedor/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de fornec
     fncFornec.carregaFornecEdi(req, res);
 })
 
-router.post('/financeiro/fornecedor/atualizar',(req,res) =>{//atualiza o cadastro da Fornecimento
+router.post('/financeiro/fornecedor/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Fornecimento
     fncFornec.atualizaFornec(req, res);
 })
 
 //Financeiro / categoria
-router.get('/financeiro/despesa/categoria/lis',(req,res) =>{//lista todas categorias
+router.get('/financeiro/despesa/categoria/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas categorias
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     fncDebitCateg.listaDebitcateg(req, res, resposta);
 })
 
-router.get('/financeiro/despesa/categoria/cad',(req,res) =>{//direciona o cadstro de categoria
+router.get('/financeiro/despesa/categoria/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de categoria
     fncDebitCateg.carregaDebitcateg(req, res);
 })
 
-router.post('/financeiro/despesa/categoria/add',(req,res) =>{//adiciona categoria
+router.post('/financeiro/despesa/categoria/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona categoria
     fncDebitCateg.cadastraDebitcateg(req, res);
 })
 
-router.get('/financeiro/despesa/categoria/del/:id', (req,res) =>{//deleta categoria
+router.get('/financeiro/despesa/categoria/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta categoria
     fncDebitCateg.deletaDebitcateg(req, res);
 })
 
-router.get('/financeiro/despesa/categoria/edi/:id', (req,res) =>{//direciona a edição de categoria
+router.get('/financeiro/despesa/categoria/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de categoria
     fncDebitCateg.carregaDebitcategEdi(req, res);
 })
 
-router.post('/financeiro/despesa/categoria/atualizar',(req,res) =>{//atualiza o cadastro da categoria
+router.post('/financeiro/despesa/categoria/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da categoria
     fncDebitCateg.atualizaDebitcateg(req, res);
 })
 
 //Financeiro / sub-categoria
-router.get('/financeiro/despesa/subcategoria/lis',(req,res) =>{//lista todas subcategorias
+router.get('/financeiro/despesa/subcategoria/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas subcategorias
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     fncDebitSubcateg.listaDebitsubcateg(req, res, resposta);
 })
 
-router.get('/financeiro/despesa/subcategoria/cad',(req,res) =>{//direciona o cadstro de subcategoria
+router.get('/financeiro/despesa/subcategoria/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de subcategoria
     fncDebitSubcateg.carregaDebitsubcateg(req, res);
 })
 
-router.post('/financeiro/despesa/subcategoria/add',(req,res) =>{//adiciona subcategoria
+router.post('/financeiro/despesa/subcategoria/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona subcategoria
     console.log("passando")
     fncDebitSubcateg.cadastraDebitsubcateg(req, res);
 })
 
-router.get('/financeiro/despesa/subcategoria/del/:id', (req,res) =>{//deleta subcategoria
+router.get('/financeiro/despesa/subcategoria/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta subcategoria
     fncDebitSubcateg.deletaDebitsubcateg(req, res);
 })
 
-router.get('/financeiro/despesa/subcategoria/edi/:id', (req,res) =>{//direciona a edição de subcategoria
+router.get('/financeiro/despesa/subcategoria/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de subcategoria
     fncDebitSubcateg.carregaDebitsubcategEdi(req, res);
 })
 
-router.post('/financeiro/despesa/subcategoria/atualizar',(req,res) =>{//atualiza o cadastro da subcategoria
+router.post('/financeiro/despesa/subcategoria/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da subcategoria
     fncDebitSubcateg.atualizaDebitsubcateg(req, res);
 })
 
 //Financeiro / Crédito
 //Menu Crédito   
-router.get('/financeiro/receita/lis',(req,res) =>{//lista todas credits
+router.get('/financeiro/receita/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas credits
     fncCredit.listar(req,res);
 })
 
-router.get('/financeiro/receita/cad',(req,res) =>{//direciona o cadstro de credit
+router.get('/financeiro/receita/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de credit
     res.render("financeiro/receita/creditCad")
 })
 
-router.post('/financeiro/receita/add',(req,res) =>{//adiciona credit
+router.post('/financeiro/receita/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona credit
     fncCredit.adicionar(req,res);
 })
 
-router.get('/financeiro/receita/del/:id', (req,res) =>{//deleta credit[]
+router.get('/financeiro/receita/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta credit[]
     fncCredit.delete(req,res);
 })
 
-router.get('/financeiro/receita/edi/:id', (req,res) =>{//direciona a edição de credit
+router.get('/financeiro/receita/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de credit
     fncCredit.carregaEditar(req,res);
 })
 
-router.post('/financeiro/receita/atualizar',(req,res) =>{//atualiza o cadastro da Creditimento
+router.post('/financeiro/receita/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Creditimento
     fncCredit.atualizar(req,res);
 })
 
 //Financeiro / Débito
 //Menu Débito   
-router.get('/financeiro/despesa/lis',(req,res) =>{//lista todas debits      
+router.get('/financeiro/despesa/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas debits      
     fncDebit.listar(req,res);
 })
 
-router.get('/financeiro/despesa/ges',(req,res) =>{//lista todas debits      
+router.get('/financeiro/despesa/ges', fncGeral.IsAuthenticated, (req,res) =>{//lista todas debits      
     fncFinanceiro.listaRelContasAPagar(req,res);
 })
 
-router.get('/financeiro/despesa/cad',(req,res) =>{//direciona o cadstro de debit
+router.get('/financeiro/despesa/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de debit
     fncDebit.carregaDebit(req,res)
 })
 
-router.post('/financeiro/despesa/add',(req,res) =>{//adiciona debit
+router.post('/financeiro/despesa/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona debit
     fncDebit.adicionar(req,res);
 })
 
-router.get('/financeiro/despesa/del/:id', (req,res) =>{//deleta debit
+router.get('/financeiro/despesa/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta debit
     fncDebit.listar(req,res)
 })
 
-router.get('/financeiro/despesa/edi/:id', (req,res) =>{//direciona a edição de debit
+router.get('/financeiro/despesa/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de debit
     fncDebit.carregaEditar(req,res)
 })
 
-router.post('/financeiro/despesa/atualizar',(req,res) =>{//atualiza o cadastro da Debitimento
+router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Debitimento
     fncDebit.atualizar(req,res)
 })
 
 //Menu Beneficiario
 //Bene    
-    router.get('/beneficiario/lis',(req,res) =>{//lista todas benes
+    router.get('/beneficiario/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
         fncBene.listaBene(req, res);        
     })
 
-    router.get('/beneficiario/cad',(req,res) =>{//direciona o cadastro de bene, com Ufs e Convênios.
+    router.get('/beneficiario/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de bene, com Ufs e Convênios.
         fncBene.carregaBene(req, res); 
     })
 
-    router.get('/beneficiario/imp/:id', (req,res) =>{//direciona a edição de bene
+    router.get('/beneficiario/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
         fncBene.listaBeneImp(req, res); 
     })
 
-    router.post('/beneficiario/add',(req,res) =>{//adiciona bene
+    router.post('/beneficiario/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona bene
       fncBene.cadastraBene(req, res); 
     })
 
-    router.get('/beneficiario/del/:id', (req,res) =>{//deleta bene
+    router.get('/beneficiario/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta bene
       fncBene.deletaBene(req, res); 
     })
 
-    router.get('/beneficiario/edi/:id', (req,res) =>{//direciona a edição de bene
+    router.get('/beneficiario/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
        fncBene.carregaBeneEdi(req, res); 
     })
 
-    router.post('/beneficiario/atualizar',(req,res) =>{//atualiza o cadastro da Beneficiario
+    router.post('/beneficiario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
         fncBene.atualizaBene(req, res); 
     })
 
 //Evolucao
-    router.get('/beneficiario/evolucao/lis',(req,res) =>{
+    router.get('/beneficiario/evolucao/lis', fncGeral.IsAuthenticated, (req,res) =>{
         fncEvolucao.listaEvolucao(req, res); 
     })
 
 //Menu Beneficiario Escola
-router.get('/beneficiario/escola/lis',(req,res) =>{//lista todas escolas
+router.get('/beneficiario/escola/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas escolas
     let resposta = new Resposta();
     resposta.texto = "";
     resposta.sucesso = "";
     fncEscola.listaEscola(req, res, resposta);        
 })
 
-router.get('/beneficiario/escola/cad',(req,res) =>{//direciona o cadastro de escolas
+router.get('/beneficiario/escola/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de escolas
     fncEscola.carregaEscola(req, res);//coment
 })
 
-router.get('/beneficiario/escola/imp/:id', (req,res) =>{//direciona a edição de escola
+router.get('/beneficiario/escola/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escola
     fncEscola.listaEscola(req, res); 
 })
 
-router.post('/beneficiario/escola/add',(req,res) =>{//adiciona escola
+router.post('/beneficiario/escola/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona escola
     console.log("post")
     fncEscola.cadastraEscola(req, res); 
 })
 
-router.get('/beneficiario/escola/del/:id', (req,res) =>{//deleta escola
+router.get('/beneficiario/escola/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta escola
     fncEscola.deletaEscola(req, res); 
 })
 
-router.get('/beneficiario/escola/edi/:id', (req,res) =>{//direciona a edição de escola
+router.get('/beneficiario/escola/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escola
     fncEscola.carregaEscolaEdi(req, res); 
 })
 
-router.post('/beneficiario/escola/atualizar',(req,res) =>{//atualiza o cadastro da escola
+router.post('/beneficiario/escola/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da escola
     fncEscola.atualizaEscola(req, res); 
 })
 
@@ -789,16 +875,16 @@ router.post('/beneficiario/escola/atualizar',(req,res) =>{//atualiza o cadastro 
 //cria uma tabela com as necessidades de cada beneficiário segundo as especialidades,
 //Essa tabela de acompanhamento é atualizada cada atendimento realizado.
 //A tabela de ananmese é a base para a geração da agenda.
-router.get('/beneficiario/sessao/cad',(req,res) =>{
+router.get('/beneficiario/sessao/cad', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.carregaSessao(req, res);
 })
 
 
-router.post('/beneficiario/sessao/add',(req,res) =>{//adiciona bene
+router.post('/beneficiario/sessao/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona bene
 fncSessao.cadastraSessao(req, res);
 })
 
-router.get('/beneficiario/sessao/del/:id', (req,res) =>{//deleta bene
+router.get('/beneficiario/sessao/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta bene
 fncSessao.deletaSessao(req, res);
 })
 
@@ -806,212 +892,281 @@ fncSessao.deletaSessao(req, res);
 
 //Menu Beneficiario /Sessaoese
 //Edita a Requisição de Atendimentos.
-router.get('/beneficiario/sessao/edi/:id', (req,res) =>{
+router.get('/beneficiario/sessao/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{
  fncSessao.carregaSessaoEdi(req, res);
 })
 
-router.post('/beneficiario/sessao/atualizar',(req,res) =>{//atualiza o cadastro da Beneimento
+router.post('/beneficiario/sessao/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneimento
  fncSessao.atualizaSessao(req, res);
 })
 
 
 //Menu Beneficiario /Sessaos
 //Lista de Requisição de Atendimentos.
-router.get('/beneficiario/sessao/lis',(req,res) =>{
+router.get('/beneficiario/sessao/lis', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessao(req, res);
 })
 
 
 //Lista de Requisição de Tabela com QT de Atendimentos por beneficiario.
-router.get('/beneficiario/sessao/listab/:id',(req,res) =>{
+router.get('/beneficiario/sessao/listab/:id', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessaoTab(req, res); 
 })
 
 //Menu Evolução dos Atendimentos ** Area Tecnicos   
 //Lista Todos os Atendimentos por Data Atual e Beneficiário vinculados pela AGENDA do Dia
-router.get('/area/evoatendlis',(req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.listaEvoatend(req, res);
 })
 
 //Menu Anamnese ** Area Tecnicos   
 //Lista Todos as anamneses por Data, Beneficiário
-router.get('/area/anamn/anamnlis',(req,res) =>{//direciona para a lista de anamneses
+router.get('/area/anamn/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a lista de anamneses
     let resposta = new Resposta();
     resposta.texto = "";
     resposta.sucesso = "";
     fncAnamn.listaAnamn(req, res, resposta);
 })
-//Carrega Cadastro
-router.get('/area/anamn/anamncad',(req,res) =>{//direciona o cadstro da Anamneses
+//Carrega Cadastro de Anamnese
+router.get('/area/anamn/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro da Anamneses
     fncAnamn.carregaAnamn(req, res);
 })
-
-router.post('/area/anamn/add',(req,res) =>{//adiciona Anamnese
+//Adiciona Registro de Anamnese
+router.post('/area/anamn/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Anamnese
     console.log("post")
     fncAnamn.cadastraAnamn(req, res); 
 })
-
-router.get('/area/anamn/edi/:id', (req,res) =>{//direciona a edição da Anemnese
+//Atualiza registro de Anamnese Selecionada
+router.post('/area/anamn/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneimento
+    fncAnamn.atualizaAnamn(req, res);
+})
+//Carrega Editar Anamnese Selecionada
+router.get('/area/anamn/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escola
     fncAnamn.carregaAnamnEdi(req, res); 
 })
 
 //Menu Bordo ** Area Tecnicos   
 //Lista Todos os Diários de Bordo por Data, Beneficiário
-router.get('/area/bordo/bordolis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     fncBordo.listaBordo(req, res);
 })
-//Carrega Cadastro
-router.get('/area/bordo/bordocad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
-    fncBordo.carregaBordo(req, res);
+//Carrega Cadastro de Diário de Bordo
+router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncBordo.carregaBordo(req,res);
 })
-
+//Carrega Editar SDelecionado de Diário de Bordo
+router.get('/area/bordo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+    fncBordo.carregaBordoedi(req,res);
+})
+//Adiciona Diário de Bordo Registro
+router.post('/area/bordo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+    fncBordo.cadastraBordo(req,res);
+})
+//Atualiza Diario de Bordo
+router.post('/area/bordo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o Plano de Tratamentos Padrao
+    fncBordo.atualizaBordo(req , res);
+})
+//CarrDeleta bordo Selecionado
+router.get('/area/bordo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+    fncBordo.deletaBordo(req,res);
+})
 //Menu Plano de Tratamentos ** Area Tecnicos   
-//Lista Todos os Tipos de Tratamento num Relatório Só categorizado por Tipo, Data, Beneficiário
-router.get('/area/plano/tratlis',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+//Lista Todos Planos de Tratamento
+router.get('/area/plano/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     fncTrat.listaTrat(req, res);
 })
-//Carrega Cadastro
-router.get('/area/plano/tratcad',(req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+//Carrega Cadastro de Plano de Tratamento
+router.get('/area/plano/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     fncTrat.carregaTrat(req,res);
 })
-//Adiciona Registro
-router.post('/area/plano/tratadd',(req,res) =>{//adiciona Plano de Tratamentos Padrao
+//Carrega Editar de Plano de Tratamento Selecionado
+router.get('/area/plano/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+    fncTrat.carregaTratedi(req,res);
+})
+//Adiciona Registro de Plano de Tratamento
+router.post('/area/plano/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
     fncTrat.cadastraTrat(req,res);
 })
-//Atualiza Regitros
-router.post('/area/plano/tratatualizar',(req,res) =>{//atualiza o Plano de Tratamentos Padrao
+//Atualiza Regitros de Plano de Tratamento 
+router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o Plano de Tratamentos Padrao
     fncTrat.atualizaTrat(req , res);
 })
-
-//Deleta Exclui Registros
-router.get('/area/plano/tratdel/:id', (req,res) =>{//deleta Plano de Tratamentos Padrao
+//Deleta plano Selecionado
+router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncTrat.deletaTrat(req, res);
 })
 
-//Menu Laudos ** Area Tecnicos   
-//Carrega Cadastro
-router.get('/area/laudo/laudocad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
-    fncLaudo.carregaLaudo(req, res);
-})
 
-//Lista Todos os Laudispor Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/laudo/laudolis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
-    fncLaudo.listaLaudo(req, res);
+
+//Menu Laudos ** Area Tecnicos   
+//Carrega Cadastro de Laudo 
+router.get('/area/laudo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
+    fncLaudo.carregaLaudo(req,res);
+})
+//Adiciona Registro de Laudo
+router.post('/area/laudo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncLaudo.cadastraLaudo(req,res);
+})
+//Carrega Laudo para Edição
+router.get('/area/laudo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncLaudo.carregaLaudoedi(req,res);
+})
+//Atualiza Laudo selecionado editado
+router.get('/area/laudo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncLaudo.atualizaLaudo(req,res);
+})
+//Lista todos os Laudos
+router.get('/area/laudo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncLaudo.listaLaudo(req,res);
+})
+//Deleta Laudo Selecionado
+router.get('/area/laudo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+    fncLaudo.deletaLaudo(req,res);
 })
 
 //Menu Evoluções ** Area Tecnicos   
-//Carrega Cadastro
-router.get('/area/evol/evolcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+//Carrega Cadastro de Relatório Evolutivo
+router.get('/area/evol/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncEvol.carregaEvol(req, res);
 })
-
-//Lista Todos os Laudispor Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/evol/evollis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+//Adiciona Registro de Relatório Evolutivo
+router.post('/area/evol/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncEvol.cadastraEvol(req,res);
+})
+//Lista Todos os Relatório Evolutivo
+router.get('/area/evol/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.listaEvol(req, res);
+})
+//Carrega Relatório Evolutivo Selecionado para Edição
+router.get('/area/evol/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncEvol.carregaEvoledi(req, res);
+})
+//Atualiza Relatório Evolutivo Selecionado
+router.get('/area/evol/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncEvol.atualizaEvol(req, res);
+})
+//Deleta Exclui Relatório Evolutivo
+router.get('/area/evol/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+    fncEvol.deletaEvol(req, res);
 })
 
 //Menu VB-MAPPS ** Area Tecnicos   
-//Carrega Cadastro
-router.get('/area/mapp/mappcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+//Carrega Cadastro de Mapp
+router.get('/area/mapp/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncMapp.carregaMapp(req, res);
 })
-
-//Lista Todos os VB-MAPP's Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/mapp/mapplis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+//Adiciona Registro de Mapp
+router.post('/area/mapp/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncMapp.cadastraMapp(req,res);
+})
+//Carrega o Mapp Selecionado para Edição
+router.get('/area/mapp/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncMapp.carregaMappedi(req, res);
+})
+//atualiza o Mapp Editado
+router.get('/area/mapp/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncMapp.atualizaMapp(req, res);
+})
+//Lista Todos os Mapss
+router.get('/area/mapp/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncMapp.listaMapp(req, res);
+})
+//Deleta Exclui o Mapp Selecionado
+router.get('/area/mapp/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+    fncMapp.deletaMapp(req, res);
 })
 
 //Menu Sonda ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/sonda/sondacad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/sonda/sondacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncSonda.carregaSonda(req, res);
 })
 
 //Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/sonda/sondalis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncSonda.listaSonda(req, res);
 })
 
 //Menu Programas ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/prog/progcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/prog/progcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncProg.carregaProg(req, res);
 })
 
 //Lista Progrmas por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/prog/proglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncProg.listaProg(req, res);
 })
 
 //Menu Gráfico do Programa ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/grafprog/grafprogcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/grafprog/grafprogcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncGrafprog.carregaGrafprog(req, res);
 })
 
 //Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/grafprog/grafproglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/grafprog/grafproglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncGrafprog.listaGrafprog(req, res);
 })
 
 //Menu SET ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/set/setcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/set/setcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncSet.carregaSet(req, res);
 })
 
 //Lista SET por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/set/setlis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/set/setlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncSet.listaSet(req, res);
 })
 
 //Menu Folha de Registro ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/folreg/folregcad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncFolreg.carregaFolreg(req, res);
 })
 
 //Lista Folha Registro ** Area Tecnicos e ABA
-router.get('/area/aba/folreg/folreglis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/folreg/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncFolreg.listaFolreg(req, res);
 })
 
 //Menu Gráfico ABC ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/grafabc/grafabccad',(req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/grafabc/grafabccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncGrafabc.carregaGrafabc(req, res);
 })
 
 //Lista Gráfico ABC por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/grafabc/grafabclis',(req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/grafabc/grafabclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncGrafabc.listaGrafabc(req, res);
 })
 
 //Menu Convenio
 //Sub Menu Conv
     
-router.get('/convenio/conv/lis',(req,res) =>{//lista todas os registros dos convênios
+router.get('/convenio/conv/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas os registros dos convênios
 fncConv.listaConv(req, res);    
 })
 
-router.get('/convenio/conv/cad',(req,res) =>{//direciona para o cadastro de novos convênios
+router.get('/convenio/conv/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o cadastro de novos convênios
 fncConv.carregaConv(req, res); 
 })
 
-router.post('/convenio/conv/add',(req,res) =>{//adiciona registro no Convênio
+router.post('/convenio/conv/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro no Convênio
 fncConv.cadastraConv(req, res); 
 
 })
 
-router.get('/convenio/conv/del/:id', (req,res) =>{//deleta registro do convênio
+router.get('/convenio/conv/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta registro do convênio
 fncConv.deletaConv(req, res); 
 })
 
-router.get('/convenio/conv/edi/:id', (req,res) =>{//direciona a edição de registro no convênio
+router.get('/convenio/conv/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de registro no convênio
 fncConv.carregaConvEdi(req, res); 
 })
 
-router.post('/convenio/conv/atualizar',(req,res) =>{//atualiza no convênio
+router.post('/convenio/conv/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
 fncConv.atualizaConv(req, res);
 })
 
@@ -1019,48 +1174,48 @@ fncConv.atualizaConv(req, res);
 //Relatório Individual de Valores de Atendimento por Beneficiário.
 //Emite uma relação de todos os valores de atendimentos realizados pelo beneficiário
 //pagos pelos convênios, incluindo particular, num determinado período de tempo.
-router.get('/convenio/conv/relatendconvval',(req,res) =>{
+router.get('/convenio/conv/relatendconvval', fncGeral.IsAuthenticated, (req,res) =>{
     res.render("convenio/conv/relatendconvval")
 })
 
 
 //Menu Convenio/ConvCre 
     //convcre
-    router.get('/convenio/convcre/lis',(req,res) =>{//lista todas convcres
+    router.get('/convenio/convcre/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas convcres
         fncConvcre.listaConvcre(req,res);
     })
 
-    router.get('/convenio/convcre/cad',(req,res) =>{//direciona o cadstro de bene, com Ufs e Convênios.
+    router.get('/convenio/convcre/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de bene, com Ufs e Convênios.
         fncConvcre.carregaConvcre(req,res);
     })
 
-    router.post('/convenio/convcre/add',(req,res) =>{//adiciona convcre
+    router.post('/convenio/convcre/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona convcre
         fncConvcre.cadastraConvcre(req,res);
     })
 
-    router.get('/convenio/convcre/del/:id', (req,res) =>{//deleta convcre
+    router.get('/convenio/convcre/del/:id' ,fncGeral.IsAuthenticated, (req,res) =>{//deleta convcre
         fncConvcre.deletaConvcre(req,res);
     })
 
-    router.get('/convenio/convcre/edi/:id', (req,res) =>{//direciona a edição de convcre
+    router.get('/convenio/convcre/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de convcre
         fncConvcre.carregaConvcreEdi(req,res);
     })
 
-    router.post('/convenio/convcre/atualizar',(req,res) =>{//atualiza o cadastro da Convcreimento
+    router.post('/convenio/convcre/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Convcreimento
         fncConvcre.editaConvcre(req, res);
     })
 
 //Menu Convenio/Convdeb 
     //convdeb
-    router.get('/convenio/convdeb/lis',(req,res) =>{//lista todas convdebs
+    router.get('/convenio/convdeb/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas convdebs
         fncConvdeb.listaConvdeb(req,res);
     })
 
-    router.get('/convenio/convdeb/cad',(req,res) =>{//direciona o cadstro de Convdeb, com Ufs e Convênios.
+    router.get('/convenio/convdeb/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Convdeb, com Ufs e Convênios.
         fncConvdeb.carregaConvdeb(req,res);
     })
 
-    router.post('/convenio/convdeb/add',(req,res) =>{//adiciona convdeb
+    router.post('/convenio/convdeb/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona convdeb
         fncConvdeb.cadastraConvdeb(req,res);
     })
 
@@ -1068,11 +1223,11 @@ router.get('/convenio/conv/relatendconvval',(req,res) =>{
         fncConvdeb.deletaConvdeb(req,res);
     })
 
-    router.get('/convenio/convdeb/edi/:id', (req,res) =>{//direciona a edição de convdeb
+    router.get('/convenio/convdeb/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de convdeb
         fncConvdeb.carregaConvdebEdi(req,res);
     })
 
-    router.post('/convenio/convdeb/atualizar',(req,res) =>{//atualiza o cadastro da convdeb
+    router.post('/convenio/convdeb/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da convdeb
         fncConvdeb.editarConvdev(req,res);
     })
 
@@ -1080,28 +1235,28 @@ router.get('/convenio/conv/relatendconvval',(req,res) =>{
 //Menu Financeiro
 //Menu Conrrente, conta
     
-router.get('/financeiro/corrente/lis',(req,res) =>{//lista toda os registros da conta corrente
+router.get('/financeiro/corrente/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista toda os registros da conta corrente
     fncCorrente.listaCorrente(req, res);           
 })
 
-router.get('/financeiro/corrente/cad',(req,res) =>{//direciona para o cadastro de conta corrente
+router.get('/financeiro/corrente/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o cadastro de conta corrente
     fncCorrente.carregaCorrente(req, res);     
 })
 
 
-router.post('/financeiro/corrente/add',(req,res) =>{//adiciona registro a conta corrente
+router.post('/financeiro/corrente/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro a conta corrente
     fncCorrente.cadastraCorrente(req, res);
 })
 
-router.get('/financeiro/corrente/del/:id', (req,res) =>{//deleta registro na conta corrente 
+router.get('/financeiro/corrente/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta registro na conta corrente 
     fncCorrente.deletaCorrente(req, res);
 })
 
-router.get('/financeiro/corrente/edi/:id', (req,res) =>{//direciona para a edição dos registros na conta corrente
+router.get('/financeiro/corrente/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição dos registros na conta corrente
     fncCorrente.carregaCorrenteEdi(req, res);
 })
 
-router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro na conta corrente
+router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o registro na conta corrente
     fncCorrente.atualizaCorrente(req, res);
 })
 
@@ -1110,27 +1265,27 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
 //Menu Ferramentas
     //sala
-        router.get('/ferramentas/sala/lis',(req,res) =>{//lista todas salas
+        router.get('/ferramentas/sala/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
             fncSala.listaSala(req, res);
         })
 
-        router.get('/ferramentas/sala/cad',(req,res) =>{//direciona o cadstro de sala
+        router.get('/ferramentas/sala/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de sala
             fncSala.carregaSala(req, res);
         })
 
-        router.post('/ferramentas/sala/add',(req,res) =>{//adiciona sala
+        router.post('/ferramentas/sala/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona sala
             fncSala.cadastraSala(req, res);
         })
 
-        router.get('/ferramentas/sala/del/:id', (req,res) =>{//deleta sala
+        router.get('/ferramentas/sala/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta sala
             fncSala.deletaSala(req, res);
         })
 
-        router.get('/ferramentas/sala/edi/:id', (req,res) =>{//direciona a edição de sala
+        router.get('/ferramentas/sala/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de sala
             fncSala.carregaSalaEdi(req, res);
         })
 
-        router.post('/ferramentas/sala/atualizar',(req,res) =>{//atualiza o cadastro da Salaimento
+        router.post('/ferramentas/sala/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
             fncSala.atualizaSala(req, res);
         })
         
@@ -1138,34 +1293,34 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
 //Menu Ferramentas
     //Empresa
-        router.get('/ferramentas/empresa/lis',(req,res) =>{//lista todas empresas
+        router.get('/ferramentas/empresa/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas empresas
             fncEmpresa.listaEmpresa(req, res);
         })
         
-        router.get('/ferramentas/empresa/cad',(req,res) =>{//direciona o cadstro de empresa.
+        router.get('/ferramentas/empresa/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de empresa.
             fncEmpresa.carregaEmpresa(req, res);
         })
 
-        router.post('/ferramentas/empresa/add',(req,res) =>{//adiciona empresa
+        router.post('/ferramentas/empresa/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona empresa
         fncEmpresa.cadastraEmpresa(req, res);
 
         })
         
-        router.get('/ferramentas/empresa/del/:id', (req,res) =>{//deleta empresa
+        router.get('/ferramentas/empresa/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta empresa
             fncEmpresa.deletaEmpresa(req, res);
         })
         
-        router.get('/ferramentas/empresa/edi/:id', (req, res) =>{//direciona a edição de empresa
+        router.get('/ferramentas/empresa/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
             fncEmpresa.carregaEmpresaEdi(req, res);
         })
    
-        router.post('/ferramentas/empresa/atualizar',(req,res) =>{//atualiza o cadastro da Empresa
+        router.post('/ferramentas/empresa/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
             fncEmpresa.atualizaEmpresa(req, res);
         })
 
 //Menu Ferramentas
     //Especialidade
-        router.get('/ferramentas/especialidade/lis',(req,res) =>{//lista todas especialidades
+        router.get('/ferramentas/especialidade/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especialidades
             let resposta = new Resposta()
             resposta.texto = ""
             resposta.sucesso = ""
@@ -1173,82 +1328,82 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
             
         })
 
-        router.get('/ferramentas/especialidade/cad',(req,res) =>{//direciona o cadstro de especialidade
+        router.get('/ferramentas/especialidade/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de especialidade
             fncEspecialidade.carregaEspecialidade(req, res);
         })
         
-        router.post('/ferramentas/especialidade/add',(req,res) =>{//adiciona especialidade
+        router.post('/ferramentas/especialidade/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona especialidade
             fncEspecialidade.cadastraEspecialidade(req, res);
         })
         
-        router.get('/ferramentas/especialidade/del/:id', (req,res) =>{//deleta especialidade
+        router.get('/ferramentas/especialidade/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta especialidade
             fncEspecialidade.deletaEspecialidade(req, res);
         })
         
-        router.get('/ferramentas/especialidade/edi/:id', (req,res) =>{//direciona a edição de especialidade
+        router.get('/ferramentas/especialidade/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de especialidade
             fncEspecialidade.carregaEspecialidadeEdi(req, res);
         })
 
-        router.post('/ferramentas/especialidade/atualizar',(req,res) =>{//atualiza o cadastro da Especialidadeimento
+        router.post('/ferramentas/especialidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Especialidadeimento
             fncEspecialidade.atualizaEspecialidade(req, res);
         })
 
 //Menu Ferramentas
     //Especializacao
-    router.get('/ferramentas/especializacao/lis',(req,res) =>{//lista todas especializacaos
+    router.get('/ferramentas/especializacao/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especializacaos
         let resposta = new Resposta()
         resposta.texto = ""
         resposta.sucesso = ""
         fncEspecializacao.listaEspecializacao(req, res, resposta);
     })
 
-    router.get('/ferramentas/especializacao/cad',(req,res) =>{//direciona o cadstro de especializacao
+    router.get('/ferramentas/especializacao/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de especializacao
         fncEspecializacao.carregaEspecializacao(req, res);
     })
     
-    router.post('/ferramentas/especializacao/add',(req,res) =>{//adiciona especializacao
+    router.post('/ferramentas/especializacao/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona especializacao
         fncEspecializacao.cadastraEspecializacao(req, res);
     })
     
-    router.get('/ferramentas/especializacao/del/:id', (req,res) =>{//deleta especializacao
+    router.get('/ferramentas/especializacao/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta especializacao
         fncEspecializacao.deletaEspecializacao(req, res);
     })
     
-    router.get('/ferramentas/especializacao/edi/:id', (req,res) =>{//direciona a edição de especializacao
+    router.get('/ferramentas/especializacao/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de especializacao
         fncEspecializacao.carregaEspecializacaoEdi(req, res);
     })
 
-    router.post('/ferramentas/especializacao/atualizar',(req,res) =>{//atualiza o cadastro da Especializacaoimento
+    router.post('/ferramentas/especializacao/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Especializacaoimento
         fncEspecializacao.atualizaEspecializacao(req, res);
     })
 
 //Menu Ferramentas
     //Terapia
-        router.get('/ferramentas/terapia/lis',(req,res) =>{//lista todas terapias
+        router.get('/ferramentas/terapia/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas terapias
             fncTerapia.listaTerapia(req, res);
             
         })
 
-        router.get('/ferramentas/terapia/cad',(req,res) =>{//direciona o cadstro de terapia
+        router.get('/ferramentas/terapia/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de terapia
             fncTerapia.carregaTerapia(req, res);
         })
         
-        router.post('/ferramentas/terapia/add',(req,res) =>{//adiciona terapia
+        router.post('/ferramentas/terapia/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona terapia
         fncTerapia.cadastraTerapia(req, res);
 
         })
         
-        router.get('/ferramentas/terapia/del/:id', (req,res) =>{//deleta terapia
+        router.get('/ferramentas/terapia/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta terapia
             fncTerapia.deletaTerapia(req, res);
         })
         
-        router.get('/ferramentas/terapia/edi/:id', (req,res) =>{//direciona a edição de terapia
+        router.get('/ferramentas/terapia/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de terapia
             fncTerapia.carregaTerapiaEdi(req, res);
         })
         
 
 
-        router.post('/ferramentas/terapia/atualizar',(req,res) =>{//atualiza o cadastro da Terapiaimento
+        router.post('/ferramentas/terapia/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Terapiaimento
             fncTerapia.atualizaTerapia(req, res);
         })
         
@@ -1261,29 +1416,29 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
 //Menu Ferramentas
     //Funcao
-        router.get('/ferramentas/funcao/lis',(req,res) =>{//lista todas funcaos
+        router.get('/ferramentas/funcao/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas funcaos
         fncFuncao.listaFuncao(req, res);
         })
         
-        router.get('/ferramentas/funcao/cad',(req,res) =>{//direciona o cadstro de funcao
+        router.get('/ferramentas/funcao/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de funcao
             fncFuncao.carregaFuncao(req, res);
         })
         
-        router.post('/ferramentas/funcao/add',(req,res) =>{//adiciona funcao
+        router.post('/ferramentas/funcao/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona funcao
             fncFuncao.cadastraFuncao(req, res);
         })
         
-        router.get('/ferramentas/funcao/del/:id', (req,res) =>{//deleta funcao
+        router.get('/ferramentas/funcao/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta funcao
             fncFuncao.deletaFuncao(req, res);
         })
         
-        router.get('/ferramentas/funcao/edi/:id', (req,res) =>{//direciona a edição de funcao
+        router.get('/ferramentas/funcao/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de funcao
             fncFuncao.carregaFuncaoEdi(req, res);
         })
         
 
 
-        router.post('/ferramentas/funcao/atualizar',(req,res) =>{//atualiza o cadastro da Funcaoimento
+        router.post('/ferramentas/funcao/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Funcaoimento
             fncFuncao.atualizaFuncao(req, res);
         })
         
@@ -1291,32 +1446,32 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
     
 //Menu Ferramentas
     //Horario
-        router.get('/ferramentas/horaage/lis',(req,res) =>{//lista todas horarios
+        router.get('/ferramentas/horaage/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas horarios
             fncHoraAge.listaHoraage(req, res);
             
         }),
 
-        router.get('/ferramentas/horaage/cad',(req,res) =>{//direciona o cadstro de horario
+        router.get('/ferramentas/horaage/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de horario
             fncHoraAge.carregaHoraage(req, res);
         }),
         
-        router.post('/ferramentas/horaage/add',(req,res) =>{//adiciona horario
+        router.post('/ferramentas/horaage/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona horario
             fncHoraAge.cadastraHoraage(req, res);
 
         }),
         
-        router.get('/ferramentas/horaage/del/:id', (req,res) =>{//deleta horario
+        router.get('/ferramentas/horaage/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta horario
             fncHoraAge.deletaHoraage(req, res);
      
         }),
         
-        router.get('/ferramentas/horaage/edi/:id', (req,res) =>{//direciona a edição de horario
+        router.get('/ferramentas/horaage/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de horario
             fncHoraAge.carregaHoraageEdi(req, res);
         }),
         
 
 
-        router.post('/ferramentas/horaage/atualizar',(req,res) =>{//atualiza o cadastro da Horarioimento
+        router.post('/ferramentas/horaage/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Horarioimento
             fncHoraAge.atualizaHoraage(req, res);
         })
         
@@ -1324,30 +1479,30 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
 //Menu Ferramentas
     //Perfil
-        router.get('/ferramentas/perfil/lis',(req,res) =>{//lista todas perfils
+        router.get('/ferramentas/perfil/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas perfils
             fncPerfil.listaPerfil(req,res);
             
         })
 
-        router.get('/ferramentas/perfil/cad',(req,res) =>{//direciona o cadstro de perfil
+        router.get('/ferramentas/perfil/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de perfil
             fncPerfil.carregaPerfil(req,res);
         })
         
-        router.post('/ferramentas/perfil/add',(req,res) =>{//adiciona perfil
+        router.post('/ferramentas/perfil/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona perfil
             fncPerfil.cadastraPerfil(req,res);
         })
         
-        router.get('/ferramentas/perfil/del/:id', (req,res) =>{//deleta perfil
+        router.get('/ferramentas/perfil/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta perfil
             fncPerfil.deletaPerfil(req,res);
         })
         
-        router.get('/ferramentas/perfil/edi/:id', (req,res) =>{//direciona a edição de perfil
+        router.get('/ferramentas/perfil/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de perfil
             fncPerfil.carregaPerfilEdi(req,res);
         })
         
  
 
-        router.post('/ferramentas/perfil/atualizar',(req,res) =>{//atualiza o cadastro da Perfilimento
+        router.post('/ferramentas/perfil/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Perfilimento
             fncPerfil.atualizaPerfil(req,res);
         })
 
@@ -1355,28 +1510,28 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
         //Menu Ferramentas
         //estado
-        router.get('/ferramentas/estado/lis',(req,res) =>{//lista todas estados
+        router.get('/ferramentas/estado/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas estados
             fncEstado.listaEstado(req, res);        
         })
 
-        router.get('/ferramentas/estado/cad',(req,res) =>{//direciona o cadstro de estado
+        router.get('/ferramentas/estado/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de estado
 
             fncEstado.carregaEstado(req, res);
         })
 
-        router.post('/ferramentas/estado/add',(req,res) =>{//adiciona estado
+        router.post('/ferramentas/estado/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona estado
             fncEstado.cadastraEstado(req, res);
         })
 
-        router.get('/ferramentas/estado/del/:id', (req,res) =>{//deleta estado
+        router.get('/ferramentas/estado/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta estado
             fncEstado.deletaEstado(req, res);
         })
 
-        router.get('/ferramentas/estado/edi/:id', (req,res) =>{//direciona a edição de estado
+        router.get('/ferramentas/estado/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de estado
             fncEstado.carregaEstadoEdi(req, res);
         })
 
-        router.post('/ferramentas/estado/atualizar',(req,res) =>{//atualiza o cadastro da Estadoimento
+        router.post('/ferramentas/estado/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Estadoimento
             fncEstado.atualizaEstado(req, res);
         })
     
@@ -1386,15 +1541,15 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
 
 //Menu Ferramentas
     //Usuario
-        router.get('/ferramentas/usuario/lis',(req,res) =>{//lista todas usuarios
+        router.get('/ferramentas/usuario/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas usuarios
           fncUsuario.listaUsuario(req, res); 
         })
 
-        router.get('/ferramentas/usuario/cad',(req,res) =>{//direciona o cadstro de Usuário, com Ufs e Convênios.
+        router.get('/ferramentas/usuario/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Usuário, com Ufs e Convênios.
         fncUsuario.carregaUsuario(req, res); 
         })
 
-        router.post('/ferramentas/usuario/add',(req,res) =>{//adiciona usuario
+        router.post('/ferramentas/usuario/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona usuario
         fncUsuario.cadastraUsuario(req, res); 
         })
         
@@ -1402,22 +1557,22 @@ router.post('/financeiro/corrente/atualizar',(req,res) =>{//atualiza o registro 
         fncUsuario.deletaUsuario(req, res); 
         })
         
-        router.get('/ferramentas/usuario/edi/:id', (req,res) =>{//direciona a edição de usuario
+        router.get('/ferramentas/usuario/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de usuario
           fncUsuario.carregaUsuarioEdi(req, res); 
         })
 
-        router.post('/ferramentas/usuario/atualizar',(req,res) =>{//atualiza o cadastro da Usuarioimento
+        router.post('/ferramentas/usuario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
            fncUsuario.atualizaUsuario(req, res); 
         })
 
 //Menu Ferramentas
     //Ajuda
-        router.get('/ferramentas/ajuda',(req,res) =>{
+        router.get('/ferramentas/ajuda', fncGeral.IsAuthenticated, (req,res) =>{
             res.render("ferramentas/ajuda")
         })
     
     //Tabela Tese
-    router.get('/ferramentas/tbteste',(req,res) =>{
+    router.get('/ferramentas/tbteste', fncGeral.IsAuthenticated, (req,res) =>{
         res.render("ferramentas/tables")
     })
 

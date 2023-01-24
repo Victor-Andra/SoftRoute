@@ -45,7 +45,7 @@ module.exports = {
             console.log(empresa)
                 Estado.find().then((estado)=>{
                     console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/empresa/empresaEdi', {empresas: empresa, estados: estado})
+            res.render('ferramentas/empresa/empresaEdi', {empresa, estados: estado})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

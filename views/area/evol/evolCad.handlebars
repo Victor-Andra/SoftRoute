@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Evoluções</title>
+		<title>Relatórios Evolutivos</title>
 	</head>
 	<body class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -11,16 +11,16 @@
 					</div>
 					<div class="page-header">
 						<h1>
-							Evoluções
+							Relatórios Evolutivos
 							<small>
 								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro e Índice Geral Evoluções para Upload
+								Cadastro e Relatórios Evolutivos para Upload
 							</small>
 						</h1>
 					</div><!-- /.page-header -->
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/evol/add" method="POST">
 								<div class="col-xs-12">
 									<div class="col-xs-12">
 										<div class="row">
@@ -30,13 +30,11 @@
 												</div>
 												<div class="row">
 													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
-																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
+															<select name="evolBeneid" id="evolBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
 															</select>
-														</div>
 													</div>
 												</div>
 											</div>
@@ -46,28 +44,22 @@
 												</div>
 												<div class="row">
 													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
-																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+															<select name="evolUsuid" id="evolUsuid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
 															</select>
-														</div>
 													</div>
 												</div>
 											</div>
 											<div class="col-sm-5">
 												<div class="row">
-													<label>Tipo de Laudo</label>
+													<label>Tipo de Relatório Evolutivo</label>
 												</div>
 												<div class="row">
 													<div class="input-group">
 														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ESCOLA PEQUENOS AERONAUTAS</option>
-																	<option value="Não">COLÉGIO MADRE DE DEUS</option>
-															</select>
+															<input type="text" name="evolTipo" id="evolTipo" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
 														</div>
 													</div>
 												</div>
@@ -78,17 +70,17 @@
 												</div>
 												<div class="row">
 													<div class="input-group">
-															<input type="text" name="atendOrg" id="atendOrg" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
+															<input type="text" name="evolMedico" id="evolMedico" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
 													</div>
 												</div>
 											</div>													
 											<div class="col-sm-2">
 												<div class="row">
-													<label>Data Laudo</label>
+													<label>Data Relatório Evolutivo</label>
 												</div>
 												<div class="row">
 													<div class="input-group">
-															<input id="beneDatanasc" name="beneDatanasc" type="date">
+															<input id="evolEvoldata" name="evolEvoldata" type="date">
 													</div>
 												</div>
 											</div>													
@@ -96,40 +88,59 @@
 										<div class="row">
 										<div class="col-sm-5">
 											<div class="row">
-												<label>Upload de Laudo</label>
+												<label>Upload de Relatório Evolutivo</label>
 											</div>
 										</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-xs-5">
-											<label class="ace-file-input">
-												<input type="file" id="id-input-file-2">
-												<span class="ace-file-container" data-title="Escolha">
-													<span class="ace-file-name" data-title="Nenhum arquivo ...">
-														<i class=" ace-icon fa fa-upload"></i>
-													</span>
-												</span>
-												<a class="remove" href="#">
-													<i class=" ace-icon fa fa-times"></i>
-												</a>
-											</label>
+										<div class="col-sm-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">Inserir arquivo</h4>
+
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="alert alert-danger">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>ATENÇÃO! </strong>
+													O Arquivo escolhido para UpLoad não pode ter tamanho maior que <strong>13MB ou 13.000 KBytes</strong>.
+													<br>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="form-group">
+															<div class="col-xs-12">
+																<input type="file" id="id-input-file-2" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 									
 									<div class="col=xs=12">
 										<hr>
 									</div>
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
 									</div>
 								</div>							
 							</form>

@@ -232,7 +232,8 @@
 																<div class="space space-8"></div>
 																<label> Filhos</label>
 																<div  style="padding-left: 10px;" class="form-group">
-																	<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																		<option value="Não Informado">Não Informado</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																	</select>
@@ -266,7 +267,8 @@
 														<label >Escolaridade</label>
 														<div class="form-group">
 															<div class="col-sm-4">
-																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" data-placeholder="Escolha...">
+																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																		<option value="Não Informado">Não Informado</option>
 																		<option value="Fundamental">Fundamental</option>
 																		<option value="Médio">Médio</option>
 																		<option value="Superior">Superior</option>
@@ -283,7 +285,8 @@
 																<label> Graduação</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuariograduacao" id="usuariograduacao" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuariograduacao" id="usuariograduacao" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																				<option value="Não Informado">Não Informado</option>
 																				{{#each especialidades}}
 																				<option value="{{_id}}">{{especialidade_nome}}</option>
 																				{{else}}
@@ -296,7 +299,8 @@
 																<label> Especialização</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuarioEspecialidade" id="usuarioEspecialidade" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioEspecialidade" id="usuarioEspecialidade" class="chosen-select" data-placeholder="Escolha..." value="Não informado">
+																				<option value="Não Informado">Não Informado</option>
 																				{{#each especializacaos}}
 																				<option value="{{_id}}">{{especializacao_nome}}</option>
 																				{{else}}
@@ -321,60 +325,48 @@
 
 														<div class="row">
 															<div class="col-xs-6">
-
 																<label> Complemento </label>
 																<div class="form-group">
 																	<div class="col-sm-9">
 																		<input type="text" name="usuarioEndcompl"  id="usuarioEndcompl" placeholder="" class="form-control" />
 																	</div>
 																</div>											
-															
 															</div>
 															
 															<div class="col-xs-6">													
-															
 																<label> Bairro </label>
 																<div class="form-group">
 																	<div class="col-sm-9">
 																		<input type="text" name="usuarioEndbairro" id="usuarioEndbairro" placeholder="" class="form-control" />
 																	</div>
 																</div>
-															
 															</div>
-													
 														</div>
 
 
 														<div class="row" >
 
 															<div class="col-xs-12 col-sm-6">
-																<div >
-
-
+																<div>
 																	<div>
 																		<div>
 																			<div>
-
 																				<label> Cidade </label>
 																				<div class="form-group">
 																					<div class="col-sm-9">
 																						<input type="text" name="usuarioEndcidade" id="usuarioEndcidade" placeholder="" class="form-control" />
 																					</div>
 																				</div>
-
 																			</div>
-
 																		</div>
 																	</div>
 																</div>
 															</div><!-- /.span -->
-
 															<div class="col-xs-12 col-sm-2">
 																<div >
 																	<div >
 																		<div>
 																			<div>
-																				
 																				<label>UF</label>
 																				<div class="form-group">
 																						<div class="col-sm-4">
@@ -386,13 +378,7 @@
 																							</select>
 																						</div>
 																				</div>
-
-
 																			</div>
-
-
-
-
 																		</div>
 																	</div>
 																</div>
@@ -403,38 +389,23 @@
 																	<div >
 																		<div>
 																			<div>
-																				
 																				<label> CEP </label>
 																				<div class="form-group">
 																					<div class="col-sm-3" style="width: 200px;">
 																						<input type="text" name="usuarioEndcep" id="usuarioEndcep" placeholder="" class="form-control" />
 																					</div>
 																				</div>
-
-				
-
-
 																			</div>
-
-
-
-
 																		</div>
 																	</div>
 																</div>
 															</div><!-- /.span -->
-														
 
 														</div>
-
-
-
-
 
 													</div>
 
 													<div id="contato" class="tab-pane fade">
-														
 
 														<div>
 															<label>whatsApp
@@ -449,8 +420,6 @@
 																<input name="usuarioCel1" id="usuarioCel1" class="col-sm-3" class="form-control input-mask-phone" type="text" id="Whatsapp" />
 															</div>
 														</div>
-						
-											
 														<div>
 															<label>Celular
 																<small class="text-warning"> (99) 9999-9999</small>
@@ -464,9 +433,6 @@
 																<input name="usuarioCel2" id="usuarioCel2" class="col-sm-3" class="form-control input-mask-phone" type="text" id="Celular" />
 															</div>
 														</div>
-
-
-
 														<div>
 															<label>Email
 																<small class="text-warning"> </small>
@@ -481,8 +447,6 @@
 															</div>
 														</div>
 
-
-
 													</div>
 
 													<div id="finan" class="tab-pane fade">
@@ -493,26 +457,19 @@
 																<input type="text" name="usuarioBanco" id="usuarioBanco"  placeholder="" class="form-control" />
 															</div>
 														</div>
-
 														<div class="row">
-
 															<div class="col-xs-12 col-sm-4">
 																<div >
-
 																	<div>
 																		<div>
 																			<div>
-																				
 																				<label > Agência / Dv</label>
 																				<div class="form-group">
 																					<div class="col-sm-9">
 																						<input type="text" name="usuarioAgencia" id="usuarioAgencia" placeholder="" class="form-control" />
 																					</div>
 																				</div>
-																			
 																			</div>
-
-
 																		</div>
 																	</div>
 																</div>
@@ -520,21 +477,16 @@
 
 															<div class="col-xs-12 col-sm-4">
 																<div >
-
-
 																	<div>
 																		<div>
 																			<div>
-																				
 																				<label > Conta / Dv</label>
 																				<div class="form-group">
 																					<div class="col-sm-9">
 																						<input type="text" name="usuarioConta" id="usuarioConta" placeholder="" class="form-control" />
 																					</div>
 																				</div>
-																			
 																			</div>
-
 																		</div>
 																	</div>
 																</div>
@@ -543,25 +495,21 @@
 															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
 
 																<div >
-
-
 																	<div>
 																		<div>
 																			<div>
 																				<label for="id-date-picker-1">Tipo</label>
 																				<div class="form-group">
 																						<div class="col-sm-8">
-																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																									<option value="X"></option>
+																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																									<option value="Não Informado">Não Informado</option>
 																									<option value="Salário">Salário</option>
 																									<option value="Poupança">Poupança</option>
 																									<option value="Corrente">Corrente</option>																									
 																							</select>
 																						</div>
 																				</div>
-
 																			</div>
-
 																		</div>
 																	</div>
 																</div>
@@ -584,9 +532,11 @@
 																				<label for="id-date-picker-1">Contrato</label>
 																				<div class="form-group">
 																						<div class="col-sm-8">
-																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." >
+																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." Value="Não Informado" >
+																								<option value="Não Informado">Não Informado</option>
 																								<option value="CLT">CLT</option>
 																								<option value="CNPJ">CNPJ</option>
+																								<option value="CNPJ Fixo">CNPJ Fixo</option>
 																								<option value="Autônomo">Autônomo</option>
 																							</select>
 																						</div>
@@ -609,7 +559,8 @@
 																<label for="id-date-picker-1">Tipo PIX</label>
 																<div class="form-group">
 																		<div class="col-sm-8">
-																			<select name="usuarioTipoPix" id="usuarioTipoPix" class="chosen-select" data-placeholder="Escolha..." >
+																			<select name="usuarioTipoPix" id="usuarioTipoPix" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																					<option value="Não Informado">Não Informado</option>
 																					<option value="CPF">CPF</option>
 																					<option value="CNPJ">CNPJ</option>
 																					<option value="Número Celular">Número Celular</option>
@@ -626,10 +577,9 @@
 																<label > PIX </label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<input type="text" name="usuarioPix" id="usuarioPix"  placeholder="" class="form-control" />
+																		<input type="text" name="usuarioPix" id="usuarioPix"  placeholder="" class="form-control" value="Não Informado"/>
 																	</div>
 																</div>
-															
 															</div>
 													
 													
@@ -782,7 +732,7 @@
 
 									<div class="clearfix document-actions">
 									
-										<div class="col-md-offset-3 col-md-9">
+										<div class="col-xs-12" style="text-align: center;">
 											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar

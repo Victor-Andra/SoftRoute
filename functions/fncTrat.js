@@ -26,30 +26,18 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 module.exports = {
-    listaTrat(req,res,resposta){
-        let flash = new Resposta()
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                        console.log("Listagem Realizada de beneficiarios")
-                            if(resposta.sucesso == ""){
-                                console.log(' objeto vazio');
-                                flash.texto = ""
-                                flash.sucesso = ""
-                            } else {
-                                console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                                flash.texto = resposta.texto
-                                flash.sucesso = resposta.sucesso
-                            }
-                            res.render("area/plano/tratLis", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-        })})})}).catch((err) =>{
+    listaTrat(req,res){
+        console.log('listando Planos de Tratamentos')
+        Trat.find().then((trat) =>{
+            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                console.log("Listagem Realizada de beneficiarios")
+                        res.render('area/plano/tratLis', {banes: bene,trats: trat})
+        })}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar!")
+            req.flash("error_message", "houve um erro ao listar Planos de Tratamentos")
             res.redirect('admin/erro')
         })
+
     },
 
     carregaTrat(req,res){
@@ -69,15 +57,16 @@ module.exports = {
 
     },
 
-    carregaTratEdi(req,res){
-        Conv.find().then((conv)=>{
+    carregaTratedi(req,res){
+        Trat.find().then((trat)=>{
+            console.log("Listagem Realizada de Planos de Tratamento")
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
+                                res.render("area/plano/tratEdi", {trats: trat, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -85,31 +74,25 @@ module.exports = {
         })
     },
 
+   
     cadastraTrat(req,res){
-        console.log("chegou")
-        let resultado
-        let resposta = new Resposta()
+        let resposta
+        let cadastro = tratClass.tratAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        tratClass.cadastraTratFisio(req,res).then((result)=>{
-            console.log("Cadastro Realizado!")
-            console.log(res)
-            resultado = true;
+        cadastro.then((result)=>{
+            resposta = true;
         }).catch((err)=>{
-            resultado = err
+            resposta = err
             console.log("ERRO:"+err)
         }).finally(()=>{
-            if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+            if (resposta == true){
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaTrat(req,res,resposta)
+                this.listaTrat(req,res)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro');
             }
         })
     },

@@ -12,6 +12,7 @@ const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport");
 require("./config/auth")(passport)
+const cookieParser = require('cookie-parser');
 
 
 //Configurações
@@ -44,6 +45,8 @@ require("./config/auth")(passport)
     //Body-Parser
         app.use(bodyParser.urlencoded({extended: true}))
         app.use(bodyParser.json())
+    //Cookies
+        app.use(cookieParser());
     //Handlebars
         //app.engine('handlebars', engine());
         //app.engine("handlebars", handlebars({   handlebars: allowInsecurePrototypeAccess(Handlebars) }));
@@ -91,7 +94,18 @@ require("./config/auth")(passport)
                     } else {
                         return options.inverse(this);
                     }
-                }
+                }/*,
+                compareLvl: function(v1) {
+                    console.log("USANDO compara");
+                    //let cookies = req.cookies['lvlUsu'];
+                    let cookies = document.headers.cookies['lvlUsu'];
+                    console.log(cookies);
+                    if(v1 == cookies){
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                }*/
             }
         }));
         app.set('view engine', 'handlebars');

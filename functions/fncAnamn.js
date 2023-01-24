@@ -129,13 +129,13 @@ module.exports = {
         }
     },
 
-
-    
     carregaAnamnEdi(req, res){
         Anamn.findById(req.params.id).then((anamn) =>{
             console.log(anamn)
-            res.render('area/anamn/anamnEdi', anamn)
-        }).catch((err) =>{
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    console.log("Listagem Realizada de beneficiarios")
+            res.render('area/anamn/anamnEdi', {banes: bene, anamn})
+        })}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

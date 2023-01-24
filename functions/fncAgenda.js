@@ -8,7 +8,7 @@ const agendaClass = require("../models/agenda")
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
-const convecreClass = require("../models/convCre")
+const convcreClass = require("../models/convCre")
 const convdebClass = require("../models/convDeb")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia") 
@@ -7161,15 +7161,15 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    converteAgendaEmAtend(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
+    converteAgendaEmAtend(req,res){//Converte a Agenda em Atendimento
         console.log("----------CÓPIA----------")
         console.log("dia:"+req.body.dataFil)
-
         let convcreval;
         let convdebval;
-
+        let dataAtual = new Date();
         let seg = new Date(req.body.dataFil);
         let sex = new Date(req.body.dataFil);
+        let agendaFinal;
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -7212,74 +7212,118 @@ module.exports = {
         }
         let dataIni = seg.toISOString();
         let dataFim = sex.toISOString();
-
-
         let nextNum;
-        console.log("dataIni"+dataIni);
-        console.log("dataFim"+dataFim);
+        let tempId;
+        let temp;
+        let teraContrato;
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
+        let cc = convcreClass.convcreCarregarTodos(req,res);
+        let cd = convdebClass.convdebCarregarTodos(req,res);
+
+        cc.then((convcre)=>{
+            console.log(convcre)
+            cd.then((convdeb)=>{
+                console.log(convdeb)
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
             //-------------------------
-            console.log(agenda)
-            console.log("atendmodel");
+            //console.log(agenda)
             let atend;
+            let nextNum;
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
                 console.log("validação caso seja o primeiro registro")
                 atendimento.forEach(e => {atend = e});
-                console.log("atendNum")
-                console.log(atend.atend_num)
-                atend.atend_num = atend.atend_num+1;
-                console.log(atend.atend_num)
-                console.log("Listagem Realizada de NextNum")
-                console.log("size:"+agenda.length)
-                agenda.forEach((a)=>{
-                    console.log("migrado?")
-                    console.log(a.agenda_migrado)
-                    console.log("mi")
-                    if(a.agenda_migrado != undefined){
-                        console.log("T")
-                    }
-                    if(a.agenda_migrado != "true"){
+                nextNum = atend.atend_num;
+                this.sleep(2000).then(() => {
+                        convcre.forEach((ce)=>{
+                            //console.log("convcre_convid: "+ce.convcre_convid)
+                            //console.log("convcre_terapiaid: "+ce.convcre_terapiaid)
+                        })
+                        convdeb.forEach((db)=>{
+                            //console.log("convdeb_convid: "+db.convdeb_convid)
+                            //console.log("convdeb_terapiaid: "+db.convdeb_terapiaid)
+                        })
+                        let tamanho = agenda.length;
+                        for( var i = 0; i < tamanho; i++){ 
+                            Usuario.findOne({_id: agenda[i].agenda_usuid}).then((terapeuta)=>{
+                                teraContrato = terapeuta.usuario_contrato;
+                            })
+                            temp = agenda[i].agenda_tempId;
+                            
+                            if (temp != undefined){
+                                tempId = temp;
+                            } else {
+                                tempId = '';
+                            }
+                            
+                            if (tempId != '') {
+                                agenda.splice(i, 1);
+                            }
+                        }
+                        agenda.forEach((a)=>{
+                            console.log("migrado?")
+                            console.log(a.agenda_migrado)
+                            if(a.agenda_migrado != undefined){
+                                console.log("T")
+                            }
+                            if(a.agenda_migrado != "true"){
+                                nextNum = nextNum + 1;
+                                console.log("nextNum: "+nextNum)
+                                console.log("("+a.agenda_convid+"-"+a.agenda_terapiaid+")")
+                                convcreval = "0,00";
+                                convdebval = "0,00";
 
-                        Convcre.find({convcre_convid: a.agenda_convid, convcre_terapiaid: a.agenda_terapiaid}).then((convcre) => {
-                            convcreval = convcre.convcre_valor;
+                                convcre.forEach((cre)=>{
+                                    let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                    let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                    if( convcreTes == agendacreTes){
+                                        console.log("if ("+convcreTes+" == "+agendacreTes)
+                                        convcreval = cre.convcre_valor;
+                                    }
+                                })
+                                convdeb.forEach((deb)=>{
+                                    if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                        convdebval = "0,00";
+                                    } else {
+                                        let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                        let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                        if(convdebTes == agendadebTes){
+                                            console.log("if ("+convdebTes+" == "+agendadebTes)
+                                            convdebval = deb.convdeb_valor;
+                                        }
+                                    }
+                                })
+
+                                const newAtend = new Atend({
+                                    atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                    atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                    atend_beneid : a.agenda_beneid,//
+                                    atend_convid : a.agenda_convid,//
+                                    atend_usuid : "Usuario Atual",
+                                    atend_atenddata : a.agenda_data,//
+                                    atend_terapeutaid : a.agenda_usuid,//
+                                    atend_terapiaid : a.agenda_terapiaid,//
+                                    atend_salaid : a.agenda_salaid,//
+                                    atend_valorcre : convcreval,//
+                                    atend_valordeb : convdebval,//
+                                    atend_num : nextNum,
+                                    atend_datacad : dataAtual.toISOString()
+                                });
+                                
+                                console.log("newAtend:"+newAtend)
+                                nextNum = nextNum ++;
+                                console.log("newAtend save");
+                                this.geraAtend(newAtend);
+                                console.log("Setar migrado")
+                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
+                                Agenda.findById(a._id)
+                                console.log("setou migrado")
+                            }
+                            })
                         })
-                        if(convcreval == undefined || convcreval == "undefined"){
-                            convcreval = "0,00";
-                        }
-                        Convdeb.find({convdeb_convid: a.agenda_convid, convdeb_terapiaid: a.agenda_terapiaid}).then((convdeb) => {
-                            convdebval = convdeb.convdeb_valor;
-                        })
-                        if(convdebval == undefined || convcreval == "undefined"){
-                            convdebval = "0,00";
-                        }
-                        const newAtend = new Atend({
-                            atend_org : "Padrão",//
-                            atend_categoria : "Padrão",//
-                            atend_beneid : a.agenda_beneid,//
-                            atend_convid : a.agenda_convid,//
-                            atend_usuid : "Usuario Atual",
-                            atend_atenddata : a.agenda_data,//
-                            atend_terapeutaid : a.agenda_usuid,//
-                            atend_terapiaid : a.agenda_terapiaid,//
-                            atend_salaid : a.agenda_salaid,//
-                            atend_valorcre : convcreval,//
-                            atend_valordeb : convdebval,//
-                            atend_num : atend.atend_num,
-                            atend_datacad : dataAtual.toISOString()
-                        });
-                        
-                        console.log("newAtend:"+newAtend)
-                        nextNum = nextNum + 1;
-                        console.log("newAtend save");
-                        this.geraAtend(newAtend);
-                        console.log("Setar migrado")
-                        Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
-                        Agenda.findById(a._id)
-                        console.log("setou migrado")
-                    }
+                    })
                 })
             })
-            
             console.log("END COPIA")
         }).catch((err)=>{
             console.log(err)
@@ -7409,6 +7453,9 @@ module.exports = {
             console.log(err)
             return err;
         });
+    },
+    sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }
 /*

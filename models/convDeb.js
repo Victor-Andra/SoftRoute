@@ -122,5 +122,13 @@ module.exports = {ConvdebModel,ConvdebSchema,
                 return err;
             });
         }
+    },
+    convdebCarregarTodos: async (req,res) => {
+        let convdebs;
+        await ConvdebModel.find({}).then((convdeb) => {
+            convdebs = convdeb;
+        });
+        
+        return convdebs;
     }
 };

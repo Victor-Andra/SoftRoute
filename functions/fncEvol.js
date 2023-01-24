@@ -2,40 +2,40 @@
 const mongoose = require("mongoose")
 
 //As classe tem que ser declaradas antes das tabelas
-//Classe  Plano de Evolamento 
+//Classe  Relatório Evolutivo 
 const evolClass = require("../models/evol")
 
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
-//Tabela Plano de Evolamento 
+//Tabela Relatório Evolutivo 
 const Evol = mongoose.model("tb_evol")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+
 
 
 //Funções auxiliares
-
+const respostaClass = require("../models/resposta")
+const bene = require("../models/bene")
+const usuario = require("../models/usuario")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
     listaEvol(req, res){
-        let convs = new Array();
+        let evols = new Array();
         console.log('listando Diários de Evol')
         Evol.find().then((evol) =>{
             console.log("Listagem Realizada dos Diários de Evol!")
-                Bene.findById(req.params.id).then((bene) =>{
-                    console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
+            Bene.find().then((bene)=>{
+                console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada Usuário!")
-            res.render('area/evol/evolLis', {Evols: evol, Usuarios: usuario, Benes: bene})
+            res.render('area/evol/evolLis', {evols: evol, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Evol")
@@ -44,32 +44,37 @@ module.exports = {
     },
 
     carregaEvol(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evol/evolCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+        let evols = new Array();
+        console.log('listando Diários de Evol')
+        Evol.find().then((evol) =>{
+            console.log("Listagem Realizada dos Diários de Evol!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 
+                    console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena os Usuarios por nome 
+                        console.log("Listagem Realizada Usuário!")
+                                res.render("area/evol/evolCad", {evols: evol, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar")
             res.redirect('admin/erro')
         })
-
     },
 
-    carregaEvolEdi(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evol/evolEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+    carregaEvoledi(req,res){
+        let evols = new Array();
+        console.log('listando Diários de Evol')
+        Evol.find().then((evol) =>{
+            console.log("Listagem Realizada dos Diários de Evol!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 
+                    console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena os Usuarios por nome 
+                            console.log("Listagem Realizada Usuário!")
+                                res.render("area/evol/evolEdi", {evols: evol, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -77,39 +82,33 @@ module.exports = {
     },
 
     cadastraEvol(req,res){
-        console.log("chegou")
-        let resultado
-        let resposta = new Resposta()
+        let resposta
+        let cadastro = evolClass.evolAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        evolClass.cadastraEvolFisio(req,res).then((result)=>{
-            console.log("Cadastro Realizado!")
-            console.log(res)
-            resultado = true;
+        cadastro.then((result)=>{
+            resposta = true;
         }).catch((err)=>{
-            resultado = err
+            resposta = err
             console.log("ERRO:"+err)
         }).finally(()=>{
-            if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+            if (resposta == true){
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaEvol(req,res,resposta)
+                this.listaEvol(req,res)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro');
             }
         })
     },
+    
 
     atualizaEvol(req,res){
         let resultado
-        let resposta = new Resposta()
+        let resposta = new resposta()
         try{
-            evolClass.escolaEditar(req,res).then((res)=>{
+            evolClass.evolEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -140,25 +139,17 @@ module.exports = {
         }
     },
 
-
     deletaEvol(req,res){
-        Evolfisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
+        Evol.deleteOne({_id: req.params.id}).then(() =>{
+            console.log("Listagem Realizada de Evols")
                 req.flash("success_message", "Evolamento Fisioterapêutico deletado!")
-                res.render('area/evol/evolLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+                res.render('area/evol/evolLis', {Evol, flash})
+            .catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
                 res.render('admin/erro')
             })
         })
     }
-
 
 }

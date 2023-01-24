@@ -60,7 +60,7 @@ module.exports = {
 
     },
 
-    carregaBordoEdi(req,res){
+    carregaBordoedi(req,res){
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")

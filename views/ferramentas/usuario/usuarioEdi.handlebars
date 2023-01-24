@@ -10,11 +10,12 @@
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
 				console.log("usuperfdilid:"+document.getElementById("usuPerfilId").value);
 				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
-				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
+				document.getElementById("usuarioContatipo").value = document.getElementById("usuContaTipo").value;
 				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
 				console.log("IDasdasdasd:"+document.getElementById("usuEspecializacao").value);
 				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
+				document.getElementById("usuarioContrato").value = document.getElementById("usuContrato").value;
 				console.log("termina");
 			}
 		</script>
@@ -576,11 +577,10 @@
 																				<label for="id-date-picker-1">Tipo</label>
 																				<div class="form-group">
 																						<div class="col-sm-8">
-																							<select name="usuarioContaTipo" id="usuarioContaTipo" class="chosen-select" data-placeholder="Escolha...">
-																									<option value="{{usuario.usuario_contatipo}}">{{usuario.usuario_contatipo}}</option>
-																									<option value="Salário">Salário</option>
-																									<option value="Poupança">Poupança</option>
-																									<option value="Corrente">Corrente</option>																									
+																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																								<option value="Salário">Salário</option>
+																								<option value="Poupança">Poupança</option>
+																								<option value="Corrente">Corrente</option>																									
 																							</select>
 																						</div>
 																				</div>
@@ -609,11 +609,12 @@
 																				<label for="id-date-picker-1">Contrato</label>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha...">
+																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." Value="Não Informado" >
 																								<option value="CLT">CLT</option>
 																								<option value="CNPJ">CNPJ</option>
-																								<option value="Autônomo">Autônomo</option>																									
-																						</select>
+																								<option value="CNPJ Fixo">CNPJ Fixo</option>
+																								<option value="Autônomo">Autônomo</option>
+																							</select>
 																					</div>
 																				</div>
 
@@ -747,6 +748,7 @@
 																						<input id="usuTipoPix" name="usuTipoPix" value="{{usuario.usuario_tipopix}}" />
 																						<input id="usuEspecializacao" name="usuEspecializacao" value="{{usuario.usuario_especializacao}}" />
 																						<input id="usuGraduacao" name="usuGraduacao" value="{{usuario.usuario_graduacao}}" />
+																						<input id="usuContrato" name="usuContrato" value="{{usuario.usuario_contrato}}" />
 																					</div>
 
 																				</div>
@@ -819,7 +821,7 @@
 
 									<div class="clearfix document-actions">
 									
-										<div class="col-md-offset-3 col-md-9">
+										<div class="col-xs-12" style="text-align: center;">
 											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar

@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const EmpresaSchema = mongoose.Schema({
+    empresa_unidade : {
+        type: String,
+        unique: true,
+        required: true
+    },
     empresa_nome : {
         type: String,
         unique: true,
@@ -79,11 +84,12 @@ const EmpresaSchema = mongoose.Schema({
 })
 
 class Empresa{
-    constructor(empresa_nome,empresa_fantasia,empresa_cnpj,empresa_muni
+    constructor(empresa_unidade,empresa_nome,empresa_fantasia,empresa_cnpj,empresa_muni
         ,empresa_estad,empresa_end,empresa_endcompl,empresa_endbairro,empresa_endcidade
         ,empresa_enduf,empresa_endcep,empresa_whatsapp,empresa_cel,empresa_fixo
         ,empresa_email,empresa_site,empresa_obs,empresa_datacad,empresa_dataedi 
         ){
+        this.empresa_unidade  = empresa_unidade,
         this.empresa_nome  = empresa_nome,
         this.empresa_fantasia  = empresa_fantasia,
         this.empresa_cnpj  = empresa_cnpj,
@@ -120,6 +126,7 @@ module.exports = {EmpresaModel,EmpresaSchema,
         //Realiza Atualização
         await EmpresaModel.findByIdAndUpdate(req.body.empresaId, 
             {$set: {
+                empresa_unidade: req.body.empresaUnidade,
                 empresa_nome: req.body.empresaNome,
                 empresa_fantasia: req.body.empresaFantasia,
                 empresa_cnpj: req.body.empresaCnpj,
@@ -165,6 +172,7 @@ module.exports = {EmpresaModel,EmpresaSchema,
         } else {
             console.log("empresamodel");
             const newEmpresa = new EmpresaModel({
+                empresa_unidade: req.body.empresaUnidade,
                 empresa_nome: req.body.empresaNome,
                 empresa_fantasia: req.body.empresaFantasia,
                 empresa_cnpj: req.body.empresaCnpj,

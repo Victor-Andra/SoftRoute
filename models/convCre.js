@@ -123,5 +123,13 @@ module.exports = {ConvcreModel,ConvcreSchema,
                 return err;
             });
         }
+    },
+    convcreCarregarTodos: async (req,res) => {
+        let convcres;
+        await ConvcreModel.find({}).then((convcre) => {
+            convcres = convcre;
+        });
+        
+        return convcres;
     }
 };

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Laudos Diversos</title>
+	</head>
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Laudos Diversos
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro e Índice Geral Laudos para Upload
+							</small>
+						</h1>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/area/laudo/atualizar" method="POST">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Beneficiário</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{laudo.laudo_beneid}}">
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Terapeuta Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<select name="laudoUsuid" id="laudoUsuid" class="chosen-select" data-placeholder="Escolha..." value="{{laudo.laudo_usuarioid}}">
+																{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
+															</select>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<label>Tipo de Laudo</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+														<div class="input-group">
+															<input type="text" name="laudoTipo" id="laudoTipo" placeholder="Padrão" class="form-control" value="{{laudo.laudo_tipo}}" style="width: 400px;"/>
+														</div>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-6">
+												<div class="row">
+													<label >Médico Responsável</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input type="text" name="laudoMedico" id="laudoMedico" placeholder="Padrão" class="form-control" value="{{laudo.laudo_medico}}" style="width: 400px;"/>
+													</div>
+												</div>
+											</div>													
+											<div class="col-sm-2">
+												<div class="row">
+													<label>Data Laudo</label>
+												</div>
+												<div class="row">
+													<div class="input-group">
+															<input id="laudoLaudodata" name="laudoLaudodata" type="date" value="{{laudo.laudo_laudodata}}">
+													</div>
+												</div>
+											</div>													
+										</div>
+										<div class="row">
+										<div class="col-sm-5">
+											<div class="row">
+												<label>Upload de Laudo</label>
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">Inserir arquivo</h4>
+
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="alert alert-danger">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>ATENÇÃO! </strong>
+													O Arquivo escolhido para UpLoad não pode ter tamanho maior que <strong>13MB ou 13.000 KBytes</strong>.
+													<br>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="form-group">
+															<div class="col-xs-12">
+																<input type="file" id="id-input-file-2" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="hidden">
+										<input name="laudoId" value="{{laudo._id}}" />
+									</div>
+									<div class="col=xs=12">
+										<hr>
+									</div>
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning" href="/area/laudo/lis">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

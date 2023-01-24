@@ -2,113 +2,124 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const TratSchema = mongoose.Schema({
-    trat_planotipo :{
-        type: String,
-        required: true
-    },
-    trat_beneid :{
-        type: ObjectId,
-        required: true
-    },
-    trat_beneidade :{
-        type: String,
-        required: false
-    },
-    trat_convid :{
-        type: ObjectId,
-        required: true
-    },
-    trat_usuid :{
-        type: String,
-        required: true
-    },
-    trat_tratdata :{
-        type: Date,
-        required: true
-    },
-    trat_terapeutaid :{
-        type: ObjectId,
-        required: true
-    },
-    trat_terapiaid :{
-        type: ObjectId,
-        required: false
-    },
-     trat_num :{
-        type: Number,
-        required: true
-    },
-    trat_diagnostico :{
-        type: String,
-        required: false
-    },
-    trat_histclinico:{
-        type: String,
-        required: false
-    },
-    trat_metacurto :{
-        type: String,
-        required: false
-    },
-    trat_metamedio :{
-        type: String,
-        required: false
-    },
-    trat_metalongo :{
-        type: String,
-        required: false
-    },
-    trat_objetivo :{
-        type: String,
-        required: false
-    },
-    trat_datacad :{
-        type: Date,
-        required: false
-    },
-    trat_dataedi :{
-        type: Date,
-        required: false
-    }
+    //identificação do plano de tratamento
+    trat_planotipo :{ type: String, required: true },
+    trat_beneid :{ type: ObjectId, required: true },
+    trat_beneidade :{ type: String, required: false },
+    trat_benedatanasc :{ type: String, required: true },
+    trat_tratdata :{ type: Date, required: true },
+    trat_diagnostico :{ type: String, required: true },
+    //plano padrao
+    trat_especialidadepad :{ type: String, required: false },
+    trat_terapeutaidpad  :{ type: ObjectId, required: false },
+    trat_historicopad :{ type: String, required: false },
+    trat_objgeralpad :{ type: String, required: false },
+    trat_objespecificopad :{ type: String, required: false },
+    trat_estrategiapad :{ type: String, required: false },
+    trat_obspad :{ type: String, required: false },
+    //plano de tratamento IS
+    trat_terapeutaidis :{ type: ObjectId, required: false },
+    trat_metacurtois :{ type: String, required: false },
+    trat_metamediois :{ type: String, required: false },
+    trat_metalongois :{ type: String, required: false },
+    trat_objetivois :{ type: String, required: false },
+    //plano de tratamento AVD
+    trat_terapeutaidavd :{ type: ObjectId, required: false },
+    trat_metacurtoavd :{ type: String, required: false },
+    trat_metamedioavd :{ type: String, required: false },
+    trat_metalongoavd :{ type: String, required: false },
+    trat_objetivoavd :{ type: String, required: false },
+    //plano de tratamento Fisioterapico
+    trat_terapeutaidfis :{ type: ObjectId, required: false },
+    trat_histclinicofis :{ type: String, required: false },
+    trat_metacurtofis :{ type: String, required: false },
+    trat_metamediofis :{ type: String, required: false },
+    trat_metalongofis :{ type: String, required: false },
+    trat_objetivofis :{ type: String, required: false },
+    //Dados para de Sistema, quem fez, data criação e quem alterou
+    trat_usuid :{ type: String, required: false },
+    trat_datacad :{ type: Date, required: false },
+    trat_dataedi :{ type: Date, required: false }
 })
 
 class Trat{
     constructor(
+        //identificação do plano de tratamento
         trat_planotipo,
-        trat_beneidade,
         trat_beneid,
-        trat_convid,
-        trat_usuid,
+        trat_beneidade,
+        trat_benedatanasc,
         trat_tratdata,
-        trat_terapeutaid,
-        trat_terapiaid,
-        trat_num,
         trat_diagnostico,
-        trat_histclinico,
-        trat_metacurto,
-        trat_metamedio,
-        trat_metalongo,
-        trat_objetivo,
+        //plano padrao
+        trat_especialidadepad,
+        trat_terapeutaidpad,
+        trat_historicopad,
+        trat_objgeralpad,
+        trat_objespecificopad,
+        trat_estrategiapad,
+        trat_obspad,
+        //plano de tratamento IS
+        trat_terapeutaidis,
+        trat_metacurtois,
+        trat_metamediois,
+        trat_metalongois,
+        trat_objetivois,
+        //plano de tratamento AVD
+        trat_terapeutaidavd,
+        trat_metacurtoavd,
+        trat_metamedioavd,
+        trat_metalongoavd,
+        trat_objetivoavd,
+        //plano de tratamento Fisioterapico
+        trat_terapeutaidfis,
+        trat_histclinicofis,
+        trat_metacurtofis,
+        trat_metamediofis,
+        trat_metalongofis,
+        trat_objetivofis,
+        //Dados para de Sistema, quem fez, data criação e quem alterou
+        trat_usuid,
         trat_datacad,
         trat_dataedi
         ){
         this.trat_planotipo = trat_planotipo,
-        this.trat_beneidade = trat_beneidade,
         this.trat_beneid = trat_beneid,
-        this.trat_convid = trat_convid,
-        this.trat_usuid = trat_usuid,
+        this.trat_beneidade = trat_beneidade,
+        this.trat_benedatanasc = trat_benedatanasc,
         this.trat_tratdata = trat_tratdata,
-        this.trat_terapeutaid = trat_terapeutaid,
-        this.trat_terapiaid = trat_terapiaid,
-        this.trat_num = trat_num,
-        this.trat_diagnostico = diagnostico,
-        this.trat_histclinico = trat_histclinico,
-        this.trat_metacurto = trat_metacurto,
-        this.trat_metamedio = trat_metamedio,
-        this.trat_metalongo = trat_metalongo,
-        this.trat_objetivo = trat_objetivo,
+        this.trat_diagnostico = trat_diagnostico,
+        //plano padrao
+        this.trat_especialidadepad = trat_especialidadepad,
+        this.trat_terapeutaidpad = trat_terapeutaidpad,
+        this.trat_historicopad = trat_historicopad,
+        this.trat_objgeralpad = trat_objgeralpad,
+        this.trat_objespecificopad = trat_objespecificopad,
+        this.trat_estrategiapad = trat_estrategiapad,
+        this.trat_obspad = trat_obspad,
+        //plano de tratamento IS
+        this.trat_terapeutaidis = trat_terapeutaidis,
+        this.trat_metacurtois = trat_metacurtois,
+        this.trat_metamediois = trat_metamediois,
+        this.trat_metalongois = trat_metalongois,
+        this.trat_objetivois = trat_objetivois,
+        //plano de tratamento AVD
+        this.trat_terapeutaidavd = trat_terapeutaidavd,
+        this.trat_metacurtoavd = trat_metacurtoavd,
+        this.trat_metamedioavd = trat_metamedioavd,
+        this.trat_metalongoavd = trat_metalongoavd,
+        this.trat_objetivoavd = trat_objetivoavd,
+        //plano de tratamento Fisioterapico
+        this.trat_terapeutaidfis = trat_terapeutaidfis,
+        this.trat_histclinicofis = trat_histclinicofis,
+        this.trat_metacurtofis = trat_metacurtofis,
+        this.trat_metamediofis = trat_metamediofis,
+        this.trat_metalongofis = trat_metalongofis,
+        this.trat_objetivofis = trat_objetivofis,
+        //Dados para de Sistema, quem fez, data criação e quem alterou
+        this.trat_usuid = trat_usuid,
         this.trat_datacad = trat_datacad,
-        this.trat_dataedi = trat_dataedi       
+        this.trat_dataedi = trat_dataedi   
     }
 }
 
@@ -123,22 +134,45 @@ module.exports = {TratModel,TratSchema,
         //Realiza Atualização
         await TratModel.findByIdAndUpdate(req.body.tratId, 
             {$set: {
-                trat_planotipo : req.body.tratPlanotipo,
-                trat_beneidade : req.body.tratIdade,
-                trat_beneid : req.body.tratBeneid,
-                trat_convid : req.body.tratConvid,
-                trat_usuid : req.body.tratUsuid,
-                trat_tratdata : req.body.tratdata,
-                trat_terapeutaid : req.body.tratTerapeutaid,
-                trat_terapiaid : req.body.tratTerapiaid,
-                trat_diagnostico : req.body.tratDiagnostico,
-                trat_histclinico : req.body.tratHistclinico,
-                trat_metacurto : req.body.tratMetacurto,
-                trat_metamedio : req.body.tratMetamedio,
-                trat_metalongo : req.body.tratMetalongo,
-                trat_objetivo : req.body.tratObjetivo,
-                trat_dataedi : dataAtual.toISOString()
-                }}
+                //identificação do plano de tratamento
+        trat_planotipo : req.body.tratPlanotipo,
+        trat_beneid : req.body.tratBeneid,
+        trat_beneidade : req.body.tratBeneidade,
+        trat_benedatanasc : req.body.tratBenedatanasc,
+        trat_tratdata : req.body.tratTratdata,
+        trat_diagnostico : req.body.tratDiagnostico,
+        //plano padrao
+        trat_especialidadepad : req.body.tratEspecialidadepad,
+        trat_terapeutaidpad : req.body.tratTerapeutaidpad,
+        trat_historicopad : req.body.tratHistoricopad,
+        trat_objgeralpad : req.body.tratObjgeralpad,
+        trat_objespecificopad : req.body.tratObjespecificopad,
+        trat_estrategiapad : req.body.tratEstrategiapad,
+        trat_obspad : req.body.tratObspad,
+        //plano de tratamento IS
+        trat_terapeutaidis : req.body.tratTerapeutaidis,
+        trat_metacurtois : req.body.tratMetacurtois,
+        trat_metamediois : req.body.tratMetamediois,
+        trat_metalongois : req.body.tratMetalongois,
+        trat_objetivois : req.body.tratObjetivois,
+        //plano de tratamento AVD
+        trat_terapeutaidavd : req.body.tratTerapeutaidavd,
+        trat_metacurtoavd : req.body.tratMetacurtoavd,
+        trat_metamedioavd : req.body.tratMetamedioavd,
+        trat_metalongoavd : req.body.tratMetalongoavd,
+        trat_objetivoavd : req.body.tratObjetivoavd,
+        //plano de tratamento Fisioterapico
+        trat_terapeutaidfis : req.body.tratTerapeutaidfis,
+        trat_histclinicofis : req.body.tratHistclinicofis,
+        trat_metacurtofis : req.body.tratMetacurtofis,
+        trat_metamediofis : req.body. tratMetamediofis,
+        trat_metalongofis : req.body.tratMetalongofis,
+        trat_objetivofis : req.body.tratObjetivofis,
+        //Dados para de Sistema, quem fez, data criação e quem alterou
+        trat_usuid : req.body.tratUsuid,
+        trat_datacad : req.body.tratDatacad,
+        trat_dataedi : dataAtual.toISOString()
+        }}
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -154,27 +188,47 @@ module.exports = {TratModel,TratSchema,
         console.log("tratmodel");
         console.log("req.body.tratdata:")
         console.log(req.body.tratdata)
-        const NewTrat = new TratModel({
+        const newTrat = new TratModel({
             trat_planotipo : req.body.tratPlanotipo,
-            trat_beneidade : req.body.tratBeneidade,
             trat_beneid : req.body.tratBeneid,
-            trat_convid : req.body.tratConvid,
-            trat_usuid : req.body.tratUsuid,
-            trat_tratdata : req.body.tratdata,
-            trat_terapeutaid : req.body.tratTerapeutaid,
-            trat_terapiaid : req.body.tratTerapiaid,
-            trat_num : req.body.nextNum,
+            trat_beneidade : req.body.tratBeneidade,
+            trat_benedatanasc : req.body.tratBenedatanasc,
+            trat_tratdata : req.body.tratTratdata,
             trat_diagnostico : req.body.tratDiagnostico,
-            trat_histclinico : req.body.tratHistclinico,
-            trat_metacurto : req.body.tratMetacurto,
-            trat_metamedio : req.body.tratMetamedio,
-            trat_metalongo : req.body.tratMetalongo,
-            trat_objetivo : req.body.tratObjetivo,
+            //plano padrao
+            trat_especialidadepad : req.body.tratEspecialidadepad,
+            trat_historicopad : req.body.tratHistoricopad,
+            trat_objgeralpad : req.body.tratObjgeralpad,
+            trat_objespecificopad : req.body.tratObjespecificopad,
+            trat_estrategiapad : req.body.tratEstrategiapad,
+            trat_obspad : req.body.tratObspad,
+            //plano de tratamento IS
+            trat_terapeutaidis : req.body.tratTerapeutaidis,
+            trat_metacurtois : req.body.tratMetacurtois,
+            trat_metamediois : req.body.tratMetamediois,
+            trat_metalongois : req.body.tratMetalongois,
+            trat_objetivois : req.body.tratObjetivois,
+            //plano de tratamento AVD
+            trat_terapeutaidavd : req.body.tratTerapeutaidavd,
+            trat_metacurtoavd : req.body.tratMetacurtoavd,
+            trat_metamedioavd : req.body.tratMetamedioavd,
+            trat_metalongoavd : req.body.tratMetalongoavd,
+            trat_objetivoavd : req.body.tratObjetivoavd,
+            //plano de tratamento Fisioterapico
+            trat_terapeutaidfis : req.body.tratTerapeutaidfis,
+            trat_histclinicofis : req.body.tratHistclinicofis,
+            trat_metacurtofis : req.body.tratMetacurtofis,
+            trat_metamediofis : req.body. tratMetamediofis,
+            trat_metalongofis : req.body.tratMetalongofis,
+            trat_objetivofis : req.body.tratObjetivofis,
+            //Dados para de Sistema, quem fez, data criação e quem alterou
+            trat_usuid : req.body.tratUsuid,
+            trat_dataedi : req.body.tratDataedi,
             trat_datacad : dataAtual.toISOString()
             
         });
-        console.log("newAtend save");
-        await newAtend.save().then(()=>{
+        console.log("newTrat save");
+        await newTrat.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {

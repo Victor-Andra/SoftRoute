@@ -8,34 +8,34 @@ const laudoClass = require("../models/laudo")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
 //Tabela Plano de Laudoamento 
 const Laudo = mongoose.model("tb_laudo")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+
 
 
 //Funções auxiliares
-
+const respostaClass = require("../models/resposta")
+const bene = require("../models/bene")
+const usuario = require("../models/usuario")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
     listaLaudo(req, res){
-        let convs = new Array();
+        let laudos = new Array();
         console.log('listando Diários de Laudo')
         Laudo.find().then((laudo) =>{
             console.log("Listagem Realizada dos Diários de Laudo!")
-                Bene.findById(req.params.id).then((bene) =>{
-                    console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
+            Bene.find().then((bene)=>{
+                console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada Usuário!")
-            res.render('area/laudo/laudoLis', {Laudos: laudo, Usuarios: usuario, Benes: bene})
+            res.render('area/laudo/laudoLis', {laudos: laudo, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Laudo")
@@ -44,32 +44,37 @@ module.exports = {
     },
 
     carregaLaudo(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/laudo/laudoCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+        let laudos = new Array();
+        console.log('listando Diários de Laudo')
+        Laudo.find().then((laudo) =>{
+            console.log("Listagem Realizada dos Diários de Laudo!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 
+                    console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena os Usuarios por nome 
+                        console.log("Listagem Realizada Usuário!")
+                                res.render("area/laudo/laudoCad", {laudos: laudo, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar")
             res.redirect('admin/erro')
         })
-
     },
 
-    carregaLaudoEdi(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/laudo/laudoEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+    carregaLaudoedi(req,res){
+        let laudos = new Array();
+        console.log('listando Diários de Laudo')
+        Laudo.find().then((laudo) =>{
+            console.log("Listagem Realizada dos Diários de Laudo!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 
+                    console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena os Usuarios por nome 
+                            console.log("Listagem Realizada Usuário!")
+                                res.render("area/laudo/laudoEdi", {laudos: laudo, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -77,39 +82,33 @@ module.exports = {
     },
 
     cadastraLaudo(req,res){
-        console.log("chegou")
-        let resultado
-        let resposta = new Resposta()
+        let resposta
+        let cadastro = laudoClass.laudoAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        laudoClass.cadastraLaudoFisio(req,res).then((result)=>{
-            console.log("Cadastro Realizado!")
-            console.log(res)
-            resultado = true;
+        cadastro.then((result)=>{
+            resposta = true;
         }).catch((err)=>{
-            resultado = err
+            resposta = err
             console.log("ERRO:"+err)
         }).finally(()=>{
-            if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+            if (resposta == true){
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaLaudo(req,res,resposta)
+                this.listaLaudo(req,res)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro');
             }
         })
     },
+    
 
     atualizaLaudo(req,res){
         let resultado
-        let resposta = new Resposta()
+        let resposta = new resposta()
         try{
-            laudoClass.escolaEditar(req,res).then((res)=>{
+            laudoClass.laudoEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -140,25 +139,17 @@ module.exports = {
         }
     },
 
-
     deletaLaudo(req,res){
-        Laudofisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
+        Laudo.deleteOne({_id: req.params.id}).then(() =>{
+            console.log("Listagem Realizada de Laudos")
                 req.flash("success_message", "Laudoamento Fisioterapêutico deletado!")
-                res.render('area/laudo/laudoLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+                res.render('area/laudo/laudoLis', {Laudo, flash})
+            .catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
                 res.render('admin/erro')
             })
         })
     }
-
 
 }

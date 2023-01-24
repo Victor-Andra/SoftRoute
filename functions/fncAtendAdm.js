@@ -51,7 +51,7 @@ module.exports = {
                                 Terapia.find().then((terapia)=>{
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
-                                        res.render('financeiro/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala})
+                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala})
         })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -84,7 +84,7 @@ module.exports = {
                                             nextNumEdi = atendEdi.atend_num;
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
-                                                    res.render('financeiro/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala})
+                                                    res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala})
         })})})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -513,7 +513,7 @@ module.exports = {
                         console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 console.log("Listagem Realizada de Terapia")
-                                res.render("financeiro/atendadm/atendAdmLis", {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
+                                res.render("atendimento/atendadm/atendAdmLis", {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -524,7 +524,7 @@ module.exports = {
         Atend.deleteOne({_id: req.params.id}).then(() =>{
             Atend.find().then((atend) =>{
                 req.flash("success_message", "Atend deletada!")
-                res.render('financeiro/atendadm/atendAdmLis', {atends: atend})
+                res.render('atendimento/atendadm/atendAdmLis', {atends: atend})
             }).catch((err) =>{
                 console.log(err)
                 res.render('admin/erro')
@@ -548,7 +548,7 @@ module.exports = {
                     //Volta para a atend de listagem
                     Atend.find().then((atend) =>{
                         console.log("Listagem Realizada!")
-                        res.render('financeiro/atendadm/atendAdmLis', {atends: atend})
+                        res.render('atendimento/atendadm/atendAdmLis', {atends: atend})
                     }).catch((err) =>{
                         console.log("err:")
                         console.log(err)

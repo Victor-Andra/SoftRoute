@@ -50,7 +50,7 @@
 				{{/compareString}}
 				<div class="row">
 					<div class="col-xs-12">
-						<form class="form-horizontal" role="form" action="/menu/area/anamn/add" method="POST">
+						<form class="form-horizontal" role="form" action="/menu/area/anamn/atualizar" method="POST">
 							<div class="col-sm-12">
 								<div class="tabbable tabs-left ">
 									<ul class="nav nav-tabs" id="myTab">
@@ -5049,21 +5049,24 @@
 											</div>
 										</div>
 									</div>
-
+									<div class="hidden">
+										<input name="anamnId" value="{{anamn._id}}" />
+									</div>
 									<div class="col-md-12">
 										<hr>
 									</div>								
-									<div class="col-md-offset-3 col-md-12">
-
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  href="/area/anamn/lis">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
 									</div>
 								</div>
 							</form>

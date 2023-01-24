@@ -137,8 +137,7 @@ module.exports = {
     deletaAtend(req, res){
         Atend.deleteOne({_id: req.params.id}).then(() =>{
             Atend.find().then((atend) =>{
-                req.flash("success_message", "Atend deletada!")
-                res.render('atendimento/atendLis', {atends: atend})
+                this.listaAtend(req,res)
             }).catch((err) =>{
                 console.log(err)
                 res.render('admin/erro')

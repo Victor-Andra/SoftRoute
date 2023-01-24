@@ -55,6 +55,8 @@ module.exports = {
     carregaUsuarioEdi(req,res){
         Usuario.findById(req.params.id).then((usuario) =>{
             console.log("Listagem Realizada!")
+            console.log("usuario:")
+            console.log(usuario)
                 Estado.find().then((estado)=>{
                     console.log("Listagem Realizada de Ufs!")
                         Perfil.find().then((perfil)=>{

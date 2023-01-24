@@ -88,6 +88,7 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Empresa: activate to sort column ascending">Unidade</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Empresa: activate to sort column ascending">Empresa</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Bnpj:     activate to sort column ascending">Cnpj</th>
 														<th>Ação</th>
@@ -106,7 +107,7 @@
 																	<span class="lbl"></span>
 																</label>
 															</th>
-
+															<td>{{empresa_unidade}}</td>
 															<td>{{empresa_nome}}</td>
 															<td>{{empresa_cnpj}}</td>
 
@@ -139,29 +140,6 @@
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route
-						</span>
-
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-
-		
-						</span>
-					</div>
-				</div>
-			</div>
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -206,7 +184,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, { "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

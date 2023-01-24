@@ -40,7 +40,6 @@
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
@@ -51,79 +50,80 @@
 										<div class="widget-body">
 											<div class="widget-main">
 
-
+												<label> Unidade</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="empresaUnidade" id="empresaUnidade"  class="form-control" value="{{empresa.empresa_unidade}}"/>
+													</div>
+												</div>
 				
 												<label> Razão Social</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="empresaNome" placeholder="" class="form-control" value="{{empresa_nome}}"/>
+														<input type="text" name="empresaNome" placeholder="" class="form-control" value="{{empresa.empresa_nome}}"/>
 													</div>
 												</div>
 
 												<label> Nome Fantasia</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="empresaFantasia" placeholder="" class="form-control" value="{{empresa_fantasia}}"/>
+														<input type="text" name="empresaFantasia" placeholder="" class="form-control" value="{{empresa.empresa_fantasia}}"/>
 													</div>
 												</div>
-
 
 												<label> CNPJ</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="empresaCnpj" placeholder="" class="form-control" value="{{empresa_cnpj}}"/>
+														<input type="text" name="empresaCnpj" placeholder="" class="form-control" value="{{empresa.empresa_cnpj}}"/>
 													</div>
 												</div>
-
 
 												<label> Inscrição Municipal</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="empresaMuni" placeholder="" class="form-control" value="{{empresa_muni}}"/>
+														<input type="text" name="empresaMuni" placeholder="" class="form-control" value="{{empresa.empresa_muni}}"/>
 													</div>
 												</div>
 
 												<label> Inscrição Estadual</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="empresaEstad" placeholder="" class="form-control" value="{{empresa_estad}}" />
+														<input type="text" name="empresaEstad" placeholder="" class="form-control" value="{{empresa.empresa_estad}}" />
 													</div>
 												</div>
 
 												<label > Endereço </label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="empresaEnd" placeholder="" class="form-control" value="{{empresa_end}}"/>
+														<input type="text" name="empresaEnd" placeholder="" class="form-control" value="{{empresa.empresa_end}}"/>
 													</div>
 												</div>
 				
 												<label> Complemento </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="empresaEndcompl" placeholder="" class="form-control" value="{{empresa_endcompl}}"/>
+														<input type="text" name="empresaEndcompl" placeholder="" class="form-control" value="{{empresa.empresa_endcompl}}"/>
 													</div>
 												</div>
 				
 												<label> Bairro </label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<input type="text" name="empresaEndbairro" placeholder="" class="form-control" value="{{empresa_endbairro}}"/>
+														<input type="text" name="empresaEndbairro" placeholder="" class="form-control" value="{{empresa.empresa_endbairro}}"/>
 													</div>
 												</div>
 				
 												<label> Cidade </label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<input type="text" name="empresaEndcidade" placeholder="" class="form-control" value="{{empresa_endcidade}}"/>
+														<input type="text" name="empresaEndcidade" placeholder="" class="form-control" value="{{empresa.empresa_endcidade}}"/>
 													</div>
 												</div>
-
 				
 												<label>UF</label>
 												<div class="form-group">
 														<div class="col-sm-6">
-															<select name="empresaEnduf" class="chosen-select" data-placeholder="Escolha o estado..." value="{{empresa_enduf}}">
-																<option value="{{conv_enduf}}">{{conv_enduf}}</option>
+															<select name="empresaEnduf" class="chosen-select" data-placeholder="Escolha o estado..." value="{{empresa.empresa_enduf}}">
 																{{#each estados}}
 																<option value="{{_id}}">{{estado_nome}}</option>
 																{{/each}}
@@ -137,10 +137,9 @@
 												</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<input type="text" name="empresaEndcep" placeholder="" class="form-control" value="{{empresa_endcep}}"/>
+														<input type="text" name="empresaEndcep" placeholder="" class="form-control" value="{{empresa.empresa_endcep}}"/>
 													</div>
 												</div>
-
 
 												<div>
 													<label>whatsApp
@@ -152,10 +151,9 @@
 															<i class="ace-icon fa fa-phone"></i>
 														</span>
 									
-														<input name="empresaWhatsapp"class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" value="{{empresa_whatsapp}}"/>
+														<input name="empresaWhatsapp"class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" value="{{empresa.empresa_whatsapp}}"/>
 													</div>
 												</div>
-				
 									
 												<div>
 													<label>Celular
@@ -167,7 +165,7 @@
 															<i class="ace-icon fa fa-phone"></i>
 														</span>
 									
-														<input name="empresaCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_cel}}"/>
+														<input name="empresaCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa.empresa_cel}}"/>
 													</div>
 												</div>
 
@@ -181,7 +179,7 @@
 															<i class="ace-icon fa fa-phone"></i>
 														</span>
 									
-														<input name="empresaFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_fixo}}"/>
+														<input name="empresaFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa.empresa_fixo}}"/>
 													</div>
 												</div>
 
@@ -195,10 +193,9 @@
 															<i class="ace-icon fa fa-envelope-o"></i>
 														</span>
 									
-														<input name="empresaEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_email}}"/>
+														<input name="empresaEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa.empresa_email}}"/>
 													</div>
 												</div>
-
 
 												<div>
 													<label>Site
@@ -210,15 +207,14 @@
 															<i class="ace-icon fa fa-home"></i>
 														</span>
 									
-														<input name="empresaSite" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa_site}}"/>
+														<input name="empresaSite" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" value="{{empresa.empresa_site}}"/>
 													</div>
 												</div>
-
 
 												<label> Observações </label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<input type="text" name="empresaObs" placeholder="" class="form-control" value="{{empresa_obs}}"/>
+														<input type="text" name="empresaObs" placeholder="" class="form-control" value="{{empresa.empresa_obs}}"/>
 													</div>
 												</div>
 
@@ -231,11 +227,10 @@
 									</div>
 								</div>
 							
-							
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-	
-								<div class="clearfix form-actions">
+
+								<div class="form-actions">
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>

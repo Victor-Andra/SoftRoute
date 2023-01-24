@@ -99,20 +99,80 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
-							<li class="active">Lista de Atendimentos</li>
-						</ul><!-- /.breadcrumb -->
-					</div>
+						<div class="espace">
+						</div>
+						<div class="page-header">
+							<h1>
+								Lista de Atendimentos
+								<small>
+									<i class="ace-icon fa fa-angle-double-right"></i>
+									Cadastro Geral da Amamnese
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
 					{{#each error}}
 						<div class="alert alert-danger">{{texto}}{{error}}</div>
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
+						<div class="col-xs-12" class="row">
+							<div class="col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label> Filial:&nbsp;</label>
+										<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="row">
+									<div class="input-group">
+													<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023">
+													<option value="2022">2022</option>
+													<option value="2023">2023</option>
+													<option value="2022">2024</option>
+													<option value="2023">2025</option>
+											</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label for="id-date-picker-1">Mês:&nbsp;</label>
+										<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+												<option value="Sem Info">Sem Informação</option>
+												<option value="Janeiro">Janeiro</option>
+												<option value="Fevereiro">Fevereirio</option>
+												<option value="Março">Março</option>
+												<option value="Abril">Abril</option>
+												<option value="Maio">Maio</option>
+												<option value="Junho">Junho</option>
+												<option value="Julho">Julho</option>
+												<option value="Agosto">Agosto</option>
+												<option value="Setembro">Setembro</option>
+												<option value="Outubro">Outubro</option>
+												<option value="Novembro">Novembro</option>
+												<option value="Dezembro">Dezembro</option>
+										</select>
+									</div>
+								</div>
+							</div>												
+							<div class="row">
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+								<i class="ace-icon fa fa-search-plus "></i>
+								</button>
+							</div>
+							<hr>
+						</div>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
@@ -142,10 +202,12 @@
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1"   >Terapia</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
 
 												</tr>
 												
@@ -189,7 +251,11 @@
 														{{/each}}
 
 														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
-														
+
+														<td>{{atend_valorcre}}</td>
+																												
+														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
+																												
 														<td>
 															<div class="action-buttons">
 																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/edi/{{_id}}">
@@ -231,29 +297,7 @@
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route
-						</span>
-
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-
 		
-						</span>
-					</div>
-				</div>
-			</div>
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -298,7 +342,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					
