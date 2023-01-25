@@ -59,6 +59,14 @@
 					console.log(chck.value);
 				}
 			}
+			function alteraCheck(checkboxid){
+				let chck = document.getElementById(checkboxid);
+				if(chck.checked){
+					chck.value="true";
+				} else {
+					chck.value="false";
+				}
+			}
 		</script>
 	</head>
 
@@ -266,6 +274,17 @@
 														<div class="form-group">
 															<div class="col-sm-6">
 																<input style="width: 400px;" type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-6">													
+														<label>Extraordinário: </label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 300px;">
+																<input id="agendaExtra" name="agendaExtra" type="checkbox" onchange="javascript:alteraCheck('agendaExtraordinario');" value="false" />
+																<span class="lbl"></span>
 															</div>
 														</div>
 													</div>

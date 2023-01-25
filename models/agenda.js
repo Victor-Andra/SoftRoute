@@ -20,7 +20,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_aux :{ type: String, required: false },
     agenda_temp :{ type: Boolean, required: false },
     agenda_tempId :{ type: ObjectId, required: false },
-    agenda_tempmotivo :{ type: String, required: false }
+    agenda_tempmotivo :{ type: String, required: false },
+    agenda_extra :{ type: Boolean, required: false}
 })
 
 class Agenda{
@@ -43,7 +44,8 @@ class Agenda{
         agenda_aux,
         agenda_temp,
         agenda_tempId,
-        agenda_tempmotivo
+        agenda_tempmotivo,
+        agenda_extra
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -63,7 +65,8 @@ class Agenda{
         this.agenda_aux = agenda_aux, 
         this.agenda_temp = agenda_temp, 
         this.agenda_tempId = agenda_tempId,
-        this.agenda_tempmotivo = agenda_tempmotivo
+        this.agenda_tempmotivo = agenda_tempmotivo,
+        this.agenda_extra = agenda_extra
     }
 }
 
@@ -126,6 +129,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : false ,
+            agenda_extra: req.body.agendaExtraordinario ,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -216,7 +220,7 @@ module.exports = {AgendaModel,AgendaSchema,
         let resultado;
         await AgendaModel.updateMany(
             {},
-            {$set: {'agenda_temp': false}}
+            {$set: {'agenda_extra': false}}
         ).then((res) =>{
             console.log("XABLAU")
             resultado = "OK"

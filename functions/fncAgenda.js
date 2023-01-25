@@ -7244,20 +7244,25 @@ module.exports = {
                             //console.log("convdeb_terapiaid: "+db.convdeb_terapiaid)
                         })
                         let tamanho = agenda.length;
-                        for( var i = 0; i < tamanho; i++){ 
-                            Usuario.findOne({_id: agenda[i].agenda_usuid}).then((terapeuta)=>{
-                                teraContrato = terapeuta.usuario_contrato;
-                            })
-                            temp = agenda[i].agenda_tempId;
-                            
-                            if (temp != undefined){
-                                tempId = temp;
+                        for( var i = 0; i < tamanho; i++){
+                            if(agenda[i]){
+                                console.log("OK")
+                                Usuario.findOne({_id: agenda[i].agenda_usuid}).then((terapeuta)=>{
+                                    teraContrato = terapeuta.usuario_contrato;
+                                })
+                                temp = agenda[i].agenda_tempId;
+                                
+                                if (temp != undefined){
+                                    tempId = temp;
+                                } else {
+                                    tempId = '';
+                                }
+                                
+                                if (tempId != '') {
+                                    agenda.splice(i, 1);
+                                }
                             } else {
-                                tempId = '';
-                            }
-                            
-                            if (tempId != '') {
-                                agenda.splice(i, 1);
+                                console.log("FUCK")
                             }
                         }
                         agenda.forEach((a)=>{
@@ -7363,7 +7368,7 @@ module.exports = {
         let nextNum;
         console.log("dataIni"+dataIni);
         console.log("dataFim"+dataFim);
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false }).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setUTCDate(dataaux.getUTCDate()+7);
