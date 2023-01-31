@@ -550,7 +550,9 @@ router.get("/atendimento/lis", fncGeral.IsAuthenticated,(req,res) =>{//direciona
     fncAtend.listaAtend(req, res);
 })
 
-
+router.post("/atendimento/lisF", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+    fncAtend.filtraAtend(req, res);
+})
 
 router.get('/atendimento/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtend.carregaAtend(req,res);

@@ -7170,6 +7170,14 @@ module.exports = {
         let seg = new Date(req.body.dataFil);
         let sex = new Date(req.body.dataFil);
         let agendaFinal;
+        let AgendaSubstituida = [];
+        let newAtend;
+        let nextNum;
+        let tempId;
+        let temp;
+        let teraContrato;
+        let roberta;
+        let atend;
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -7212,10 +7220,6 @@ module.exports = {
         }
         let dataIni = seg.toISOString();
         let dataFim = sex.toISOString();
-        let nextNum;
-        let tempId;
-        let temp;
-        let teraContrato;
         console.log("dataIni: "+dataIni);
         console.log("dataFim: "+dataFim);
         let cc = convcreClass.convcreCarregarTodos(req,res);
@@ -7228,13 +7232,12 @@ module.exports = {
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
             //-------------------------
             //console.log(agenda)
-            let atend;
-            let nextNum;
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
                 console.log("validação caso seja o primeiro registro")
                 atendimento.forEach(e => {atend = e});
                 nextNum = atend.atend_num;
                 this.sleep(2000).then(() => {
+                    /*
                         convcre.forEach((ce)=>{
                             //console.log("convcre_convid: "+ce.convcre_convid)
                             //console.log("convcre_terapiaid: "+ce.convcre_terapiaid)
@@ -7243,14 +7246,17 @@ module.exports = {
                             //console.log("convdeb_convid: "+db.convdeb_convid)
                             //console.log("convdeb_terapiaid: "+db.convdeb_terapiaid)
                         })
-                        let tamanho = agenda.length;
-                        for( var i = 0; i < tamanho; i++){
-                            if(agenda[i]){
+                        */
+                        //let tamanho = agenda.length;
+                        let agendaSub;
+                        let index;
+                        agenda.forEach((agendaFull)=>{
+                            if(agendaFull){
                                 console.log("OK")
-                                Usuario.findOne({_id: agenda[i].agenda_usuid}).then((terapeuta)=>{
+                                Usuario.findOne({_id: agendaFull.agenda_usuid}).then((terapeuta)=>{
                                     teraContrato = terapeuta.usuario_contrato;
                                 })
-                                temp = agenda[i].agenda_tempId;
+                                temp = agendaFull.agenda_tempId;
                                 
                                 if (temp != undefined){
                                     tempId = temp;
@@ -7259,70 +7265,280 @@ module.exports = {
                                 }
                                 
                                 if (tempId != '') {
-                                    agenda.splice(i, 1);
+                                    agendaSub = agendaFull.filter(a => a._id == tempId);
+                                    console.log("agendaSub: " + agendaSub)
+                                    AgendaSubstituida.push(agendaSub)
+                                    agendaFull.splice(agendaFull.findIndex(agendaSub), 1);
                                 }
                             } else {
                                 console.log("FUCK")
                             }
-                        }
+                        })
                         agenda.forEach((a)=>{
                             console.log("migrado?")
                             console.log(a.agenda_migrado)
                             if(a.agenda_migrado != undefined){
-                                console.log("T")
+                                console.log("TTTTTTTTTTTTTTTT")
                             }
                             if(a.agenda_migrado != "true"){
                                 nextNum = nextNum + 1;
+                                temp = a.agenda_tempId;
                                 console.log("nextNum: "+nextNum)
-                                console.log("("+a.agenda_convid+"-"+a.agenda_terapiaid+")")
                                 convcreval = "0,00";
                                 convdebval = "0,00";
-
-                                convcre.forEach((cre)=>{
-                                    let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                    let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
-                                    if( convcreTes == agendacreTes){
-                                        console.log("if ("+convcreTes+" == "+agendacreTes)
-                                        convcreval = cre.convcre_valor;
+                                if (temp != undefined){
+                                    tempId = temp;
+                                } else {
+                                    tempId = '';
+                                }
+                                if(tempId != ''){
+                                    agendaSub = AgendaSubstituida.filter(as => as._id == tempId)
+                                    switch (a.agenda_tempmotivo){
+                                        case "Falta":
+                                            convcre.forEach((cre)=>{
+                                                let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convcreval = cre.convcre_valor;
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Falta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//
+                                                atend_valordeb : "0,00",//
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                atend_mergevalorcre : "0,00",
+                                                atend_mergevalordeb : "0,00",
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
+                                        case "Falta Justificada":
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Falta Justificada",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//
+                                                atend_valordeb : "0,00",//
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                atend_mergevalorcre : "0,00",
+                                                atend_mergevalordeb : "0,00",
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
+                                        case "Substituição":
+                                            convcre.forEach((cre)=>{
+                                                let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                                let agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convcreval = cre.convcre_valor;
+                                                }
+                                            })
+                                            convdeb.forEach((deb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                                    let agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convdebval = deb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Substituição",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//
+                                                atend_valordeb : "0,00",//
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                atend_mergevalorcre : convcreval,
+                                                atend_mergevalordeb : convdebval,
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
+                                        case "Roberta Disponivel":
+                                            let idRoberta = new ObjectId("62e008adea444f5b7a02c04f");
+                                            Usuario.findOne({_id: idRoberta}).then((usu)=>{
+                                                roberta = usu;
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Roberta Disponivel",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//
+                                                atend_valordeb : "0,00",//
+                                                atend_mergeterapeutaid : roberta._id,
+                                                atend_mergeterapiaid : a.agenda_terapiaid,
+                                                atend_mergevalorcre : "0,00",
+                                                atend_mergevalordeb : "0,00",
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
+                                        case "Nenhuma Observação":
+                                            convcre.forEach((cre)=>{
+                                                let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convcreval = cre.convcre_valor;
+                                                }
+                                            })
+                                            convdeb.forEach((deb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                                    let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convdebval = deb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Nenhuma Observação",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//
+                                                atend_valordeb : convdebval,//
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
+                                        default:
+                                            convcre.forEach((cre)=>{
+                                                let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convcreval = cre.convcre_valor;
+                                                }
+                                            })
+                                            convdeb.forEach((deb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                                    let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convdebval = deb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_terapeutaid : a.agenda_usuid,//
+                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//
+                                                atend_valordeb : convdebval,//
+                                                atend_categoria : "Nenhuma Observação",
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+                                            break;
                                     }
-                                })
-                                convdeb.forEach((deb)=>{
-                                    if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
-                                        convdebval = "0,00";
-                                    } else {
-                                        let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
-                                        let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
-                                        if(convdebTes == agendadebTes){
-                                            console.log("if ("+convdebTes+" == "+agendadebTes)
-                                            convdebval = deb.convdeb_valor;
+                                } else {
+                                    convcre.forEach((cre)=>{
+                                        let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                        let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                        if( convcreTes == agendacreTes){
+                                            console.log("if ("+convcreTes+" == "+agendacreTes)
+                                            convcreval = cre.convcre_valor;
                                         }
-                                    }
-                                })
-
-                                const newAtend = new Atend({
-                                    atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                    atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                    atend_beneid : a.agenda_beneid,//
-                                    atend_convid : a.agenda_convid,//
-                                    atend_usuid : "Usuario Atual",
-                                    atend_atenddata : a.agenda_data,//
-                                    atend_terapeutaid : a.agenda_usuid,//
-                                    atend_terapiaid : a.agenda_terapiaid,//
-                                    atend_salaid : a.agenda_salaid,//
-                                    atend_valorcre : convcreval,//
-                                    atend_valordeb : convdebval,//
-                                    atend_num : nextNum,
-                                    atend_datacad : dataAtual.toISOString()
-                                });
-                                
-                                console.log("newAtend:"+newAtend)
-                                nextNum = nextNum ++;
-                                console.log("newAtend save");
-                                this.geraAtend(newAtend);
-                                console.log("Setar migrado")
-                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
-                                Agenda.findById(a._id)
-                                console.log("setou migrado")
+                                    })
+                                    convdeb.forEach((deb)=>{
+                                        if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                            convdebval = "0,00";
+                                        } else {
+                                            let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                            let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                            if(convdebTes == agendadebTes){
+                                                console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                convdebval = deb.convdeb_valor;
+                                            }
+                                        }
+                                    })
+    
+                                    newAtend = new Atend({
+                                        atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                        atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                        atend_beneid : a.agenda_beneid,//
+                                        atend_convid : a.agenda_convid,//
+                                        atend_usuid : "Usuario Atual",
+                                        atend_atenddata : a.agenda_data,//
+                                        atend_terapeutaid : a.agenda_usuid,//
+                                        atend_terapiaid : a.agenda_terapiaid,//
+                                        atend_salaid : a.agenda_salaid,//
+                                        atend_valorcre : convcreval,//
+                                        atend_valordeb : convdebval,//
+                                        atend_num : nextNum,
+                                        atend_datacad : dataAtual.toISOString()
+                                    });
+                                    
+                                    console.log("newAtend:"+newAtend)
+                                    nextNum = nextNum ++;
+                                    console.log("newAtend save");
+                                    this.geraAtend(newAtend);
+                                    console.log("Setar migrado")
+                                    Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
+                                    Agenda.findById(a._id)
+                                    console.log("setou migrado")
+                                }
                             }
                             })
                         })

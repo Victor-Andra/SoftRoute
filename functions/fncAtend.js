@@ -193,12 +193,38 @@ module.exports = {
         })
     },
     listaAtend(req, res){
+        let fulldate;
         Atend.find().then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
                 } else {
                     b.atend_atenddata=new Date();
                 }
+                    
+                let data = new Date(b.atend_atenddata)
+                let mes = (data.getMonth()+1).toString();
+                let dia = (data.getUTCDate()).toString();
+
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+
+                let hora = (data.getHours()).toString();
+                let minuto = (data.getMinutes()).toString();
+
+                if (hora.length == 1){
+                    hora = "0"+hora;
+                }
+                if (minuto.length == 1){
+                    minuto = "0"+minuto;
+                }
+
+                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.data=fulldate;
+                b.hora = hora + ":" + minuto;
             })
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
@@ -207,11 +233,97 @@ module.exports = {
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     console.log("Listagem Realizada de Convenios")
-                    Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 console.log("Listagem Realizada de Terapia")
-                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, qtdAtends})
+                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
+        })})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    filtraAtend(req, res){
+        let fulldate;
+        let tipoFiltro = req.body.tipoFiltro;
+        let tipoData = req.body.tipoData;
+        let dataIni;
+        let dataFim;
+        let idFiltro;
+        let busca = {};
+        switch (tipoFiltro){
+            case "Ano/Mes":
+                dataIni = new Date(req.body.ano+"/"+req.body.mes+"/"+"01");
+                dataFim = new Date(req.body.ano+"/"+req.body.mes+"/"+"01");
+                dataFim.setMonth(dataFim.getMonth()+1)
+                dataFim = dataFim - 1;
+                break;
+            case "Dia":
+                dataIni = new Date(req.body.data)
+                dataFim = new Date(req.body.data)
+                dataFim.setMonth(dataFim.getMonth()+1)
+                dataFim = dataFim - 1;
+                break;
+            default:
+                break;
+        }
+        switch (tipoData){
+            case "Geral":
+                break;
+            case "Beneficiário":
+                busca["atend_beneid"] = req.body.atendBeneId;
+                break;
+            case "Terapeuta":
+                busca["atend_terapeutaid"] = req.body.atendTerapeutaId;
+                break;
+            default:
+                break;
+        }
+        Atend.find().then((atend) =>{
+            atend.forEach((b)=>{
+                if(b.atend_atenddata){
+                } else {
+                    b.atend_atenddata=new Date();
+                }
+                    
+                let data = new Date(b.atend_atenddata)
+                let mes = (data.getMonth()+1).toString();
+                let dia = (data.getUTCDate()).toString();
+
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+
+                let hora = (data.getHours()).toString();
+                let minuto = (data.getMinutes()).toString();
+
+                if (hora.length == 1){
+                    hora = "0"+hora;
+                }
+                if (minuto.length == 1){
+                    minuto = "0"+minuto;
+                }
+
+                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.data=fulldate;
+                b.hora = hora + ":" + minuto;
+            })
+            var tamanho = atend.length;
+            var qtdAtends = {qtd: tamanho}
+            console.log("Listagem Realizada de Atendimentos!")
+            Bene.find().then((bene)=>{
+                console.log("Listagem Realizada de Beneficiários!")
+                Conv.find().then((conv)=>{
+                    console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        console.log("Listagem Realizada de Usuário")
+                            Terapia.find().then((terapia)=>{
+                                console.log("Listagem Realizada de Terapia")
+                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

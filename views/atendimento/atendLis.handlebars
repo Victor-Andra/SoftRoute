@@ -45,38 +45,19 @@
 				let fullDatas = document.getElementsByName("fullData")
 
 				fullDatas.forEach((elementox)=>{
-					console.log("atendmun:")
-					console.log(elementox.id);
 					let id = "atenddata"+elementox.id;
-					console.log("procure:")
-					console.log(id)
-
-					//
-
 					let dat = new Date(elementox.value);
-					console.log("dat:"+dat)
 					let mes = (dat.getMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
+
 					if (mes.length == 1){
 						mes = "0"+mes;
 					}
 					if (dia.length == 1){
 						dia = "0"+dia;
 					}
-					console.log("ta undefined?")
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-					console.log("não")
-					//
-					
 
-					console.log("receba:")
-					console.log(elementox.value)
-					console.log("what?")
-					document.getElementById(id).value = fulldate;
-					console.log(document.getElementById(id).value)
-					//document.getElementById(id).value = "asdasd";
-					console.log("resultado:")
-					//console.log(document.getElementById(id).value)
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
 				})
 			}
 			function formataData(){
@@ -93,9 +74,24 @@
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function carregaBody(){
+				document.getElementById("divDataFil").hidden = true;
+			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:ajustaData()">
+	<body class="no-skin" onload="javascript:carregaBody()">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -104,10 +100,6 @@
 						<div class="page-header">
 							<h1>
 								Lista de Atendimentos
-								<small>
-									<i class="ace-icon fa fa-angle-double-right"></i>
-									Cadastro Geral da Amamnese
-								</small>
 							</h1>
 						</div><!-- /.page-header -->
 
@@ -120,52 +112,106 @@
 							<div class="col-sm-2">
 								<div class="row">
 									<div class="input-group">
-										<label> Filial:&nbsp;</label>
-										<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
+										<label>Tipo Filtro Data:&nbsp;</label>
+										<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+											<option value="Ano/Mes">Ano/Mes</option>
+											<option value="Dia">Dia</option>
 										</select>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-2">
+							<div class="hidden col-sm-2">
 								<div class="row">
 									<div class="input-group">
-													<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023">
-													<option value="2022">2022</option>
-													<option value="2023">2023</option>
-													<option value="2022">2024</option>
-													<option value="2023">2025</option>
-											</select>
+										<label> Filial:&nbsp;</label>
+										<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+											<option value="Matriz">Matriz</option>
+											<option value="Filial 1">Filial 1</option>
+											<option value="Filial 2">Filial 2</option>
+											<option value="Filial 3">Filial 3</option>
+											<option value="Filial 4">Filial 4</option>
+										</select>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-2">
+							<div id="divAnoAtend" class="col-xs-12 col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label for="id-date-picker-1">Ano:&nbsp;</label>
+										<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023">
+											<option value="2022">2022</option>
+											<option value="2023">2023</option>
+											<option value="2022">2024</option>
+											<option value="2023">2025</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div id="divMesAtend" class="col-xs-12 col-sm-2">
 								<div class="row">
 									<div class="input-group">
 										<label for="id-date-picker-1">Mês:&nbsp;</label>
 										<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-												<option value="Sem Info">Sem Informação</option>
-												<option value="Janeiro">Janeiro</option>
-												<option value="Fevereiro">Fevereirio</option>
-												<option value="Março">Março</option>
-												<option value="Abril">Abril</option>
-												<option value="Maio">Maio</option>
-												<option value="Junho">Junho</option>
-												<option value="Julho">Julho</option>
-												<option value="Agosto">Agosto</option>
-												<option value="Setembro">Setembro</option>
-												<option value="Outubro">Outubro</option>
-												<option value="Novembro">Novembro</option>
-												<option value="Dezembro">Dezembro</option>
+											<option value="Sem Info">Sem Informação</option>
+											<option value="Janeiro">Janeiro</option>
+											<option value="Fevereiro">Fevereiro</option>
+											<option value="Março">Março</option>
+											<option value="Abril">Abril</option>
+											<option value="Maio">Maio</option>
+											<option value="Junho">Junho</option>
+											<option value="Julho">Julho</option>
+											<option value="Agosto">Agosto</option>
+											<option value="Setembro">Setembro</option>
+											<option value="Outubro">Outubro</option>
+											<option value="Novembro">Novembro</option>
+											<option value="Dezembro">Dezembro</option>
 										</select>
 									</div>
 								</div>
-							</div>												
+							</div>
+							<div id="divDataFil" class="col-xs-12 col-sm-2">
+								<div class="input-group">
+									<label>Data: </label>
+									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+									<input class="hidden" id="dataFinal" name="dataFinal" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label>Terapeuta:&nbsp;</label>
+										<select name="tipoFiltro" id="tipoFiltro" class="chosen-select" data-placeholder="Escolha..." value="Geral">
+											{{#each terapeutas}}
+												<option value="{{_id}}">{{usuario_nome}}</option>
+											{{/each}}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label>Beneficiário:&nbsp;</label>
+										<select name="atendBeneId" id="atendBeneId" class="chosen-select" data-placeholder="Escolha..." value="Geral">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_nome}}</option>
+											{{/each}}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="row">
+									<div class="input-group">
+										<label>Tipo Filtro:&nbsp;</label>
+										<select name="atendTerapeutaId" id="atendTerapeutaId" class="chosen-select" data-placeholder="Escolha..." value="Geral">
+											<option value="Geral">Geral</option>
+											<option value="Beneficiário">Beneficiário</option>
+											<option value="Terapeuta">Terapeuta</option>
+										</select>
+									</div>
+								</div>
+							</div>
 							<div class="row">
 								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 								<i class="ace-icon fa fa-search-plus "></i>
@@ -180,82 +226,69 @@
 									<div class="col-xs-12">
 										<div class="clearfix" >
 											<div class="pull-right tableTools-container">
-
-
 											</div>
 										</div>
-
 										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 										</div>
-										
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-											
 											<thead>
 												<tr role="row">
-													<th class="center hidden">
+													<th class="center">
 														<label class="pos-rel">
 															<input type="checkbox" class="ace" />
 															<span class="lbl"></span>
 														</label>
 													</th>
-
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
-
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
 												</tr>
-												
 											</thead>
-											
 											<tbody>
 												{{#each atends}}
 													<tr role="row" class="odd">
-
-														<th class="center hidden">
-															
-														</th>
-														
-														
+														<td class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+														</td>
 														<td>
-															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{atend_atenddata}}" />
-														</td>					
-
+															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
+														</td>	
+														<td>
+															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{hora}}" />
+														</td>				
 														{{#each ../benes}}
 															{{#ifEqual this._id ../atend_beneid}}
 																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-
 														{{#each ../convs}}<!-- Ok -->	
 															{{#ifEqual this._id ../atend_convid}}
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-			
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../atend_terapiaid}}
 																<td>{{terapia_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-
 														{{#each ../usuarios}}
 															{{#ifEqual this._id ../atend_terapeutaid}}
 																<td>{{usuario_nome}}</td> <!-- Nome Usuário que é Terapeuta -->	
 															{{/ifEqual}}
 														{{/each}}
-
 														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
-
 														<td>{{atend_valorcre}}</td>
-																												
 														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
-																												
 														<td>
 															<div class="action-buttons">
 																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/edi/{{_id}}">
@@ -271,24 +304,14 @@
 																</a>
 																	{{/ifEqual}}
 																{{/each}}
-																
 															</div>
 															<div class="hidden-md hidden-lg">
 															</div>
-															
-															
 														</td>
-											
 													</tr>
 												{{/each}}
 											</tbody>
 										</table>
-										<div id="divData" name="divData" class="hidden" value="{{qtdAtends.qtd}}">
-											{{#each atends}}
-												<input id="{{atend_num}}" name="fullData" value="{{atend_atenddata}}" />
-												<!-- O id é o atendnum utilizado para verificar qual o atendimento correspondente, o nome é utilizado para pegar todos elementos de data -->
-											{{/each}}
-										</div>
 									</div>
 								</div>
 							</div>
@@ -296,9 +319,6 @@
 					</div><!-- /.page-content -->
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
-
-		
-
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
@@ -342,7 +362,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					
