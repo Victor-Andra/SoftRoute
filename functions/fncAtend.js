@@ -71,18 +71,23 @@ module.exports = {
             console.log(atend.atend_num)
             console.log("Listagem Realizada de NextNum")
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({"conv_status":"Ativo"}).then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
                         console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
                             console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
+                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                         res.render("atendimento/atendCad", {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala
                                         })
         })})})})})})})}).catch((err) =>{
@@ -182,10 +187,14 @@ module.exports = {
     },
     carregaAtendEdi(req, res){
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     Sala.find().then((sala)=>{
                         Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                                Terapia.find().then((terapia)=>{
+                            usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
+                            Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                     Atend.findById(req.params.id).then((atend) =>{
                                          res.render('atendimento/atendEdi', { atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, salas: sala})
         })})})})})}).catch((err) =>{
@@ -242,12 +251,16 @@ module.exports = {
             var qtdAtends = {qtd: tamanho}
             console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
+                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
@@ -395,12 +408,16 @@ module.exports = {
             var qtdAtends = {qtd: tamanho}
             console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
+                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
@@ -414,6 +431,7 @@ module.exports = {
         let data = {atual: dataAtual}
         let atend;
         Bene.findById(req.params.id).then((bene)=>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
             console.log("Listagem Realizada de Beneficiários!")
             Atend.find({atend_beneid:req.params.id}).sort({atend_num : -1}).then((atendimento) =>{
             //validação caso seja o primeiro registro
@@ -423,14 +441,17 @@ module.exports = {
             console.log(atend.atend_num)
             console.log("Listagem Realizada de NextNum")
                 Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
                         console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
                             console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                                terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                                 console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                                     console.log("Listagem Realizada de Convenios")
                                     res.render("atendimento/relatendInd", {atendimentos: atendimento, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, convcres: convcre, convdebs: convdeb, data})
         })})})})})})}).catch((err) =>{

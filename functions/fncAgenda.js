@@ -243,8 +243,10 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
+                    bene.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
@@ -267,6 +269,15 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
+        Atend.find().then((atend)=>{
+            atend.forEach((a)=>{
+                if(a.atend_num != 1){
+                    Atend.deleteOne({_id: a._id}).then(()=>{
+                        console.log("Deleted")
+                    })
+                }
+            })
+        })
         //seg.setUTCDate(seg.getUTCDate() - 22);
         //sex.setUTCDate(sex.getUTCDate() - 22);
         seg.setUTCHours(0);
@@ -365,6 +376,7 @@ module.exports = {
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
@@ -857,6 +869,7 @@ module.exports = {
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
@@ -1366,6 +1379,7 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({}).then((conv)=>{
                     console.log("Listagem Realizada de Convenios")
@@ -2909,7 +2923,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
+            b.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
             console.log("Listagem Realizada de agendamentos!")
             console.log(agenda)
             agenda.forEach((e)=>{
@@ -2953,7 +2968,9 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
             Bene.find({_id: req.body.agendaBeneid}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 bene.forEach(e => {
                     nomeBene = e.bene_nome
                     nomeSup = e.bene_supervisor
@@ -5449,6 +5466,7 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
@@ -5943,6 +5961,7 @@ module.exports = {
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
