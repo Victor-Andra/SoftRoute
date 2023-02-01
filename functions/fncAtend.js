@@ -31,6 +31,7 @@ const Sala = mongoose.model("tb_sala")
 
 //Funções auxiliares
 const fncCredit = require("../functions/fncCredit")
+const fncGeral = require("../functions/fncGeral")
 
 class RelAtend{
     constructor(
@@ -194,7 +195,18 @@ module.exports = {
     },
     listaAtend(req, res){
         let fulldate;
-        Atend.find().then((atend) =>{
+        let seg = new Date();
+        let sex = new Date();
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        
+        Atend.find({atend_atenddata: { $gte : agora, $lte:  depois }}).then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
                 } else {
@@ -233,7 +245,7 @@ module.exports = {
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     console.log("Listagem Realizada de Convenios")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 console.log("Listagem Realizada de Terapia")
@@ -246,41 +258,108 @@ module.exports = {
     },
     filtraAtend(req, res){
         let fulldate;
-        let tipoFiltro = req.body.tipoFiltro;
+        let tipoPessoa = req.body.atendTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
         let dataFim;
-        let idFiltro;
-        let busca = {};
-        switch (tipoFiltro){
+        let seg;
+        let sex;
+        let busca;
+
+        switch (tipoData){
             case "Ano/Mes":
-                dataIni = new Date(req.body.ano+"/"+req.body.mes+"/"+"01");
-                dataFim = new Date(req.body.ano+"/"+req.body.mes+"/"+"01");
-                dataFim.setMonth(dataFim.getMonth()+1)
-                dataFim = dataFim - 1;
+                dataIni = new Date(req.body.anoAtend+'-'+req.body.mesAtend+'-01');
+                dataFim = new Date(req.body.anoAtend+'-'+req.body.mesAtend+'-01');
+
+                dataFim.setMonth(dataFim.getMonth()+1);
+                dataFim.setDate(dataFim.getDate()-1);
+
+                dataIni.setUTCHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+                dataFim.setUTCHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            case "Semana":
+                seg = new Date(req.body.dataFinal)
+                sex = new Date(req.body.dataFinal)
+
+                seg.setUTCHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+                sex.setUTCHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+                
                 break;
             case "Dia":
-                dataIni = new Date(req.body.data)
-                dataFim = new Date(req.body.data)
-                dataFim.setMonth(dataFim.getMonth()+1)
-                dataFim = dataFim - 1;
+                dataIni = new Date(req.body.dataFinal)
+                dataFim = new Date(req.body.dataFinal)
+
+                dataIni.setUTCHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+                dataFim.setUTCHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+                
                 break;
             default:
+                
                 break;
         }
-        switch (tipoData){
+        switch (tipoPessoa){
             case "Geral":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
                 break;
             case "Beneficiário":
-                busca["atend_beneid"] = req.body.atendBeneId;
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneId };
                 break;
             case "Terapeuta":
-                busca["atend_terapeutaid"] = req.body.atendTerapeutaId;
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeutaId };
                 break;
             default:
                 break;
         }
-        Atend.find().then((atend) =>{
+        console.log(busca)
+        Atend.find(busca).then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
                 } else {
@@ -385,7 +464,7 @@ module.exports = {
     },
     relAtendimentoValFiltro(req,res){
         let seg = new Date(req.body.dataIni);
-        let sex = new Date(req.body.dataFin);
+        let sex = new Date(req.body.dataFim);
         let a = new RelAtend();
         let t = new RelAtend();
         let existe = false;
@@ -474,7 +553,7 @@ module.exports = {
     },
     relAtendimentoValFiltro2(req,res){
         let seg = new Date(req.body.dataIni);
-        let sex = new Date(req.body.dataFin);
+        let sex = new Date(req.body.dataFim);
         let a = new RelAtend();
         let existe = false;
         seg.setUTCHours(0);

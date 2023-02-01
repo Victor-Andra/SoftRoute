@@ -21,5 +21,26 @@ module.exports = {
             flash.texto = "false";
             res.render('ferramentas/usuario/login',{flash});
         }
+    },
+    getDiaSemana(dt){
+        let dat = new Date(dt);
+        switch (dat.getUTCDay()){
+            case 0:
+                return "dom"
+            case 1:
+                return "seg"
+            case 2:
+                return "ter"
+            case 3:
+                return "qua"
+            case 4:
+                return "qui"
+            case 5:
+                return "sex"
+            case 6:
+                return "sab"
+            default:
+                return "dom"
+        }
     }
 }

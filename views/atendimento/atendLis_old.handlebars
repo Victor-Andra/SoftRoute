@@ -40,7 +40,7 @@
 		<script src="../../../assets/js/html5shiv.min.js"></script>
 		<script src="../../../assets/js/respond.min.js"></script>
 		<![endif]-->
-		<script type="text/javascript">
+				<script type="text/javascript">
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData")
 
@@ -80,10 +80,6 @@
 					document.getElementById("divAnoAtend").hidden = false;
 					document.getElementById("divMesAtend").hidden = false;
 					document.getElementById("divDataFil").hidden = true;
-				} else if (fill == "Semana"){
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
 				} else {
 					document.getElementById("divAnoAtend").hidden = true;
 					document.getElementById("divMesAtend").hidden = true;
@@ -91,156 +87,45 @@
 				}
 			}
 			function trocaFilpessoa() {
-				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				let fillTipopessoa = document.getElementById("atendTipopessoa").value;
 				if(fillTipopessoa == "Geral"){
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = true;
-				} else if(fillTipopessoa == "Beneficiario"){
-					document.getElementById("divAtendBeneficiario").hidden = false;
-					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("atendTipobene").style.display = 'block';
+					document.getElementById("atendTipotera").style.display = 'block';
+				else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("atendTipobene").style.display = 'none';
+					document.getElementById("atendTipotera").style.display = 'block';
 				} else {
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = false;
+					document.getElementById("atendTipobene").style.display = 'block';
+					document.getElementById("atendTipotera").style.display = 'none';
+				}
 				}
 			}
 			function carregaBody(){
 				document.getElementById("divDataFil").hidden = true;
-				//document.getElementById("divAtendBeneficiario").hidden = true;
-				//document.getElementById("divAtendTerapeuta").hidden = true;
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();trocaFilpessoa();">
+
+	<body class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-						<div class="espace">
-						</div>
-						<div class="page-header">
-							<h1>
-								Lista de Atendimentos
-							</h1>
-						</div><!-- /.page-header -->
-
+					<div class="breadcrumbs" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Lista de Atendimentos</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
 					{{#each error}}
 						<div class="alert alert-danger">{{texto}}{{error}}</div>
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
-							<div class="col-xs-12" class="row">
-								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro Data:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
-												<option value="Ano/Mes">Ano/Mes</option>
-												<option value="Semana">Semana</option>
-												<option value="Dia">Dia</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="hidden col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label> Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAnoAtend" class="col-xs-12 col-sm-1">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023">
-												<option value="2022">2022</option>
-												<option value="2023">2023</option>
-												<option value="2024">2024</option>
-												<option value="2025">2025</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divMesAtend" class="col-xs-12 col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro">
-												<option value="01">Janeiro</option>
-												<option value="02">Fevereiro</option>
-												<option value="03">Março</option>
-												<option value="04">Abril</option>
-												<option value="05">Maio</option>
-												<option value="06">Junho</option>
-												<option value="07">Julho</option>
-												<option value="08">Agosto</option>
-												<option value="09">Setembro</option>
-												<option value="10">Outubro</option>
-												<option value="11">Novembro</option>
-												<option value="12">Dezembro</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
-									<div class="input-group">
-										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
-									</div>
-								</div>
-
-								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
-												<option value="Geral">Geral</option>
-												<option value="Beneficiario">Beneficiário</option>
-												<option value="Terapeuta">Terapeuta</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAtendBeneficiario" class="col-xs-12 col-sm-4">
-									<div class="row">
-										<div class="input-group">
-											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
-												{{#each benes}}
-													<option value="{{_id}}">{{bene_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAtendTerapeuta" class="col-xs-12 col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Terapeuta:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
-												{{#each terapeutas}}
-													<option value="{{_id}}">{{usuario_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-									<i class="ace-icon fa fa-search-plus "></i>
-									</button>
-								</div>
-								<hr>
-							</div>
-						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
@@ -255,21 +140,21 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="" class="center" tabindex="0">
+													<th class="center">
 														<label class="pos-rel">
 															<input type="checkbox" class="ace" />
 															<span class="lbl"></span>
 														</label>
 													</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1"  >Hora</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Hora</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1">Origem</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1">Cred</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1">Deb</th>
 													<th class="" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
 												</tr>
 											</thead>
@@ -284,10 +169,10 @@
 														</td>
 														<td>
 															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
-														</td>	
+														</td>
 														<td>
 															<input style="border: none; width: 35px;" readonly="true" id="atenddata{{atend_num}}" value="{{hora}}" />
-														</td>				
+														</td>
 														{{#each ../benes}}
 															{{#ifEqual this._id ../atend_beneid}}
 																<td>{{bene_nome}}</td>
@@ -303,31 +188,21 @@
 																<td>{{terapia_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#each ../terapeutas}}<!-- Ok -->
-															{{#ifEqual this._id ../atend_terapeutaid}}
-																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
-														<td>{{atend_valorcre}}</td>
-														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
+														<td>terapeuta</td>
+														<td>{{atend_org}}</td>
+														<td>{{atend_valordeb}}</td>
+														<td>{{atend_valordeb}}</td>
 														<td>
 															<div class="action-buttons">
-																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/edi/{{_id}}">
+																<a class="blue" href="/menu/beneficiario/imp/{{_id}}">
+																	<i class="ace-icon fa fa-print bigger-130"></i>
+																</a>
+																<a class="green" href="/menu/beneficiario/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																<a class="red" name="acaoDel" id="acaoDel" href="/menu/atendimento/del/{{_id}}">
+																<a class="red" href="/menu/beneficiario/del/{{_id}}">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-																{{#each ../benes}}
-																	{{#ifEqual this._id ../atend_beneid}}
-																		<a class="blue" name="acaoDel" id="acaoDel" href="/menu/atendimento/relatendInd/{{this._id}}">
-																	<i class="ace-icon fa fa-file-o bigger-130"></i>
-																</a>
-																	{{/ifEqual}}
-																{{/each}}
-															</div>
-															<div class="hidden-md hidden-lg">
 															</div>
 														</td>
 													</tr>
@@ -335,12 +210,14 @@
 											</tbody>
 										</table>
 									</div>
-								</div>
+								</div>				
 							</div>
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
+
+		
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
@@ -384,7 +261,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [null, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					
@@ -394,7 +271,7 @@
 			
 					//,
 					//"sScrollY": "200px",
-					"bPaginate": true,
+					//"bPaginate": false,
 			
 					//"sScrollX": "100%",
 					//"sScrollXInner": "120%",
@@ -412,6 +289,119 @@
 			
 				
 				
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+				
+				new $.fn.dataTable.Buttons( myTable, {
+					buttons: [
+					  {
+						"extend": "colvis",
+						"text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
+						"className": "btn btn-white btn-primary btn-bold",
+						columns: ':not(:first):not(:last)'
+					  },
+					  {
+						"extend": "copy",
+						"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
+						"className": "btn btn-white btn-primary btn-bold"
+					  },
+					  {
+						"extend": "csv",
+						"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
+						"className": "btn btn-white btn-primary btn-bold"
+					  },
+					  {
+						"extend": "excel",
+						"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
+						"className": "btn btn-white btn-primary btn-bold"
+					  },
+					  {
+						"extend": "pdf",
+						"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
+						"className": "btn btn-white btn-primary btn-bold"
+					  },
+					  {
+						"extend": "print",
+						"text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
+						"className": "btn btn-white btn-primary btn-bold",
+						autoPrint: false,
+						message: 'This print was produced using the Print button for DataTables'
+					  }		  
+					]
+				} );
+				myTable.buttons().container().appendTo( $('.tableTools-container') );
+				
+				//style the message box
+				var defaultCopyAction = myTable.button(1).action();
+				myTable.button(1).action(function (e, dt, button, config) {
+					defaultCopyAction(e, dt, button, config);
+					$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+				});
+				
+				
+				var defaultColvisAction = myTable.button(0).action();
+				myTable.button(0).action(function (e, dt, button, config) {
+					
+					defaultColvisAction(e, dt, button, config);
+					
+					
+					if($('.dt-button-collection > .dropdown-menu').length == 0) {
+						$('.dt-button-collection')
+						.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+						.find('a').attr('href', '#').wrap("<li />")
+					}
+					$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+				});
+			
+				////
+			
+				setTimeout(function() {
+					$($('.tableTools-container')).find('a.dt-button').each(function() {
+						var div = $(this).find(' > div').first();
+						if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+						else $(this).tooltip({container: 'body', title: $(this).text()});
+					});
+				}, 500);
+				
+				
+				
+				
+				
+				myTable.on( 'select', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
+					}
+				} );
+				myTable.on( 'deselect', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
+					}
+				} );
+			
+			
+			
+			
+				/////////////////////////////////
+				//table checkboxes
+				$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+				
+				//select/deselect all rows according to table header checkbox
+				$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+					
+					$('#dynamic-table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) myTable.row(row).select();
+						else  myTable.row(row).deselect();
+					});
+				});
+				
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
+					var row = $(this).closest('tr').get(0);
+					if(this.checked) myTable.row(row).deselect();
+					else myTable.row(row).select();
+				});
+			
 			
 			
 				$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
@@ -474,7 +464,22 @@
 				});
 				/***************/
 				
-
+				
+				
+				
+				
+				/**
+				//add horizontal scrollbars to a simple table
+				$('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+				  {
+					horizontal: true,
+					styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+					size: 2000,
+					mouseWheelLock: true
+				  }
+				).css('padding-top', '12px');
+				*/
+			
 			
 			})
 		</script>
