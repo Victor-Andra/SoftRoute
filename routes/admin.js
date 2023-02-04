@@ -67,7 +67,7 @@ const beneClass = require("../models/bene")
 const Bene = mongoose.model("tb_bene")
 const fncBene = require("../functions/fncBene")
 
-//Anamnese
+//Evolução Atendimento
 const evoatendClass = require("../models/evoatend")
 const Evoatend = mongoose.model("tb_evoatend")
 const fncEvoatend = require("../functions/fncEvoatend")
@@ -162,8 +162,9 @@ const fncConvdeb = require("../functions/fncConvdeb")
 const atendClass = require("../models/atend")
 const Atend = mongoose.model("tb_atend")
 const fncAtend = require("../functions/fncAtend")
-    //AtendAdm, Atendimento Administrativo
-    const fncAtendAdm = require("../functions/fncAtendAdm")
+   
+//AtendAdm, Atendimento Administrativo
+const fncAtendAdm = require("../functions/fncAtendAdm")
 
 
 //AGENDA, Agendamentos Padrão
@@ -447,6 +448,15 @@ router.get("/agenda/lisB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
 
 router.post("/agenda/filB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
     fncAgenda.carregaAgendaFilB(req, res);
+})
+
+router.get("/agenda/resp", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
+    console.log("Agenda Resp")
+    fncAgenda.carregaAgendaResp(req, res);//CARREGAAGENDABENE
+})
+
+router.post("/agenda/filResp", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
+    fncAgenda.carregaAgendaFilResp(req, res);
 })
 
 router.get("/agenda/lisT", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de terapeutas.

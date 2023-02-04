@@ -7253,7 +7253,7 @@ module.exports = {
                             if(a.agenda_migrado != undefined){
                                 console.log("T")
                             }
-                            if(a.agenda_migrado != "true"){
+                            if(a.agenda_migrado != true){
                                 nextNum++;
                                 console.log("nextNum: "+nextNum)
                                 console.log("("+a.agenda_convid+"-"+a.agenda_terapiaid+")")
@@ -7294,7 +7294,7 @@ module.exports = {
                                 console.log("newAtend save");
                                 this.geraAtend(newAtend);
                                 console.log("Setar migrado")
-                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
+                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: true }})
                                 Agenda.findById(a._id)
                                 console.log("setou migrado")
                             }

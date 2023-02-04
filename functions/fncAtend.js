@@ -403,6 +403,9 @@ module.exports = {
                 fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.data=fulldate;
                 b.hora = hora + ":" + minuto;
+                if(b.atend_org == "Administrativo"){
+                    b.atend_org = "ADM";
+                }
             })
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}

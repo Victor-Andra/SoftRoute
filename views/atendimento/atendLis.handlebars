@@ -268,9 +268,10 @@
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-													<th class="" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -309,6 +310,7 @@
 															{{/ifEqual}}
 														{{/each}}
 														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
+														<td>{{atend_categoria}}</td>
 														<td>{{atend_valorcre}}</td>
 														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
 														<td>
@@ -384,7 +386,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					

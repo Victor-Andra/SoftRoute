@@ -11,7 +11,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_salaid :{ type: ObjectId, required: false },
     agenda_terapiaid :{ type: ObjectId, required: false },
     agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
-    agenda_migrado :{ type: String, required: false }, //Status se o agendamento gerou agendamento
+    agenda_migrado :{ type: Boolean, required: false }, //Status se o agendamento gerou agendamento
     agenda_datacad :{ type: String, required: false },
     agenda_dataedi :{ type: String, required: false },
     agenda_categoria :{ type: String, required: true },
@@ -90,7 +90,6 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_migrado : req.body.agendaMigrado ,
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
@@ -124,7 +123,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_migrado : req.body.agendaMigrado ,
+            agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
@@ -159,7 +158,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_migrado : req.body.agendaMigrado ,
+            agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
@@ -194,7 +193,6 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_migrado : req.body.agendaMigrado ,
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
@@ -210,6 +208,22 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log("erro mongo:")
             console.log(err)
             resultado = err;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
+    },
+    agendaFindOne: async (id, res) => {
+        let resultado;
+        //Pega data atual
+        
+        //Realiza Atualização - Atualização não faz alteração temporaria
+        await AgendaModel.findOne({_id: id}).then((res) =>{
+            console.log("Salvo")
+            resultado = res;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = undefined;
             //res.redirect('admin/branco')
         })
         return resultado;

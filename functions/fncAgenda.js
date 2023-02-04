@@ -3365,6 +3365,1040 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+
+    carregaAgendaResp(req,res){
+        let aux = 1;
+        let is = false;
+        let dtFill;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.findOne().then((b) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+            console.log("Listagem Realizada de agendamentos!")
+            console.log(agenda)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
+
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        console.log("erro");
+                        break;
+                }
+            })
+            //console.log(agenda)
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+            Bene.find({_id: b._id}).then((bene)=>{
+                bene.forEach(e => {
+                    nomeBene = e.bene_apelido
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+                console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                        console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            console.log("Listagem Realizada de Terapia")
+                            Horaage.find().then((horaage)=>{
+                                console.log("Listagem Realizada de Horario")
+                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
+                                
+                                let z = "seg"
+
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "ter"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "qua"
+                                                               
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "qui"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "sex"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                //Feito serapadamente porque o foreach de semana não estava afim de funcionar
+
+                                agenda.sort(function(a, b) {
+                                    let h1 = a.agenda_hora.substring(0,2);
+                                    let m1 = a.agenda_hora.substring(3,5);
+                                    let h2 = b.agenda_hora.substring(0,2);
+                                    let m2 = b.agenda_hora.substring(3,5);
+                                    if(h1 == h2){
+                                        if(m1 < m2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        if(h1 < h2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                Sala.find().then((sala)=>{
+                                    console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    console.log("benenomeconv:"+benenomeconv)
+                                    res.render("agenda/agendaResp", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+
+    carregaAgendaFilResp(req,res){
+        let aux = 1;
+        let is = false;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let benenomeconv;
+        let dtFill = new Date(req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
+            b.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
+            console.log("Listagem Realizada de agendamentos!")
+            console.log(agenda)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
+
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        console.log("erro");
+                        break;
+                }
+            })
+            //console.log(agenda)
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            Bene.find({_id: req.body.agendaBeneid}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                bene.forEach(e => {
+                    nomeBene = e.bene_nome
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+                console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                        console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            console.log("Listagem Realizada de Terapia")
+                            Horaage.find().then((horaage)=>{
+                                console.log("Listagem Realizada de Horario")
+                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
+                                
+                                let z = "seg"
+
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "ter"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "qua"
+                                                               
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "qui"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true;
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                z = "sex"
+                                
+                                haddia = agenda.some(a => a.agenda_data_semana === z);
+                                console.log("Tem "+z+"?"+haddia)
+                                if(haddia){
+                                    horaage.forEach((h)=>{
+                                        is = true
+                                        
+                                        agenda.forEach((e)=>{
+                                            if(e.agenda_data_semana == z){
+                                                if (h.horaage_hora == e.agenda_hora){
+                                                    is = false
+                                                }
+                                            }
+                                        });
+                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                                        
+                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                                            let daty;
+                                            semana.forEach((y)=>{
+                                                if(y.dia == z){
+                                                    daty = y.data
+                                                }
+                                            });
+
+                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                            
+                                            agendaVoid = new Agenda({
+                                                agenda_hora : h.horaage_hora,
+                                                agenda_data_semana : z,
+                                                agenda_data_dia : dty,
+                                                agenda_aux : aux,
+                                                agenda_salaid : voidId,
+                                                agenda_beneid : voidId,
+                                                agenda_convid : voidId,
+                                                agenda_terapiaid : voidId,
+                                                agenda_usuid : voidId
+                                            });
+                                            agenda.push(agendaVoid);
+                                            aux++;
+                                        }
+                                    })
+                                } else {
+                                    horaage.forEach((h)=>{
+                                        let daty;
+                                        semana.forEach((y)=>{
+                                            if(y.dia == z){
+                                                daty = y.data
+                                            }
+                                        });
+
+                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                                        
+                                        agendaVoid = new Agenda({
+                                            agenda_hora : h.horaage_hora,
+                                            agenda_data_semana : z,
+                                            agenda_data_dia : dty,
+                                            agenda_aux : aux,
+                                            agenda_salaid : voidId,
+                                            agenda_beneid : voidId,
+                                            agenda_convid : voidId,
+                                            agenda_terapiaid : voidId,
+                                            agenda_usuid : voidId
+                                        });
+                                        agenda.push(agendaVoid);
+                                        aux++;
+                                    })
+                                }
+                                //Feito serapadamente porque o foreach de semana não estava afim de funcionar
+
+                                agenda.sort(function(a, b) {
+                                    let h1 = a.agenda_hora.substring(0,2);
+                                    let m1 = a.agenda_hora.substring(3,5);
+                                    let h2 = b.agenda_hora.substring(0,2);
+                                    let m2 = b.agenda_hora.substring(3,5);
+                                    if(h1 == h2){
+                                        if(m1 < m2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        if(h1 < h2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                Sala.find().then((sala)=>{
+                                    console.log("Listagem Realizada de Terapia")
+                                    benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    console.log("benenomeconv:"+benenomeconv)
+                                    res.render("agenda/agendaResp", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+
     carregaAgendaS(req,res){
         let aux = 1;
         let is = false;
@@ -4367,6 +5401,10 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
+        Atend.find({atend_num: {$gte: 2}}).then((a)=>{
+            a.forEach(a=>{
+                Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
+        })
         let aux = 1;
         let is = false;
         let dtFill;
@@ -4437,8 +5475,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -4481,12 +5519,12 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -4495,7 +5533,7 @@ module.exports = {
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5918,7 +6956,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
@@ -5962,18 +7000,18 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6341,7 +7379,7 @@ module.exports = {
                                 })
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSala", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -6406,8 +7444,8 @@ module.exports = {
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -6447,19 +7485,19 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     //Montar estrutura da linha baseada no horario da agenda
                                     let linha;
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
@@ -6475,15 +7513,15 @@ module.exports = {
         dtTemp.setMinutes(0);
         dtTemp.setSeconds(0);
         let dtFill;
-        console.log("req.body.dataFinal:"+req.body.dataFinal)
-        console.log("dtTemp.getUTCDay():"+dtTemp.getUTCDay())
+        //console.log("req.body.dataFinal:"+req.body.dataFinal)
+        //console.log("dtTemp.getUTCDay():"+dtTemp.getUTCDay())
         if(dtTemp.getUTCDay() == 0 || dtTemp.getUTCDay() == 6){
             dtFill = {dia: "seg"};
         } else {
             dtFill = {dia: this.getDiaSemana(dtTemp)};
         }
-        console.log("dtFill")
-        console.log(dtFill)
+        //console.log("dtFill")
+        //console.log(dtFill)
 
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -6493,8 +7531,8 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -6545,7 +7583,7 @@ module.exports = {
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -6585,19 +7623,19 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -6662,8 +7700,8 @@ module.exports = {
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -6703,19 +7741,19 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})})}).catch((err) =>{
             console.log(err)
@@ -6729,15 +7767,15 @@ module.exports = {
         dtTemp.setMinutes(0);
         dtTemp.setSeconds(0);
         let dtFill;
-        console.log("req.body.dataFinal:"+req.body.dataFinal)
-        console.log("dtTemp.getUTCDay():"+dtTemp.getUTCDay())
+        //console.log("req.body.dataFinal:"+req.body.dataFinal)
+        //console.log("dtTemp.getUTCDay():"+dtTemp.getUTCDay())
         if(dtTemp.getUTCDay() == 0 || dtTemp.getUTCDay() == 6){
             dtFill = {dia: "seg"};
         } else {
             dtFill = {dia: this.getDiaSemana(dtTemp)};
         }
-        console.log("dtFill")
-        console.log(dtFill)
+        //console.log("dtFill")
+        //console.log(dtFill)
 
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -6747,8 +7785,8 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -6799,7 +7837,7 @@ module.exports = {
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -6839,19 +7877,19 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -6862,11 +7900,11 @@ module.exports = {
     cadastraAgenda(req,res){//AdicionaAgenda
         let flash = new Resposta()
         let resultado;
-        console.log(req.body.dataAg)
-        console.log(req.body.agendaHora)
+        //console.log(req.body.dataAg)
+        //console.log(req.body.agendaHora)
         let cadastro = agendaClass.agendaAdicionar(req,res);
         cadastro.then((res) =>{
-            console.log(res)
+            //console.log(res)
             resultado = true;
         }).catch((err) =>{
             console.log(err)
@@ -6903,17 +7941,17 @@ module.exports = {
             agenda.agenda_data_dia = this.getDataFMT(dat);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Beneficiário!")
+                //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Convenios!")
+                    //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
-                        console.log("Listagem salas!")
+                        //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{ 
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem terapia!")
+                            //console.log("Listagem terapia!")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                                console.log("Listagem terapeutas!")
+                                //console.log("Listagem terapeutas!")
                                 Horaage.find().then((horaage)=>{
         res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId})
         })})})})})})}).catch((err) =>{
@@ -6924,11 +7962,11 @@ module.exports = {
     cadastraAgendaTemp(req,res){//AdicionaAgenda
         let flash = new Resposta()
         let resultado;
-        console.log(req.body.dataAg)
-        console.log(req.body.agendaHora)
+        //console.log(req.body.dataAg)
+        //console.log(req.body.agendaHora)
         let cadastro = agendaClass.agendaAdicionarTemp(req,res);
         cadastro.then((res) =>{
-            console.log(res)
+            //console.log(res)
             flash.sucesso = "true";
             flash.texto = "Cadastro Agenda Diária realizado com sucesso!";
         }).catch((err) =>{
@@ -6958,17 +7996,17 @@ module.exports = {
             agenda.agenda_data_dia = this.getDataFMT(dat);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Beneficiário!")
+                //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Convenios!")
+                    //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
-                        console.log("Listagem salas!")
+                        //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{ 
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem terapia!")
+                            //console.log("Listagem terapia!")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                                console.log("Listagem terapeutas!")
+                                //console.log("Listagem terapeutas!")
                                 Horaage.find().then((horaage)=>{
         res.render('agenda/agendaEdiTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
         })})})})})})}).catch((err) =>{
@@ -6981,11 +8019,11 @@ module.exports = {
         let resposta;
         try{
             agendaClass.agendaEditarTemp(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
+                //console.log("Atualização Realizada!")
+                //console.log(res)
                 resposta = true;
             }).catch((err) =>{
-                console.log("error1")
+                //console.log("error")
                 console.log(err)
                 resposta = err;
                 res.render('admin/erro')
@@ -6994,7 +8032,7 @@ module.exports = {
                     //Volta para a agenda de listagem
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
-                    console.log('verdadeiro')
+                    //console.log('verdadeiro')
                     this.carregaAgendaCadastro(req,res,flash);
                 }else{
                     //passar classe de erro
@@ -7038,13 +8076,12 @@ module.exports = {
         let flash = new Resposta()
         let resultado;
         try{
-            console.log("TRY")
             agendaClass.agendaEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log("res")
+                //console.log("Atualização Realizada!")
+                //console.log("res")
                 resultado = true;
             }).catch((err) =>{
-                console.log("error1")
+                //console.log("error")
                 console.log(err)
                 resultado = err;
                 res.render('admin/erro')
@@ -7056,7 +8093,7 @@ module.exports = {
                     //Volta para a agenda de listagem
                     this.carregaAgendaCadastro(req,res,flash);
                 }else{
-                    console.log("ERROR")
+                    console.log("Erro ao editar agenda!")
                     flash.texto = "Erro ao editar agenda!"
                     flash.sucesso = "false"
                     this.carregaAgendaCadastro(req,res,flash);
@@ -7079,17 +8116,17 @@ module.exports = {
             agenda.agenda_data_dia = this.getDataFMT(dat);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Beneficiário!")
+                //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Convenios!")
+                    //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
-                        console.log("Listagem salas!")
+                        //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem terapia!")
+                            //console.log("Listagem terapia!")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                                console.log("Listagem terapeutas!")
+                                //console.log("Listagem terapeutas!")
                                 Horaage.find().then((horaage)=>{
         res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
         })})})})})})}).catch((err) =>{
@@ -7099,26 +8136,26 @@ module.exports = {
     },
     carregaAgendaEdiF(req, res){
         let dat = new Date(req.params.mes+"/"+req.params.dia+"/"+req.params.ano);
-        console.log("dat:"+dat)
-        console.log("hora:"+req.params.hora)
+        //console.log("dat:"+dat)
+        //console.log("hora:"+req.params.hora)
         let agenda_hora = req.params.hora;
         let agenda_data_dia = {"dia":req.params.dia,"mes":req.params.mes,"ano":req.params.ano};
         let agenda = {"data":agenda_data_dia,"hora":agenda_hora}
-        console.log(agenda.data)
-        console.log(agenda.hora)
+        //console.log(agenda.data)
+        //console.log(agenda.hora)
         Bene.find().then((bene) =>{
             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-            console.log("Listagem Beneficiário!")
+            //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
-                console.log("Listagem Convenios!")
+                //console.log("Listagem Convenios!")
                 Sala.find().then((sala)=>{ 
-                    console.log("Listagem salas!")
+                    //console.log("Listagem salas!")
                     Terapia.find().then((terapia)=>{ 
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem terapia!")
+                        //console.log("Listagem terapia!")
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                            console.log("Listagem terapeutas!")
+                            //console.log("Listagem terapeutas!")
                             Horaage.find().then((horaage)=>{
         res.render('agenda/agendaCadF', {agenda,benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
         })})})})})}).catch((err) =>{
@@ -7128,20 +8165,20 @@ module.exports = {
     },
     carregaAgendaCadE(req, res){
         Agenda.find({_id: req.params.id}).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                     Sala.find().then((sala)=>{
-                                        console.log("Listagem Realizada de Terapia")
+                                        //console.log("Listagem Realizada de Terapia")
                                 res.render("agenda/agendaCadE", {salas: sala, agenda, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
         })})})})})}).catch((err) =>{
             console.log(err)
@@ -7153,24 +8190,24 @@ module.exports = {
         let flash = new Resposta()
         Bene.find().then((bene) =>{
             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-            console.log("Listagem Beneficiário!")
+            //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
-                console.log("Listagem Convenios!")
+                //console.log("Listagem Convenios!")
                 Sala.find().then((sala)=>{ 
-                    console.log("Listagem salas!")
+                    //console.log("Listagem salas!")
                     Terapia.find().then((terapia)=>{ 
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem terapia!")
+                        //console.log("Listagem terapia!")
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                            console.log("Listagem terapeutas!")
+                            //console.log("Listagem terapeutas!")
                             Horaage.find().then((horaage)=>{
                                 if(resposta.sucesso == ""){
-                                    console.log(' objeto vazio');
+                                    //console.log(' objeto vazio');
                                     flash.texto = ""
                                     flash.sucesso = ""
                                 } else {
-                                    console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                                    //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
                                     flash.texto = resposta.texto
                                     flash.sucesso = resposta.sucesso
                                 }
@@ -7181,19 +8218,22 @@ module.exports = {
         })
     },
     converteAgendaEmAtend(req,res){//Converte a Agenda em Atendimento
-        console.log("----------CÓPIA----------")
-        console.log("dia:"+req.body.dataFil)
+        //console.log("----------CÓPIA----------")
+        //console.log("dia:"+req.body.dataFil)
         let convcreval;
         let convdebval;
         let dataAtual = new Date();
         let seg = new Date(req.body.dataFil);
         let sex = new Date(req.body.dataFil);
         let agendaFinal;
-        let AgendaSubstituida = [];
+        let idSubstituidas = [];
+        let agendaSubstituida = [];
+        let agendaSub;
         let newAtend;
         let nextNum;
-        let tempId;
         let temp;
+        let aux;
+        let auxId;
         let teraContrato;
         let roberta;
         let atend;
@@ -7203,8 +8243,8 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -7239,23 +8279,23 @@ module.exports = {
         }
         let dataIni = seg.toISOString();
         let dataFim = sex.toISOString();
-        console.log("dataIni: "+dataIni);
-        console.log("dataFim: "+dataFim);
+        //console.log("dataIni: "+dataIni);
+        //console.log("dataFim: "+dataFim);
         let cc = convcreClass.convcreCarregarTodos(req,res);
         let cd = convdebClass.convdebCarregarTodos(req,res);
 
         cc.then((convcre)=>{
-            console.log(convcre)
+            //console.log(convcre)
             cd.then((convdeb)=>{
-                console.log(convdeb)
+                //console.log(convdeb)
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
             //-------------------------
             //console.log(agenda)
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
-                console.log("validação caso seja o primeiro registro")
+                //console.log("validação caso seja o primeiro registro")
                 atendimento.forEach(e => {atend = e});
                 nextNum = atend.atend_num;
-                this.sleep(2000).then(() => {
+                //this.sleep(10000).then(() => {
                     /*
                         convcre.forEach((ce)=>{
                             //console.log("convcre_convid: "+ce.convcre_convid)
@@ -7267,58 +8307,67 @@ module.exports = {
                         })
                         */
                         //let tamanho = agenda.length;
-                        let agendaSub;
-                        let index;
                         agenda.forEach((agendaFull)=>{
                             if(agendaFull){
-                                console.log("OK")
                                 Usuario.findOne({_id: agendaFull.agenda_usuid}).then((terapeuta)=>{
                                     teraContrato = terapeuta.usuario_contrato;
                                 })
                                 temp = agendaFull.agenda_tempId;
                                 
                                 if (temp != undefined){
-                                    tempId = temp;
-                                } else {
-                                    tempId = '';
-                                }
-                                
-                                if (tempId != '') {
-                                    agendaSub = agendaFull.filter(a => a._id == tempId);
-                                    console.log("agendaSub: " + agendaSub)
-                                    AgendaSubstituida.push(agendaSub)
-                                    agendaFull.splice(agendaFull.findIndex(agendaSub), 1);
+
+                                    idSubstituidas.push(temp);
+                                    
                                 }
                             } else {
-                                console.log("FUCK")
+                                //console.log("undefined")
                             }
                         })
+
+                        idSubstituidas.forEach((a)=>{
+                            auxId = ""+a+"";
+                            agenda.some((g)=>{
+                                aux = ""+g._id+"";
+                                if(auxId===auxId){
+                                    agendaSubstituida.push(g);
+                                    agenda.splice(agenda.findIndex(agenda => agenda._id == a), 1);
+                                    return true;
+                                }
+                                return false;
+                            })
+                        })
+                        //agendaSubstituida.forEach((s)=>{console.log("aSub:"+s)})
+                        
                         agenda.forEach((a)=>{
-                            console.log("migrado?")
-                            console.log(a.agenda_migrado)
                             if(a.agenda_migrado != undefined){
-                                console.log("TTTTTTTTTTTTTTTT")
+                                //console.log("migrado?"+a.agenda_migrado)
                             }
-                            if(a.agenda_migrado != "true"){
+                            if(!a.agenda_migrado){
                                 nextNum = nextNum + 1;
                                 temp = a.agenda_tempId;
-                                console.log("nextNum: "+nextNum)
+                                //console.log("nextNum: "+nextNum)
                                 convcreval = "0,00";
                                 convdebval = "0,00";
                                 if (temp != undefined){
-                                    tempId = temp;
-                                } else {
-                                    tempId = '';
-                                }
-                                if(tempId != ''){
-                                    agendaSub = AgendaSubstituida.filter(as => as._id == tempId)
+                                    //agendaSub = agendaSubstituida.filter(as => as._id == temp)
+                                    
+                                    agendaSubstituida.some((s)=>{
+                                        aux = s._id
+                                        if((""+aux) === (""+temp)){
+                                            agendaSub = s;
+                                            return true;
+                                        }
+                                        return false;
+                                    })
+
                                     switch (a.agenda_tempmotivo){
                                         case "Falta":
+                                            
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
                                                 let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
-                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -7330,14 +8379,14 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : a.agenda_usuid,//
-                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
-                                                atend_valorcre : convcreval,//
+                                                atend_valorcre : "0,00",//
                                                 atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
-                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
-                                                atend_mergevalorcre : "0,00",
+                                                atend_mergeterapeutaid : a.agenda_usuid,
+                                                atend_mergeterapiaid : a.agenda_terapiaid,
+                                                atend_mergevalorcre : convcreval,
                                                 atend_mergevalordeb : "0,00",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
@@ -7352,13 +8401,13 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : a.agenda_usuid,//
-                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_terapiaid,//
+                                                atend_terapiaid : agendaSub.agenda_usuid,//
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//
                                                 atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
-                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                atend_mergeterapeutaid : a.agenda_terapiaid,
+                                                atend_mergeterapiaid : a.agenda_usuid,
                                                 atend_mergevalorcre : "0,00",
                                                 atend_mergevalordeb : "0,00",
                                                 atend_num : nextNum,
@@ -7366,22 +8415,23 @@ module.exports = {
                                             });
                                             break;
                                         case "Substituição":
+                                            console.log("agendaSub:"+agendaSub)
+                                            let agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                                let agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
-                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
+                                            let agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convdeb.forEach((deb)=>{
                                                 if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
                                                     convdebval = "0,00";
                                                 } else {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
-                                                    let agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                                     if(convdebTes == agendadebTes){
-                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
                                                         convdebval = deb.convdeb_valor;
                                                     }
                                                 }
@@ -7394,13 +8444,13 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : a.agenda_usuid,//
-                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//
                                                 atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,
-                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                atend_mergeterapeutaid : a.agenda_usuid,
+                                                atend_mergeterapiaid : a.agenda_terapiaid,
                                                 atend_mergevalorcre : convcreval,
                                                 atend_mergevalordeb : convdebval,
                                                 atend_num : nextNum,
@@ -7420,8 +8470,8 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : a.agenda_usuid,//
-                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//
                                                 atend_valordeb : "0,00",//
@@ -7438,7 +8488,7 @@ module.exports = {
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
                                                 let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
-                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -7449,7 +8499,7 @@ module.exports = {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
                                                     let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                     if(convdebTes == agendadebTes){
-                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
                                                         convdebval = deb.convdeb_valor;
                                                     }
                                                 }
@@ -7462,11 +8512,15 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : a.agenda_usuid,//
-                                                atend_terapiaid : a.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
-                                                atend_valorcre : convcreval,//
-                                                atend_valordeb : convdebval,//
+                                                atend_valorcre : "0,00",//
+                                                atend_valordeb : "0,00",//
+                                                atend_mergeterapeutaid : a.agenda_usuid,
+                                                atend_mergeterapiaid : a.agenda_terapiaid,
+                                                atend_mergevalorcre : convcreval,
+                                                atend_mergevalordeb : convdebval,
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
@@ -7476,7 +8530,7 @@ module.exports = {
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
                                                 let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
-                                                    console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -7487,14 +8541,14 @@ module.exports = {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
                                                     let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                     if(convdebTes == agendadebTes){
-                                                        console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
                                                         convdebval = deb.convdeb_valor;
                                                     }
                                                 }
                                             })
             
                                             newAtend = new Atend({
-                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
@@ -7516,7 +8570,7 @@ module.exports = {
                                         let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
                                         let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                         if( convcreTes == agendacreTes){
-                                            console.log("if ("+convcreTes+" == "+agendacreTes)
+                                            //console.log("if ("+convcreTes+" == "+agendacreTes)
                                             convcreval = cre.convcre_valor;
                                         }
                                     })
@@ -7527,7 +8581,7 @@ module.exports = {
                                             let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
                                             let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                             if(convdebTes == agendadebTes){
-                                                console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                //console.log("if ("+convdebTes+" == "+agendadebTes)
                                                 convdebval = deb.convdeb_valor;
                                             }
                                         }
@@ -7548,21 +8602,20 @@ module.exports = {
                                         atend_num : nextNum,
                                         atend_datacad : dataAtual.toISOString()
                                     });
-                                    
-                                    console.log("newAtend:"+newAtend)
-                                    nextNum = nextNum ++;
-                                    console.log("newAtend save");
-                                    this.geraAtend(newAtend);
-                                    console.log("Setar migrado")
-                                    Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: "true" }})
-                                    Agenda.findById(a._id)
-                                    console.log("setou migrado")
                                 }
+                                //console.log("newAtend:"+newAtend)
+                                nextNum = nextNum ++;
+                                //console.log("newAtend save");
+                                this.geraAtend(newAtend);
+                                //console.log("Setar migrado")
+                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: true }})
+                                //Agenda.findById(a._id)
+                                //console.log("setou migrado")
                             }
                             })
                         })
                     })
-                })
+                //})
             })
             console.log("END COPIA")
         }).catch((err)=>{
@@ -7573,9 +8626,9 @@ module.exports = {
         })
     }, 
     geraAtend: async (newAtend,res) => {
-        console.log("newAtend save");
+        //console.log("newAtend save");
         await newAtend.save().then(()=>{
-            console.log("Cadastro realizado!");
+            //console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
             console.log(err)
@@ -7709,5 +8762,9 @@ atualizar.then((res) =>{
 }).finally(() =>{
     console.log("resultado")
     console.log(resultado);
+})
+
+let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
+    a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
 })
 */
