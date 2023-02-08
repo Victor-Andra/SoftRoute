@@ -141,12 +141,38 @@ module.exports = {
         })
     },
     deletaAtend(req, res){
-        Atend.deleteOne({_id: req.params.id}).then(() =>{
-            Atend.find().then((atend) =>{
-                this.listaAtend(req,res)
-            }).catch((err) =>{
-                console.log(err)
-                res.render('admin/erro')
+        Atend.findOne({_id: req.params.id}).then((a)=>{
+            creditClass.find({credit_atendnum: a.atend_num}).then((cre)=>{
+                cre.forEach((c)=>{
+                    creditClass.deleteOne({_id: c._id}).catch((err) =>{
+                        console.log(err)
+                        res.render('admin/erro')
+                    })
+                })
+                debitClass.find({debit_atendnum: a.atend_num}).then((deb)=>{
+                    deb.forEach((d)=>{
+                        debitClass.deleteOne({_id: d._id}).catch((err) =>{
+                            console.log(err)
+                            res.render('admin/erro')
+                        })
+                    })
+                    tabilClass.find({tabil_atendnum: a.atend_num}).then((tab)=>{
+                        tab.forEach((t)=>{
+                            tabilClass.deleteOne({_id: t._id}).catch((err) =>{
+                                console.log(err)
+                                res.render('admin/erro')
+                            })
+                        })
+                        Atend.deleteOne({_id: req.params.id}).then((a) =>{
+                            Atend.find().then((atend) =>{
+                                this.listaAtend(req,res)
+                            })
+                        }).catch((err) =>{
+                            console.log(err)
+                            res.render('admin/erro')
+                        })
+                    })
+                })
             })
         })
     },
@@ -674,4 +700,10 @@ module.exports = {
             console.log(err)
         })
     }
+    /*
+    Atend.find({atend_num: {$gte: 2}}).then((a)=>{
+        a.forEach(a=>{
+        Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
+    })
+    */
 }

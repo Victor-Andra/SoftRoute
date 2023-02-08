@@ -31,7 +31,7 @@
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
 				var dataFmt = new Date(dataIso);
-				console.log(dataIso);
+				//console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
@@ -54,8 +54,8 @@
 							let id = "hora"+e.id;//td para receber o append
 							
 								let valor = e.value;//valor para indexar no td
-								console.log("valor:"+valor)
-								console.log("ELEMENTO VALOR:"+document.getElementById(valor))
+								//console.log("valor:"+valor)
+								//console.log("ELEMENTO VALOR:"+document.getElementById(valor))
 								if(document.getElementById(valor) != null){
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
@@ -69,7 +69,7 @@
 							let id = "hora"+e.id;//td para receber o append
 							
 								let valor = e.value;//valor para indexar no td
-								console.log("valor:"+valor)
+								//console.log("valor:"+valor)
 								let val = document.getElementById(valor).cloneNode(true);
 								val.id = val.id+"x";
 								document.getElementById(id).append(val);
@@ -89,7 +89,7 @@
 				}
 			}
 			function formataData(){
-				let dat = new Date(document.getElementById('dataFil').value);
+				let dat = new Date(document.getElementById('dataFil').value+"T00:00:00");
 				let mes = (dat.getMonth()+1).toString();
 				let dia = (dat.getUTCDate()).toString();
 				if (mes.length == 1){
@@ -100,7 +100,6 @@
 				}
 				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
 			function testeConfirmCopia(acao){
 				if(confirm("Tem certeza que quer copiar a semana?")){

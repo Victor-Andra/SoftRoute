@@ -10,6 +10,7 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const convcreClass = require("../models/convCre")
 const convdebClass = require("../models/convDeb")
+const tabilClass = require("../models/tabil")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia") 
 const horaageClass = require("../models/horaAge")
@@ -24,6 +25,7 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Convcre = mongoose.model("tb_convcre")
 const Convdeb = mongoose.model("tb_convdeb")
+const Tabil = mongoose.model("tb_tabil")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Horaage = mongoose.model("tb_horaage")
@@ -5401,10 +5403,6 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
-        Atend.find({atend_num: {$gte: 2}}).then((a)=>{
-            a.forEach(a=>{
-                Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
-        })
         let aux = 1;
         let is = false;
         let dtFill;
@@ -5912,12 +5910,16 @@ module.exports = {
         let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
+        console.log("seg dtf: "+seg)
+        console.log("sex dtf: "+sex)
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
+        console.log("seg aft: "+seg)
+        console.log("sex aft: "+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -5935,6 +5937,8 @@ module.exports = {
                 sex.setUTCDate(sex.getUTCDate() + 2);
                 break;
             case 4://QUI
+                console.log("seg: "+seg)
+                console.log("sex: "+sex)
                 seg.setUTCDate(seg.getUTCDate() - 3);
                 sex.setUTCDate(sex.getUTCDate() + 1);
                 break;
@@ -8223,6 +8227,8 @@ module.exports = {
         let convcreval;
         let convdebval;
         let dataAtual = new Date();
+        let dataVenci = dataAtual;
+        dataVenci.setDate(dataVenci.getDate()+30);
         let seg = new Date(req.body.dataFil);
         let sex = new Date(req.body.dataFil);
         let agendaFinal;
@@ -8230,6 +8236,11 @@ module.exports = {
         let agendaSubstituida = [];
         let agendaSub;
         let newAtend;
+        let newConvCre;
+        let newConvDeb;
+        let convCreCpfCnpj;
+        let convDebCpfCnpj;
+        let newTabil;
         let nextNum;
         let temp;
         let aux;
@@ -8237,6 +8248,8 @@ module.exports = {
         let teraContrato;
         let roberta;
         let atend;
+        let agendacreTes;
+        let agendadebTes;
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -8285,8 +8298,18 @@ module.exports = {
         let cd = convdebClass.convdebCarregarTodos(req,res);
 
         cc.then((convcre)=>{
+            convcre.forEach((c)=>{
+                convClass.findOne({_id: c.convcre_convid}).then((conv)=>{
+                    c.convcre_convCpfCnpj = conv.conv_cnpj;
+                })
+            })
             //console.log(convcre)
             cd.then((convdeb)=>{
+                convdeb.forEach((d)=>{
+                    convClass.findOne({_id: d.convdeb_convid}).then((conv)=>{
+                        d.convdeb_convCpfCnpj = conv.conv_cnpj;
+                    })
+                })
                 //console.log(convdeb)
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}}).then((agenda)=>{
             //-------------------------
@@ -8365,9 +8388,10 @@ module.exports = {
                                             
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
                                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = cre.convcre_convCpfCnpj;
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -8375,7 +8399,7 @@ module.exports = {
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Falta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                                atend_beneid : a.agenda_beneid,//
+                                                atend_beneid : a.agenda_beneid,//Faltou sem aviso prévio
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
@@ -8384,43 +8408,114 @@ module.exports = {
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//
                                                 atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : a.agenda_usuid,
+                                                atend_mergeterapeutaid : a.agenda_usuid,//mesmo terapeuta
                                                 atend_mergeterapiaid : a.agenda_terapiaid,
-                                                atend_mergevalorcre : convcreval,
-                                                atend_mergevalordeb : "0,00",
+                                                atend_mergevalorcre : convcreval,//recebe pelo plano pois não foi avisado previamente
+                                                atend_mergevalordeb : "0,00",//Não paga pois o terapeuita não atende ninguem
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = new Convcre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newConvDeb = "";
+                                            
                                             break;
                                         case "Falta Justificada":
-            
+
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((cre)=>{
+                                                let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = cre.convcre_convCpfCnpj;
+                                                    convcreval = cre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+
+                                            convdeb.forEach((deb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cre.convdeb_convCpfCnpj;
+                                                        convdebval = deb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Falta Justificada",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                                atend_beneid : a.agenda_beneid,//
+                                                atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : agendaSub.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_terapiaid,//Atenderá o outro bene pelo merge
                                                 atend_terapiaid : agendaSub.agenda_usuid,//
                                                 atend_salaid : a.agenda_salaid,//
-                                                atend_valorcre : "0,00",//
-                                                atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : a.agenda_terapiaid,
+                                                atend_valorcre : "0,00",//não recebe pois foi avisado previamente
+                                                atend_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
+                                                atend_mergeterapeutaid : a.agenda_terapiaid,//Atendendo outro bene
                                                 atend_mergeterapiaid : a.agenda_usuid,
-                                                atend_mergevalorcre : "0,00",
-                                                atend_mergevalordeb : "0,00",
+                                                atend_mergevalorcre : convcreval,//recebe pelo novo bene
+                                                atend_mergevalordeb : convdebval,//paga pelo atendimento do novo bene
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = new Convcre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newConvDeb = new Convdeb({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
                                             break;
                                         case "Substituição":
-                                            console.log("agendaSub:"+agendaSub)
                                             let agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
                                                 if( convcreTes == agendacreTes){
                                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = cre.convcre_convCpfCnpj;
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -8432,6 +8527,7 @@ module.exports = {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
                                                     if(convdebTes == agendadebTes){
                                                         //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cre.convdeb_convCpfCnpj;
                                                         convdebval = deb.convdeb_valor;
                                                     }
                                                 }
@@ -8439,23 +8535,52 @@ module.exports = {
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                                atend_categoria : "Substituição",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_categoria : "Substituição",//Para quando o convenio não paga o que deve
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
-                                                atend_terapeutaid : agendaSub.agenda_usuid,//
-                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
                                                 atend_salaid : a.agenda_salaid,//
-                                                atend_valorcre : "0,00",//
-                                                atend_valordeb : "0,00",//
-                                                atend_mergeterapeutaid : a.agenda_usuid,
-                                                atend_mergeterapiaid : a.agenda_terapiaid,
-                                                atend_mergevalorcre : convcreval,
-                                                atend_mergevalordeb : convdebval,
+                                                atend_valorcre : "0,00",//Convenio não paga
+                                                atend_valordeb : convdebval,//Paga ao musico
+                                                atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
+                                                atend_mergeterapiaid : a.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = new Convcre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newConvDeb = new Convdeb({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : agendaSub.agenda_terapiaid ,
+                                                credit_terapeutaid : agendaSub.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convdebval ,
+                                                credit_datacad : dataAtual
+                                            })
+
                                             break;
                                         case "Roberta Disponivel":
                                             let idRoberta = new ObjectId("62e008adea444f5b7a02c04f");
@@ -8482,13 +8607,18 @@ module.exports = {
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = "";
+                                            newConvDeb = "";
+
                                             break;
                                         case "Nenhuma Observação":
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
                                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = cre.convcre_convCpfCnpj;
                                                     convcreval = cre.convcre_valor;
                                                 }
                                             })
@@ -8497,9 +8627,10 @@ module.exports = {
                                                     convdebval = "0,00";
                                                 } else {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
-                                                    let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                    agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                     if(convdebTes == agendadebTes){
                                                         //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cre.convdeb_convCpfCnpj;
                                                         convdebval = deb.convdeb_valor;
                                                     }
                                                 }
@@ -8524,11 +8655,40 @@ module.exports = {
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = new Convcre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newConvDeb = new Convdeb({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convdebval ,
+                                                credit_datacad : dataAtual
+                                            })
+
                                             break;
                                         default:
                                             convcre.forEach((cre)=>{
                                                 let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                                let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                 if( convcreTes == agendacreTes){
                                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convcreval = cre.convcre_valor;
@@ -8539,7 +8699,7 @@ module.exports = {
                                                     convdebval = "0,00";
                                                 } else {
                                                     let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
-                                                    let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                                    agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                                     if(convdebTes == agendadebTes){
                                                         //console.log("if ("+convdebTes+" == "+agendadebTes)
                                                         convdebval = deb.convdeb_valor;
@@ -8563,14 +8723,44 @@ module.exports = {
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
+
+                                            newConvCre = new Convcre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newConvDeb = new Convdeb({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Justificada" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : dataAtual ,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convdebval ,
+                                                credit_datacad : dataAtual
+                                            })
+
                                             break;
                                     }
                                 } else {
                                     convcre.forEach((cre)=>{
                                         let convcreTes = ""+cre.convcre_convid + cre.convcre_terapiaid+""
-                                        let agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                         if( convcreTes == agendacreTes){
                                             //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                            convCreCpfCnpj = cre.convcre_convCpfCnpj;
                                             convcreval = cre.convcre_valor;
                                         }
                                     })
@@ -8579,9 +8769,10 @@ module.exports = {
                                             convdebval = "0,00";
                                         } else {
                                             let convdebTes = ""+deb.convdeb_convid + deb.convdeb_terapiaid+""
-                                            let agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                            agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                             if(convdebTes == agendadebTes){
                                                 //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                convDebCpfCnpj = cre.convdeb_convCpfCnpj;
                                                 convdebval = deb.convdeb_valor;
                                             }
                                         }
@@ -8602,11 +8793,45 @@ module.exports = {
                                         atend_num : nextNum,
                                         atend_datacad : dataAtual.toISOString()
                                     });
+
+                                    newConvCre = new Convcre({
+                                        credit_atendnum : nextNum ,
+                                        credit_categoria : "Falta Justificada" ,
+                                        credit_terapiaid : a.agenda_terapiaid ,
+                                        credit_terapeutaid : a.agenda_usuid ,
+                                        //credit_convid : req.body.creditConvid ,
+                                        credit_nome : "Atendimento "+nextNum ,
+                                        credit_cpfcnpj : convCreCpfCnpj ,
+                                        credit_dataevento : dataAtual ,
+                                        credit_datavenci : dataVenci ,
+                                        credit_valorprev : convcreval ,
+                                        credit_datacad : dataAtual
+                                    })
+
+                                    newConvDeb = new Convdeb({
+                                        credit_atendnum : nextNum ,
+                                        credit_categoria : "Falta Justificada" ,
+                                        credit_terapiaid : a.agenda_terapiaid ,
+                                        credit_terapeutaid : a.agenda_usuid ,
+                                        //credit_convid : req.body.creditConvid ,
+                                        credit_nome : "Atendimento "+nextNum ,
+                                        credit_cpfcnpj : convCreCpfCnpj ,
+                                        credit_dataevento : dataAtual ,
+                                        credit_datavenci : dataVenci ,
+                                        credit_valorprev : convdebval ,
+                                        credit_datacad : dataAtual
+                                    })
                                 }
                                 //console.log("newAtend:"+newAtend)
                                 nextNum = nextNum ++;
                                 //console.log("newAtend save");
                                 this.geraAtend(newAtend);
+                                if(newConvCre != ""){
+                                    this.GeraConvCre(newConvCre);
+                                }
+                                if(newConvDeb != ""){
+                                    this.GeraConvDeb(newConvDeb);
+                                }
                                 //console.log("Setar migrado")
                                 Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: true }})
                                 //Agenda.findById(a._id)
@@ -8627,7 +8852,28 @@ module.exports = {
     }, 
     geraAtend: async (newAtend,res) => {
         //console.log("newAtend save");
+        //console.log(newAtend.atend_num)
         await newAtend.save().then(()=>{
+            //console.log("Cadastro realizado!");
+            return true;
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
+    },
+    GeraConvCre: async (newConvCre,res) => {
+        //console.log("newConvCre save");
+        await newConvCre.save().then(()=>{
+            //console.log("Cadastro realizado!");
+            return true;
+        }).catch((err) => {
+            console.log(err)
+            return err;
+        });
+    },
+    GeraConvDeb: async (newConvDeb,res) => {
+        //console.log("newConvDeb save");
+        await newConvDeb.save().then(()=>{
             //console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {

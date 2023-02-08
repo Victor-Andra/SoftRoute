@@ -141,7 +141,7 @@
 				}
 			}
 			function formataData(){
-				let dat = new Date(document.getElementById('dataFil').value);
+				let dat = new Date(document.getElementById('dataFil').value+"T00:00:00");
 				let mes = (dat.getMonth()+1).toString();
 				let dia = (dat.getUTCDate()).toString();
 				if (mes.length == 1){

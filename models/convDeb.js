@@ -6,6 +6,10 @@ const ConvdebSchema = mongoose.Schema({
          type: ObjectId, 
          required: true 
         },
+    convdeb_convCpfCnpj :{
+         type: String, 
+         required: false 
+        },
     convdeb_convnome :{
          type: String, 
          required: false 
@@ -40,10 +44,11 @@ const ConvdebSchema = mongoose.Schema({
 
 class Convdeb{
     constructor(
-        convdeb_convid ,convdeb_convnome ,convdeb_terapiaid ,convdeb_data,
+        convdeb_convid , convdeb_convCpfCnpj, convdeb_convnome ,convdeb_terapiaid ,convdeb_data,
         convdeb_valor, convdeb_obs, convdeb_datacad, convdeb_dataedi
         ){
             this.convdeb_convid = convdeb_convid, //vem da tabela Convenio
+            this.convdeb_convCpfCnpj = convdeb_convCpfCnpj, 
             this.convdeb_convnome = convdeb_convnome, //Facilitar identificação do convenio pelo nome
             this.convdeb_terapiaid = convdeb_terapiaid, //Vem da Tabela Terapia
             this.convdeb_data = convdeb_data,

@@ -7,6 +7,10 @@ const ConvcreSchema = mongoose.Schema({
          type: ObjectId, 
          required: true 
         },
+    convcre_convCpfCnpj :{
+         type: String, 
+         required: false 
+        },
     convcre_convnome :{
          type: String, 
          required: false 
@@ -39,10 +43,11 @@ const ConvcreSchema = mongoose.Schema({
 
 class Convcre{
     constructor(
-        convcre_convid ,convcre_convnome ,convcre_terapiaid ,convcre_terapianome ,convcre_data,
+        convcre_convid, convcre_convCpfCnpj,convcre_convnome ,convcre_terapiaid ,convcre_terapianome ,convcre_data,
         convcre_valor, convcre_obs, convcre_datacad, convcre_dataedi
         ){
             this.convcre_convid = convcre_convid, //vem da tabela Convenio
+            this.convcre_convCpfCnpj = convcre_convCpfCnpj,
             this.convcre_convnome = convcre_convnome, //Facilitar identificação do convenio pelo nome
             this.convcre_terapiaid = convcre_terapiaid, //Vem da Tabela Terapia
             this.convcre_terapianome = convcre_terapianome,
