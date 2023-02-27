@@ -11,6 +11,7 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const escolaClass = require("../models/escola")
 
 //Tabela Plano de Bordoamento 
 const Bordo = mongoose.model("tb_bordo")
@@ -20,7 +21,7 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
-
+const Escola = mongoose.model("tb_escola")
 
 //Funções auxiliares
 
@@ -32,11 +33,15 @@ module.exports = {
         Bordo.find().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
                 Bene.findById(req.params.id).then((bene) =>{
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                     console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
+                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                         console.log("Listagem Realizada Usuário!")
-            res.render('area/bordo/bordoLis', {Bordos: bordo, Usuarios: usuario, Benes: bene})
-        })})}).catch((err) =>{
+                            Escola.find().then((escola) =>{
+                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome    
+                                res.render('area/bordo/bordoLis', {Bordos: bordo, escolas: escola, Usuarios: usuario, Benes: bene})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
@@ -47,14 +52,18 @@ module.exports = {
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/bordo/bordoCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+                            Escola.find().then((escola) =>{
+                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome    
+                                    res.render("area/bordo/bordoCad", {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene})
+        })})})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
             res.redirect('admin/erro')
         })
 
@@ -64,12 +73,16 @@ module.exports = {
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/bordo/bordoEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+                            Escola.find().then((escola) =>{
+                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                                    res.render("area/bordo/bordoEdi", {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -81,7 +94,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         
-        bordoClass.cadastraBordoFisio(req,res).then((result)=>{
+        bordoClass.cadastraBordo(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
             resultado = true;
@@ -109,7 +122,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            bordoClass.escolaEditar(req,res).then((res)=>{
+            bordoClass.bordoEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -142,19 +155,23 @@ module.exports = {
 
 
     deletaBordo(req,res){
-        Bordofisio.deleteOne({_id: req.params.id}).then(() =>{
+        Bordo.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                             console.log("Listagem Realizada de Usuário")
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                                     console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Bordoamento Fisioterapêutico deletado!")
-                res.render('area/bordo/bordoLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+                                    Escola.find().then((escola) =>{
+                                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                                            req.flash("success_message", "Diário de Bordo Deletado!")
+                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene, flash})
+            })})})})}).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
+                req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
                 res.render('admin/erro')
             })
         })

@@ -35,12 +35,12 @@ const fncGeral = require("../functions/fncGeral")
 
 class RelAtend{
     constructor(
-        especialidade,
+        nomecid,
         sessoes,
         valor,
         total
         ){
-        this.especialidade = especialidade,
+        this.nomecid = nomecid,
         this.sessoes = sessoes,
         this.valor = valor,
         this.total = total
@@ -50,15 +50,19 @@ class RelAtend{
 module.exports = {
     mascaraValores(val){
         //Esta mascara só vai até Milhões
-        let t = val
-        
-        if (t.length >= 9){
-            t = t.substring(0,t.length-8)+"."+t.substring(t.length-8,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
-        } else if (t.length >= 6){
-            t = t.substring(0,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+        let t = val.toString();
+        if(val == "0" || val == "0,00"){
+            t = "0,00";
         } else {
-            t = t.substring(0,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            if (t.length >= 9){
+                t = t.substring(0,t.length-8)+"."+t.substring(t.length-8,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            } else if (t.length >= 6){
+                t = t.substring(0,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            } else {
+                t = t.substring(0,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            }
         }
+
         return t;
     },
     carregaAtend(req,res){
@@ -513,90 +517,73 @@ module.exports = {
         })
     },
     relAtendimentoValFiltro(req,res){
+        //console.log("INI:"+req.body.dataIni)
+        //console.log("FIM:"+req.body.dataFim)
+        let a = new RelAtend();//objeto para fazer push em relatendimento
+        let val;//objeto para formatar valor do cre
+        let existe = 0;//verifica se existe a terapia no rel
+        let valTot = 0;//calcular valor total
+        let sessaoTot = 0;//calcular total de sessoes
+        let aux;//auxiliar
+        let rel = [];//relatorio
+        let total;//objeto valor total cre
+        let teraID;
+        let qtdIds;
+        let creVal;
+        let u;
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
-        let a = new RelAtend();
-        let t = new RelAtend();
-        let existe = false;
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
-        let rel = [];
-        let total = [];
-        let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg}, credit_dataevento: { $lte: sex}}
+        let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg, $lte: sex}}
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
         Credit.find(filtroCredit).then((cre) =>{
-            console.log("cre:")
-            console.log(cre)
+            //console.log("cre:")
+            //console.log(cre)
             Conv.find().then((conv)=>{
-                console.log("conv:")
-                console.log(conv)
+                //console.log("conv:")
+                //console.log(conv)
                 Terapia.find().then((terapia)=>{
-                        console.log(cre)
-                        cre.forEach((e)=>{
-                            console.log("passando aqui")
-                            existe = false;
-                            if(rel.length == 0){
-                                console.log("tamanho == 0")
-                                a.especialidade = e.credit_terapiaid;
-                                a.sessoes = 1;
-                                a.valor = e.credit_valorprev;
-                                console.log("a:"+a)
-                                rel.push(a);
-                                rel.forEach((r)=>{
-                                    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                                    console.log("rel:"+v)
-                                })
-                                t =  a.sessoes;
-                                t = a.valor;
-                                total.push(t);
-                            } else {
-                                console.log("tamanho < 0")
-                                rel.forEach((r)=>{
-                                    console.log("r.especialidade:"+r.especialidade)
-                                    if(r.especialidade.toString() === e.credit_terapiaid.toString()){
-                                        console.log("existe")
-                                        r.sessoes = r.sessoes+1;
-                                        existe = true;
-                                    }
-                                })
-                                if(!existe){
-                                    console.log("não existe")
-                                    a.especialidade = e.credit_terapiaid;
-                                    a.sessoes = 1;
-                                    a.valor = e.credit_valorprev;
-                                    rel.push(a);
-                                    console.log(a.toString())
-                                    t =  t.sessoes + a.sessoes;
-                                    t = t.valor + a.valor;
-                                    total.push(t);
+                        terapia.forEach((t)=>{
+                            qtdIds = 0;
+                            function comparaIDS(cre){
+                                if ((""+t._id) === (""+cre.credit_terapiaid)){
+                                    qtdIds++;
+                                    creVal = cre.credit_valorprev;
+                                    teraID = cre.credit_terapiaid;
+                                    return cre;
                                 }
                             }
-                        })
-                        rel.forEach((r)=>{
-                            let t = (parseInt(r.valor.toString().replace(",",""))*parseInt(r.sessoes)).toString();
-                            console.log("t:"+t)
-                            
-                            t = this.mascaraValores(t);
-                            
-                            console.log(t)
-                            if(t % 1 === 0) {
-                                console.log("É inteiro");
-                            } else {
-                                console.log("É float");
-                            }
-                            r.total = t;
-                        })
-                        rel.forEach((r)=>{
-                            let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                            console.log("rel:"+v)
-                        })
 
-                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel})
+                            u = cre.filter((c)=>{comparaIDS(c)})
+
+                            if(qtdIds != 0){
+                                a.sessoes = qtdIds;
+                                a.nomecid = teraID;
+                                a.valor = creVal;
+                            }
+                            //separado do if anterior pq o codigo n quer q fique junto... da BUG
+                            if(a.sessoes){
+                                rel.push(a);
+                                a = new RelAtend();
+                            }
+                        })
+                        rel.forEach((r)=>{
+                            val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
+                            val = this.mascaraValores(val);
+                            r.total = val;
+
+                            valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
+                            sessaoTot += r.sessoes;
+                        })
+                        total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+
+                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total})
         })})}).catch((err) =>{
             console.log(err)
         })
@@ -625,7 +612,7 @@ module.exports = {
                             existe = false;
                             if(rel.length == 0){
                                 console.log("tamanho == 0")
-                                a.especialidade = e.atend_terapiaid;
+                                a.nomecid = e.atend_terapiaid;
                                 a.sessoes = 1;
                                 let val;
                                 convcre.forEach((c)=>{
@@ -642,14 +629,14 @@ module.exports = {
 
                                 rel.push(a);
                                 rel.forEach((r)=>{
-                                    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
+                                    let v = "{nomecid:"+r.nomecid+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
                                     console.log("rel:"+v)
                                 })
                             } else {
                                 console.log("tamanho < 0")
                                 rel.forEach((r)=>{
-                                    console.log("r.especialidade:"+r.especialidade)
-                                    if(r.especialidade.toString() === e.atend_terapiaid.toString()){
+                                    console.log("r.nomecid:"+r.nomecid)
+                                    if(r.nomecid.toString() === e.atend_terapiaid.toString()){
                                         console.log("existe")
                                         r.sessoes = r.sessoes+1;
                                         existe = true;
@@ -657,7 +644,7 @@ module.exports = {
                                 })
                                 if(!existe){
                                     console.log("não existe")
-                                    a.especialidade = e.atend_terapiaid;
+                                    a.nomecid = e.atend_terapiaid;
                                     a.sessoes = 1;
                                     let val;
                                 convcre.forEach((c)=>{
@@ -691,7 +678,7 @@ module.exports = {
                             r.total = t;
                         })
                         rel.forEach((r)=>{
-                            let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
+                            let v = "{nomecid:"+r.nomecid+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
                             console.log("rel:"+v)
                         })
 
@@ -706,4 +693,150 @@ module.exports = {
         Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
     })
     */
+   /*
+   relAtendimentoValFiltro(req,res){
+        //console.log("INI:"+req.body.dataIni)
+        //console.log("FIM:"+req.body.dataFim)
+        let seg = new Date(req.body.dataIni);
+        let sex = new Date(req.body.dataFim);
+        let a = new RelAtend();
+        let t = new RelAtend();
+        let val;
+        let existe = false;
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
+        let rel = [];
+        let total = [];
+        let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg, $lte: sex}}
+        Credit.find(filtroCredit).then((cre) =>{
+            //console.log("cre:")
+            //console.log(cre)
+            Conv.find().then((conv)=>{
+                //console.log("conv:")
+                //console.log(conv)
+                Terapia.find().then((terapia)=>{
+                        //console.log(cre)
+                        cre.forEach((e)=>{
+                            //console.log("passando aqui")
+                            existe = false;
+                            if(rel.length == 0){
+                                //console.log("tamanho == 0")
+                                a.especialidade = e.credit_terapiaid;
+                                a.sessoes = 1;
+                                a.valor = e.credit_valorprev;
+                                //console.log("a:"+a)
+                                rel.push(a);
+                                //rel.forEach((r)=>{
+                                //    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
+                                //    console.log("rel:"+v)
+                                //})
+                                t =  a.sessoes;
+                                t = a.valor;
+                                total.push(t);
+                            } else {
+                                //console.log("tamanho < 0")
+                                rel.forEach((r)=>{
+                                    //console.log("r.especialidade:"+r.especialidade)
+                                    if(r.especialidade.toString() === e.credit_terapiaid.toString()){
+                                        //console.log("existe")
+                                        r.sessoes = r.sessoes+1;
+                                        existe = true;
+                                    }
+                                })
+                                if(!existe){
+                                    //console.log("não existe")
+                                    a.especialidade = e.credit_terapiaid;
+                                    a.sessoes = 1;
+                                    a.valor = e.credit_valorprev;
+                                    rel.push(a);
+                                    //console.log(a.toString())
+                                    t =  t.sessoes + a.sessoes;
+                                    t = t.valor + a.valor;
+                                    total.push(t);
+                                }
+                            }
+                        })
+                        rel.forEach((r)=>{
+                            val = (parseInt(r.valor.toString().replace(",",""))*parseInt(r.sessoes)).toString();
+                            //console.log("t:"+t)
+                            
+                            val = this.mascaraValores(val);
+                            
+                            //console.log(t)
+                            //if(t % 1 === 0) {
+                            //    console.log("É inteiro");
+                            //} else {
+                            //    console.log("É float");
+                            //}
+                            
+                            r.total = val;
+                        })
+                        
+                        //rel.forEach((r)=>{
+                        //    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
+                        //   console.log("rel:"+v)
+                        //})
+                        
+                        console.log("TAMANHO:"+rel.length)
+                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel})
+        })})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+   */
 }
+
+
+                        /*
+                        //1*e2f
+                        cre.forEach((e)=>{
+                            existe = 0;
+                            if(rel.length == 0){
+                                //console.log("tamanho == 0")
+                                a.nomecid = e.credit_terapiaid.toString();
+                                a.sessoes = 1;
+                                a.valor = e.credit_valorprev;
+                                //console.log("a:"+a)
+                                rel.push(a);
+                                console.log("Primeiro")
+                            } else {
+                                //console.log("TAMANHODECORRER"+rel.length)
+                                rel.some(function(r, index, relArray) {
+                                    if(existe == 1){
+                                    } else {
+                                        if(r.nomecid && e.credit_terapiaid){
+                                            if((""+r.nomecid) === (""+e.credit_terapiaid)){
+                                                //console.log("existe: "+r.nomecid.toString() +"="+ e.credit_terapiaid.toString())
+                                                existe = 1;
+                                                //console.log("INDEX:"+index)
+                                                //console.log("relArray[index].sessoes:"+relArray[index].sessoes)
+                                                aux = relArray[index].sessoes;
+                                                aux = aux + 1;
+                                                //console.log("aux:"+aux)
+                                                relArray[index].sessoes = aux;
+                                                //console.log("relArray[index].sessoes: "+relArray[index].sessoes)
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                    return false;
+                                })
+
+                                //console.log("existe:"+existe)
+                                if(existe == 0){
+                                }else{
+                                    //console.log("não existe")
+                                    a.nomecid = e.credit_terapiaid;
+                                    a.sessoes = 1;
+                                    a.valor = e.credit_valorprev;
+                                    rel.push(a);
+                                }
+                            }
+                        })
+                        */

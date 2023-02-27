@@ -72,6 +72,11 @@ const evoatendClass = require("../models/evoatend")
 const Evoatend = mongoose.model("tb_evoatend")
 const fncEvoatend = require("../functions/fncEvoatend")
 
+//Agenda Técnicos
+const agendaTecClass = require("../models/agenda")
+const AgendaTec = mongoose.model("tb_agenda")
+const fncAgendaTec = require("../functions/fncAgendaTec")
+
 //Anamnese
 const anamnClass = require("../models/anamn")
 const Anamn = mongoose.model("tb_anamn")
@@ -545,6 +550,14 @@ router.post('/agenda/converteDia', fncGeral.IsAuthenticated, (req,res) =>{//dire
     fncAgenda.converteAgendaEmAtend(req, res);
 })
 
+router.get('/area/magenda/lisDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaDTerapeuta(req, res);
+})
+
+router.get('/area/magenda/lisSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaSTerapeuta(req, res);
+})
+
 // Visualizar Agenda
 /*
 router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro A AGENDA.
@@ -930,6 +943,16 @@ fncSessao.listaSessaoTab(req, res);
 router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.listaEvoatend(req, res);
 })
+
+//Menu Minha Agenda Area Tecnicos
+router.get("/area/magenda/LisD", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Do Dia.
+    fncAgendaTec.carregaAgendaTecDia(req, res);
+})
+
+router.get("/area/magenda/LisS", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Da Semana.
+    fncAgendaTec.carregaAgendaTecSem(req, res);
+})
+
 
 //Menu Anamnese ** Area Tecnicos   
 //Lista Todos as anamneses por Data, Beneficiário

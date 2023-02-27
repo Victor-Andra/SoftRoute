@@ -17,7 +17,7 @@
 		</div><!-- /.page-header -->
 		<div class="row">
 			<div class="col-xs-12">
-				<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
+				<form role="form" action="/menu/area/bordo/add" method="POST">
 					<div class="col-xs-12">
 						<div class="alert alert-warning">
 							<button id="alertaForm" type="button" class="close" data-dismiss="alert">
@@ -28,60 +28,69 @@
 							Para visualizar o RESUMO semanal deve ir ao MAPA do Diário de Bordo.
 							<br>
 						</div>
-						<div class="row">
-							<div class="col-sm-5">
-								<div class="row">
-									<label>Beneficiário</label>
-								</div>
-								<div class="row">
-									<div class="input-group">
-											<select name="beneId" id="beneId" class="chosen-select" data-placeholder="Escolha...">
-												{{#each benes}}
-													<option value="{{_id}}">{{bene_nome}}</option>
-												{{/each}}
-											</select>
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="row">
+										<label>Beneficiário</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoBeneid" id="bordoBeneid" class="chosen-select" >
+														<option value="Sem Info">Sem Informação</option>
+														<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
+														<option value="Não">APOLO DE ARAÚJO ALVES</option>
+												</select>
+											</div>
+										</div>
 									</div>
 								</div>
+								<div class="col-sm-5">
+									<div class="row">
+										<label>Terapeuta</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" >
+														<option value="Sem Info">Sem Informação</option>
+														<option value="Sim">RINALDA ADRIANA DE MELO</option>
+														<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<div class="row">
+										<label>Escola</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" >
+														<option value="Sem Info">Sem Informação</option>
+														<option value="Sim">ESCOLA PEQUENOS AERONAUTAS</option>
+														<option value="Não">COLÉGIO MADRE DE DEUS</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-2">
+									<div class="row">
+										<label >Data</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+												<input id="bordoDatacad" name="bordoDatacad" type="date">
+										</div>
+									</div>
+								</div>													
+												
 							</div>
-							<div class="col-sm-5">
-								<div class="row">
-									<label>Terapeuta Responsável</label>
-								</div>
-								<div class="row">
-									<div class="input-group">
-											<select name="bordo_terapeutaid" id="bordo_terapeutaid" class="chosen-select" data-placeholder="Escolha..." >
-												{{#each usuarios}}
-												<option value="{{_id}}">{{usuario_nome}}</option>
-												{{/each}}
-											</select>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-5">
-								<div class="row">
-									<label>Escola</label>
-								</div>
-								<div class="row">
-									<div class="input-group">
-											<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" data-placeholder="Escolha..." >
-												{{#each escolas}}
-												<option value="{{_id}}">{{escola_nome}}</option>
-												{{/each}}
-											</select>
-									</div>
-								</div>
-							</div>											
-																		
-							<div class="col-sm-2">
-								<div class="row">
-									<label>Data do Diário</label>
-								</div>
-								<div class="row">
-									<div class="input-group">
-											<input id="laudoLaudodata" name="laudoLaudodata" type="date">
-									</div>
-								</div>
-							</div>													
 						</div>
 						<div class="col-xs-12">
 							<hr>

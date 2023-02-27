@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Terapeuta T</title>
+		<title>Agenda Terapeuta Dia</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -100,7 +100,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Terapeuta</li>
+							<li class="active">Agenda Terapeuta Dia</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -116,10 +116,10 @@
 							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
 							<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
 							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-								<a class="blue" href="/menu/agenda/edi/{{_id}}">
+								<a class="hidden" class="blue" href="/menu/agenda/edi/{{_id}}">
 									<i class="ace-icon fa fa-pencil bigger-130"></i>
 								</a>
-								<a class="red" href="/menu/agenda/del/{{_id}}">
+								<a class="hidden" class="red" href="/menu/agenda/del/{{_id}}">
 									<i class="ace-icon fa fa-trash-o bigger-130"></i>
 								</a>
 							</div>
@@ -132,7 +132,7 @@
 							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}</label>
 						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filT" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/area/magenda/lisDia" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
 							<div style="text-align: center;">
 									<label id="beneFilDiv">Terapeuta:</label>
@@ -143,7 +143,7 @@
 									</select>
 									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 									<label style="margin-left: 25px;">Data:</label>
-									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value={fulldate} onchange="javascript:formataData()">
 									<input class="hidden" id="dataFinal" name="dataFinal" />
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>

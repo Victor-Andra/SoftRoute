@@ -180,9 +180,9 @@
 														<tbody>
 															<tr>
 																<td class="center">#</td>
-																{{#each ../terapias}}
-																	{{#ifEqual this._id ../nomecid}}
-																		<td>{{terapia_nomecid}}</td>
+																{{#each terapias}}
+																	{{#ifEqual _id ../especialidade}}
+																		<td id="{{_id}}" name="{{_id}}">{{terapia_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
 																<td>{{sessoes}}</td>
@@ -196,7 +196,7 @@
 															<td class="right">5</td>
 															<td><b>Total</b></td>
 															<td><b>{{total.sessoes}}</b></td>
-															<td><b>-</b></td>		
+															<td><b>{{total.valor}}</b></td>		
 															<td><b>{{total.total}}</b></td>					
 														</tr>
 													</footer>

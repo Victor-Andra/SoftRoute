@@ -248,10 +248,10 @@ module.exports = {BordoModel,BordoSchema,
     bordoAdicionar: async (req,res) => {
         let dataAtual = new Date();
         console.log("bordomodel");
-        console.log("req.body.bordodata:")
+        console.log("req.body.bordoDatacad:")
         console.log(req.body.bordodata)
         const NewBordo = new BordoModel({
-            bordo_beneid : req.body.bordoBeneid,
+                bordo_beneid : req.body.bordoBeneid,
                 bordo_terapeutaid : req.body.bordoTerapeutaid,
                 bordo_escolaid : req.body.bordoEscolaid,
                 //Rotinas
@@ -301,7 +301,7 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_incidente : req.body.bordoIncidente,
                 bordo_obs : req.body.bordoObs,
                  //Edição
-                bordo_datacad : dataAtual.toISOString()
+                bordo_datacad : req.body.bordoDatacad,
             
         });
         console.log("newAtend save");
