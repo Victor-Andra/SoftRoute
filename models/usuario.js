@@ -323,13 +323,11 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_conta : req.body.usuarioConta ,
             usuario_contatipo : req.body.usuarioContaTipo,
             usuario_contrato : req.body.usuarioContrato ,
-
             usuario_funcaoid : req.body.usuarioFuncaoid ,
             usuario_perfilid : req.body.usuarioPerfilid ,
             usuario_status : req.body.usuarioStatus ,
             usuario_senha : req.body.usuarioSenha ,
             usuario_img : req.body.usuarioImg ,
-
             usuario_filhos : req.body.usuarioFilhos ,
             usuario_filhosqt : req.body.usuarioFilhosQt ,
             usuario_numconselho : req.body.usuarioNumConselho ,

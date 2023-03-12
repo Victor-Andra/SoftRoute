@@ -42,6 +42,7 @@ const Especializacao = mongoose.model("tb_especializacao")
 //Funções Auxiliares
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
+const atendFnc = require("../functions/fncAtend")
 
 module.exports = {
     getData(data){
@@ -6400,9 +6401,9 @@ module.exports = {
     },
     carregaAgendaF(req,res){
         /*
-        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
-            a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
-        })
+        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})})
+        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{console.log("DELETED!");})})})
+        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{console.log("DELETED!");})})})
         */
         let aux = 1;
         let is = false;
@@ -9911,7 +9912,8 @@ module.exports = {
                             })
                         })
                         //agendaSubstituida.forEach((s)=>{console.log("aSub:"+s)})
-                        
+                        let hora;
+                        let data;
                         agenda.forEach((a)=>{
                             if(a.agenda_migrado != undefined){
                                 //console.log("migrado?"+a.agenda_migrado)
@@ -9932,11 +9934,23 @@ module.exports = {
                                         console.log("auxId===auxId : "+auxId+"==="+auxId + " : " + foi + " : " + foinao + ";")
                                         if((""+aux) === (""+temp)){
                                             agendaSub = s;
+                                            //console.log("HORA:"+agendaSub)
                                             console.log("achou!!!")
                                             return true;
                                         }
                                         return false;
                                     })
+
+                                    if(!a.agenda_hora){
+                                        hora = agendaSub.agenda_hora;
+                                    } else {
+                                        hora = a.agenda_hora;
+                                    }
+                                    if(!a.agenda_data){
+                                        data = new Date(agendaSub.agenda_data)
+                                    } else {
+                                        data = new Date(a.agenda_data)
+                                    }
 
                                     switch (a.agenda_tempmotivo){
                                         case "Falta":
@@ -9958,6 +9972,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : agendaSub.agenda_usuid,//
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
@@ -10021,6 +10036,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : agendaSub.agenda_terapiaid,//Atenderá o outro bene pelo merge
                                                 atend_terapiaid : agendaSub.agenda_usuid,//
                                                 atend_salaid : a.agenda_salaid,//
@@ -10095,6 +10111,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
                                                 atend_salaid : a.agenda_salaid,//
@@ -10150,6 +10167,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : agendaSub.agenda_usuid,//
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
@@ -10200,6 +10218,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : agendaSub.agenda_usuid,//
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
@@ -10275,6 +10294,7 @@ module.exports = {
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
                                                 atend_terapeutaid : a.agenda_usuid,//
                                                 atend_terapiaid : a.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
@@ -10347,7 +10367,8 @@ module.exports = {
                                         atend_beneid : a.agenda_beneid,//
                                         atend_convid : a.agenda_convid,//
                                         atend_usuid : "Usuario Atual",
-                                        atend_atenddata : a.agenda_data,//
+                                        atend_atenddata : new Date(a.agenda_data),//
+                                        atend_atendhora : a.agenda_hora,
                                         atend_terapeutaid : a.agenda_usuid,//
                                         atend_terapiaid : a.agenda_terapiaid,//
                                         atend_salaid : a.agenda_salaid,//
@@ -10560,6 +10581,36 @@ module.exports = {
     },
     sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
+    },
+    deletaAgendaAtend(req, res){
+        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
+            a.forEach(a=>{
+                Cre.find({credit_atendnum: a.atend_num}).then((cr)=>{
+                    cr.forEach((c)=>{
+                        Cre.deleteOne({_id: c._id}).catch((err) =>{
+                            console.log(err)
+                        })
+                    })
+                    Deb.find({debit_atendnum: a.atend_num}).then((de)=>{
+                        de.forEach((d)=>{
+                            Deb.deleteOne({_id: d._id}).catch((err) =>{
+                                console.log(err)
+                            })
+                        })
+                        Tabil.find({tabil_atendnum: a.atend_num}).then((tab)=>{
+                            tab.forEach((t)=>{
+                                Tabil.deleteOne({_id: t._id}).catch((err) =>{
+                                    console.log(err)
+                                })
+                            })
+                            Atend.deleteOne({_id: a._id}).then(()=>{
+                                console.log("DELETED!");
+                            })
+                        })
+                    })
+                })
+            })
+        })
     }
 }
 /*

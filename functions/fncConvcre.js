@@ -24,10 +24,12 @@ module.exports = {
         Convcre.find().then((convcre) =>{
         console.log("Listagem Crédito de Convênios!")
             Terapia.find().then((terapia)=>{
-            console.log("Listagem Terapias!")      
-                Conv.find().then((conv)=>{
-                console.log("Listagem Convênios!")      
-                res.render('convenio/convcre/convCreLis', {convcres: convcre, terapias: terapia, convs: conv})
+                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
+                console.log("Listagem Terapias!")      
+                    Conv.find().then((conv)=>{
+                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                            console.log("Listagem Convênios!")      
+                            res.render('convenio/convcre/convCreLis', {convcres: convcre, terapias: terapia, convs: conv})
             })})}).catch((err) =>{
             console.log(err)
             //req.flash("error_message", "houve um erro ao listar Convcres")
@@ -36,8 +38,10 @@ module.exports = {
     },
     carregaConvcre(req,res){
         Conv.find().then((conv)=>{
+            conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
             console.log("Listagem Realizada de Convênios")
                 Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
                     console.log("Listagem Realizada de Terapias")
                     res.render("convenio/convcre/convCreCad", {convs: conv, terapias: terapia})
         })}).catch((err) =>{
@@ -49,8 +53,10 @@ module.exports = {
     carregaConvcreEdi(req,res){
         Convcre.findById(req.params.id).then((convcre) =>{
             Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome .
                 console.log("Listagem Realizada de Convênios")
                     Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
                         console.log("Listagem Realizada de Terapias")
                         res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
         })})}).catch((err) =>{

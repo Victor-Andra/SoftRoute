@@ -105,11 +105,21 @@
 				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
 				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
 				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
+				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
+				atualizaData();
 			}
 			function atualizaData(){
-				var hora = "00:00"
-				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
+				console.log("data:"+data);
 				var datafmt = new Date(data);
+				console.log("datafmt:"+datafmt);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+			function atualizaData(){
+				var data = document.getElementById("atendAtenddataEdi").value+"T"+document.getElementById("atendHoraEdi").value+":00.000Z";
+				console.log("data:"+data);
+				var datafmt = new Date(data);
+				console.log("datafmt:"+datafmt);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();
 			}
 		</script>
@@ -162,6 +172,16 @@
 														<div class="input-group">
 															<input name="atenddata" id="atenddata" type="date" onchange="javascript:atualizaData()" />
 														</div>
+													</div>
+												</div>
+												<label for="id-date-picker-1">Hora Atendimento</label>
+												<div class="row">
+													<div class="col-sm-8">
+														<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
+															{{#each horaages}}
+																<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+															{{/each}}
+														</select>
 													</div>
 												</div>
 												<label>Origem Atendimento</label>
@@ -419,6 +439,7 @@
 													<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atendEdi.atend_mergevalorcre}}"/>
 													<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atendEdi.atend_mergevalordeb}}"/>
 													<input id="atendEvolucaoEdi" name="atendEvolucaoEdi" value="{{atendEdi.atend_evolucao}}"/>
+													<input id="atendHoraEdi" name="atendHoraEdi" value="{{atendEdi.atend_atendhora}}"/>
 													<input id="atendAtenddata"  name="atendAtenddata" value="{{atend.atend_atenddata}}" />
 												</div>
 											</div>

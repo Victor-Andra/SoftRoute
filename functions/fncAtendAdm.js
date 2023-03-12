@@ -15,6 +15,7 @@ const tabilClass = require("../models/tabil")
 const debitClass = require("../models/debit")
 const creditClass = require("../models/credit")
 const salaClass = require("../models/sala")
+const horaageClass = require("../models/horaAge")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
@@ -26,6 +27,7 @@ const Tabil = mongoose.model("tb_tabil")
 const Convdeb = mongoose.model("tb_convdeb")
 const Convcre = mongoose.model("tb_convcre")
 const Sala = mongoose.model("tb_sala")
+const Horaage = mongoose.model("tb_horaage")
 
 //Funções Auxiliares
 const fncCredit = require("../functions/fncCredit")
@@ -51,8 +53,9 @@ module.exports = {
                                 Terapia.find().then((terapia)=>{
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
-                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala})
-        })})})})})})})}).catch((err) =>{
+                                        Horaage.find().then((horaage)=>{
+                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage})
+        })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -84,8 +87,9 @@ module.exports = {
                                             nextNumEdi = atendEdi.atend_num;
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
-                                                    res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala})
-        })})})})})})})})})})}).catch((err) =>{
+                                                    Horaage.find().then((horaage)=>{
+                                                        res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala, horaages: horaage})
+        })})})})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

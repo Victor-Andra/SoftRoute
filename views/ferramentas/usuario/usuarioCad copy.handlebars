@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Usuário Cadastro</title>
+	</head>
+
+	<body class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Usuário Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/usuario/add" method="POST">
+								<document class="document-horizontal" role="document" >
+									<label > Nome Abreviado</label>
+										<div class="form-group">
+											<div class="col-sm-6">
+												<input type="text" id="usuarioNome" name="usuarioNome" placeholder="" class="form-control" />
+											</div>
+										</div>
+			
+									<label > Nome Completo</label>
+										<div class="form-group">
+											<div class="col-sm-9">
+												<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" />
+											</div>
+										</div>
+									
+										<div class="col-xl-12" style="padding-top: 50px;">
+											<div class="tabbable">
+												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+													
+													<li class="active">
+														<a data-toggle="tab" href="#basico" aria-expanded="true">
+															<i class="blue ace-icon fa fa-child bigger-120"></i>
+															Dados Básicos
+														</a>
+													</li>
+
+
+													<li class="">
+														<a data-toggle="tab" href="#escolaridade" aria-expanded="false">
+															<i class="green ace-icon fa fa-graduation-cap  bigger-120"></i>
+															Escolaridade
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#end" aria-expanded="false">
+															<i class="orange ace-icon fa fa-globe bigger-120"></i>
+															Endereço
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#contato" aria-expanded="false">
+															<i class="brown ace-icon fa fa-phone bigger-120"></i>
+															Contato
+															
+														</a>
+													</li>
+
+													<li class="">
+														<a data-toggle="tab" href="#finan" aria-expanded="false">
+															<i class="green ace-icon fa fa-money bigger-120"></i>
+															Financeiro
+															
+														</a>
+													</li>
+
+
+													<li class="">
+														<a data-toggle="tab" href="#acesso" aria-expanded="false">
+															<i class="red ace-icon fa fa-male bigger-120"></i>
+															Permissões
+															
+														</a>
+													</li>
+
+
+												</ul>
+
+												<div class="tab-content">
+
+													<div id="basico" class="tab-pane fade active in">
+														
+											
+
+
+																<div class="row">
+
+																	<div class="col-xs-12 col-sm-4">
+																		<div >
+
+																			<div>
+																				<div>
+																					<div>
+																						
+																						<label for="id-date-picker-1">Data Nascimento</label>
+																						<div class="row ">
+																							<div class="input-group">
+																								<div class="col-sm-4">
+																									<input id="usuarioDatanasc" name="usuarioDatanasc" type="date">
+																								</div>
+																							</div>
+																						</div>
+																					
+																					</div>
+
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+
+																	<div class="col-xs-12 col-sm-4">
+																		<div >
+																			<div>
+																				<div>
+																					<div>
+																						<label> CPF </label>
+																						<div class="form-group">
+																							<div class="col-sm-3">
+																								<input type="text" name="usuarioCpf" placeholder="" class="form-control" style="width: 200px;"/>
+																							</div>
+																						</div>
+
+																					</div>
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+
+																	<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+																		<div >
+																			<div >
+																				<div>
+																					<div>
+																						<label> Identidade </label>
+																						<div class="form-group">
+																							<div class="col-sm-9">
+																								<input type="text" name="usuarioIdent" placeholder="" class="form-control" />
+																							</div>
+																						</div>
+																					</div>
+
+
+
+
+																				</div>
+																			</div>
+																		</div>
+																	</div><!-- /.span -->
+																
+																</div>
+
+
+
+
+
+
+
+
+														<div class="row">
+															<div class="col-xs-6">
+
+																<div class="space space-8"></div>
+
+																<label > Nome pai </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<input class="col-sm-8" type="text" name="usuarioNomepai" placeholder="" class="form-control"  />
+																	</div>
+																</div>									
+															
+															</div>
+															
+															<div class="col-xs-6">													
+																
+																<div class="space space-8"></div>
+																	<label > Nome Mãe </label>
+																	<div class="form-group">
+																		<div class="col-sm-12">
+																			<input class="col-sm-8" type="text" name="usuarioNomemae" placeholder="" class="form-control"  />
+																		</div>
+																	</div>
+															
+															</div>
+													
+																										
+														</div>
+														<div class="row">
+															<div class="col-xs-6">
+																<div class="space space-8"></div>
+																<label> Nacionalidade</label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<input type="text" name="usuarioNacionalidade" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-6">													
+																<div class="space space-8"></div>
+																<label> Naturalidade</label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<input type="text" name="usuarioNaturalidade" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-6">
+																<div class="space space-8"></div>
+																<label> Filhos</label>
+																<div  style="padding-left: 10px;" class="form-group">
+																	<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																		<option value="Não Informado">Não Informado</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																	</select>
+																</div>										
+															</div>
+															<div class="col-xs-6">													
+																<div class="space space-8"></div>
+																<label> Quantidade de Filhos</label>
+																<div class="form-group">
+																	<div class="col-sm-3">
+																		<input type="text" name="usuarioFilhosQt" id="usuarioFilhosQt" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12">
+																<div class="space space-8"></div>
+																<label> Observação Usuario</label>
+																<div class="form-group">
+																	<div class="col-sm-3">
+																		<input style="width: 400px;" type="text" name="usuarioObs" id="usuarioObs" placeholder="" class="form-control"  />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div id="escolaridade" class="tab-pane fade">
+
+														<label >Escolaridade</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																		<option value="Não Informado">Não Informado</option>
+																		<option value="Fundamental">Fundamental</option>
+																		<option value="Médio">Médio</option>
+																		<option value="Superior">Superior</option>
+																		<option value="Pós-graduação">Pós-graduação</option>
+																		<option value="Mestrado">Mestrado</option>
+																		<option value="Doutorado">Doutorado</option>
+																</select>
+															</div>
+														</div>
+
+
+														<div class="row">
+															<div class="col-xs-6">
+																<label> Graduação</label>
+																<div class="form-group">
+																	<div class="col-sm-4">
+																		<select name="usuariograduacao" id="usuariograduacao" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																				<option value="Não Informado">Não Informado</option>
+																				{{#each especialidades}}
+																				<option value="{{_id}}">{{especialidade_nome}}</option>
+																				{{else}}
+																				{{/each}}
+																		</select>
+																	</div>								
+																</div>
+															</div>
+															<div class="col-xs-6">
+																<label> Especialização</label>
+																<div class="form-group">
+																	<div class="col-sm-4">
+																		<select name="usuarioEspecialidade" id="usuarioEspecialidade" class="chosen-select" data-placeholder="Escolha..." value="Não informado">
+																				<option value="Não Informado">Não Informado</option>
+																				{{#each especializacaos}}
+																				<option value="{{_id}}">{{especializacao_nome}}</option>
+																				{{else}}
+																				{{/each}}
+																		</select>
+																	</div>
+																</div>
+															</div>								
+														</div>
+
+
+													</div>
+
+													<div id="end" class="tab-pane fade">
+														
+															<label > Endereço </label>
+															<div class="form-group">
+																<div class="col-sm-9">
+																	<input type="text" name="usuarioEnd" id="usuarioEnd" placeholder="" class="form-control" />
+																</div>
+															</div>
+
+														<div class="row">
+															<div class="col-xs-6">
+																<label> Complemento </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioEndcompl"  id="usuarioEndcompl" placeholder="" class="form-control" />
+																	</div>
+																</div>											
+															</div>
+															
+															<div class="col-xs-6">													
+																<label> Bairro </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioEndbairro" id="usuarioEndbairro" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
+														<div class="row" >
+
+															<div class="col-xs-12 col-sm-6">
+																<div>
+																	<div>
+																		<div>
+																			<div>
+																				<label> Cidade </label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioEndcidade" id="usuarioEndcidade" placeholder="" class="form-control" />
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+															<div class="col-xs-12 col-sm-2">
+																<div >
+																	<div >
+																		<div>
+																			<div>
+																				<label>UF</label>
+																				<div class="form-group">
+																						<div class="col-sm-4">
+																							<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
+																									{{#each estados}}
+																									<option value="{{_id}}">{{estado_uf}}</option>
+																									{{else}}
+																									{{/each}}
+																							</select>
+																						</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+														
+															<div class="col-xs-12 col-sm-4">
+																<div >
+																	<div >
+																		<div>
+																			<div>
+																				<label> CEP </label>
+																				<div class="form-group">
+																					<div class="col-sm-3" style="width: 200px;">
+																						<input type="text" name="usuarioEndcep" id="usuarioEndcep" placeholder="" class="form-control" />
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+														</div>
+
+													</div>
+
+													<div id="contato" class="tab-pane fade">
+
+														<div>
+															<label>whatsApp
+																<small class="text-warning">(99) 9999-9999</small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+											
+																<input name="usuarioCel1" id="usuarioCel1" class="col-sm-3" class="form-control input-mask-phone" type="text" id="Whatsapp" />
+															</div>
+														</div>
+														<div>
+															<label>Celular
+																<small class="text-warning"> (99) 9999-9999</small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+											
+																<input name="usuarioCel2" id="usuarioCel2" class="col-sm-3" class="form-control input-mask-phone" type="text" id="Celular" />
+															</div>
+														</div>
+														<div>
+															<label>Email
+																<small class="text-warning"> </small>
+															</label>
+											
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-envelope-o"></i>
+																</span>
+											
+																<input name="usuarioEmail" id="usuarioEmail" class="col-sm-8" class="form-control input-mask-phone" type="text" id="Celular" />
+															</div>
+														</div>
+
+													</div>
+
+													<div id="finan" class="tab-pane fade">
+
+														<label > Banco </label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<input type="text" name="usuarioBanco" id="usuarioBanco"  placeholder="" class="form-control" />
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<div >
+																	<div>
+																		<div>
+																			<div>
+																				<label > Agência / Dv</label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioAgencia" id="usuarioAgencia" placeholder="" class="form-control" />
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+															<div class="col-xs-12 col-sm-4">
+																<div >
+																	<div>
+																		<div>
+																			<div>
+																				<label > Conta / Dv</label>
+																				<div class="form-group">
+																					<div class="col-sm-9">
+																						<input type="text" name="usuarioConta" id="usuarioConta" placeholder="" class="form-control" />
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+
+																<div >
+																	<div>
+																		<div>
+																			<div>
+																				<label for="id-date-picker-1">Tipo</label>
+																				<div class="form-group">
+																						<div class="col-sm-8">
+																							<select name="usuarioContatipo" id="usuarioContatipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																									<option value="Não Informado">Não Informado</option>
+																									<option value="Salário">Salário</option>
+																									<option value="Poupança">Poupança</option>
+																									<option value="Corrente">Corrente</option>																									
+																							</select>
+																						</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+															</div><!-- /.span -->
+														
+														</div>
+
+														
+														<div class="row">
+															
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+
+																<div >
+
+
+																	<div>
+																		<div>
+																			<div>
+																				<label for="id-date-picker-1">Contrato</label>
+																				<div class="form-group">
+																						<div class="col-sm-8">
+																							<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha..." Value="Não Informado" >
+																								<option value="Não Informado">Não Informado</option>
+																								<option value="CLT">CLT</option>
+																								<option value="CNPJ">CNPJ</option>
+																								<option value="CNPJ Fixo">CNPJ Fixo</option>
+																								<option value="Autônomo">Autônomo</option>
+																							</select>
+																						</div>
+																				</div>
+
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+															</div><!-- /.span -->
+
+
+														</div>
+														
+														<div class="row">
+															<div class="col-xs-4">
+
+																<label for="id-date-picker-1">Tipo PIX</label>
+																<div class="form-group">
+																		<div class="col-sm-8">
+																			<select name="usuarioTipoPix" id="usuarioTipoPix" class="chosen-select" data-placeholder="Escolha..." value="Não Informado">
+																					<option value="Não Informado">Não Informado</option>
+																					<option value="CPF">CPF</option>
+																					<option value="CNPJ">CNPJ</option>
+																					<option value="Número Celular">Número Celular</option>
+																					<option value="E-mail">E-mail</option>	
+																					<option value="Chave Aleatória">Chave Aleatória</option>																								
+																			</select>
+																		</div>
+																</div>										
+															
+															</div>
+															
+															<div class="col-xs-6">													
+															
+																<label > PIX </label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<input type="text" name="usuarioPix" id="usuarioPix"  placeholder="" class="form-control" value="Não Informado"/>
+																	</div>
+																</div>
+															</div>
+													
+													
+													
+														</div>
+
+
+
+														
+													</div>
+
+													<div id="acesso" class="tab-pane fade">
+														
+															<div class="row">
+																<div class="col-xs-6">
+																	<div>
+																		<div>
+																			<div>
+																				<div>
+																					<label>Login
+																						<small class="text-warning"> </small>
+																					</label>
+																	
+																					<div class="input-group">
+																						<span class="input-group-addon">
+																							<i class="ace-icon fa fa-user"></i>
+																						</span>
+																	
+																						<input name="usuarioLogin" class="col-sm-4" class="form-control input-mask-phone" type="text" id="login" style="width: 200px;" />
+																					</div>
+																				</div>	
+																			</div>									
+																		</div>
+																	</div>
+																</div>
+																
+																<div class="col-xs-6">													
+																	<div>
+																		<div>
+																			<div>																
+																					<div>
+																						<label>Senha
+																							<small class="text-warning"> </small>
+																						</label>
+																		
+																						<div class="input-group">
+																							<span class="input-group-addon">
+																								<i class="ace-icon fa fa-key"></i>
+																							</span>
+																		
+																							<input name="usuarioSenha" class="col-sm-4" class="form-control input-mask-phone" type="password" id="senha" style="width: 200px;"/>
+																						</div>
+																					</div>
+																			</div>	
+																		</div>
+																	</div>
+																</div>
+														
+															</div>
+
+
+															<div class="row" >
+
+																<div class="col-xs-12 col-sm-6">
+																	<div >
+
+
+																		<div>
+																			<div>
+																				<div>
+
+																					<label>Função</label>
+																					<div class="form-group">
+																							<div class="col-sm-4">
+																								<select name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;">
+																										{{#each funcaos}}
+																										<option value="{{_id}}">{{funcao_nome}}</option>
+																										{{else}}
+																										{{/each}}
+																								</select>
+																							</div>
+																					</div>
+
+																				</div>
+
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+
+																<div class="col-xs-12 col-sm-6">
+																	<div >
+																		<div >
+																			<div>
+																				<div>
+																					
+																					<label>Perfil</label>
+																					<div class="form-group">
+																							<div class="col-sm-4">
+																								<select name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																										{{#each perfils}}
+																										<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
+																										{{else}}
+																										{{/each}}
+																								</select>
+																							</div>
+																					</div>
+
+
+																				</div>
+
+
+
+
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+															
+
+															</div>
+
+
+
+							
+														<label>Status</label>
+														<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="Ativo">Ativo</option>
+																			<option value="Inativo">Inativo</option>
+																	</select>
+																</div>
+														</div>
+
+
+
+
+
+													</div>
+
+
+
+												</div>
+											</div>
+										</div>
+
+										<div class="space-6" style="height: 70px;"></div>
+
+									<div class="clearfix document-actions">
+									
+										<div class="col-xs-12" style="text-align: center;">
+											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  href="/menu/ferramentas/usuario/lis">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Cancelar
+											</button>
+										</div>
+									</div>
+						
+								</document>
+							</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div>
+		</div><!-- /.main-container -->
+	</body>
+</html>

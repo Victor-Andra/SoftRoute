@@ -26,6 +26,10 @@ const AtendSchema = mongoose.Schema({
         type: Date,
         required: true
     },
+    atend_atendhora :{
+        type: String,
+        required: false
+    },
     atend_terapeutaid :{
         type: ObjectId,
         required: true
@@ -88,6 +92,7 @@ class Atend{
         atend_convid,
         atend_usuid,
         atend_atenddata,
+        atend_atendhora,
         atend_terapeutaid,
         atend_terapiaid,
         atend_salaid,
@@ -108,6 +113,7 @@ class Atend{
         this.atend_convid = atend_convid,
         this.atend_usuid = atend_usuid,
         this.atend_atenddata = atend_atenddata,
+        this.atend_atendhora = atend_atendhora,
         this.atend_terapeutaid = atend_terapeutaid,
         this.atend_terapiaid = atend_terapiaid,
         this.atend_salaid = atend_salaid,
@@ -141,6 +147,7 @@ module.exports = {AtendModel,AtendSchema,
                 atend_convid : req.body.atendConvid,
                 atend_usuid : req.body.atendUsuid,
                 atend_atenddata : req.body.atendAtenddata,
+                atend_atendhora : req.body.atendHora,
                 atend_terapeutaid : req.body.atendTerapeutaid,
                 atend_terapiaid : req.body.atendTerapiaid,
                 atend_salaid : req.body.atendSalaid,
@@ -176,6 +183,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_convid : req.body.atendConvid,
             atend_usuid : req.body.atendUsuid,
             atend_atenddata : req.body.atendAtenddata,
+            atend_atendhora : req.body.atendHora,
             atend_terapeutaid : req.body.atendTerapeutaid,
             atend_terapiaid : req.body.atendTerapiaid,
             atend_salaid : req.body.atendSalaid,

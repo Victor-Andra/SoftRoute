@@ -612,10 +612,13 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
-router.get('/atendimento/relatendInd/:id', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.carregaAtendIndBene(req, res);
+    router.get('/atendimento/relatendbene', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBene(req,res)
     })
 
+    router.post('/atendimento/relatendbenes', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneFiltro(req,res)
+    })
 
 //Menu Financeiro / AtendAdm
 //Menu AtendAdm   

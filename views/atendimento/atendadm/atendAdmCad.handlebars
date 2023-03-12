@@ -143,6 +143,16 @@
 																</div>
 															</div>
 														</div>
+														<label for="id-date-picker-1">Hora Atendimento</label>
+														<div class="row">
+															<div class="col-sm-8">
+																<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each horaages}}
+																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
 														<label>Origem Atendimento</label>
 														<div class="form-group">
 															<div class="col-sm-9">

@@ -47,6 +47,18 @@ class RelAtend{
     }
 }
 
+class RelAtendBene{
+    constructor(
+        horadata,
+        especialidade,
+        profissional
+        ){
+        this.horadata = horadata,
+        this.especialidade = especialidade,
+        this.profissional = profissional
+    }
+}
+
 module.exports = {
     mascaraValores(val){
         //Esta mascara só vai até Milhões
@@ -506,13 +518,10 @@ module.exports = {
         console.log("sex:"+sex)
         
         Conv.findOne().then((conv)=>{
-            let filtroCredit = {credit_convid: conv._id, credit_dataevento: { $gte: seg}, credit_dataevento: { $lte: sex}}
-            console.log(conv)
-            Credit.find(filtroCredit).then((cre) =>{
                 Terapia.find().then((terapia)=>{
                     Conv.find().then((conv)=>{
-                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv})
-        })})})}).catch((err) =>{
+                        res.render("atendimento/relatendval", {terapias: terapia, convs: conv})
+        })})}).catch((err) =>{
             console.log(err)
         })
     },
@@ -539,17 +548,21 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg, $lte: sex}}
-        //console.log("seg:"+seg)
-        //console.log("sex:"+sex)
-        Credit.find(filtroCredit).then((cre) =>{
-            //console.log("cre:")
-            //console.log(cre)
-            Conv.find().then((conv)=>{
-                //console.log("conv:")
-                //console.log(conv)
-                Terapia.find().then((terapia)=>{
+        //procurar por atend com conv
+        let filtroAtend = {atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}
+        let atendIds = [];
+        
+        Atend.find(filtroAtend).then((at)=>{
+            at.forEach((a)=>{
+                atendIds.push(a.atend_num);
+            })
+            //console.log("at.length: " + at.length)
+            //console.log("atendIds.length: " + atendIds.length)
+            Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+                Conv.find().then((conv)=>{
+                    Terapia.find().then((terapia)=>{
                         terapia.forEach((t)=>{
+                            //console.log("TERA: "+t.terapia_nome + "-" + t.terapia_nomecid)
                             qtdIds = 0;
                             function comparaIDS(cre){
                                 if ((""+t._id) === (""+cre.credit_terapiaid)){
@@ -584,7 +597,109 @@ module.exports = {
                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
 
                         res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total})
-        })})}).catch((err) =>{
+                    })
+                })
+            })
+        })
+    },
+    relAtendimentoBene(req,res){
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
+        
+        Bene.find().then((bene)=>{
+            Bene.findOne().then((b)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                Terapia.find().then((terapia)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        res.render("atendimento/relatendvalBene", {Rels: rel, terapeutas: terapeuta, terapias: terapia, benes: bene})
+        })})})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+    relAtendimentoBeneFiltro(req,res){
+        let u;
+        let teraID;
+        let usuId;
+        let rel = [];
+        let dt;
+        //console.log("INI:"+req.body.dataIni)
+        //console.log("FIM:"+req.body.dataFim)
+        let rab = new RelAtendBene();//objeto para fazer push em relatendimento
+        let seg = new Date(req.body.dataIni);
+        let sex = new Date(req.body.dataFim);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
+        Atend.find(filtroAtend).then((at)=>{
+            //console.log("at.length: " + at.length)
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                Terapia.find().then((terapia)=>{
+                    Bene.find().then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                        at.sort(function(a, b) {
+                            let d1 = new Date(a.atend_atenddata);
+                            let h1 = a.atend_atendhora.substring(0,2);
+                            let m1 = a.atend_atendhora.substring(3,5);
+                            let d2 = new Date(b.atend_atenddata);
+                            let h2 = b.atend_atendhora.substring(0,2);
+                            let m2 = b.atend_atendhora.substring(3,5);
+                            d1.setUTCHours(0);
+                            d1.setMinutes(0);
+                            d1.setSeconds(0);
+                            d2.setUTCHours(0);
+                            d2.setMinutes(0);
+                            d2.setSeconds(0);
+                            if(d1 == d2){
+                                if(h1 == h2){
+                                    if(m1 < m2) {
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                } else {
+                                    if(h1 < h2) {
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            } else {
+                                if(d1 < d2){
+                                    return -1;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        });
+                        at.forEach((a)=>{
+                            rab.profissional = a.atend_terapeutaid;
+                            rab.especialidade = a.atend_terapiaid;
+                            rab.horadata = "("+a.agenda_hora + " - " + (fncGeral.getData(a.atend_atenddata))+")";
+
+                            rel.push(rab);
+                            rab = new RelAtendBene();
+                        });
+                        
+                        res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel})
+                    })
+                })
+            })
+        }).catch((err) =>{
             console.log(err)
         })
     },
@@ -840,3 +955,81 @@ module.exports = {
                             }
                         })
                         */
+                       /*
+                       relAtendimentoValFiltro(req,res){
+                        //console.log("INI:"+req.body.dataIni)
+                        //console.log("FIM:"+req.body.dataFim)
+                        let a = new RelAtend();//objeto para fazer push em relatendimento
+                        let val;//objeto para formatar valor do cre
+                        let existe = 0;//verifica se existe a terapia no rel
+                        let valTot = 0;//calcular valor total
+                        let sessaoTot = 0;//calcular total de sessoes
+                        let aux;//auxiliar
+                        let rel = [];//relatorio
+                        let total;//objeto valor total cre
+                        let teraID;
+                        let qtdIds;
+                        let creVal;
+                        let u;
+                        let seg = new Date(req.body.dataIni);
+                        let sex = new Date(req.body.dataFim);
+                        seg.setUTCHours(0);
+                        seg.setMinutes(0);
+                        seg.setSeconds(0);
+                        sex.setUTCHours(23);
+                        sex.setMinutes(59);
+                        sex.setSeconds(59);
+                        let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg, $lte: sex}}
+                        //procurar por atend com conv
+                        let filtroAtend = {atend_convid: req.body.convid, atend_atenddata: { $gte: seg, $lte: sex}}
+                        Atend.find(filtroAtend).then((at)=>{})
+                        //console.log("seg:"+seg)
+                        //console.log("sex:"+sex)
+                        Credit.find(filtroCredit).then((cre) =>{
+                            //console.log("cre:")
+                            //console.log(cre)
+                            Conv.find().then((conv)=>{
+                                //console.log("conv:")
+                                //console.log(conv)
+                                Terapia.find().then((terapia)=>{
+                                        terapia.forEach((t)=>{
+                                            console.log("TERA: "+t.terapia_nome + "-" + t.terapia_nomecid)
+                                            qtdIds = 0;
+                                            function comparaIDS(cre){
+                                                if ((""+t._id) === (""+cre.credit_terapiaid)){
+                                                    qtdIds++;
+                                                    creVal = cre.credit_valorprev;
+                                                    teraID = cre.credit_terapiaid;
+                                                    return cre;
+                                                }
+                                            }
+
+                                            u = cre.filter((c)=>{comparaIDS(c)})
+
+                                            if(qtdIds != 0){
+                                                a.sessoes = qtdIds;
+                                                a.nomecid = teraID;
+                                                a.valor = creVal;
+                                            }
+                                            //separado do if anterior pq o codigo n quer q fique junto... da BUG
+                                            if(a.sessoes){
+                                                rel.push(a);
+                                                a = new RelAtend();
+                                            }
+                                        })
+                                        rel.forEach((r)=>{
+                                            val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
+                                            val = this.mascaraValores(val);
+                                            r.total = val;
+
+                                            valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
+                                            sessaoTot += r.sessoes;
+                                        })
+                                        total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+
+                                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total})
+                        })})}).catch((err) =>{
+                            console.log(err)
+                        })
+                    },
+                       */
