@@ -49,11 +49,11 @@ class RelAtend{
 
 class RelAtendBene{
     constructor(
-        horadata,
+        dt,
         especialidade,
         profissional
         ){
-        this.horadata = horadata,
+        this.dt = dt,
         this.especialidade = especialidade,
         this.profissional = profissional
     }
@@ -556,7 +556,7 @@ module.exports = {
             at.forEach((a)=>{
                 atendIds.push(a.atend_num);
             })
-            //console.log("at.length: " + at.length)
+            console.log("at.length: " + at.length)
             //console.log("atendIds.length: " + atendIds.length)
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 Conv.find().then((conv)=>{
@@ -646,18 +646,14 @@ module.exports = {
         //console.log("seg:"+seg)
         //console.log("sex:"+sex)
         Atend.find(filtroAtend).then((at)=>{
-            //console.log("at.length: " + at.length)
+            console.log("at.length: " + at.length)
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 Terapia.find().then((terapia)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         at.sort(function(a, b) {
                             let d1 = new Date(a.atend_atenddata);
-                            let h1 = a.atend_atendhora.substring(0,2);
-                            let m1 = a.atend_atendhora.substring(3,5);
                             let d2 = new Date(b.atend_atenddata);
-                            let h2 = b.atend_atendhora.substring(0,2);
-                            let m2 = b.atend_atendhora.substring(3,5);
                             d1.setUTCHours(0);
                             d1.setMinutes(0);
                             d1.setSeconds(0);
@@ -665,19 +661,7 @@ module.exports = {
                             d2.setMinutes(0);
                             d2.setSeconds(0);
                             if(d1 == d2){
-                                if(h1 == h2){
-                                    if(m1 < m2) {
-                                        return -1;
-                                    } else {
-                                        return true;
-                                    }
-                                } else {
-                                    if(h1 < h2) {
-                                        return -1;
-                                    } else {
-                                        return true;
-                                    }
-                                }
+                                return true;
                             } else {
                                 if(d1 < d2){
                                     return -1;
@@ -687,14 +671,16 @@ module.exports = {
                             }
                         });
                         at.forEach((a)=>{
-                            rab.profissional = a.atend_terapeutaid;
+                            rab.dt = (fncGeral.getData(a.atend_atenddata));
+                            console.log("dt: "+rab.dt)
                             rab.especialidade = a.atend_terapiaid;
-                            rab.horadata = "("+a.agenda_hora + " - " + (fncGeral.getData(a.atend_atenddata))+")";
+                            rab.profissional = a.atend_terapeutaid;
+                            console.log("profissional: " +rab.profissional)
 
                             rel.push(rab);
                             rab = new RelAtendBene();
                         });
-                        
+                        console.log("REL:"+rel.length)
                         res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel})
                     })
                 })

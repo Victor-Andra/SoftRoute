@@ -146,7 +146,7 @@
 														<tbody>
 															<tr>
 																<td class="center">#</td>
-																<td>{{datahora}}</td>
+																<td>{{dt}}</td>
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}
 																		<td>{{terapia_nomecid}}</td>
@@ -154,7 +154,7 @@
 																{{/each}}
 																{{#each ../terapeutas}}
 																	{{#ifEqual this._id ../profissional}}
-																		<td>{{terapia_nomecid}}</td>
+																		<td>{{usuario_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
 															</tr>
