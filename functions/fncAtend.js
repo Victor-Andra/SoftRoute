@@ -548,7 +548,6 @@ module.exports = {
         let atendIds = [];
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
-        let conv_cnpj;
         let conv_nome;
 
         Atend.find(filtroAtend).then((at)=>{
@@ -559,7 +558,6 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     conv.some((c)=>{
                         if((c._id+"") === (req.body.relConvid+"")){
-                            conv_cnpj = conv.conv_cnpj;
                             conv_nome = conv.conv_nome;
                             return true;
                         }
@@ -603,7 +601,7 @@ module.exports = {
                         })
                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
 
-                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome, conv_cnpj})
+                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome})
                     })
                 })
             })
