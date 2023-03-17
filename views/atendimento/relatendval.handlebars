@@ -4,29 +4,11 @@
 		<title>Relatório de Atendimentos e Valores</title>
 		<script type="text/javascript">
 			function atualizaDataIni(){
-				let dat = new Date(document.getElementById('dataFilDe').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataIni').value = fulldate;
 			}
 			function atualizaDataFin(){
-				let dat = new Date(document.getElementById('dataFilAte').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
 			function carregaBody(){
@@ -34,19 +16,14 @@
 				let sessoes = document.getElementsByName("sessoes")
 				let valores = document.getElementsByName("valor")
 				sessoes.forEach((s)=>{
-					let subTotal = s.value * (document.getElementById("valor"+s.id).value)
+					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
 			}
 		</script>
 	</head>
-
 	<body class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -55,17 +32,12 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
 							<li class="active">Relatório de Atendimentos e Valores</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<form role="form" action="/menu/atendimento/relatendvals" method="POST">
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
 							<ul class="breadcrumb" >
-
-
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
 								<input class="hidden" id="dataIni" name="dataIni" />
@@ -78,7 +50,6 @@
 										<option value="{{_id}}">{{conv_nome}}</option>
 									{{/each}}
 								</select>
-								
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar
@@ -86,11 +57,7 @@
 							</ul><!-- /.breadcrumb -->
 						</div>
 					</form>
-
-
 				</div>
-
-
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- PAGE CONTENT BEGINS -->
@@ -98,20 +65,12 @@
 						<div class="row">
 							<div class="col-sm-10 col-sm-offset-1">
 								<div class="widget-box transparent">
-									
 										<div class="widget-header widget-header-large">
-
-
-
 											<h3 class="widget-title grey lighter">
 												<i class="ace-icon fa fa-leaf green"></i>
 												Atendimentos e Valores
-
-												
-
 											</h3>
 										</div>
-									
 									<div class="widget-body">
 										<div class="widget-main padding-24">
 											<div class="row">
@@ -121,7 +80,6 @@
 															<b>Informações da Instituição</b>
 														</div>
 													</div>
-
 													<div>
 														<ul class="list-unstyled">
 															<li>
@@ -132,39 +90,24 @@
 															</li>
 														</ul>
 													</div>
-													
-
-												
 													<div class="row">
 														<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
 															<b>Informações do Convênio</b>
 														</div>
 													</div>
-
 													<div>
 														<ul class="list-unstyled ">
 															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>Covênio:</b> {{conv_nome}}
+																<i class="ace-icon fa fa-caret-right green"></i><b>Periodo de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
 															</li>
-															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>Responsável: </b>{{conv_razao}}
-															</li>
-															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>CNPJ:</b> {{conv_cnpj}}
-															</li>
-
 														</ul>
 													</div>
-													
 													<div class="row">
 														<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
 															<b>Informações dos Atendimentos</b>
 														</div>
 													</div>
 											</div><!-- /.row -->
-
-
-
 											<div>
 												<table class="table table-striped table-bordered">
 													<thead>
@@ -202,26 +145,14 @@
 													</footer>
 												</table>
 											</div>
-
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-
-						<!-- PAGE CONTENT ENDS -->
+						</div><!-- PAGE CONTENT ENDS -->
 					</div><!-- /.col -->
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

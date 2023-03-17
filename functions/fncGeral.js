@@ -10,7 +10,7 @@ module.exports = {
     },
     IsAuthenticated(req,res,next){
         //Passport creates a function to your session called isAuthenticated(), so you can use it to verify if the user really login in the app
-        console.log("AUTENTICADO?"+req.isAuthenticated())
+        //console.log("AUTENTICADO?"+req.isAuthenticated())
         if(req.isAuthenticated()){
             //So, here you are saying that if the route called had any other function, it will goes to the next one ( which is rendering the HTML )
             next();
@@ -56,5 +56,19 @@ module.exports = {
         }
         
         return (dia+'/'+mes+'/'+dt.getFullYear()).toString();
+    },
+    getDataInvert(dt){//yyyy-mm-dd -> dd-mm-yyyy
+        let dia = dt.substring(8,10);
+        let mes = dt.substring(5,7);
+        let ano = dt.substring(0,4);
+
+        return (dia+"-"+mes+"-"+ano);
+    },
+    getDataRevert(dt){//dd-mm-yyyy -> yyyy-mm-dd
+        let dia = dt.substring(0,2);
+        let mes = dt.substring(3,5);
+        let ano = dt.substring(6,10);
+        
+        return (dia+"-"+mes+"-"+ano);
     }
 }

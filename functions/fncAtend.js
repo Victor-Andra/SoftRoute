@@ -82,26 +82,26 @@ module.exports = {
         Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
             //validação caso seja o primeiro registro
             atendimento.forEach(e => {atend = e});
-            console.log(atend.atend_num)
+            //console.log(atend.atend_num)
             atend.atend_num = atend.atend_num+1;
-            console.log(atend.atend_num)
-            console.log("Listagem Realizada de NextNum")
+            //console.log(atend.atend_num)
+            //console.log("Listagem Realizada de NextNum")
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({"conv_status":"Ativo"}).then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
-                        console.log("Listagem Realizada de Convenios")
+                        //console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
-                            console.log("Listagem Realizada de Convenios")
+                            //console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                                 usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                console.log("Listagem Realizada de Usuário")
+                                //console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    console.log("Listagem Realizada de Convenios")
+                                    //console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                         res.render("atendimento/atendCad", {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala
@@ -122,30 +122,30 @@ module.exports = {
         let cadastroDeb = debitClass.debitAdicionar(req,res);
         let cadastroTab = tabilClass.tabilAdicionar(req,res);
         
-        cadastro.then((res)=>{console.log(res)
+        cadastro.then((res)=>{//console.log(res)
             retorno = true;
         }).catch((err) => {console.log(err)
             retorno = err;
         }).finally(() => {
-            cadastroCre.then((res)=>{console.log(res)
+            cadastroCre.then((res)=>{//console.log(res)
                 retornoCre = true;
             }).catch((err) => {console.log(err)
                 retornoCre = err;
             }).finally(() => {
-                cadastroDeb.then((res)=>{console.log(res)
+                cadastroDeb.then((res)=>{//console.log(res)
                     retornoDeb = true;
                 }).catch((err) => {console.log(err)
                     retornoDeb = err;
                 }).finally(() => {
-                    cadastroTab.then((res)=>{console.log(res)
+                    cadastroTab.then((res)=>{//console.log(res)
                         retornoTab = true;
                     }).catch((err) => {console.log(err)
                         retornoTab = err;
                     }).finally(() => {
-                        console.log(retorno)
-                        console.log(retornoCre)
-                        console.log(retornoDeb)
-                        console.log(retornoTab)
+                        //console.log(retorno)
+                        //console.log(retornoCre)
+                        //console.log(retornoDeb)
+                        //console.log(retornoTab)
                         if (retorno && retornoCre && retornoDeb && retornoTab){
                             this.carregaAtend(req,res);
                         } else {
@@ -196,11 +196,11 @@ module.exports = {
         let resposta;
         try{
             atendClass.atendEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
+                //console.log("Atualização Realizada!")
+                //console.log(res)
                 resposta = res;
             }).catch((err) =>{
-                console.log("error1")
+                //console.log("error1")
                 console.log(err)
                 resposta = err;
                 res.render('admin/erro')
@@ -208,22 +208,22 @@ module.exports = {
                 if(resposta){
                     //Volta para a atend de listagem
                     Atend.find().then((atend) =>{
-                        console.log("Listagem Realizada!")
+                        //console.log("Listagem Realizada!")
                         this.listaAtend(req,res);
                     }).catch((err) =>{
-                        console.log("err:")
+                        //console.log("err:")
                         console.log(err)
                         res.render('admin/erro')
                     })
                 }else{
                     //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
+                    //console.log("error")
+                    //console.log(resposta)
                     res.render('admin/erro')
                 }
             })
         } catch(err1){
-            console.log(err1)
+            //console.log(err1)
         }
 
     },
@@ -291,19 +291,19 @@ module.exports = {
             })
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
-            console.log("Listagem Realizada de Atendimentos!")
+            //console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -413,7 +413,7 @@ module.exports = {
             default:
                 break;
         }
-        console.log(busca)
+        //console.log(busca)
         Atend.find(busca).then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
@@ -451,19 +451,19 @@ module.exports = {
             })
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
-            console.log("Listagem Realizada de Atendimentos!")
+            //console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                         terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -477,27 +477,27 @@ module.exports = {
         let atend;
         Bene.findById(req.params.id).then((bene)=>{
             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-            console.log("Listagem Realizada de Beneficiários!")
+            //console.log("Listagem Realizada de Beneficiários!")
             Atend.find({atend_beneid:req.params.id}).sort({atend_num : -1}).then((atendimento) =>{
             //validação caso seja o primeiro registro
             atendimento.forEach(e => {atend = e});
-            console.log(atend.atend_num)
+            //console.log(atend.atend_num)
             atend.atend_num = atend.atend_num+1;
-            console.log(atend.atend_num)
-            console.log("Listagem Realizada de NextNum")
+            //console.log(atend.atend_num)
+            //console.log("Listagem Realizada de NextNum")
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
-                        console.log("Listagem Realizada de Convenios")
+                        //console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
-                            console.log("Listagem Realizada de Convenios")
+                            //console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                                 terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                                console.log("Listagem Realizada de Usuário")
+                                //console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                                    console.log("Listagem Realizada de Convenios")
+                                    //console.log("Listagem Realizada de Convenios")
                                     res.render("atendimento/relatendInd", {atendimentos: atendimento, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, convcres: convcre, convdebs: convdeb, data})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -514,8 +514,6 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
         
         Conv.findOne().then((conv)=>{
                 Terapia.find().then((terapia)=>{
@@ -526,8 +524,6 @@ module.exports = {
         })
     },
     relAtendimentoValFiltro(req,res){
-        //console.log("INI:"+req.body.dataIni)
-        //console.log("FIM:"+req.body.dataFim)
         let a = new RelAtend();//objeto para fazer push em relatendimento
         let val;//objeto para formatar valor do cre
         let existe = 0;//verifica se existe a terapia no rel
@@ -548,26 +544,37 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        //procurar por atend com conv
-        let filtroAtend = {atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}
+        let filtroAtend = {atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
         let atendIds = [];
-        
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        let conv_cnpj;
+        let conv_nome;
+
         Atend.find(filtroAtend).then((at)=>{
             at.forEach((a)=>{
                 atendIds.push(a.atend_num);
             })
-            console.log("at.length: " + at.length)
-            //console.log("atendIds.length: " + atendIds.length)
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 Conv.find().then((conv)=>{
+                    conv.some((c)=>{
+                        if((c._id+"") === (req.body.relConvid+"")){
+                            conv_cnpj = conv.conv_cnpj;
+                            conv_nome = conv.conv_nome;
+                            return true;
+                        }
+                        return false;
+                    })
                     Terapia.find().then((terapia)=>{
                         terapia.forEach((t)=>{
-                            //console.log("TERA: "+t.terapia_nome + "-" + t.terapia_nomecid)
                             qtdIds = 0;
                             function comparaIDS(cre){
                                 if ((""+t._id) === (""+cre.credit_terapiaid)){
                                     qtdIds++;
                                     creVal = cre.credit_valorprev;
+                                    if ("0,00" == cre.credit_valorprev){
+                                        console.log("Santo:"+cre);
+                                    }
                                     teraID = cre.credit_terapiaid;
                                     return cre;
                                 }
@@ -596,7 +603,7 @@ module.exports = {
                         })
                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
 
-                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total})
+                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome, conv_cnpj})
                     })
                 })
             })
@@ -612,8 +619,6 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        //console.log("seg:"+seg)
-        //console.log("sex:"+sex)
         
         Bene.find().then((bene)=>{
             Bene.findOne().then((b)=>{
@@ -631,8 +636,11 @@ module.exports = {
         let usuId;
         let rel = [];
         let dt;
-        //console.log("INI:"+req.body.dataIni)
-        //console.log("FIM:"+req.body.dataFim)
+        let conv_cnpj;
+        let conv_nome;
+        let conv_id;
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
@@ -643,45 +651,51 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
-        //console.log("seg:"+seg)
-        //console.log("sex:"+sex)
+
         Atend.find(filtroAtend).then((at)=>{
-            console.log("at.length: " + at.length)
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 Terapia.find().then((terapia)=>{
                     Bene.find().then((bene)=>{
-                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                        at.sort(function(a, b) {
-                            let d1 = new Date(a.atend_atenddata);
-                            let d2 = new Date(b.atend_atenddata);
-                            d1.setUTCHours(0);
-                            d1.setMinutes(0);
-                            d1.setSeconds(0);
-                            d2.setUTCHours(0);
-                            d2.setMinutes(0);
-                            d2.setSeconds(0);
-                            if(d1 == d2){
+                        bene.some((b)=>{
+                            if((""+b._id) === (""+req.body.relBeneid)){
+                                conv_id = b.bene_convid;
                                 return true;
-                            } else {
-                                if(d1 < d2){
-                                    return -1;
-                                } else {
-                                    return true;
-                                }
                             }
-                        });
-                        at.forEach((a)=>{
-                            rab.dt = (fncGeral.getData(a.atend_atenddata));
-                            console.log("dt: "+rab.dt)
-                            rab.especialidade = a.atend_terapiaid;
-                            rab.profissional = a.atend_terapeutaid;
-                            console.log("profissional: " +rab.profissional)
+                            return false;
+                        })
+                        Conv.findOne({_id: conv_id}).then((conv)=>{
+                            conv_cnpj = conv.conv_cnpj;
+                            conv_nome = conv.conv_nome;
+                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                            at.sort(function(a, b) {
+                                let d1 = new Date(a.atend_atenddata);
+                                let d2 = new Date(b.atend_atenddata);
+                                d1.setUTCHours(0);
+                                d1.setMinutes(0);
+                                d1.setSeconds(0);
+                                d2.setUTCHours(0);
+                                d2.setMinutes(0);
+                                d2.setSeconds(0);
+                                if(d1 == d2){
+                                    return true;
+                                } else {
+                                    if(d1 < d2){
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            });
+                            at.forEach((a)=>{
+                                rab.dt = (fncGeral.getData(a.atend_atenddata));
+                                rab.especialidade = a.atend_terapiaid;
+                                rab.profissional = a.atend_terapeutaid;
 
-                            rel.push(rab);
-                            rab = new RelAtendBene();
-                        });
-                        console.log("REL:"+rel.length)
-                        res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel})
+                                rel.push(rab);
+                                rab = new RelAtendBene();
+                            });
+                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, conv_cnpj})
+                        })
                     })
                 })
             })
@@ -700,87 +714,64 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
         let rel = [];
         let filtroAtend = {atend_convid: req.body.relConvid}
         Conv.findOne().then((conv)=>{
             Convcre.find({convcre_convid: conv._id}).then((convcre)=>{
                 Terapia.find().then((terapia)=>{
                     Atend.find(filtroAtend).then((atend) =>{
-                        console.log(atend)
                         atend.forEach((e)=>{
                             existe = false;
                             if(rel.length == 0){
-                                console.log("tamanho == 0")
                                 a.nomecid = e.atend_terapiaid;
                                 a.sessoes = 1;
                                 let val;
                                 convcre.forEach((c)=>{
-                                    console.log("c.terapiaid:"+c.convcre_terapiaid+"=="+e.atend_terapiaid);
                                     if(c.convcre_terapiaid.toString() === e.atend_terapiaid.toString()){
-                                        console.log("true")
                                         val = c.convcre_valor;
                                     } else {
-                                        console.log("false")
                                     }
                                 });
-                                console.log("val:"+val)
                                 a.valor = val;
 
                                 rel.push(a);
                                 rel.forEach((r)=>{
                                     let v = "{nomecid:"+r.nomecid+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                                    console.log("rel:"+v)
                                 })
                             } else {
-                                console.log("tamanho < 0")
                                 rel.forEach((r)=>{
-                                    console.log("r.nomecid:"+r.nomecid)
                                     if(r.nomecid.toString() === e.atend_terapiaid.toString()){
-                                        console.log("existe")
                                         r.sessoes = r.sessoes+1;
                                         existe = true;
                                     }
                                 })
                                 if(!existe){
-                                    console.log("não existe")
                                     a.nomecid = e.atend_terapiaid;
                                     a.sessoes = 1;
                                     let val;
                                 convcre.forEach((c)=>{
-                                    console.log("c.terapiaid:"+c.convcre_terapiaid+"=="+e.atend_terapiaid);
                                     if(c.convcre_terapiaid.toString() === e.atend_terapiaid.toString()){
-                                        console.log("true")
                                         val = c.convcre_valor;
                                     } else {
-                                        console.log("false")
                                     }
                                 });
-                                console.log("val:"+val)
                                 a.valor = val;
                                     rel.push(a);
-                                    console.log(a.toString())
                                 }
                             }
                         })
                         rel.forEach((r)=>{
                             let t = (parseInt(r.valor.toString().replace(",",""))*parseInt(r.sessoes)).toString();
-                            console.log("t:"+t)
                             
                             t = this.mascaraValores(t);
                             
-                            console.log(t)
                             if(t % 1 === 0) {
-                                console.log("É inteiro");
                             } else {
-                                console.log("É float");
                             }
                             r.total = t;
                         })
                         rel.forEach((r)=>{
                             let v = "{nomecid:"+r.nomecid+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                            console.log("rel:"+v)
                         })
 
                         res.render("atendimento/relatendval", {convcres: convcre, terapias: terapia, convs: conv, rels: rel})
@@ -791,7 +782,7 @@ module.exports = {
     /*
     Atend.find({atend_num: {$gte: 2}}).then((a)=>{
         a.forEach(a=>{
-        Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
+        Atend.deleteOne({_id: a._id}).then(()=>{//console.log("DELETED!");})})
     })
     */
    /*
@@ -835,7 +826,7 @@ module.exports = {
                                 rel.push(a);
                                 //rel.forEach((r)=>{
                                 //    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                                //    console.log("rel:"+v)
+                                //    //console.log("rel:"+v)
                                 //})
                                 t =  a.sessoes;
                                 t = a.valor;
@@ -871,9 +862,9 @@ module.exports = {
                             
                             //console.log(t)
                             //if(t % 1 === 0) {
-                            //    console.log("É inteiro");
+                            //    //console.log("É inteiro");
                             //} else {
-                            //    console.log("É float");
+                            //    //console.log("É float");
                             //}
                             
                             r.total = val;
@@ -881,10 +872,10 @@ module.exports = {
                         
                         //rel.forEach((r)=>{
                         //    let v = "{especialidade:"+r.especialidade+",sessoes:"+r.sessoes+",valor:"+r.valor+"}";
-                        //   console.log("rel:"+v)
+                        //   //console.log("rel:"+v)
                         //})
                         
-                        console.log("TAMANHO:"+rel.length)
+                        //console.log("TAMANHO:"+rel.length)
                         res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel})
         })})}).catch((err) =>{
             console.log(err)
@@ -905,7 +896,7 @@ module.exports = {
                                 a.valor = e.credit_valorprev;
                                 //console.log("a:"+a)
                                 rel.push(a);
-                                console.log("Primeiro")
+                                //console.log("Primeiro")
                             } else {
                                 //console.log("TAMANHODECORRER"+rel.length)
                                 rel.some(function(r, index, relArray) {
@@ -979,7 +970,7 @@ module.exports = {
                                 //console.log(conv)
                                 Terapia.find().then((terapia)=>{
                                         terapia.forEach((t)=>{
-                                            console.log("TERA: "+t.terapia_nome + "-" + t.terapia_nomecid)
+                                            //console.log("TERA: "+t.terapia_nome + "-" + t.terapia_nomecid)
                                             qtdIds = 0;
                                             function comparaIDS(cre){
                                                 if ((""+t._id) === (""+cre.credit_terapiaid)){

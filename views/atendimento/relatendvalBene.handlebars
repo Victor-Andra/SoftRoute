@@ -4,29 +4,11 @@
 		<title>Relatório de Atendimentos e Valores</title>
 		<script type="text/javascript">
 			function atualizaDataIni(){
-				let dat = new Date(document.getElementById('dataFilDe').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataIni').value = fulldate;
 			}
 			function atualizaDataFin(){
-				let dat = new Date(document.getElementById('dataFilAte').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
 			function carregaBody(){
@@ -50,7 +32,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Relatório de Atendimentos e Valores</li>
+							<li class="active">Relatório de Atendimentos por Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form role="form" action="/menu/atendimento/relatendbenes" method="POST">
@@ -86,7 +68,7 @@
 										<div class="widget-header widget-header-large">
 											<h3 class="widget-title grey lighter">
 												<i class="ace-icon fa fa-leaf green"></i>
-												Atendimentos e Valores
+												Atendimentos por Beneficiário
 											</h3>
 										</div>
 									<div class="widget-body">
@@ -116,10 +98,10 @@
 													<div>
 														<ul class="list-unstyled ">
 															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>Covênio:</b> {{conv_nome}}
+																<i class="ace-icon fa fa-caret-right green"></i><b>Periodo de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
 															</li>
 															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>Responsável: </b>{{conv_razao}}
+																<i class="ace-icon fa fa-caret-right green"></i><b>Convênio:</b> {{conv_nome}}
 															</li>
 															<li>
 																<i class="ace-icon fa fa-caret-right green"></i><b>CNPJ:</b> {{conv_cnpj}}

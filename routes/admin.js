@@ -456,7 +456,6 @@ router.post("/agenda/filB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a
 })
 
 router.get("/agenda/resp", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
-    console.log("Agenda Resp")
     fncAgenda.carregaAgendaResp(req, res);//CARREGAAGENDABENE
 })
 

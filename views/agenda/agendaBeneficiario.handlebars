@@ -75,16 +75,11 @@
 				}
 			}
 			function formataData(){
-				let dat = new Date(document.getElementById('dataFil').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let dt = document.getElementById('dataFil').value;
+				let dia = dt.substring(8,10);
+				let mes = dt.substring(5,7);
+				let ano = dt.substring(0,4);
+				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
@@ -143,7 +138,7 @@
 										</select>
 										<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 										<label style="margin-left: 25px;">Data:</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
 										<input class="hidden" id="dataFinal" name="dataFinal" />
 										<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 											<i class="ace-icon fa fa-search-plus "></i>

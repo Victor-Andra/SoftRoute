@@ -89,17 +89,9 @@
 				}
 			}
 			function formataData(){
-				let dat = new Date(document.getElementById('dataFil').value+"T00:00:00");
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
 			function testeConfirmCopia(acao){
 				if(confirm("Tem certeza que quer copiar a semana?")){

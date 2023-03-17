@@ -162,8 +162,8 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
         
-        console.log("seg::")
-        console.log(seg)
+        //console.log("seg::")
+        //console.log(seg)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -210,8 +210,8 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -251,18 +251,18 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     bene.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -280,7 +280,7 @@ module.exports = {
             atend.forEach((a)=>{
                 if(a.atend_num != 1){
                     Atend.deleteOne({_id: a._id}).then(()=>{
-                        console.log("Deleted")
+                        //console.log("Deleted")
                     })
                 }
             })
@@ -348,7 +348,7 @@ module.exports = {
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 e.agenda_hora = hora+":"+min;
-                console.log("aux:"+aux)
+                //console.log("aux:"+aux)
                 e.agenda_aux = aux;
                 aux++;
                 
@@ -380,24 +380,24 @@ module.exports = {
                         break;
                 }
             })
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){//Verifica se tem ao menos 1 registro no dia
                                     horaage.forEach((h)=>{
                                         is = true
@@ -463,7 +463,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -529,7 +529,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -595,7 +595,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -661,7 +661,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -746,7 +746,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     let tela = "agenda/agendaGeral"
                                     res.render(tela, {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
@@ -822,7 +822,7 @@ module.exports = {
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 e.agenda_hora = hora+":"+min;
-                console.log("aux:"+aux)
+                //console.log("aux:"+aux)
                 e.agenda_aux = aux;
                 aux++;
                 
@@ -873,24 +873,24 @@ module.exports = {
                     }
                 }
             });
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -956,7 +956,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1022,7 +1022,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1088,7 +1088,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1154,7 +1154,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1239,7 +1239,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaGeral", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -1323,7 +1323,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Usuario.findOne({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usu)=>{//Apenas 1
-            console.log("usu.usuario_obs:"+usu.usuario_obs)
+            //console.log("usu.usuario_obs:"+usu.usuario_obs)
             if(typeof usu.usuario_nome === undefined){
                 usunomefnc = usu.usuario_nomecompleto;
                 nomeUsu = usu.usuario_nomecompleto;
@@ -1343,8 +1343,8 @@ module.exports = {
                 usuObs = " - "
             }
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -1387,23 +1387,23 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((benef)=>{
                 benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({}).then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1471,7 +1471,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1539,7 +1539,7 @@ module.exports = {
                                 z = "qua"
                                                             
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1607,7 +1607,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1675,7 +1675,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -1763,18 +1763,18 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Terapia");
+                                    //console.log("Listagem Realizada de Terapia");
                                     Especialidade.find().then((especialidade)=>{
                                     
                                         especialidade.forEach((e)=>{//graduação
-                                            console.log("Listagem Realizada de Especialidade")
+                                            //console.log("Listagem Realizada de Especialidade")
                                             //console.log("TESTE:"+e._id+"/"+idFnc)
                                             if(e._id == idFnc){
                                                 nomeFnc = e.especialidade_nome;
                                             }
                                         })
                                         Especializacao.find().then((especializacao)=>{//Terapia
-                                            console.log("Listagem Realizada de Especializacao")
+                                            //console.log("Listagem Realizada de Especializacao")
                                             especializacao.forEach((ez)=>{//especializacao
                                                 //console.log("TESTE:"+ez._id+"/"+idEsp)
                                                 if(ez._id == idEsp){
@@ -1787,7 +1787,7 @@ module.exports = {
                                             if(!(typeof nomeEsp === "undefined")){
                                                 usunomefnc += " ("+nomeEsp+")"
                                             }
-                                            console.log("benenomeconv:"+usunomefnc)
+                                            //console.log("benenomeconv:"+usunomefnc)
                                             res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usu ,usunomefnc, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -1872,7 +1872,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Usuario.findOne({_id:req.body.agendaTeraid, usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usu) =>{
-            console.log("usu:"+usu)
+            //console.log("usu:"+usu)
             if(typeof usu.usuario_nome === undefined){
                 usunomefnc = usu.usuario_nomecompleto;
             } else {
@@ -1934,22 +1934,22 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                    console.log("Listagem Realizada de Usuário")
+                    //console.log("Listagem Realizada de Usuário")
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem Realizada de Terapia")
+                        //console.log("Listagem Realizada de Terapia")
                         Horaage.find().then((horaage)=>{
-                            console.log("Listagem Realizada de Horario")
+                            //console.log("Listagem Realizada de Horario")
                             let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                             var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                             
                             let z = "seg"
 
                             haddia = agenda.some(a => a.agenda_data_semana === z);
-                            console.log("Tem "+z+"?"+haddia)
+                            //console.log("Tem "+z+"?"+haddia)
                             if(haddia){
                                 horaage.forEach((h)=>{
                                     is = true
@@ -2017,7 +2017,7 @@ module.exports = {
                             z = "ter"
                             
                             haddia = agenda.some(a => a.agenda_data_semana === z);
-                            console.log("Tem "+z+"?"+haddia)
+                            //console.log("Tem "+z+"?"+haddia)
                             if(haddia){
                                 horaage.forEach((h)=>{
                                     is = true
@@ -2085,7 +2085,7 @@ module.exports = {
                             z = "qua"
                                                             
                             haddia = agenda.some(a => a.agenda_data_semana === z);
-                            console.log("Tem "+z+"?"+haddia)
+                            //console.log("Tem "+z+"?"+haddia)
                             if(haddia){
                                 horaage.forEach((h)=>{
                                     is = true
@@ -2153,7 +2153,7 @@ module.exports = {
                             z = "qui"
                             
                             haddia = agenda.some(a => a.agenda_data_semana === z);
-                            console.log("Tem "+z+"?"+haddia)
+                            //console.log("Tem "+z+"?"+haddia)
                             if(haddia){
                                 horaage.forEach((h)=>{
                                     is = true
@@ -2221,7 +2221,7 @@ module.exports = {
                             z = "sex"
                             
                             haddia = agenda.some(a => a.agenda_data_semana === z);
-                            console.log("Tem "+z+"?"+haddia)
+                            //console.log("Tem "+z+"?"+haddia)
                             if(haddia){
                                 horaage.forEach((h)=>{
                                     is = true
@@ -2309,18 +2309,18 @@ module.exports = {
                             });
                             Sala.find().then((sala)=>{
                                 sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                console.log("Listagem Realizada de Terapia")
+                                //console.log("Listagem Realizada de Terapia")
                                 Especialidade.find().then((especialidade)=>{
                                     
                                     especialidade.forEach((e)=>{//graduação
-                                        console.log("Listagem Realizada de Especialidade")
+                                        //console.log("Listagem Realizada de Especialidade")
                                         //console.log("TESTE:"+e._id+"/"+idFnc)
                                         if(e._id == idFnc){
                                             nomeFnc = e.especialidade_nome;
                                         }
                                     })
                                     Especializacao.find().then((especializacao)=>{//Terapia
-                                        console.log("Listagem Realizada de Especializacao")
+                                        //console.log("Listagem Realizada de Especializacao")
                                         especializacao.forEach((ez)=>{//especializacao
                                             //console.log("TESTE:"+ez._id+"/"+idEsp)
                                             if(ez._id == idEsp){
@@ -2333,7 +2333,7 @@ module.exports = {
                                         if(!(typeof nomeEsp === "undefined")){
                                             usunomefnc += " ("+nomeEsp+")"
                                         }
-                                        console.log("usunomefnc:"+usunomefnc)
+                                        //console.log("usunomefnc:"+usunomefnc)
                                         res.render("agenda/agendaTerapeuta", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, usu, usunomefnc, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -2416,8 +2416,8 @@ module.exports = {
 
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -2466,27 +2466,27 @@ module.exports = {
                     nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
                     conv.forEach(e => {
                         nomeConv = e.conv_nome
                     });
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -2554,7 +2554,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -2622,7 +2622,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -2690,7 +2690,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -2758,7 +2758,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -2845,9 +2845,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
+                                    //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -2877,6 +2877,10 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
+        //console.log("req.body.dataFinal:"+req.body.dataFinal);
+        //console.log("sex1:"+sex);
+        //console.log("seg1:"+seg);
+        //console.log("sex1:"+sex);
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -2901,6 +2905,8 @@ module.exports = {
                 dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 3);
                 sex.setUTCDate(sex.getUTCDate() + 1);
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
                 break;
             case 5://SEX
                 dtFill = {dia: this.getDiaSemana(seg)};
@@ -2919,6 +2925,8 @@ module.exports = {
         }
         let agora = seg.toISOString();
         let depois = sex.toISOString();
+        //console.log("AGORA:"+agora);
+        //console.log("depois:"+depois);
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
@@ -2932,8 +2940,8 @@ module.exports = {
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             b.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -2983,27 +2991,27 @@ module.exports = {
                     nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
                     conv.forEach(e => {
                         nomeConv = e.conv_nome
                     });
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3071,7 +3079,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3139,7 +3147,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3207,7 +3215,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true;
@@ -3275,7 +3283,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3362,9 +3370,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
+                                    //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -3448,8 +3456,8 @@ module.exports = {
 
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -3498,27 +3506,27 @@ module.exports = {
                     nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
                     conv.forEach(e => {
                         nomeConv = e.conv_nome
                     });
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3586,7 +3594,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3654,7 +3662,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3722,7 +3730,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3790,7 +3798,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -3877,9 +3885,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
+                                    //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaResp", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -3965,8 +3973,8 @@ module.exports = {
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             b.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -4016,27 +4024,27 @@ module.exports = {
                     nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
                     conv.forEach(e => {
                         nomeConv = e.conv_nome
                     });
-                    console.log("Listagem Realizada de Convenios")
+                    //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                            console.log("Listagem Realizada de Terapia")
+                            //console.log("Listagem Realizada de Terapia")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4104,7 +4112,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4172,7 +4180,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4240,7 +4248,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true;
@@ -4308,7 +4316,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4395,9 +4403,9 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Terapia")
+                                    //console.log("Listagem Realizada de Terapia")
                                     benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    console.log("benenomeconv:"+benenomeconv)
+                                    //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaResp", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -4476,8 +4484,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -4520,12 +4528,12 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -4534,7 +4542,7 @@ module.exports = {
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4602,7 +4610,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4670,7 +4678,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4738,7 +4746,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4806,7 +4814,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -4894,7 +4902,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -4973,7 +4981,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
@@ -5022,23 +5030,23 @@ module.exports = {
                 agenda = agenda.filter(a => a.id != i);
                 //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
             })
-            console.log(idsAgendasEx)
+            //console.log(idsAgendasEx)
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5107,7 +5115,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5176,7 +5184,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5244,7 +5252,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5312,7 +5320,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5399,7 +5407,7 @@ module.exports = {
                                     }
                                 });
                                 Sala.find().then((sala)=>{
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -5477,8 +5485,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -5521,12 +5529,12 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -5535,7 +5543,7 @@ module.exports = {
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5603,7 +5611,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5671,7 +5679,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5739,7 +5747,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5807,7 +5815,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -5895,7 +5903,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("area/magenda/agendaTecSem", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -5973,8 +5981,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -6017,12 +6025,12 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -6031,7 +6039,7 @@ module.exports = {
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6099,7 +6107,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6167,7 +6175,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6235,7 +6243,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6303,7 +6311,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6391,7 +6399,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("area/magenda/agendaTecSem", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -6401,9 +6409,9 @@ module.exports = {
     },
     carregaAgendaF(req,res){
         /*
-        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})})
-        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{console.log("DELETED!");})})})
-        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{console.log("DELETED!");})})})
+        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{//console.log("DELETED!");})})})
+        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{//console.log("DELETED!");})})})
+        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{//console.log("DELETED!");})})})
         */
         let aux = 1;
         let is = false;
@@ -6601,7 +6609,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6669,7 +6677,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6737,7 +6745,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6805,7 +6813,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -6893,7 +6901,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaFixa", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -6912,16 +6920,16 @@ module.exports = {
         let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        console.log("seg dtf: "+seg)
-        console.log("sex dtf: "+sex)
+        //console.log("seg dtf: "+seg)
+        //console.log("sex dtf: "+sex)
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg aft: "+seg)
-        console.log("sex aft: "+sex)
+        //console.log("seg aft: "+seg)
+        //console.log("sex aft: "+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -6939,8 +6947,8 @@ module.exports = {
                 sex.setUTCDate(sex.getUTCDate() + 2);
                 break;
             case 4://QUI
-                console.log("seg: "+seg)
-                console.log("sex: "+sex)
+                //console.log("seg: "+seg)
+                //console.log("sex: "+sex)
                 seg.setUTCDate(seg.getUTCDate() - 3);
                 sex.setUTCDate(sex.getUTCDate() + 1);
                 break;
@@ -6971,7 +6979,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
+            //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
@@ -7015,19 +7023,19 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
                                 
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7096,7 +7104,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7165,7 +7173,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7233,7 +7241,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7301,7 +7309,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7389,7 +7397,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaFixa", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -7467,8 +7475,8 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
-            console.log("Listagem Realizada de agendamentos!")
-            console.log(agenda)
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -7511,11 +7519,11 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                console.log("Listagem Realizada de Beneficiários!")
+                //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada de Usuário")
+                        //console.log("Listagem Realizada de Usuário")
                             Horaage.find().then((horaage)=>{
-                                console.log("Listagem Realizada de Horario")
+                                //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
@@ -7524,7 +7532,7 @@ module.exports = {
                                 let z = "seg"
 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7592,7 +7600,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7660,7 +7668,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7728,7 +7736,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7796,7 +7804,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -7884,7 +7892,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    console.log("Listagem Realizada de Salas")
+                                    //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSala", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -8086,7 +8094,7 @@ module.exports = {
                                 z = "ter"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -8155,7 +8163,7 @@ module.exports = {
                                 z = "qua"
                                                                
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -8223,7 +8231,7 @@ module.exports = {
                                 z = "qui"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -8291,7 +8299,7 @@ module.exports = {
                                 z = "sex"
                                 
                                 haddia = agenda.some(a => a.agenda_data_semana === z);
-                                console.log("Tem "+z+"?"+haddia)
+                                //console.log("Tem "+z+"?"+haddia)
                                 if(haddia){
                                     horaage.forEach((h)=>{
                                         is = true
@@ -8918,18 +8926,18 @@ module.exports = {
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         }).finally(() =>{
-            console.log("resultado")
-            console.log(resultado);
+            //console.log("resultado")
+            //console.log(resultado);
             if (resultado == true){
                 flash.texto = "Cadastrado com sucesso!"
                 flash.sucesso = "true"
-                console.log('verdadeiro')
+                //console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 this.carregaAgendaCadastro(req,res,flash);
             } else {
                 flash.texto = resultado
                 flash.sucesso = "false"
-                console.log('falso')
+                //console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
                 res.render('admin/erro', flash);
             }
@@ -8980,13 +8988,13 @@ module.exports = {
             flash.sucesso = "false"
             flash.texto = "houve um erro ao Realizar as listas!"
         }).finally(() =>{
-            console.log("resultado")
-            console.log(resultado);
+            //console.log("resultado")
+            //console.log(resultado);
             if (flash.sucesso == "true"){
-                console.log('verdadeiro')
+                //console.log('verdadeiro')
                 this.carregaAgendaCadastro(req,res,flash);
             } else {
-                console.log('ERRO')
+                //console.log('ERRO')
                 res.render('admin/erro', flash);
             }
         })
@@ -9029,7 +9037,7 @@ module.exports = {
                 //console.log(res)
                 resposta = true;
             }).catch((err) =>{
-                //console.log("error")
+                console.log("error")
                 console.log(err)
                 resposta = err;
                 res.render('admin/erro')
@@ -9048,13 +9056,13 @@ module.exports = {
                 }
             })
         } catch(err1){
-            console.log(err1)
+            //console.log(err1)
         }
     },
     deletaAgenda(req, res){
         Agenda.deleteOne({_id: req.params.id}).then(() =>{
             //this.carregaAgendaF(req,res);
-            console.log("Deletado:"+req.params.id);
+            //console.log("Deletado:"+req.params.id);
         })
         /*
         let antes = new Date();
@@ -9067,12 +9075,12 @@ module.exports = {
         depois.setSeconds(59);
         antes.setUTCDate(antes.getUTCDate() - 9);
         depois.setUTCDate(depois.getUTCDate() + 3);
-        console.log(" Antes " + antes + " / Depois " + depois);
+        //console.log(" Antes " + antes + " / Depois " + depois);
         Agenda.find({agenda_data: { $gte : antes, $lte:  depois }}).then((agendas) =>{
             agendas.forEach(dia => {
                 Agenda.deleteOne({_id: dia._id}).then(() =>{
                     //this.carregaAgendaF(req,res);
-                    console.log("Deletado:"+dia._id);
+                    //console.log("Deletado:"+dia._id);
                 }) 
             });
         })
@@ -9087,26 +9095,26 @@ module.exports = {
                 //console.log("res")
                 resultado = true;
             }).catch((err) =>{
-                //console.log("error")
+                console.log("error")
                 console.log(err)
                 resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                console.log("Finally")
+                //console.log("Finally")
                 if(resultado == true){
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
                     //Volta para a agenda de listagem
                     this.carregaAgendaCadastro(req,res,flash);
                 }else{
-                    console.log("Erro ao editar agenda!")
+                    //console.log("Erro ao editar agenda!")
                     flash.texto = "Erro ao editar agenda!"
                     flash.sucesso = "false"
                     this.carregaAgendaCadastro(req,res,flash);
                 }
             })
         } catch(err1){
-            console.log(err1)
+            //console.log(err1)
         }
     },
     carregaAgendaEdi(req, res, resposta){//CarregaEdiçãoAgenda
@@ -9911,7 +9919,7 @@ module.exports = {
                                 return false;
                             })
                         })
-                        //agendaSubstituida.forEach((s)=>{console.log("aSub:"+s)})
+                        //agendaSubstituida.forEach((s)=>{//console.log("aSub:"+s)})
                         let hora;
                         let data;
                         agenda.forEach((a)=>{
@@ -9931,11 +9939,11 @@ module.exports = {
                                         aux = s._id
                                         let foi = (""+aux) === (""+temp);
                                         let foinao = (""+aux) == (""+temp);
-                                        console.log("auxId===auxId : "+auxId+"==="+auxId + " : " + foi + " : " + foinao + ";")
+                                        //console.log("auxId===auxId : "+auxId+"==="+auxId + " : " + foi + " : " + foinao + ";")
                                         if((""+aux) === (""+temp)){
                                             agendaSub = s;
                                             //console.log("HORA:"+agendaSub)
-                                            console.log("achou!!!")
+                                            //console.log("achou!!!")
                                             return true;
                                         }
                                         return false;
@@ -10428,7 +10436,7 @@ module.exports = {
                     })
                 //})
             })
-            console.log("END COPIA")
+            //console.log("END COPIA")
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro')
@@ -10468,8 +10476,8 @@ module.exports = {
         });
     },
     copiaDiaAgendaFill(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
-        console.log("----------CÓPIA----------")
-        console.log("dia:"+req.body.data)
+        //console.log("----------CÓPIA----------")
+        //console.log("dia:"+req.body.data)
 
         let dataaux;
         let dataIni = new Date(this.formataData(req.body.data));
@@ -10486,14 +10494,14 @@ module.exports = {
         dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
-        console.log("dataIni"+dataIni);
-        console.log("dataFim"+dataFim);
+        //console.log("dataIni"+dataIni);
+        //console.log("dataFim"+dataFim);
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false }).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setUTCDate(dataaux.getUTCDate()+7);
-                console.log("date")
-                console.log(dataaux)
+                //console.log("date")
+                //console.log(dataaux)
                 a.agenda_data = dataaux.toISOString();
                 const newAgenda = new Agenda({
                     agenda_data : a.agenda_data,//
@@ -10514,10 +10522,10 @@ module.exports = {
         })
     },
     copiaSemanaAgendaGeral(req,res){//Fazer ajuste para encontrar agendas diarias e substituir as fixas correspondentes.
-        console.log("-------------------------")
-        console.log("----------CÓPIA----------")
-        console.log("-------------------------")
-        console.log("dia:"+req.body.data)
+        //console.log("-------------------------")
+        //console.log("----------CÓPIA----------")
+        //console.log("-------------------------")
+        //console.log("dia:"+req.body.data)
 
         let dataaux;
         let dataIni = new Date(req.body.data);//deve retornar uma segunda-feira
@@ -10534,14 +10542,14 @@ module.exports = {
         dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
-        console.log("dataIni"+dataIni);
-        console.log("dataFim"+dataFim);
+        //console.log("dataIni"+dataIni);
+        //console.log("dataFim"+dataFim);
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false}).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setDate(dataaux.getDate()+7);
-                console.log("date")
-                console.log(dataaux)
+                //console.log("date")
+                //console.log(dataaux)
                 a.agenda_data = dataaux.toISOString();
                 const newAgenda = new Agenda({
                     agenda_data : a.agenda_data,//
@@ -10558,21 +10566,21 @@ module.exports = {
                 });
                 this.salvaAgenda(newAgenda);
             })
-            console.log(agenda)
+            //console.log(agenda)
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro');
         }).finally(()=>{
-            console.log("-------------------------")
-            console.log("-----------FIM-----------")
-            console.log("-------------------------")
+            //console.log("-------------------------")
+            //console.log("-----------FIM-----------")
+            //console.log("-------------------------")
             this.carregaAgendaF(req,res);
         })
     },
     salvaAgenda: async (newAgenda,res) => {
-        console.log("newAgenda save");
+        //console.log("newAgenda save");
         await newAgenda.save().then(()=>{
-            console.log("Cadastro realizado!");
+            //console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
             console.log(err)
@@ -10604,7 +10612,7 @@ module.exports = {
                                 })
                             })
                             Atend.deleteOne({_id: a._id}).then(()=>{
-                                console.log("DELETED!");
+                                //console.log("DELETED!");
                             })
                         })
                     })
@@ -10616,17 +10624,17 @@ module.exports = {
 /*
 let atualizar = agendaClass.agendaAddNovosCampos(req,res);
 atualizar.then((res) =>{
-    console.log(res)
+    //console.log(res)
     resultado = true;
 }).catch((err) =>{
     console.log(err)
     resultado = false;
 }).finally(() =>{
-    console.log("resultado")
-    console.log(resultado);
+    //console.log("resultado")
+    //console.log(resultado);
 })
 
 let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
-    a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{console.log("DELETED!");})})
+    a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{//console.log("DELETED!");})})
 })
 */
