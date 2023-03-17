@@ -556,52 +556,48 @@ module.exports = {
             })
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 Conv.find().then((conv)=>{
-                    conv.some((c)=>{
-                        if((c._id+"") === (req.body.relConvid+"")){
-                            conv_nome = conv.conv_nome;
-                            return true;
-                        }
-                        return false;
-                    })
-                    Terapia.find().then((terapia)=>{
-                        terapia.forEach((t)=>{
-                            qtdIds = 0;
-                            function comparaIDS(cre){
-                                if ((""+t._id) === (""+cre.credit_terapiaid)){
-                                    qtdIds++;
-                                    creVal = cre.credit_valorprev;
-                                    if ("0,00" == cre.credit_valorprev){
-                                        console.log("Santo:"+cre);
+                    Conv.findOne({_id: req.body.relConvid}).then((c)=>{
+                        conv_nome = c.conv_nome;
+                        Terapia.find().then((terapia)=>{
+                            terapia.forEach((t)=>{
+                                qtdIds = 0;
+                                function comparaIDS(cre){
+                                    if ((""+t._id) === (""+cre.credit_terapiaid)){
+                                        qtdIds++;
+                                        creVal = cre.credit_valorprev;
+                                        if ("0,00" == cre.credit_valorprev){
+                                            console.log("Santo:"+cre);
+                                        }
+                                        teraID = cre.credit_terapiaid;
+                                        return cre;
                                     }
-                                    teraID = cre.credit_terapiaid;
-                                    return cre;
                                 }
-                            }
 
-                            u = cre.filter((c)=>{comparaIDS(c)})
+                                u = cre.filter((c)=>{comparaIDS(c)})
 
-                            if(qtdIds != 0){
-                                a.sessoes = qtdIds;
-                                a.nomecid = teraID;
-                                a.valor = creVal;
-                            }
-                            //separado do if anterior pq o codigo n quer q fique junto... da BUG
-                            if(a.sessoes){
-                                rel.push(a);
-                                a = new RelAtend();
-                            }
+                                if(qtdIds != 0){
+                                    a.sessoes = qtdIds;
+                                    a.nomecid = teraID;
+                                    a.valor = creVal;
+                                }
+                                //separado do if anterior pq o codigo n quer q fique junto... da BUG
+                                if(a.sessoes){
+                                    rel.push(a);
+                                    a = new RelAtend();
+                                }
+                            })
+                            rel.forEach((r)=>{
+                                val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
+                                val = this.mascaraValores(val);
+                                r.total = val;
+
+                                valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
+                                sessaoTot += r.sessoes;
+                            })
+                            total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+
+                            res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome})
                         })
-                        rel.forEach((r)=>{
-                            val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
-                            val = this.mascaraValores(val);
-                            r.total = val;
-
-                            valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
-                            sessaoTot += r.sessoes;
-                        })
-                        total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
-
-                        res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome})
                     })
                 })
             })
