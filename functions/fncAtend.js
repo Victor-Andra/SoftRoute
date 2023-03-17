@@ -639,6 +639,7 @@ module.exports = {
         let conv_cnpj;
         let conv_nome;
         let conv_id;
+        let bene_nome;
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
@@ -658,13 +659,13 @@ module.exports = {
                     Bene.find().then((bene)=>{
                         bene.some((b)=>{
                             if((""+b._id) === (""+req.body.relBeneid)){
+                                bene_nome = b.bene_nome;
                                 conv_id = b.bene_convid;
                                 return true;
                             }
                             return false;
                         })
                         Conv.findOne({_id: conv_id}).then((conv)=>{
-                            conv_cnpj = conv.conv_cnpj;
                             conv_nome = conv.conv_nome;
                             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             at.sort(function(a, b) {
@@ -694,7 +695,7 @@ module.exports = {
                                 rel.push(rab);
                                 rab = new RelAtendBene();
                             });
-                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, conv_cnpj})
+                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome})
                         })
                     })
                 })
