@@ -3,8 +3,35 @@ const mongoose = require("mongoose")
 
 
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
-const creditClass = require("../models/credit")
+const creditClass = require("../models/credit");
+const terapiaClass = require("../models/terapia")
+
 const Credit = mongoose.model("tb_credit")
+const Terapia = mongoose.model("tb_terapia")
+
+//Funções auxiliares
+const fncCredit = require("../functions/fncCredit")
+const fncGeral = require("../functions/fncGeral")
+
+class CreditLis{
+    constructor(
+        credit_convid,
+        credit_terapiaid,
+        credit_datavenci,
+        credit_datapg,
+        credit_valorprev,
+        credit_valorpg,
+        credit_pg
+        ){
+        this.credit_convid = credit_convid,
+        this.credit_terapiaid = credit_terapiaid,
+        this.credit_datavenci = credit_datavenci,
+        this.credit_datapg = credit_datapg,
+        this.credit_valorprev = credit_valorprev,
+        this.credit_valorpg = credit_valorpg,
+        this.credit_pg = credit_pg
+    }
+}
 
 module.exports = {
     creditAdicionarApoio: async (req,res) => {
@@ -403,13 +430,33 @@ module.exports = {
         }
     },
     listar(req,res){
-        Credit.find().then((credit) =>{
-            console.log("Listagem Realizada!")
-            res.render('financeiro/receita/creditLis', {credits: credit})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Credits")
-            res.redirect('admin/erro')
+        let cl = new CreditLis();
+        let listaCredito = [];
+        let dt;
+        Terapia.find().then((terapia)=>{
+            Credit.find().then((credit) =>{
+                credit.forEach(c=>{
+                    cl.credit_convid = c.credit_convid;
+                    cl.credit_terapiaid = c.credit_terapiaid;
+                    cl.credit_datavenci = fncGeral.getData(c.credit_datavenci);
+                    cl.credit_datapg =  fncGeral.getData(c.credit_datapg);
+                    cl.credit_valorprev = c.credit_valorprev;
+                    cl.credit_valorpg = c.credit_valorpg;
+                    if(c.credit_pg){
+                        cl.credit_pg = "Sim";
+                    } else {
+                        cl.credit_pg = "Não";
+                    }
+                    listaCredito.push(cl);
+                    cl = new CreditLis();
+                })
+                console.log("Listagem Realizada!")
+                res.render('financeiro/receita/creditLis', {listaCreditos: listaCredito, terapias: terapia})
+            }).catch((err) =>{
+                console.log(err)
+                req.flash("error_message", "houve um erro ao listar Credits")
+                res.redirect('admin/erro')
+            })
         })
     }
 }

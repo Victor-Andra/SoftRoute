@@ -4,22 +4,21 @@
 		<title>Usuários</title>
 		<script>
 			function carregaBody(){
-				console.log("começa");
-				let funcaoId = document.getElementById("usuFuncaoId").value;
-				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoid").value;
+				console.log("carregar body");
+				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuEnduf").value;
-				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilid").value;
-				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
+				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
+				document.getElementById("usuarioContatipo").value = document.getElementById("usuContaTipo").value;
 				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
 				document.getElementById("usuarioEscolaridade").value = document.getElementById("usuEscolaridade").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
 				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
 				document.getElementById("usuarioContrato").value = document.getElementById("usuContrato").value;
-				console.log("usuPerfilId:"+document.getElementById("usuPerfilId").value);
+				console.log("body carregado");
 			}
 		</script>
 	</head>
-	<body class="no-skin">
+	<body class="no-skin" onload="javascript:carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">

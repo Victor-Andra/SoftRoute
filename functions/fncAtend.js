@@ -535,6 +535,7 @@ module.exports = {
         let teraID;
         let qtdIds;
         let creVal;
+        let creValArray;
         let u;
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
@@ -561,20 +562,46 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.forEach((t)=>{
                                 qtdIds = 0;
+                                /*
                                 function comparaIDS(cre){
                                     if ((""+t._id) === (""+cre.credit_terapiaid)){
                                         qtdIds++;
                                         creVal = cre.credit_valorprev;
-                                        if ("0,00" == cre.credit_valorprev){
-                                            console.log("Santo:"+cre);
-                                        }
                                         teraID = cre.credit_terapiaid;
                                         return cre;
                                     }
                                 }
+*/
+                                u = cre.filter((c)=>{comparaIDS(c)})//apenas cres com terapiaid do foreach
 
-                                u = cre.filter((c)=>{comparaIDS(c)})
+                                u.forEach(ct=>{
+                                    ct.forEach(cts=>{
+                                        if(creValArray.length == 0){
+                                            creValArray.push(cts.credit_valorprev);
+                                        } else {
+                                            if(fncGeral.verificarExistencia(creValArray, cts.credit_valorprev)){
+                                                creValArray.push(cts.credit_valorprev);
+                                            }
+                                        }
+                                    })
+                                })
 
+                                creValArray.forEach(cva=>{
+                                    u.forEach(ct=>{
+                                        if(ct.credit_valorprev == cva){
+                                            qtdIds++;
+                                            creVal = cre.credit_valorprev;
+                                            teraID = cre.credit_terapiaid;
+                                        }
+                                    })
+                                    a.sessoes = qtdIds;
+                                    a.nomecid = teraID;
+                                    a.valor = creVal;
+
+                                    rel.push(a);
+                                    a = new RelAtend();
+                                })
+/*
                                 if(qtdIds != 0){
                                     a.sessoes = qtdIds;
                                     a.nomecid = teraID;
@@ -585,6 +612,7 @@ module.exports = {
                                     rel.push(a);
                                     a = new RelAtend();
                                 }
+*/
                             })
                             rel.forEach((r)=>{
                                 val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
@@ -773,7 +801,107 @@ module.exports = {
         })})})}).catch((err) =>{
             console.log(err)
         })
-    }
+    },
+    relAtendimentoBeneCons(req,res){
+        let seg = new Date();
+        let sex = new Date();
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Bene.findOne().then((bene)=>{
+                Terapia.find().then((terapia)=>{
+                    Bene.find().then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                        res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene})
+        })})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+    relAtendimentoBeneConsFiltro(req,res){
+        let a = new RelAtend();//objeto para fazer push em relatendimento
+        let val;//objeto para formatar valor do cre
+        let existe = 0;//verifica se existe a terapia no rel
+        let valTot = 0;//calcular valor total
+        let sessaoTot = 0;//calcular total de sessoes
+        let aux;//auxiliar
+        let rel = [];//relatorio
+        let total;//objeto valor total cre
+        let teraID;
+        let qtdIds;
+        let creVal;
+        let u;
+        let seg = new Date(req.body.dataIni);
+        let sex = new Date(req.body.dataFim);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
+        let atendIds = [];
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        let bene_nome;
+
+        Atend.find(filtroAtend).then((at)=>{
+            at.forEach((a)=>{
+                atendIds.push(a.atend_num);
+            })
+            Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+                Bene.find().then((bene)=>{
+                    Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
+                        bene_nome = b.bene_nome;
+                        Terapia.find().then((terapia)=>{
+                            terapia.forEach((t)=>{
+                                qtdIds = 0;
+                                function comparaIDS(cre){
+                                    if ((""+t._id) === (""+cre.credit_terapiaid)){
+                                        qtdIds++;
+                                        creVal = cre.credit_valorprev;
+                                        teraID = cre.credit_terapiaid;
+                                        return cre;
+                                    }
+                                }
+
+                                u = cre.filter((b)=>{comparaIDS(b)})
+
+                                if(qtdIds != 0){
+                                    a.sessoes = qtdIds;
+                                    a.nomecid = teraID;
+                                    a.valor = creVal;
+                                }
+                                //separado do if anterior pq o codigo n quer q fique junto... da BUG
+                                if(a.sessoes){
+                                    rel.push(a);
+                                    a = new RelAtend();
+                                }
+                            })
+                            rel.forEach((r)=>{
+                                val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
+                                val = this.mascaraValores(val);
+                                r.total = val;
+
+                                valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
+                                sessaoTot += r.sessoes;
+                            })
+                            total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+
+                            res.render("atendimento/relatendvalcons", {cres: cre, terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome})
+                        })
+                    })
+                })
+            })
+        })
+    },
+
+
+
+
     /*
     Atend.find({atend_num: {$gte: 2}}).then((a)=>{
         a.forEach(a=>{

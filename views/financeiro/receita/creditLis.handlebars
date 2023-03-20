@@ -36,7 +36,7 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio/Venda: activate to sort column ascending">Convênio/Venda</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio: activate to sort column ascending">Convênio</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapia: activate to sort column ascending">Terapia</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Vencimento: activate to sort column ascending">Vencimento</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Pagamento: activate to sort column ascending">Pagamento</th>
@@ -47,7 +47,7 @@
 													</tr>
 												</thead><!-- Fim Cabeçalho da tabela -->
 												<tbody><!-- Corpo da tabela -->
-													{{#each credits}}
+													{{#each listaCreditos}}
 														<tr>
 															<th class="center">
 																<label class="pos-rel">
@@ -55,8 +55,16 @@
 																	<span class="lbl"></span>
 																</label>
 															</th>
-															<td>{{credit_convid}}</td>
-															<td>{{credit_terapiaid}}</td>
+															{{#each convs}}
+																{{#ifEqual this._id ../credit_convid}}
+																	<td>{{conv_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+															{{#each ../terapias}}
+																{{#ifEqual this._id ../nomecid}}
+																	<td>{{credit_terapiaid}}</td>
+																{{/ifEqual}}
+															{{/each}}
 															<td>{{credit_datavenci}}</td>
 															<td>{{credit_datapg}}</td>
 															<th>{{credit_valorprev}}</th>

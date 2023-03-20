@@ -598,8 +598,8 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
 
   
 
-//Relatório Individual de Valores de Atendimento por Beneficiário.
-//Emite uma relação de todos os valores de atendimentos realizados pelo beneficiário
+//Relatório Individual de Valores de Atendimento por Convênuio.
+//Emite uma consolidado de todos os valores de atendimentos realizados pelo beneficiário
 //pagos pelos convênios, incluindo particular, num determinado período de tempo.
     router.get('/atendimento/relatendval', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoVal(req,res)
@@ -617,6 +617,15 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
 
     router.post('/atendimento/relatendbenes', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneFiltro(req,res)
+    })
+//Relatório Consolidado de Atendimentos por Beneficiário.
+//Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
+    router.get('/atendimento/relatendbenecons', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneCons(req,res)
+    })
+
+    router.post('/atendimento/relatendvalconss', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneConsFiltro(req,res)
     })
 
 //Menu Financeiro / AtendAdm

@@ -22,6 +22,17 @@ module.exports = {
             res.render('ferramentas/usuario/login',{flash});
         }
     },
+    verificarExistencia(arrayString, val){//verifica a existencia de uma string em um arraystring;
+        let boo = false;
+        arrayString.some(v => {
+            if(val == v){
+                boo = true;
+                return true;
+            }
+            return false;
+        });
+        return boo;
+    },
     getDiaSemana(dt){
         let dat = new Date(dt);
         switch (dat.getUTCDay()){

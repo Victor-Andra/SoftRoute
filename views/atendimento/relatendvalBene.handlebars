@@ -44,7 +44,7 @@
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" />
-								<label>Convênio: </label>
+								<label>Beneficiário: </label>
 								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
 									{{#each benes}}
 										<option value="{{_id}}">{{bene_nome}}</option>
@@ -77,7 +77,7 @@
 												<div class="col-sm-12">
 													<div class="row">
 														<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
-															<b>Informações da Instituição</b>
+															<b>Informações do Prestador</b>
 														</div>
 													</div>
 													<div>
