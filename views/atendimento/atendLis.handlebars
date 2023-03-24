@@ -315,19 +315,12 @@
 														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
 														<td>
 															<div class="action-buttons">
-																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/edi/{{_id}}">
+																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
 																<a class="red" name="acaoDel" id="acaoDel" href="/menu/atendimento/del/{{_id}}">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-																{{#each ../benes}}
-																	{{#ifEqual this._id ../atend_beneid}}
-																		<a class="blue" name="acaoDel" id="acaoDel" href="/menu/atendimento/relatendInd/{{this._id}}">
-																	<i class="ace-icon fa fa-file-o bigger-130"></i>
-																</a>
-																	{{/ifEqual}}
-																{{/each}}
 															</div>
 															<div class="hidden-md hidden-lg">
 															</div>
