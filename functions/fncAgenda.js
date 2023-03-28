@@ -3380,7 +3380,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAgendaResp(req,res){
         let aux = 1;
         let is = false;
@@ -3895,7 +3894,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAgendaFilResp(req,res){
         let aux = 1;
         let is = false;
@@ -4413,7 +4411,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAgendaS(req,res){
         let aux = 1;
         let is = false;
@@ -6408,11 +6405,11 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
-        /*
-        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{//console.log("DELETED!");})})})
-        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{//console.log("DELETED!");})})})
-        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{//console.log("DELETED!");})})})
-        */
+
+        //let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        //let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        //let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        
         let aux = 1;
         let is = false;
         let dtFill;
@@ -9810,6 +9807,7 @@ module.exports = {
         let atend;
         let agendacreTes;
         let agendadebTes;
+        let temAgendaSub;
         seg.setUTCHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -9937,11 +9935,9 @@ module.exports = {
                                     
                                     agendaSubstituida.some((s)=>{
                                         aux = s._id
-                                        let foi = (""+aux) === (""+temp);
-                                        let foinao = (""+aux) == (""+temp);
-                                        //console.log("auxId===auxId : "+auxId+"==="+auxId + " : " + foi + " : " + foinao + ";")
                                         if((""+aux) === (""+temp)){
                                             agendaSub = s;
+                                            temAgendaSub = true;
                                             //console.log("HORA:"+agendaSub)
                                             //console.log("achou!!!")
                                             return true;
@@ -9949,15 +9945,37 @@ module.exports = {
                                         return false;
                                     })
 
-                                    if(!a.agenda_hora){
-                                        hora = agendaSub.agenda_hora;
-                                    } else {
-                                        hora = a.agenda_hora;
-                                    }
-                                    if(!a.agenda_data){
-                                        data = new Date(agendaSub.agenda_data)
-                                    } else {
+                                    if(!temAgendaSub){
                                         data = new Date(a.agenda_data)
+                                        let hora = data.getHours();
+                                        let min = data.getMinutes();
+
+                                        if (hora.length = 1){
+                                            hora = "0"+hora;
+                                        }
+
+                                        if (min.length = 1){
+                                            min = "0"+min;
+                                        }
+
+                                        let horaAgenda = hora+":"+min;
+                                        console.log("HORA:"+horaAgenda);
+                                        hora = horaAgenda;
+                                    } else {
+                                        data = new Date(agendaSub.agenda_data)
+                                        let hora = data.getHours();
+                                        let min = data.getMinutes();
+
+                                        if (hora.length = 1){
+                                            hora = "0"+hora;
+                                        }
+
+                                        if (min.length = 1){
+                                            min = "0"+min;
+                                        }
+                                        let horaAgenda = data.getHours()+":"+data.getMinutes();
+                                        console.log("HORA:"+horaAgenda);
+                                        hora = horaAgenda;
                                     }
 
                                     switch (a.agenda_tempmotivo){
