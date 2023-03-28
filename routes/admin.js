@@ -628,6 +628,16 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
         fncAtend.relAtendimentoBeneConsFiltro(req,res)
     })
 
+//Relatório Emissão NF.
+//Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
+router.get('/atendimento/relatendvalnf', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendimentoValNf(req,res)
+})
+
+router.post('/atendimento/relatendvalnfs', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendimentoValNfFiltro(req,res)
+})
+
 //Menu Financeiro / AtendAdm
 //Menu AtendAdm   
 

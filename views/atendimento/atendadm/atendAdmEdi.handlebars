@@ -92,6 +92,8 @@
 				document.getElementById("Padrão").style.display = "none";
 			}
 			function carregaBody(){
+				atualizaData();
+				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
 				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
 				document.getElementById("atendCategoria").value = document.getElementById("atendCategoriaEdi").value;
 				document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
@@ -105,8 +107,6 @@
 				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
 				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
 				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
-				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
-				atualizaData();
 			}
 			function atualizaData(){
 				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";

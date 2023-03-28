@@ -62,7 +62,23 @@
 												<label > Terapia Nome CID / Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="terapiaNomeCid" id="terapiaNomeCid" placeholder="" class="form-control"  value="{{terapia.terapia_nomecid}}" />
+														<select name="terapiaNomeCid" id="terapiaNomeCid" class="chosen-select" value="{{terapia.terapia_nomecid}}" >
+															<option value="{{terapia.terapia_nomecid}}">{{terapia.terapia_nomecid}}</option>
+															<option value="ARTETERAPIA">ARTETERAPIA</option>
+															<option value="ABA">ABA</option>
+															<option value="FISIOTERAPIA">FISIOTERAPIA</option>
+															<option value="FONOAUDIOLOGIA">FONOAUDIOLOGIA</option>
+															<option value="MUSICOTERAPIA">MUSICOTERAPIA</option>
+															<option value="NUTRIÇÃO">NUTRIÇÃO</option>
+															<option value="PSICOLOGIA">PSICOLOGIA</option>
+															<option value="PSICOMOTRICIDADE FUNCIONAL">PSICOMOTRICIDADE FUNCIONAL</option>
+															<option value="PSICOMOTRICIDADE RELACIONAL">PSICOMOTRICIDADE RELACIONAL</option>
+															<option value="PSICOPEDAGOGIA">PSICOPEDAGOGIA</option>
+															<option value="TCC">TCC</option>
+															<option value="TO AVD">TO AVD</option>
+															<option value="TO IS">TO IS</option>
+														</select>
+														
 													</div>
 												</div>
 
