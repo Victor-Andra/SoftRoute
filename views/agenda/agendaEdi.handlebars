@@ -87,7 +87,6 @@
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Agendamentos</h4>
-											<input class="hidden" id="agendaId" name="agendaId" value="{{agenda._id}}" />
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
@@ -255,6 +254,7 @@
 									</div>
 								</div>
 								<div class="hidden">
+									<input id="id" name="id" value="{{agenda._id}}" />
 									<input id="agendaData" name="agendaData" />
 									<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
 									<input id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />

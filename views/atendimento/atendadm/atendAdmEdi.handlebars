@@ -114,9 +114,14 @@
 				var datafmt = new Date(data);
 				console.log("datafmt:"+datafmt);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+				//
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
 			}
 			function atualizaDataEdi(){
-				document.getElementById("atenddata").value = formatDate(document.getElementById("atendAtenddataEdi").value);
+				document.getElementById("atenddata").value = formataData(document.getElementById("atendAtenddataEdi").value);
 			}
 			function formataData(date) {//yyyy-MM-dd
 				var d = new Date(date),

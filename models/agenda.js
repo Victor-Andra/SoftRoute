@@ -82,7 +82,7 @@ module.exports = {AgendaModel,AgendaSchema,
         //Pega data atual
         
         //Realiza Atualização - Atualização não faz alteração temporaria
-        await AgendaModel.findByIdAndUpdate(req.body.agendaId, 
+        await AgendaModel.findByIdAndUpdate(req.body.id, 
             {$set: {
                 agenda_data : dataAgenda ,
                 agenda_beneid : req.body.agendaBeneid ,

@@ -400,20 +400,21 @@ module.exports = {
                 
                 break;
         }
+
         switch (tipoPessoa){
             case "Geral":
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
                 break;
-            case "Beneficiário":
-                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneId };
+            case "Beneficiario":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneficiario };
                 break;
             case "Terapeuta":
-                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeutaId };
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
                 break;
             default:
                 break;
         }
-        //console.log(busca)
+
         Atend.find(busca).then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
