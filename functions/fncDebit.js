@@ -521,5 +521,81 @@ module.exports = {
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
+    },
+    debitAtendEditar(req,res){
+        Debit.findOne({debit_atendnum: req.body.nextNum}).then((deb)=>{
+            switch (req.body.atendCategoria){
+                case "Apoio":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Extra":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Falta":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Falta Justificada":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendMergevalordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Glosa":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Padrão":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Pais":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Substituição":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendMergevalordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+                case "Supervisão":
+                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
+                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_dataedi = new Date();
+                    break;
+            }
+        })
     }
 }
+/*
+            this.debit_atendnum = debit_atendnum,
+            this.debit_nome = debit_nome,
+            this.debit_cpfcnpj = debit_cpfcnpj,
+            this.debit_dataevento = debit_dataevento,
+            this.debit_datavenci = debit_datavenci,
+            this.debit_datapg = debit_datapg,
+            this.debit_valorprev = debit_valorprev,
+            this.debit_juros = debit_juros,
+            this.debit_multa = debit_multa,
+            this.debit_adianta = debit_adianta,
+            this.debit_valorpg = debit_valorpg,
+            this.debit_pg = debit_pg,
+            this.debit_fornecid = debit_fornecid,
+            this.debit_parcelado = debit_parcelado,
+            this.debit_recorrente = debit_recorrente,
+            this.debit_descr = debit_descr,
+            this.debit_categoriaid = debit_categoriaid,
+            this.debit_subcategoriaid = debit_subcategoriaid,
+            this.debit_credcategoriaid = debit_credcategoriaid,
+            this.debit_credsubcategoriaid = debit_credsubcategoriaid,
+            this.debit_notafiscal = debit_notafiscal,
+            this.debit_datacad = debit_datacad,
+            this.debit_dataedi = debit_dataedi
+*/

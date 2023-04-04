@@ -441,6 +441,24 @@ router.get("/agenda/lisS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a
     fncAgenda.carregaAgendaS(req, res);
 })
 
+router.get("/agenda/lisSB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Beneficiario  Semanal.
+    console.log("Agenda Semanal")
+    fncAgenda.carregaAgendaSB(req, res);
+})
+
+router.post("/agenda/filSB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios Semanal.
+    fncAgenda.carregaAgendaFilSB(req, res);
+})
+
+router.get("/agenda/lisTB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Terapeuta Semanal.
+    console.log("Agenda Semanal")
+    fncAgenda.carregaAgendaTB(req, res);
+})
+
+router.post("/agenda/filTB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de terapeuta Semanal.
+    fncAgenda.carregaAgendaFilTB(req, res);
+})
+
 router.post("/agenda/filS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
     console.log("lista")
     fncAgenda.carregaAgendaFilS(req, res);
@@ -534,6 +552,9 @@ router.post('/agenda/cadE/atualiza', fncGeral.IsAuthenticated, (req,res) =>{//di
     fncAgenda.atualizaAgenda(req, res);
 })
 
+router.post('/agenda/deleteall', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.deletarTodosAtendimentos(req, res);
+})
 /*
 router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaAgendaCadE(req, res);

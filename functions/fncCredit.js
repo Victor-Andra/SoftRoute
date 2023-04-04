@@ -458,5 +458,56 @@ module.exports = {
                 res.redirect('admin/erro')
             })
         })
+    },
+    creditAtendEditar(req,res){
+        Credit.findOne({credit_atendnum: req.body.nextNum}).then((cre)=>{
+            switch (req.body.atendCategoria){
+                case "Apoio":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Extra":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Falta":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Falta Justificada":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendMergevalorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Glosa":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Padrão":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Pais":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Substituição":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendMergevalorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+                case "Supervisão":
+                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
+                    cre.credit_valorprev = req.body.atendValorcre;
+                    cre.credit_dataedi = new Date();
+                    break;
+            }
+        })
     }
 }

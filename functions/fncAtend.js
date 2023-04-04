@@ -997,8 +997,7 @@ module.exports = {
             })
         })
     },
-
-
+}
     /*
     Atend.find({atend_num: {$gte: 2}}).then((a)=>{
         a.forEach(a=>{
@@ -1102,7 +1101,6 @@ module.exports = {
         })
     },
    */
-}
 
 
                         /*

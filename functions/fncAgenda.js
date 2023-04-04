@@ -4907,6 +4907,680 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+    carregaAgendaSB(req,res){
+        let aux = 1;
+        let is = false;
+        let dtFill;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        seg.setFullYear(2020);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        sex.setFullYear(2020);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.findOne().then((b) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
+
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        console.log("erro");
+                        break;
+                }
+            })
+            //console.log(agenda)
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+            Bene.find({_id: b._id}).then((bene)=>{
+                bene.forEach(e => {
+                    nomeBene = e.bene_apelido
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                        //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            //console.log("Listagem Realizada de Terapia")
+                            Horaage.find().then((horaage)=>{
+                                //console.log("Listagem Realizada de Horario")
+                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                let segASex = ["seg","ter","qua","qui","sex"];
+                                
+                                segASex.forEach((diaDaSemana)=>{
+                                    haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                    //console.log("Tem "+z+"?"+haddia)
+                                    this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                })
+
+                                agenda.sort(function(a, b) {
+                                    let h1 = a.agenda_hora.substring(0,2);
+                                    let m1 = a.agenda_hora.substring(3,5);
+                                    let h2 = b.agenda_hora.substring(0,2);
+                                    let m2 = b.agenda_hora.substring(3,5);
+                                    if(h1 == h2){
+                                        if(m1 < m2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        if(h1 < h2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                Sala.find().then((sala)=>{
+                                    //console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    //console.log("benenomeconv:"+benenomeconv)
+                                    res.render("agenda/agendaBeneficiarioSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    carregaAgendaFilSB(req,res){
+        let aux = 1;
+        let is = false;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let benenomeconv;
+        let idsAgendasEx = [];
+        let dtFill = new Date(req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("req.body.dataFinal:"+req.body.dataFinal);
+        //console.log("sex1:"+sex);
+        //console.log("seg1:"+seg);
+        //console.log("sex1:"+sex);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        //console.log("AGORA:"+agora);
+        //console.log("depois:"+depois);
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.find({_id:req.body.agendaBeneid}).then((bene) =>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                bene.forEach(e => {
+                    nomeBene = e.bene_nome
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
+                //console.log("Listagem Realizada de agendamentos!")
+                //console.log(agenda)
+                agenda.forEach((e)=>{
+                    let dat = new Date(e.agenda_data);
+                    e.agenda_data_dia = this.getDataFMT(dat);
+                    let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                    let min = ""+dat.getMinutes();
+                    if (hora.length == 1){hora = "0" + hora + "";}
+                    if (min.length == 1){min = "0" + min + "";}
+                    e.agenda_hora = hora+":"+min;
+                    e.agenda_aux = aux;
+                    aux++;
+
+                    switch (dat.getUTCDay()){
+                        case 0:
+                            e.agenda_data_semana = "dom"
+                            break;
+                        case 1:
+                            e.agenda_data_semana = "seg"
+                            break;
+                        case 2:
+                            e.agenda_data_semana = "ter"
+                            break;
+                        case 3:
+                            e.agenda_data_semana = "qua"
+                            break;
+                        case 4:
+                            e.agenda_data_semana = "qui"
+                            break;
+                        case 5:
+                            e.agenda_data_semana = "sex"
+                            break;
+                        case 6:
+                            e.agenda_data_semana = "sab"
+                            break;
+                        default:
+                            
+                            console.log("erro");
+                            break;
+                    }
+                    idsAgendasEx.push(mongoose.Types.ObjectId(e._id));
+                })
+                //console.log(agenda)
+                Agenda.find({'_id': { $in: idsAgendasEx}}).then((agendaS)=>{
+                    Bene.find().then((benef)=>{
+                        benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Beneficiários!")
+                        Conv.find({_id: beneConvid}).then((conv)=>{
+                            conv.forEach(e => {
+                                nomeConv = e.conv_nome
+                            });
+                            //console.log("Listagem Realizada de Convenios")
+                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                                //console.log("Listagem Realizada de Usuário")
+                                Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                                    //console.log("Listagem Realizada de Terapia")
+                                    Horaage.find().then((horaage)=>{
+                                        //console.log("Listagem Realizada de Horario")
+                                        let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                        let segASex = ["seg","ter","qua","qui","sex"];
+                                        
+                                        segASex.forEach((diaDaSemana)=>{
+                                            haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                            //console.log("Tem "+z+"?"+haddia)
+                                            this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                        })
+
+                                        agenda.sort(function(a, b) {
+                                            let h1 = a.agenda_hora.substring(0,2);
+                                            let m1 = a.agenda_hora.substring(3,5);
+                                            let h2 = b.agenda_hora.substring(0,2);
+                                            let m2 = b.agenda_hora.substring(3,5);
+                                            if(h1 == h2){
+                                                if(m1 < m2) {
+                                                    return -1;
+                                                } else {
+                                                    return true;
+                                                }
+                                            } else {
+                                                if(h1 < h2) {
+                                                    return -1;
+                                                } else {
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                        Sala.find().then((sala)=>{
+                                            //console.log("Listagem Realizada de Terapia")
+                                            benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                            //console.log("benenomeconv:"+benenomeconv)
+                                            res.render("agenda/agendaBeneficiarioSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta, agendaSemanais: agendaS})
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    carregaAgendaTB(req,res){
+        let aux = 1;
+        let is = false;
+        let dtFill;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        seg.setFullYear(2020);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        sex.setFullYear(2020);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
+            //console.log(agenda)
+            Bene.find().then((bene)=>{
+                //console.log("Listagem Realizada de Beneficiários!")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                        //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            //console.log("Listagem Realizada de Terapia")
+                            Horaage.find().then((horaage)=>{
+                                //console.log("Listagem Realizada de Horario")
+                                Sala.find().then((sala)=>{
+                                    //console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    //console.log("benenomeconv:"+benenomeconv)
+                                    res.render("agenda/agendaTerapeutaSemanal", {salas: sala, horaages: horaage, agendas: agenda, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+        })})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    carregaAgendaFilTB(req,res){
+        let aux = 1;
+        let is = false;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let benenomeconv;
+        let idsAgendasEx = [];
+        let dtFill = new Date(req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        seg.setUTCHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setUTCHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("req.body.dataFinal:"+req.body.dataFinal);
+        //console.log("sex1:"+sex);
+        //console.log("seg1:"+seg);
+        //console.log("sex1:"+sex);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        //console.log("AGORA:"+agora);
+        //console.log("depois:"+depois);
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.find({_id:req.body.agendaBeneid}).then((bene) =>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                bene.forEach(e => {
+                    nomeBene = e.bene_nome
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
+                //console.log("Listagem Realizada de agendamentos!")
+                //console.log(agenda)
+                agenda.forEach((e)=>{
+                    let dat = new Date(e.agenda_data);
+                    e.agenda_data_dia = this.getDataFMT(dat);
+                    let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                    let min = ""+dat.getMinutes();
+                    if (hora.length == 1){hora = "0" + hora + "";}
+                    if (min.length == 1){min = "0" + min + "";}
+                    e.agenda_hora = hora+":"+min;
+                    e.agenda_aux = aux;
+                    aux++;
+
+                    switch (dat.getUTCDay()){
+                        case 0:
+                            e.agenda_data_semana = "dom"
+                            break;
+                        case 1:
+                            e.agenda_data_semana = "seg"
+                            break;
+                        case 2:
+                            e.agenda_data_semana = "ter"
+                            break;
+                        case 3:
+                            e.agenda_data_semana = "qua"
+                            break;
+                        case 4:
+                            e.agenda_data_semana = "qui"
+                            break;
+                        case 5:
+                            e.agenda_data_semana = "sex"
+                            break;
+                        case 6:
+                            e.agenda_data_semana = "sab"
+                            break;
+                        default:
+                            
+                            console.log("erro");
+                            break;
+                    }
+                    idsAgendasEx.push(mongoose.Types.ObjectId(e._id));
+                })
+                //console.log(agenda)
+                Agenda.find({'_id': { $in: idsAgendasEx}}).then((agendaS)=>{
+                    Bene.find().then((benef)=>{
+                        benef.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Beneficiários!")
+                        Conv.find({_id: beneConvid}).then((conv)=>{
+                            conv.forEach(e => {
+                                nomeConv = e.conv_nome
+                            });
+                            //console.log("Listagem Realizada de Convenios")
+                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                                //console.log("Listagem Realizada de Usuário")
+                                Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                                    //console.log("Listagem Realizada de Terapia")
+                                    Horaage.find().then((horaage)=>{
+                                        //console.log("Listagem Realizada de Horario")
+                                        let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                        let segASex = ["seg","ter","qua","qui","sex"];
+                                        
+                                        segASex.forEach((diaDaSemana)=>{
+                                            haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                            //console.log("Tem "+z+"?"+haddia)
+                                            this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                        })
+
+                                        agenda.sort(function(a, b) {
+                                            let h1 = a.agenda_hora.substring(0,2);
+                                            let m1 = a.agenda_hora.substring(3,5);
+                                            let h2 = b.agenda_hora.substring(0,2);
+                                            let m2 = b.agenda_hora.substring(3,5);
+                                            if(h1 == h2){
+                                                if(m1 < m2) {
+                                                    return -1;
+                                                } else {
+                                                    return true;
+                                                }
+                                            } else {
+                                                if(h1 < h2) {
+                                                    return -1;
+                                                } else {
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                        Sala.find().then((sala)=>{
+                                            //console.log("Listagem Realizada de Terapia")
+                                            benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                            //console.log("benenomeconv:"+benenomeconv)
+                                            res.render("agenda/agendaTerapeutaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta, agendaSemanais: agendaS})
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
     carregaAgendaFilS(req,res){
         let aux = 1;
         let is = false;
@@ -6405,11 +7079,6 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
-
-        //let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
-        //let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
-        //let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
-        
         let aux = 1;
         let is = false;
         let dtFill;
@@ -9918,7 +10587,155 @@ module.exports = {
 
                                     hora = hor+":"+min;
 
-                                    switch (a.agenda_tempmotivo){
+                                    switch (a.agendaCateg){
+                                        case "Apoio"://ANALISE
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Apoio",//Para quando o convenio não paga o que deve
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : a.agenda_terapiaid,//Musica
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//Convenio não paga
+                                                atend_valordeb : convdebval,//Paga ao musico
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Apoio" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : agendaSub.agenda_data,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Apoio" ,
+                                                debit_terapiaid : agendaSub.agenda_terapiaid ,
+                                                debit_terapeutaid : agendaSub.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
+                                            })
+                                            break;
+                                        case "Extra":
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Extra",//Para quando o convenio não paga o que deve
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : a.agenda_terapiaid,//Musica
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//Convenio não paga
+                                                atend_valordeb : convdebval,//Paga ao musico
+                                                //atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                //atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Extra" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : a.agenda_data,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Extra" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : arguments.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
+                                            })
+                                            break;
                                         case "Falta":
 
                                             agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
@@ -10031,19 +10848,155 @@ module.exports = {
                                             })
 
                                             newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Falta Justificada" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convcreval ,
+                                                debit_datacad : dataAtual
+                                            })
+
+                                            break;
+                                        case "Glosa":
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Glosa",//Para quando o convenio não paga o que deve
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : a.agenda_terapiaid,//Musica
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//Convenio não paga
+                                                atend_valordeb : "0,00",//Paga ao musico
+                                                //atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                //atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
+                                                credit_categoria : "Glosa" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
-                                                credit_dataevento : agendaSub.agenda_data,
+                                                credit_dataevento : a.agenda_data,
                                                 credit_datavenci : dataVenci ,
                                                 credit_valorprev : convcreval ,
                                                 credit_datacad : dataAtual
                                             })
 
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Glosa" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : a.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
+                                            })
+                                            break;
+                                        case "Pais":
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Pais",//Para quando o convenio não paga o que deve
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : a.agenda_terapiaid,//Musica
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//Convenio não paga
+                                                atend_valordeb : "0,00",//Paga ao musico
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Pais" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                //credit_convid : req.body.creditConvid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : a.agenda_data,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newDeb = "";
                                             break;
                                         case "Substituição":
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
@@ -10093,7 +11046,7 @@ module.exports = {
 
                                             newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
+                                                credit_categoria : "Substituição" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
@@ -10106,19 +11059,93 @@ module.exports = {
                                             })
 
                                             newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Substituição" ,
+                                                debit_terapiaid : agendaSub.agenda_terapiaid ,
+                                                debit_terapeutaid : agendaSub.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
+                                            })
+
+                                            break;
+                                        case "Supervisão":
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+            
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Supervisão",//Para quando o convenio não paga o que deve
+                                                atend_beneid : a.agenda_beneid,//
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : agendaSub.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : convcreval,//Recebe pelo atendimento
+                                                atend_valordeb : convdebval,//Paga ao terapeuta
+                                                atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
+                                                atend_mergeterapiaid : a.agenda_terapiaid,//ABA
+                                                atend_mergevalorcre : "0,00",//Não recebe pela supervisão
+                                                atend_mergevalordeb : convdebval,//Paga a supervsão
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
-                                                credit_terapiaid : agendaSub.agenda_terapiaid ,
-                                                credit_terapeutaid : agendaSub.agenda_usuid ,
+                                                credit_categoria : "Supervisão" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
                                                 credit_datavenci : dataVenci ,
-                                                credit_valorprev : convdebval ,
+                                                credit_valorprev : convcreval ,
                                                 credit_datacad : dataAtual
                                             })
 
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Supervisão" ,
+                                                debit_terapiaid : agendaSub.agenda_terapiaid ,
+                                                debit_terapeutaid : agendaSub.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
+                                            })
                                             break;
                                         case "Roberta Disponivel":
                                             let idRoberta = new ObjectId("62e008adea444f5b7a02c04f");
@@ -10179,7 +11206,7 @@ module.exports = {
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                                atend_categoria : "Nenhuma Observação",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
@@ -10200,11 +11227,11 @@ module.exports = {
 
                                             newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
+                                                credit_categoria : "Padrão" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
                                                 credit_datavenci : dataVenci ,
@@ -10213,17 +11240,17 @@ module.exports = {
                                             })
 
                                             newDeb = new Deb({
-                                                credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
-                                                credit_terapiaid : a.agenda_terapiaid ,
-                                                credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
-                                                credit_cpfcnpj : convCreCpfCnpj ,
-                                                credit_dataevento : agendaSub.agenda_data,
-                                                credit_datavenci : dataVenci ,
-                                                credit_valorprev : convdebval ,
-                                                credit_datacad : dataAtual
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Padrão" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
                                             })
 
                                             break;
@@ -10254,7 +11281,7 @@ module.exports = {
                                             })
             
                                             newAtend = new Atend({
-                                                atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
@@ -10273,7 +11300,7 @@ module.exports = {
 
                                             newCre = new Cre({
                                                 convcre_atendnum : nextNum ,
-                                                convcre_categoria : "Falta Justificada" ,
+                                                convcre_categoria : "Padrão" ,
                                                 convcre_terapiaid : a.agenda_terapiaid ,
                                                 convcre_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
@@ -10286,17 +11313,17 @@ module.exports = {
                                             })
 
                                             newDeb = new Deb({
-                                                credit_atendnum : nextNum ,
-                                                credit_categoria : "Falta Justificada" ,
-                                                credit_terapiaid : a.agenda_terapiaid ,
-                                                credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
-                                                credit_cpfcnpj : convCreCpfCnpj ,
-                                                credit_dataevento : agendaSub.agenda_data,
-                                                credit_datavenci : dataVenci ,
-                                                credit_valorprev : convdebval ,
-                                                credit_datacad : dataAtual
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Padrão" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                //debit_convid : req.body.creditConvid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convdebval ,
+                                                debit_datacad : dataAtual
                                             })
 
                                             break;
@@ -10359,11 +11386,11 @@ module.exports = {
 
                                     newCre = new Cre({
                                         credit_atendnum : nextNum ,
-                                        credit_categoria : "Falta Justificada" ,
+                                        credit_categoria : "Padrão" ,
                                         credit_terapiaid : a.agenda_terapiaid ,
                                         credit_terapeutaid : a.agenda_usuid ,
                                         //credit_convid : req.body.creditConvid ,
-                                        credit_nome : "Atendimento Auto" ,
+                                        credit_nome : "Atendimento "+nextNum ,
                                         credit_cpfcnpj : convCreCpfCnpj ,
                                         credit_dataevento : a.agenda_data ,
                                         credit_datavenci : dataVenci ,
@@ -10372,17 +11399,17 @@ module.exports = {
                                     })
 
                                     newDeb = new Deb({
-                                        credit_atendnum : nextNum ,
-                                        credit_categoria : "Falta Justificada" ,
-                                        credit_terapiaid : a.agenda_terapiaid ,
-                                        credit_terapeutaid : a.agenda_usuid ,
-                                        //credit_convid : req.body.creditConvid ,
-                                        credit_nome : "Atendimento Auto" ,
-                                        credit_cpfcnpj : convCreCpfCnpj ,
-                                        credit_dataevento : a.agenda_data ,
-                                        credit_datavenci : dataVenci ,
-                                        credit_valorprev : convdebval ,
-                                        credit_datacad : dataAtual
+                                        debit_atendnum : nextNum ,
+                                        debit_categoria : "Padrão" ,
+                                        debit_terapiaid : a.agenda_terapiaid ,
+                                        debit_terapeutaid : a.agenda_usuid ,
+                                        //debit_convid : req.body.creditConvid ,
+                                        debit_nome : "Atendimento "+nextNum ,
+                                        debit_cpfcnpj : convCreCpfCnpj ,
+                                        debit_dataevento : a.agenda_data ,
+                                        debit_datavenci : dataVenci ,
+                                        debit_valorprev : convdebval ,
+                                        debit_datacad : dataAtual
                                     })
                                 }
                                 //console.log("newAtend:"+newAtend)
@@ -10591,6 +11618,80 @@ module.exports = {
                 })
             })
         })
+    },
+    deletarTodosAtendimentos(req,res){
+        if (senha == "Teste@#$2022"){
+            let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
+            let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
+            let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        }
+    },
+    temDia(haddia,horaage,agenda,semana,aux,diaDaSemana){
+        let voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
+        if(haddia){
+            horaage.forEach((h)=>{
+                let is = true;
+                
+                agenda.forEach((e)=>{
+                    if(e.agenda_data_semana == diaDaSemana){
+                        if (h.horaage_hora == e.agenda_hora){
+                            is = false
+                        }
+                    }
+                });
+                // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
+                
+                if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
+                    let daty;
+                    semana.forEach((y)=>{
+                        if(y.dia == diaDaSemana){
+                            daty = y.data
+                        }
+                    });
+
+                    let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                    
+                    agendaVoid = new Agenda({
+                        agenda_hora : h.horaage_hora,
+                        agenda_data_semana : diaDaSemana,
+                        agenda_data_dia : dty,
+                        agenda_aux : aux,
+                        agenda_salaid : voidId,
+                        agenda_beneid : voidId,
+                        agenda_convid : voidId,
+                        agenda_terapiaid : voidId,
+                        agenda_usuid : voidId
+                    });
+                    agenda.push(agendaVoid);
+                    aux++;
+                }
+            })
+        } else {
+            horaage.forEach((h)=>{
+                let daty;
+                semana.forEach((y)=>{
+                    if(y.dia == diaDaSemana){
+                        daty = y.data
+                    }
+                });
+
+                let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
+                
+                agendaVoid = new Agenda({
+                    agenda_hora : h.horaage_hora,
+                    agenda_data_semana : diaDaSemana,
+                    agenda_data_dia : dty,
+                    agenda_aux : aux,
+                    agenda_salaid : voidId,
+                    agenda_beneid : voidId,
+                    agenda_convid : voidId,
+                    agenda_terapiaid : voidId,
+                    agenda_usuid : voidId
+                });
+                agenda.push(agendaVoid);
+                aux++;
+            })
+        }
     }
 }
 /*
@@ -11000,7 +12101,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                                 credit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 credit_terapeutaid : agendaSub.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data ,
                                                 credit_datavenci : dataVenci ,
@@ -11093,7 +12194,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data ,
                                                 credit_datavenci : dataVenci ,
@@ -11107,7 +12208,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data ,
                                                 credit_datavenci : dataVenci ,
@@ -11180,7 +12281,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 //credit_convid : req.body.creditConvid ,
-                                                credit_nome : "Atendimento Auto" ,
+                                                credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data ,
                                                 credit_datavenci : dataVenci ,
@@ -11239,7 +12340,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                         credit_terapiaid : a.agenda_terapiaid ,
                                         credit_terapeutaid : a.agenda_usuid ,
                                         //credit_convid : req.body.creditConvid ,
-                                        credit_nome : "Atendimento Auto" ,
+                                        credit_nome : "Atendimento "+nextNum ,
                                         credit_cpfcnpj : convCreCpfCnpj ,
                                         credit_dataevento : a.agenda_data ,
                                         credit_datavenci : dataVenci ,
@@ -11253,7 +12354,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                         credit_terapiaid : a.agenda_terapiaid ,
                                         credit_terapeutaid : a.agenda_usuid ,
                                         //credit_convid : req.body.creditConvid ,
-                                        credit_nome : "Atendimento Auto" ,
+                                        credit_nome : "Atendimento "+nextNum ,
                                         credit_cpfcnpj : convCreCpfCnpj ,
                                         credit_dataevento : a.agenda_data ,
                                         credit_datavenci : dataVenci ,
