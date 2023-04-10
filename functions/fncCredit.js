@@ -448,6 +448,10 @@ module.exports = {
                         cl.credit_pg = "Não";
                     }
                     listaCredito.push(cl);
+                    console.log("cl.credit_convid:"+cl.credit_convid)
+                    console.log("c.credit_convid:"+c.credit_convid)
+                    console.log("cl.credit_terapiaid:"+cl.credit_terapiaid)
+                    console.log("c.credit_terapiaid:"+c.credit_terapiaid)
                     cl = new CreditLis();
                 })
                 console.log("Listagem Realizada!")

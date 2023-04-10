@@ -555,6 +555,10 @@ router.post('/agenda/cadE/atualiza', fncGeral.IsAuthenticated, (req,res) =>{//di
 router.post('/agenda/deleteall', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.deletarTodosAtendimentos(req, res);
 })
+
+router.get('/agenda/deleteall/Teste2342022', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.deletarTodosAtendimentos2(req, res);
+})
 /*
 router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaAgendaCadE(req, res);

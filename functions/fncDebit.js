@@ -532,12 +532,12 @@ module.exports = {
                     break;
                 case "Extra":
                     deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_valorprev = "0,00";
                     deb.debit_dataedi = new Date();
                     break;
                 case "Falta":
                     deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_valorprev = "0,00";
                     deb.debit_dataedi = new Date();
                     break;
                 case "Falta Justificada":
@@ -547,7 +547,7 @@ module.exports = {
                     break;
                 case "Glosa":
                     deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
+                    deb.debit_valorprev = "0,00";
                     deb.debit_dataedi = new Date();
                     break;
                 case "Padrão":

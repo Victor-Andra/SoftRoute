@@ -24,7 +24,8 @@ module.exports = {
     },
     verificarExistencia(arrayString, val){//verifica a existencia de uma string em um arraystring;
         let boo = false;
-        arrayString.some(v => {
+        arrayString.some((v) => {
+            console.log("val == v: "+val +"=="+ v + " : "+(val == v))
             if(val == v){
                 boo = true;
                 return true;

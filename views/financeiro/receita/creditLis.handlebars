@@ -56,14 +56,14 @@
 																</label>
 															</th>
 															{{#each convs}}
-																{{#ifEqual this._id ../credit_convid}}
+																{{#compareThis this._id ../credit_convid}}
 																	<td>{{conv_nome}}</td>
-																{{/ifEqual}}
+																{{/compareThis}}
 															{{/each}}
 															{{#each ../terapias}}
-																{{#ifEqual this._id ../nomecid}}
+																{{#compareThis this._id ../nomecid}}
 																	<td>{{credit_terapiaid}}</td>
-																{{/ifEqual}}
+																{{/compareThis}}
 															{{/each}}
 															<td>{{credit_datavenci}}</td>
 															<td>{{credit_datapg}}</td>

@@ -5582,6 +5582,15 @@ module.exports = {
         })
     },
     carregaAgendaFilS(req,res){
+        Agenda.find({agenda_data: { $gte : new Date(2022,10,27), $lte: new Date(2022,11,3) }}).then((agendas)=>{
+            console.log("AGENDA TAMANOGHO"+agendas.length)
+            agendas.forEach((a)=>{
+                if(a.agenda_categoria == "Apoio"){
+                    console.log("ACHEI")
+                    Agenda.updateOne({_id: a._id},{$set: {'agenda_categoria': 'Falta'}})
+                }
+            })
+        })
         let aux = 1;
         let is = false;
         let segunda;
@@ -5712,351 +5721,13 @@ module.exports = {
                             Horaage.find().then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
-                                var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
+                                let segASex = ["seg","ter","qua","qui","sex"];
                                 
-                                let z = "seg"
-
-                                haddia = agenda.some(a => a.agenda_data_semana === z);
-                                //console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
-                                    horaage.forEach((h)=>{
-                                        is = true
-                                        
-                                        agenda.forEach((e)=>{
-                                            if(e.agenda_data_semana == z){
-                                                if (h.horaage_hora == e.agenda_hora){
-                                                    is = false
-                                                }
-                                            }
-                                        });
-                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
-                                        
-                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
-                                            let daty;
-                                            semana.forEach((y)=>{
-                                                if(y.dia == z){
-                                                    daty = y.data
-                                                }
-                                            });
-
-                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                            
-                                            agendaVoid = new Agenda({
-                                                agenda_hora : h.horaage_hora,
-                                                agenda_data_semana : z,
-                                                agenda_data_dia : dty,
-                                                agenda_aux : aux,
-                                                agenda_salaid : voidId,
-                                                agenda_beneid : voidId,
-                                                agenda_convid : voidId,
-                                                agenda_terapiaid : voidId,
-                                                agenda_usuid : voidId
-                                            });
-                                            agenda.push(agendaVoid);
-                                            aux++;
-                                        }
-                                    })
-                                } else {
-                                    horaage.forEach((h)=>{
-                                        let daty;
-                                        semana.forEach((y)=>{
-                                            if(y.dia == z){
-                                                daty = y.data
-                                            }
-                                        });
-
-                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                        
-                                        agendaVoid = new Agenda({
-                                            agenda_hora : h.horaage_hora,
-                                            agenda_data_semana : z,
-                                            agenda_data_dia : dty,
-                                            agenda_aux : aux,
-                                            agenda_salaid : voidId,
-                                            agenda_beneid : voidId,
-                                            agenda_convid : voidId,
-                                            agenda_terapiaid : voidId,
-                                            agenda_usuid : voidId
-                                        });
-                                        agenda.push(agendaVoid);
-                                        aux++;
-                                    })
-                                }
-
-                                z = "ter"
-                                
-                                haddia = agenda.some(a => a.agenda_data_semana === z);
-                                //console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
-                                    horaage.forEach((h)=>{
-                                        is = true
-                                        
-                                        agenda.forEach((e)=>{
-                                            if(e.agenda_data_semana == z){
-                                                if (h.horaage_hora == e.agenda_hora){
-                                                    is = false
-                                                }
-                                            }
-                                        });
-                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
-                                        
-                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
-                                            let daty;
-                                            semana.forEach((y)=>{
-                                                if(y.dia == z){
-                                                    daty = y.data
-                                                }
-                                            });
-
-                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                            
-                                            agendaVoid = new Agenda({
-                                                agenda_hora : h.horaage_hora,
-                                                agenda_data_semana : z,
-                                                agenda_data_dia : dty,
-                                                agenda_aux : aux,
-                                                agenda_salaid : voidId,
-                                                agenda_beneid : voidId,
-                                                agenda_convid : voidId,
-                                                agenda_terapiaid : voidId,
-                                                agenda_usuid : voidId
-                                            });
-                                            agenda.push(agendaVoid);
-                                            aux++;
-                                        }
-                                    })
-                                } else {
-                                    horaage.forEach((h)=>{
-                                        let daty;
-                                        semana.forEach((y)=>{
-                                            if(y.dia == z){
-                                                daty = y.data
-                                            }
-                                        });
-
-                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                        
-                                        agendaVoid = new Agenda({
-                                            agenda_hora : h.horaage_hora,
-                                            agenda_data_semana : z,
-                                            agenda_data_dia : dty,
-                                            agenda_aux : aux,
-                                            agenda_salaid : voidId,
-                                            agenda_beneid : voidId,
-                                            agenda_convid : voidId,
-                                            agenda_terapiaid : voidId,
-                                            agenda_usuid : voidId
-                                        });
-                                        agenda.push(agendaVoid);
-                                        aux++;
-                                    })
-                                }
-
-                                z = "qua"
-                                                               
-                                haddia = agenda.some(a => a.agenda_data_semana === z);
-                                //console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
-                                    horaage.forEach((h)=>{
-                                        is = true
-                                        
-                                        agenda.forEach((e)=>{
-                                            if(e.agenda_data_semana == z){
-                                                if (h.horaage_hora == e.agenda_hora){
-                                                    is = false
-                                                }
-                                            }
-                                        });
-                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
-                                        
-                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
-                                            let daty;
-                                            semana.forEach((y)=>{
-                                                if(y.dia == z){
-                                                    daty = y.data
-                                                }
-                                            });
-
-                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                            
-                                            agendaVoid = new Agenda({
-                                                agenda_hora : h.horaage_hora,
-                                                agenda_data_semana : z,
-                                                agenda_data_dia : dty,
-                                                agenda_aux : aux,
-                                                agenda_salaid : voidId,
-                                                agenda_beneid : voidId,
-                                                agenda_convid : voidId,
-                                                agenda_terapiaid : voidId,
-                                                agenda_usuid : voidId
-                                            });
-                                            agenda.push(agendaVoid);
-                                            aux++;
-                                        }
-                                    })
-                                } else {
-                                    horaage.forEach((h)=>{
-                                        let daty;
-                                        semana.forEach((y)=>{
-                                            if(y.dia == z){
-                                                daty = y.data
-                                            }
-                                        });
-
-                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                        
-                                        agendaVoid = new Agenda({
-                                            agenda_hora : h.horaage_hora,
-                                            agenda_data_semana : z,
-                                            agenda_data_dia : dty,
-                                            agenda_aux : aux,
-                                            agenda_salaid : voidId,
-                                            agenda_beneid : voidId,
-                                            agenda_convid : voidId,
-                                            agenda_terapiaid : voidId,
-                                            agenda_usuid : voidId
-                                        });
-                                        agenda.push(agendaVoid);
-                                        aux++;
-                                    })
-                                }
-                                z = "qui"
-                                
-                                haddia = agenda.some(a => a.agenda_data_semana === z);
-                                //console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
-                                    horaage.forEach((h)=>{
-                                        is = true
-                                        
-                                        agenda.forEach((e)=>{
-                                            if(e.agenda_data_semana == z){
-                                                if (h.horaage_hora == e.agenda_hora){
-                                                    is = false
-                                                }
-                                            }
-                                        });
-                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
-                                        
-                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
-                                            let daty;
-                                            semana.forEach((y)=>{
-                                                if(y.dia == z){
-                                                    daty = y.data
-                                                }
-                                            });
-
-                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                            
-                                            agendaVoid = new Agenda({
-                                                agenda_hora : h.horaage_hora,
-                                                agenda_data_semana : z,
-                                                agenda_data_dia : dty,
-                                                agenda_aux : aux,
-                                                agenda_salaid : voidId,
-                                                agenda_beneid : voidId,
-                                                agenda_convid : voidId,
-                                                agenda_terapiaid : voidId,
-                                                agenda_usuid : voidId
-                                            });
-                                            agenda.push(agendaVoid);
-                                            aux++;
-                                        }
-                                    })
-                                } else {
-                                    horaage.forEach((h)=>{
-                                        let daty;
-                                        semana.forEach((y)=>{
-                                            if(y.dia == z){
-                                                daty = y.data
-                                            }
-                                        });
-
-                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                        
-                                        agendaVoid = new Agenda({
-                                            agenda_hora : h.horaage_hora,
-                                            agenda_data_semana : z,
-                                            agenda_data_dia : dty,
-                                            agenda_aux : aux,
-                                            agenda_salaid : voidId,
-                                            agenda_beneid : voidId,
-                                            agenda_convid : voidId,
-                                            agenda_terapiaid : voidId,
-                                            agenda_usuid : voidId
-                                        });
-                                        agenda.push(agendaVoid);
-                                        aux++;
-                                    })
-                                }
-                                z = "sex"
-                                
-                                haddia = agenda.some(a => a.agenda_data_semana === z);
-                                //console.log("Tem "+z+"?"+haddia)
-                                if(haddia){
-                                    horaage.forEach((h)=>{
-                                        is = true
-                                        
-                                        agenda.forEach((e)=>{
-                                            if(e.agenda_data_semana == z){
-                                                if (h.horaage_hora == e.agenda_hora){
-                                                    is = false
-                                                }
-                                            }
-                                        });
-                                        // se não achar pelomenos 1 horario compativel com o horaage do dia ele cria o horario vazio para preencher a agenda.
-                                        
-                                        if(is){//is verifica se é para fazer um novo cadastro ou não, por padrão é para fazer, marcado como falso caso ja tenha um cadastro nesse horario
-                                            let daty;
-                                            semana.forEach((y)=>{
-                                                if(y.dia == z){
-                                                    daty = y.data
-                                                }
-                                            });
-
-                                            let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                            
-                                            agendaVoid = new Agenda({
-                                                agenda_hora : h.horaage_hora,
-                                                agenda_data_semana : z,
-                                                agenda_data_dia : dty,
-                                                agenda_aux : aux,
-                                                agenda_salaid : voidId,
-                                                agenda_beneid : voidId,
-                                                agenda_convid : voidId,
-                                                agenda_terapiaid : voidId,
-                                                agenda_usuid : voidId
-                                            });
-                                            agenda.push(agendaVoid);
-                                            aux++;
-                                        }
-                                    })
-                                } else {
-                                    horaage.forEach((h)=>{
-                                        let daty;
-                                        semana.forEach((y)=>{
-                                            if(y.dia == z){
-                                                daty = y.data
-                                            }
-                                        });
-
-                                        let dty = new Date(this.getData(daty));//this.getDataFMT(daty)formataData
-                                        
-                                        agendaVoid = new Agenda({
-                                            agenda_hora : h.horaage_hora,
-                                            agenda_data_semana : z,
-                                            agenda_data_dia : dty,
-                                            agenda_aux : aux,
-                                            agenda_salaid : voidId,
-                                            agenda_beneid : voidId,
-                                            agenda_convid : voidId,
-                                            agenda_terapiaid : voidId,
-                                            agenda_usuid : voidId
-                                        });
-                                        agenda.push(agendaVoid);
-                                        aux++;
-                                    })
-                                }
-                                //Feito serapadamente porque o foreach de semana não estava afim de funcionar
+                                segASex.forEach((diaDaSemana)=>{
+                                    haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                    //console.log("Tem "+z+"?"+haddia)
+                                    this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                })
 
                                 agenda.sort(function(a, b) {
                                     let h1 = a.agenda_hora.substring(0,2);
@@ -6077,7 +5748,9 @@ module.exports = {
                                         }
                                     }
                                 });
+
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                     //console.log("Listagem Realizada de Salas")
                                     res.render("agenda/agendaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
         })})})})}).catch((err) =>{
@@ -9666,7 +9339,13 @@ module.exports = {
         })
     },
     carregaAgendaEdiTemp(req, res){//CarregaEdiçãoAgenda
-        Agenda.findById(req.params.id).then((agenda) =>{
+        let id;
+        if(req.params.id){
+            id = req.params.id;
+        } else {
+            id = req.body.agendaId;
+        }
+        Agenda.findById(id).then((agenda) =>{
             let dat = new Date(agenda.agenda_data);
             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
             let min = ""+dat.getMinutes();
@@ -9713,12 +9392,12 @@ module.exports = {
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
                     //console.log('verdadeiro')
-                    this.carregaAgendaCadastro(req,res,flash);
+                    this.carregaAgendaEdiTemp(req,res,flash);
                 }else{
                     //passar classe de erro
                     flash.texto = "Erro ao editar agenda!"
                     flash.sucesso = "false"
-                    this.carregaAgendaCadastro(req,res,flash);
+                    this.carregaAgendaEdiTemp(req,res,flash);
                 }
             })
         } catch(err1){
@@ -9726,31 +9405,18 @@ module.exports = {
         }
     },
     deletaAgenda(req, res){
+        Agenda.find({agenda_tempId:req.params.id}).then((agenda)=>{
+            agenda.forEach((a)=>{
+                Agenda.deleteOne({_id: a._id}).then(() =>{
+                    //this.carregaAgendaF(req,res);
+                    //console.log("Deletado:"+req.params.id);
+                })        
+            })
+        })
         Agenda.deleteOne({_id: req.params.id}).then(() =>{
             //this.carregaAgendaF(req,res);
             //console.log("Deletado:"+req.params.id);
         })
-        /*
-        let antes = new Date();
-        let depois = new Date();
-        antes.setUTCHours(0);
-        antes.setMinutes(0);
-        antes.setSeconds(0);
-        depois.setUTCHours(23);
-        depois.setMinutes(59);
-        depois.setSeconds(59);
-        antes.setUTCDate(antes.getUTCDate() - 9);
-        depois.setUTCDate(depois.getUTCDate() + 3);
-        //console.log(" Antes " + antes + " / Depois " + depois);
-        Agenda.find({agenda_data: { $gte : antes, $lte:  depois }}).then((agendas) =>{
-            agendas.forEach(dia => {
-                Agenda.deleteOne({_id: dia._id}).then(() =>{
-                    //this.carregaAgendaF(req,res);
-                    //console.log("Deletado:"+dia._id);
-                }) 
-            });
-        })
-        */
     },
     atualizaAgenda(req, res){//EditaAgenda
         let flash = new Resposta()
@@ -10494,6 +10160,7 @@ module.exports = {
         sex.setSeconds(59);
         //console.log("seg:"+seg)
         //console.log("sex:"+sex)
+        console.log("START CONVERT");
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -10639,7 +10306,7 @@ module.exports = {
                                                 credit_categoria : "Apoio" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : req.body.creditConvid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -10653,7 +10320,7 @@ module.exports = {
                                                 debit_categoria : "Apoio" ,
                                                 debit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 debit_terapeutaid : agendaSub.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : req.body.debitConvid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -10713,7 +10380,7 @@ module.exports = {
                                                 credit_categoria : "Extra" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data,
@@ -10727,7 +10394,7 @@ module.exports = {
                                                 debit_categoria : "Extra" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : a.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : arguments.agenda_data,
@@ -10774,7 +10441,7 @@ module.exports = {
                                                 credit_categoria : "Falta" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -10838,7 +10505,7 @@ module.exports = {
                                                 credit_categoria : "Falta Justificada" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -10852,7 +10519,7 @@ module.exports = {
                                                 debit_categoria : "Falta Justificada" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : a.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -10913,7 +10580,7 @@ module.exports = {
                                                 credit_categoria : "Glosa" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data,
@@ -10927,7 +10594,7 @@ module.exports = {
                                                 debit_categoria : "Glosa" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : a.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : a.agenda_data,
@@ -10987,7 +10654,7 @@ module.exports = {
                                                 credit_categoria : "Pais" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : a.agenda_data,
@@ -11049,7 +10716,7 @@ module.exports = {
                                                 credit_categoria : "Substituição" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -11063,7 +10730,7 @@ module.exports = {
                                                 debit_categoria : "Substituição" ,
                                                 debit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 debit_terapeutaid : agendaSub.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : a.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -11124,7 +10791,7 @@ module.exports = {
                                                 credit_categoria : "Supervisão" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : agendaSub.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -11138,7 +10805,7 @@ module.exports = {
                                                 debit_categoria : "Supervisão" ,
                                                 debit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 debit_terapeutaid : agendaSub.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : agendaSub.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -11179,7 +10846,12 @@ module.exports = {
 
                                             break;
                                         case "Nenhuma Observação":
-
+                                            if(a.agenda_beneid+"" === "62d17a1eea444f5b7a02323c"){
+                                                console.log("ESSE DAQUI Ó:")
+                                                console.log("a:"+a)
+                                                console.log("agendaSub:"+agendaSub)
+                                            }
+                                            
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
@@ -11207,8 +10879,8 @@ module.exports = {
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                                atend_beneid : a.agenda_beneid,//
-                                                atend_convid : a.agenda_convid,//
+                                                atend_beneid : agendaSub.agenda_beneid,//
+                                                atend_convid : agendaSub.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : agendaSub.agenda_data,//
                                                 atend_atendhora : hora,//
@@ -11230,7 +10902,7 @@ module.exports = {
                                                 credit_categoria : "Padrão" ,
                                                 credit_terapiaid : a.agenda_terapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : agendaSub.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
                                                 credit_cpfcnpj : convCreCpfCnpj ,
                                                 credit_dataevento : agendaSub.agenda_data,
@@ -11244,7 +10916,7 @@ module.exports = {
                                                 debit_categoria : "Padrão" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : agendaSub.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -11293,7 +10965,7 @@ module.exports = {
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : convcreval,//
                                                 atend_valordeb : convdebval,//
-                                                atend_categoria : "Nenhuma Observação",
+                                                atend_categoria : "Padrão",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
@@ -11303,7 +10975,7 @@ module.exports = {
                                                 convcre_categoria : "Padrão" ,
                                                 convcre_terapiaid : a.agenda_terapiaid ,
                                                 convcre_terapeutaid : a.agenda_usuid ,
-                                                //credit_convid : req.body.creditConvid ,
+                                                credit_convid : agendaSub.agenda_convid ,
                                                 convcre_nome : "Atendimento Auto" ,
                                                 convcre_cpfcnpj : convCreCpfCnpj ,
                                                 convcre_dataevento : agendaSub.agenda_data,
@@ -11317,7 +10989,7 @@ module.exports = {
                                                 debit_categoria : "Padrão" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
-                                                //debit_convid : req.body.creditConvid ,
+                                                debit_convid : agendaSub.agenda_convid ,
                                                 debit_nome : "Atendimento "+nextNum ,
                                                 debit_cpfcnpj : convCreCpfCnpj ,
                                                 debit_dataevento : agendaSub.agenda_data,
@@ -11389,7 +11061,7 @@ module.exports = {
                                         credit_categoria : "Padrão" ,
                                         credit_terapiaid : a.agenda_terapiaid ,
                                         credit_terapeutaid : a.agenda_usuid ,
-                                        //credit_convid : req.body.creditConvid ,
+                                        credit_convid : agendaSub.agenda_convid ,
                                         credit_nome : "Atendimento "+nextNum ,
                                         credit_cpfcnpj : convCreCpfCnpj ,
                                         credit_dataevento : a.agenda_data ,
@@ -11403,7 +11075,7 @@ module.exports = {
                                         debit_categoria : "Padrão" ,
                                         debit_terapiaid : a.agenda_terapiaid ,
                                         debit_terapeutaid : a.agenda_usuid ,
-                                        //debit_convid : req.body.creditConvid ,
+                                        debit_convid : agendaSub.agenda_convid ,
                                         debit_nome : "Atendimento "+nextNum ,
                                         debit_cpfcnpj : convCreCpfCnpj ,
                                         debit_dataevento : a.agenda_data ,
@@ -11435,7 +11107,7 @@ module.exports = {
                 //})
                 })
             })
-            console.log("END COPIA");
+            console.log("END CONVERT");
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro')
@@ -11624,7 +11296,16 @@ module.exports = {
             let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
             let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
             let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+            console.log("Finish");
         }
+        res.render("admin/branco");
+    },
+    deletarTodosAtendimentos2(req,res){
+        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        console.log("Finish");
+        res.render("admin/branco");
     },
     temDia(haddia,horaage,agenda,semana,aux,diaDaSemana){
         let voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id

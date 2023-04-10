@@ -248,10 +248,10 @@ module.exports = {
         let fulldate;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let agora = seg.toISOString();
@@ -299,7 +299,7 @@ module.exports = {
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
@@ -320,31 +320,53 @@ module.exports = {
         let seg;
         let sex;
         let busca;
+        let data;
+        let ano;
+        let mes;
+        let dia;
 
         switch (tipoData){
             case "Ano/Mes":
-                dataIni = new Date(req.body.anoAtend+'-'+req.body.mesAtend+'-01');
-                dataFim = new Date(req.body.anoAtend+'-'+req.body.mesAtend+'-01');
-
-                dataFim.setMonth(dataFim.getMonth()+1);
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
                 dataFim.setDate(dataFim.getDate()-1);
-
-                dataIni.setUTCHours(0);
-                dataIni.setMinutes(0);
-                dataIni.setSeconds(0);
-                dataFim.setUTCHours(23);
+                dataFim.setHours(23);
                 dataFim.setMinutes(59);
                 dataFim.setSeconds(59);
 
                 break;
             case "Semana":
-                seg = new Date(req.body.dataFinal)
-                sex = new Date(req.body.dataFinal)
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
 
-                seg.setUTCHours(0);
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
                 seg.setMinutes(0);
                 seg.setSeconds(0);
-                sex.setUTCHours(23);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
                 sex.setMinutes(59);
                 sex.setSeconds(59);
 
@@ -382,19 +404,34 @@ module.exports = {
                 }
                 dataIni = seg.toISOString();
                 dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
                 
                 break;
             case "Dia":
-                dataIni = new Date(req.body.dataFinal)
-                dataFim = new Date(req.body.dataFinal)
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
 
-                dataIni.setUTCHours(0);
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
                 dataIni.setMinutes(0);
                 dataIni.setSeconds(0);
-                dataFim.setUTCHours(23);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
                 dataFim.setMinutes(59);
                 dataFim.setSeconds(59);
-                
+
                 break;
             default:
                 
@@ -410,6 +447,7 @@ module.exports = {
                 break;
             case "Terapeuta":
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
+                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
                 break;
@@ -460,7 +498,7 @@ module.exports = {
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                        terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
@@ -494,7 +532,7 @@ module.exports = {
                         Convdeb.find().then((convdeb) => {
                             //console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                                terapeuta.sort((a,b) => (a.terapeuta_nome > b.terapeuta_nome) ? 1 : ((b.terapeuta_nome > a.terapeuta_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
+                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                                 //console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
@@ -509,10 +547,10 @@ module.exports = {
     relAtendimentoVal(req,res){
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -525,7 +563,6 @@ module.exports = {
         })
     },
     relAtendimentoValFiltro(req,res){
-        let a = new RelAtend();//objeto para fazer push em relatendimento
         let val;//objeto para formatar valor do cre
         let existe = 0;//verifica se existe a terapia no rel
         let valTot = 0;//calcular valor total
@@ -536,14 +573,16 @@ module.exports = {
         let teraID;
         let qtdIds;
         let creVal;
-        let creValArray;
+        let creArray = [];
+        let exclusaoCreVal = [];
         let u;
+        let relAtendConv = new RelAtend();
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let filtroAtend = {atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
@@ -551,79 +590,92 @@ module.exports = {
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         let conv_nome;
+        let continuando = "true";
+
+        relAtendConv.sessoes = 0;
+        relAtendConv.valor = "";
+        relAtendConv.nomecid = "";
 
         Atend.find(filtroAtend).then((at)=>{
             at.forEach((a)=>{
                 atendIds.push(a.atend_num);
             })
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+                console.log("cre:"+cre.length);
                 Conv.find().then((conv)=>{
                     Conv.findOne({_id: req.body.relConvid}).then((c)=>{
                         conv_nome = c.conv_nome;
                         Terapia.find().then((terapia)=>{
                             terapia.forEach((t)=>{
                                 qtdIds = 0;
-                                /*
-                                function comparaIDS(cre){
-                                    if ((""+t._id) === (""+cre.credit_terapiaid)){
-                                        qtdIds++;
-                                        creVal = cre.credit_valorprev;
-                                        teraID = cre.credit_terapiaid;
-                                        return cre;
+                                continuando = "true";
+
+                                cre.forEach((ct)=>{
+                                    if ((""+t._id) === (""+ct.credit_terapiaid)){
+                                        creArray.push(ct);
                                     }
-                                }
-*/
-                                u = cre.filter((c)=>{comparaIDS(c)})//apenas cres com terapiaid do foreach
+                                })
 
-                                u.forEach(ct=>{
-                                    ct.forEach(cts=>{
-                                        if(creValArray.length == 0){
-                                            creValArray.push(cts.credit_valorprev);
-                                        } else {
-                                            if(fncGeral.verificarExistencia(creValArray, cts.credit_valorprev)){
-                                                creValArray.push(cts.credit_valorprev);
+                                if (creArray.length > 0){
+                                    //console.log("TERAPIA: "+t.terapia_nome)
+                                    //console.log("creArray.length:"+creArray.length)
+                                    while (continuando == "true"){
+                                        //console.log("continuando")
+                                        creArray.forEach((ca)=>{
+                                            //console.log("foreach CA")
+                                            //console.log("exclusaoCreVal:"+exclusaoCreVal)
+                                            //console.log("exclusaoCreVal.length:"+exclusaoCreVal.length)
+                                            if(relAtendConv.sessoes == 0){
+                                                if(exclusaoCreVal.length == 0){
+                                                    relAtendConv.sessoes = 1;
+                                                    relAtendConv.valor = ca.credit_valorprev;
+                                                    relAtendConv.nomecid = ca.credit_terapiaid;
+                                                    //console.log("primeiro!!!!!")
+                                                    //console.log("ca.credit_valorprev:"+ca.credit_valorprev)
+                                                    //console.log("ca.credit_terapiaid:"+ca.credit_terapiaid)
+                                                    qtdIds++;
+                                                } else {
+                                                    if(!fncGeral.verificarExistencia(exclusaoCreVal, ca.credit_valorprev)){
+                                                        relAtendConv.sessoes = 1;
+                                                        relAtendConv.valor = ca.credit_valorprev;
+                                                        relAtendConv.nomecid = ca.credit_terapiaid;
+                                                        //console.log("novo!!!")
+                                                        //console.log("ca.credit_valorprev:"+ca.credit_valorprev)
+                                                        //console.log("ca.credit_terapiaid:"+ca.credit_terapiaid)
+                                                        qtdIds++;
+                                                    }
+                                                }
+                                            } else {
+                                                if(relAtendConv.valor == ca.credit_valorprev){
+                                                    relAtendConv.sessoes = relAtendConv.sessoes + 1;
+                                                    console.log("ja tinha")
+                                                    qtdIds++;
+                                                }
                                             }
+                                        })
+                                        exclusaoCreVal.push(relAtendConv.valor);
+                                        relAtendConv.total = (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
+                                        sessaoTot += relAtendConv.sessoes;
+                                        valTot += (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
+                                        relAtendConv.total = this.mascaraValores(relAtendConv.total);
+                                        rel.push(relAtendConv);
+                                        //console.log("relAtendConv:"+relAtendConv.nomecid+"-"+relAtendConv.sessoes+"-"+relAtendConv.valor);
+                                        //console.log("qtdIds: "+qtdIds)
+                                        //console.log("creArray.length: "+creArray.length)
+                                        if (qtdIds == creArray.length){
+                                            continuando = "false";
+                                            //console.log("qtdIds == cre.length");
                                         }
-                                    })
-                                })
-
-                                creValArray.forEach(cva=>{
-                                    u.forEach(ct=>{
-                                        if(ct.credit_valorprev == cva){
-                                            qtdIds++;
-                                            creVal = cre.credit_valorprev;
-                                            teraID = cre.credit_terapiaid;
-                                        }
-                                    })
-                                    a.sessoes = qtdIds;
-                                    a.nomecid = teraID;
-                                    a.valor = creVal;
-
-                                    rel.push(a);
-                                    a = new RelAtend();
-                                })
-/*
-                                if(qtdIds != 0){
-                                    a.sessoes = qtdIds;
-                                    a.nomecid = teraID;
-                                    a.valor = creVal;
+                                    }
+                                    relAtendConv = new RelAtend();
+                                    relAtendConv.sessoes = 0;
+                                    exclusaoCreVal = [];
+                                    creArray = [];
                                 }
-                                //separado do if anterior pq o codigo n quer q fique junto... da BUG
-                                if(a.sessoes){
-                                    rel.push(a);
-                                    a = new RelAtend();
-                                }
-*/
                             })
-                            rel.forEach((r)=>{
-                                val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
-                                val = this.mascaraValores(val);
-                                r.total = val;
 
-                                valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
-                                sessaoTot += r.sessoes;
-                            })
-                            total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+                            valTot = this.mascaraValores(valTot)
+                            total = {"sessoes": sessaoTot, "valor": "-", "total": valTot};
 
                             res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome})
                         })
@@ -636,10 +688,10 @@ module.exports = {
         let seg = new Date();
         let sex = new Date();
         let rel = [];
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -648,6 +700,7 @@ module.exports = {
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                 Terapia.find().then((terapia)=>{
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         res.render("atendimento/relatendvalBene", {Rels: rel, terapeutas: terapeuta, terapias: terapia, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
@@ -668,18 +721,21 @@ module.exports = {
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
 
         Atend.find(filtroAtend).then((at)=>{
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     Bene.find().then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         bene.some((b)=>{
                             if((""+b._id) === (""+req.body.relBeneid)){
                                 bene_nome = b.bene_nome;
@@ -690,14 +746,13 @@ module.exports = {
                         })
                         Conv.findOne({_id: conv_id}).then((conv)=>{
                             conv_nome = conv.conv_nome;
-                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             at.sort(function(a, b) {
                                 let d1 = new Date(a.atend_atenddata);
                                 let d2 = new Date(b.atend_atenddata);
-                                d1.setUTCHours(0);
+                                d1.setHours(0);
                                 d1.setMinutes(0);
                                 d1.setSeconds(0);
-                                d2.setUTCHours(0);
+                                d2.setHours(0);
                                 d2.setMinutes(0);
                                 d2.setSeconds(0);
                                 if(d1 == d2){
@@ -732,10 +787,10 @@ module.exports = {
         let sex = new Date(req.body.dataFim);
         let a = new RelAtend();
         let existe = false;
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let rel = [];
@@ -806,10 +861,10 @@ module.exports = {
     relAtendimentoBeneCons(req,res){
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -836,11 +891,13 @@ module.exports = {
         let creVal;
         let u;
         let seg = new Date(req.body.dataIni);
+        console.log("req.body.dataIni:"+req.body.dataIni)
         let sex = new Date(req.body.dataFim);
-        seg.setUTCHours(0);
+        console.log("req.body.dataFim:"+req.body.dataFim)
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
@@ -853,12 +910,16 @@ module.exports = {
             at.forEach((a)=>{
                 atendIds.push(a.atend_num);
             })
+            console.log("tamanho:"+at.length);
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+                console.log("cre.length: "+cre.length)
                 Bene.find().then((bene)=>{
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                         bene_nome = b.bene_nome;
                         Terapia.find().then((terapia)=>{
                             terapia.forEach((t)=>{
+                                console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
                                 qtdIds = 0;
                                 function comparaIDS(cre){
                                     if ((""+t._id) === (""+cre.credit_terapiaid)){
@@ -870,6 +931,7 @@ module.exports = {
                                 }
 
                                 u = cre.filter((b)=>{comparaIDS(b)})
+                                console.log("u.length:"+u.length);
 
                                 if(qtdIds != 0){
                                     a.sessoes = qtdIds;
@@ -899,15 +961,13 @@ module.exports = {
             })
         })
     },
-
-    //relatório emissão de NF
-    relAtendimentoValNf(req,res){
+    relAtendimentoValNf(req,res){    //relatório emissão de NF
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -935,10 +995,10 @@ module.exports = {
         let u;
         let seg = new Date(req.body.dataIni);
         let sex = new Date(req.body.dataFim);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
@@ -996,7 +1056,7 @@ module.exports = {
                 })
             })
         })
-    },
+    }
 }
     /*
     Atend.find({atend_num: {$gte: 2}}).then((a)=>{
@@ -1014,10 +1074,10 @@ module.exports = {
         let t = new RelAtend();
         let val;
         let existe = false;
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg:"+seg)
@@ -1168,10 +1228,10 @@ module.exports = {
                         let u;
                         let seg = new Date(req.body.dataIni);
                         let sex = new Date(req.body.dataFim);
-                        seg.setUTCHours(0);
+                        seg.setHours(0);
                         seg.setMinutes(0);
                         seg.setSeconds(0);
-                        sex.setUTCHours(23);
+                        sex.setHours(23);
                         sex.setMinutes(59);
                         sex.setSeconds(59);
                         let filtroCredit = {credit_convid: req.body.convid, credit_dataevento: { $gte: seg, $lte: sex}}

@@ -42,18 +42,23 @@ module.exports = {
             atend.atend_num = atend.atend_num+1;
             console.log("Listagem Realizada de NextNum")
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({"conv_status":"Ativo"}).then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));
                     console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
                         console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
                             console.log("Listagem Realizada de Convenios")
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
                                 console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
+                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Horaage.find().then((horaage)=>{
                                         res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage})
         })})})})})})})})}).catch((err) =>{
@@ -71,18 +76,23 @@ module.exports = {
             atend.atend_num = atend.atend_num+1;
             console.log("Listagem Realizada de NextNum")
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({"conv_status":"Ativo"}).then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));
                     console.log("Listagem Realizada de Convenios")
                     Convcre.find().then((convcre) => {
                         console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
                             console.log("Listagem Realizada de Convenios")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas//, usuario_status:"Ativo"
+                                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
                                 console.log("Listagem Realizada de Usuário")
                                 Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
+                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Atend.findById(req.params.id).then((atendEdi)=>{
                                             console.log(atendEdi.atend_num)
                                             nextNumEdi = atendEdi.atend_num;

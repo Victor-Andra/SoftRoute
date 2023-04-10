@@ -42,8 +42,7 @@
 		<![endif]-->
 		<script type="text/javascript">
 			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData")
-
+				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
 					let id = "atenddata"+elementox.id;
 					let dat = new Date(elementox.value);
@@ -61,18 +60,48 @@
 				})
 			}
 			function formataData(){
-				let dat = new Date(document.getElementById('dataFil').value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
 				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
@@ -104,13 +133,13 @@
 				}
 			}
 			function carregaBody(){
-				document.getElementById("divDataFil").hidden = true;
-				//document.getElementById("divAtendBeneficiario").hidden = true;
-				//document.getElementById("divAtendTerapeuta").hidden = true;
+				trocaFiltroData()
+				trocaFilpessoa();
+				formataData();
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();trocaFilpessoa();">
+	<body class="no-skin" onload="javascript:carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -159,7 +188,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023">
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
 												<option value="2022">2022</option>
 												<option value="2023">2023</option>
 												<option value="2024">2024</option>
@@ -172,19 +201,19 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro">
-												<option value="01">Janeiro</option>
-												<option value="02">Fevereiro</option>
-												<option value="03">Março</option>
-												<option value="04">Abril</option>
-												<option value="05">Maio</option>
-												<option value="06">Junho</option>
-												<option value="07">Julho</option>
-												<option value="08">Agosto</option>
-												<option value="09">Setembro</option>
-												<option value="10">Outubro</option>
-												<option value="11">Novembro</option>
-												<option value="12">Dezembro</option>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
 											</select>
 										</div>
 									</div>
@@ -225,7 +254,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}
@@ -287,7 +316,7 @@
 															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
 														</td>	
 														<td>
-															<input style="border: none; width: 35px;" readonly="true" id="atenddata{{atend_num}}" value="{{hora}}" />
+															<input style="border: none; width: 35px;" readonly="true" id="atenddata{{atend_num}}" value="{{atend_atendhora}}" />
 														</td>				
 														{{#each ../benes}}
 															{{#ifEqual this._id ../atend_beneid}}

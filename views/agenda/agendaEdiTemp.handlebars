@@ -15,8 +15,6 @@
 					document.getElementById("agendaTempMotivo").style.backgroundColor = "cyan";
 				} else if (categ == "Roberta Disponpivel") {
 					document.getElementById("agendaTempMotivo").style.backgroundColor = "salmon";
-				} else {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "lightgreen";
 				}
 			}
 			function mudamuda(cor){
@@ -136,14 +134,10 @@
 														<div class="form-group">
 															<div class="col-sm-9">
 																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
-																	<option id="Apoio" value="Apoio">Apoio</option>
-																	<option id="Extra" value="Extra">Extra</option>
 																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="Glosa" value="Glosa">Glosa</option>
 																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																	<option id="Pais" value="Pais">Pais</option>
 																	<option id="Substituto" value="Substituto">Substituto</option>
-																	<option id="Supervisão" value="Supervisão">Supervisão</option>
 																</select>
 															</div>
 														</div>
@@ -241,7 +235,6 @@
 																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
 																	<option style="background-color: cyan;" value="Substituição">Substituição</option>
 																	<option style="background-color: salmon;" value="Roberta Disponpivel">Roberta Disponpivel</option>
-																	<option style="background-color: lightgreen;" value="Nenhuma Observação">Nenhuma Observação</option>
 																</select>
 															</div>
 														</div>
