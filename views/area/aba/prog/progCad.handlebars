@@ -2,136 +2,491 @@
 <html lang="pt-br">
 	<head>
 		<title>Programas ABA</title>
+		<script type="text/javascript">
+			function inserirNomebene(){
+				var nomebene = document.getElementById("abaProgbenenome").value;
+				console.log(nomebene)
+				document.getElementById("dica1bene").value = nomebene;
+				document.getElementById("dica2bene").value = nomebene;
+				document.getElementById("dica3bene").value = nomebene;
+				document.getElementById("dica4bene").value = nomebene;
+			}
+			function inserirProgtipo(){
+				var progtipo = document.getElementById("abaProgtipo").value;
+				console.log(progtipo)
+				document.getElementById("tituloabaProgtipo").value = progtipo;
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("abaProgdata").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("abaProgdata").value = datafmt.toISOString();
+			}
+		</script>
 	</head>
 	<body class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="espace">
-					</div>
 					<div class="page-header">
 						<h1>
-							Programas ABA
+							<div class="row">
+								<div class="col-xs-12">
+									Formulário de Informação do Programa
+								</div>
+							</div>
 							<small>
-								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro e Índice Geral Programas ABA para Upload
+								Programas ABA - Cadastro e Índice Geral
 							</small>
 						</h1>
 					</div><!-- /.page-header -->
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
+								<div class="col-xs-12">	
+									<div class="col-sm-5">
+										<div class="row">	
+											<label>Beneficiário</label>
+											<div class="input-group">
+												<div class="input-group">
+													<select name="abaProgbenenome" id="abaProgbenenome" class="chosen-select" value="Sem Info" onchange="javascript:inserirNomebene()" >
+															<option value="Sem Info">Sem Informação</option>
+															<option value="ANA CLARA SANTANA DA SILVA">ANA CLARA SANTANA DA SILVA</option>
+															<option value="APOLO DE ARAÚJO ALVES">APOLO DE ARAÚJO ALVES</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-7">
+										<div class="row">
+											<label>Data do Programa</label>
+											<div class="input-group">
+												<div class="input-group">
+													<input id="abaProgdata" name="abaProgdata" type="date" onchange="javascript:atualizaData()">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div><br>
 								<div class="col-xs-12">
-									<div class="col-xs-12">
+									<div class="col-sm-4">
 										<div class="row">
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Beneficiário</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
-																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
-															</select>
-														</div>
-													</div>
+											<label>Tipo de Programa</label>
+											<div class="input-group">
+												<div class="input-group">
+													<select name="abaProgtipo" id="abaProgtipo" class="chosen-select" onchange="javascript:inserirProgtipo()">
+															<option value="Sem Info">Sem Informação</option>
+															<option value="Intraverbal I">Intraverbal I</option>
+															<option value="Intraverbal II">Intraverbal II</option>
+													</select>
 												</div>
 											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Terapeuta Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
-																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
-															</select>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Tipo de Programa</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">Psicológico</option>
-																	<option value="Não">Neurológico</option>
-															</select>
-														</div>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-6">
-												<div class="row">
-													<label >Médico Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input type="text" name="atendOrg" id="atendOrg" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-2">
-												<div class="row">
-													<label>Data Programa</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input id="beneDatanasc" name="beneDatanasc" type="date">
-													</div>
-												</div>
-											</div>													
-										</div>
-										<div class="row">
-										<div class="col-sm-5">
-											<div class="row">
-												<label>Upload do Programa ABA</label>
-											</div>
-										</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-xs-5">
-											<label class="ace-file-input">
-												<input type="file" id="id-input-file-2">
-												<span class="ace-file-container" data-title="Escolha">
-													<span class="ace-file-name" data-title="Nenhum arquivo ...">
-														<i class=" ace-icon fa fa-upload"></i>
-													</span>
-												</span>
-												<a class="remove" href="#">
-													<i class=" ace-icon fa fa-times"></i>
-												</a>
-											</label>
+								</div>
+								
+								<div class="page-header">
+									<br>
+									<h1>
+										<div class="row" >
+											<div class="col-xs-12">
+												Categoria
+												<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+												<input style="border: transparent; background-color: transparent;"  id="tituloabaProgtipo" name="tituloabaProgtipo" value=""></input>
+											</div>
 										</div>
-									</div>
+									</h1>
+								</div><!-- /.page-header -->
+
+
+									<div class="col-xs-7">
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+												<i class="ace-icon fa fa-line-chart"></i>
+												Objetivos do Programa
+												</h5>
+												
+
+												<div class="widget-toolbar">
+													
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<div>
+														<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" class="form-control"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-bullseye"></i>
+													Alvo
+												</h5>
+
+												<div class="widget-toolbar">
+													
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<p class="alert alert-info">
+														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-cogs"></i>
+													Estrutura do Programa
+												</h5>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Estruturado</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+														
+															<div class="row">
+																																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Desestruturado</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+														
+															<div class="row">
+																																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Brincar</span>
+																	</label>
+																</div>
+															</div>
+														</div>												
+														<div class="col-sm-2">
+														
+															<div class="row">
+																																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> NET</span>
+																	</label>
+																</div>
+															</div>
+														</div>												
+
+													
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-cubes"></i>
+													Materiais
+												</h5>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													
+													<div class="row">
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> 3D</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> 2D</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Livro(s)</span>
+																	</label>
+																</div>
+															</div>
+														</div>												
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Vídeo(s)</span>
+																	</label>
+																</div>
+															</div>
+														</div>												
+													</div>
+													<div class="row">
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Tablet</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> Outros</span>
+																	</label>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<div class="checkbox">
+																	<label class="block">
+																		<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																		<span class="lbl bigger-120"> N/A</span>
+																	</label>
+																</div>
+															</div>
+														</div>												
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-gavel"></i>
+													Procedimentos
+												</h5>
+
+												<div class="widget-toolbar">
 									
-									<div class="col-xs-12">
-										<hr>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<div>
+														<textarea type="text" name="progProcedimentos" id="progProcedimentos" placeholder="" class="form-control"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box ui-sortable-handle" id="widget-box-1">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-clone"></i>
+													Exemplos
+												</h5>
+
+												<div class="widget-toolbar">
+													
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</div>
+											</div>
+
+											<div class="widget-body" style="display: block;">
+												<div class="widget-main">
+													<div>
+														<textarea type="text" name="progExemplos" id="progExemplos" placeholder="" class="form-control"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>										
 									</div>
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
+								
+									<div class="col-xs-5">
+										<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="ace-icon fa fa-info"></i>
+														Dica
+														
+													</h4>
+
+													<span class="widget-toolbar">
+
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+
+													</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="alert alert-warning">
+															<div class="row">
+																<strong>Tipos de Dicas</strong><br>
+																	<i class="ace-icon fa fa-check-square-o"></i>
+																		Visual |
+																	<i class="ace-icon fa fa-check-square-o"></i>
+																		Ecóico
+															</div>
+															<br>
+															<div class="row">
+																<strong>Procedimentos de Dicas</strong><br>
+																	<i class="ace-icon fa fa-check-square-o"></i>
+																	Errorless |
+																	<i class="ace-icon fa fa-square-o"></i>
+																	Most-to-Lead |
+																	<i class="ace-icon fa fa-square-o"></i>
+																	Least-to-Most
+															</div>
+															<br>
+															<div class="row">
+																<strong>Hierarquia de Dicas</strong><br>
+																<div style="text-align: center;">
+																	<img width="320" height="200" alt="150x150" style="alight center" src="/images/gallery/progr_aba_graf_hierarquicadicas.png">
+																</div>
+															</div>
+															<br>
+															<div class="row">
+																<strong>Sequências de Dica</strong><br>
+																	<strong>1.</strong> Se você for fisicamente incitar <strong><input style="border: transparent; background-color: transparent;"  id="dica1bene" name="dica1bene" value="Sem Info"></input></strong> e ele começar a responder de forma adequada, reduza o uso da dica ecóica
+																	<i class="ace-icon fa fa-share"></i> para dica visual.<br>
+																	<strong>2.</strong> Quando <strong><input style="border: transparent; background-color: transparent;"  id="dica2bene" name="dica1bene" value="Sem Info"></input></strong> começar a responder à dica visual, reduza <i class="ace-icon fa fa-share"></i>a partir da dica visual.<br>
+																	<strong>3.</strong> Quando <strong><input style="border: transparent; background-color: transparent;"  id="dica3bene" name="dica1bene" value="Sem Info"></input></strong> começar a responder à dica visual, desvanecer a dica.<br>
+																	<strong>4.</strong> Agora <strong><input style="border: transparent; background-color: transparent;"  id="dica4bene" name="dica1bene" value="Sem Info"></input></strong> está respondendo de forma independente, puro Intraverbal.
+															</div>
+														</div>
+													</div>
+												</div>
+										</div>
 									</div>
-								</div>							
+								
+									<div class="row">
+										<div class="col-md-12" style="text-align: center;">
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+
 							</form>
 						</div>
 					</div>

@@ -82,5 +82,31 @@ module.exports = {
         let ano = dt.substring(6,10);
         
         return (dia+"-"+mes+"-"+ano);
+    },
+    getDateFromString(dt, iniFim){//Passa data yyyy-MM-dd para Date setando os valores em um date vazio separadamente, iniFim serve para definir se vai definir o horario em 00:00:00 ou 23:59:59. Trabalha com mês 1-12.
+        data = dt;
+        ano = data.substring(0,4);
+        mes = data.substring(5,7);
+        dia = data.substring(8,10);
+
+        let formatData = new Date();
+        formatData.setFullYear(ano);
+        //console.log("formatData1:"+formatData)
+        formatData.setUTCMonth((parseInt(mes)-1).toString());//recebendo o mes 1-12 passando para 0-11;
+        //console.log("formatData2:"+formatData)
+        formatData.setDate(dia);
+        //console.log("formatData3:"+formatData)
+        if(iniFim == "ini"){
+            formatData.setHours(0);
+            formatData.setMinutes(0);
+            formatData.setSeconds(0);
+        } else if (iniFim == "fim"){
+            formatData.setHours(23);
+            formatData.setMinutes(59);
+            formatData.setSeconds(59);
+        }
+        
+        //console.log("formatData4:"+formatData)
+        return formatData;
     }
 }
