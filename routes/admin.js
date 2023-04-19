@@ -422,27 +422,22 @@ router.get("/agenda/cadF/:dia/:mes/:ano/:hora", fncGeral.IsAuthenticated, (req,r
 })
 
 router.get("/agenda/lisL/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
-    console.log("lista")
     fncAgenda.carregaAgendaL(req, res);
 })
 
 router.get("/agenda/lisG/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Geral.
-    console.log("lista")
     fncAgenda.carregaAgendaG(req, res);
 })
 
 router.post("/agenda/filG/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Geral.
-    console.log("lista")
     fncAgenda.carregaAgendaFilG(req, res);
 })
 
 router.get("/agenda/lisS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
-    console.log("Agenda Semanal")
     fncAgenda.carregaAgendaS(req, res);
 })
 
 router.get("/agenda/lisSB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Beneficiario  Semanal.
-    console.log("Agenda Semanal")
     fncAgenda.carregaAgendaSB(req, res);
 })
 
@@ -451,7 +446,6 @@ router.post("/agenda/filSB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 })
 
 router.get("/agenda/lisTB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Terapeuta Semanal.
-    console.log("Agenda Semanal")
     fncAgenda.carregaAgendaTB(req, res);
 })
 
@@ -460,12 +454,10 @@ router.post("/agenda/filTB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 })
 
 router.post("/agenda/filS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
-    console.log("lista")
     fncAgenda.carregaAgendaFilS(req, res);
 })
 
 router.get("/agenda/lisB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
-    console.log("Agenda Bene")
     fncAgenda.carregaAgendaB(req, res);//CARREGAAGENDABENE
 })
 

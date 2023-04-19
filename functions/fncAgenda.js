@@ -5582,15 +5582,6 @@ module.exports = {
         })
     },
     carregaAgendaFilS(req,res){
-        Agenda.find({agenda_data: { $gte : new Date(2022,10,27), $lte: new Date(2022,11,3) }}).then((agendas)=>{
-            console.log("AGENDA TAMANOGHO"+agendas.length)
-            agendas.forEach((a)=>{
-                if(a.agenda_categoria == "Apoio"){
-                    console.log("ACHEI")
-                    Agenda.updateOne({_id: a._id},{$set: {'agenda_categoria': 'Falta'}})
-                }
-            })
-        })
         let aux = 1;
         let is = false;
         let segunda;

@@ -3,7 +3,7 @@
 	<head>
 		<title>Agendamentos</title>
 		<script type="text/javascript">
-			function ajustaOption(){
+			/*function ajustaOption(){
 				let valor;
 				let categ = document.getElementById("agendaTempMotivo").value;
 				console.log("categ: "+categ)
@@ -16,7 +16,7 @@
 				} else if (categ == "Roberta Disponpivel") {
 					document.getElementById("agendaTempMotivo").style.backgroundColor = "salmon";
 				}
-			}
+			}*/
 			function mudamuda(cor){
 				document.getElementById(cor).style.backgroundColor = cor;
 			}
@@ -45,7 +45,7 @@
 				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
-				document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
+				//document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
 				atualizaData();
 			}
 			function alteraMigrado(){
@@ -221,11 +221,10 @@
 															</div>
 														</div>
 													</div>
-
 															<!--<label class="pos-rel">
 																<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
 																Realizado? 
-															</label>-->
+															</label>
 													<div class="col-xs-6">
 														<label>Motivo</label>
 														<div class="form-group">
@@ -238,7 +237,7 @@
 																</select>
 															</div>
 														</div>
-													</div>
+													</div>-->
 												</div>
 												<div class="row" >
 													<div class="col-xs-12 col-sm-6">													
@@ -264,7 +263,7 @@
 										<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
 										<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
 										<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
-										<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda.agenda_tempmotivo}}" />
+										<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda.agenda_tempmotivo}}" />-->
 										<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
 									</div>
 									<div class="space-4"></div>							
