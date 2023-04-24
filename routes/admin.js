@@ -262,8 +262,8 @@ router.get('/login', (req,res)=>{
 })
 
 //Rota Alterar Senhas ou recuperar Senha ou Esqueci Senha
-router.get('/login', (req,res)=>{
-    console.log("LOGIN")
+router.get('/recuperarSenha', (req,res)=>{
+    console.log("recuperarSenha")
     lvl = "x";
     res.render("/menu/ferramentas/usuario/recuperaSenha", {nivel: lvl})
 })
@@ -297,13 +297,16 @@ router.post('/login', (req,res,next)=>{
 
 router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/login', failureMessage: true }), function(req, res) {
     let lvl;
+    let idUsu;
     let perfilId;
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
         console.log(usu)
         perfilId = usu.usuario_perfilid;
+        idUsu = usu._id;
 
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 900000), httpOnly: true });
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 900000)/*, httpOnly: true */});//comentado, paleativo
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 900000)/*, httpOnly: true */});//comentado, paleativo
         
         switch (perfilId){
             case "62421801a12aa557219a0fb9":
@@ -572,6 +575,34 @@ router.get('/area/magenda/lisDia', fncGeral.IsAuthenticated, (req,res) =>{//dire
 
 router.get('/area/magenda/lisSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.carregaAgendaSTerapeuta(req, res);
+})
+
+router.get('/agenda/lisPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaPessoal(req, res);
+})
+
+router.post('/agenda/filPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.filtraAgendaPessoal(req, res);
+})
+
+router.get('/agenda/lisPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaPessoalSemanal(req, res);
+})
+
+router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.filtraAgendaPessoalSemanal(req, res);
+})
+
+router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaEvolucao(req, res);
+})
+
+router.get('/agenda/evolucaoTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.carregaEvolucaoTemp(req, res);
+})
+
+router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.atualizaEvolucao(req, res);
 })
 
 // Visualizar Agenda

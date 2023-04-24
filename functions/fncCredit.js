@@ -464,53 +464,59 @@ module.exports = {
         })
     },
     creditAtendEditar(req,res){
+        let dataEvento;
+        let valorPrev;
+        let dataEdi;
         Credit.findOne({credit_atendnum: req.body.nextNum}).then((cre)=>{
-            switch (req.body.atendCategoria){
-                case "Apoio":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Extra":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Falta":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Falta Justificada":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendMergevalorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Glosa":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Padrão":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Pais":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Substituição":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendMergevalorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
-                case "Supervisão":
-                    cre.credit_dataevento = new Date(req.body.atendAtenddata);
-                    cre.credit_valorprev = req.body.atendValorcre;
-                    cre.credit_dataedi = new Date();
-                    break;
+            if (cre){
+                switch (req.body.atendCategoria){
+                    case "Apoio":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Extra":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Falta":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Falta Justificada":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Glosa":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Padrão":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Pais":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Substituição":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Supervisão":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValorcre;
+                        dataEdi = new Date();
+                        break;
+                }
+                Credit.findByIdAndUpdate(cre._id, { $set: {credit_dataevento : dataEvento, credit_valorprev : valorPrev, credit_dataedi : dataEdi}})
             }
         })
     }

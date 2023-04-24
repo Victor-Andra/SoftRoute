@@ -64,12 +64,45 @@
 					doc.value += texto.substring(0,1);
 				}
 			}
+			function procuraBiscoito(name){//apenas se estiver desabilitado httpOnly
+				var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+				if (match) {
+					console.log(match[2]);
+					return match[2];
+				} else {
+					console.log('not found');
+					return "";
+				}
+			}
+			function controlaNave(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				console.log("biscoito:"+biscoito);
+				if (biscoito == "62421903a12aa557219a0fd3"){
+					console.log("1: "+(biscoito== "62421903a12aa557219a0fd3")+"biscoito == 62421903a12aa557219a0fd3")
+					document.getElementById("naveTera").style.display = '';
+					console.log("naveTera");
+				} else if (biscoito == "62421801a12aa557219a0fb9"){
+					console.log("2: "+(biscoito== "62421801a12aa557219a0fb9")+"biscoito == 62421801a12aa557219a0fb9")
+					document.getElementById("naveRoot").style.display = '';
+					console.log("naveRoot");
+				} else {
+					console.log("3: "+(biscoito== "undefined")+"biscoito == undefined")
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveTera").remove();
+					console.log("naveTera");
+				}
+			}
 		</script>
 	</head>
 	<body class="no-skin">
+		<div id="naveRoot" style="display: none;">
 		{{>_navbar}}
+		</div>
+		<div id="naveTera" style="display: none;">
+		{{>_navbarT}}
+		</div>
 		<!--DIV para espaçamento entre nav e body-->
-		<div style="margin-bottom: 70px;"></div>
+		<div style="margin-bottom: 75px;"></div>
 		<!--validação-->
 		{{#if success_msg}}
 			<div class="alert alert-danger">{{success_msg}}</div>

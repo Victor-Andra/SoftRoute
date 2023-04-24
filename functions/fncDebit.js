@@ -523,53 +523,59 @@ module.exports = {
         })
     },
     debitAtendEditar(req,res){
+        let dataEvento;
+        let valorPrev;
+        let dataEdi;
         Debit.findOne({debit_atendnum: req.body.nextNum}).then((deb)=>{
-            switch (req.body.atendCategoria){
-                case "Apoio":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Extra":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = "0,00";
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Falta":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = "0,00";
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Falta Justificada":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendMergevalordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Glosa":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = "0,00";
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Padrão":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Pais":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Substituição":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendMergevalordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
-                case "Supervisão":
-                    deb.debit_dataevento = new Date(req.body.atendAtenddata);
-                    deb.debit_valorprev = req.body.atendValordeb;
-                    deb.debit_dataedi = new Date();
-                    break;
+            if (deb._id){
+                switch (req.body.atendCategoria){
+                    case "Apoio":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValordeb;
+                        dataEdi = new Date();
+                        break;
+                    case "Extra":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = "0,00";
+                        dataEdi = new Date();
+                        break;
+                    case "Falta":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = "0,00";
+                        dataEdi = new Date();
+                        break;
+                    case "Falta Justificada":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalordeb;
+                        dataEdi = new Date();
+                        break;
+                    case "Glosa":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = "0,00";
+                        dataEdi = new Date();
+                        break;
+                    case "Padrão":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValordeb;
+                        dataEdi = new Date();
+                        break;
+                    case "Pais":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValordeb;
+                        dataEdi = new Date();
+                        break;
+                    case "Substituição":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalordeb;
+                        dataEdi = new Date();
+                        break;
+                    case "Supervisão":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendValordeb;
+                        dataEdi = new Date();
+                        break;
+                }
+                Debit.findByIdAndUpdate(deb._id, { $set: {debit_dataevento : dataEvento, debit_valorprev : valorPrev, debit_dataedi : dataEdi}})
             }
         })
     }

@@ -47,6 +47,13 @@
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
 				//document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
 				atualizaData();
+				if (document.getElementById("agendaSelo").value == 'false'){
+					document.getElementById("agendaSelo").checked = false;
+					document.getElementById("agendaSelo").style = '';
+				}
+				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
+					document.getElementById("divEvolucao").style = '';
+				}
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -60,7 +67,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();ajustaOption();">
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();ajustaOption();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -134,10 +141,11 @@
 														<div class="form-group">
 															<div class="col-sm-9">
 																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
-																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
-																	<option id="Pais" value="Pais">Pais</option>
-																	<option id="Substituto" value="Substituto">Substituto</option>
+																	<option style="backgroundColor:yellow" id="Falta" value="Falta">Falta</option>
+																	<option style="backgroundColor:orange" id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
+																	<option style="backgroundColor:lightgray" id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+																	<option style="backgroundColor:lightgreen" id="Pais" value="Pais">Pais</option>
+																	<option style="backgroundColor:cyan" id="Substituto" value="Substituto">Substituto</option>
 																</select>
 															</div>
 														</div>
@@ -249,10 +257,32 @@
 														</div>
 													</div>
 												</div>
+												<div id="divEvolucao" style="display: none;" class="row" >
+													<div class="col-xs-12 col-sm-6">													
+														<label> Evolução</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">													
+														<label class="pos-rel">
+															{{#isTrue selo}}
+															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															<b>Evolução Finalizada!</b>
+															{{else}}
+															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+															{{/isTrue}}
+														</label>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 									<div class="hidden">
+										<input id="isAgendaTerapeuta" name="isAgendaTerapeuta" value="{{isAgendaTerapeuta}}" />
 										<input id="agendaIdTemp" name="agendaIdTemp" value="{{agenda.agenda_tempId}}" />
 										<input id="agendaData" name="agendaData" /><!-- permanesce vazio para receber a data antes de salvar -->
 										<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />

@@ -28,7 +28,15 @@
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
 				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
 				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
+				document.getElementById("agendaObs").value = document.getElementById("agendaObsEdi").value;
 				atualizaData();
+				if (document.getElementById("agendaSelo").value == 'false'){
+					document.getElementById("agendaSelo").checked = false;
+					document.getElementById("agendaSelo").style = '';
+				}
+				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
+					document.getElementById("divEvolucao").style = '';
+				}
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -66,7 +74,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();">
+	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -233,7 +241,6 @@
 															</div>
 														</div>
 													</div>
-
 													<div class="col-xs-6">													
 														<label> Observação de agenda</label>
 														<div class="form-group">
@@ -249,11 +256,33 @@
 														</label>
 														-->
 												</div>
+												<div id="divEvolucao" style="display: none;" class="row" >
+													<div class="col-xs-12 col-sm-6">													
+														<label> Evolução</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">													
+														<label class="pos-rel">
+															{{#isTrue selo}}
+															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															<b>Evolução Finalizada!</b>
+															{{else}}
+															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+															{{/isTrue}}
+														</label>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="hidden">
+									<input id="isAgendaTerapeuta" name="isAgendaTerapeuta" value="{{isAgendaTerapeuta}}" />
 									<input id="id" name="id" value="{{agenda._id}}" />
 									<input id="agendaData" name="agendaData" />
 									<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
@@ -265,6 +294,7 @@
 									<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
 									<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
 									<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+									<input id="agendaObsEdi" name="agendaObsEdi" value="{{agenda.agenda_obs}}" />
 								</div>
 								<div class="space-4"></div>							
 								<div class="space-4"></div>

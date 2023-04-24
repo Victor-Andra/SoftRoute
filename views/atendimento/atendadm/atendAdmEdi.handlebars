@@ -92,6 +92,8 @@
 				document.getElementById("Padrão").style.display = "none";
 			}
 			function carregaBody(){
+				console.log("START");
+				document.getElementById("atendId").value = document.getElementById("idEdi").value;
 				atualizaDataEdi();
 				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
 				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
@@ -107,6 +109,7 @@
 				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
 				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
 				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
+				console.log("FINISH");
 			}
 			function atualizaData(){
 				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
@@ -141,7 +144,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody()">
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -163,8 +166,9 @@
 										<div class="widget-header">
 											<h4 class="widget-title">Atendimento</h4>
 											<div class="hidden">
-												<input id="nextNum" name="nextNum" type="number"  value="{{atendEdi.atend_num}}" />
-												<input id="atendId" name="atendId" type="number"  value="{{atendEdi._id}}" />
+
+												<input id="nextNum" name="nextNum" type="number" value="{{atendEdi.atend_num}}" />
+												<input id="atendId" name="atendId" value="{{atendEdi._id}}" />
 											</div>
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
@@ -444,6 +448,7 @@
 													<div id="tabilValordebit" name="tabilValordebit" value=""></div>
 												</div>
 												<div id="divCarrega" name="divCarrega" class="hidden">
+													<input id="idEdi" name="idEdi" value="{{atendEdi._id}}"/>
 													<input id="atendAtenddataEdi" name="atendAtenddataEdi" value="{{atendEdi.atend_atenddata}}"/>
 													<input id="atendOrgEdi" name="atendOrgEdi" value="{{atendEdi.atend_org}}"/>
 													<input id="atendCategoriaEdi" name="atendCategoriaEdi" value="{{atendEdi.atend_categoria}}"/>

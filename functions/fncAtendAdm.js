@@ -32,6 +32,7 @@ const Horaage = mongoose.model("tb_horaage")
 //Funções Auxiliares
 const fncCredit = require("../functions/fncCredit")
 const fncDebit = require("../functions/fncDebit")
+const fncAtend = require("./fncAtend")
 
 module.exports = {
     carregaAtendAdm(req,res){
@@ -549,14 +550,15 @@ module.exports = {
     atualizaAtendAdm(req, res){
         let resposta;
         try{
+            //console.log("req.body.atendId:"+req.body.atendId)
             atendClass.atendEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resposta = res;
                 //criar metodo atualiza cascata cre e deb
-                fncCredit.creditAtendEditar(req,res).then((res)=>{
-                fncDebit.debitAtendEditar(req,res).then((res)=>{
-            })})}).catch((err) =>{
+                fncCredit.creditAtendEditar(req,res);
+                fncDebit.debitAtendEditar(req,res);
+            }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
                 resposta = err;
@@ -564,14 +566,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a atend de listagem
-                    Atend.find().then((atend) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('atendimento/atendadm/atendAdmLis', {atends: atend})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    fncAtend.listaAtend(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")

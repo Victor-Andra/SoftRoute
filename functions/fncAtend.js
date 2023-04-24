@@ -16,7 +16,6 @@ const terapiaClass = require("../models/terapia")
 const creditClass = require("../models/credit")
 const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
-const { carregaAtendAdmEdi } = require("./fncAtendAdm")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
@@ -147,7 +146,7 @@ module.exports = {
                         //console.log(retornoDeb)
                         //console.log(retornoTab)
                         if (retorno && retornoCre && retornoDeb && retornoTab){
-                            this.carregaAtend(req,res);
+                            this.listaAtend(req,res);
                         } else {
                             res.render('admin/branco');
                         }

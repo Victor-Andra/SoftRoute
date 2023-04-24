@@ -14,8 +14,6 @@ const tabilClass = require("../models/tabil")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
-const { carregaAtendAdmEdi } = require("./fncAtendAdm")
-
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")

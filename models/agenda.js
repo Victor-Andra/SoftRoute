@@ -21,7 +21,9 @@ const AgendaSchema = mongoose.Schema({
     agenda_temp :{ type: Boolean, required: false },
     agenda_tempId :{ type: ObjectId, required: false },
     agenda_tempmotivo :{ type: String, required: false },
-    agenda_extra :{ type: Boolean, required: false}
+    agenda_extra :{ type: Boolean, required: false},
+    agenda_evolucao :{ type: String, require: false },
+    agenda_selo :{ type: Boolean, require: false }
 })
 
 class Agenda{
@@ -45,7 +47,9 @@ class Agenda{
         agenda_temp,
         agenda_tempId,
         agenda_tempmotivo,
-        agenda_extra
+        agenda_extra,
+        agenda_evolucao,
+        agenda_selo
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -66,7 +70,9 @@ class Agenda{
         this.agenda_temp = agenda_temp, 
         this.agenda_tempId = agenda_tempId,
         this.agenda_tempmotivo = agenda_tempmotivo,
-        this.agenda_extra = agenda_extra
+        this.agenda_extra = agenda_extra,
+        this.agenda_evolucao = agenda_evolucao,
+        this.agenda_selo = agenda_selo
     }
 }
 
@@ -79,8 +85,6 @@ module.exports = {AgendaModel,AgendaSchema,
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
         console.log(dataAgenda);
         let resultado;
-        //Pega data atual
-        
         //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findByIdAndUpdate(req.body.id, 
             {$set: {
@@ -129,6 +133,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : false ,
             agenda_extra: req.body.agendaExtraordinario ,
+            agenda_selo : false ,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -165,6 +170,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_temp : true ,
             agenda_tempId : agendaTempId ,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
+            agenda_selo : false ,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -197,7 +203,6 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
                 agenda_temp : true ,
-                agenda_tempId : req.body.agenda_tempId ,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
                 agenda_dataedi : dataAtual
                 }}
@@ -225,6 +230,46 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log(err)
             resultado = undefined;
             //res.redirect('admin/branco')
+        })
+        return resultado;
+    },
+    evolucao: async (req, res) => {
+        var resultado;
+        let selo;
+        let selamento;
+        await AgendaModel.find({_id: req.body.id}).then((a)=>{
+            selo = a.agendaSelo;
+            console.log("req.body.agendaId:"+req.body.id)
+        })
+        console.log("req.body.agendaSelamento:"+req.body.agendaSelamento)
+        if (req.body.agendaSelamento == "true"){
+            selamento = true;
+        } else {
+            selamento = false;
+        }
+        console.log("req.body.agendaEvolucao:"+req.body.agendaEvolucao)
+        if(selo){
+            resultado = "A Evolução já foi finalizada, não é possível editar as informações sem autorização administrativa!";
+            console.log(resultado);
+        } else {
+            console.log("SALVANDO!")
+            await AgendaModel.findByIdAndUpdate(req.body.id, 
+                {$set: {
+                    agenda_evolucao : req.body.agendaEvolucao ,
+                    agenda_selo : selamento
+                }}
+            ).then((res) =>{
+                console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+        }
+        await AgendaModel.find({_id: req.body.id}).then((a)=>{
+            console.log("agenda:"+a)
         })
         return resultado;
     }

@@ -94,18 +94,7 @@ const cookieParser = require('cookie-parser');
                     } else {
                         return options.inverse(this);
                     }
-                }/*,
-                compareLvl: function(v1) {
-                    console.log("USANDO compara");
-                    //let cookies = req.cookies['lvlUsu'];
-                    let cookies = document.headers.cookies['lvlUsu'];
-                    console.log(cookies);
-                    if(v1 == cookies){
-                        return options.fn(this);
-                    } else {
-                        return options.inverse(this);
-                    }
-                }*/
+                }
             }
         }));
         app.set('view engine', 'handlebars');

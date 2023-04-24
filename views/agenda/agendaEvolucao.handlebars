@@ -3,25 +3,6 @@
 	<head>
 		<title>Agendamentos</title>
 		<script type="text/javascript">
-			/*function ajustaOption(){
-				let valor;
-				let categ = document.getElementById("agendaTempMotivo").value;
-				console.log("categ: "+categ)
-				if (categ == "Falta") {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "yellow";
-				} else if (categ == "Falta Justificada") {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "orange";
-				} else if (categ == "Substituição") {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "cyan";
-				} else if (categ == "Roberta Disponivel") {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "salmon";
-				} else {
-					document.getElementById("agendaTempMotivo").style.backgroundColor = "lightgreen";
-				}
-			}*/
-			function mudamuda(cor){
-				document.getElementById(cor).style.backgroundColor = cor;
-			}
 			function selectConv(){
 				var v1 = document.getElementById(document.getElementById("agendaBeneid").value).value.toString();
 				console.log(v1)
@@ -36,7 +17,6 @@
 				var dataFmt = new Date(dataIso);
 				console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
-				console.log(dataFmt);
 			}
 			function carregaBody(){
 				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
@@ -46,10 +26,17 @@
 				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
-				//document.getElementById("agendaTempMotivo").value = "Nenhuma Observação";//document.getElementById("agendaTempMotivoEdi").value;
-				document.getElementById("agendaCateg").value = "Padrão";
-				//ajustaOption();
+				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
+				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
+				document.getElementById("agendaEvolucao").value = document.getElementById("agendaEvolucaoEdi").value;
 				atualizaData();
+				if (document.getElementById("agendaSelamento").value == 'false'){
+					document.getElementById("agendaSelo").checked = false;
+					document.getElementById("agendaSelo").style = '';
+				}
+				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
+					document.getElementById("divEvolucao").style = '';
+				}
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -61,9 +48,36 @@
 					console.log(chck.value);
 				}
 			}
+			function controlaCategoria(){
+				let origem = document.getElementById("agendaOrg").value;
+				if(origem == "Padrão"){
+					document.getElementById("agendaCateg").value = "Padrão";
+					document.getElementById("Padrão").style.display = "";
+					document.getElementById("Falta").style.display = "none";
+					document.getElementById("Apoio").style.display = "none";
+					document.getElementById("Supervisão").style.display = "none";
+					document.getElementById("Pais").style.display = "none";
+					document.getElementById("Substituto").style.display = "none";
+					document.getElementById("Glosa").style.display = "none";
+					document.getElementById("Extra").style.display = "none";
+				} else {
+					document.getElementById("agendaCateg").value = "Apoio";
+					document.getElementById("Padrão").style.display = "none";
+					document.getElementById("Falta").style.display = "";
+					document.getElementById("Apoio").style.display = "";
+					document.getElementById("Supervisão").style.display = "";
+					document.getElementById("Pais").style.display = "";
+					document.getElementById("Substituto").style.display = "";
+					document.getElementById("Glosa").style.display = "";
+					document.getElementById("Extra").style.display = "";
+				}
+			}
+			function selamento(){
+				document.getElementById("agendaSelamento").value = document.getElementById("agendaSelo").checked;
+			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -79,12 +93,11 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/agenda/addTemp" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/agenda/evolucao" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Agendamentos</h4>
-											<input class="hidden" id="agendaId" name="agendaId" value="{{agenda._id}}" />
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
@@ -100,7 +113,7 @@
 													<div class="col-xs-12 col-sm-6">
 														<label for="id-date-picker-1">Data Agendamento</label>
 														<div class="row">
-															<div class="col-sm-4">
+															<div class="col-sm-2">
 																<div class="input-group">
 																	<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
 																</div>
@@ -110,7 +123,7 @@
 													<div class="col-xs-12 col-sm-6">
 														<label for="id-date-picker-1">Hora Agendamento</label>
 														<div class="form-group">
-															<div class="col-sm-8">
+															<div class="col-sm-2">
 																<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																	{{#each horaages}}
 																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
@@ -122,32 +135,37 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Origem Agendamento</label>
-														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																	<option value="Administrativo">Administrativo</option>
-																	<option value="Padrão">Padrão</option>
-																</select>
+														<label for="id-date-picker-1">Origem Agendamento</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																		<option value="Padrão">Padrão</option>
+																		<option value="Administrativo">Administrativo</option>
+																	</select>
+																</div>
 															</div>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-6">
-														<label>Categoria</label>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Categoria</label>
 														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." value="Padrão">
-																	<option style="background-color: yellow;" value="Falta">Falta</option>
-																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
-																	<option style="background-color: lightgrey;" value="Padrão" >Padrão</option>
-																	<option style="background-color: salmon;" value="Roberta Disponivel">Roberta Disponivel</option>
-																	<option style="background-color: lightgreen;" value="Nenhuma Observação">Nenhuma Observação</option>
+															<div class="col-sm-8">
+																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																	<option id="Apoio" value="Apoio">Apoio</option>
+																	<option id="Extra" value="Extra">Extra</option>
+																	<option id="Falta" value="Falta">Falta</option>
+																	<option id="Glosa" value="Glosa">Glosa</option>
+																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+																	<option id="Pais" value="Pais">Pais</option>
+																	<option id="Substituto" value="Substituto">Substituto</option>
+																	<option id="Supervisão" value="Supervisão">Supervisão</option>
 																</select>
 															</div>
 														</div>
 													</div>
 												</div>
-												<div class="row" >
+												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<label>Beneficiário</label>
 														<div class="hidden" class="col-sm-5">
@@ -158,6 +176,7 @@
 																	{{/ifEqual}}
 																{{/each}}
 															{{/each}}
+															<input value="X" id="X" name="refAgendaConv" />
 														</div>
 														<div class="form-group" >
 															<div class="col-sm-5">
@@ -168,7 +187,7 @@
 																</select>
 															</div>
 														</div>
-													</div><!-- /.span -->
+													</div>
 													<div class="col-xs-12 col-sm-2">
 														<label>Convênio</label>
 														<div class="form-group"  >
@@ -184,7 +203,7 @@
 																</select>
 															</div>
 														</div>
-													</div><!-- /.span -->
+													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-6">
@@ -193,7 +212,7 @@
 															<div class="col-sm-4" style="width: 500px;">
 																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
 																	{{#each terapeutas}}
-																	<option value="{{_id}}">{{usuario_nome}}</option>
+																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -213,11 +232,11 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-6">
+													<div class="col-xs-6">													
 														<label>Salas</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
@@ -225,61 +244,76 @@
 															</div>
 														</div>
 													</div>
-
-															<!--<label class="pos-rel">
-																<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
-																Realizado? 
-															</label>
-													<div class="col-xs-6">
-														<label>Motivo</label>
-														<div class="form-group">
-															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
-																	
-																</select>
-															</div>
-														</div>
-													</div>-->
-												</div>
-												<div class="row" >
-													<div class="col-xs-12 col-sm-6">													
-														<label> Notificação de agenda</label>
+													<div class="col-xs-6">													
+														<label> Observação de agenda</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<textarea style="width: 400px;" id="agendaObs" name="agendaObs" placeholder="" class="form-control"></textarea>
+																<input style="width: 400px;" type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
 															</div>
 														</div>
+													</div>
+														<!--
+														<label class="pos-rel">
+															<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
+															Realizado? 
+														</label>
+														-->
+												</div>
+												<div id="divEvolucao" style="display: none;" class="row" >
+													<div class="col-xs-12 col-sm-6">													
+														<label> Evolução</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">													
+														<label class="pos-rel">
+															{{#isTrue selo}}
+															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															<b>Evolução Finalizada!</b>
+															{{else}}
+															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+															{{/isTrue}}
+														</label>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="hidden">
-											<input id="agendaIdTemp" name="agendaIdTemp" value="{{agenda_tempId}}" />
-											<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda_tempmotivo}}" />-->
-											<input id="agendaData" name="agendaData" /><!-- permanesce vazio para receber a data antes de salvar -->
-											<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
-											<input id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />
-											<input id="agendaBeneidEdi" name="agendaBeneidEdi" value="{{agenda.agenda_beneid}}" />
-											<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
-											<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
-											<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
-											<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
-										</div>
-										<div class="space-4"></div>							
-										<div class="space-4"></div>
-										<div class="form-actions">
-											<div class="col-md-offset-3 col-md-9">
-												<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-													<i class="ace-icon fa fa-check bigger-110"></i>
-													Salvar
-												</button>
-												&nbsp; &nbsp; &nbsp;
-												<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-													<i class="ace-icon fa fa-undo bigger-110"></i>
-													Voltar
-												</button>
-											</div>
-										</div>
+									</div>
+								</div>
+								<div class="hidden">
+									<input id="agendaEvolucaoEdi" name="agendaEvolucaoEdi" value="{{agenda.agenda_evolucao}}" />
+									<input id="agendaSelamento" name="agendaSelamento" value="{{selo}}" />
+									<input id="isAgendaTerapeuta" name="isAgendaTerapeuta" value="{{isAgendaTerapeuta}}" />
+									<input id="id" name="id" value="{{agenda._id}}" />
+									<input id="agendaTemp" name="agendaTemp" value="{{agenda.agenda_temp}}" />
+									<input id="agendaData" name="agendaData" />
+									<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
+									<input id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />
+									<input id="agendaCategEdi" name="agendaCategEdi" value="{{agenda.agenda_categoria}}" />
+									<input id="agendaOrgEdi" name="agendaOrgEdi" value="{{agenda.agenda_org}}" />
+									<input id="agendaBeneidEdi" name="agendaBeneidEdi" value="{{agenda.agenda_beneid}}" />
+									<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
+									<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
+									<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
+									<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+								<div class="form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
 									</div>
 								</div>
 							</form>
