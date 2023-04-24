@@ -6647,7 +6647,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         //let idTera = new ObjectId('636e5e85c276219d41aee9ea');//apenas para teste, trocar depois por idTerapeuta
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte: depois }, agenda_usuid : '627171515f593cdfa51b96b8' }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte: depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
             
@@ -6826,7 +6826,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : seg, $lte:  sex }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -6927,8 +6927,11 @@ module.exports = {
         let quarta;
         let quinta;
         let sexta;
+        let idsSubs = [];
         let seg = fncGeral.getDateFromString(req.body.dataFinal, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFinal, "fim");
+        let agora = fncGeral.getDateFromString(req.body.dataFinal, "ini");
+        let depois = fncGeral.getDateFromString(req.body.dataFinal, "fim");
         
         switch (seg.getUTCDay()){
             case 0://DOM
@@ -6970,9 +6973,8 @@ module.exports = {
                 sex.setUTCDate(sex.getUTCDate() + 5);
                 break;
         }
-        let agora = seg.toISOString();
-        let depois = sex.toISOString();
-        let diaSemana = seg.toISOString();
+
+        let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
@@ -6981,11 +6983,16 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        //let idTera = new ObjectId('636e5e85c276219d41aee9ea');//apenas para teste, trocar depois por idTerapeuta
 
-        Agenda.find({ agenda_data: { $gte : seg, $lte:  sex }, agenda_usuid : new ObjectId(idTerapeuta) }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : seg, $lte: sex }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            //console.log(agenda)
+            //console.log(agenda.length)
+            
             agenda.forEach((e)=>{
+                if (e.agenda_temp){
+                    idsSubs.push(e.agenda_tempId);
+                }
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -7023,6 +7030,13 @@ module.exports = {
                         console.log("erro");
                         break;
                 }
+            })
+          
+            idsSubs.forEach((id)=>{
+                function comparaIds(agendaArray){//tem que converter em string pq objectids não são comparados corretamente entre si.
+                    return ((""+agendaArray._id) != (""+id));
+                }
+                agenda = agenda.filter(comparaIds);
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
