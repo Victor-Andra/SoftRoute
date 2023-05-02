@@ -24,9 +24,10 @@ module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
             //console.log(usuario)
-            Funcao.find().then((funcao) =>{
-                res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
-            })}).catch((err) =>{
+            Perfil.find().then((perfil)=>{
+                Funcao.find().then((funcao) =>{
+                    res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao, perfils: perfil,})
+                })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')

@@ -31,11 +31,13 @@ module.exports = {
         console.log('listando Diários de Folreg')
         Folreg.find().then((folreg) =>{
             console.log("Listagem Realizada dos Diários de Folreg!")
-                Bene.findById(req.params.id).then((bene) =>{
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         console.log("Listagem Realizada Usuário!")
-            res.render('area/aba/folreg/folregLis', {Folregs: folreg, Usuarios: usuario, Benes: bene})
+            res.render('area/aba/folreg/folregLis', {Folregs: folreg, terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Folreg")
@@ -44,14 +46,19 @@ module.exports = {
     },
 
     carregaFolreg(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/aba/folreg/folregCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            //console.log("Listagem Realizada de Beneficiários!")
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Convenios")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                            //console.log("Listagem Realizada de Terapia")
+                                res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")

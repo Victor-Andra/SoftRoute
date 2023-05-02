@@ -128,6 +128,17 @@ const setClass = require("../models/set")
 const Set = mongoose.model("tb_set")
 const fncSet = require("../functions/fncSet")
 
+//NAT - ABA
+const natClass = require("../models/nat")
+const Nat = mongoose.model("tb_nat")
+const fncNat = require("../functions/fncNat")
+
+//NotaSup
+const notasupClass = require("../models/notasup")
+const Notasup = mongoose.model("tb_notasup")
+const fncNotasup = require("../functions/fncNotasup")
+
+
 //Folha Registro - ABA
 const folregClass = require("../models/folreg")
 const Folreg = mongoose.model("tb_folreg")
@@ -137,6 +148,11 @@ const fncFolreg = require("../functions/fncFolreg")
 const grafabcClass = require("../models/grafabc")
 const Grafabc = mongoose.model("tb_grafabc")
 const fncGrafabc = require("../functions/fncGrafabc")
+
+//Análise funcional do comportamento
+const anafuncompClass = require("../models/anafuncomp")
+const Anafuncomp = mongoose.model("tb_anafuncomp")
+const fncAnafuncomp = require("../functions/fncAnafuncomp")
 
 //Evolucao
 const evolucaoClass = require("../models/atend")
@@ -338,6 +354,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                 res.redirect("/menu/admin/erro")
                 break;
         }
+        res.redirect("/menu/branco")
+        /*
         if(lvl == 0){
             res.redirect("/menu/branco")
         } else if (lvl == 1){
@@ -353,6 +371,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         } else {
             res.redirect("/menuV/")
         }
+        */
     })
 });
 
@@ -1224,6 +1243,28 @@ router.get('/area/aba/set/setlis', fncGeral.IsAuthenticated, (req,res) =>{//dire
     fncSet.listaSet(req, res);
 })
 
+//Menu NAT ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/nat/natcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncNat.carregaNat(req, res);
+})
+
+//Lista NAT por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/nat/natlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncNat.listaNat(req, res);
+})
+
+//Menu Notasup ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/notasup/notasupcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
+    fncNotasup.carregaNotasup(req, res);
+})
+
+//Lista Notasup por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/notasup/notasuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
+    fncNotasup.listaNotasup(req, res);
+})
+
 //Menu Folha de Registro ** Area Tecnicos e ABA 
 //Carrega Cadastro
 router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
@@ -1245,6 +1286,18 @@ router.get('/area/aba/grafabc/grafabccad', fncGeral.IsAuthenticated, (req,res) =
 router.get('/area/aba/grafabc/grafabclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncGrafabc.listaGrafabc(req, res);
 })
+
+//Menu Análise Funcional do Comportamento ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/anafuncomp/anafuncompcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona ao cadastro de Análise funcional de comportamento
+    fncAnafuncomp.carregaAnafuncomp(req, res);
+})
+
+//Lista Lista
+router.get('/area/aba/anafuncomp/anafuncomplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona ao lista de Análise funcional de comportamento
+    fncAnafuncomp.listaAnafuncomp(req, res);
+})
+
 
 //Menu Convenio
 //Sub Menu Conv

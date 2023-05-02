@@ -3,171 +3,202 @@
 	<head>
 		<title>SET</title>
 	</head>
+
 	<body onload="javascript:controlaNave();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
+
+
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="espace">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">SET</a>
+							</li>
+
+							<li class="active">Sala Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
 					</div>
-					<div class="page-header">
-						<h1>
-							SET<br>
-							<small>
-								Cadastro SET´s
-							</small>
-						</h1>
-					</div><!-- /.page-header -->
+
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/aba/set/add" method="POST">
-									<div class="col-xs-12">
-										
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Beneficiário</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/sala/add" method="POST">
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho do SET´s
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Beneficiário</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="setBenenome" id="setBenenome" class="form-control" />
+														</div>
+													</div>
+
+													<div class="space space-8"></div>
+													<label> Tipo do programa</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="setProgramatipo" id="setProgramatipo" class="form-control" />
+														</div>
+													</div>
+
+													<div class="space space-8"></div>
+													<label for="id-date-picker-1"> Data Inicial do Conjunto de SETS</label>
+													<div class="row">
 														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
-																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
-															</select>
+															<div class="col-sm-4">
+																<input id="setDatainicialconjunto" name="setDatainicialconjunto" type="date">
+															</div>
 														</div>
 													</div>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>TIPO Programa</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
+
+
+													<div class="space space-8"></div>
+													<label for="id-date-picker-1"> Data Final do Conjunto de SETS</label>
+													<div class="row">
 														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
-																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
-															</select>
+															<div class="col-sm-4">
+																<input id="setDatafinalconjunto" name="setDatafinalconjunto" type="date">
+															</div>
 														</div>
 													</div>
+
 												</div>
 											</div>
-											<div class="col-sm-2">
-												<div class="row">
-													<label>Data Inicial</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input id="setDatainicial" name="setDatainicial" type="date">
+										</div>	
+											
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bullseye"></i>
+													SET
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Descrição </label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<textarea type="text" name="setDesc" id="setDesc" placeholder="" class="form-control" ></textarea>
+														</div>
 													</div>
-												</div>
-											</div>		
-											<div class="col-sm-2">
-												<div class="row">
-													<label>Data Final</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input id="setDatafinal" name="setDatafinal" type="date">
+
+													<div class="space space-8"></div>
+													<label> Introdução</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="setIntro" id="setIntro" class="form-control" />
+														</div>
 													</div>
+
+													<div class="space space-8"></div>
+													<label> Aquisição</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="setAquisicao" id="setAquisicao" class="form-control" />
+														</div>
+													</div>
+
+
+													<div class="space space-8"></div>
+													<label for="id-date-picker-1">Data Desse SET</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="setDataset" name="setDataset" type="date">
+															</div>
+														</div>
+													</div>
+
 												</div>
-											</div>											
+											</div>
 										
-									</div>
-									<div class="col-xs-12 col-sm-12">	
-										<br>
-										<div class="row">
-											<div class="col-sm-4 ">
-												<div class="widget-box ui-sortable-handle" id="widget-box-1">
-													<div class="widget-header">
-														<h5 class="widget-title">
-															<i class="ace-icon fa fa-bullseye"></i>
-															SET 01
-														</h5>
-													
-														<div class="widget-toolbar">
-														
-															<a href="#" data-action="fullscreen" class="orange2">
-																<i class="ace-icon fa fa-expand"></i>
-															</a>
-
-															<a href="#" data-action="reload">
-																<i class="ace-icon fa fa-refresh"></i>
-															</a>
-
-															<a href="#" data-action="collapse">
-																<i class="ace-icon fa fa-chevron-up"></i>
-															</a>
-													
-														</div>
-													</div>
-
-													<div class="widget-body" style="display: block;">
-														<div class="widget-main">
-															<p class="alert alert-info">
-															</p>
-															<div>
-																<textarea type="text" name="progProcedimentos" id="progProcedimentos" placeholder="" class="form-control"></textarea>
-															</div>
-
-
-															<div class="widget-box transparent ui-sortable-handle" id="widget-box-12">
-																<div class="widget-header">
-																	<h5 class="widget-title lighter">Observações Adicionais </h5>
-
-																	<div class="widget-toolbar no-border">
-																		<a href="#" data-action="collapse">
-																			<i class="ace-icon fa fa-chevron-up"></i>
-																		</a>
-																	</div>
-																</div>
-
-																<div class="widget-body" style="display: block;">
-																	<div class="widget-main padding-6 no-padding-left no-padding-right">
-																		<label>Introdução: </label>
-																		<input type="text" id="setSet1intro" name="setSet1intro" >
-																		<label>Aquisição: </label>
-																		<input type="text" id="setSet1aquisicao" name="setSet1aquisicao" >
-																		<label>Data desse SET: </label>
-																		<input type="date" id="setSet1data" name="setSet1data" >
-																	</div>
-																</div>
-															</div>
-
-																			
-																		
-																	
-																		
-															
-														</div>
-													</div>
-												</div>
-											</div>
-																		
+										
 										</div>
 									</div>
-									<div class="col=xs=12">
-										<hr>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="row">
+										<div class="col-md-offset-3 col-md-9" style="text-align: center;">
+											<button class="btn btn-info"  name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
 									</div>
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
-														
+								</div>
 							</form>
-						</div>
-					</div>
-				</div><!-- /.main-container -->
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
 			</div><!-- /.main-content -->
-		</div>
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
 	</body>
 </html>

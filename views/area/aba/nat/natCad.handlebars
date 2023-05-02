@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Gráfico do Programa ABA</title>
+		<title>REGISTROS: Simples ou Duplo</title>
+		<script type="text/javascript">
+			
+			
+		
+		</script>
 	</head>
+
 	<body onload="javascript:controlaNave();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
+
+
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="espace">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Folha de Registro Naturalístico com Gráfico (NAT)</a>
+							</li>
+
+							<li class="active"> - ABA</li>
+						</ul><!-- /.breadcrumb -->
+
 					</div>
-					<div class="page-header">
-						<h1>
-							Gráfico do Programa ABA
-							<small>
-								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro e Índice Geral Gráfico do Programa ABA
-							</small>
-						</h1>
-					</div><!-- /.page-header -->
+
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="" method="POST">
-							
-								<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
+
+								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -45,65 +57,14 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
+												
+											
 												<div class="col-xs-12" class="row">
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														<strong>Observação! </strong>
-														Aqui você cadastra informações Gráfico do Programa ABA
-														<br>
-													</div>
-												</div><br>
-
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Programa</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegprograma" id="folRegprograma" type="text" />
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">SET</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegset" id="folRegset" type="text" />
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
 													
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data do Registro</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegdatareg" id="folRegdatareg" type="date" onchange="javascript:atualizaData()" />
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data da Acsição</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegdataac" id="folRegdataac" type="date" onchange="javascript:atualizaData()" />
-																</div>
-															</div>
-														</div>
-													</div>
 													<div class="col-xs-12 col-sm-4">
 														<label>Beneficiário</label>
 														<div class="form-group">
-															<div class="col-sm-4">
+															<div class="col-sm-8">
 																<select name="folRegBeneid" id="folRegBeneid" class="chosen-select" data-placeholder="Escolha..." >
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -111,11 +72,22 @@
 																</select>
 															</div>
 														</div>
-													</div>												
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Programa</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="folRegprog" id="folRegprog" type="text"  />
+									 							</div>
+															</div>
+														</div>
+													</div>											
 													<div class="col-xs-12 col-sm-4">
+						
 														<label>Técnico Aplicador</label>
 														<div class="form-group">
-															<div class="col-sm-4">
+															<div class="col-sm-8">
 																<select name="folRegterapeutaid" id="folRegterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -124,93 +96,71 @@
 															</div>
 														</div>
 													</div>																								
+																						
+												
 												</div>
 
-												<label>Observações:</label>
+												<label>Estímulos:</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+														<textarea type="text" name="folRegest" id="folRegest" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
 														</textarea>
 													</div>
 												</div>
-
-												<div class="row">
-													<div class="col-sm-4">
-													<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-														<thead>
-															<h5 class="widget-title bigger lighter">
-																<i class="ace-icon fa fa-table"></i>
-																Ordem das cores para registro diário do gráfico do programa!
-															</h5>
-															<tr>
-																<th >Cor</th>
-																<th >Sigla</th>
-																<th >Descrição</th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr><!-- 1Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #66ff06;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-success">I</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 2Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #ffa806;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-warning">+d</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 3Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #fff700;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-yellow">E</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 4Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #ee06ff;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-pink">-d</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-														</tbody>
-													</table>
+												<label>Descrição:</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea type="text" name="folRegdesc" id="folRegdesc" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
+														</textarea>
 													</div>
 												</div>
-											</div>		
-										</div>
+												<label>Hierarquia da dica:</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea type="text" name="folReghie" id="folReghie" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+											
+
+											</div>
+										</div>		
 									</div>
 								</div>
-							
-								
-								<div class="col-xs-10">
+
+								<div class="col-xs-12" name="du" id="du"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												Resultado do Dia</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
 												
-												Gráfico Diário</h4>
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+								
+								<div class="col-xs-12" name="du" id="du"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-gavel bigger-110"></i>
+												
+												Tentativas Diárias</h4>
 
 											<span class="widget-toolbar">
 
@@ -230,19 +180,11 @@
 												<table class="table table-sm table-bordered" style="font-size: 9px;" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 													<thead>
 														<tr role="row">	
-															<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3">
+															<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2">
 																<b>I = </b>
 																<span class="label label label-success arrowed">Independente</span>
-																
-																<b>+d = </b>
+																<b>D = </b>
 																<span class="label label label-danger arrowed">Dica</span>
-
-																<b>E = </b>
-																<span class="label label label-danger arrowed">Dica</span>
-																
-																<b>-d = </b>
-																<span class="label label label-danger arrowed">Dica</span>
-
 																<b>- = </b>
 																<span class="label label label arrowed">Sem Avaliação</span>
 															</th>
@@ -253,12 +195,12 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T01</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
+																	
 																</select>
 															</td>													
 															
@@ -266,12 +208,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T02</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -279,12 +220,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T03</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -292,12 +232,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T04</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -305,12 +244,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T05</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -318,12 +256,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T06</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -331,12 +268,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T07</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="-">-</option>
+																<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -344,12 +280,11 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T08</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -357,12 +292,23 @@
 														<tr role="row" class="odd">
 															
 															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T09</span>
 																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="-">-</option>
+																		<option value="-">-</option>
 																	<option value="I">I</option>
-																	<option value="+d">+d</option>
-																	<option value="E">E</option>
-																	<option value="-d">-d</option>
+																	<option value="D">D</option>
+																</select>
+															</td>													
+															
+														</tr>
+														<tr role="row" class="odd">
+															
+															<td name="dia" rowspan="1" style="width: 40px;">
+																<span class="label label-lg label-pink arrowed-right">T10</span>
+																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																	<option value="I">I</option>
+																	<option value="D">D</option>
 																</select>
 															</td>													
 															
@@ -372,29 +318,31 @@
 											</div>
 										</div>		
 									</div>
-								</div>
+								</div>	
 								
-								<div class="col-xs-12">
-									<br>
-								</div>
-								<div class="row">
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
+
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
+
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>
 									</div>
 								</div>
 							</form>
-						</div>
-					</div>
-				</div><!-- /.main-container -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
 			</div><!-- /.main-content -->
-		</div>
+		</div><!-- /.main-container -->
 	</body>
 </html>

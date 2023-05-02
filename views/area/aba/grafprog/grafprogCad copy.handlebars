@@ -21,7 +21,6 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="" method="POST">
-							
 								<div class="col-xs-12">
 									<div class="widget-box">
 										<div class="widget-header">
@@ -54,157 +53,116 @@
 														Aqui você cadastra informações Gráfico do Programa ABA
 														<br>
 													</div>
-												</div><br>
-
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Programa</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegprograma" id="folRegprograma" type="text" />
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">SET</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegset" id="folRegset" type="text" />
-																</div>
-															</div>
-														</div>
-													</div>
 												</div>
+
+											
 													
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data do Registro</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegdatareg" id="folRegdatareg" type="date" onchange="javascript:atualizaData()" />
+												
+													<div class="col-xs-12" class="row">
+														
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1">Data do Registro</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="folRegdata" id="folRegdata" type="date" onchange="javascript:atualizaData()" />
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data da Acsição</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="folRegdataac" id="folRegdataac" type="date" onchange="javascript:atualizaData()" />
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1">Hora do Registro</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="folRegdata" id="folRegdata" type="text"  />
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-xs-12 col-sm-4">
-														<label>Beneficiário</label>
-														<div class="form-group">
-															<div class="col-sm-4">
-																<select name="folRegBeneid" id="folRegBeneid" class="chosen-select" data-placeholder="Escolha..." >
-																	{{#each Benes}}
-																		<option value="{{_id}}">{{bene_nome}}</option>
-																	{{/each}}
-																</select>
+														<div class="col-xs-12 col-sm-4">
+															<label>Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-8">
+																	<select name="folRegBeneid" id="folRegBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
 															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-4">
-														<label>Técnico Aplicador</label>
-														<div class="form-group">
-															<div class="col-sm-4">
-																<select name="folRegterapeutaid" id="folRegterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
-																	{{#each Terapeutas}}
-																		<option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-																</select>
+														</div>												
+														<div class="col-xs-12 col-sm-4">
+															<label>Técnico Aplicador</label>
+															<div class="form-group">
+																<div class="col-sm-8">
+																	<select name="folRegterapeutaid" id="folRegterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
 															</div>
-														</div>
-													</div>																								
-												</div>
-
-												<label>Observações:</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-														</textarea>
+														</div>																								
+													
 													</div>
-												</div>
 
-												<div class="row">
-													<div class="col-sm-4">
-													<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-														<thead>
-															<h5 class="widget-title bigger lighter">
-																<i class="ace-icon fa fa-table"></i>
-																Ordem das cores para registro diário do gráfico do programa!
-															</h5>
-															<tr>
-																<th >Cor</th>
-																<th >Sigla</th>
-																<th >Descrição</th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr><!-- 1Reg -->
-																<td >
+													<label>Observações:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+															</textarea>
+														</div>
+													</div>
+													<label>Ordem das cores para o registro no Gráfico do Programa diário</label>
+													<div class="col-xs-8" class="row">
+														<div class="col-xs-1col-sm-1">
+															<label>( I )</label>
+															<div class="form-group">
+																<div class="col-sm-2">
 																	<div style="width:4px;height:0;border:5px solid #66ff06;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-success">I</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 2Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #ffa806;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-warning">+d</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 3Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #fff700;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-yellow">E</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-															<tr><!-- 4Reg -->
-																<td >
-																	<div style="width:4px;height:0;border:5px solid #ee06ff;overflow:hidden"></div>
-																</td>
-																<td>
-																	<span class="badge badge-pink">-d</span>
-																</td>
-																<td>
-																	<span class="badge badge-purple">Sem Observação</span>
-																</td>
-															</tr>
-														</tbody>
-													</table>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-1 col-sm-1">
+															<label>( + d )</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<div style="width:4px;height:0;border:5px solid #ff8f06;overflow:hidden"></div>
+																</div>
+															</div>
+														</div>	
+														<div class="col-xs-1 col-sm-1">
+															<label>( E )</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<div style="width:4px;height:0;border:5px solid #fffb06;overflow:hidden"></div>
+																</div>
+															</div>
+														</div>	
+														<div class="col-xs-1 col-sm-1">
+															<label>(- d)</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<div style="width:4px;height:0;border:5px solid #ff4d06;overflow:hidden"></div>
+																</div>
+															</div>
+														</div>		
+													
 													</div>
+													
+												
+
 												</div>
 											</div>		
-										</div>
+									</div>
+											
+
+											</div>
+										</div>		
 									</div>
 								</div>
-							
-								
-								<div class="col-xs-10">
+								<div class="col-xs-3">
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -230,23 +188,7 @@
 												<table class="table table-sm table-bordered" style="font-size: 9px;" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 													<thead>
 														<tr role="row">	
-															<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3">
-																<b>I = </b>
-																<span class="label label label-success arrowed">Independente</span>
-																
-																<b>+d = </b>
-																<span class="label label label-danger arrowed">Dica</span>
-
-																<b>E = </b>
-																<span class="label label label-danger arrowed">Dica</span>
-																
-																<b>-d = </b>
-																<span class="label label label-danger arrowed">Dica</span>
-
-																<b>- = </b>
-																<span class="label label label arrowed">Sem Avaliação</span>
-															</th>
-															
+															<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1"><b>P</b></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -372,23 +314,20 @@
 											</div>
 										</div>		
 									</div>
-								</div>
-								
+								</div>	
 								<div class="col-xs-12">
 									<br>
 								</div>
-								<div class="row">
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
+								<div class="col-md-offset-3 col-md-12">
+									<button class="btn btn-info" name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning"  type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
 								</div>
 							</form>
 						</div>

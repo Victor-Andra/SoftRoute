@@ -2,8 +2,8 @@
 const mongoose = require("mongoose")
 
 //As classe tem que ser declaradas antes das tabelas
-//Classe  Plano de Grafprogamento 
-const grafprogClass = require("../models/grafprog")
+//Classe  Analise funcional do comportamento
+const anafuncompClass = require("../models/anafuncomp")
 
 
 //Classes Extrangeiras
@@ -12,8 +12,8 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
-//Tabela Plano de Grafprogamento 
-const Grafprog = mongoose.model("tb_grafprog")
+//Tabela Plano de Anafuncompamento 
+const Anafuncomp = mongoose.model("tb_anafuncomp")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
@@ -26,36 +26,34 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 module.exports = {
-    listaGrafprog(req, res){
+    listaAnafuncomp(req, res){
         let convs = new Array();
-        console.log('listando Diários de Grafprog')
-        Grafprog.find().then((grafprog) =>{
-            console.log("Listagem Realizada dos Diários de Grafprog!")
+        console.log('listando Diários de Anafuncomp')
+        Anafuncomp.find().then((anafuncomp) =>{
+            console.log("Listagem Realizada dos Diários de Anafuncomp!")
                 Bene.findById(req.params.id).then((bene) =>{
                     console.log("Listagem Realizada bene!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/grafprog/grafprogLis', {Grafprogs: grafprog, Terapeutas: terapeuta, Benes: bene})
+                        Usuario.find().then((usuario)=>{
+                        console.log("Listagem Realizada Usuário!")
+            res.render('area/aba/anafuncomp/anafuncompLis', {Anafuncomps: anafuncomp, Usuarios: usuario, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Diários de Grafprog")
+            req.flash("error_message", "houve um erro ao listar Diários de Anafuncomp")
             res.redirect('admin/erro')
         })
     },
 
-    carregaGrafprog(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
+
+
+    carregaAnafuncomp(req,res){
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/aba/grafprog/grafprogCad", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
-        })})})}).catch((err) =>{
+                            res.render("area/aba/anafuncomp/anafuncompCad", {benes: bene, terapeutas: terapeuta})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
@@ -63,16 +61,17 @@ module.exports = {
 
     },
 
-    carregaGrafprogEdi(req,res){
+  
+    
+    carregaAnafuncompEdi(req,res){
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Usuário")
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/aba/grafprog/grafprogEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                                res.render("area/aba/anafuncomp/anafuncompEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -80,12 +79,12 @@ module.exports = {
         })
     },
 
-    cadastraGrafprog(req,res){
+    cadastraAnafuncomp(req,res){
         console.log("chegou")
         let resultado
         let resposta = new Resposta()
         
-        grafprogClass.cadastraGrafprogFisio(req,res).then((result)=>{
+        anafuncompClass.cadastraAnafuncompFisio(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
             resultado = true;
@@ -98,7 +97,7 @@ module.exports = {
                 resposta.sucesso = "true"
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaGrafprog(req,res,resposta)
+                this.listaAnafuncomp(req,res,resposta)
             } else {
                 resposta.texto = resultado
                 resposta.sucesso = "false"
@@ -109,11 +108,11 @@ module.exports = {
         })
     },
 
-    atualizaGrafprog(req,res){
+    atualizaAnafuncomp(req,res){
         let resultado
         let resposta = new Resposta()
         try{
-            grafprogClass.escolaEditar(req,res).then((res)=>{
+            anafuncompClass.escolaEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -128,14 +127,14 @@ module.exports = {
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
-                    this.listaGrafprog(req,res,resposta)
+                    this.listaAnafuncomp(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
                     console.log(resultado)
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    this.listaGrafprog(req,res,resposta)
+                    this.listaAnafuncomp(req,res,resposta)
                 }
             })
         } catch(err1){
@@ -145,18 +144,17 @@ module.exports = {
     },
 
 
-    deletaGrafprog(req,res){
-        Grafprogfisio.deleteOne({_id: req.params.id}).then(() =>{
+    deletaAnafuncomp(req,res){
+        Anafuncompfisio.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
+                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                            console.log("Listagem Realizada de Usuário")
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Grafprogamento Fisioterapêutico deletado!")
-                res.render('area/aba/grafprog/grafprogLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
+                req.flash("success_message", "Anafuncompamento Fisioterapêutico deletado!")
+                res.render('area/aba/anafuncomp/anafuncompLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")

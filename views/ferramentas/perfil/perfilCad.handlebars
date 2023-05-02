@@ -29,10 +29,6 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/ferramentas/perfil/add" method="POST">
 								<div class="form-horizontal" role="form">
-									<div id="divCarrega" name="divCarrega" class="hidden">
-										<input id="perfilNome" name="perfilNome" value="{{perfilEdi.perfil_nome}}"/>
-										<input id="perfilDescricao" name="perfilDescricao" value="{{perfilEdi.perfil_Descricao}}"/>
-									</div>
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
@@ -56,7 +52,7 @@
 													<label> Perfil</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="perfilNome" id="perfilNome"  class="form-control" value="{{perfil_nome}}"/>
+															<input type="text" name="perfilNome" id="perfilNome"  class="form-control" />
 														</div>
 													</div>
 													
@@ -64,7 +60,7 @@
 													<label> Descrição</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="perfilDescricao" id="perfilDescricao" class="form-control" value="{{perfil_descricao}}"/>
+															<input type="text" name="perfilDescricao" id="perfilDescricao" class="form-control" />
 														</div>
 													</div>
 												</div>

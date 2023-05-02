@@ -40,7 +40,7 @@ module.exports = {PerfilModel,PerfilSchema,
         //Pega data atual
         
         //Realiza Atualização
-        await PerfilModel.findByIdAndUpdate(req.body.perfilId, 
+        await PerfilModel.findByIdAndUpdate(req.body.id, 
             {$set: {
                 perfil_nome: req.body.perfilNome,
                 perfil_descricao: req.body.perfilDescricao,

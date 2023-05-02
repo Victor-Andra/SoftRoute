@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Nota do Supervisor</title>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Notas de Supervisão</a>
+							</li>
+
+							<li class="active">Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/sala/add" method="POST">
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-3">
+														<label for="id-date-picker-1"> Data </label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="setDatainicialconjunto" name="setDatainicialconjunto" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Hora </label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="setDatainicialconjunto" name="setDatainicialconjunto" type="text">
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-6">
+															<label> Terapeuta</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="folRegterapeutaid" id="folRegterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="folRegbeneid" id="folRegbeneid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Data Nascimento</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-3">
+																		<input id="folRegnasc" name="folRegnasc" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Idade</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<input type="text" name="folRegidade" id="folRegidade" class="form-control" />
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Tipo Supervisão</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="folRegtiuposup" id="folRegtiuposup" class="chosen-select" data-placeholder="Escolha..." >
+																			<option value="Direta">Direta</option>
+																			<option value="Indireta">Indireta</option>
+																			<option value="Avaliativa">Avaliativa</option>
+																			<option value="Outras">Outras</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label> Supervisor</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="folRegsupid" id="folRegsupid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+
+														
+													</div>
+
+												</div>
+											</div>
+										</div>	
+											
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bullseye"></i>
+													Observações Comportamentais
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Topografias Comportamentais: </label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<textarea type="text" name="folRegtopo" id="folRegtopo" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-2">
+															<label> Fuga / Evitação</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="folRegfuga" id="folRegfuga" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label> Atenção</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="folRegaten" id="folRegaten" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Tangível</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="folRegatang" id="setIntang" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Automatico</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<input type="text" name="folRegaauto" id="folRegaauto" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+
+
+													</div>
+													<label> Notas Narrativas: </label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="folRegnarra" id="folRegnarra" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										
+										
+										</div>
+
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-video-camera"></i>
+													Métodos de Gravação das Sessões
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<div class="row">
+
+														<div class="col-sm-4">
+															<label> ABC Frequência:</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegabc" id="folRegabc" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-4">
+															<label> Duração</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegdura" id="folRegdura" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-4">
+															<label> Terapia</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegtera" id="folRegtera" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+																								
+
+
+
+													</div>
+
+													<div class="row">
+														<div class="col-sm-4">
+															<label> Gravação do Evento</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegeve" id="folRegeve" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														
+														<div class="col-sm-4">
+															<label> Produto permanente</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegprod" id="folRegprod" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-4">
+															<label> Mandos Frequência</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="folRegmando" id="folRegmando" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+
+													</div>
+
+													<label> Notas Narrativas: </label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="folRegnarra2" id="folRegnarra2" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										
+										
+										</div>
+										
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="tabbable tabs-left">
+												<ul class="nav nav-tabs" id="myTab3">
+													<li class="active">
+														<a data-toggle="tab" href="#home3">
+															<i class="pink ace-icon fa fa-tachometer bigger-110"></i>
+															Home
+														</a>
+													</li>
+
+													<li>
+														<a data-toggle="tab" href="#profile3">
+															<i class="blue ace-icon fa fa-user bigger-110"></i>
+															Profile
+														</a>
+													</li>
+
+													<li>
+														<a data-toggle="tab" href="#dropdown13">
+															<i class="ace-icon fa fa-rocket"></i>
+															More
+														</a>
+													</li>
+												</ul>
+
+												<div class="tab-content">
+													<div id="home3" class="tab-pane in active">
+														<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+													</div>
+
+													<div id="profile3" class="tab-pane">
+														<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+													</div>
+
+													<div id="dropdown13" class="tab-pane">
+														<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+													
+
+
+								
+
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="row">
+									<div clas="col-xs-12">
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-9" style="text-align: center;">
+													<button class="btn btn-info"  name="acao" type="submit">
+														<i class="ace-icon fa fa-check bigger-110"></i>
+														Salvar
+													</button>
+
+													&nbsp; &nbsp; &nbsp;
+													<button class="btn btn-warning"  type="reset">
+														<i class="ace-icon fa fa-undo bigger-110"></i>
+														Voltar
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

@@ -6434,6 +6434,34 @@ module.exports = {
         sex.setUTCHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
+        let hoje;
+        switch(seg.getDay()){
+            case 0://DOM
+                hoje = "dom";
+                break;
+            case 1://SEG
+                hoje = "seg";
+                break;
+            case 2://TER
+                hoje = "ter";
+                break;
+            case 3://QUA
+                hoje = "qua";
+                break;
+            case 4://QUI
+                hoje = "qui";
+                break;
+            case 5://SEX
+                hoje = "sex";
+                break;
+            case 6://SAB
+                hoje = "sab";
+                break;
+            default:
+                hoje = "dom";
+                break;
+        }
+        console.log("HOJE:"+hoje)
         /*
         switch (seg.getUTCDay()){
             case 0://DOM
@@ -6570,7 +6598,7 @@ module.exports = {
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                     //console.log("Listagem Realizada de Salas")
-                                    res.render("agenda/agendaPessoal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+                                    res.render("agenda/agendaPessoal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta, hoje})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -6594,6 +6622,33 @@ module.exports = {
         let sex = fncGeral.getDateFromString(req.body.dataFinal, "fim");
         let agora = fncGeral.getDateFromString(req.body.dataFinal, "ini");
         let depois = fncGeral.getDateFromString(req.body.dataFinal, "fim");
+        let hoje;
+        switch(seg.getDay()){
+            case 0://DOM
+                hoje = "dom";
+                break;
+            case 1://SEG
+                hoje = "seg";
+                break;
+            case 2://TER
+                hoje = "ter";
+                break;
+            case 3://QUA
+                hoje = "qua";
+                break;
+            case 4://QUI
+                hoje = "qui";
+                break;
+            case 5://SEX
+                hoje = "sex";
+                break;
+            case 6://SAB
+                hoje = "sab";
+                break;
+            default:
+                hoje = "dom";
+                break;
+        }
         
         switch (seg.getUTCDay()){
             case 0://DOM
@@ -6740,7 +6795,7 @@ module.exports = {
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                     //console.log("Listagem Realizada de Salas")
-                                    res.render("agenda/agendaPessoal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+                                    res.render("agenda/agendaPessoal", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta, hoje})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

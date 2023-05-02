@@ -1,150 +1,1814 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Folha de Registro</title>
+		<title>REGISTROS: Simples ou Duplo</title>
+		<script type="text/javascript">
+			function selectConv(){
+				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("atendConvid").value = v1;
+			}
+			function mudaPlano() {
+				let tipodoc = document.getElementById("folRegtipo").value;
+				console.log(tipodoc)
+				if (tipodoc == "Não Informado") {
+					document.getElementById('d1').style.display = 'none';
+					document.getElementById('d2').style.display = 'none';
+					document.getElementById('du').style.display = 'none';
+				} else if (tipodoc == "Duplo") {
+					document.getElementById('d1').style.display = 'block';
+					document.getElementById('d2').style.display = 'block';
+					document.getElementById('du').style.display = 'none';
+				} else if (tipodoc == "Simples") {
+					document.getElementById('d1').style.display = 'none';
+					document.getElementById('d2').style.display = 'none';
+					document.getElementById('du').style.display = 'block';
+				} else {
+					document.getElementById('d1').style.display = 'none';
+					document.getElementById('d2').style.display = 'none';
+					document.getElementById('du').style.display = 'none';
+				}
+				document.getElementById('folRegtipo').ReadOnly
+   			}
+			function atualizaTerapeutaId(){
+				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+			function somaResEstSI() {
+				//As Valores dos campos tipo "Radio" são carregados com as opções "on" e "off"
+				var resI = 0;
+				var resE = 0;
+				var resmD = 0;
+				var resnD = 0;
+					
+					if (document.getElementById("folRegSIres1").value == "on") {
+					resI = resI + 1;
+					} else {
+					
+					}
+					document.getElementById("folRegSIest10i").value = resI;
+					document.getElementById("folRegSIest10e").value = document.getElementById("folRegSIres1").value;
+						console.log(document.getElementById("folRegSIres1").value)
+				
+   			}
+		
+		</script>
 	</head>
+
 	<body onload="javascript:controlaNave();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
+
+
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="espace">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Registro</a>
+							</li>
+
+							<li class="active">ABA</li>
+						</ul><!-- /.breadcrumb -->
+
 					</div>
-					<div class="page-header">
-						<h1>
-							Folha de Registro
-							<small>
-								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro Folhas de Registro dos Tipos Simples e Duplo
-							</small>
-						</h1>
-					</div><!-- /.page-header -->
+
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/bordo/add" method="POST">
-								<div class="col-xs-12">
-									<div class="alert alert-warning">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-										<strong>Observação! </strong>
-										Não esqueça de escolher corretamente o formulário entre o Simples e o Duplo.
-										<br>
-									</div>
-									<div class="col-xs-12">
-										<div class="row">
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Beneficiário</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ANA CLARA SANTANA DA SILVA</option>
-																	<option value="Não">APOLO DE ARAÚJO ALVES</option>
-															</select>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Terapeuta Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">RINALDA ADRIANA DE MELO</option>
-																	<option value="Não">ALYNE DE FÁTIMA LIMA ARAGÃO DE JESUS</option>
-															</select>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Tipo de Laudo</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<select name="beneStatus" id="beneStatus" class="chosen-select" style="width: 400px;">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">ESCOLA PEQUENOS AERONAUTAS</option>
-																	<option value="Não">COLÉGIO MADRE DE DEUS</option>
-															</select>
-														</div>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-6">
-												<div class="row">
-													<label >Médico Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input type="text" name="atendOrg" id="atendOrg" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-2">
-												<div class="row">
-													<label>Data Laudo</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input id="beneDatanasc" name="beneDatanasc" type="date">
-													</div>
-												</div>
-											</div>													
-										</div>
-										<div class="row">
-										<div class="col-sm-5">
-											<div class="row">
-												<label>Upload de Laudo</label>
-											</div>
-										</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-5">
-											<label class="ace-file-input">
-												<input type="file" id="id-input-file-2">
-												<span class="ace-file-container" data-title="Escolha">
-													<span class="ace-file-name" data-title="Nenhum arquivo ...">
-														<i class=" ace-icon fa fa-upload"></i>
-													</span>
-												</span>
-												<a class="remove" href="#">
-													<i class=" ace-icon fa fa-times"></i>
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
+
+								<div class="col-sm-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												
+												Cabeçalho</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-											</label>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												
+											
+												<div class="col-xs-12" class="row">
+													<div class="col-sm-2">
+														<label>Tipo do Registro</label>
+														<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="folRegtipo" id="folRegtipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaPlano()">
+																		<option value="Não Informado">Não Informado</option>
+																		<option value="Simples">Simples</option>
+																		<option value="Duplo">Duplo</option>
+																	</select>
+																</div>
+														</div>	
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Data do Registro</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="folRegdata" id="folRegdata" type="date" onchange="javascript:atualizaData()" />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-4">
+														<label>Beneficiário</label>
+														<div class="form-group">
+															<div class="col-sm-8">
+																<select name="folRegBeneid" id="folRegBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>												
+													<div class="col-xs-12 col-sm-4">
+														<label>Técnico Aplicador</label>
+														<div class="form-group">
+															<div class="col-sm-8">
+																<select name="folRegterapeutaid" id="folRegterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>																								
+																						
+												
+												</div>
+
+												<div class="col-xs-12" class="row">
+													
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="folRegdata" id="folRegdata" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="folRegdata" id="folRegdata" type="text"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="folRegdata" id="folRegdata" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>																							
+																						
+												
+												</div>
+												
+												<label>Observações Adicionais</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+														</textarea>
+													</div>
+												</div>
+												
+												<div class="row">
+															<div class="col-sm-2">
+																<input name="folRegesvandica" id="folRegesvandica"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">Esvanecimento de dica</span>
+															</div>
+															<div class="col-sm-2">
+																<input name="folRegesvandica" id="folRegesvandica"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">Meta</span>
+															</div>
+															<div class="col-sm-2">
+																<input name="folRegesvandica" id="folRegesvandica"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">Volta de Passo de Dica</span>
+															</div>
+												</div>
+
+
+											</div>	
+										</div>		
+									</div>
+								</div>
+							
+								<div class="col-xs-12 col-sm-12" name="du" id="du"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-male bigger-110"></i>
+												Registro Simples</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+
+											<div>
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+													<thead>
+														<tr>
+															<th class="center">Tent</th>
+															<th>RA</th>
+															<th>Estímulo</th>
+															<th colspan="4">Resultado</th>
+															<th>Passo D</th>
+															<th>Tipo D</th>														
+														</tr>
+													</thead>
+
+													<tbody>
+														<tr><!-- 1Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">1</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest1" id="folRegSIest1" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres1" id="folRegSIres1"  type="radio" class="ace" onchange="javascript:somaResEstSI()">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres1" id="folRegSIres1"  type="radio" class="ace" onchange="javascript:somaResEstSI()">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres1" id="folRegSIres1" type="radio" class="ace" onchange="javascript:somaResEstSI()">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres1" id="folRegSIres1" type="radio" class="ace" onchange="javascript:somaResEstSI()">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P1</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod1" id="folRegSItipod1" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Física</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 2Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">2</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest2" id="folRegSIest2" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres2" id="folRegSIres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres2" id="folRegSIres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres2" id="folRegSIres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres2" id="folRegSIres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P2</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod2" id="folRegSItipod2" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Gestual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 3Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">3</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest3" id="folRegSIest3" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres3" id="folRegSIres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres3" id="folRegSIres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres3" id="folRegSIres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres3" id="folRegSIres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P3</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod3" id="folRegSItipod3"type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Ecóica</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 4Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">4</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest4" id="folRegSIest4" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres4" id="folRegSIres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres4" id="folRegSIres4"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres4" id="folRegSIres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres4" id="folRegSIres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P4</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod4" id="folRegSItipod4" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Visual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 5Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">5</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest5" id="folRegSIest5" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres5" id="folRegSIres5"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres5" id="folRegSIres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres5" id="folRegSIres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres5" id="folRegSIres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P5</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod5" id="folRegSItipod5" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 6Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">6</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest6" id="folRegSIest6" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres6" name="folRegSIres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres6" name="folRegSIres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres6" name="folRegSIres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres6" name="folRegSIres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P6</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod6" id="folRegSItipod6" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Modelação</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 7Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">7</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest7" id="folRegSIest7" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres7" id="folRegSIres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres7" id="folRegSIres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres7" id="folRegSIres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres7" id="folRegSIres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P7</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod7" name="folRegSItipod7" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Verbal</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 8Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">8</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest8" id="folRegSIest8" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres8" id="folRegSIres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres8" id="folRegSIres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres8" id="folRegSIres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres8" id="folRegSIres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P8</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegSItipod8" id="folRegSItipod8" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Textual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 9Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">9</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegSIest9" id="folRegest9" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegSIres9" id="folRegSIres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegSIres9" id="folRegSIres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegSIres9" id="folRegSIres9"type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegSIres9" id="folRegSIres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																
+															</td>
+															<td>
+																
+															</td>
+														</tr>
+
+														<tr><!-- 10Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-inverse">10</span>
+																
+															</td>
+															<td colspan="2" style="text-align:right">
+																<label class="pos-rel">
+																<span  class="label label-lg label-inverse arrowed-right">Totais</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegSIest10i" id="folRegSIest10i" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegSIest10e" id="folRegSIest10e" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegSIest10md" id="folRegSIest10md" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegSIest10nd" id="folRegSIest10nd" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																
+															</td>
+															<td>
+														
+															</td>
+														</tr>
+
+													</tbody>
+
+												</table>
+											</div>
+													
+																								
+											</div>
 										</div>
 									</div>
-									
-									<div class="col=xs=12">
-										<hr>
+								</div>				
+								<div class="col-xs-6 col-sm-6" name="d1" id="d1"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-rss bigger-110"></i>
+												Registro Duplo - Esquerda</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												
+												<div>
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+													<thead>
+														<tr>
+															<th class="center">Tent</th>
+															<th>RA</th>
+															<th>Estímulo</th>
+															<th colspan="4">Resultado</th>
+															<th>Passo D</th>
+															<th>Tipo D</th>														
+														</tr>
+													</thead>
+													<tbody>
+														<tr><!-- 1Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">1</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest1" id="folRegDEest1" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres1" id="folRegDEres1"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres1" id="folRegDEres1"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<inputname="folRegDEres1" id="folRegDEres1" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres1" id="folRegDEres1" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P1</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod1" id="folRegDEtipod1" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Física</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 2Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">2</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest2" id="folRegDEest2" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres2" id="folRegDEres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres2" id="folRegDEres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres2" id="folRegDEres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres2" id="folRegDEres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P2</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod2" id="folRegDEtipod2" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Gestual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 3Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">3</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest3" id="folRegDEest3" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres3" id="folRegDEres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres3" id="folRegDEres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres3" id="folRegDEres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres3" id="folRegDEres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P3</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod3" id="folRegDEtipod3"type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Ecóica</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 4Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">4</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest4" id="folRegDEest4" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres4" id="folRegDEres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres4" id="folRegDEres4"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres4" id="folRegDEres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres4" id="folRegDEres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P4</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod4" id="folRegDEtipod4" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Visual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 5Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">5</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest5" id="folRegDEest5" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres5" id="folRegDEres5"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres5" id="folRegDEres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres5" id="folRegDEres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres5" id="folRegDEres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P5</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod5" id="folRegDEtipod5" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 6Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">6</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest6" id="folRegDEest6" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres6" name="folRegDEres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres6" name="folRegDEres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres6" name="folRegDEres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres6" name="folRegDEres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P6</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod6" id="folRegDEtipod6" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Modelação</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 7Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">7</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest7" id="folRegDEest7" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres7" id="folRegDEres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres7" id="folRegDEres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres7" id="folRegDEres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres7" id="folRegDEres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P7</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod7" name="folRegDEtipod7" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Verbal</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 8Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">8</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest8" id="folRegDEest8" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres8" id="folRegDEres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres8" id="folRegDEres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres8" id="folRegDEres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres8" id="folRegDEres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P8</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDEtipod8" id="folRegDEtipod8" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Textual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 9Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">9</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															<td>
+																<div>
+																	<input name="folRegDEest9" id="folRegest9" type="text" />
+																</div>
+															</td>
+															<td>
+																<input name="folRegDEres9" id="folRegDEres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDEres9" id="folRegDEres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDEres9" id="folRegDEres9"type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDEres9" id="folRegDEres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																
+															</td>
+															<td>
+																
+															</td>
+														</tr>
+
+														<tr><!-- 10Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-inverse">10</span>
+																
+															</td>
+															<td colspan="2" style="text-align:right">
+																<label class="pos-rel">
+																<span  class="label label-lg label-inverse arrowed-right">Totais</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDEest10i" id="folRegest10i" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDEest10e" id="folRegest10e" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDEest10md" id="folRegestmd10" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDEest10nd" id="folRegest10nd" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																
+															</td>
+															<td>
+														
+															</td>
+														</tr>
+
+													</tbody>
+												</table>
+											</div>
+																								
+											</div>
+										</div>
 									</div>
-									<div class="col-md-offset-3 col-md-12">
-										<button class="btn btn-info" name="acao" type="submit">
+								</div>
+
+								<div class="col-xs-6 col-sm-6" name="d2" id="d2"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-rss bigger-110"></i>
+												Registro Duplo - Direita</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												
+												<div>
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+													<thead>
+														<tr>
+															<th class="center">Tent</th>
+															<th>RA</th>
+															<th colspan="4">Resultado</th>
+															<th>Passo D</th>
+															<th>Tipo D</th>														
+														</tr>
+													</thead>
+
+													<tbody>
+														<tr><!-- 1Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">1</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres1" id="folRegDDres1"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres1" id="folRegDDres1"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres1" id="folRegDDres1"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres1" id="folRegDDres1" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P1</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod1" id="folRegDDtipod1" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Física</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 2Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">2</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres2" id="folRegDDres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres2" id="folRegDDres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres2" id="folRegDDres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres2" id="folRegDDres2" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P2</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod2" id="folRegDDtipod2" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Gestual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 3Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">3</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres3" id="folRegDDres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres3" id="folRegDDres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres3" id="folRegDDres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres3" id="folRegDDres3" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P3</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod3" id="folRegDDtipod3"type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Ecóica</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 4Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">4</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres4" id="folRegDDres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres4" id="folRegDDres4"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres4" id="folRegDDres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres4" id="folRegDDres4" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P4</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod4" id="folRegDDtipod4" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Visual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 5Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">5</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres5" id="folRegDDres5"  type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres5" id="folRegDDres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres5" id="folRegDDres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres5" id="folRegDDres5" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P5</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod5" id="folRegDDtipod5" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 6Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">6</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres6" name="folRegDDres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres6" name="folRegDDres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres6" name="folRegDDres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres6" name="folRegDDres6" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P6</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod6" id="folRegDDtipod6" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Modelação</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 7Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-purple">7</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres7" id="folRegDDres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres7" id="folRegDDres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres7" id="folRegDDres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres7" id="folRegDDres7" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P7</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod7" name="folRegDDtipod7" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Verbal</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 8Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">8</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres8" id="folRegDDres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres8" id="folRegDDres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres8" id="folRegDDres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres8" id="folRegDDres8" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																<span class="label label-lg label-pink arrowed-right">P8</span>
+																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folRegDDtipod8" id="folRegDDtipod8" type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Textual</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+
+														<tr><!-- 9Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-gray">9</span>
+																
+															</td>
+															<td>
+																<label class="pos-rel">
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDres9" id="folRegDDres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-danger arrowed-in">I</span>
+															</td>
+															<td>
+																<input name="folRegDDres9" id="folRegDDres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-alert arrowed-in">E</span>
+															</td>
+															<td>
+																<input name="folRegDDres9" id="folRegDDres9"type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-yellow arrowed-in">+d</span>
+															</td>
+															<td>
+																<input name="folRegDDres9" id="folRegDDres9" type="radio" class="ace">
+																<span class="lbl"></span>
+																<span class="label label-success arrowed-in">-d</span>
+															</td>
+															<td>
+																
+															</td>
+															<td>
+																
+															</td>
+														</tr>
+
+														<tr><!-- 10Reg -->
+															<td class="center">
+																
+																	<span class="badge badge-inverse">10</span>
+																
+															</td>
+															<td colspan="2" style="text-align:right">
+																<label class="pos-rel">
+																<span  class="label label-lg label-inverse arrowed-right" >Totais</span>
+																</label>
+															</td>
+															
+															<td>
+																<input name="folRegDDest10i" id="folRegest10i" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDDest10e" id="folRegest10e" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDDest10md" id="folRegestmd10" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																<input name="folRegDDest10nd" id="folRegest10nd" type="text"  style="width: 25%;"/>
+																
+															</td>
+															<td>
+																
+															</td>
+															<td>
+														
+															</td>
+														</tr>
+
+													</tbody>
+												</table>
+											</div>
+																								
+											</div>
+										</div>
+									</div>
+								</div>														
+
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
+
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>
 									</div>
-								</div>							
+								</div>
 							</form>
-						</div>
-					</div>
-				</div><!-- /.main-container -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
 			</div><!-- /.main-content -->
-		</div>
+		</div><!-- /.main-container -->
 	</body>
 </html>

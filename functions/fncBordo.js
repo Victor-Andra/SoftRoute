@@ -28,7 +28,6 @@ const Escola = mongoose.model("tb_escola")
 
 module.exports = {
     listaBordo(req, res){
-        let convs = new Array();
         console.log('listando Diários de Bordo')
         Bordo.find().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
@@ -38,10 +37,8 @@ module.exports = {
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                         console.log("Listagem Realizada Usuário!")
-                            Escola.find().then((escola) =>{
-                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome    
-                                res.render('area/bordo/bordoLis', {Bordos: bordo, escolas: escola, Usuarios: usuario, Benes: bene})
-        })})})}).catch((err) =>{
+                                res.render('area/bordo/bordoLis', {Bordos: bordo, terapeutas: terapeuta, Benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
@@ -49,19 +46,14 @@ module.exports = {
     },
 
     carregaBordo(req,res){
-        Conv.find().then((conv)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                            Escola.find().then((escola) =>{
-                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome    
-                                    res.render("area/bordo/bordoCad", {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})})}).catch((err) =>{
+                                res.render("area/bordo/bordoCad", {terapeutas: terapeuta, benes: bene})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
             res.redirect('admin/erro')
