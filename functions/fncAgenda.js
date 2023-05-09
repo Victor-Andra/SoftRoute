@@ -124,7 +124,7 @@ module.exports = {
         }
         let ano = data.toString().substring(6,10);
         let dt = new Date(ano,mesformat,dia,0,0,0,0)
-        dt.setUTCHours(0);
+        dt.setHours(0);
         dt.setMinutes(0);
         dt.setSeconds(0);
         return dt;
@@ -156,10 +156,10 @@ module.exports = {
         let sex = new Date();
         //seg.setUTCDate(seg.getUTCDate() - 15);
         //sex.setUTCDate(sex.getUTCDate() - 15);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -288,10 +288,10 @@ module.exports = {
         })
         //seg.setUTCDate(seg.getUTCDate() - 22);
         //sex.setUTCDate(sex.getUTCDate() - 22);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -762,10 +762,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -1265,10 +1265,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -1479,10 +1479,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -2022,10 +2022,10 @@ module.exports = {
         let beneConvid;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -2537,10 +2537,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("req.body.dataFinal:"+req.body.dataFinal);
@@ -3061,10 +3061,10 @@ module.exports = {
         let beneConvid;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -3576,10 +3576,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -4088,10 +4088,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -4588,11 +4588,11 @@ module.exports = {
         let beneConvid;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         seg.setFullYear(2020);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         sex.setFullYear(2020);
@@ -4770,10 +4770,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("req.body.dataFinal:"+req.body.dataFinal);
@@ -4966,11 +4966,11 @@ module.exports = {
         let beneConvid;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         seg.setFullYear(2020);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         sex.setFullYear(2020);
@@ -5066,10 +5066,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("req.body.dataFinal:"+req.body.dataFinal);
@@ -5259,10 +5259,10 @@ module.exports = {
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
         let idsAgendasEx = [];
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -5427,10 +5427,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -5923,10 +5923,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -6427,86 +6427,57 @@ module.exports = {
         let quinta;
         let sexta;
         let seg = new Date();
-        let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setSeconds(0); 
         seg.setMinutes(0);
-        seg.setSeconds(0);
-        sex.setUTCHours(23);
-        sex.setMinutes(59);
+        seg.setUTCHours(0);
+
+        let sex = new Date();
         sex.setSeconds(59);
+        sex.setMinutes(59);
+        sex.setUTCHours(23);
+
         let hoje;
-        switch(seg.getDay()){
+        let diaSemana = new Date();
+        diaSemana.setSeconds(0);
+        diaSemana.setMinutes(0);
+        diaSemana.setHours(0);
+
+        diaSemana.setDate(diaSemana.getDate()+1)
+        switch (seg.getUTCDay()){
             case 0://DOM
                 hoje = "dom";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() + 1);
                 break;
             case 1://SEG
                 hoje = "seg";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() + 4);
                 break;
             case 2://TER
                 hoje = "ter";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 1);
                 break;
             case 3://QUA
                 hoje = "qua";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 2);
                 break;
             case 4://QUI
                 hoje = "qui";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 3);
                 break;
             case 5://SEX
                 hoje = "sex";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 4);
                 break;
             case 6://SAB
                 hoje = "sab";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 5);
                 break;
             default:
                 hoje = "dom";
+                diaSemana.setUTCDate(diaSemana.getUTCDate() - 6);
                 break;
         }
-        console.log("HOJE:"+hoje)
-        /*
-        switch (seg.getUTCDay()){
-            case 0://DOM
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
-            case 1://SEG
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 4);
-                break;
-            case 2://TER
-                dtFill = {dia: this.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
-                break;
-            case 3://QUA
-                dtFill = {dia: this.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
-                break;
-            case 4://QUI
-                dtFill = {dia: this.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
-                break;
-            case 5://SEX
-                dtFill = {dia: this.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 4);
-                break;
-            case 6://SAB
-                seg.setUTCDate(seg.getUTCDate() - 5);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() - 1);
-                break;
-            default:
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
-        }
-        let agora = seg.toISOString();
-        let depois = sex.toISOString();
-        */
-        let diaSemana = seg;
+        
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
@@ -6515,10 +6486,11 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
-        Agenda.find({ agenda_data: { $gte : seg, $lte:  sex }, agenda_usuid : idTerapeuta }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : seg.toISOString(), $lte:  sex.toISOString() }, agenda_usuid : idFiltro }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            //console.log(agenda)
+            //console.log(agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -6822,10 +6794,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         
@@ -7151,10 +7123,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -7650,10 +7622,10 @@ module.exports = {
         let sex = new Date(req.body.dataFinal);
         //console.log("seg dtf: "+seg)
         //console.log("sex dtf: "+sex)
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg aft: "+seg)
@@ -8144,10 +8116,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -8639,10 +8611,10 @@ module.exports = {
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -9133,10 +9105,10 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -9251,7 +9223,7 @@ module.exports = {
     },
     filtraAgendaLRefatorado(req,res){//FiltraAgendaFiltroRefatorado
         let dtTemp = new Date(req.body.dataFinal);
-        dtTemp.setUTCHours(0);
+        dtTemp.setHours(0);
         dtTemp.setMinutes(0);
         dtTemp.setSeconds(0);
         let dtFill;
@@ -9267,10 +9239,10 @@ module.exports = {
 
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg:"+seg)
@@ -9389,10 +9361,10 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -9505,7 +9477,7 @@ module.exports = {
     },
     filtraAgendaL(req,res){//FiltraAgendaFiltro
         let dtTemp = new Date(req.body.dataFinal);
-        dtTemp.setUTCHours(0);
+        dtTemp.setHours(0);
         dtTemp.setMinutes(0);
         dtTemp.setSeconds(0);
         let dtFill;
@@ -9521,10 +9493,10 @@ module.exports = {
 
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg:"+seg)
@@ -10158,10 +10130,10 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
@@ -10725,10 +10697,10 @@ module.exports = {
         let data;
         let hor;
         let min;
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg:"+seg)
@@ -11726,13 +11698,13 @@ module.exports = {
         let dataaux;
         let dataIni = new Date(this.formataData(req.body.data));
         
-        dataIni.setUTCHours(0);
+        dataIni.setHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
         dataIni = dataIni.toISOString();
         let dataFim = new Date(this.formataData(req.body.data));
         
-        dataFim.setUTCHours(23);
+        dataFim.setHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
         dataFim = dataFim.toISOString();
@@ -11773,13 +11745,13 @@ module.exports = {
 
         let dataaux;
         let dataIni = new Date(req.body.data);//deve retornar uma segunda-feira
-        dataIni.setUTCHours(0);
+        dataIni.setHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
         dataIni = dataIni.toISOString();
         let dataFim = new Date(req.body.data);
         
-        dataFim.setUTCHours(23);
+        dataFim.setHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
         dataFim.setDate(dataFim.getDate()+4)//+4 dias na segunda-feira para chegar a sexta
@@ -11998,10 +11970,10 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
         let agendacreTes;
         let agendadebTes;
         let temAgendaSub;
-        seg.setUTCHours(0);
+        seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setUTCHours(23);
+        sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
         //console.log("seg:"+seg)

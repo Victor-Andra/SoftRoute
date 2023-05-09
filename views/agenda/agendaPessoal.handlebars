@@ -79,6 +79,21 @@
 				} catch(err){
 					console.log(err)
 				}
+				/*
+				//ajustar, so deleta 1 dia por vez e ainda é esquisito
+				let diaDeHoje = document.getElementById("hoje").value;
+				console.log("diaDeHoje:"+diaDeHoje);
+				let tabela = document.getElementsByName("tabela");
+				tabela.forEach((cell)=>{
+					let id = cell.id;
+                    //console.log("id:"+id);
+					if(id.includes(diaDeHoje)){
+						cell.display="";
+					} else {
+						document.getElementById(id).remove();
+					}
+				})
+				*/
 			}
 			function pintaAgenda(val, motivo){
 				switch (motivo) {
@@ -210,85 +225,58 @@
 											</tr>
 											<tr role="row">
 												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-												{{#compareString hoje.hoje "seg"}}
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "ter"}}
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qua"}}
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qui"}}
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "sex"}}
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
-												{{/compareString}}
+												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
+												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
+												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
+												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
+												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
 											</tr>
 											<tr role="row">	
 												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-												{{#compareString hoje.hoje "seg"}}
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "ter"}}
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qua"}}
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qui"}}
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th style="width: 25px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												{{/compareString}}
-												{{#compareString hoje.hoje "sex"}}
-												<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												{{/compareString}}
+												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thseg3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thter3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqua3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqui3" name="tabela" style="width: 25px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thsex3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 											</tr>
 										</thead>
 										{{#each horaages}}
 										<tbody>
 											<tr role="row" class="odd">
 												<td style="width: 50px;">{{horaage_hora}}</td>
-												{{#compareString hoje.hoje "seg"}}
-												<td id="horasegSalaId_{{horaage_hora}}"></td>
-												<td id="horasegBeneId_{{horaage_hora}}"></td>
-												<td id="horasegAcaoId_{{horaage_hora}}"></td>
-												{{/compareString}}
-												{{#compareString hoje.hoje "ter"}}
-												<td id="horaterSalaId_{{horaage_hora}}"></td>
-												<td id="horaterBeneId_{{horaage_hora}}"></td>
-												<td id="horaterAcaoId_{{horaage_hora}}"></td>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qua"}}
-												<td id="horaquaSalaId_{{horaage_hora}}"></td>
-												<td id="horaquaBeneId_{{horaage_hora}}"></td>
-												<td id="horaquaAcaoId_{{horaage_hora}}"></td>
-												{{/compareString}}
-												{{#compareString hoje.hoje "qui"}}
-												<td id="horaquiSalaId_{{horaage_hora}}"></td>
-												<td id="horaquiBeneId_{{horaage_hora}}"></td>
-												<td id="horaquiAcaoId_{{horaage_hora}}"></td>
-												{{/compareString}}
-												{{#compareString hoje.hoje "sex"}}
-												<td id="horasexSalaId_{{horaage_hora}}"></td>
-												<td id="horasexBeneId_{{horaage_hora}}"></td>
-												<td id="horasexAcaoId_{{horaage_hora}}"></td>
-												{{/compareString}}
+												<td name="tabela" id="horasegSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexAcaoId_{{horaage_hora}}"></td>
 											</tr>
 										</tbody>
 										{{/each}}
 									</table>
 								</div>
+							</div>
+							<div id="ocultaIds" class="hidden">
+								<input id="hoje" name="hoje" value="{{hoje}}" />
 							</div>
 							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert">

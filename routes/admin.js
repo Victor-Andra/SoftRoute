@@ -103,6 +103,12 @@ const mappClass = require("../models/mapp")
 const Mapp = mongoose.model("tb_mapp")
 const fncMapp = require("../functions/fncMapp")
 
+//ABLLS-R
+const abllsrClass = require("../models/abllsr")
+const Abllsr = mongoose.model("tb_abllsr")
+const fncAbllsr = require("../functions/fncAbllsr")
+
+
 //Laudo
 const evolClass = require("../models/evol")
 const Evol = mongoose.model("tb_evol")
@@ -321,8 +327,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
 
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 900000)/*, httpOnly: true */});//comentado, paleativo
-        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 900000)/*, httpOnly: true */});//comentado, paleativo
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
         
         switch (perfilId){
             case "62421801a12aa557219a0fb9":
@@ -1197,6 +1203,32 @@ router.get('/area/mapp/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 //Deleta Exclui o Mapp Selecionado
 router.get('/area/mapp/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncMapp.deletaMapp(req, res);
+})
+
+//Menu ABLLS-R ** Area Tecnicos   
+//Carrega Cadastro de Mapp
+router.get('/area/abllsr/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
+    fncAbllsr.carregaAbllsr(req, res);
+})
+//Adiciona Registro de Mapp
+router.post('/area/abllsr/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncAbllsr.cadastraAbllsr(req,res);
+})
+//Carrega o Mapp Selecionado para Edição
+router.get('/area/abllsr/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncAbllsr.carregaAbllsr(req, res);
+})
+//atualiza o Mapp Editado
+router.get('/area/abllsr/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncAbllsr.atualizaAbllsr(req, res);
+})
+//Lista Todos os Mapss
+router.get('/area/abllsr/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncAbllsr.listaAbllsr(req, res);
+})
+//Deleta Exclui o Mapp Selecionado
+router.get('/area/abllsr/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+    fncAbllsr.deletaAbllsr(req, res);
 })
 
 //Menu Sonda ** Area Tecnicos e ABA 
