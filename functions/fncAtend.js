@@ -23,6 +23,7 @@ const Conv = mongoose.model("tb_conv")
 const Convcre = mongoose.model("tb_convcre")
 const Convdeb = mongoose.model("tb_convdeb")
 const Credit = mongoose.model("tb_credit")
+const Debit = mongoose.model("tb_debit")
 const Tabil = mongoose.model("tb_tabil")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
@@ -157,23 +158,23 @@ module.exports = {
     },
     deletaAtend(req, res){
         Atend.findOne({_id: req.params.id}).then((a)=>{
-            creditClass.find({credit_atendnum: a.atend_num}).then((cre)=>{
+            Credit.find({credit_atendnum: a.atend_num}).then((cre)=>{
                 cre.forEach((c)=>{
-                    creditClass.deleteOne({_id: c._id}).catch((err) =>{
+                    Credit.deleteOne({_id: c._id}).catch((err) =>{
                         console.log(err)
                         res.render('admin/erro')
                     })
                 })
-                debitClass.find({debit_atendnum: a.atend_num}).then((deb)=>{
+                Debit.find({debit_atendnum: a.atend_num}).then((deb)=>{
                     deb.forEach((d)=>{
-                        debitClass.deleteOne({_id: d._id}).catch((err) =>{
+                        Debit.deleteOne({_id: d._id}).catch((err) =>{
                             console.log(err)
                             res.render('admin/erro')
                         })
                     })
-                    tabilClass.find({tabil_atendnum: a.atend_num}).then((tab)=>{
+                    Tabil.find({tabil_atendnum: a.atend_num}).then((tab)=>{
                         tab.forEach((t)=>{
-                            tabilClass.deleteOne({_id: t._id}).catch((err) =>{
+                            Tabil.deleteOne({_id: t._id}).catch((err) =>{
                                 console.log(err)
                                 res.render('admin/erro')
                             })
@@ -244,6 +245,7 @@ module.exports = {
         })
     },
     listaAtend(req, res){
+        
         let fulldate;
         let seg = new Date();
         let sex = new Date();
@@ -1444,3 +1446,32 @@ module.exports = {
                         })
                     },
                        */
+
+
+                    /*
+                    //deleta mes atend
+                    let segr = new Date();
+        let sexr = new Date();
+        segr.setHours(0);
+        segr.setMinutes(0);
+        segr.setSeconds(0);
+        sexr.setHours(23);
+        sexr.setMinutes(59);
+        sexr.setSeconds(59);
+        segr.setUTCDate(1);
+        sexr.setUTCDate(31);
+        console.log("segr"+segr)
+        console.log("sexr"+sexr)
+        Atend.find({atend_atenddata: { $gte : segr.toISOString(), $lte: sexr.toISOString() }}).then((a)=>{
+            a.forEach((at)=>{
+                Atend.findByIdAndDelete(at._id, function (err, docs) {
+                    if (err){
+                        console.log(err)
+                    }else{
+                        console.log("DETETED!");
+                    }
+                });
+            })
+            console.log("END!!!!!!!!!!!!!!!!!!");
+        })
+                    */
