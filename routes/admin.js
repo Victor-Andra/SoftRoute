@@ -139,6 +139,24 @@ const natClass = require("../models/nat")
 const Nat = mongoose.model("tb_nat")
 const fncNat = require("../functions/fncNat")
 
+//CARS - ABA
+const carsClass = require("../models/cars")
+const Cars = mongoose.model("tb_cars")
+const fncCars = require("../functions/fncCars")
+
+
+//ATA - ABA
+const ataClass = require("../models/ata")
+const Ata = mongoose.model("tb_ata")
+const fncAta = require("../functions/fncAta")
+
+
+//ATEC - ABA
+const atecClass = require("../models/atec")
+const Atec = mongoose.model("tb_atec")
+const fncAtec = require("../functions/fncAtec")
+
+
 //NotaSup
 const notasupClass = require("../models/notasup")
 const Notasup = mongoose.model("tb_notasup")
@@ -323,13 +341,13 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let perfilId;
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
-        console.log(usu)
+        //console.log(usu);
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
 
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
-        
+        /*
         switch (perfilId){
             case "62421801a12aa557219a0fb9":
                 //Admin
@@ -360,7 +378,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                 res.redirect("/menu/admin/erro")
                 break;
         }
-        res.redirect("/menu/branco")
+        */
+        res.redirect("/menu/branco");
         /*
         if(lvl == 0){
             res.redirect("/menu/branco")
@@ -1284,6 +1303,39 @@ router.get('/area/aba/nat/natcad', fncGeral.IsAuthenticated, (req,res) =>{//dire
 //Lista NAT por Tipo, Beneficiário. Tecnico, Medico e data
 router.get('/area/aba/nat/natlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncNat.listaNat(req, res);
+})
+
+//Menu ATEC ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAtec.carregaAtec(req, res);
+})
+
+//Lista ATEC por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAtec.listaAtec(req, res);
+})
+
+//Menu ATA ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAta.carregaAta(req, res);
+})
+
+//Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAta.listaAta(req, res);
+})
+
+//Menu CARS ** Area Tecnicos e ABA 
+//Carrega Cadastro
+router.get('/area/aba/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncCars.carregaCars(req, res);
+})
+
+//Lista CARS por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/aba/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncCars.listaCars(req, res);
 })
 
 //Menu Notasup ** Area Tecnicos e ABA 

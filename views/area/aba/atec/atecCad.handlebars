@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Escala ATEC</title>
+		<script type="text/javascript">
+			
+			
+		
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">ATEC – ESCALA DE AVALIAÇÃO DE TRatecMENTO DO AUTISMO</a>
+							</li>
+
+							<li class="active"> - ABA</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/atec/add" method="POST">
+
+								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												
+												Cabeçalho Escala ATEC</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" datec-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" datec-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-6 col-sm-6">
+														<label>Beneficiário</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select name="atecBeneid" id="atecBeneid" class="chosen-select" datec-placeholder="Escolha..." >
+																	{{#each Benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-3 col-sm-3">
+														<label for="id-date-picker-1">Sexo</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<select name="atecBenesexo" id="atecBenesexo" class="chosen-select" datec-placeholder="Escolha..."value="-" >
+																		<option value="-">-</option>
+																		<option value="F">Feminino</option>
+																		<option value="M">Masculino</option>
+																</select>
+															</div>
+														</div>
+													</div>	
+													<div class="col-xs-3 col-sm-3">
+														<label for="id-date-picker-1">Datec Nascimento</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="atecdatecnasc" id="atecdatecnasc" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>	
+													<div class="col-xs-3 col-sm-3">
+														<label for="id-date-picker-1">Idade</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="atecidade" id="atecidade" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>	
+													
+												</div>
+												
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Preenchido por:</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="atecpreenchido" id="atecpreenchido" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Parentesco</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="atecparen" id="atecparen" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">													
+													<div class="col-xs-12 col-sm-4">
+														<label>Técnico Acompanhante</label>
+														<div class="form-group">
+															<div class="col-sm-8">
+																<select name="atecterapeutaid" id="atecterapeutaid" class="chosen-select" datec-placeholder="Escolha..." >
+																	{{#each Terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>																								
+												</div>
+
+											</div>
+										</div>		
+									</div>
+									
+								</div>
+
+								<div class="col-xs-12" name="du" id="du"><!-- Pontuação -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												Pontuação</h4>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="row">
+															<div class="col-xs-12">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" datec-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			O ATEC (Autism Treatment Evaluation Checklist – Formulário para Avaliação de Tratecmentos do Autismo) é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indica a severidade dos sintomas e a redução progressiva dessa pontuação é um indicador de que as intervenções têm trazido melhoras no quadro. A pontuação do ATEC varia de 0 a 180, sendo que qualquer valor acima de 0 indica presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
+																		</div>
+																		
+																			<label> Informações iniciais adicionais </label>
+																			<div class="form-group">
+																				<div class="col-sm-12">
+																					<textarea type="text" name="abllsrInfoiniatec" id="abllsrInfoiniatec" row="3" placeholder="" class="form-control" ></textarea>
+																				</div>
+																			</div>
+																		<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																				<thead>
+																					<h5 class="widget-title bigger lighter">
+																						<i class="ace-icon fa fa-table"></i>
+																						Tabela ATEC
+																					</h5>
+																					<tr>
+																						<th >Sub-Escalas</th>
+																						<th >
+																							<span class="badge badge-danger">1ª Avaliação</span>
+																						</th>
+																						<th >
+																							<span class="badge badge-warning">2ª Avaliação</span>
+																						</th>
+																						<th >
+																							<span class="badge badge-success">3ª Avaliação</span>
+																						</th>
+																					</tr>
+																				</thead>
+
+																				<tbody>
+																					<tr><!-- 1Reg -->
+																						<td>
+																							<span>Fala/Linguagem/Comunicação</span>
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecfala1" id="abllsrAtecfala1" type="text" style="width:30px">
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecfala2" id="abllsrAtecfala2" type="text" style="width:30px">
+																						</td>
+																						<td>
+																							<input name="abllsrAtecfala3" id="abllsrAtecfala3" type="text"style="width:30px" >
+																						</td>
+																						
+																						
+																					</tr>
+																					<tr><!-- 2Reg -->
+																						<td>
+																							<span>Sociabilidade</span>
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsoc1" id="abllsrAtecsoc1" type="text" style="width:30px" >
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsoc2" id="abllsrAtecsoc2" type="text" style="width:30px">
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsoc3" id="abllsrAtecsoc3" type="text" style="width:30px">
+																						</td>
+																						
+																						
+																					</tr>
+																					<tr><!-- 3Reg -->
+																						<td>
+																							<span>Percepção sensorial/Cognitiva</span>
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsen1" id="abllsrAtecsen1" type="text" style="width:30px" >
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsen2" id="abllsrAtecsen2" type="text" style="width:30px">
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsen3" id="abllsrAtecsen3" type="text" style="width:30px">
+																						</td>
+																						
+																						
+																					</tr>
+																					<tr><!-- 4Reg -->
+																						<td>
+																							<span>Saúde/Aspectos físicos/Comportamentais</span>
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsau1" id="abllsrAtecsau1" type="text" style="width:30px">
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsau2" id="abllsrAtecsau2" type="text" style="width:30px">
+																						</td>
+																						<td>	
+																							<input name="abllsrAtecsau3" id="abllsrAtecsau3" type="text" style="width:30px">
+																						</td>
+																					</tr>
+																					
+																					
+																				</tbody>
+																			</table>	
+
+																	
+
+
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+								<div class="col-xs-12" name="du" id="du"><!-- I.	Fala / Linguagem/ Comunicação -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												<b>I.</b> Fala / Linguagem/ Comunicação</h4>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<button type="button" class="close" datec-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Por favor, marque na coluna que mais representa a frase de acordo com o que percebe no beneficiário:
+														</div>
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th colspan="1" >Id</th>
+																			<th colspan="1">Descrição</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Não Verdadeiro</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Mais ou menos</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Verdade</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 01AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">01.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Sabe o próprio nome</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 02AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">02.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Responde ao “Não” ou “Pare”</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 03AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">03.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Pode obedecer a certas ordens</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 04AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">04.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Consegue usar uma palavra por vez</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 05AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">05.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Consegue usar 2 palavras juntas</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>																																																					
+																		<tr><!-- 06AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">06.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Consegue usar 3 palavras juntas</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 07AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">07.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Sabe 10 ou mais palavras</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 08AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">08.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Consegue usar orações com 4 ou mais palavras</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 09AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">09.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Explica o que quer</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 10AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">10.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Faz perguntas com sentido</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 11AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">11.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Sua linguagem costuma ser relevante / com sentido</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 12AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">12.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Com frequência usa várias frases sucessivas</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 13AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">13.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Mantém uma conversa razoavelmente boa</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 14AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">14.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Tem capacidade normal de comunicação para sua idade</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12" name="du" id="du"><!-- II.	Sociabilidade -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												<b>II.</b> Sociabilidade</h4>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													<div class="col-xs-12">
+														
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th colspan="1">Id</th>
+																			<th colspan="1">Descrição</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Não Verdadeiro</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Mais ou menos</th>
+																			<th colspan="1" style="writing-mode: vertical-rl">Verdade</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 01AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">01.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Parece estar fechado em si mesmo. Não é possível interagir com ele/ela</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecSabenome1" id="atecSabenome1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 02AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">02.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não presta atenção nas pessoas</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecRespnaop1" id="atecRespnaop1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 03AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">03.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Mostra pouca ou nada de atenção quando falamos com ele</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="ateccertord1" id="ateccertord1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 04AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">04.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não é cooperativo e é resistente</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecUmaporvez1" id="atecUmaporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 05AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">05.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não tem contato ocular</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecConpalavra1" id="atecConpalavra1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>																																																					
+																		<tr><!-- 06AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">06.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Prefere que o deixem sozinho</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTresporvez1" id="atecTresporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 07AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">07.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não demonstra afeto</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecDezporvez1" id="atecDezporvez1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 08AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">08.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não cumprimenta os pais</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecOracao1" id="atecOracao1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 09AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">09.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Evita contato com outras personas</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecExplicaquer1" id="atecExplicaquer1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 10AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">10.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl">Não imita</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFazperg1" id="atecFazperg1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 11AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">11.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não gosta que lhe abracem ou acariciem</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecLinguarelev1" id="atecLinguarelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 12AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">12.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não compartilha / mostra coisas aos outros</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecFrasessuc1" id="atecFrasessuc1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 13AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">13.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não se despede fazendo tchau</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecMantemrelev1" id="atecMantemrelev1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 14AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">14.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Desagradável / desobediente</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 15AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">15.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Birras</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 16AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">16.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não tem amigos / companheiros.</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 17AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">17.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Sorri muito pouco.</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 18AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">18.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Insensível aos sentimentos dos outros.</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 19AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">19.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Não tem interesse em agradar os outros.</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 20AReg -->
+																			<td>
+																				<div>
+																					<span class="label label-info arrowed-in-right arrowed">20.</span>
+																				</div>
+																			</td>
+																			<td>
+																				<label>
+																					<span class="lbl"> Fica indiferente quando os pais vão embora, se distanciam.</span>
+																				</label>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<div class="radio">
+																					<label>
+																						<input name="atecTemcap1" id="atecTemcap1" type="radio" class="ace">
+																						<span class="lbl">&nbsp</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>

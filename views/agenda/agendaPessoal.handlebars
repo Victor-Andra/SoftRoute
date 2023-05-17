@@ -50,8 +50,8 @@
 									document.getElementsByName(tempId).forEach((ti)=>{
 										pintaAgenda(val, ti.value);
 									})
-									console.log("val")
-									console.log(val)
+									console.log("val");
+									console.log(val);
 									document.getElementById(id).append(val);
 								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
 									val = document.getElementById(valor).cloneNode(true);
@@ -68,32 +68,89 @@
 						document.getElementsByName(dia).forEach((e)=>{
 							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
 								let id = "hora"+e.id;//td para receber o append
-								console.log("id:"+id)
+								console.log("id:"+id);
 								let el = document.getElementById(e.id);//elemento da acao
-								console.log("el:"+el)
+								console.log("el:"+el);
 								document.getElementById(id).append(el);
 								//elemento td recebendo acao
 							}
 						})
 					})
 				} catch(err){
-					console.log(err)
+					console.log(err);
 				}
-				/*
+				
 				//ajustar, so deleta 1 dia por vez e ainda é esquisito
 				let diaDeHoje = document.getElementById("hoje").value;
 				console.log("diaDeHoje:"+diaDeHoje);
+
 				let tabela = document.getElementsByName("tabela");
+
 				tabela.forEach((cell)=>{
 					let id = cell.id;
-                    //console.log("id:"+id);
-					if(id.includes(diaDeHoje)){
+					//console.log("id:"+id);
+					//s.indexOf("oo") != -1
+					if(id.indexOf(diaDeHoje) != -1){
+						console.log("id = diaDeHoje");
+						console.log("id:"+id);
+						console.log("diaDeHoje:"+diaDeHoje);
 						cell.display="";
 					} else {
 						document.getElementById(id).remove();
 					}
 				})
-				*/
+				tabela.forEach((cell)=>{
+					let id = cell.id;
+					//console.log("id:"+id);
+					//s.indexOf("oo") != -1
+					if(id.indexOf(diaDeHoje) != -1){
+						console.log("id = diaDeHoje");
+						console.log("id:"+id);
+						console.log("diaDeHoje:"+diaDeHoje);
+						cell.display="";
+					} else {
+						document.getElementById(id).remove();
+					}
+				})
+				tabela.forEach((cell)=>{
+					let id = cell.id;
+					//console.log("id:"+id);
+					//s.indexOf("oo") != -1
+					if(id.indexOf(diaDeHoje) != -1){
+						console.log("id = diaDeHoje");
+						console.log("id:"+id);
+						console.log("diaDeHoje:"+diaDeHoje);
+						cell.display="";
+					} else {
+						document.getElementById(id).remove();
+					}
+				})
+				tabela.forEach((cell)=>{
+					let id = cell.id;
+					//console.log("id:"+id);
+					//s.indexOf("oo") != -1
+					if(id.indexOf(diaDeHoje) != -1){
+						console.log("id = diaDeHoje");
+						console.log("id:"+id);
+						console.log("diaDeHoje:"+diaDeHoje);
+						cell.display="";
+					} else {
+						document.getElementById(id).remove();
+					}
+				})
+				tabela.forEach((cell)=>{
+					let id = cell.id;
+					//console.log("id:"+id);
+					//s.indexOf("oo") != -1
+					if(id.indexOf(diaDeHoje) != -1){
+						console.log("id = diaDeHoje");
+						console.log("id:"+id);
+						console.log("diaDeHoje:"+diaDeHoje);
+						cell.display="";
+					} else {
+						document.getElementById(id).remove();
+					}
+				})
 			}
 			function pintaAgenda(val, motivo){
 				switch (motivo) {
@@ -210,6 +267,12 @@
 																<br>
 															</div>
 														</div>
+													</div>
+												</th>
+											</tr>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<div id="divAlertas">
 														<div class="col-xs-14 col-sm-5" style="padding-top: 2px;">
 															<div class="alert alert-warning">
 																<strong>

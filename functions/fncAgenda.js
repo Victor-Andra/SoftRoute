@@ -6426,6 +6426,7 @@ module.exports = {
         let quarta;
         let quinta;
         let sexta;
+        let hoje;
         let seg = new Date();
         seg.setSeconds(0); 
         seg.setMinutes(0);
@@ -6436,13 +6437,13 @@ module.exports = {
         sex.setMinutes(59);
         sex.setUTCHours(23);
 
-        let hoje;
         let diaSemana = new Date();
         diaSemana.setSeconds(0);
         diaSemana.setMinutes(0);
         diaSemana.setHours(0);
 
-        diaSemana.setDate(diaSemana.getDate()+1)
+        diaSemana.setDate(diaSemana.getDate()+1);
+
         switch (seg.getUTCDay()){
             case 0://DOM
                 hoje = "dom";
@@ -6477,7 +6478,6 @@ module.exports = {
                 diaSemana.setUTCDate(diaSemana.getUTCDate() - 6);
                 break;
         }
-        
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
@@ -12619,3 +12619,23 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
         })
     }, 
     */
+   /*
+        let aaa = new Date();
+        aaa.setDate(aaa.getDate()-4);
+        console.log("AAA:"+aaa);
+        let bbb = new Date();
+        bbb.setDate(bbb.getDate()+2);
+        console.log("BBB:"+bbb);
+        Agenda.find({agenda_data: { $gte : aaa, $lte:  bbb }}).then((del)=>{
+            console.log("del.length"+del.length);
+            del.forEach((item)=>{
+                Agenda.findByIdAndDelete(item._id, function (err, docs) {
+                    if (err){
+                        console.log(err)
+                    }else{
+                        console.log("DETETED!");
+                    }
+                });
+            })
+        })
+   */
