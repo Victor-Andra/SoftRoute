@@ -345,8 +345,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
 
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
-        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 2100000)/*, httpOnly: true */});//comentado, paleativo
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
         /*
         switch (perfilId){
             case "62421801a12aa557219a0fb9":

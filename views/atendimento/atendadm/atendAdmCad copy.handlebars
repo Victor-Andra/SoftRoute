@@ -82,17 +82,66 @@
 					document.getElementById("Extra").style.display = "";
 				}
 			}
+
 			function ajustaOption(){
 				document.getElementById("Padrão").style.display = "none";
 			}
+
 			function atualizaData(){
 				var hora = "00:00"
 				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
 				var datafmt = new Date(data);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();
 			}
+
 			function carregaBody(){
-				this.carregaValores();
+				document.getElementById("divPlus").style.display = "none";
+			}
+
+			function showPlus(){
+				console.log(document.getElementById("atendCategoria").value);
+				if(document.getElementById("atendCategoria").value === "Extra"){
+					document.getElementById("divPlus").style.display = "";
+				} else {
+					document.getElementById("divPlus").style.display = "none";
+				}
+			}
+
+			function addNewData(){
+				console.log("START");
+				let divDataHora = document.getElementById("divDataHora");
+				let qtd = document.getElementsByName("atenddata1").length+1;
+				console.log("QTD: "+qtd);
+				document.getElementById("atendData1").id = document.getElementById("atendData1").id.substring(0,(document.getElementById("atendData1").id.length-1))+qtd;
+				document.getElementById("atendHora1").id = document.getElementById("atendHora1").id.substring(0,(document.getElementById("atendHora1").id.length-1))+qtd;
+				document.getElementById("atendData1").name = document.getElementById("atendData1").name.substring(0,(document.getElementById("atendData1").name.length-1))+qtd;
+				document.getElementById("atendHora1").name = document.getElementById("atendHora1").name.substring(0,(document.getElementById("atendHora1").name.length-1))+qtd;
+				console.log(document.getElementById("atendData"));
+				//console.log(document.getElementById("atendData2").id);
+				let strng = "*" + document.getElementById("atendData1").id + "*";
+				console.log(document.getElementById("atendData1") != null);
+				let data = document.getElementById("atendData1");
+				console.log("data:"+data);
+				let cloneData = data.cloneNode(true);
+				console.log("data:"+cloneData);
+				let hora = document.getElementById("divAtendHora1");
+				let cloneHora = hora.cloneNode(true).innerHTML;
+				console.log("hora:"+hora);
+				console.log("hora:"+cloneHora);
+				hora.getElementById("atendHora").id = hora.getElementById("atendHora").id+qtd;
+				console.log("merda:"+cloneHora.getElementById("atendHora1").id);
+				//let br = document.getElementById("br").cloneNode(true);
+				let br = document.createElement("br");
+				console.log("PLUS");
+				let lbl = document.createElement("label");
+				let conteudo = document.createTextNode(" " + qtd + " ");
+				console.log("APPEND");
+				//divNova.appendChild(conteudoNovo);
+				divDataHora.append(data);
+				divDataHora.append(hora);
+				divDataHora.append(lbl);
+				divDataHora.append(br);
+				console.log("END");
 			}
 		</script>
 	</head>
@@ -137,51 +186,57 @@
 														<input type="text" id="atendUsuid" name="atendUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
 													</div>
 												</div>
-									
-														<label for="id-date-picker-1">Data Atendimento</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="atenddata" id="atenddata" type="date" onchange="javascript:atualizaData()" />
-																</div>
-															</div>
+												<div id="divPlus" class="row">
+													<div class="col-sm-4">
+														<div class="input-group">
+															<label>Copiar Atendimento</label>
+															<br>
+															<button style="width: 50px; height: 50px; float: left" type="button" class="close" data-dismiss="alert" onclick="javascript:addNewData();">
+																<i style="color:darkblue; font-size: 2em;" class="ace-icon fa fa-plus"></i>
+															</button>
 														</div>
-														<label for="id-date-picker-1">Hora Atendimento</label>
-														<div class="row">
-															<div class="col-sm-8">
-																<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
+													</div>
+												</div>
+												<label id="labelData" for="id-date-picker-1">Data/Hora Atendimento</label>
+												<div id="divData" class="row">
+													<div class="col-sm-4">
+														<div id="divDataHora" class="input-group">
+															<input name="atendData" id="atendData1" type="date" onchange="javascript:atualizaData()" />
+															<div id="divAtendHora1">
+																<select name="atendHora1" id="atendHora1" class="chosen-select" data-placeholder="Escolha..." >
 																	{{#each horaages}}
 																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																	{{/each}}
 																</select>
-															</div>
+															</div><label> 1 </label>
 														</div>
-														<label>Origem Atendimento</label>
-														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="atendOrg" name="atendOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																	<option value="Administrativo">Administrativo</option>
-																	<option value="Padrão">Padrão</option>
-																</select>
-															</div>
-														</div>
-														<label>Categoria</label>
-														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
-																	<option id="Apoio" value="Apoio">Apoio</option>
-																	<option id="Extra" value="Extra">Extra</option>
-																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="Glosa" value="Glosa">Glosa</option>
-																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
-																	<option id="Pais" value="Pais">Pais</option>
-																	<option id="Substituto" value="Substituto">Substituto</option>
-																	<option id="Supervisão" value="Supervisão">Supervisão</option>
-																</select>
-															</div>
-															<input type="text" name="tabilCategoria" id="tabilCategoria" class="hidden" value="Padrão"/>
-														</div>
-												
+													</div>
+												</div>
+												<label>Origem Atendimento</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select id="atendOrg" name="atendOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+															<option value="Administrativo">Administrativo</option>
+															<option value="Padrão">Padrão</option>
+														</select>
+													</div>
+												</div>
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()" onchange="javascript:showPlus()">
+															<option id="Apoio" value="Apoio">Apoio</option>
+															<option id="Extra" value="Extra">Extra</option>
+															<option id="Falta" value="Falta">Falta</option>
+															<option id="Glosa" value="Glosa">Glosa</option>
+															<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+															<option id="Pais" value="Pais">Pais</option>
+															<option id="Substituto" value="Substituto">Substituto</option>
+															<option id="Supervisão" value="Supervisão">Supervisão</option>
+														</select>
+													</div>
+													<input type="text" name="tabilCategoria" id="tabilCategoria" class="hidden" value="Padrão"/>
+												</div>
 												<label>Beneficiário</label>
 												<div class="hidden">
 													{{#each benes}}
@@ -222,6 +277,7 @@
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select id="atendSalaid" name="atendSalaid" class="chosen-select" data-placeholder="Escolha...">
+																<!--<option value="-">-</option> -->
 																{{#each salas}}
 																	<option value="{{_id}}">{{sala_nome}}</option>
 																{{/each}}

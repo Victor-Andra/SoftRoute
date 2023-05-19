@@ -10825,6 +10825,12 @@ module.exports = {
                                                 }
                                             })
             
+                                            Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
+
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Apoio",//Para quando o convenio não paga o que deve
@@ -10898,6 +10904,12 @@ module.exports = {
                                                     }
                                                 }
                                             })
+
+                                            Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -10910,10 +10922,10 @@ module.exports = {
                                                 atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
                                                 atend_terapiaid : a.agenda_terapiaid,//Musica
                                                 atend_salaid : a.agenda_salaid,//
-                                                atend_valorcre : "0,00",//Convenio não paga
+                                                atend_valorcre : convcreval,//Convenio não paga
                                                 atend_valordeb : convdebval,//Paga ao musico
-                                                //atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
-                                                //atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                //atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
+                                                //atend_mergeterapiaid : a.agenda_terapiaid,//ABA
                                                 atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
                                                 atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
                                                 atend_num : nextNum,
@@ -11021,6 +11033,12 @@ module.exports = {
                                                         convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
                                                         convdebval = cdeb.convdeb_valor;
                                                     }
+                                                }
+                                            })
+
+                                            Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
                                                 }
                                             })
 
@@ -11234,6 +11252,12 @@ module.exports = {
                                                     }
                                                 }
                                             })
+
+                                            Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -11247,11 +11271,11 @@ module.exports = {
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//Convenio não paga
-                                                atend_valordeb : convdebval,//Paga ao musico
+                                                atend_valordeb : "0,00",//Paga ao musico
                                                 atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
                                                 atend_mergeterapiaid : a.agenda_terapiaid,//ABA
                                                 atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                atend_mergevalordeb : convdebval,//Não paga ao outro Terapeuta
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
@@ -11307,6 +11331,12 @@ module.exports = {
                                                         convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
                                                         convdebval = cdeb.convdeb_valor;
                                                     }
+                                                }
+                                            })
+
+                                            Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
                                                 }
                                             })
             
@@ -11420,6 +11450,12 @@ module.exports = {
                                                     }
                                                 }
                                             })
+
+                                            Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -11494,6 +11530,12 @@ module.exports = {
                                                         convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
                                                         convdebval = cdeb.convdeb_valor;
                                                     }
+                                                }
+                                            })
+
+                                            Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
                                                 }
                                             })
             
@@ -11581,6 +11623,12 @@ module.exports = {
                                                 convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
                                                 convdebval = cdeb.convdeb_valor;
                                             }
+                                        }
+                                    })
+
+                                    Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                        if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                            convdebval = "0,00";
                                         }
                                     })
     

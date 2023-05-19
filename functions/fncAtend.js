@@ -32,6 +32,7 @@ const Sala = mongoose.model("tb_sala")
 //Funções auxiliares
 const fncCredit = require("../functions/fncCredit")
 const fncGeral = require("../functions/fncGeral")
+const fncAtendAdm = require("./fncAtendAdm")
 
 class RelAtend{
     constructor(
@@ -146,15 +147,15 @@ module.exports = {
                         //console.log(retornoCre)
                         //console.log(retornoDeb)
                         //console.log(retornoTab)
-                        if (retorno && retornoCre && retornoDeb && retornoTab){
-                            this.listaAtend(req,res);
-                        } else {
-                            res.render('admin/branco');
-                        }
                     })
                 })
             })
         })
+        if (retorno && retornoCre && retornoDeb && retornoTab){
+            fncAtendAdm.carregaAtendAdm(req,res);//atendcad
+        } else {
+            res.render('admin/branco');
+        }
     },
     deletaAtend(req, res){
         Atend.findOne({_id: req.params.id}).then((a)=>{
@@ -225,7 +226,6 @@ module.exports = {
         } catch(err1){
             //console.log(err1)
         }
-
     },
     carregaAtendEdi(req, res){
             Bene.find().then((bene)=>{
@@ -1475,3 +1475,27 @@ module.exports = {
             console.log("END!!!!!!!!!!!!!!!!!!");
         })
                     */
+
+        /*
+        recarregaAtendCad(req, res){
+        let atend = Atend.montaAtend(req,res);
+        console.log("Atend: ");
+        console.log(atend);
+        console.log("END Atend");
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                Sala.find().then((sala)=>{
+                    Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                    Atend.findById(req.params.id).then((atend) =>{
+                                        res.render('atendimento/atendEdi', { atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, salas: sala})
+        })})})})})}).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
+        })
+    },
+        */

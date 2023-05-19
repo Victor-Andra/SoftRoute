@@ -206,5 +206,30 @@ module.exports = {AtendModel,AtendSchema,
             console.log(err)
             return err;
         });
+    },
+    montaAtend(req,res){
+        const newAtend = new AtendModel({
+            atend_org : req.body.atendOrg,
+            atend_categoria : req.body.atendCategoria,
+            atend_beneid : req.body.atendBeneid,
+            atend_convid : req.body.atendConvid,
+            atend_usuid : req.body.atendUsuid,
+            atend_atenddata : req.body.atendAtenddata,
+            atend_atendhora : req.body.atendHora,
+            atend_terapeutaid : req.body.atendTerapeutaid,
+            atend_terapiaid : req.body.atendTerapiaid,
+            atend_salaid : req.body.atendSalaid,
+            atend_valorcre : req.body.atendValorcre,
+            atend_valordeb : req.body.atendValordeb,
+            atend_mergeterapeutaid : req.body.atendMergeTerapeutaid,
+            atend_mergeterapiaid : req.body.atendMergeTerapiaid,
+            atend_mergevalorcre : req.body.atendMergevalorcre,
+            atend_mergevalordeb : req.body.atendMergevalordeb,
+            atend_evolucao : req.body.atendEvolucao,
+            atend_num : req.body.nextNum,
+            atend_datacad : dataAtual.toISOString()
+        });
+
+        return newAtend;
     }
 };
