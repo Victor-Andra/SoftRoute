@@ -133,13 +133,86 @@
 				}
 			}
 			function carregaBody(){
-				trocaFiltroData()
+				trocaFiltroData();
 				trocaFilpessoa();
 				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+
+				}
+			}
+			function mostraDivCopia(nextNum){
+				document.getElementById("atualNextNum").value = nextNum;
+				document.getElementById("divCopiaAtend").style.display = "";
+				document.getElementById("divFormPesquisa").style.display = "none";
+			}
+			function ocultaDivCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+			}
+			function addCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+				document.getElementById("btnEnviarCopia").style.display = "";
+
+				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
+					let dat = new Date(document.getElementById('dataCopia').value+" 00:00:00.000Z");
+					console.log("dat:"+dat);
+					let mes = (dat.getUTCMonth()+1).toString();
+					console.log("mes:"+mes);
+					let dia = (dat.getUTCDate()).toString();
+					console.log("dia:"+dia);
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					console.log("fulldate:"+fulldate);
+					if(document.getElementById("temCopia").value == "false"){
+						document.getElementById("numCopia").value = document.getElementById("atualNextNum").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
+						document.getElementById("dtCopia").value = fulldate;
+						document.getElementById("temCopia").value = "true";
+					} else {
+						document.getElementById("numCopia").value = document.getElementById("numCopia").value+","+document.getElementById("atualNextNum").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
+						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
+					}
+				}
+			}
+			function enviarCopia(){
+				let form = document.getElementById("divFormPesquisa");
+				form.action = "/menu/atendimento/copiaAtends";
+				form.submit();
+			}
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				if(confirmado == true){
+					window.location.href=("/menu/atendimento/del/"+id);
+				}
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -155,8 +228,20 @@
 						<div class="alert alert-danger">{{texto}}{{error}}</div>
 					{{else}}
 					{{/each}}
+					<div class="hidden">
+						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+						<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
+						<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+						<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+						<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+					</div>
 					<div class="page-content"><!-- .page-content -->
-						<form class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
 							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
@@ -264,12 +349,43 @@
 								</div>
 								<div class="row">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-									<i class="ace-icon fa fa-search-plus "></i>
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									<button id="btnEnviarCopia" name="acaoCopiar" id="acaoCopiar" class="btn btn-xs btn-info" style="margin-left: 25px;display: none;" onclick="javascript:enviarCopia();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Realizar Cópias Marcadas
 									</button>
 								</div>
 								<hr>
 							</div>
+							<div class="hidden">
+								<input id="numCopia" name="numCopia" value="" />
+								<input id="dtCopia" name="dtCopia" value="" />
+								<input id="qtdCopia" name="qtdCopia" value="" />
+								<input id="temCopia" name="temCopia" value="false" />
+							</div>
 						</form>
+						<div id="divCopiaAtend" class="col-xs-12" class="row" style="display: none;">
+							<div id="divDataCopiaFil" class="col-xs-12 col-sm-2">
+								<div class="input-group">
+									<label>Data:&nbsp;</label>
+									<input style="height: 30px;" id="dataCopia" name="dataCopia" type="date" onchange="javascript:formataDataCopia();">
+								</div>
+							</div>
+							<label>Quantidade de Cópias:&nbsp;</label>
+							<input style="padding-left: 10px;" id="qtd" name="qtd" value="0" />
+							<button name="acaoAddCopia" id="acaoAddCopia" class="green btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:addCopia();">
+								<i class="ace-icon fa fa-search-plus "></i>
+								Adicionar Cópia
+							</button>
+							<button name="acaoOcultaCopia" id="acaoOcultaCopia" class="red btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:ocultaDivCopia({{_id}});">
+								<i class="ace-icon fa fa-window-close-o "></i>
+								Cancelar
+							</button>
+							<input id="atualNextNum" name="atualNextNum" class="hidden" />
+							<hr>
+						</div>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
@@ -348,8 +464,11 @@
 																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																<a class="red" name="acaoDel" id="acaoDel" href="/menu/atendimento/del/{{_id}}">
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar({{_id}});">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia({{atend_num}});">
+																	<i class="ace-icon fa fa-clone bigger-130"></i>
 																</a>
 															</div>
 															<div class="hidden-md hidden-lg">
@@ -503,8 +622,5 @@
 			
 			})
 		</script>
-	
-
 	</body>
-
 </html>

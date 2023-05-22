@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
+		<title>Relatório Analítico de Atendimento dos Terapeutas</title>
 		<style>
 			@media print {
                .noprint {
@@ -39,10 +39,10 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Relatório de Atendimentos por Beneficiário</li>
+							<li class="active">Relatório Analítico de Atendimento dos Terapeutas</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" action="/menu/atendimento/relatendbenes" method="POST">
+					<form role="form" action="/menu/atendimento/atendreltera/relatendteraanas" method="POST">
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
 							<ul class="breadcrumb">
 								<label>Período de:</label>
@@ -52,8 +52,8 @@
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" />
 								<label>Beneficiário: </label>
-								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each benes}}
+								<select style="height: 30px; width:300px;" name="relTeraid"  id="relTeraid" class="chosen-select" data-placeholder="Escolha...">
+									{{#each terapeutas}}
 										<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}
 								</select>

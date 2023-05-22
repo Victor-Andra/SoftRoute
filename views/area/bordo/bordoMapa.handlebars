@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
+		<title>Mapa dos Diários de Bordo</title>
 		<style>
 			@media print {
                .noprint {
@@ -36,13 +36,12 @@
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none">
 						<ul class="breadcrumb">
 							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
+								<i class="ace-icon fa fa-map"></i>
 							</li>
-							<li class="active">Relatório de Atendimentos por Beneficiário</li>
+							<li class="active">Mapa dos Diários de Bordo</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" action="/menu/atendimento/relatendbenes" method="POST">
+					<form role="form" action="/menu/bordo/carregaBordomapaFiltro" method="POST">
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
 							<ul class="breadcrumb">
 								<label>Período de:</label>
@@ -78,7 +77,7 @@
 										<div class="widget-header widget-header-large">
 											<h3 class="widget-title grey lighter">
 												<i class="ace-icon fa fa-leaf green"></i>
-												Atendimentos por Beneficiário
+												Mapa dos Diários de Bordo
 											</h3>
 										</div>
 									<div class="widget-body">

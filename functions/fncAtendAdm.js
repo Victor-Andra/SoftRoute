@@ -558,12 +558,6 @@ module.exports = {
                 //criar metodo atualiza cascata cre e deb
                 fncCredit.creditAtendEditar(req,res);
                 fncDebit.debitAtendEditar(req,res);
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resposta = err;
-                res.render('admin/erro')
-            }).finally(() =>{
                 if(resposta){
                     //Volta para a atend de listagem
                     fncAtend.listaAtend(req,res);
@@ -573,6 +567,13 @@ module.exports = {
                     console.log(resposta)
                     res.render('admin/erro')
                 }
+            }).catch((err) =>{
+                console.log("error1")
+                console.log(err)
+                resposta = err;
+                res.render('admin/erro')
+            }).finally(() =>{
+               
             })
         } catch(err1){
             console.log(err1)

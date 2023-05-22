@@ -24,21 +24,37 @@ const Terapia = mongoose.model("tb_terapia")
 const Escola = mongoose.model("tb_escola")
 
 //Funções auxiliares
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
 
+class BordoMapa{
+    constructor(
+        dt,
+        especialidade,
+        profissional,
+        escola
+        ){
+        this.dt = dt,
+        this.especialidade = especialidade,
+        this.profissional = profissional,
+        this.escola = escola
+    }
+}
 
 module.exports = {
     listaBordo(req, res){
         console.log('listando Diários de Bordo')
         Bordo.find().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
-                Bene.findById(req.params.id).then((bene) =>{
+                Bene.find().then((bene) =>{
                     bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                    console.log("Listagem Realizada bene!")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada Usuário!")
-                                res.render('area/bordo/bordoLis', {Bordos: bordo, terapeutas: terapeuta, Benes: bene})
-        })})}).catch((err) =>{
+                        Escola.find().then((escola) =>{
+                            escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
+                                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                                        console.log("Listagem Realizada Usuário!")
+                                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
@@ -46,21 +62,162 @@ module.exports = {
     },
 
     carregaBordo(req,res){
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/bordo/bordoCad", {terapeutas: terapeuta, benes: bene})
-        })}).catch((err) =>{
+        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                    Escola.find().sort({escola_nome: 1}).then((escola)=>{
+                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
+                                    res.render("area/bordo/bordoCad", {escolas: escola, terapeutas: terapeuta, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
             res.redirect('admin/erro')
         })
 
     },
+    carregaBordomapa(req,res){
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+            console.log("Listagem Realizada de Usuário")
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                    console.log("Listagem Realizada de beneficiarios")
+                    Escola.find().then((escola) =>{
+                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                            res.render("area/bordo/bordoMapa", {escolas: escola, terapeutas: terapeuta, benes: bene})
+        })})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+    carregaBordomapaFiltro(req,res){
+        let u;
+        let teraID;
+        let usuId;
+        let rel = [];
+        let dt;
+        
+        let bene_nome;
+        let terapiaAtend;
+        let terapeutaAtend;
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        let rab = new BordoMapa();//objeto para fazer push em BordoMapa
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let filtroBordoMapa= {bordo_beneid: req.body.bordoBeneid, bordo_datacad: { $gte: seg, $lte: sex}}
 
+        Atend.find(filtroBordomapa).then((at)=>{
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Bene.find().then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                        bene.some((b)=>{
+                            if((""+b._id) === (""+req.body.bordoBeneid)){
+                                bene_nome = b.bene_nome;
+                                return true;
+                            }
+                            return false;
+                        })
+                        Conv.findOne({_id: conv_id}).then((conv)=>{
+                            conv_nome = conv.conv_nome;
+                            at.sort(function(a, b) {
+                                let d1 = new Date(a.atend_atenddata);
+                                let d2 = new Date(b.atend_atenddata);
+                                d1.setHours(0);
+                                d1.setMinutes(0);
+                                d1.setSeconds(0);
+                                d2.setHours(0);
+                                d2.setMinutes(0);
+                                d2.setSeconds(0);
+                                if(d1 == d2){
+                                    return true;
+                                } else {
+                                    if(d1 < d2){
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            });
+                            at.forEach((atend)=>{
+                                rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                categorias = atend.atend_cartegoria
+                                switch (categorias){
+                                    case "Apoio":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Extra":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Falta":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid
+                                        terapeutaAtend = atend.atend_merdeterapeutaid;;
+                                        break;
+                                    case "Glosa":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Padrão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Pais":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Substituição":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    case "Supervisão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    default:
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                }
+                                rab.especialidade = terapiaAtend;
+                                rab.profissional = terapeutaAtend;
+
+                                rel.push(rab);
+                                rab = new BordoMapa();
+                            });
+                            res.render("area/bordo/bordoMapa", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome})
+                        })
+                    })
+                })
+            })
+        }).catch((err) =>{
+            console.log(err)
+        })
+    },
     carregaBordoedi(req,res){
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
@@ -73,7 +230,7 @@ module.exports = {
                             console.log("Listagem Realizada de beneficiarios")
                             Escola.find().then((escola) =>{
                                 escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    res.render("area/bordo/bordoEdi", {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene})
+                                    res.render("area/bordo/bordoEdi", {convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -84,9 +241,9 @@ module.exports = {
     cadastraBordo(req,res){
         console.log("chegou")
         let resultado
-        let resposta = new Resposta()
+        let resposta = new Resposta();
         
-        bordoClass.cadastraBordo(req,res).then((result)=>{
+        bordoClass.bordoAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
             resultado = true;
@@ -160,7 +317,7 @@ module.exports = {
                                     Escola.find().then((escola) =>{
                                         escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
                                             req.flash("success_message", "Diário de Bordo Deletado!")
-                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, flash})
             })})})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Diários de Bordo")

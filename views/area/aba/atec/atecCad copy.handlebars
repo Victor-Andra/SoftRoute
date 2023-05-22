@@ -23,8 +23,12 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">ATEC – Escala de Avaliação do Tratamento do Autismo</a>
 							</li>
+
+							<li class="active"></li>
 						</ul><!-- /.breadcrumb -->
+
 					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -36,15 +40,15 @@
 											<h4 class="widget-title">
 												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
 												
-												Cabeçalho ATEC</h4>
+												Cabeçalho Escala ATEC</h4>
 
 											<span class="widget-toolbar">
 
-												<a href="#" data-action="reload">
+												<a href="#" datec-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
 
-												<a href="#" data-action="collapse">
+												<a href="#" datec-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
 
@@ -53,7 +57,6 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-											
 												<div class="row">
 													<div class="col-xs-12">
 														<div class="row">
@@ -90,7 +93,7 @@
 																<div class="row">
 																	<div class="input-group">
 																		<div class="col-sm-4">
-																			<input id="atecDatecnasc" name="atecDatecnasc" type="date">
+																			<input id="atecdatecnasc" name="atecdatecnasc" type="date">
 																		</div>
 																	</div>
 																</div>
@@ -100,7 +103,7 @@
 																<div class="row">
 																	<div class="input-group">
 																		<div class="col-sm-2">
-																			<input type="text" name="atecIdade" id="atecIdade" placeholder="" class="form-control" style="width: 300px;"/>
+																			<input type="text" name="atecidade" id="atecidade" placeholder="" class="form-control" style="width: 300px;"/>
 																		</div>
 																	</div>
 																</div>
@@ -112,7 +115,7 @@
 																<div class="row">
 																	<div class="col-sm-6">
 																		<div class="input-group">
-																			<input name="atecPreenchido" id="atecPreenchido" type="text"  />
+																			<input name="atecpreenchido" id="atecpreenchido" type="text"  />
 																		</div>
 																	</div>
 																</div>
@@ -122,7 +125,7 @@
 																<div class="row">
 																	<div class="col-sm-4">
 																		<div class="input-group">
-																			<input name="atecParen" id="atecParen" type="text"  />
+																			<input name="atecparen" id="atecparen" type="text"  />
 																		</div>
 																	</div>
 																</div>
@@ -134,7 +137,6 @@
 																<div class="form-group">
 																	<div class="col-sm-8">
 																		<select name="atecterapeutaid" id="atecterapeutaid" class="chosen-select" datec-placeholder="Escolha..." value="-">
-																			<option value="-">-</option>
 																			{{#each Terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>
 																			{{/each}}
@@ -145,7 +147,7 @@
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
-																<label> Informações iniciais adicionais </label>
+																<label> Informações iniciais adivionais </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
 																		<textarea type="text" name="atecInfoiniatec" id="atecInfoiniatec" row="3" placeholder="" class="form-control" ></textarea>
@@ -155,142 +157,163 @@
 														</div>
 													</div>
 												</div>
-
 											</div>
 										</div>		
 									</div>
+									
 								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- Pontuação -->
+
+								<div class="col-xs-12" name="du" id="du"><!-- Pontuação -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
-												
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												Pontuação</h4>
-
-											<span class="widget-toolbar">
-
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
 										</div>
-
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-xs-12">
-															<div class="col-sm-12">
-																<div class="alert alert-warning">
-																	<button type="button" class="close" data-dismiss="alert">
-																		<i class="ace-icon fa fa-times"></i>
-																	</button>
-																	<strong>Observação! </strong>
-																	O ATEC (Autism Treatment Evaluation Checklist – Formulário para Avaliação de Tratecmentos do Autismo) é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indiva a severidade dos sintomas e a redução progressiva dessa pontuação é um indivador de que as intervenções têm trazido melhoras no quadro. A pontuação do ATEC varia de 0 a 180, sendo que qualquer valor acima de 0 indiva presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
-																</div><br>
-															</div>
-															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-																	<thead>
-																		<h5 class="widget-title bigger lighter">
-																			<i class="ace-icon fa fa-table"></i>
-																			Tabela ATEC
-																		</h5>
-																		<tr>
-																			<th >Sub-Escalas</th>
-																			<th >
-																				<span class="badge badge-danger">Avaliação</span>
-																			</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr><!-- 1Reg -->
-																			<td>
-																				<span>Fala/Linguagem/Comunicação</span>
-																			</td>
-																			<td>	
-																				<input name="atecAtecfala1" id="atecAtecfala1" type="text" style="width:30px">
-																			</td>
-																		</tr>
-																		<tr><!-- 2Reg -->
-																			<td>
-																				<span>Sociabilidade</span>
-																			</td>
-																			<td>	
-																				<input name="atecAtecsoc1" id="atecAtecsoc1" type="text" style="width:30px" >
-																			</td>
-																		</tr>
-																		<tr><!-- 3Reg -->
-																			<td>
-																				<span>Percepção sensorial/Cognitiva</span>
-																			</td>
-																			<td>	
-																				<input name="atecAtecsen1" id="atecAtecsen1" type="text" style="width:30px" >
-																			</td>
-																		</tr>
-																		<tr><!-- 4Reg -->
-																			<td>
-																				<span>Saúde/Aspectos físicos/Comportamentais</span>
-																			</td>
-																			<td>	
-																				<input name="atecAtecsau1" id="atecAtecsau1" type="text" style="width:30px">
-																			</td>
-																		</tr>
-																	</tbody>
-															</table>
-															<div class="row">
-																<div class="col-xs-12">
-																	<label> Pontuação Total</label>
-																	<div class="form-group">
-																		<div class="col-sm-6">
-																			<input type="text" id="atecTotpont" name="atecTotpont" placeholder="0"  class="form-control" />
+														<div class="row">
+															<div class="col-xs-12">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" datec-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			O ATEC (Autism Treatment Evaluation Checklist – Formulário para Avaliação de Tratecmentos do Autismo) é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indiva a severidade dos sintomas e a redução progressiva dessa pontuação é um indivador de que as intervenções têm trazido melhoras no quadro. A pontuação do ATEC varia de 0 a 180, sendo que qualquer valor acima de 0 indiva presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
 																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xs-12">
-																	<label> Comentários</label>
-																	<div class="form-group">
-																		<div class="col-sm-12">
-																			<textarea type="text" name="atecComentatec" id="atecComentatec" row="3" placeholder="" class="form-control" ></textarea>
-																		</div>
-																	</div>
-																</div>
+																		
+																			
+																		<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																				<thead>
+																					<h5 class="widget-title bigger lighter">
+																						<i class="ace-icon fa fa-table"></i>
+																						Tabela ATEC
+																					</h5>
+																					<tr>
+																						<th >Sub-Escalas</th>
+																						<th >
+																							<span class="badge badge-danger">Avaliação</span>
+																						</th>
+																						
+																					</tr>
+																				</thead>
+
+																				<tbody>
+																					<tr><!-- 1Reg -->
+																						<td>
+																							<span>Fala/Linguagem/Comunicação</span>
+																						</td>
+																						<td>	
+																							<input name="atecAtecfala1" id="atecAtecfala1" type="text" style="width:30px">
+																						</td>
+																						
+																						
+																						
+																					</tr>
+																					<tr><!-- 2Reg -->
+																						<td>
+																							<span>Sociabilidade</span>
+																						</td>
+																						<td>	
+																							<input name="atecAtecsoc1" id="atecAtecsoc1" type="text" style="width:30px" >
+																						</td>
+																						
+																						
+																						
+																					</tr>
+																					<tr><!-- 3Reg -->
+																						<td>
+																							<span>Percepção sensorial/Cognitiva</span>
+																						</td>
+																						<td>	
+																							<input name="atecAtecsen1" id="atecAtecsen1" type="text" style="width:30px" >
+																						</td>
+																						
+																						
+																						
+																					</tr>
+																					<tr><!-- 4Reg -->
+																						<td>
+																							<span>Saúde/Aspectos físicos/Comportamentais</span>
+																						</td>
+																						<td>	
+																							<input name="atecAtecsau1" id="atecAtecsau1" type="text" style="width:30px">
+																						</td>
+																						
+																					</tr>
+																					
+																					
+																				</tbody>
+																			</table>
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label> Pontuação Total</label>
+																					<div class="form-group">
+																						<div class="col-sm-6">
+																							<input type="text" id="atecTotpont" name="atecTotpont" placeholder="0"  class="form-control" />
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																	
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label> Comentários</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="atecComentatec" id="atecComentatec" row="3" placeholder="" class="form-control" ></textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+
+
+
 															</div>
 														</div>
 													</div>
+
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
-								</div>
-								
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- I.	Fala / Linguagem/ Comunicação -->
+								</div>	
+								<div class="col-xs-12" name="du" id="du"><!-- I.	Fala / Linguagem/ Comunicação -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												<b>I.</b> Fala / Linguagem/ Comunicação</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
 										</div>
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<button type="button" class="close" datec-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Por favor, marque na coluna que mais representa a frase de acordo com o que percebe no beneficiário:
+														</div>
 														<div class="row">
 															<div class="col-xs-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -812,34 +835,34 @@
 																	</tbody>
 																</table>
 															</div>
-														</div>																	
 														</div>
 													</div>
+
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- II. Sociabilidade -->
+								<div class="col-xs-12" name="du" id="du"><!-- II.	Sociabilidade -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												<b>II.</b> Sociabilidade</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
 										</div>
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-xs-12">
 														<div class="row">
 															<div class="col-xs-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -1577,34 +1600,35 @@
 																	</tbody>
 																</table>
 															</div>
-														</div>																	
 														</div>
 													</div>
+
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- III.	Percepção Sensorial / Cognitiva -->
+								<div class="col-xs-12" name="du" id="du"><!-- III.	Percepção Sensorial / Cognitiva -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												<b>III.</b> Percepção Sensorial / Cognitiva</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
 										</div>
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-xs-12">
+														
 														<div class="row">
 															<div class="col-xs-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -2271,34 +2295,35 @@
 																	</tbody>
 																</table>
 															</div>
-														</div>																	
 														</div>
 													</div>
+
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
-								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- IV.	Saúde / Aspectos Físicos / Comportamento -->
+								</div>								
+								<div class="col-xs-12" name="du" id="du"><!-- IV.	Saúde / Aspectos Físicos / Comportamento -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												<b>IV.</b> Saúde / Aspectos Físicos / Comportamento</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" datec-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" datec-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
 										</div>
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-xs-12">
+														
 														<div class="row">
 															<div class="col-xs-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -3217,17 +3242,14 @@
 																	</tbody>
 																</table>
 															</div>
-														</div>																	
 														</div>
 													</div>
+
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
-								</div>			
-																				
-									
-							
+								</div>									
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
 

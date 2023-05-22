@@ -17,6 +17,7 @@ const BordoSchema = mongoose.Schema({
     bordo_segue :{type: String, required: false},
     bordo_repertorio :{type: String, required: false},
     
+    bordo_desorganiza :{type: String, required: false},
     bordo_autoagressao :{type: String, required: false},
     bordo_agrideadulto :{type: String, required: false},
     bordo_agridepares :{type: String, required: false},
@@ -53,7 +54,14 @@ const BordoSchema = mongoose.Schema({
     bordo_incidente :{type: String, required: false},
     bordo_obs :{type: String, required: false},
    
-    bordo_dataedi :{type: Date, required: false}
+    bordo_dataedi :{type: Date, required: false},
+    
+    bordo_datasupervisao :{type: Date, required: false},
+    bordo_terapeutasup :{type: ObjectId, required: false},
+    bordo_supcomentario :{type: String, required: false},
+    bordo_conclusao :{type: String, required: false}
+    
+
 })
 
 class Bordo{
@@ -74,6 +82,7 @@ class Bordo{
         bordo_segue,
         bordo_repertorio,
         //Comportamento
+        bordo_desorganiza,
         bordo_autoagressao,
         bordo_agrideadulto,
         bordo_agridepares,
@@ -109,6 +118,11 @@ class Bordo{
         bordo_habilnova,
         bordo_incidente,
         bordo_obs,
+        //Supervisao
+        bordo_datasupervisao,
+        bordo_terapeutasup,
+        bordo_supcomentario,
+        bordo_conclusao,
         //Edição
         bordo_dataedi
         
@@ -130,6 +144,7 @@ class Bordo{
         this.bordo_segue = bordo_segue,
         this.bordo_repertorio = bordo_repertorio,
         //Comportamento
+        this.bordo_desorganiza = bordo_desorganiza,
         this.bordo_autoagressao = bordo_autoagressao,
         this.bordo_agrideadulto = bordo_agrideadulto,
         this.bordo_agridepares = bordo_agridepares,
@@ -165,6 +180,11 @@ class Bordo{
         this.bordo_habilnova = bordo_habilnova,
         this.bordo_incidente = bordo_incidente,
         this.bordo_obs = bordo_obs,
+        //Supervisao
+        this.bordo_datasupervisao = bordo_datasupervisao,
+        this.bordo_terapeutasup = bordo_terapeutasup,
+        this.bordo_supcomentario = bordo_supcomentario,
+        this.bordo_conclusao = bordo_conclusao,
         //Edição
         this.bordo_dataedi  = bordo_dataedi     
     }
@@ -196,6 +216,7 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_segue : req.body.bordoSegue,
                 bordo_repertorio : req.body.bordoRepertorio,
                 //Comportamento
+                bordo_desorganiza : req.body.bordoDesorganiza,
                 bordo_autoagressao : req.body.bordoAutoagressao,
                 bordo_agrideadulto : req.body.bordoAgrideadulto,
                 bordo_agridepares : req.body.bordoAgridepares,
@@ -231,9 +252,13 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_habilnova : req.body.bordoHabilnova,
                 bordo_incidente : req.body.bordoIncidente,
                 bordo_obs : req.body.bordoObs,
-        //Edição
-         
-                bordo_dataedi :req.body.bordoDataAtual.toISOString()
+                //Supervisao
+                bordo_datasupervisao : req.body.bordoDatasupervisao,
+                bordo_terapeutasup :  req.body.bordoTerapeutasup,
+                bordo_supcomentario :  req.body.bordoSupcomentario,
+                bordo_conclusao :  req.body.bordoConclusao,
+                //Edição
+                bordo_dataedi : req.body.bordoDataAtual.toISOString()
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -250,7 +275,7 @@ module.exports = {BordoModel,BordoSchema,
         console.log("bordomodel");
         console.log("req.body.bordoDatacad:")
         console.log(req.body.bordodata)
-        const NewBordo = new BordoModel({
+        const newBordo = new BordoModel({
                 bordo_beneid : req.body.bordoBeneid,
                 bordo_terapeutaid : req.body.bordoTerapeutaid,
                 bordo_escolaid : req.body.bordoEscolaid,
@@ -265,6 +290,7 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_segue : req.body.bordoSegue,
                 bordo_repertorio : req.body.bordoRepertorio,
                 //Comportamento
+                bordo_desorganiza : req.body.bordoDesorganiza,
                 bordo_autoagressao : req.body.bordoAutoagressao,
                 bordo_agrideadulto : req.body.bordoAgrideadulto,
                 bordo_agridepares : req.body.bordoAgridepares,
@@ -300,12 +326,18 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_habilnova : req.body.bordoHabilnova,
                 bordo_incidente : req.body.bordoIncidente,
                 bordo_obs : req.body.bordoObs,
-                 //Edição
+                //Supervisao
+                bordo_datasupervisao : req.body.bordoDatasupervisao,
+                bordo_terapeutasup :  req.body.bordoTerapeutasup,
+                bordo_supcomentario :  req.body.bordoSupcomentario,
+                bordo_conclusao :  req.body.bordoConclusao,
+                bordo_supcomentario :  req.body.bordoSupcomentario,
+                //Edição             
                 bordo_datacad : req.body.bordoDatacad,
             
         });
-        console.log("newAtend save");
-        await newAtend.save().then(()=>{
+        console.log("newBordo save");
+        await newBordo.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {

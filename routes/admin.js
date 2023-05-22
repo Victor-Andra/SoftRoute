@@ -668,6 +668,10 @@ router.post("/atendimento/lisF", fncGeral.IsAuthenticated,(req,res) =>{//direcio
     fncAtend.filtraAtend(req, res);
 })
 
+router.post("/atendimento/copiaAtends", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+    fncAtend.copiarAtends(req,res);
+})
+
 router.get('/atendimento/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtend.carregaAtend(req,res);
 })
@@ -690,8 +694,7 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
 
   
 
-//Relatório Individual de Valores de Atendimento por Convênuio.
-//Emite uma consolidado de todos os valores de atendimentos realizados pelo beneficiário
+//Relatório de Atendimentos por Convênio.
 //pagos pelos convênios, incluindo particular, num determinado período de tempo.
     router.get('/atendimento/relatendval', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoVal(req,res)
@@ -719,6 +722,37 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/relatendvalconss', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneConsFiltro(req,res)
     })
+
+//Relatório de Atendimentos por Terapeutas.
+//para pagamentos aos Terapeutas, num determinado período de tempo.
+router.get('/atendimento/atendreltera/relatendterapiacons', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendterapiacons(req,res)
+})
+
+router.post('/atendimento/atendreltera/relatendterapiaconss', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendterapiaconsFiltro(req,res)
+})
+
+//Relatório Individual de Atendimentos por Beneficiário.
+//Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
+router.get('/atendimento/atendreltera/relatendteraana', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraana(req,res)
+})
+
+router.post('/atendimento/atendreltera/relatendteraanas', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraanaFiltro(req,res)
+})
+//Relatório Consolidado de Atendimentos por Beneficiário.
+//Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
+router.get('/atendimento/atendreltera/relatendteracons', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteracons(req,res)
+})
+
+router.post('/atendimento/atendreltera/relatendteraconss', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraconsFiltro(req,res)
+})
+
+
 
 //Relatório Emissão NF.
 //Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
@@ -1095,28 +1129,32 @@ router.get('/area/anamn/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direc
 
 //Menu Bordo ** Area Tecnicos   
 //Lista Todos os Diários de Bordo por Data, Beneficiário
-router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.listaBordo(req, res);
 })
 //Carrega Cadastro de Diário de Bordo
-router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.carregaBordo(req,res);
 })
-//Carrega Editar SDelecionado de Diário de Bordo
-router.get('/area/bordo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+//Carrega Editar Selecionado de Diário de Bordo
+router.get('/area/bordo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncBordo.carregaBordoedi(req,res);
 })
 //Adiciona Diário de Bordo Registro
-router.post('/area/bordo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+router.post('/area/bordo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncBordo.cadastraBordo(req,res);
 })
 //Atualiza Diario de Bordo
-router.post('/area/bordo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o Plano de Tratamentos Padrao
+router.post('/area/bordo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza Diário de Bordo Padrao
     fncBordo.atualizaBordo(req , res);
 })
-//CarrDeleta bordo Selecionado
-router.get('/area/bordo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
+//Deleta bordo Selecionado
+router.get('/area/bordo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncBordo.deletaBordo(req,res);
+})
+//Carrega Mapa de Bordo Selecionado
+router.get('/area/bordo/mapabordo', fncGeral.IsAuthenticated, (req,res) =>{//Abre o Mapa de Bordo com filtro para filtrar e definir mapa a ser exibido
+    fncBordo.carregaBordomapa(req,res);
 })
 //Menu Plano de Tratamentos ** Area Tecnicos   
 //Lista Todos Planos de Tratamento
@@ -1351,23 +1389,23 @@ router.get('/area/aba/notasup/notasuplis', fncGeral.IsAuthenticated, (req,res) =
 
 //Menu Folha de Registro ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
     fncFolreg.carregaFolreg(req, res);
 })
 
 //Lista Folha Registro ** Area Tecnicos e ABA
-router.get('/area/aba/folreg/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/folreg/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista de registros
     fncFolreg.listaFolreg(req, res);
 })
 
 //Menu Gráfico ABC ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/grafabc/grafabccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/grafabc/grafabccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro ddo grafico abc,
     fncGrafabc.carregaGrafabc(req, res);
 })
 
 //Lista Gráfico ABC por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/grafabc/grafabclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/grafabc/grafabclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista o grafico abc.
     fncGrafabc.listaGrafabc(req, res);
 })
 

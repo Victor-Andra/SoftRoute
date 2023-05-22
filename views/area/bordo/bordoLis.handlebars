@@ -2,44 +2,27 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Planos de Tratamentos</title>
+		<title>Lista de Diários de Bordo</title>
+		<script type="text/javascript">
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
 
-		<meta name="description" content="Static &amp; Dynamic Tables">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
 
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
-
-		<!-- page specific plugin styles -->
-
-		<!-- text fonts -->
-		<link rel="stylesheet" href="../../../assets/css/fonts.googleapis.com.css">
-
-		<!-- ace styles -->
-		<link rel="stylesheet" href="../../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
-
-		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="../../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
-		<![endif]-->
-		<link rel="stylesheet" href="../../../assets/css/ace-skins.min.css">
-		<link rel="stylesheet" href="../../../assets/css/ace-rtl.min.css">
-
-		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="../../../assets/css/ace-ie.min.css" />
-		<![endif]-->
-
-		<!-- inline styles related to this page -->
-
-		<!-- ace settings handler -->
-		<script src="../../../assets/js/ace-extra.min.js"></script><style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
-
-		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
-
-		<!--[if lte IE 8]>
-		<script src="../../../assets/js/html5shiv.min.js"></script>
-		<script src="../../../assets/js/respond.min.js"></script>
-		<![endif]-->
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -48,7 +31,7 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs" id="breadcrumbs">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -67,62 +50,98 @@
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-										<div class="clearfix" >
-											<div class="pull-right tableTools-container">
-											</div>
-										</div>
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
-												<tr role="row">
-													<th class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"></span>
-														</label>
-													</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tipo Plano: activate to sort column ascending">Tipo</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Benficiário: activate to sort column ascending">Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Idade</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data: activate to sort column ascending">Data</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta:     activate to sort column ascending">Terapeuta</th>
-													<th>Ação</th>
-												</tr>
-											</thead>
-											<tbody>
-												{{#each benes}}
+											<div class="clearfix" >
+												<div class="pull-right tableTools-container">
 
-													<tr role="row" class="odd">
-														<td class="center">
+
+												</div>
+											</div>
+
+											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+											</div>
+											
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
+													<tr role="row">
+														<th class="center">
 															<label class="pos-rel">
 																<input type="checkbox" class="ace" />
 																<span class="lbl"></span>
 															</label>
-														</td>
-														<td>{{bene_nome}}</td>
-														<td>{{bene_apelido}}</td>
-														<td>{{datanasc}}</td>
-														{{#each ../convs}}
-															{{#ifEqual this._id ../bene_convid}}
-																<td>{{conv_nome}}</td>
+														</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapias: activate to sort column ascending">Baneficiário</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapias nome: activate to sort column ascending">Terapeuta</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Descrição:     activate to sort column ascending">Data</th>
+														<th>Ação</th>
+
+													</tr>
+													
+												</thead>
+												
+												<tbody>
+													{{#each bordos}}
+														<tr>
+															<th class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</th>
+															{{#each ../benes}}
+															{{#ifEqual this._id ../bordo_beneid}}
+																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														<td>{{bene_status}}</td>
-														<td>
-															<div class="action-buttons">
-																<a class="blue" href="/menu/area/bordo/imp/{{_id}}">
-																	<i class="ace-icon fa fa-print bigger-130"></i>
-																</a>
-																<a class="green" href="/menu/area/bordo/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-															</div>
-														</td>
-													</tr>
-												{{/each}}
-											</tbody>
-										</table>
+														{{#each ../terapeutas}}
+															{{#ifEqual this._id ../bordo_terapeutaid}}
+																<td>{{usuario_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														
+														<td>{{bordo_datacad}}</td>
+															<td>
+																<div class="action-buttons">
+																	<a class="green" href="/menu/ferramentas/terapia/edi/{{_id}}">
+																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	</a>
+																	<a class="hidden" class="red" href="/menu/ferramentas/terapia/del/{{_id}}">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
+																</div>
+																<div class="hidden-md hidden-lg">
+																	
+																	</div>
+																</div>
+															</td>
+														</tr>
+													{{/each}}
+												</tbody>
+
+											</table>
+
+											<div class="row">
+													<div class="col-xs-6">
+														<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+												
+
+
+
+
+														</div>
+													</div>
+													
+													<div class="col-xs-6">
+														
+														<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+						
+														</div>
+													
+													</div>
+											</div>
+										
+										
+										
 									</div>
 								</div>				
 							</div>
@@ -131,29 +150,7 @@
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route
-						</span>
-
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-
-		
-						</span>
-					</div>
-				</div>
-			</div>
+			
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -198,7 +195,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					
