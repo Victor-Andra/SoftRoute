@@ -26,6 +26,7 @@ const Escola = mongoose.model("tb_escola")
 //Funções auxiliares
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral")
 
 class BordoMapa{
     constructor(
@@ -46,6 +47,9 @@ module.exports = {
         console.log('listando Diários de Bordo')
         Bordo.find().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
+            bordo.forEach((b)=>{
+                b.bordo_data = fncGeral.getDataRevert(fncGeral.getData(b.bordo_datacad))
+            })
                 Bene.find().then((bene) =>{
                     bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         Escola.find().then((escola) =>{

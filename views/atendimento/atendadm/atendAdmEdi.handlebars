@@ -94,7 +94,8 @@
 			function carregaBody(){
 				console.log("START");
 				document.getElementById("atendId").value = document.getElementById("idEdi").value;
-				atualizaDataEdi();
+				this.atualizaDataEdi();
+				this.atualizaData();
 				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
 				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
 				document.getElementById("atendCategoria").value = document.getElementById("atendCategoriaEdi").value;
@@ -118,18 +119,22 @@
 				console.log("datafmt:"+datafmt);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();
 				//
-				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataIso);
-				document.getElementById("agendaData").value = dataFmt;
+				//var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				//var dataFmt = new Date(dataIso);
+				//console.log(dataIso);
+				//document.getElementById("agendaData").value = dataFmt;
 			}
 			function atualizaDataEdi(){
 				document.getElementById("atenddata").value = formataData(document.getElementById("atendAtenddataEdi").value);
 			}
 			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date),
-					month = '' + (d.getMonth() + 1),
-					day = '' + d.getDate(),
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
 					year = d.getFullYear();
 
 				if (month.length == 1) {

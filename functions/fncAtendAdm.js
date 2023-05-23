@@ -32,7 +32,7 @@ const Horaage = mongoose.model("tb_horaage")
 //Funções Auxiliares
 const fncCredit = require("../functions/fncCredit")
 const fncDebit = require("../functions/fncDebit")
-const fncAtend = require("./fncAtend")
+const atendFnc = require("../functions/fncAtend")
 
 module.exports = {
     carregaAtendAdm(req,res){
@@ -73,9 +73,9 @@ module.exports = {
         let nextNumEdi;
         Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
             //validação caso seja o primeiro registro
-            atendimento.forEach(e => {atend = e});
-            atend.atend_num = atend.atend_num+1;
-            console.log("Listagem Realizada de NextNum")
+            //atendimento.forEach(e => {atend = e});
+            //atend.atend_num = atend.atend_num+1;
+            //console.log("Listagem Realizada de NextNum")
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));
                 console.log("Listagem Realizada de Beneficiários!")
@@ -95,8 +95,9 @@ module.exports = {
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Atend.findById(req.params.id).then((atendEdi)=>{
-                                            console.log(atendEdi.atend_num)
+                                            console.log(atendEdi.atend_num);
                                             nextNumEdi = atendEdi.atend_num;
+                                            console.log("atendEdi.atend_atenddata:"+atendEdi.atend_atenddata);
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
                                                     Horaage.find().then((horaage)=>{
@@ -551,16 +552,16 @@ module.exports = {
         let resposta;
         try{
             //console.log("req.body.atendId:"+req.body.atendId)
-            atendClass.atendEditar(req,res).then((res)=>{
+            atendClass.atendEditar(req,res).then((result)=>{
                 console.log("Atualização Realizada!")
-                console.log(res)
-                resposta = res;
+                console.log(result)
+                resposta = result;
                 //criar metodo atualiza cascata cre e deb
                 fncCredit.creditAtendEditar(req,res);
                 fncDebit.debitAtendEditar(req,res);
-                if(resposta){
+                if(resposta == true){
                     //Volta para a atend de listagem
-                    fncAtend.listaAtend(req,res);
+                    this.listaAtend2(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")
@@ -579,4 +580,72 @@ module.exports = {
             console.log(err1)
         }
     },
+    listaAtend2(req, res){
+        let carregaFiltro = "false";
+        let fulldate;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        
+        Atend.find({atend_atenddata: { $gte : agora, $lte:  depois }}).then((atend) =>{
+            atend.forEach((b)=>{
+                if(b.atend_atenddata){
+                } else {
+                    b.atend_atenddata=new Date();
+                }
+                    
+                let data = new Date(b.atend_atenddata)
+                let mes = (data.getMonth()+1).toString();
+                let dia = (data.getUTCDate()).toString();
+
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+
+                let hora = (data.getHours()).toString();
+                let minuto = (data.getMinutes()).toString();
+
+                if (hora.length == 1){
+                    hora = "0"+hora;
+                }
+                if (minuto.length == 1){
+                    minuto = "0"+minuto;
+                }
+
+                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.data=fulldate;
+                b.hora = hora + ":" + minuto;
+            })
+            var tamanho = atend.length;
+            var qtdAtends = {qtd: tamanho}
+            //console.log("Listagem Realizada de Atendimentos!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Usuário")
+                            Terapia.find().then((terapia)=>{
+                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                //console.log("Listagem Realizada de Terapia")
+                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
+        })})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    }
 }

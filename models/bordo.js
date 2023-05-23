@@ -6,7 +6,7 @@ const BordoSchema = mongoose.Schema({
     bordo_terapeutaid :{type: ObjectId, required: true},
     bordo_escolaid :{type: ObjectId, required: true},
     bordo_datacad :{type: Date, required: false},
-    
+    bordo_data :{type: String, required: false},
     bordo_seguerotina :{type: String, required: false},
     bordo_estereotipas :{type: String, required: false},
     bordo_foco :{type: String, required: false},
@@ -71,6 +71,7 @@ class Bordo{
         bordo_terapeutaid,
         bordo_escolaid,
         bordo_datacad,
+        bordo_data,
         //Rotinas
         bordo_seguerotina,
         bordo_estereotipas,
@@ -133,6 +134,7 @@ class Bordo{
         this.bordo_terapeutaid = bordo_terapeutaid,
         this.bordo_escolaid = bordo_escolaid,
         this.bordo_datacad = bordo_datacad,
+        this.bordo_data = bordo_data,
         //Rotinas
         this.bordo_seguerotina = bordo_seguerotina,
         this.bordo_estereotipas = bordo_estereotipas,

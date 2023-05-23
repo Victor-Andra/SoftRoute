@@ -81,7 +81,7 @@ module.exports = {
         let mes = dt.substring(3,5);
         let ano = dt.substring(6,10);
         
-        return (dia+"-"+mes+"-"+ano);
+        return (ano+"-"+mes+"-"+dia);
     },
     getDateFromString(dt, iniFim){//Passa data yyyy-MM-dd para Date setando os valores em um date vazio separadamente, iniFim serve para definir se vai definir o horario em 00:00:00 ou 23:59:59. Trabalha com mês 1-12.
         data = dt;
