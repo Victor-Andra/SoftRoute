@@ -206,8 +206,8 @@ module.exports = {
             })
         })
     },
-    deletaVariosAtend(req, res){
-        let arrayIdString = req.params.id;
+    deletaVariosAtends(req, res){
+        let arrayIdString = req.body.idsDeletar;
         let arrayId = arrayIdString.split(",");
         arrayId.forEach((id)=>{
             console.log("id:"+id);
@@ -1345,7 +1345,8 @@ module.exports = {
                                 if (atendCopia.atend_usuid != undefined){atendimentoNovo.atend_usuid = atendCopia.atend_usuid;}
                                 console.log("dataAtendData"+i+":"+dataAtendData);
                                 atendimentoNovo.atend_atenddata = dataAtendData;
-                                atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;
+                                console.log("atendCopia.atend_atendhora:"+atendCopia.atend_atendhora);
+                                if (atendCopia.atend_atendhora != undefined){atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;} else {atendimentoNovo.atend_atendhora = "08:00"}
                                 if (atendCopia.atend_terapeutaid != undefined){atendimentoNovo.atend_terapeutaid = atendCopia.atend_terapeutaid;}
                                 if (atendCopia.atend_terapiaid != undefined){atendimentoNovo.atend_terapiaid = atendCopia.atend_terapiaid;}
                                 if (atendCopia.atend_salaid != undefined){atendimentoNovo.atend_salaid = atendCopia.atend_salaid;}

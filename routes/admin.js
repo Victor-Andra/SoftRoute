@@ -680,12 +680,12 @@ router.post('/atendimento/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona
     fncAtend.cadastraAtend(req,res);
 })
 
-router.get('/atendimento/del/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
-    fncAtend.deletaAtend(req, res);
-})
-
 router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
     fncAtend.deletaVariosAtend(req, res);
+})
+
+router.post('/atendimento/deleteMany/', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
+    fncAtend.deletaVariosAtends(req, res);
 })
 
 router.get('/atendimento/edi/:id', fncGeral.IsAuthenticated,(req,res) =>{//direciona para a edição de atend

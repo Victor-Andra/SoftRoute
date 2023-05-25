@@ -225,13 +225,16 @@
 					}
 				})
 
+				document.getElementById("idsDeletar").value = idsSelecionados;
 				if (tem){
 					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
 					if(confirmado == true){
 						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
 						if(confirmado == true){
 							console.log("idsSelecionados: "+idsSelecionados);
-							window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
+							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteMany/";
+							document.getElementById("divFormPesquisa").submit();
+							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
 						}
 					}
 				}
@@ -409,6 +412,7 @@
 								<input id="dtCopia" name="dtCopia" value="" />
 								<input id="qtdCopia" name="qtdCopia" value="" />
 								<input id="temCopia" name="temCopia" value="false" />
+								<input id="idsDeletar" name="idsDeletar" value="" />
 							</div>
 						</form>
 						<div id="divCopiaAtend" class="col-xs-12" class="row" style="display: none;">
