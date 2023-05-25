@@ -210,6 +210,46 @@
 					window.location.href=("/menu/atendimento/del/"+id);
 				}
 			}
+			function deletaTudo(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				let idsSelecionados = "";
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+						if (idsSelecionados == ""){
+							idsSelecionados = id.id;
+						} else {
+							idsSelecionados = idsSelecionados + "," + id.id;
+						}
+					}
+				})
+
+				if (tem){
+					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
+					if(confirmado == true){
+						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+						if(confirmado == true){
+							console.log("idsSelecionados: "+idsSelecionados);
+							window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
+						}
+					}
+				}
+			}
+			function alternarBotao(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+					}
+				})
+				if (tem){
+					document.getElementById("btnDeleteMany").style.display = "";
+				} else {
+					document.getElementById("btnDeleteMany").style.display = "none";
+				}
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
@@ -239,6 +279,7 @@
 						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+						<input id="idsChecked" value="" />
 					</div>
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
@@ -356,6 +397,10 @@
 										<i class="ace-icon fa fa-search-plus "></i>
 										Realizar Cópias Marcadas
 									</button>
+									<button id="btnDeleteMany" name="acaoDeleteMany" id="acaoDeleteMany" class="btn btn-xs btn-info" style="margin-left: 25px;display: none;" onclick="javascript:deletaTudo();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Deletar Atendimentos Selecionados
+									</button>
 								</div>
 								<hr>
 							</div>
@@ -425,7 +470,7 @@
 													<tr role="row" class="odd">
 														<td class="center">
 															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
+																<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
 																<span class="lbl"></span>
 															</label>
 														</td>

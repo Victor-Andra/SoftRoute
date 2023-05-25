@@ -206,6 +206,47 @@ module.exports = {
             })
         })
     },
+    deletaVariosAtend(req, res){
+        let arrayIdString = req.params.id;
+        let arrayId = arrayIdString.split(",");
+        arrayId.forEach((id)=>{
+            console.log("id:"+id);
+            Atend.findOne({_id: id}).then((a)=>{
+                Credit.find({credit_atendnum: a.atend_num}).then((cre)=>{
+                    cre.forEach((c)=>{
+                        Credit.deleteOne({_id: c._id}).catch((err) =>{
+                            console.log(err)
+                            res.render('admin/erro')
+                        })
+                    })
+                    Debit.find({debit_atendnum: a.atend_num}).then((deb)=>{
+                        deb.forEach((d)=>{
+                            Debit.deleteOne({_id: d._id}).catch((err) =>{
+                                console.log(err)
+                                res.render('admin/erro')
+                            })
+                        })
+                        Tabil.find({tabil_atendnum: a.atend_num}).then((tab)=>{
+                            tab.forEach((t)=>{
+                                Tabil.deleteOne({_id: t._id}).catch((err) =>{
+                                    console.log(err)
+                                    res.render('admin/erro')
+                                })
+                            })
+                            Atend.deleteOne({_id: id}).then((a) =>{
+                                Atend.find().then((atend) =>{
+                                })
+                            }).catch((err) =>{
+                                console.log(err)
+                                res.render('admin/erro')
+                            })
+                        })
+                    })
+                })
+            })
+        })
+        this.listaAtend(req,res)
+    },
     atualizaAtend(req, res){
         let resposta;
         try{
@@ -935,6 +976,7 @@ module.exports = {
         
         Bene.findOne().then((bene)=>{
                 Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene})
@@ -981,6 +1023,7 @@ module.exports = {
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                         bene_nome = b.bene_nome;
                         Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                             terapia.forEach((t)=>{
                                 //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
                                 qtdIds = 0;
@@ -1091,6 +1134,7 @@ module.exports = {
         
         Bene.findOne().then((bene)=>{
                 Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/relatendvalnf", {terapias: terapia, benes: bene})
@@ -1235,75 +1279,119 @@ module.exports = {
         })
     },
     copiarAtends(req,res){
+        let arrayAtends =[];
         let dadosCopia = new AtendCopia();
         let nextNums = req.body.numCopia;
         let arrayNextNum = nextNums.split(",");
         let datas = req.body.dtCopia;
         let arrayData = datas.split(",");
         let quantidades = req.body.qtdCopia;
+        console.log("quantidades:"+quantidades);
         let arrayQuantidade = quantidades.split(",");
         let dataAtual = new Date();
         var atendCopia;
-        var atendimentoNovo;
-        
+        let qtd;
+        let nextNumAtendCopiar;
+        let nextNum;
+        let dataAtendData;
+
+        console.log("Começando Copia!");
+        arrayQuantidade.forEach((aq)=>{
+            console.log("quantidade!"+aq);
+        })
+        console.log("arrayQuantidade[0]:"+arrayQuantidade[0]);
+        console.log("arrayQuantidade[1]:"+arrayQuantidade[1]);
+        console.log("arrayQuantidade[2]:"+arrayQuantidade[2]);
         if (arrayNextNum.length == arrayData.length && arrayData.length == arrayQuantidade.length){
-            let i = 0;
-            arrayNextNum.forEach((a)=>{
-                atendimentoNovo = new Atend();
-                let j = 0;
-                let nextNum;
-                console.log("arrayNextNum["+i+"]:"+arrayNextNum[i]);
-
-                console.log("arrayData:"+arrayData[i]);
-                
-                Atend.find().sort({atend_num : -1}).limit(1).then((ultimoAtend) =>{
-                    ultimoAtend.forEach((ua)=>{
-                        nextNum = ua.atend_num;
-                        console.log("nextNum:"+nextNum)
-                    })
-                    
-                    Atend.find({nextNum: arrayNextNum[i]}).limit(1).then((a)=>{
-                        atendCopia = a;
-                        atendCopia.atend_atenddata = arrayData[i];
-                        console.log("(ultimoAtend.atend_num+1):"+(ultimoAtend.atend_num+1));
-                        console.log("(ultimoAtend.atend_num):"+(ultimoAtend.atend_num));
-                        atendCopia.atend_num = nextNum;
-                        console.log("arrayQuantidade["+i+"]:"+arrayQuantidade[i]);
-                        for(j = 0; j < arrayQuantidade[i]; j++){
-                            console.log("cadastrando novo atend!");
-                            atendCopia.atend_num = (atendCopia.atend_num+1);
-                            console.log("atendCopia:"+atendCopia)
-
-                            if (atendCopia.atendOrg != undefined){atendimentoNovo.atend_org = atendCopia.atendOrg;console.log("1");}
-                            if (atendCopia.atend_categoria != undefined){atendimentoNovo.atend_categoria = atendCopia.atendCategoria;console.log("2");}
-                            if (atendCopia.atend_beneid != undefined){atendimentoNovo.atend_beneid = atendCopia.atendBeneid;console.log("3");}
-                            if (atendCopia.atend_convid != undefined){atendimentoNovo.atend_convid = atendCopia.atendConvid;console.log("4");}
-                            if (atendCopia.atend_usuid != undefined){atendimentoNovo.atend_usuid = atendCopia.atendUsuid;console.log("5");}
-                            if (atendCopia.atend_atenddata != undefined){atendimentoNovo.atend_atenddata = atendCopia.atend_atenddata;console.log("6");}
-                            if (atendCopia.atend_atendhora != undefined){atendimentoNovo.atend_atendhora = atendCopia.atendHora;console.log("7");}
-                            if (atendCopia.atend_terapeutaid != undefined){atendimentoNovo.atend_terapeutaid = atendCopia.atendTerapeutaid;console.log("8");}
-                            if (atendCopia.atend_terapiaid != undefined){atendimentoNovo.atend_terapiaid = atendCopia.atendTerapiaid;console.log("9");}
-                            if (atendCopia.atend_salaid != undefined){atendimentoNovo.atend_salaid = atendCopia.atendSalaid;console.log("10");}
-                            if (atendCopia.atend_valorcre != undefined){atendimentoNovo.atend_valorcre = atendCopia.atendValorcre;console.log("11");}
-                            if (atendCopia.atend_valordeb != undefined){atendimentoNovo.atend_valordeb = atendCopia.atendValordeb;console.log("12");}
-                            if (atendCopia.atend_mergeterapeutaid != undefined){atendimentoNovo.atend_mergeterapeutaid = atendCopia.atendMergeTerapeutaid;console.log("13");}
-                            if (atendCopia.atend_mergeterapiaid != undefined){atendimentoNovo.atend_mergeterapiaid = atendCopia.atendMergeTerapiaid;console.log("14");}
-                            if (atendCopia.atend_mergevalorcre != undefined){atendimentoNovo.atend_mergevalorcre = atendCopia.atendMergevalorcre;console.log("15");}
-                            if (atendCopia.atend_mergevalordeb != undefined){atendimentoNovo.atend_mergevalordeb = atendCopia.atendMergevalordeb;console.log("16");}
-                            if (atendCopia.atend_num != undefined){atendimentoNovo.atend_num = atendCopia.atend_num;console.log("17");}
-                            if (atendCopia.atend_datacad != undefined){atendimentoNovo.atend_datacad = dataAtual.toISOString();console.log("18");}
-                            console.log("atendimentoNovo:"+atendimentoNovo);
-
-                            atendClass.gerarAtend(atendimentoNovo);
-                            j++;
-                        }
-                        i++;
-                    })
+            //let i = 0;
+            Atend.find().sort({atend_num : -1}).limit(1).then((ultimoAtend) =>{
+                ultimoAtend.forEach((ua)=>{
+                    nextNum = ua.atend_num;
                 })
-            })
+                //arrayNextNum.forEach((a)=>{
+                    console.log("arrayNextNum.length:"+arrayNextNum.length);
+                    let tamanho = parseInt(arrayNextNum.length);
+                    console.log("tamanho:"+tamanho);
+                for (var i = 0; i < tamanho;i++){
+                    console.log("i:"+i);
+                    qtd = parseInt(arrayQuantidade[i]);
+                    dataAtendData = arrayData[i];
+                    nextNumAtendCopiar = parseInt(arrayNextNum[i]);
+                    console.log("qtd:"+qtd);
+                    console.log("dataAtendData:"+dataAtendData);
+                    console.log("nextNumAtendCopiar:"+nextNumAtendCopiar);
+
+                    if (qtd != undefined && dataAtendData != undefined && nextNumAtendCopiar != undefined){
+                        let j = 0;
+
+                        Atend.find({nextNum: nextNumAtendCopiar}).limit(1).then((a)=>{
+                            a.forEach((atendCopiar)=>{
+                                atendCopia = atendCopiar;
+                            })
+                        }).catch((error)=>{
+                            console.log("ERRO ao obter nextNum");console.log(error);
+                        }).finally(()=>{
+                            console.log("qtd:"+qtd);
+                            for (var k = 0;k < qtd; k++){
+                                nextNum = nextNum + 1;
+
+                                let atendimentoNovo = new Atend();
+
+                                atendimentoNovo.atend_org = atendCopia.atend_org;
+                                atendimentoNovo.atend_categoria = atendCopia.atend_categoria;
+                                atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;
+                                if (atendCopia.atend_beneid != undefined){atendimentoNovo.atend_beneid = atendCopia.atend_beneid;}
+                                if (atendCopia.atend_convid != undefined){atendimentoNovo.atend_convid = atendCopia.atend_convid;}
+                                if (atendCopia.atend_usuid != undefined){atendimentoNovo.atend_usuid = atendCopia.atend_usuid;}
+                                console.log("dataAtendData"+i+":"+dataAtendData);
+                                atendimentoNovo.atend_atenddata = dataAtendData;
+                                atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;
+                                if (atendCopia.atend_terapeutaid != undefined){atendimentoNovo.atend_terapeutaid = atendCopia.atend_terapeutaid;}
+                                if (atendCopia.atend_terapiaid != undefined){atendimentoNovo.atend_terapiaid = atendCopia.atend_terapiaid;}
+                                if (atendCopia.atend_salaid != undefined){atendimentoNovo.atend_salaid = atendCopia.atend_salaid;}
+                                if (atendCopia.atend_valorcre != undefined){atendimentoNovo.atend_valorcre = atendCopia.atend_valorcre;}
+                                if (atendCopia.atend_valordeb != undefined){atendimentoNovo.atend_valordeb = atendCopia.atend_valordeb;}
+                                if (atendCopia.atend_mergeterapeutaid != undefined){atendimentoNovo.atend_mergeterapeutaid = atendCopia.atend_mergeterapeutaid;}
+                                if (atendCopia.atend_mergeterapiaid != undefined){atendimentoNovo.atend_mergeterapiaid = atendCopia.atend_mergeterapiaid;}
+                                if (atendCopia.atend_mergevalorcre != undefined){atendimentoNovo.atend_mergevalorcre = atendCopia.atend_mergevalorcre;}
+                                if (atendCopia.atend_mergevalordeb != undefined){atendimentoNovo.atend_mergevalordeb = atendCopia.atend_mergevalordeb;}
+                                atendimentoNovo.atend_num = atendCopia.atend_num;
+                                if (atendCopia.atend_datacad != undefined){atendimentoNovo.atend_datacad = dataAtual.toISOString();}
+                                atendimentoNovo.atend_num = nextNum;
+                                console.log("atendimentoNovo:"+atendimentoNovo);
+
+                                Atend.find({_id: atendimentoNovo._id}).then((atendimentoExitente)=>{
+                                    if (atendimentoExitente.length > 0){
+                                        atendimentoExitente.forEach((at)=>{
+                                            console.log("at:"+at);
+                                        })
+                                        var id = new mongoose.Types.ObjectId();
+                                        atendimentoNovo._id = id;
+                                    }
+                                })
+                                atendimentoNovo.save();
+                                arrayAtends.push(atendimentoNovo);
+                            }
+                            /*
+                            console.log("arrayAtends.length:"+arrayAtends.length);
+                            if (arrayAtends.length > 0){
+                                console.log("GERAR!");
+                                Atend.insertMany(arrayAtends, function(error, docs) {
+                                    if (error){
+                                        console.log("error:"+error);
+                                    } else {
+                                        console.log("TUDO LIMPO!");
+                                    }
+                                });
+                                //arrayAtends.forEach((atend) => {atend.save();});
+                            }
+                            */
+                        })
+                    }
+                }
+            }).catch((error)=>{console.log("ERRO ao obter atendimento");console.log(error);})
         }
-        res.send("FUCK YOU!");
-        //this.filtraAtend(req,res);
+        this.filtraAtend(req,res);
     },
     /* Relatório por Terapeuta*/
       /* Consolidado Por Terapia*/
@@ -1604,6 +1692,7 @@ module.exports = {
         
         Bene.findOne().then((bene)=>{
                 Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, benes: bene})
@@ -1650,6 +1739,7 @@ module.exports = {
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                         bene_nome = b.bene_nome;
                         Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                             terapia.forEach((t)=>{
                                 //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
                                 qtdIds = 0;

@@ -684,6 +684,10 @@ router.get('/atendimento/del/:id', fncGeral.IsAuthenticated,(req,res) =>{//delet
     fncAtend.deletaAtend(req, res);
 })
 
+router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
+    fncAtend.deletaVariosAtend(req, res);
+})
+
 router.get('/atendimento/edi/:id', fncGeral.IsAuthenticated,(req,res) =>{//direciona para a edição de atend
     fncAtend.carregaAtendEdi(req, res);
 })

@@ -232,10 +232,10 @@ module.exports = {AtendModel,AtendSchema,
 
         return newAtend;
     },
-    gerarAtend: async (a) => {
-        
-
-        await a.save().then(()=>{
+    gerarAtend: async (atend) => {
+        console.log("cadastrando novo atend!");
+        console.log("atend: "+atend);
+        await atend.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
