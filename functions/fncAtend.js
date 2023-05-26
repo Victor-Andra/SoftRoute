@@ -1323,10 +1323,16 @@ module.exports = {
 
                     if (qtd != undefined && dataAtendData != undefined && nextNumAtendCopiar != undefined){
                         let j = 0;
-
-                        Atend.find({nextNum: nextNumAtendCopiar}).limit(1).then((a)=>{
+//testar com o nextNumAtendCopiar string e int
+                        Atend.find({nextNum: arrayNextNum[i]}).then((a)=>{
                             a.forEach((atendCopiar)=>{
-                                atendCopia = atendCopiar;
+                                if (atendCopiar.atend_atendhora == nextNumAtendCopiar){
+                                    atendCopia = atendCopiar;
+                                    console.log("atendCopiar:"+atendCopiar);
+                                } else {
+                                    atendCopia = atendCopiar;
+                                    console.log("não bateu:"+atendCopiar);
+                                }
                             })
                         }).catch((error)=>{
                             console.log("ERRO ao obter nextNum");console.log(error);
@@ -1334,6 +1340,7 @@ module.exports = {
                             console.log("qtd:"+qtd);
                             for (var k = 0;k < qtd; k++){
                                 nextNum = nextNum + 1;
+                                console.log("atendCopia:"+atendCopia);
 
                                 let atendimentoNovo = new Atend();
 
@@ -1345,7 +1352,7 @@ module.exports = {
                                 if (atendCopia.atend_usuid != undefined){atendimentoNovo.atend_usuid = atendCopia.atend_usuid;}
                                 console.log("dataAtendData"+i+":"+dataAtendData);
                                 atendimentoNovo.atend_atenddata = dataAtendData;
-                                console.log("atendCopia.atend_atendhora:"+atendCopia.atend_atendhora);
+                                console.log("atendCopia:"+atendCopia);
                                 if (atendCopia.atend_atendhora != undefined){atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;} else {atendimentoNovo.atend_atendhora = "08:00"}
                                 if (atendCopia.atend_terapeutaid != undefined){atendimentoNovo.atend_terapeutaid = atendCopia.atend_terapeutaid;}
                                 if (atendCopia.atend_terapiaid != undefined){atendimentoNovo.atend_terapiaid = atendCopia.atend_terapiaid;}

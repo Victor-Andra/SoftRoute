@@ -684,7 +684,7 @@ router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.deletaVariosAtend(req, res);
 })
 
-router.post('/atendimento/deleteMany/', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
+router.post('/atendimento/deleteAll/', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
     fncAtend.deletaVariosAtends(req, res);
 })
 

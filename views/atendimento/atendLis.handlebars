@@ -232,7 +232,7 @@
 						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
 						if(confirmado == true){
 							console.log("idsSelecionados: "+idsSelecionados);
-							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteMany/";
+							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteAll/";
 							document.getElementById("divFormPesquisa").submit();
 							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
 						}
