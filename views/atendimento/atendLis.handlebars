@@ -158,8 +158,8 @@
 
 				}
 			}
-			function mostraDivCopia(nextNum){
-				document.getElementById("atualNextNum").value = nextNum;
+			function mostraDivCopia(id){
+				document.getElementById("atualId").value = id;
 				document.getElementById("divCopiaAtend").style.display = "";
 				document.getElementById("divFormPesquisa").style.display = "none";
 			}
@@ -188,12 +188,12 @@
 					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 					console.log("fulldate:"+fulldate);
 					if(document.getElementById("temCopia").value == "false"){
-						document.getElementById("numCopia").value = document.getElementById("atualNextNum").value;
+						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
 						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
 						document.getElementById("dtCopia").value = fulldate;
 						document.getElementById("temCopia").value = "true";
 					} else {
-						document.getElementById("numCopia").value = document.getElementById("numCopia").value+","+document.getElementById("atualNextNum").value;
+						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
 						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
 						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
 					}
@@ -408,7 +408,7 @@
 								<hr>
 							</div>
 							<div class="hidden">
-								<input id="numCopia" name="numCopia" value="" />
+								<input id="idsCopia" name="idsCopia" value="" />
 								<input id="dtCopia" name="dtCopia" value="" />
 								<input id="qtdCopia" name="qtdCopia" value="" />
 								<input id="temCopia" name="temCopia" value="false" />
@@ -428,11 +428,11 @@
 								<i class="ace-icon fa fa-search-plus "></i>
 								Adicionar Cópia
 							</button>
-							<button name="acaoOcultaCopia" id="acaoOcultaCopia" class="red btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:ocultaDivCopia({{_id}});">
+							<button name="acaoOcultaCopia" id="acaoOcultaCopia" class="red btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:ocultaDivCopia('{{_id}}');">
 								<i class="ace-icon fa fa-window-close-o "></i>
 								Cancelar
 							</button>
-							<input id="atualNextNum" name="atualNextNum" class="hidden" />
+							<input id="atualId" name="atualId" class="hidden" />
 							<hr>
 						</div>
 						<div class="row"><!--.row -->
@@ -516,7 +516,7 @@
 																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia({{atend_num}});">
+																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia('{{_id}}');">
 																	<i class="ace-icon fa fa-clone bigger-130"></i>
 																</a>
 															</div>

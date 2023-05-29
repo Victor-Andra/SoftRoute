@@ -34,6 +34,7 @@ const fncCredit = require("../functions/fncCredit")
 const fncGeral = require("../functions/fncGeral")
 const fncAtendAdm = require("./fncAtendAdm")
 const fncAgenda = require("./fncAgenda")
+const ObjectId = require('mongodb').ObjectId;
 
 class RelAtend{
     constructor(
@@ -1281,8 +1282,8 @@ module.exports = {
     copiarAtends(req,res){
         let arrayAtends =[];
         let dadosCopia = new AtendCopia();
-        let nextNums = req.body.numCopia;
-        let arrayNextNum = nextNums.split(",");
+        let arrIds = req.body.idsCopia;
+        let arrayIds = arrIds.split(",");
         let datas = req.body.dtCopia;
         let arrayData = datas.split(",");
         let quantidades = req.body.qtdCopia;
@@ -1294,6 +1295,7 @@ module.exports = {
         let nextNumAtendCopiar;
         let nextNum;
         let dataAtendData;
+        let horaAtendHora;
 
         console.log("Começando Copia!");
         arrayQuantidade.forEach((aq)=>{
@@ -1302,21 +1304,21 @@ module.exports = {
         console.log("arrayQuantidade[0]:"+arrayQuantidade[0]);
         console.log("arrayQuantidade[1]:"+arrayQuantidade[1]);
         console.log("arrayQuantidade[2]:"+arrayQuantidade[2]);
-        if (arrayNextNum.length == arrayData.length && arrayData.length == arrayQuantidade.length){
+        if (arrayIds.length == arrayData.length && arrayData.length == arrayQuantidade.length){
             //let i = 0;
             Atend.find().sort({atend_num : -1}).limit(1).then((ultimoAtend) =>{
                 ultimoAtend.forEach((ua)=>{
                     nextNum = ua.atend_num;
                 })
-                //arrayNextNum.forEach((a)=>{
-                    console.log("arrayNextNum.length:"+arrayNextNum.length);
-                    let tamanho = parseInt(arrayNextNum.length);
+                //arrayIds.forEach((a)=>{
+                    console.log("arrayIds.length:"+arrayIds.length);
+                    let tamanho = parseInt(arrayIds.length);
                     console.log("tamanho:"+tamanho);
                 for (var i = 0; i < tamanho;i++){
                     console.log("i:"+i);
                     qtd = parseInt(arrayQuantidade[i]);
                     dataAtendData = arrayData[i];
-                    nextNumAtendCopiar = parseInt(arrayNextNum[i]);
+                    nextNumAtendCopiar = parseInt(arrayIds[i]);
                     console.log("qtd:"+qtd);
                     console.log("dataAtendData:"+dataAtendData);
                     console.log("nextNumAtendCopiar:"+nextNumAtendCopiar);
@@ -1324,16 +1326,27 @@ module.exports = {
                     if (qtd != undefined && dataAtendData != undefined && nextNumAtendCopiar != undefined){
                         let j = 0;
 //testar com o nextNumAtendCopiar string e int
-                        Atend.find({nextNum: arrayNextNum[i]}).then((a)=>{
+                        console.log("arrayIds[i]:"+arrayIds[i]);
+                        let idAtend = new ObjectId(arrayIds[i]);
+                        console.log("idAtend:"+idAtend);
+                        Atend.findOne({_id: idAtend}).then((a)=>{
+                            console.log("AAAAAAAAAA:"+a);
+                            atendCopia = a;
+                            
+                            /*
                             a.forEach((atendCopiar)=>{
-                                if (atendCopiar.atend_atendhora == nextNumAtendCopiar){
-                                    atendCopia = atendCopiar;
+                                if (atendCopiar.atend_atendhora.length == 5){
+                                    
+                                    horaAtendHora = atendCopiar.atend_atendhora
                                     console.log("atendCopiar:"+atendCopiar);
                                 } else {
-                                    atendCopia = atendCopiar;
+                                    if (atendCopia == undefined){
+                                        atendCopia = atendCopiar;
+                                    }
                                     console.log("não bateu:"+atendCopiar);
                                 }
                             })
+                            */
                         }).catch((error)=>{
                             console.log("ERRO ao obter nextNum");console.log(error);
                         }).finally(()=>{

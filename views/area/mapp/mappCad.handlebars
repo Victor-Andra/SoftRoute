@@ -148,23 +148,7 @@
 																</div>
 															</div>																								
 														</div>
-														<div class="row">													
-															<div class="col-xs-12 col-sm-4">
-																<label>Teste</label>
-																<div class="form-group">
-																	<div class="col-sm-8">
-																		<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" dcars-placeholder="Escolha..." value="-">
-																				<option value="-">-</option>
-																				<option style="color:crimson" value="1º Teste">1º Teste</option>
-																				<option style="color:yellow" value="2º Teste">2º Teste</option>
-																				<option style="color:greenyellow" value="3º Teste">3º Teste</option>
-																				<option style="color:blue" value="4º Teste">4º Teste</option>
-																			
-																		</select>
-																	</div>
-																</div>
-															</div>																								
-														</div>
+														
 														<div class="row">
 															<div class="col-xs-12">
 																<label> Informações iniciais adicionais </label>
@@ -305,24 +289,320 @@
 
 													</div>
 													<label> Considerações iniciais: </label><br>
-														<label> Primeira Avaliação </label>
+														<label style="color:crimson"> Primeira Avaliação </label>
 														<div class="form-group">
 															<div class="col-sm-12">
 																<textarea type="text" name="mappAva01" id="mappAva01" row="3" placeholder="" class="form-control" ></textarea>
 															</div>
 														</div>
-														<label> Segunda Avaliação </label>
+														<label style="color:orange"> Segunda Avaliação </label>
 														<div class="form-group">
 															<div class="col-sm-12">
 																<textarea type="text" name="mappAva02" id="mappAva02" row="3" placeholder="" class="form-control" ></textarea>
 															</div>
 														</div>
-														<label> Terceira Avaliação </label>
+														<label style="color:green" > Terceira Avaliação </label>
 														<div class="form-group">
 															<div class="col-sm-12">
 																<textarea type="text" name="mappAva03" id="mappAva03" row="3" placeholder="" class="form-control" ></textarea>
 															</div>
 														</div>
+														<label style="color:blue"> Quarta Avaliação </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="mappAva04" id="mappAva04" row="3" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+												</div>
+											</div>
+										</div>
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-pencil"></i>
+													AVALIAÇÕES E ESCALAS ATA, ATEC E CARS
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="tabbable">
+																<ul class="nav nav-tabs" id="myTab">
+																	<li class="active">
+																		<a data-toggle="tab" href="#ata">
+																			<i class="blue ace-icon fa fa-signal bigger-120"></i>
+																			ATA
+																		</a>
+																	</li>
+																	<li>
+																		<a data-toggle="tab" href="#atec">
+																			<i class="orange ace-icon fa fa-eyedropper bigger-120"></i>
+																			ATEC
+																			
+																		</a>
+																	</li>
+																	<li>
+																		<a data-toggle="tab" href="#cars">
+																			<i class="red ace-icon fa fa-check bigger-120"></i>
+																			CARS
+																		</a>
+																	</li>
+																</ul>
+
+																<div class="tab-content">
+																	<div id="ata" class="tab-pane active">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			ATA – ESCALA DE AVALIAÇÃO DE TRAÇOS AUTÍSTICOS.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappAtaconclusao" id="mappAtaconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+
+																		<div class="row">				
+																			<div class="col-xs-12">
+																				<div class="tabbable tabs-left">
+																					<ul class="nav nav-tabs" id="myTab3">
+																						<li class="active">
+																							<a data-toggle="tab" href="#ava1" aria-expanded="true">
+																								<i class="red ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								1º Avaliação
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava2" aria-expanded="false">
+																								<i class="orange ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								2º Avaliação
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava3" aria-expanded="false">
+																								<i class="green ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								3º Avaliação
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava4" aria-expanded="false">
+																								<i class="blue ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								4º Avaliação
+																							</a>
+																						</li>
+																					</ul>
+
+																					<div class="tab-content">
+																						<div id="ava1" class="tab-pane active">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								O mando consiste na habilidade da criança pedir por aquilo que precisa ou deseja. A avaliação do nível 1 tem como objetivo verificar se a criança usa palavras, sinais ou figuras para pedir um item ou atividade desejada. As tarefas de mando do nível 2 têm como objetivo verificar se a criança demonstra mandos frequentes e espontâneos. As tarefas de mando do nível 3 tem como objetivo verificar se a criança pede por informações, usa diferentes componentes da linguagem para pedir (como verbos e adjetivos) e dá direções aos outros.
+																							</div>
+
+
+																						</div>
+																						<div id="ava2" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								O tato consiste na habilidade de nomear coisas, objetos, ações, etc. As tarefas de tato do nível 1 e 2 procuram investigar se a criança nomeia usando substantivos e verbos; e as do nível 3 verificam se a criança emite uma variedade de nomeação contendo vários componentes diferentes da linguagem
+																							</div>
+																							
+																						</div>
+																						<div id="ava3" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								A resposta de ouvinte se refere à capacidade de compreender e responder à fala do outro. O nível 1 da resposta de ouvinte tem como objetivo verificar se a criança atenta e responde a palavra falada pelo outro. O nível 2 da habilidade de ouvinte tem como objetivo verificar se a criança está adquirindo habilidades de ouvinte mais avançadas. Já o nível 3 procura verificar se a criança compreende palavras complexas e sentenças envolvendo os diferentes componentes da linguagem.
+																							</div>
+																							
+																						</div>
+																						<div id="ava4" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								As tarefas de percepção visual e matching-to-sample tem como objetivo verificar se a criança atenta a estímulos visuais, emparelha objetos e figuras e completa sequências e padrões.
+																							</div>
+
+
+																						</div>
+																						
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+
+
+																	</div>
+																	<div id="atec" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			ATEC – Escala de Avaliação do Tratamento do Autismo.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappAtecconclusao" id="mappAtecconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																					<thead>
+																						<h5 class="widget-title bigger lighter">
+																							<i class="ace-icon fa fa-table"></i>
+																							Tabela ATEC
+																						</h5>
+																						<tr>
+																							<th >Sub-Escalas</th>
+																							<th >
+																								<span class="badge badge-danger">1º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-warning">2º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-success">3º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-info">4º Avaliação</span>
+																							</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr><!-- 1Reg -->
+																							<td>
+																								<span>Fala/Linguagem/Comunicação</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																							</td>
+																						</tr>
+																						<tr><!-- 2Reg -->
+																							<td>
+																								<span>Sociabilidade</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc1" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc2" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc3" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc4" type="text" style="width:30px" >
+																							</td>
+																						</tr>
+																						<tr><!-- 3Reg -->
+																							<td>
+																								<span>Percepção sensorial/Cognitiva</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen1" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen2" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen3" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen4" type="text" style="width:30px" >
+																							</td>
+																						</tr>
+																						<tr><!-- 4Reg -->
+																							<td>
+																								<span>Saúde/Aspectos físicos/Comportamentais</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau1" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau2" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau3" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau4" type="text" style="width:30px">
+																							</td>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+
+																	</div>
+																	<div id="cars" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			CARS – Escala de Avaliação do Tratamento do Autismo.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappCarsconclusao" id="mappCarsconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.col -->
+													</div>
+													<div class="vspace-6-sm"></div>
+
 												</div>
 											</div>
 										</div>
@@ -350,6 +630,83 @@
 											
 											<div class="widget-body">
 												<div class="widget-main">
+
+													<div class="row">				
+														<div class="col-xs-12">
+															<div class="tabbable tabs">
+																<ul class="nav nav-tabs" id="myTabmapp">
+																	<li class="active">
+																		<a data-toggle="tab" href="#ava1mapp" aria-expanded="true">
+																			<i class="red ace-icon fa fa-pencil-square-o bigger-110"></i>
+																			1º Avaliação
+																		</a>
+																	</li>
+																	<li class="">
+																		<a data-toggle="tab" href="#ava2mapp" aria-expanded="false">
+																			<i class="orange ace-icon fa fa-pencil-square-o bigger-110"></i>
+																			2º Avaliação
+																		</a>
+																	</li>
+																	<li class="">
+																		<a data-toggle="tab" href="#ava3mapp" aria-expanded="false">
+																			<i class="green ace-icon fa fa-pencil-square-o bigger-110"></i>
+																			3º Avaliação
+																		</a>
+																	</li>
+																	<li class="">
+																		<a data-toggle="tab" href="#ava4mapp" aria-expanded="false">
+																			<i class="blue ace-icon fa fa-pencil-square-o bigger-110"></i>
+																			4º Avaliação
+																		</a>
+																	</li>
+																</ul>
+
+																<div class="tab-content">
+																	<div id="ava1mapp" class="tab-pane active">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			O mando consiste na habilidade da criança pedir por aquilo que precisa ou deseja. A avaliação do nível 1 tem como objetivo verificar se a criança usa palavras, sinais ou figuras para pedir um item ou atividade desejada. As tarefas de mando do nível 2 têm como objetivo verificar se a criança demonstra mandos frequentes e espontâneos. As tarefas de mando do nível 3 tem como objetivo verificar se a criança pede por informações, usa diferentes componentes da linguagem para pedir (como verbos e adjetivos) e dá direções aos outros.
+																		</div>
+
+
+																	</div>
+																	<div id="ava2mapp" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			O tato consiste na habilidade de nomear coisas, objetos, ações, etc. As tarefas de tato do nível 1 e 2 procuram investigar se a criança nomeia usando substantivos e verbos; e as do nível 3 verificam se a criança emite uma variedade de nomeação contendo vários componentes diferentes da linguagem
+																		</div>
+																		
+																	</div>
+																	<div id="ava3mapp" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			A resposta de ouvinte se refere à capacidade de compreender e responder à fala do outro. O nível 1 da resposta de ouvinte tem como objetivo verificar se a criança atenta e responde a palavra falada pelo outro. O nível 2 da habilidade de ouvinte tem como objetivo verificar se a criança está adquirindo habilidades de ouvinte mais avançadas. Já o nível 3 procura verificar se a criança compreende palavras complexas e sentenças envolvendo os diferentes componentes da linguagem.
+																		</div>
+																		
+																	</div>
+																	<div id="ava4mapp" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			As tarefas de percepção visual e matching-to-sample tem como objetivo verificar se a criança atenta a estímulos visuais, emparelha objetos e figuras e completa sequências e padrões.
+																		</div>
+
+
+																	</div>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+
+
 
 													<div class="row">				
 														<div class="col-xs-12">
