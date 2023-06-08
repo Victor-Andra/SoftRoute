@@ -1289,8 +1289,8 @@ module.exports = {
         let quantidades = req.body.qtdCopia;
         console.log("quantidades:"+quantidades);
         let arrayQuantidade = quantidades.split(",");
-        let arrCategs = req.body.categoriaCopia;
-        let arrayCategs = arrCategs.split(",");
+        //let arrCategs = req.body.categoriaCopia;
+        //let arrayCategs = arrCategs.split(",");
         let dataAtual = new Date();
         var atendCopia;
         let qtd;
@@ -1360,7 +1360,8 @@ module.exports = {
                                 let atendimentoNovo = new Atend();
 
                                 atendimentoNovo.atend_org = atendCopia.atend_org;
-                                atendimentoNovo.atend_categoria = arrayCategs[i];
+                                //atendimentoNovo.atend_categoria = arrayCategs[i];
+                                atendimentoNovo.atend_categoria = atendCopia.atend_categoria;
                                 atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;
                                 if (atendCopia.atend_beneid != undefined){atendimentoNovo.atend_beneid = atendCopia.atend_beneid;}
                                 if (atendCopia.atend_convid != undefined){atendimentoNovo.atend_convid = atendCopia.atend_convid;}
