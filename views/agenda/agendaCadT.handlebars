@@ -48,6 +48,10 @@
 				}
 				let fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
 				document.getElementById("agendaData").value = fulldate;
+				document.getElementById("agendaExtra").value = "false";
+				document.getElementById("agendaExtra").checked = true;
+				document.getElementById("agendaExtra").checked = false;
+				console.log("carregou!");
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -164,7 +168,7 @@
 														<label style="color: crimson;">Extraordinário: </label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<input id="agendaExtra" name="agendaExtra" type="checkbox" onchange="javascript:alteraCheck('agendaExtraordinario');" value="false" />
+																<input id="agendaExtra" name="agendaExtra" type="checkbox" onchange="javascript:alteraCheck('agendaExtra');" value="false" />
 																<label style="color: crimson;">Marque somente em caso de agendamento Extraordinário.</label>
 																<span class="lbl"></span>
 																

@@ -160,6 +160,7 @@
 			}
 			function mostraDivCopia(id){
 				document.getElementById("atualId").value = id;
+				document.getElementById("atendCategoria").value = document.getElementById("atendCategoria"+id).value;
 				document.getElementById("divCopiaAtend").style.display = "";
 				document.getElementById("divFormPesquisa").style.display = "none";
 			}
@@ -190,12 +191,14 @@
 					if(document.getElementById("temCopia").value == "false"){
 						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
 						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
+						document.getElementById("categoriaCopia").value = document.getElementById("atendCategoria").value;
 						document.getElementById("dtCopia").value = fulldate;
 						document.getElementById("temCopia").value = "true";
 					} else {
 						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
 						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
 						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
+						document.getElementById("categoriaCopia").value = document.getElementById("categoriaCopia").value+","+document.getElementById("atendCategoria").value;
 					}
 				}
 			}
@@ -411,6 +414,7 @@
 								<input id="idsCopia" name="idsCopia" value="" />
 								<input id="dtCopia" name="dtCopia" value="" />
 								<input id="qtdCopia" name="qtdCopia" value="" />
+								<input id="categoriaCopia" name="categoriaCopia" value="" />
 								<input id="temCopia" name="temCopia" value="false" />
 								<input id="idsDeletar" name="idsDeletar" value="" />
 							</div>
@@ -422,7 +426,23 @@
 									<input style="height: 30px;" id="dataCopia" name="dataCopia" type="date" onchange="javascript:formataDataCopia();">
 								</div>
 							</div>
-							<label>Quantidade de Cópias:&nbsp;</label>
+							<label>Categoria das Cópias:&nbsp;</label>
+							<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+								<option id="Apoio" value="Apoio">Apoio</option>
+								<option id="Extra" value="Extra">Extra</option>
+								<option id="Falta" value="Falta">Falta</option>
+								<option id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
+								<option id="Glosa" value="Glosa">Glosa</option>
+								<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+								<option id="Pais" value="Pais">Pais</option>
+								<option id="Substituição" value="Substituição">Substituto</option>
+								<option id="Supervisão" value="Supervisão">Supervisão</option>
+							</select>
+							<button name="acaoAddCopia" id="acaoAddCopia" class="green btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:addCopia();">
+								<i class="ace-icon fa fa-search-plus "></i>
+								Adicionar Cópia
+							</button>
+							<label>Tipo do Atendimento:&nbsp;</label>
 							<input style="padding-left: 10px;" id="qtd" name="qtd" value="0" />
 							<button name="acaoAddCopia" id="acaoAddCopia" class="green btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:addCopia();">
 								<i class="ace-icon fa fa-search-plus "></i>
@@ -521,6 +541,7 @@
 																</a>
 															</div>
 															<div class="hidden-md hidden-lg">
+																<input class="hidden" id="atendCategoria{{_id}}" value="{{atend_categoria}}" />
 															</div>
 														</td>
 													</tr>

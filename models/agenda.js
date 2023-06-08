@@ -113,7 +113,13 @@ module.exports = {AgendaModel,AgendaSchema,
     agendaAdicionar: async (req,res) => {
         let dataAtual = new Date();
         let agenda_temp = false;
+        let extra = false;
         console.log("req.body.agendaData:"+req.body.agendaData)
+        console.log("req.body.agendaExtra:"+req.body.agendaExtra);
+        if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
+            extra = req.body.agendaExtra;
+        }
+
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         //console.log(dataAgenda);
@@ -132,7 +138,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_org : req.body.agendaOrg ,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : false ,
-            agenda_extra: req.body.agendaExtraordinario ,
+            agenda_extra: extra ,
             agenda_selo : false ,
             agenda_datacad : dataAtual
         });
