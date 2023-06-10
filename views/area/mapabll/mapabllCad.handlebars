@@ -1,0 +1,4061 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>VB-MAPPs e ABLLS-R</title>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Formulário de Avaliação VB-MAPP e ABLLS-R
+						
+						</h1>
+					</div><!-- /.page-header -->
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/mapabll/add" method="POST">
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho do VB-MAPPs e ABLLS-R
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														
+														O VB-Mapp é criado e editado de forma cronológica e sequêncial e depende dos resultados de outros relatórios como ARA, ATEC e CARS.
+														O Gráfico é preenchido automaticamente ao ser respondidas as questões avaliativas.
+														Cada VB-Mapp interdependente, ao contrário do formulário em papel, ele é realizado separadamente, entretanto pode-se realizar uma leitura
+														consolidada pelo período definido pelo Terapeuta, juntando os VB-Mapps necessários ao parecer.
+													</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="row">
+															<div class="col-xs-6 col-sm-6">
+																<label>Beneficiário</label>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<select name="carsBeneid" id="carsBeneid" class="chosen-select" dcars-placeholder="Escolha..." >
+																			{{#each Benes}}
+																				<option value="{{_id}}">{{bene_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-4 col-sm-2">
+																<label> Sexo</label>
+																<div class="row">
+																	<div class="input-group">
+																		<div class="col-sm-2">
+																			<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" dcars-placeholder="Escolha..."value="-" >
+																						<option value="-">-</option>
+																						<option value="F">Feminino</option>
+																						<option value="M">Masculino</option>
+																			</select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-4">
+																<label for="id-date-picker-1">Data Nascimento</label>
+																<div class="row">
+																	<div class="input-group">
+																		<div class="col-sm-4">
+																			<input id="carsdcarsnasc" name="carsdcarsnasc" type="date">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-4 col-sm-4">
+																<label> Idade</label>
+																<div class="row">
+																	<div class="input-group">
+																		<div class="col-sm-2">
+																			<input type="text" name="carsidade" id="carsidade" placeholder="" class="form-control" style="width: 300px;"/>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-6">
+																<label for="id-date-picker-1">Preenchido por:</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<div class="input-group">
+																			<input name="carspreenchido" id="carspreenchido" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-2">
+																<label for="id-date-picker-1">Parentesco</label>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="carsparen" id="carsparen" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">													
+															<div class="col-xs-12 col-sm-4">
+																<label>Técnico Acompanhante</label>
+																<div class="form-group">
+																	<div class="col-sm-8">
+																		<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" dcars-placeholder="Escolha..." value="-">
+																			{{#each Terapeutas}}
+																				<option value="{{_id}}">{{usuario_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+															</div>																								
+														</div>
+														
+														<div class="row">
+															<div class="col-xs-12">
+																<label> Informações iniciais adicionais </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<textarea type="text" name="carsInfoinicars" id="carsInfoinicars" row="3" placeholder="" class="form-control" ></textarea>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+													<label> Assunto:</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<textarea type="text" name="mappAssunto" id="mappAssunto" class="form-control" /></textarea>
+														</div>
+													</div>
+												
+												</div>
+											</div>
+										</div>	
+
+										<div class="widget-box"><!-- .Descrição de Demanda -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-pencil"></i>
+													Descrição de Demanda
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Descrição </label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="mappDesc" id="mappDesc" row="3" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box"><!-- .Procedimento -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-retweet"></i>
+													Procedimento
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Procedimento </label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="mappProced" id="mappProced" row="3" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box"><!-- .Avaliação de Habilidades Através do VB-MAPP -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-map-o"></i>
+													Avaliação de Habilidades Através do VB-MAPP
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														
+														O protocolo VB-MAPP foi aplicado com o objetivo de mapear as habilidades de beneficiário no que diz respeito ao comportamento verbal. 
+														Este protocolo procura determinar em que nível as habilidades do beneficiário se encontra, 
+														oferecendo um guia em termos de quais habilidades precisam ser foco da intervenção e em que nível da habilidade a intervenção deverá começar a ocorrer. 
+														As 16 habilidades avaliadas pelo VB-MAPP são: mando, tato, intraverbal, ecoico, imitação motora, leitura, escrita, resposta de ouvinte,
+														 comportamento de ouvinte por função característica ou classe (LRFFC), 
+														 habilidade de percepção visual e matching to sample (pareamento), brincar independente, 
+														 comportamento social e brincar social, vocal play, rotina de sala de aula e habilidades de trabalhar em grupo, 
+														 escrita, leitura e matemática.  
+														 As habilidades avaliadas no VB-MAPP são divididas em três níveis de desenvolvimento que correspondem às habilidades apresentadas por crianças de desenvolvimento típico de idades entre 0-18 meses ou 1 ano e meio (nível 1), 18-30 meses ou 2 anos e meio (nível 2) e 30-48 meses  ou 4 anos (nível 3). A pontuação para cada tarefa pode ser de 1 ponto, 
+														 quando a criança preenche todos os pré-requisitos, 1⁄2 ponto, quando a criança preenche uma parte dos pré-requisitos,
+														  ou 0 ponto, quando a criança não preenche os pré-requisitos para pontuar.
+
+													</div>
+													<label> Considerações iniciais: </label><br>
+														<label style="color:crimson"> Primeira Avaliação </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="mappAva01" id="mappAva01" row="3" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+														<label style="color:orange"> Segunda Avaliação </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="mappAva02" id="mappAva02" row="3" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+														<label style="color:green" > Terceira Avaliação </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="mappAva03" id="mappAva03" row="3" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+														<label style="color:blue"> Quarta Avaliação </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="mappAva04" id="mappAva04" row="3" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box"><!-- .Avaliações e Escalas ATA, ATEC E CARS -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-check"></i>
+													Avaliações e Escalas ATA, ATEC E CARS
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="tabbable">
+																<ul class="nav nav-tabs" id="myTab">
+																	<li class="active">
+																		<a data-toggle="tab" href="#ata">
+																			<i class="blue ace-icon fa fa-signal bigger-120"></i>
+																			ATA
+																		</a>
+																	</li>
+																	<li>
+																		<a data-toggle="tab" href="#atec">
+																			<i class="orange ace-icon fa fa-eyedropper bigger-120"></i>
+																			ATEC
+																			
+																		</a>
+																	</li>
+																	<li>
+																		<a data-toggle="tab" href="#cars">
+																			<i class="red ace-icon fa fa-check bigger-120"></i>
+																			CARS
+																		</a>
+																	</li>
+																</ul>
+
+																<div class="tab-content">
+																	<div id="ata" class="tab-pane active">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			ATA – ESCALA DE AVALIAÇÃO DE TRAÇOS AUTÍSTICOS.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappAtaconclusao" id="mappAtaconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+
+																		<div class="row">				
+																			<div class="col-xs-12">
+																				<div class="tabbable tabs">
+																					<ul class="nav nav-tabs" id="myTab3">
+																						<li class="active">
+																							<a data-toggle="tab" href="#ava1" aria-expanded="true">
+																								<i class="red ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								1º 
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava2" aria-expanded="false">
+																								<i class="orange ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								2º 
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava3" aria-expanded="false">
+																								<i class="green ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								3º 
+																							</a>
+																						</li>
+																						<li class="">
+																							<a data-toggle="tab" href="#ava4" aria-expanded="false">
+																								<i class="blue ace-icon fa fa-pencil-square-o bigger-110"></i>
+																								4º 
+																							</a>
+																						</li>
+																					</ul>
+
+																					<div class="tab-content">
+																						<div id="ava1" class="tab-pane active">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								Resultado da 1º Avaliação
+																							</div>
+																							<div class="row">
+																								<div class="col-xs-12">
+																									<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																										<thead>
+																											<h5 class="widget-title bigger lighter">
+																												<i class="ace-icon fa fa-table"></i>
+																												1º Avaliação
+																											</h5>
+																											<tr>
+																												<th width="50px;">N</th>
+																												<th >
+																													<span class="badge badge-danger">M</span>
+																												</th>
+																												<th >
+																													<span>Descrição</span>
+																												</th>
+																												
+																											</tr>
+																										</thead>
+																										<tbody>
+																											<tr><!-- 1Reg -->
+																												<td>
+																													<span>I</span>
+																												</td>
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade na interação social</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 2Reg -->
+																												<td>
+																													<span>II</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Manipulação do Ambiente</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 3Reg -->
+																												<td>
+																													<span>III</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Utilização das Pessoas ao Seu Redor</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 4Reg -->
+																												<td>
+																													<span>IV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Resistência a Mudanças</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 5Reg -->
+																												<td>
+																													<span>V</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 6Reg -->
+																												<td>
+																													<span>VI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 7Reg -->
+																												<td>
+																													<span>VII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Mímica inexpressiva </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 8Reg -->
+																												<td>
+																													<span>VIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Distúrbio de sono</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 9Reg -->
+																												<td>
+																													<span>IX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração na alimentação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 10Reg -->
+																												<td>
+																													<span>X</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade no controle dos esfíncteres </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 11Reg -->
+																												<td>
+																													<span>XI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Exploração dos objetos (apalpar, chupar) </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 12Reg -->
+																												<td>
+																													<span>XII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Uso inapropriado dos objetos </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 13Reg -->
+																												<td>
+																													<span>XIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de atenção </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 14Reg -->
+																												<td>
+																													<span>XIV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ausência de interesse pela aprendizagem  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 15Reg -->
+																												<td>
+																													<span>XV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de iniciativa </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 16Reg -->
+																												<td>
+																													<span>XVI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração de linguagem e comunicação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 17Reg -->
+																												<td>
+																													<span>XVII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não manifesta habilidades e conhecimentos </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 18Reg -->
+																												<td>
+																													<span>XVIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Reações inapropriadas ante a frustração </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 19Reg -->
+																												<td>
+																													<span>XIX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não assume responsabilidades</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 20Reg -->
+																												<td>
+																													<span>XX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Hiperatividade ∕ Hipoatividade </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 21Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Movimentos estereotipados e repetitivos  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 22Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ignora perigo </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 23Reg -->
+																												<td>
+																													<span>XXII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Aparecimento antes dos 36 meses (DSM-IV) </span>
+																												</td>
+																												
+																											</tr>
+																											
+																										</tbody>
+																									</table>
+																								</div>
+																							</div>
+
+																						</div>
+																						<div id="ava2" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								O tato consiste na habilidade de nomear coisas, objetos, ações, etc. As tarefas de tato do nível 1 e 2 procuram investigar se a criança nomeia usando substantivos e verbos; e as do nível 3 verificam se a criança emite uma variedade de nomeação contendo vários componentes diferentes da linguagem
+																							</div>
+																							
+																							<div class="row">
+																								<div class="col-xs-12">
+																									<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																										<thead>
+																											<h5 class="widget-title bigger lighter">
+																												<i class="ace-icon fa fa-table"></i>
+																												2º Avaliação
+																											</h5>
+																											<tr>
+																												<th width="50px;">N</th>
+																												<th colspan="1" width="50px" style="text-align: center;">
+																													<span class="badge badge-warning">M</span>
+																												</th>
+																												<th >
+																													<span>Descrição</span>
+																												</th>
+																												
+																											</tr>
+																										</thead>
+																										<tbody>
+																											<tr><!-- 1Reg -->
+																												<td>
+																													<span>I</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade na interação social</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 2Reg -->
+																												<td>
+																													<span>II</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Manipulação do Ambiente</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 3Reg -->
+																												<td>
+																													<span>III</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Utilização das Pessoas ao Seu Redor</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 4Reg -->
+																												<td>
+																													<span>IV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Resistência a Mudanças</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 5Reg -->
+																												<td>
+																													<span>V</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 6Reg -->
+																												<td>
+																													<span>VI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 7Reg -->
+																												<td>
+																													<span>VII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Mímica inexpressiva </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 8Reg -->
+																												<td>
+																													<span>VIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Distúrbio de sono</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 9Reg -->
+																												<td>
+																													<span>IX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração na alimentação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 10Reg -->
+																												<td>
+																													<span>X</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade no controle dos esfíncteres </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 11Reg -->
+																												<td>
+																													<span>XI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Exploração dos objetos (apalpar, chupar) </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 12Reg -->
+																												<td>
+																													<span>XII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Uso inapropriado dos objetos </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 13Reg -->
+																												<td>
+																													<span>XIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de atenção </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 14Reg -->
+																												<td>
+																													<span>XIV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ausência de interesse pela aprendizagem  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 15Reg -->
+																												<td>
+																													<span>XV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de iniciativa </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 16Reg -->
+																												<td>
+																													<span>XVI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração de linguagem e comunicação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 17Reg -->
+																												<td>
+																													<span>XVII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não manifesta habilidades e conhecimentos </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 18Reg -->
+																												<td>
+																													<span>XVIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Reações inapropriadas ante a frustração </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 19Reg -->
+																												<td>
+																													<span>XIX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não assume responsabilidades</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 20Reg -->
+																												<td>
+																													<span>XX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Hiperatividade ∕ Hipoatividade </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 21Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Movimentos estereotipados e repetitivos  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 22Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ignora perigo </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 23Reg -->
+																												<td>
+																													<span>XXII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Aparecimento antes dos 36 meses (DSM-IV) </span>
+																												</td>
+																												
+																											</tr>
+																											
+																										</tbody>
+																									</table>
+																								</div>
+																							</div>
+																							
+																						</div>
+																						<div id="ava3" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								A resposta de ouvinte se refere à capacidade de compreender e responder à fala do outro. O nível 1 da resposta de ouvinte tem como objetivo verificar se a criança atenta e responde a palavra falada pelo outro. O nível 2 da habilidade de ouvinte tem como objetivo verificar se a criança está adquirindo habilidades de ouvinte mais avançadas. Já o nível 3 procura verificar se a criança compreende palavras complexas e sentenças envolvendo os diferentes componentes da linguagem.
+																							</div>
+																							
+																							<div class="row">
+																								<div class="col-xs-12">
+																									<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																										<thead>
+																											<h5 class="widget-title bigger lighter">
+																												<i class="ace-icon fa fa-table"></i>
+																												3º Avaliação
+																											</h5>
+																											<tr>
+																												<th width="50px;">N</th>
+																												<th colspan="1" width="50px" style="text-align: center;">
+																													<span class="badge badge-success">M</span>
+																												</th>
+																												<th >
+																													<span>Descrição</span>
+																												</th>
+																												
+																											</tr>
+																										</thead>
+																										<tbody>
+																											<tr><!-- 1Reg -->
+																												<td>
+																													<span>I</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade na interação social</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 2Reg -->
+																												<td>
+																													<span>II</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Manipulação do Ambiente</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 3Reg -->
+																												<td>
+																													<span>III</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Utilização das Pessoas ao Seu Redor</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 4Reg -->
+																												<td>
+																													<span>IV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Resistência a Mudanças</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 5Reg -->
+																												<td>
+																													<span>V</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 6Reg -->
+																												<td>
+																													<span>VI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 7Reg -->
+																												<td>
+																													<span>VII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Mímica inexpressiva </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 8Reg -->
+																												<td>
+																													<span>VIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Distúrbio de sono</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 9Reg -->
+																												<td>
+																													<span>IX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração na alimentação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 10Reg -->
+																												<td>
+																													<span>X</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade no controle dos esfíncteres </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 11Reg -->
+																												<td>
+																													<span>XI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Exploração dos objetos (apalpar, chupar) </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 12Reg -->
+																												<td>
+																													<span>XII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Uso inapropriado dos objetos </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 13Reg -->
+																												<td>
+																													<span>XIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de atenção </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 14Reg -->
+																												<td>
+																													<span>XIV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ausência de interesse pela aprendizagem  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 15Reg -->
+																												<td>
+																													<span>XV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de iniciativa </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 16Reg -->
+																												<td>
+																													<span>XVI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração de linguagem e comunicação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 17Reg -->
+																												<td>
+																													<span>XVII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não manifesta habilidades e conhecimentos </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 18Reg -->
+																												<td>
+																													<span>XVIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Reações inapropriadas ante a frustração </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 19Reg -->
+																												<td>
+																													<span>XIX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não assume responsabilidades</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 20Reg -->
+																												<td>
+																													<span>XX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Hiperatividade ∕ Hipoatividade </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 21Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Movimentos estereotipados e repetitivos  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 22Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ignora perigo </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 23Reg -->
+																												<td>
+																													<span>XXII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Aparecimento antes dos 36 meses (DSM-IV) </span>
+																												</td>
+																												
+																											</tr>
+																											
+																										</tbody>
+																									</table>
+																								</div>
+																							</div>
+																							
+																						</div>
+																						<div id="ava4" class="tab-pane">
+																							<div class="alert alert-warning">
+																								<button type="button" class="close" data-dismiss="alert">
+																									<i class="ace-icon fa fa-times"></i>
+																								</button>
+																								As tarefas de percepção visual e matching-to-sample tem como objetivo verificar se a criança atenta a estímulos visuais, emparelha objetos e figuras e completa sequências e padrões.
+																							</div>
+																							
+																							<div class="row">
+																								<div class="col-xs-12">
+																									<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																										<thead>
+																											<h5 class="widget-title bigger lighter">
+																												<i class="ace-icon fa fa-table"></i>
+																												4º Avaliação
+																											</h5>
+																											<tr>
+																												<th width="50px;">N</th>
+																												<th colspan="1" width="50px" style="text-align: center;">
+																													<span class="badge badge-info">M</span>
+																												</th>
+																												<th >
+																													<span>Descrição</span>
+																												</th>
+																												
+																											</tr>
+																										</thead>
+																										<tbody>
+																											<tr><!-- 1Reg -->
+																												<td>
+																													<span>I</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade na interação social</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 2Reg -->
+																												<td>
+																													<span>II</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Manipulação do Ambiente</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 3Reg -->
+																												<td>
+																													<span>III</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Utilização das Pessoas ao Seu Redor</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 4Reg -->
+																												<td>
+																													<span>IV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Resistência a Mudanças</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 5Reg -->
+																												<td>
+																													<span>V</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 6Reg -->
+																												<td>
+																													<span>VI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Busca por Ordem Rígida</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 7Reg -->
+																												<td>
+																													<span>VII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Mímica inexpressiva </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 8Reg -->
+																												<td>
+																													<span>VIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Distúrbio de sono</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 9Reg -->
+																												<td>
+																													<span>IX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração na alimentação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 10Reg -->
+																												<td>
+																													<span>X</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Dificuldade no controle dos esfíncteres </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 11Reg -->
+																												<td>
+																													<span>XI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Exploração dos objetos (apalpar, chupar) </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 12Reg -->
+																												<td>
+																													<span>XII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Uso inapropriado dos objetos </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 13Reg -->
+																												<td>
+																													<span>XIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de atenção </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 14Reg -->
+																												<td>
+																													<span>XIV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ausência de interesse pela aprendizagem  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 15Reg -->
+																												<td>
+																													<span>XV</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Falta de iniciativa </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 16Reg -->
+																												<td>
+																													<span>XVI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Alteração de linguagem e comunicação </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 17Reg -->
+																												<td>
+																													<span>XVII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não manifesta habilidades e conhecimentos </span>
+																												</td>
+																												
+																											</tr>
+																											
+																											<tr><!-- 18Reg -->
+																												<td>
+																													<span>XVIII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Reações inapropriadas ante a frustração </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 19Reg -->
+																												<td>
+																													<span>XIX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Não assume responsabilidades</span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 20Reg -->
+																												<td>
+																													<span>XX</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Hiperatividade ∕ Hipoatividade </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 21Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Movimentos estereotipados e repetitivos  </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 22Reg -->
+																												<td>
+																													<span>XXI</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Ignora perigo </span>
+																												</td>
+																												
+																											</tr>
+																											<tr><!-- 23Reg -->
+																												<td>
+																													<span>XXII</span>
+																												</td>
+																												
+																												<td colspan="1" width="50px" style="text-align: center;">	
+																													<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
+																													<div class="checkbox">
+																														<label class="block">
+																															<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
+																															<span class="lbl small"></span>
+																														</label>
+																													</div>
+																												</td>
+																												<td>	
+																													<span>Aparecimento antes dos 36 meses (DSM-IV) </span>
+																												</td>
+																												
+																											</tr>
+																											
+																										</tbody>
+																									</table>
+																								</div>
+																							</div>
+
+
+																						</div>
+																						
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+
+
+																	</div>
+																	<div id="atec" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			ATEC – Escala de Avaliação do Tratamento do Autismo.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappAtecconclusao" id="mappAtecconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																					<thead>
+																						<h5 class="widget-title bigger lighter">
+																							<i class="ace-icon fa fa-table"></i>
+																							Tabela ATEC
+																						</h5>
+																						<tr>
+																							<th >Sub-Escalas</th>
+																							<th >
+																								<span class="badge badge-danger">1º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-warning">2º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-success">3º Avaliação</span>
+																							</th>
+																							<th >
+																								<span class="badge badge-info">4º Avaliação</span>
+																							</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr><!-- 1Reg -->
+																							<td>
+																								<span>Fala/Linguagem/Comunicação</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																							</td>
+																						</tr>
+																						<tr><!-- 2Reg -->
+																							<td>
+																								<span>Sociabilidade</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc1" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc2" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc3" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsoc1" id="mappAtecsoc4" type="text" style="width:30px" >
+																							</td>
+																						</tr>
+																						<tr><!-- 3Reg -->
+																							<td>
+																								<span>Percepção sensorial/Cognitiva</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen1" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen2" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen3" type="text" style="width:30px" >
+																							</td>
+																							<td>	
+																								<input name="mappAtecsen1" id="mappAtecsen4" type="text" style="width:30px" >
+																							</td>
+																						</tr>
+																						<tr><!-- 4Reg -->
+																							<td>
+																								<span>Saúde/Aspectos físicos/Comportamentais</span>
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau1" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau2" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau3" type="text" style="width:30px">
+																							</td>
+																							<td>	
+																								<input name="mappAtecsau1" id="mappAtecsau4" type="text" style="width:30px">
+																							</td>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+
+																	</div>
+																	<div id="cars" class="tab-pane">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			CARS – Escala de Avaliação do Tratamento do Autismo.
+																		</div>
+																		<div class="row">
+																			<div class="col-xs-12">
+																				<label> Conclusão </label>
+																				<div class="form-group">
+																					<div class="col-sm-12">
+																						<textarea type="text" name="mappCarsconclusao" id="mappCarsconclusao" row="3" placeholder="" class="form-control" ></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		
+																	</div>
+																</div>
+															</div>
+														</div><!-- /.col -->
+													</div>
+													<div class="vspace-6-sm"></div>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box"><!-- .Gabarito da Avaliação de Marcos do VB-MAPP-->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-sliders"></i>
+													Gabarito da Avaliação de Marcos do VB-MAPP 
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														
+														Pontuação
+
+													</div>
+													<div class="row">
+														<div class="col-xs-12">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		Tabela de Pontuação de Avaliações
+																	</h5>
+																	<tr>
+																		<th >Chaves</th>
+																		<th >
+																			<span class="badge badge-danger">Pontuação</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Data</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Cor</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Avaliador</span>
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		<td>
+																			<span>1º Teste</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:80px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:290px">
+																		</td>
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		<td>
+																			<span>2º Teste</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecsoc1" id="mappAtecsoc1" type="text" style="width:30px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsoc1" id="mappAtecsoc2" type="text" style="width:80px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsoc1" id="mappAtecsoc3" type="text" style="width:30px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsoc1" id="mappAtecsoc4" type="text" style="width:290px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 3Reg -->
+																		<td>
+																			<span>3º Teste</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecsen1" id="mappAtecsen1" type="text" style="width:30px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsen1" id="mappAtecsen2" type="text" style="width:80px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsen1" id="mappAtecsen3" type="text" style="width:30px" >
+																		</td>
+																		<td>	
+																			<input name="mappAtecsen1" id="mappAtecsen4" type="text" style="width:290px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 4Reg -->
+																		<td>
+																			<span>4º Teste  </span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecsau1" id="mappAtecsau1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecsau1" id="mappAtecsau2" type="text" style="width:80px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecsau1" id="mappAtecsau3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecsau1" id="mappAtecsau4" type="text" style="width:290px">
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box"><!-- .Formulários de Avaliação de Marcos do VB-MAPP -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-pencil"></i>
+													Formulários de Avaliação de Marcos do VB-MAPP
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+																										
+													<div class="row">
+														<div class="col-xs-9">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		3º Nível
+																	</h5>
+																	<tr>
+																		<th >Indice</th>
+																		<th >
+																			<span class="badge badge-info">Mando</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Tato</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Ouvinte</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">VP/MTS</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Brincar</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Social</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Leirura</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Escrita</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">LRFFC</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Intrav</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Grupo</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Ling</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-info">Mat</span>
+																		</th>
+																		
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>15</span>
+																		</td>
+																		<td>	
+																			<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" value="-">
+																				
+																					<option style="background-color:white" value="&nbsp;">&nbsp;</option>
+																					<option style="background-color:crimson" value="1">1</option>
+																					<option style="background-color:orange" value="2">2</option>
+																					<option style="background-color:green"value="3">3</option>
+																					<option style="background-color:blue" value="4">4</option>
+																					
+																				
+																			</select>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>14</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>13</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>12</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>11</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+
+																	
+																</tbody>
+															</table>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-9">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		2º Nível
+																	</h5>
+																	<tr>
+																		<th >Indice</th>
+																		<th >
+																			<span class="badge badge-success">Mando</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Tato</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Ouvinte</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">VP/MTS</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Brincar</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Social</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Imitação</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Ecóico</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">LRFFC</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Intrav</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Grupo</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Ling</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-success">Mat</span>
+																		</th>
+																		
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>10</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>09</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>08</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>07</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>06</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+
+																	
+																</tbody>
+															</table>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		1º Nível
+																	</h5>
+																	<tr>
+																		<th >Indice</th>
+																		<th >
+																			<span class="badge badge-warning">Mando</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Tato</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Ouvinte</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">VP/MTS</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Brincar</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Social</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Imitação</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Ecóico</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-warning">Vocal</span>
+																		</th>
+																																				
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>05</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>04</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>03</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>02</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																	</tr>
+																	<tr><!-- 1Reg -->
+																		<td rowspan="2">
+																			<span>01</span>
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																		
+																		
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala2" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala3" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala4" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		<td>	
+																			<input name="mappAtecfala1" id="mappAtecfala1" type="text" style="width:30px">
+																		</td>
+																		
+																	</tr>
+
+																	
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+
+
+
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="row">
+										<div class="col-md-offset-3 col-md-9" style="text-align: center;">
+											<button class="btn btn-info"  name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

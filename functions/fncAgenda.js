@@ -277,15 +277,6 @@ module.exports = {
         let dtFill;
         let seg = new Date();
         let sex = new Date();
-        Atend.find().then((atend)=>{
-            atend.forEach((a)=>{
-                if(a.atend_num != 1){
-                    Atend.deleteOne({_id: a._id}).then(()=>{
-                        //console.log("Deleted")
-                    })
-                }
-            })
-        })
         //seg.setUTCDate(seg.getUTCDate() - 22);
         //sex.setUTCDate(sex.getUTCDate() - 22);
         seg.setHours(0);
@@ -11854,6 +11845,7 @@ module.exports = {
     sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     },
+    /*
     deletaAgendaAtend(req, res){
         let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
             a.forEach(a=>{
@@ -11884,20 +11876,27 @@ module.exports = {
             })
         })
     },
+    */
     deletarTodosAtendimentos(req,res){
+        /*
         if (senha == "Teste@#$2022"){
-            let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
-            let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
-            let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+            let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");/})})})
+            let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");/})})})
+            let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");/})})})
             console.log("Finish");
         }
+        */
+        console.log("Desativado");
         res.render("admin/branco");
     },
     deletarTodosAtendimentos2(req,res){
-        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");*/})})})
-        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");*/})})})
-        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");*/})})})
+        /*
+        let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");/})})})
+        let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");/})})})
+        let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");/})})})
         console.log("Finish");
+        */
+        console.log("Desativado");
         res.render("admin/branco");
     },
     temDia(haddia,horaage,agenda,semana,aux,diaDaSemana){

@@ -108,6 +108,10 @@ const abllsrClass = require("../models/abllsr")
 const Abllsr = mongoose.model("tb_abllsr")
 const fncAbllsr = require("../functions/fncAbllsr")
 
+//VB-Mapabll
+const mapabllClass = require("../models/mapabll")
+const Mapabll = mongoose.model("tb_mapabll")
+const fncMapabll = require("../functions/fncMapabll")
 
 //Laudo
 const evolClass = require("../models/evol")
@@ -339,64 +343,73 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let lvl;
     let idUsu;
     let perfilId;
+    let ativo;
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
         //console.log(usu);
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
-
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
-        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
-        /*
-        switch (perfilId){
-            case "62421801a12aa557219a0fb9":
-                //Admin
-                lvl = 0;
-                break;
-            case "62421857a12aa557219a0fc1":
-                //Sócios
-                lvl = 1;
-                break;
-            case "624218f5a12aa557219a0fd0":
-                //Administrador & Financeiro
-                lvl = 2;
-                break;
-            case "62421903a12aa557219a0fd3":
-                //terapeutas
-                lvl = 3;
-                break;
-            case "6242190fa12aa557219a0fd6":
-                //Recepcionistas
-                lvl = 4;
-                break;
-            case "6242191fa12aa557219a0fd9":
-                //Visitantes e Outros
-                lvl = 5;
-                break;
-            default:
-                //ERROR
-                res.redirect("/menu/admin/erro")
-                break;
-        }
-        */
-        res.redirect("/menu/branco");
-        /*
-        if(lvl == 0){
-            res.redirect("/menu/branco")
-        } else if (lvl == 1){
-            res.redirect("/menuT/")
-        } else if (lvl == 2){
-            res.redirect("/menuT/")
-        } else if (lvl == 3){
-            res.redirect("/menuT/")
-        } else if (lvl == 4){
-            res.redirect("/menuT/")
-        } else if (lvl == 5){
-            res.redirect("/menuT/")
+        ativo = usu.usuario_status;
+        console.log("ativo:"+ativo)
+        if (ativo == "Ativo"){
+            console.log("VERDADEIRO")
+            res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
+            res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
+            /*
+            switch (perfilId){
+                case "62421801a12aa557219a0fb9":
+                    //Admin
+                    lvl = 0;
+                    break;
+                case "62421857a12aa557219a0fc1":
+                    //Sócios
+                    lvl = 1;
+                    break;
+                case "624218f5a12aa557219a0fd0":
+                    //Administrador & Financeiro
+                    lvl = 2;
+                    break;
+                case "62421903a12aa557219a0fd3":
+                    //terapeutas
+                    lvl = 3;
+                    break;
+                case "6242190fa12aa557219a0fd6":
+                    //Recepcionistas
+                    lvl = 4;
+                    break;
+                case "6242191fa12aa557219a0fd9":
+                    //Visitantes e Outros
+                    lvl = 5;
+                    break;
+                default:
+                    //ERROR
+                    res.redirect("/menu/admin/erro")
+                    break;
+            }
+            */
+            res.redirect("/menu/branco");
+            /*
+            if(lvl == 0){
+                res.redirect("/menu/branco")
+            } else if (lvl == 1){
+                res.redirect("/menuT/")
+            } else if (lvl == 2){
+                res.redirect("/menuT/")
+            } else if (lvl == 3){
+                res.redirect("/menuT/")
+            } else if (lvl == 4){
+                res.redirect("/menuT/")
+            } else if (lvl == 5){
+                res.redirect("/menuT/")
+            } else {
+                res.redirect("/menuV/")
+            }
+            */
         } else {
-            res.redirect("/menuV/")
+            console.log("FALSE")
+            let lvl = "x";
+            res.render("ferramentas/usuario/login", {nivel: lvl});
         }
-        */
     })
 });
 
@@ -1267,30 +1280,57 @@ router.get('/area/mapp/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta
 })
 
 //Menu ABLLS-R ** Area Tecnicos   
-//Carrega Cadastro de Mapp
+//Carrega Cadastro de ABLLS-R
 router.get('/area/abllsr/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncAbllsr.carregaAbllsr(req, res);
 })
-//Adiciona Registro de Mapp
+//Adiciona Registro de ABLLS-R
 router.post('/area/abllsr/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
     fncAbllsr.cadastraAbllsr(req,res);
 })
-//Carrega o Mapp Selecionado para Edição
+//Carrega o ABLLS-R Selecionado para Edição
 router.get('/area/abllsr/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncAbllsr.carregaAbllsr(req, res);
 })
-//atualiza o Mapp Editado
+//atualiza o ABLLS-R Editado
 router.get('/area/abllsr/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncAbllsr.atualizaAbllsr(req, res);
 })
-//Lista Todos os Mapss
+//Lista os ABLLS-R
 router.get('/area/abllsr/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncAbllsr.listaAbllsr(req, res);
 })
-//Deleta Exclui o Mapp Selecionado
+//Deleta Exclui o ABLLS-R Selecionado
 router.get('/area/abllsr/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncAbllsr.deletaAbllsr(req, res);
 })
+
+//Menu MapAbll ** Area Tecnicos   
+//Carrega Cadastro de MapAbll
+router.get('/area/mapabll/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
+    fncMapabll.carregaMapabll(req, res);
+})
+//Adiciona Registro de MapAbll
+router.post('/area/mapabll/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncMapabll.cadastraMapabll(req,res);
+})
+//Carrega o MapAbll Selecionado para Edição
+router.get('/area/mapabll/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncMapabll.carregaMapablledi(req, res);
+})
+//atualiza o MapAbll Editado
+router.get('/area/mapabll/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncMapabll.atualizaMapabll(req, res);
+})
+//Lista Todos os MapAbll
+router.get('/area/mapabll/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncMapabll.listaMapabll(req, res);
+})
+//Deleta Exclui o MapAbll Selecionado
+router.get('/area/mapabll/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+    fncMapabll.deletaMapabll(req, res);
+})
+
 
 //Menu Sonda ** Area Tecnicos e ABA 
 //Carrega Cadastro
