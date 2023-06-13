@@ -117,7 +117,7 @@ module.exports = {AgendaModel,AgendaSchema,
         console.log("req.body.agendaData:"+req.body.agendaData)
         console.log("req.body.agendaExtra:"+req.body.agendaExtra);
         if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
-            extra = req.body.agendaExtra;
+            extra = true;
         }
 
         let data = new Date(req.body.agendaData);
@@ -276,6 +276,24 @@ module.exports = {AgendaModel,AgendaSchema,
         }
         await AgendaModel.find({_id: req.body.id}).then((a)=>{
             console.log("agenda:"+a)
+        })
+        return resultado;
+    },
+    kaskopstusagenda: async (id) => {
+        console.log("id:"+id)
+        //Realiza Atualização - Atualização não faz alteração temporaria
+        await AgendaModel.findByIdAndUpdate(id, 
+            {$set: {
+                agenda_extra : false
+                }}
+        ).then(() =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
         })
         return resultado;
     }

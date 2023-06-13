@@ -353,8 +353,14 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         console.log("ativo:"+ativo)
         if (ativo == "Ativo"){
             console.log("VERDADEIRO")
-            res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
-            res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + 10000000)/*, httpOnly: true */});//comentado, paleativo
+            if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {//Adm e Finan
+                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (10*3600000))/*, httpOnly: true */});//comentado, paleativo
+                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (10*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
+            } else {
+                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo
+                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
+            }
+
             /*
             switch (perfilId){
                 case "62421801a12aa557219a0fb9":

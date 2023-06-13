@@ -48,14 +48,70 @@
 							let id = "hora"+e.id;//td para receber o append
 							
 							let valor = e.value;//valor para indexar no td
+							console.log("valor"+valor);
 							//console.log("valor:"+valor)
 							//console.log("ELEMENTO VALOR:"+document.getElementById(valor))
 							if(document.getElementById(valor) != null){
 								let color = e.id + "_" + e.value;
 								let hav = document.getElementById(color)
-								if (hav != null) {
+								let extra = document.getElementsByName(color+"_extra")
+
+								console.log("hav:"+hav)
+								if (hav != null || extra.length > 0) {
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
+
+									if (extra.length > 0){
+										val.style.backgroundColor = "lightslategrey";
+									} else {
+										let motivo = hav.value;
+										console.log("motivo:"+motivo)
+										switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+									}
+									document.getElementById(id).append(val);
+								} else {
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementById(id).append(val);
+								}
+							}
+						})
+								
+					
+						dia_sala_tipo = dia_sala + "_Tera"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+							
+							let valor = e.value;//valor para indexar no td
+							//console.log("valor:"+valor)
+							let color = e.id + "_" + e.value;
+							let hav = document.getElementById(color)
+							let extra = document.getElementsByName(color+"_extra")
+
+							if (hav != null || extra.length > 0) {
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								if (extra.length > 0){
+									val.style.backgroundColor = "lightslategrey";
+								} else {
 									let motivo = hav.value;
 									console.log("motivo:"+motivo)
 									switch (motivo) {
@@ -77,47 +133,6 @@
 										default :
 											break;
 									}
-									document.getElementById(id).append(val);
-								} else {
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementById(id).append(val);
-								}
-							}
-						})
-								
-					
-						dia_sala_tipo = dia_sala + "_Tera"
-						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
-							let id = "hora"+e.id;//td para receber o append
-							
-							let valor = e.value;//valor para indexar no td
-							//console.log("valor:"+valor)
-							let color = e.id + "_" + e.value;
-							let hav = document.getElementById(color)
-							if (hav != null) {
-								let val = document.getElementById(valor).cloneNode(true);
-								val.id = val.id+"x";
-								let motivo = hav.value;
-								console.log("motivo:"+motivo)
-								switch (motivo) {
-									case "Falta" :
-										val.style.backgroundColor = "yellow";
-										break;
-									case "Falta Justificada":
-										val.style.backgroundColor = "orange";
-										break;
-									case "Substituição":
-										val.style.backgroundColor = "cyan";
-										break;
-									case "Roberta Disponpivel":
-										val.style.backgroundColor = "salmon";
-										break;
-									case "Nenhuma Observação":
-										val.style.backgroundColor = "lightgreen";
-										break;
-									default :
-										break;
 								}
 								document.getElementById(id).append(val);
 							} else {
@@ -175,6 +190,11 @@
 							{{#isTrue agenda_temp}}
 								<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
 								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}" value="{{agenda_categoria}}">
+							{{else}}
+							{{/isTrue}}
+							{{#isTrue agenda_extra}}
+								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}_extra" value="roxo">
+								<input name="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}_extra" value="roxo">
 							{{else}}
 							{{/isTrue}}
 							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Acao">

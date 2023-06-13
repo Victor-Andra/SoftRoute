@@ -7601,6 +7601,9 @@ module.exports = {
         })
     },
     carregaAgendaFilF(req,res){
+        Agenda.find({agenda_extra: undefined}).then((ag)=>{
+            console.log("length: "+ag.length)
+        })
         let aux = 1;
         let is = false;
         let segunda;
@@ -7611,16 +7614,16 @@ module.exports = {
         let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        //console.log("seg dtf: "+seg)
-        //console.log("sex dtf: "+sex)
+        console.log("seg dtf: "+seg);
+        console.log("sex dtf: "+sex);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        //console.log("seg aft: "+seg)
-        //console.log("sex aft: "+sex)
+        console.log("seg aft: "+seg)
+        console.log("sex aft: "+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -7668,10 +7671,12 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false}).then((agenda2) =>{
+            console.log("tamanho agbenda sem filtro: "+agenda2.length)
+        })
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            //console.log(agenda)
+            console.log(agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
