@@ -275,6 +275,21 @@ const refAtendClass = require("../models/refAtend")
 const RefAtend = mongoose.model("tb_refatend")
 */
 
+/*
+    Classes para Administração da Rota
+*/
+class PoteBiscoito{
+    constructor(
+        lvlUsu,
+        idUsu
+        ){
+        this.lvlUsu = lvlUsu,
+        this.idUsu = idUsu
+    }
+}
+
+
+
 //Rota Base '/'
 router.get('/', (req,res) =>{
     res.render("admin/index")
@@ -354,8 +369,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         if (ativo == "Ativo"){
             console.log("VERDADEIRO")
             if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {//Adm e Finan
-                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (10*3600000))/*, httpOnly: true */});//comentado, paleativo
-                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (10*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
+                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (24*3600000))/*, httpOnly: true */});//comentado, paleativo
+                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (24*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
             } else {
                 res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo
                 res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
@@ -477,14 +492,28 @@ router.get("/auth", fncGeral.IsAuthenticated, (req,res)=>{
 })
 
 router.get("/agenda/cadT", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    let resposta = new Resposta()
-    resposta.texto = ""
-    resposta.sucesso = ""
-    fncAgenda.carregaAgendaCadastro(req, res, resposta);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        let resposta = new Resposta()
+        resposta.texto = ""
+        resposta.sucesso = ""
+        fncAgenda.carregaAgendaCadastro(req, res, resposta);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get("/agenda/cadF/:dia/:mes/:ano/:hora", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
-    fncAgenda.carregaAgendaEdiF(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.carregaAgendaEdiF(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get("/agenda/lisL/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda com FILTROS, FILTRADA.
@@ -578,58 +607,149 @@ router.post("/agenda/filL", fncGeral.IsAuthenticated, (req,res) =>{//direciona o
 })
 
 router.post('/agenda/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona fornec
-    fncAgenda.cadastraAgenda(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.cadastraAgenda(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 
 router.get('/agenda/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta agenda
-    fncAgenda.deletaAgenda(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.deletaAgenda(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/agenda/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.carregaAgendaEdi(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.carregaAgendaEdi(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/agenda/ediTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
-    fncAgenda.carregaAgendaEdiTemp(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.carregaAgendaEdiTemp(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/agenda/atualizaTemp', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
-    fncAgenda.atualizaAgendaTemp(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.atualizaAgendaTemp(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/agenda/cadTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
-    fncAgenda.carregaAgendaTemp(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.carregaAgendaTemp(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/agenda/addTemp', fncGeral.IsAuthenticated, (req,res) =>{//direciona para salvar a edição de agenda diária
-    fncAgenda.cadastraAgendaTemp(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.cadastraAgendaTemp(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/agenda/cadE/atualiza', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.atualizaAgenda(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.atualizaAgenda(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/agenda/deleteall', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.deletarTodosAtendimentos(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        //fncAgenda.deletarTodosAtendimentos(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/agenda/deleteall/Teste2342022', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.deletarTodosAtendimentos2(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        //fncAgenda.deletarTodosAtendimentos2(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 /*
 router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.atualizaAgendaCadE(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.atualizaAgendaCadE(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 */
 
 router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.copiaSemanaAgendaGeral(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.copiaSemanaAgendaGeral(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 
 router.post('/agenda/converteDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.converteAgendaEmAtend(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.converteAgendaEmAtend(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/area/magenda/lisDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
@@ -688,7 +808,14 @@ router.post("/atendimento/lisF", fncGeral.IsAuthenticated,(req,res) =>{//direcio
 })
 
 router.post("/atendimento/copiaAtends", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
-    fncAtend.copiarAtends(req,res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtend.copiarAtends(req,res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/atendimento/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
@@ -696,23 +823,58 @@ router.get('/atendimento/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona
 })
 
 router.post('/atendimento/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
-    fncAtend.cadastraAtend(req,res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtend.cadastraAtend(req,res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
-    fncAtend.deletaVariosAtend(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        //fncAtend.deletaVariosAtend(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/atendimento/deleteAll/', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
-    fncAtend.deletaVariosAtends(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtend.deletaVariosAtends(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/atendimento/edi/:id', fncGeral.IsAuthenticated,(req,res) =>{//direciona para a edição de atend
-    fncAtend.carregaAtendEdi(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtend.carregaAtendEdi(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Atendimento
-    fncAtend.atualizaAtend(req , res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtend.atualizaAtend(req , res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
   
@@ -805,44 +967,64 @@ router.get('/atendimento/atendadm/cad', fncGeral.IsAuthenticated,(req,res) =>{//
 
 
 router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
-    
-    switch (req.body.atendCategoria) {
-        case 'Padrão':
-            fncAtendAdm.cadastraAtendAdm(req,res);
-            break;
-        case 'Falta':
-            fncAtendAdm.cadastraAtendAdmFalta(req,res);
-            break;
-        case 'Apoio':
-            fncAtendAdm.cadastraAtendAdmApoio(req,res);
-            break;
-        case 'Supervisão':
-            fncAtendAdm.cadastraAtendAdmSupervisao(req,res);
-            break;
-        case 'Pais':
-            fncAtendAdm.cadastraAtendAdmPais(req,res);
-            break;
-        case 'Substituto':
-            fncAtendAdm.cadastraAtendAdmSubstituto(req,res);
-            break;
-        case 'Glosa':
-            fncAtendAdm.cadastraAtendAdmGlosa(req,res);
-            break;
-        case 'Extra':
-            fncAtendAdm.cadastraAtendAdmExtra(req,res);
-            break;
-        default:
-            res.redirect('admin/erro')
-            break;
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        switch (req.body.atendCategoria) {
+            case 'Padrão':
+                fncAtendAdm.cadastraAtendAdm(req,res);
+                break;
+            case 'Falta':
+                fncAtendAdm.cadastraAtendAdmFalta(req,res);
+                break;
+            case 'Apoio':
+                fncAtendAdm.cadastraAtendAdmApoio(req,res);
+                break;
+            case 'Supervisão':
+                fncAtendAdm.cadastraAtendAdmSupervisao(req,res);
+                break;
+            case 'Pais':
+                fncAtendAdm.cadastraAtendAdmPais(req,res);
+                break;
+            case 'Substituto':
+                fncAtendAdm.cadastraAtendAdmSubstituto(req,res);
+                break;
+            case 'Glosa':
+                fncAtendAdm.cadastraAtendAdmGlosa(req,res);
+                break;
+            case 'Extra':
+                fncAtendAdm.cadastraAtendAdmExtra(req,res);
+                break;
+            default:
+                res.redirect('admin/erro')
+                break;
+        }
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
     }
 })
 
 router.get('/atendimento/atendadm/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta atend
-    fncAtendAdm.deletaAtendAdm(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtendAdm.deletaAtendAdm(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/atendimento/atendadm/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de atend
-    fncAtendAdm.carregaAtendAdmEdi(req,res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtendAdm.carregaAtendAdmEdi(req,res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
     /*
     Atend.findById(req.params.id).then((atend) =>{
         res.render('financeiro/atendadm/atendAdmEdi', atend)
@@ -854,7 +1036,14 @@ router.get('/atendimento/atendadm/edi/:id', fncGeral.IsAuthenticated, (req,res) 
 })
 
 router.post('/atendimento/atendadm/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Atendimento
-    fncAtendAdm.atualizaAtendAdm(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAtendAdm.atualizaAtendAdm(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 //Financeiro / Fornecedor
@@ -864,24 +1053,58 @@ router.get('/financeiro/fornecedor/lis', fncGeral.IsAuthenticated,(req,res) =>{/
 })
 
 router.get('/financeiro/fornecedor/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de fornec.
-    fncFornec.carregaFornecCad(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncFornec.carregaFornecCad(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/financeiro/fornecedor/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona fornec
-    fncFornec.cadastraFornec(req, res);
-
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncFornec.cadastraFornec(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/financeiro/fornecedor/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta fornec
-    fncFornec.deletaFornec(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncFornec.deletaFornec(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.get('/financeiro/fornecedor/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de fornec
-    fncFornec.carregaFornecEdi(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncFornec.carregaFornecEdi(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 router.post('/financeiro/fornecedor/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//atualiza o cadastro da Fornecimento
-    fncFornec.atualizaFornec(req, res);
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncFornec.atualizaFornec(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
 })
 
 //Financeiro / categoria

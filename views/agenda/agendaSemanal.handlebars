@@ -62,7 +62,7 @@
 									val.id = val.id+"x";
 
 									if (extra.length > 0){
-										val.style.backgroundColor = "lightslategrey";
+										val.style.backgroundColor = "aquamarine";
 									} else {
 										let motivo = hav.value;
 										console.log("motivo:"+motivo)
@@ -110,7 +110,7 @@
 								let val = document.getElementById(valor).cloneNode(true);
 								val.id = val.id+"x";
 								if (extra.length > 0){
-									val.style.backgroundColor = "lightslategrey";
+									val.style.backgroundColor = "aquamarine";
 								} else {
 									let motivo = hav.value;
 									console.log("motivo:"+motivo)
@@ -198,11 +198,18 @@
 							{{else}}
 							{{/isTrue}}
 							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Acao">
+								{{#compareString agenda_obs ""}}
+								{{else}}
+								<a style="vertical-align: middle" class="pink" id="open-event" href="#" title="{{agenda_obs}}">
+									<i class="ace-icon fa fa-comment bigger-110"></i>
+									&nbsp;
+								</a>
+								{{/compareString}}
 								{{#isTrue agenda_temp}}
-								<a class="blue" href="/menu/agenda/ediTemp/{{_id}}">
+								<a style="vertical-align: middle" class="blue" href="/menu/agenda/ediTemp/{{_id}}">
 									<i class="ace-icon fa fa-pencil bigger-130"></i>
 								</a>
-								<a class="red" href="/menu/agenda/del/{{_id}}">
+								<a style="vertical-align: middle" class="red" href="/menu/agenda/del/{{_id}}">
 									<i class="ace-icon fa fa-trash-o bigger-130"></i>
 								</a>
 								{{else}}
@@ -210,6 +217,7 @@
 									<i class="ace-icon fa fa-plus bigger-130"></i>
 								</a>
 								{{/isTrue}}
+								
 							</div>
 						{{/each}}
 						
@@ -256,19 +264,19 @@
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
-													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Acao&ensp;</th>
+													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 												</tr>
 											</thead>
 											{{#each ../horaages}}

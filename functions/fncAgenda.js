@@ -7601,9 +7601,6 @@ module.exports = {
         })
     },
     carregaAgendaFilF(req,res){
-        Agenda.find({agenda_extra: undefined}).then((ag)=>{
-            console.log("length: "+ag.length)
-        })
         let aux = 1;
         let is = false;
         let segunda;
@@ -7671,10 +7668,7 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false}).then((agenda2) =>{
-            console.log("tamanho agbenda sem filtro: "+agenda2.length)
-        })
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             console.log(agenda.length)
             agenda.forEach((e)=>{

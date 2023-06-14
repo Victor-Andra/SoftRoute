@@ -70,6 +70,10 @@ const AtendSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    atend_obs :{
+        type: String,
+        required: false
+    },
     atend_num :{
         type: Number,
         required: true
@@ -103,6 +107,7 @@ class Atend{
         atend_mergevalorcre,
         atend_mergevalordeb,
         atend_evolucao,
+        atend_obs,
         atend_num,
         atend_datacad,
         atend_dataedi
@@ -124,6 +129,7 @@ class Atend{
         this.atend_mergevalorcre = atend_mergevalorcre,
         this.atend_mergevalordeb = atend_mergevalordeb,
         this.atend_evolucao = atend_evolucao,
+        this.atend_obs = atend_obs,
         this.atend_num = atend_num,
         this.atend_datacad = atend_datacad,
         this.atend_dataedi = atend_dataedi       
@@ -157,7 +163,7 @@ module.exports = {AtendModel,AtendSchema,
                 atend_mergeterapiaid : req.body.atendMergeterapiaid,
                 atend_mergevalorcre : req.body.atendMergevalorcre,
                 atend_mergevalordeb : req.body.atendMergevalordeb,
-                atend_evolucao : req.body.atendEvolucao,
+                atend_obs : req.body.atendObs,
                 atend_dataedi : dataAtual.toISOString()
                 }}
         ).then((res) =>{
@@ -193,7 +199,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_mergeterapiaid : req.body.atendMergeTerapiaid,
             atend_mergevalorcre : req.body.atendMergevalorcre,
             atend_mergevalordeb : req.body.atendMergevalordeb,
-            atend_evolucao : req.body.atendEvolucao,
+            atend_obs : req.body.atendObs,
             atend_num : req.body.nextNum,
             atend_datacad : dataAtual.toISOString()
             
@@ -225,7 +231,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_mergeterapiaid : req.body.atendMergeTerapiaid,
             atend_mergevalorcre : req.body.atendMergevalorcre,
             atend_mergevalordeb : req.body.atendMergevalordeb,
-            atend_evolucao : req.body.atendEvolucao,
+            atend_obs : req.body.atendObs,
             atend_num : req.body.nextNum,
             atend_datacad : dataAtual.toISOString()
         });

@@ -105,7 +105,7 @@
 				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
 				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
 				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
-				document.getElementById("atendEvolucao").value = document.getElementById("atendEvolucaoEdi").value;
+				document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
 				document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
 				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
 				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
@@ -440,10 +440,10 @@
 														</div>
 													</div><!-- /.col -->
 												</div><!-- /.row -->
-												<label> Evolução atendimento</label>
+												<label> Observação do atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<textarea type="text" id="atendEvolucao" name="atendEvolucao" placeholder="" class="form-control"rows="3" class="col-sm-12" data-iconlibrary="fa">
+														<textarea type="text" id="atendObs" name="atendObs" placeholder="" class="form-control"rows="3" class="col-sm-12" data-iconlibrary="fa">
 														</textarea>
 													</div>
 												</div>
@@ -467,7 +467,7 @@
 													<input id="atendMergeTerapiaidEdi" name="atendMergeTerapiaidEdi" value="{{atendEdi.atend_mergeterapiaid}}"/>
 													<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atendEdi.atend_mergevalorcre}}"/>
 													<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atendEdi.atend_mergevalordeb}}"/>
-													<input id="atendEvolucaoEdi" name="atendEvolucaoEdi" value="{{atendEdi.atend_evolucao}}"/>
+													<input id="atendObsEdi" name="atendObsEdi" value="{{atendEdi.atend_obs}}"/>
 													<input id="atendHoraEdi" name="atendHoraEdi" value="{{atendEdi.atend_atendhora}}"/>
 													<input id="atendAtenddata"  name="atendAtenddata" value="{{atend.atend_atenddata}}" />
 												</div>

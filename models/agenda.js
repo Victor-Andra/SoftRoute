@@ -302,7 +302,7 @@ module.exports = {AgendaModel,AgendaSchema,
     agendaAddNovosCampos: async (req,res) => {
         let resultado;
         await AgendaModel.updateMany(
-            {},
+            {agenda_extra: undefined},
             {$set: {'agenda_extra': false}}
         ).then((res) =>{
             console.log("XABLAU")

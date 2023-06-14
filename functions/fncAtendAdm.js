@@ -95,9 +95,9 @@ module.exports = {
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Atend.findById(req.params.id).then((atendEdi)=>{
-                                            console.log(atendEdi.atend_num);
+                                            //console.log(atendEdi.atend_num);
                                             nextNumEdi = atendEdi.atend_num;
-                                            console.log("atendEdi.atend_atenddata:"+atendEdi.atend_atenddata);
+                                            //console.log("atendEdi.atend_atenddata:"+atendEdi.atend_atenddata);
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
                                                     Horaage.find().then((horaage)=>{
