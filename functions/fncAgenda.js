@@ -5526,7 +5526,8 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                console.log("goraage"+horaage)
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
