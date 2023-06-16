@@ -12128,7 +12128,7 @@ module.exports = {
                     agenda_org : a.agenda_org,//
                     agenda_obs : a.agenda_obs,//
                     agenda_temp : a.agenda_temp,//
-                    agenda_temp : a.agenda_extra,//
+                    agenda_extra : a.agenda_extra,//
                     agenda_datacad: dataAtual//
                 });
                 this.salvaAgenda(newAgenda);
