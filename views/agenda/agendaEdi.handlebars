@@ -58,6 +58,7 @@
 					document.getElementById("Supervisão").style.display = "none";
 					document.getElementById("Pais").style.display = "none";
 					document.getElementById("Substituto").style.display = "none";
+					document.getElementById("SubstitutoFixo").style.display = "none";
 					document.getElementById("Glosa").style.display = "none";
 					document.getElementById("Extra").style.display = "none";
 				} else {
@@ -68,10 +69,32 @@
 					document.getElementById("Supervisão").style.display = "";
 					document.getElementById("Pais").style.display = "";
 					document.getElementById("Substituto").style.display = "";
+					document.getElementById("SubstitutoFixo").style.display = "";
 					document.getElementById("Glosa").style.display = "";
 					document.getElementById("Extra").style.display = "";
 				}
 			}
+			function mudaSubis() {
+				let tipodoc = document.getElementById("agendaCateg").value;
+				console.log(tipodoc)
+				if (tipodoc == "Padrão") {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					document.getElementById('agendaMergeterapeutaid').value = ""
+					document.getElementById('agendaMergeterapiaid').value = ""
+
+				} else if (tipodoc == "Substituto Fixo") {
+					document.getElementById('widgetboxSubs').style.display = 'block';
+					
+				} else if (tipodoc == "Substituto") {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					document.getElementById('agendaMergeterapeutaid').value = ""
+					document.getElementById('agendaMergeterapiaid').value = ""
+				} else {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					document.getElementById('agendaMergeterapeutaid').value = ""
+					document.getElementById('agendaMergeterapiaid').value = ""
+				}
+   			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
@@ -84,7 +107,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agendamentos Editar</li>
+							<li class="active">Agendamentos Fixo Editar</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
@@ -148,7 +171,7 @@
 														<label for="id-date-picker-1">Categoria</label>
 														<div class="form-group">
 															<div class="col-sm-8">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()"  onchange="javascript: mudaSubis()">
 																	<option id="Apoio" value="Apoio">Apoio</option>
 																	<option id="Extra" value="Extra">Extra</option>
 																	<option id="Falta" value="Falta">Falta</option>
@@ -156,6 +179,7 @@
 																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																	<option id="Pais" value="Pais">Pais</option>
 																	<option id="Substituto" value="Substituto">Substituto</option>
+																	<option id="SubstitutoFixo" value="Substituto Fixo">Substituto Fixo</option>
 																	<option id="Supervisão" value="Supervisão">Supervisão</option>
 																</select>
 															</div>
@@ -228,6 +252,55 @@
 														</div>
 													</div>
 												</div>
+
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<div class="widget-box" name="widgetboxSubs" id="widgetboxSubs" style="display:none">
+															<div class="widget-header">
+																<h4 class="widget-title">Dados para Substituto Fixos</h4>
+																<span class="widget-toolbar">
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																</span>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<div class="alert alert-warning">
+																		<button type="button" class="close" data-dismiss="alert">
+																			<i class="ace-icon fa fa-times"></i>
+																		</button>
+																		<strong>Importante!</strong>
+																		Dados necessárias para os agendamentos Substituto Fixo.<br>
+																		Quando O terapeuta está sem carimbo ou não pode receber diretamente do plano pelo seu atendimento.<br>
+																		Se faz necessário substituir por algum Terapeuta e Terapia elegível à cobrança junto aos planos.
+																	</div>
+																	<label>Terapeuta</label>
+																	<div class="form-group">
+																		<div class="col-sm-5">
+																			<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+																				{{#each terapeutas}}
+																					<option value="{{_id}}">{{usuario_nome}}</option>
+																				{{/each}}
+																			</select>
+																		</div>
+																	</div>												
+																	<label>Terapia</label>
+																	<div class="form-group">
+																			<div class="col-sm-4">
+																				<select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+																						{{#each terapias}}
+																							<option value="{{_id}}">{{terapia_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+												</div>
+
 												<div class="row">
 													<div class="col-xs-6">													
 														<label>Salas</label>
@@ -294,6 +367,10 @@
 									<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
 									<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
 									<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+
+									<input id="agendaMergeterapeutaidEdi" name="agendaMergeterapeutaidEdi" value="{{agenda.agenda_mergeterapeutaid}}" />
+									<input id="agendaMergeterapiaidEdi" name="agendaMergeterapiaidEdi" value="{{agenda.agenda_mergeterapiaid}}" />
+
 									<input id="agendaObsEdi" name="agendaObsEdi" value="{{agenda.agenda_obs}}" />
 								</div>
 								<div class="space-4"></div>							

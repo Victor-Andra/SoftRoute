@@ -260,7 +260,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -381,7 +381,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -894,7 +894,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -1427,7 +1427,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -1638,7 +1638,7 @@ module.exports = {
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         //console.log("Listagem Realizada de Terapia")
-                        Horaage.find().then((horaage)=>{
+                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                             //console.log("Listagem Realizada de Horario")
                             let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                             var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -2195,7 +2195,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -2740,7 +2740,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -3274,7 +3274,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -3811,7 +3811,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -4326,7 +4326,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -4863,7 +4863,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -5053,7 +5053,7 @@ module.exports = {
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                                     //console.log("Listagem Realizada de Terapia")
-                                    Horaage.find().then((horaage)=>{
+                                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                         //console.log("Listagem Realizada de Horario")
                                         let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                         let segASex = ["seg","ter","qua","qui","sex"];
@@ -5187,7 +5187,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -5349,7 +5349,7 @@ module.exports = {
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                                     //console.log("Listagem Realizada de Terapia")
-                                    Horaage.find().then((horaage)=>{
+                                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                         //console.log("Listagem Realizada de Horario")
                                         let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                         let segASex = ["seg","ter","qua","qui","sex"];
@@ -5527,7 +5527,6 @@ module.exports = {
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                console.log("goraage"+horaage)
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -5686,7 +5685,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -6202,7 +6201,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -6622,12 +6621,15 @@ module.exports = {
         let seg = new Date();
         seg.setSeconds(0); 
         seg.setMinutes(0);
-        seg.setUTCHours(0);
+        seg.setHours(0);
 
         let sex = new Date();
         sex.setSeconds(59);
         sex.setMinutes(59);
-        sex.setUTCHours(23);
+        sex.setHours(23);
+
+        console.log("ISO: "+fncGeral.getDateToIsostring(seg));
+        console.log("ISO: "+fncGeral.getDateToIsostring(sex));
 
         let diaSemana = new Date();
         diaSemana.setSeconds(0);
@@ -6670,17 +6672,20 @@ module.exports = {
                 diaSemana.setUTCDate(diaSemana.getUTCDate() - 6);
                 break;
         }
+        console.log("SEG:"+seg);
+
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
-        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-5));
+        console.log("segunda:"+segunda)
         terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
-        Agenda.find({ agenda_data: { $gte : seg.toISOString(), $lte:  sex.toISOString() }, agenda_usuid : idFiltro }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
             agenda.forEach((e)=>{
@@ -6729,7 +6734,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -6926,7 +6931,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -7094,7 +7099,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -7264,7 +7269,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -7423,7 +7428,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -7944,7 +7949,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -8459,7 +8464,7 @@ module.exports = {
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -8974,7 +8979,7 @@ module.exports = {
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -9485,7 +9490,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -9623,7 +9628,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -9741,7 +9746,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -9877,7 +9882,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -9943,7 +9948,7 @@ module.exports = {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
-                                Horaage.find().then((horaage)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -10016,7 +10021,7 @@ module.exports = {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
-                                Horaage.find().then((horaage)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         res.render('agenda/agendaEdiTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -10170,7 +10175,7 @@ module.exports = {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
-                                Horaage.find().then((horaage)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -10217,7 +10222,7 @@ module.exports = {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
-                                Horaage.find().then((horaage)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -10300,7 +10305,7 @@ module.exports = {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
-                                Horaage.find().then((horaage)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -10329,7 +10334,7 @@ module.exports = {
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
                             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                             //console.log("Listagem terapeutas!")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         res.render('agenda/agendaCadF', {agenda,benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage})
         })})})})})}).catch((err) =>{
             console.log(err)
@@ -10374,7 +10379,7 @@ module.exports = {
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                             //console.log("Listagem terapeutas!")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 if(resposta.sucesso == ""){
                                     //console.log(' objeto vazio');
                                     flash.texto = ""
@@ -10538,7 +10543,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id

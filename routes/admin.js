@@ -359,13 +359,15 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let idUsu;
     let perfilId;
     let ativo;
+console.log("FILHO DA POITA!!");
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
-        //console.log(usu);
+        console.log(usu);
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
         ativo = usu.usuario_status;
-        console.log("ativo:"+ativo)
+        console.log("ativo:")
+        console.log(ativo)
         if (ativo == "Ativo"){
             console.log("VERDADEIRO")
             if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {//Adm e Finan
@@ -427,7 +429,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             }
             */
         } else {
-            console.log("FALSE")
+            console.log("DISGRACA")
             let lvl = "x";
             res.render("ferramentas/usuario/login", {nivel: lvl});
         }
@@ -606,7 +608,7 @@ router.post("/agenda/filL", fncGeral.IsAuthenticated, (req,res) =>{//direciona o
     fncAgenda.filtraAgendaL(req, res);
 })
 
-router.post('/agenda/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona fornec
+router.post('/agenda/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
         fncAgenda.cadastraAgenda(req, res);

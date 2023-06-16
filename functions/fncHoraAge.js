@@ -8,7 +8,7 @@ const horaageClass = require("../models/horaAge")
 module.exports = {
     listaHoraage(req,res){//ok
         console.log('listando horaages')
-        Horaage.find().then((horaage) =>{
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage) =>{
             console.log("Listagem Realizada!")
             res.render('ferramentas/horaage/horarioLis', {horaages: horaage})
         }).catch((err) =>{
@@ -60,7 +60,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a horaage de listagem
-                    Horaage.find().then((horaage) =>{
+                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage) =>{
                         console.log("Listagem Realizada!")
                         res.render('ferramentas/horaage/horarioLis', {horaages: horaage})
                     }).catch((err) =>{
@@ -81,7 +81,7 @@ module.exports = {
     },
     deletaHoraage(req,res){
         Horaage.deleteOne({_id: req.params.id}).then(() =>{
-            Horaage.find().then((horaage) =>{
+            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage) =>{
                 req.flash("success_message", "Horaage deletada!")
                 res.render('ferramentas/horaage/horarioLis', {horaages: horaage})
             }).catch((err) =>{

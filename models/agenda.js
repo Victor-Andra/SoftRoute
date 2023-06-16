@@ -25,6 +25,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_tempmotivo :{ type: String, required: false },
     agenda_extra :{ type: Boolean, required: false},
     agenda_evolucao :{ type: String, require: false },
+    agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
     agenda_selo :{ type: Boolean, require: false }
 })
 
@@ -53,6 +54,7 @@ class Agenda{
         agenda_tempmotivo,
         agenda_extra,
         agenda_evolucao,
+        agenda_copia,
         agenda_selo
         ){
         this.agenda_data = agenda_data,
@@ -78,6 +80,7 @@ class Agenda{
         this.agenda_tempmotivo = agenda_tempmotivo,
         this.agenda_extra = agenda_extra,
         this.agenda_evolucao = agenda_evolucao,
+        this.agenda_copia = agenda_copia,
         this.agenda_selo = agenda_selo
     }
 }
@@ -105,6 +108,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
+                agenda_copia : req.body.agendaCopia,
                 agenda_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -150,6 +154,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_temp : false ,
             agenda_extra: extra ,
             agenda_selo : false ,
+            agenda_copia: false ,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -189,6 +194,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_tempId : agendaTempId ,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_selo : false ,
+            agenda_copia : false,
             agenda_datacad : dataAtual
         });
         console.log("newAgenda save");
@@ -224,7 +230,9 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_obs : req.body.agendaObs ,
                 agenda_temp : true ,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
+                agenda_copia : req.body.agendaCopia ,
                 agenda_dataedi : dataAtual
+                
                 }}
         ).then((res) =>{
             console.log("Salvo")

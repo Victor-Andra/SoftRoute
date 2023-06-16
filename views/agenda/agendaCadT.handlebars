@@ -71,6 +71,24 @@
 					chck.value="false";
 				}
 			}
+			function mudaSubis() {
+				let tipodoc = document.getElementById("agendaCateg").value;
+				console.log(tipodoc)
+				if (tipodoc == "Padrão") {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					
+				} else if (tipodoc == "Substituto Fixo") {
+					document.getElementById('widgetboxSubs').style.display = 'block';
+					
+				} else if (tipodoc == "Simples") {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					
+				} else {
+					document.getElementById('widgetboxSubs').style.display = 'none';
+					
+				}
+				
+   			}
 		</script>
 	</head>
 
@@ -181,7 +199,7 @@
 														<label>Origem Agendamento</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..."  onchange="javascript:controlaCategoria()">
 																	<option value="Padrão">Padrão</option>
 																	<option value="Administrativo">Administrativo</option>
 																</select>
@@ -192,14 +210,14 @@
 														<label>Categoria</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()"  onchange="javascript: mudaSubis()">
 																	<option id="Apoio" value="Apoio">Apoio</option>
 																	<option id="Extra" value="Extra">Extra</option>
 																	<option id="Falta" value="Falta">Falta</option>
 																	<option id="Glosa" value="Glosa">Glosa</option>
 																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																	<option id="Pais" value="Pais">Pais</option>
-																	<option id="Substituto" value="Substituto">Substituto</option>
+																	<option id="SubstitutoFixo" value="Substituto Fixo">Substituto Fixo</option>
 																	<option id="Supervisão" value="Supervisão">Supervisão</option>
 																</select>
 															</div>
@@ -274,9 +292,9 @@
 
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<div class="widget-box" name="widgetboxSubs" id="widgetboxSubs">
+														<div class="widget-box" name="widgetboxSubs" id="widgetboxSubs" style="display:none">
 															<div class="widget-header">
-																<h4 class="widget-title">Dados de Merge</h4>
+																<h4 class="widget-title">Dados para Substituto Fixos</h4>
 																<span class="widget-toolbar">
 																	<a href="#" data-action="collapse">
 																		<i class="ace-icon fa fa-chevron-up"></i>
@@ -291,10 +309,12 @@
 																		</button>
 																		<strong>Importante!</strong>
 																		Dados necessárias para os agendamentos Substituto Fixo.<br>
+																		Quando O terapeuta está sem carimbo ou não pode receber diretamente do plano pelo seu atendimento.<br>
+																		Se faz necessário substituir por algum Terapeuta e Terapia elegível à cobrança junto aos planos.
 																	</div>
 																	<label>Terapeuta</label>
 																	<div class="form-group">
-																		<div class="col-sm-4">
+																		<div class="col-sm-5">
 																			<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 																				{{#each terapeutas}}
 																					<option value="{{_id}}">{{usuario_nome}}</option>

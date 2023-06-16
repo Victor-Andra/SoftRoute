@@ -192,7 +192,7 @@ module.exports = {
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
@@ -740,7 +740,7 @@ module.exports = {
                         console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             console.log("Listagem Realizada de Terapia")
-                            Horaage.find().then((horaage)=>{
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id

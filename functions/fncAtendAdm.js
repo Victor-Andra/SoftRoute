@@ -60,7 +60,7 @@ module.exports = {
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                        Horaage.find().then((horaage)=>{
+                                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                         res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
@@ -100,7 +100,7 @@ module.exports = {
                                             //console.log("atendEdi.atend_atenddata:"+atendEdi.atend_atenddata);
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
-                                                    Horaage.find().then((horaage)=>{
+                                                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                                         res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala, horaages: horaage})
         })})})})})})})})})})})}).catch((err) =>{
             console.log(err)
