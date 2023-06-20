@@ -300,9 +300,9 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log("agenda:"+a)
         })
         return resultado;
-    },
+    }
     /*
-    kaskopstusagenda: async (id) => {
+    ,kaskopstusagenda: async (id) => {
         console.log("id:"+id)
         //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findByIdAndUpdate(id, 
@@ -321,9 +321,8 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     }
     */
-    /*
-    ,
-    agendaAddNovosCampos: async (req,res) => {
+    /*    
+    ,agendaAddNovosCampos: async (req,res) => {
         let resultado;
         await AgendaModel.updateMany(
             {agenda_extra: undefined},

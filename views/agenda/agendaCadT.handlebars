@@ -15,6 +15,7 @@
 					document.getElementById("Substituto").style.display = "none";
 					document.getElementById("Glosa").style.display = "none";
 					document.getElementById("Extra").style.display = "none";
+					document.getElementById("SubstitutoFixo").style.display = "none";
 				} else {
 					document.getElementById("agendaCateg").value = "Apoio";
 					document.getElementById("Padrão").style.display = "none";
@@ -25,6 +26,7 @@
 					document.getElementById("Substituto").style.display = "";
 					document.getElementById("Glosa").style.display = "";
 					document.getElementById("Extra").style.display = "";
+					document.getElementById("SubstitutoFixo").style.display = "";
 				}
 			}
 			function selectConv(){
@@ -87,14 +89,10 @@
 					document.getElementById('widgetboxSubs').style.display = 'none';
 					
 				}
-				
    			}
 		</script>
 	</head>
-
-	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
-
-
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();controlaCategoria();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -104,10 +102,8 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
 							<li class="active">Agendamentos Cadastro Fixo</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
@@ -143,7 +139,6 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/agenda/add" method="POST">
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -289,7 +284,6 @@
 														</div>
 													</div>
 												</div>
-
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<div class="widget-box" name="widgetboxSubs" id="widgetboxSubs" style="display:none">
@@ -324,22 +318,19 @@
 																	</div>												
 																	<label>Terapia</label>
 																	<div class="form-group">
-																			<div class="col-sm-4">
-																				<select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
-																						{{#each terapias}}
-																							<option value="{{_id}}">{{terapia_nome}}</option>
-																						{{/each}}
-																				</select>
-																			</div>
+																		<div class="col-sm-4">
+																			<select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+																					{{#each terapias}}
+																						<option value="{{_id}}">{{terapia_nome}}</option>
+																					{{/each}}
+																			</select>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div><!-- /.span -->
 												</div>
-
-
-
 												<div class="row">
 													<div class="col-xs-6">													
 														<label>Salas</label>
@@ -364,7 +355,6 @@
 														</div>
 													</div>
 												</div>
-												
 											</div>
 										</div>
 									</div>
