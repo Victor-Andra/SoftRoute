@@ -29,6 +29,8 @@
 				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
 				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
 				document.getElementById("agendaObs").value = document.getElementById("agendaObsEdi").value;
+
+				
 				atualizaData();
 				if (document.getElementById("agendaSelo").value == 'false'){
 					document.getElementById("agendaSelo").checked = false;
@@ -36,6 +38,13 @@
 				}
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
+				}
+				if (document.getElementById("agendaMergeterapeutaidEdi").value == 'Substituto Fixo'){
+					document.getElementById('widgetboxSubs').style.display = 'block';
+					document.getElementById("agendaMergeterapeutaid").value = document.getElementById("agendaMergeterapeutaidEdi").value;
+					document.getElementById("agendaMergeterapiaid").value = document.getElementById("agendaMergeterapiaidEdi").value;
+				}else{
+					document.getElementById('widgetboxSubs').style.display = 'none';
 				}
 			}
 			function alteraMigrado(){
@@ -79,20 +88,16 @@
 				console.log(tipodoc)
 				if (tipodoc == "Padrão") {
 					document.getElementById('widgetboxSubs').style.display = 'none';
-					document.getElementById('agendaMergeterapeutaid').value = ""
-					document.getElementById('agendaMergeterapiaid').value = ""
-
+					
 				} else if (tipodoc == "Substituto Fixo") {
 					document.getElementById('widgetboxSubs').style.display = 'block';
 					
-				} else if (tipodoc == "Substituto") {
+				} else if (tipodoc == "Simples") {
 					document.getElementById('widgetboxSubs').style.display = 'none';
-					document.getElementById('agendaMergeterapeutaid').value = ""
-					document.getElementById('agendaMergeterapiaid').value = ""
+					
 				} else {
 					document.getElementById('widgetboxSubs').style.display = 'none';
-					document.getElementById('agendaMergeterapeutaid').value = ""
-					document.getElementById('agendaMergeterapiaid').value = ""
+					
 				}
    			}
 		</script>

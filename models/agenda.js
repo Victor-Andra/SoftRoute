@@ -11,8 +11,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_salaid :{ type: ObjectId, required: false },
     agenda_terapiaid :{ type: ObjectId, required: false },
     agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
-    agenda_mergeterapeutaid :{type: ObjectId, required: false }, //Id do terapeuta merge (para Substituição Fixa)
-    agenda_mergeterapiaid :{type: ObjectId, required: false }, //Id do terapia merge (para Substituição Fixa)
+    agenda_mergeterapeutaid :{type: ObjectId, required: false }, //Id do terapeuta merge (para Substituto Fixo)
+    agenda_mergeterapiaid :{type: ObjectId, required: false }, //Id do terapia merge (para Substituto Fixo)
     agenda_migrado :{ type: Boolean, required: false }, //Status se o agendamento gerou agendamento
     agenda_datacad :{ type: String, required: false },
     agenda_dataedi :{ type: String, required: false },
@@ -40,8 +40,8 @@ class Agenda{
         agenda_salaid,
         agenda_terapiaid,
         agenda_usuid,
-        agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituição Fixa)
-        agenda_mergeterapiaid,//Id do terapia merge (para Substituição Fixa)
+        agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituto Fixo)
+        agenda_mergeterapiaid,//Id do terapia merge (para Substituto Fixo)
         agenda_migrado,
         agenda_datacad,
         agenda_dataedi,
@@ -66,8 +66,8 @@ class Agenda{
         this.agenda_salaid = agenda_salaid,
         this.agenda_terapiaid = agenda_terapiaid,
         this.agenda_usuid = agenda_usuid,
-        this.agenda_mergeterapeutaid = agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituição Fixa)
-        this.agenda_mergeterapiaid = mergeterapiaid,//Id do terapia merge (para Substituição Fixa)
+        this.agenda_mergeterapeutaid = agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituto Fixo)
+        this.agenda_mergeterapiaid = mergeterapiaid,//Id do terapia merge (para Substituto Fixo)
         this.agenda_migrado = agenda_migrado,
         this.agenda_datacad = agenda_datacad,
         this.agenda_dataedi = agenda_dataedi,
@@ -103,8 +103,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituição Fixa)
-                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituição Fixa)
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
@@ -145,8 +145,8 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituição Fixa)
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituição Fixa)
+            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
+            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
             agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
@@ -184,8 +184,8 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituição Fixa)
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituição Fixa)
+            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
+            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
             agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
@@ -223,8 +223,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituição Fixa)
-                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituição Fixa)
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,

@@ -422,8 +422,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -449,8 +449,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -492,8 +492,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -519,8 +519,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -562,8 +562,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -589,8 +589,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -632,8 +632,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -659,8 +659,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -702,8 +702,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -729,8 +729,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -935,8 +935,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -962,8 +962,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1005,8 +1005,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -1032,8 +1032,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1075,8 +1075,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -1102,8 +1102,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1145,8 +1145,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -1172,8 +1172,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1215,8 +1215,8 @@ module.exports = {
                                                 agenda_beneid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -1242,8 +1242,8 @@ module.exports = {
                                             agenda_beneid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1680,8 +1680,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1708,8 +1708,8 @@ module.exports = {
                                         agenda_convid : voidId,
                                         agenda_terapiaid : voidId,
                                         agenda_usuid : voidId,
-                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                     });
                                     agenda.push(agendaVoid);
                                     aux++;
@@ -1752,8 +1752,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1780,8 +1780,8 @@ module.exports = {
                                         agenda_convid : voidId,
                                         agenda_terapiaid : voidId,
                                         agenda_usuid : voidId,
-                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                     });
                                     agenda.push(agendaVoid);
                                     aux++;
@@ -1824,8 +1824,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1852,8 +1852,8 @@ module.exports = {
                                         agenda_convid : voidId,
                                         agenda_terapiaid : voidId,
                                         agenda_usuid : voidId,
-                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                     });
                                     agenda.push(agendaVoid);
                                     aux++;
@@ -1896,8 +1896,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1924,8 +1924,8 @@ module.exports = {
                                         agenda_convid : voidId,
                                         agenda_terapiaid : voidId,
                                         agenda_usuid : voidId,
-                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                     });
                                     agenda.push(agendaVoid);
                                     aux++;
@@ -1968,8 +1968,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -1996,8 +1996,8 @@ module.exports = {
                                         agenda_convid : voidId,
                                         agenda_terapiaid : voidId,
                                         agenda_usuid : voidId,
-                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                     });
                                     agenda.push(agendaVoid);
                                     aux++;
@@ -2237,8 +2237,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2265,8 +2265,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2309,8 +2309,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2337,8 +2337,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2381,8 +2381,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2409,8 +2409,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2453,8 +2453,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2481,8 +2481,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2525,8 +2525,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2553,8 +2553,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2782,8 +2782,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2810,8 +2810,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2854,8 +2854,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2882,8 +2882,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2926,8 +2926,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -2954,8 +2954,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -2998,8 +2998,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3026,8 +3026,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3070,8 +3070,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3098,8 +3098,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3316,8 +3316,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3344,8 +3344,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3388,8 +3388,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3416,8 +3416,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3460,8 +3460,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3488,8 +3488,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3532,8 +3532,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3560,8 +3560,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3604,8 +3604,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3632,8 +3632,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3853,8 +3853,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3881,8 +3881,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3925,8 +3925,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -3953,8 +3953,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -3997,8 +3997,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4025,8 +4025,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4069,8 +4069,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4097,8 +4097,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4141,8 +4141,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4169,8 +4169,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4370,8 +4370,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4398,8 +4398,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4442,8 +4442,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4470,8 +4470,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4514,8 +4514,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4542,8 +4542,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4586,8 +4586,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4614,8 +4614,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -4658,8 +4658,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -4686,8 +4686,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -5190,6 +5190,7 @@ module.exports = {
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                     //console.log("Listagem Realizada de Terapia")
                                     let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
                                     //console.log("benenomeconv:"+benenomeconv)
@@ -5729,8 +5730,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -5757,8 +5758,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -5801,8 +5802,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -5829,8 +5830,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -5873,8 +5874,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -5901,8 +5902,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -5945,8 +5946,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -5973,8 +5974,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6017,8 +6018,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6045,8 +6046,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6245,8 +6246,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6273,8 +6274,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6317,8 +6318,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6345,8 +6346,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6389,8 +6390,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6417,8 +6418,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6461,8 +6462,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6489,8 +6490,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -6533,8 +6534,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -6561,8 +6562,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7472,8 +7473,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -7500,8 +7501,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7544,8 +7545,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -7572,8 +7573,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7616,8 +7617,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -7644,8 +7645,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7688,8 +7689,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -7716,8 +7717,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7760,8 +7761,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -7788,8 +7789,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -7990,8 +7991,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8018,8 +8019,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8063,8 +8064,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8091,8 +8092,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8136,8 +8137,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8164,8 +8165,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8208,8 +8209,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8236,8 +8237,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8280,8 +8281,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8308,8 +8309,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8507,8 +8508,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8535,8 +8536,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8579,8 +8580,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8607,8 +8608,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8651,8 +8652,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8679,8 +8680,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8723,8 +8724,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8751,8 +8752,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -8795,8 +8796,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -8823,8 +8824,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9020,8 +9021,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -9048,8 +9049,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9093,8 +9094,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -9121,8 +9122,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9166,8 +9167,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -9194,8 +9195,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9238,8 +9239,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -9266,8 +9267,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9310,8 +9311,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -9338,8 +9339,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -9492,6 +9493,7 @@ module.exports = {
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                     //console.log("Listagem Realizada de Terapia")
                                     //Montar estrutura da linha baseada no horario da agenda
                                     let linha;
@@ -9630,6 +9632,7 @@ module.exports = {
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                     //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
@@ -9748,6 +9751,7 @@ module.exports = {
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                     //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})})}).catch((err) =>{
@@ -9884,6 +9888,7 @@ module.exports = {
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                     //console.log("Listagem Realizada de Terapia")
                                     res.render("agenda/agendaFiltro", {salas: sala, horaages: horaage, agendas: agenda, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill})
         })})})})})})}).catch((err) =>{
@@ -9940,6 +9945,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                         //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{ 
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10013,6 +10019,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                         //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{ 
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10167,6 +10174,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                         //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10214,6 +10222,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                         //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{ 
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10297,6 +10306,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     //console.log("Listagem Convenios!")
                     Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                         //console.log("Listagem salas!")
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10325,7 +10335,8 @@ module.exports = {
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
                 //console.log("Listagem Convenios!")
-                Sala.find().then((sala)=>{ 
+                Sala.find().then((sala)=>{
+                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                     //console.log("Listagem salas!")
                     Terapia.find().then((terapia)=>{ 
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10355,6 +10366,7 @@ module.exports = {
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia
                                 //console.log("Listagem Realizada de Terapia")
                                     Sala.find().then((sala)=>{
+                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                                         //console.log("Listagem Realizada de Terapia")
                                 res.render("agenda/agendaCadE", {salas: sala, agenda, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
         })})})})})}).catch((err) =>{
@@ -10370,7 +10382,8 @@ module.exports = {
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
                 //console.log("Listagem Convenios!")
-                Sala.find().then((sala)=>{ 
+                Sala.find().then((sala)=>{
+                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                     //console.log("Listagem salas!")
                     Terapia.find().then((terapia)=>{ 
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
@@ -10584,8 +10597,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -10612,8 +10625,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -10656,8 +10669,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -10684,8 +10697,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -10728,8 +10741,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -10756,8 +10769,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -10800,8 +10813,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -10828,8 +10841,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -10872,8 +10885,8 @@ module.exports = {
                                                 agenda_convid : voidId,
                                                 agenda_terapiaid : voidId,
                                                 agenda_usuid : voidId,
-                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                                agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                                agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                             });
                                             agenda.push(agendaVoid);
                                             aux++;
@@ -10900,8 +10913,8 @@ module.exports = {
                                             agenda_convid : voidId,
                                             agenda_terapiaid : voidId,
                                             agenda_usuid : voidId,
-                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                                            agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                                            agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                                         });
                                         agenda.push(agendaVoid);
                                         aux++;
@@ -11610,8 +11623,8 @@ module.exports = {
                                             })
 
                                             break;
-                                        case "Substituição Fixa":
-                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                        case "Substituto Fixo":
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11643,7 +11656,7 @@ module.exports = {
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                                atend_categoria : "Substituição Fixa",//Para quando o convenio não paga o que deve
+                                                atend_categoria : "Substituto Fixo",//Para quando o convenio não paga o que deve
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
@@ -11653,19 +11666,19 @@ module.exports = {
                                                 atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//Convenio não paga
-                                                atend_valordeb : "0,00",//Paga ao musico
-                                                atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                atend_mergeterapiaid : a.agenda_terapiaid,//ABA
+                                                atend_valordeb : convdebval,//Paga ao musico
+                                                atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
+                                                atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
                                                 atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                atend_mergevalordeb : convdebval,//Não paga ao outro Terapeuta
+                                                atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
                                             });
 
                                             newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Substituição Fixa" ,
-                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_categoria : "Substituto Fixo" ,
+                                                credit_terapiaid : a.agenda_mergeterapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 credit_convid : a.agenda_convid ,
                                                 credit_nome : "Atendimento "+nextNum ,
@@ -11678,7 +11691,7 @@ module.exports = {
 
                                             newDeb = new Deb({
                                                 debit_atendnum : nextNum ,
-                                                debit_categoria : "Substituição Fixa" ,
+                                                debit_categoria : "Substituto Fixo" ,
                                                 debit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 debit_terapeutaid : agendaSub.agenda_usuid ,
                                                 debit_convid : a.agenda_convid ,
@@ -12326,8 +12339,8 @@ module.exports = {
                         agenda_convid : voidId,
                         agenda_terapiaid : voidId,
                         agenda_usuid : voidId,
-                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                        agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                        agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                     });
                     agenda.push(agendaVoid);
                     aux++;
@@ -12354,8 +12367,8 @@ module.exports = {
                     agenda_convid : voidId,
                     agenda_terapiaid : voidId,
                     agenda_usuid : voidId,
-                    agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituição Fixa)
-                    agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituição Fixa)
+                    agenda_mergeterapeutaid : voidId,//Id do terapeuta merge (para Substituto Fixo)
+                    agenda_mergeterapiaid : voidId //Id do terapia merge (para Substituto Fixo)
                 });
                 agenda.push(agendaVoid);
                 aux++;

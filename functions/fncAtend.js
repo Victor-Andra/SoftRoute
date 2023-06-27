@@ -710,12 +710,239 @@ module.exports = {
                                             } else {
                                                 if(relAtendConv.valor == ca.credit_valorprev){
                                                     relAtendConv.sessoes = relAtendConv.sessoes + 1;
-                                                    //console.log("ja tinha")
+                                                    console.log("ja tinha")
                                                     qtdIds++;
                                                 }
                                             }
                                         })
                                         exclusaoCreVal.push(relAtendConv.valor);
+                                        if (relAtendConv.valor == undefined){
+                                            relAtendConv.valor = "0,00"
+                                        }
+                                        if (relAtendConv.sessoes == undefined){
+                                            relAtendConv.sessoes = 0;
+                                        }
+                                        relAtendConv.total = (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
+                                        sessaoTot += relAtendConv.sessoes;
+                                        valTot += (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
+                                        relAtendConv.total = this.mascaraValores(relAtendConv.total);
+                                        rel.push(relAtendConv);
+                                        //console.log("relAtendConv:"+relAtendConv.nomecid+"-"+relAtendConv.sessoes+"-"+relAtendConv.valor);
+                                        //console.log("qtdIds: "+qtdIds)
+                                        //console.log("creArray.length: "+creArray.length)
+                                        if (qtdIds == creArray.length){
+                                            continuando = "false";
+                                            //console.log("qtdIds == cre.length");
+                                        }
+                                    }
+                                    relAtendConv = new RelAtend();
+                                    relAtendConv.sessoes = 0;
+                                    exclusaoCreVal = [];
+                                    creArray = [];
+                                }
+                            })
+
+                            valTot = this.mascaraValores(valTot)
+                            total = {"sessoes": sessaoTot, "valor": "-", "total": valTot};
+
+                            res.render("atendimento/relatendval", {cres: cre, terapias: terapia, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome})
+                        })
+                    })
+                })
+            })
+        })
+    },
+    relAtendimentoValFiltroRefatorado(req,res){
+        let val;//objeto para formatar valor do cre
+        let existe = 0;//verifica se existe a terapia no rel
+        let valTot = 0;//calcular valor total
+        let sessaoTot = 0;//calcular total de sessoes
+        let aux;//auxiliar
+        let rel = [];//relatorio
+        let total;//objeto valor total cre
+        let teraID;
+        let qtdIds;
+        let creVal;
+        let creArray = [];
+        let exclusaoCreVal = [];
+        let u;
+        let relAtendConv = new RelAtend();
+        let seg = new Date(req.body.dataIni);
+        let sex = new Date(req.body.dataFim);
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        let filtroAtend = {atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
+        let atendIds = [];
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        let conv_nome;
+        let continuando = "true";
+        let atendValor;
+        let atendTerapia;
+        let atendConv;
+
+        relAtendConv.sessoes = 0;
+        relAtendConv.valor = "";
+        relAtendConv.nomecid = "";
+
+        Atend.find(filtroAtend).then((atendimentos)=>{
+            atendimentos.forEach((a)=>{
+                atendIds.push(a.atend_num);
+            })
+            Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+                console.log("cre:"+cre.length);
+                Conv.find().then((conv)=>{
+                    Conv.findOne({_id: req.body.relConvid}).then((c)=>{
+                        conv_nome = c.conv_nome;
+                        Terapia.find().then((terapia)=>{
+                            terapia.forEach((t)=>{
+                                qtdIds = 0;
+                                continuando = "true";
+
+                                atendimentos.forEach((at)=>{
+                                    /*if ((""+t._id) === (""+ct.credit_terapiaid)){
+                                        creArray.push(ct);
+                                    }*/
+
+                                    //relAtendConv.sessoes = 1;
+                                    //relAtendConv.valor = ca.credit_valorprev;
+                                    //relAtendConv.nomecid = ca.credit_terapiaid;
+                                    //preencher caso vazio ou incrementar a quantidade caso valor e terapia batam
+                                    switch (at.atend_categoria){
+                                        case "Apoio"://ANALISE
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Extra":
+                                            atendValor = at.atend_valorcre;
+                                            atendTerapia = at.atend_terapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Falta":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Falta Justificada":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Glosa":
+                                            atendValor = at.atend_valorcre;
+                                            atendTerapia = at.atend_terapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Pais":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+                                            
+                                            break;
+                                        case "Substituição":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Substituto Fixo":
+                                            atendValor = at.atend_mergevalorcre;//REVER A GERAÇÃO DO ATEND
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Supervisão":
+                                            atendValor = at.atend_valorcre;//REVER
+                                            atendTerapia = at.atend_terapiaid;
+                                            atendConv = at.atend_convid;
+                                            
+                                            break;
+                                        case "Roberta Disponivel":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        case "Nenhuma Observação":
+                                            atendValor = at.atend_mergevalorcre;
+                                            atendTerapia = at.atend_mergeterapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                        default:
+                                            atendValor = at.atend_valordeb;
+                                            atendTerapia = at.atend_terapiaid;
+                                            atendConv = at.atend_convid;
+
+                                            break;
+                                    }
+                                    //atendValor;
+                                    //atendTerapia;
+                                    //atendConv;
+
+                                    rel.forEach((r)=>{
+                                        if (r.nomecid == atendTerapia){
+                                            //console.log("terapia check");
+                                        }
+                                    })
+
+                                    rel.push(relAtendConv);
+                                })
+
+                                if (creArray.length > 0){
+                                    //console.log("TERAPIA: "+t.terapia_nome)
+                                    //console.log("creArray.length:"+creArray.length)
+                                    while (continuando == "true"){
+                                        //console.log("continuando")
+                                        creArray.forEach((ca)=>{
+                                            //console.log("foreach CA")
+                                            //console.log("exclusaoCreVal:"+exclusaoCreVal)
+                                            //console.log("exclusaoCreVal.length:"+exclusaoCreVal.length)
+                                            if(relAtendConv.sessoes == 0){
+                                                if(exclusaoCreVal.length == 0){
+                                                    relAtendConv.sessoes = 1;
+                                                    relAtendConv.valor = ca.credit_valorprev;
+                                                    relAtendConv.nomecid = ca.credit_terapiaid;
+                                                    //console.log("primeiro!!!!!")
+                                                    //console.log("ca.credit_valorprev:"+ca.credit_valorprev)
+                                                    //console.log("ca.credit_terapiaid:"+ca.credit_terapiaid)
+                                                    qtdIds++;
+                                                } else {
+                                                    if(!fncGeral.verificarExistencia(exclusaoCreVal, ca.credit_valorprev)){
+                                                        relAtendConv.sessoes = 1;
+                                                        relAtendConv.valor = ca.credit_valorprev;
+                                                        relAtendConv.nomecid = ca.credit_terapiaid;
+                                                        //console.log("novo!!!")
+                                                        //console.log("ca.credit_valorprev:"+ca.credit_valorprev)
+                                                        //console.log("ca.credit_terapiaid:"+ca.credit_terapiaid)
+                                                        qtdIds++;
+                                                    }
+                                                }
+                                            } else {
+                                                if(relAtendConv.valor == ca.credit_valorprev){
+                                                    relAtendConv.sessoes = relAtendConv.sessoes + 1;
+                                                    console.log("ja tinha")
+                                                    qtdIds++;
+                                                }
+                                            }
+                                        })
+                                        exclusaoCreVal.push(relAtendConv.valor);
+                                        if (relAtendConv.valor == undefined){
+                                            relAtendConv.valor = "0,00"
+                                        }
+                                        if (relAtendConv.sessoes == undefined){
+                                            relAtendConv.sessoes = 0;
+                                        }
                                         relAtendConv.total = (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
                                         sessaoTot += relAtendConv.sessoes;
                                         valTot += (parseInt(relAtendConv.valor.replace(",",""))*relAtendConv.sessoes);
@@ -1005,8 +1232,8 @@ module.exports = {
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
 
-        console.log("SEG:"+seg);
-        console.log("SEX:"+sex);
+        //console.log("SEG:"+seg);
+        //console.log("SEX:"+sex);
 
         //let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
         let atendIds = [];
@@ -1015,8 +1242,8 @@ module.exports = {
         let bene_nome;
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
-            console.log("{atend_beneid:"+ req.body.relBeneid+", atend_atenddata: { $gte: "+seg+", $lte:"+ sex+"}}")
-            console.log("tamanho:"+at.length);
+            //console.log("{atend_beneid:"+ req.body.relBeneid+", atend_atenddata: { $gte: "+seg+", $lte:"+ sex+"}}")
+            //console.log("tamanho:"+at.length);
             //Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 //console.log("cre.length: "+cre.length)
                 Bene.find().then((bene)=>{
@@ -1032,13 +1259,50 @@ module.exports = {
                                 atends = [];
 
                                 at.forEach((ats)=>{
-                                    if((""+ats.atend_terapiaid) === (""+t._id)){
+                                    categorias = ats.atend_categoria
+                                    switch (categorias){
+                                        case "Apoio":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Extra":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Falta":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Falta Justificada":
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
+                                        case "Glosa":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Padrão":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Pais":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        case "Substituição":
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
+                                        case "Substituto Fixo":
+                                            console.log("ASDASDASDS")
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
+                                        case "Supervisão":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                        default:
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                    }
+                                    if((""+terapiaAtend) === (""+t._id)){
                                         atends.push(ats);
                                     }
                                 })
                                 
                                 atends.forEach((atend)=>{
-                                    categorias = atend.atend_cartegoria
+                                    categorias = atend.atend_categoria
                                     switch (categorias){
                                         case "Apoio":
                                             terapiaAtend = atend.atend_terapiaid;
@@ -1072,6 +1336,11 @@ module.exports = {
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
+                                        case "Substituto Fixo":
+                                            console.log("ASDASDASDS2")
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                            break;
                                         case "Supervisão":
                                             terapiaAtend = atend.atend_terapiaid;
                                             creVal = atend.atend_valorcre;
@@ -1085,7 +1354,7 @@ module.exports = {
                                     if ((""+t._id) === (""+terapiaAtend)){
                                         qtdIds++;
                                         creValFinal = creVal;
-                                        console.log("TERAPIA OK")
+                                        //console.log("TERAPIA OK")
                                     }
                                 })
 
@@ -1094,7 +1363,7 @@ module.exports = {
                                     a.nomecid = t._id;
                                     a.valor = creVal;
 
-                                    console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - creVal: "+creVal)
+                                    //console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - creVal: "+creVal)
                                 }
                                 
                                 if(qtdIds != 0){
@@ -1110,9 +1379,9 @@ module.exports = {
 
                                 valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
                                 sessaoTot += r.sessoes;
-                                console.log("r.sessoes: " + r.sessoes)
-                                console.log("r.nomecid: " + r.nomecid)
-                                console.log("r.valor: " + r.valor)
+                                //console.log("r.sessoes: " + r.sessoes)
+                                //console.log("r.nomecid: " + r.nomecid)
+                                //console.log("r.valor: " + r.valor)
                             })
                             total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
 
