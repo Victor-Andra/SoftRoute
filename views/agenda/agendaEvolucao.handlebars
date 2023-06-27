@@ -133,7 +133,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="row">
+												<div class="row" class="hidden">
 													<div class="col-xs-12 col-sm-6">
 														<label for="id-date-picker-1">Origem Agendamento</label>
 														<div class="row">
@@ -147,7 +147,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-2">
+													<div class="col-xs-12 col-sm-2" class="hidden">
 														<label for="id-date-picker-1">Categoria</label>
 														<div class="form-group">
 															<div class="col-sm-8">
@@ -188,7 +188,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-2">
+													<div class="col-xs-12 col-sm-2" class="hidden">
 														<label>Convênio</label>
 														<div class="form-group"  >
 															<div class="col-sm-6" style="width: 500px;">
@@ -248,10 +248,10 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-5">													
+													<div class="col-sm-12">													
 														<label> Observação de agenda</label>
 														<div class="form-group">
-															<div class="col-sm-5">
+															<div class="col-sm-12">
 																<input type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
 															</div>
 														</div>
@@ -268,7 +268,7 @@
 														<div class="col-sm-6">													
 															<label> Evolução</label>
 															<div class="form-group">
-																<div class="col-sm-6">
+																<div class="col-sm-12">
 																	<textarea {{#isTrue selo}} rows="4" readonly="true" {{/isTrue}} id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
 																</div>
 															</div>

@@ -88,7 +88,7 @@
 				document.getElementById("Padrão").style.display = "none";
 			}
 			function atualizaData(){
-				var hora = "00:00"
+				var hora = document.getElementById("atendHora").value;//se tirar da erro ao listar atendimento e relatorio, não pode ser fora do alcance do horaage;
 				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
 				var datafmt = new Date(data);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();

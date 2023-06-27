@@ -359,7 +359,6 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let idUsu;
     let perfilId;
     let ativo;
-console.log("FILHO DA POITA!!");
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
         console.log(usu);
@@ -969,8 +968,8 @@ router.get('/atendimento/atendadm/cad', fncGeral.IsAuthenticated,(req,res) =>{//
 
 
 router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
-    let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+    //let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    //if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
         switch (req.body.atendCategoria) {
             case 'Padrão':
                 fncAtendAdm.cadastraAtendAdm(req,res);
@@ -1000,11 +999,13 @@ router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{/
                 res.redirect('admin/erro')
                 break;
         }
+        /*
     } else {
         console.log("Acesso NEGADO!");
         let lvl = "x";
         res.render("ferramentas/usuario/login", {nivel: lvl});
     }
+    */
 })
 
 router.get('/atendimento/atendadm/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta atend
@@ -1019,14 +1020,14 @@ router.get('/atendimento/atendadm/del/:id', fncGeral.IsAuthenticated, (req,res) 
 })
 
 router.get('/atendimento/atendadm/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de atend
-    let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+    //let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    //if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
         fncAtendAdm.carregaAtendAdmEdi(req,res);
-    } else {
-        console.log("Acesso NEGADO!");
-        let lvl = "x";
-        res.render("ferramentas/usuario/login", {nivel: lvl});
-    }
+    //} else {
+    //    console.log("Acesso NEGADO!");
+    //    let lvl = "x";
+    //    res.render("ferramentas/usuario/login", {nivel: lvl});
+    //}
     /*
     Atend.findById(req.params.id).then((atend) =>{
         res.render('financeiro/atendadm/atendAdmEdi', atend)

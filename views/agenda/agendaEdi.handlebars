@@ -334,25 +334,30 @@
 														</label>
 														-->
 												</div>
-												<div id="divEvolucao" style="display: none;" class="row" >
-													<div class="col-xs-12 col-sm-6">													
-														<label> Evolução</label>
-														<div class="form-group">
-															<div class="col-sm-6">
-																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+												<!--
+												A div de Evolução só deve aparecer para os Terapeutas na Minha Agenda, pois se trata de Tratamento Sigiloso por Profissão
+												-->
+												<div class="row" class="hidden">
+													<div id="divEvolucao" style="display: block;">
+														<div class="col-xs-12 col-sm-12">													
+															<label> Evolução</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-xs-12 col-sm-6">													
-														<label class="pos-rel">
-															{{#isTrue selo}}
-															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
-															<b>Evolução Finalizada!</b>
-															{{else}}
-															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
-															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
-															{{/isTrue}}
-														</label>
+														<div class="col-xs-12 col-sm-6">													
+															<label class="pos-rel">
+																{{#isTrue selo}}
+																<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+																<b>Evolução Finalizada!</b>
+																{{else}}
+																<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+																Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+																{{/isTrue}}
+															</label>
+														</div>
 													</div>
 												</div>
 											</div>

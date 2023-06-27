@@ -174,7 +174,7 @@
 				document.getElementById("btnEnviarCopia").style.display = "";
 
 				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
-					let dat = new Date(document.getElementById('dataCopia').value+" 00:00:00.000Z");
+					let dat = new Date(document.getElementById('dataCopia').value+" "+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+":00.000Z");
 					console.log("dat:"+dat);
 					let mes = (dat.getUTCMonth()+1).toString();
 					console.log("mes:"+mes);
@@ -186,7 +186,7 @@
 					if (dia.length == 1){
 						dia = "0"+dia;
 					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' '+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+':00.000Z').toString();
 					console.log("fulldate:"+fulldate);
 					if(document.getElementById("temCopia").value == "false"){
 						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
@@ -503,7 +503,7 @@
 															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
 														</td>	
 														<td>
-															<input style="border: none; width: 35px;" readonly="true" id="atenddata{{atend_num}}" value="{{atend_atendhora}}" />
+															<input style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
 														</td>				
 														{{#each ../benes}}
 															{{#ifEqual this._id ../atend_beneid}}
