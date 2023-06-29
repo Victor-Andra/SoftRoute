@@ -249,4 +249,34 @@ module.exports = {AtendModel,AtendSchema,
             return err;
         });
     }
+    /*
+    ,atendUpdateCampos: async (req,res) => {
+        let resultado;
+        let diaumjun = new Date(req.body.dataFinal);
+        let diaumjul = new Date(req.body.dataFinal);
+        diaumjun.setUTCDate(1);
+        diaumjul.setUTCDate(1);
+        diaumjul.setUTCMonth(6);
+        console.log("diaumjun: "+diaumjun.toISOString());
+        console.log("diaumjul: "+diaumjul.toISOString());
+        let beneidx = new ObjectId("62d1bef6ea444f5b7a0237a9");
+        let teraidx = new ObjectId("627174805f593cdfa51b9728");
+        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");
+
+        let novateraidx = new ObjectId("6255b81473ddf46dc778a6c0");
+
+        await AtendModel.updateMany(
+            { atend_atenddata: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, atend_terapiaid: tpiaidx, atend_terapeutaid: teraidx , atend_beneid: beneidx },
+            {$set: {'atend_terapiaid': novateraidx, 'atend_valorcre': "130,00", 'atend_valordeb': "52,42"}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
+    }
+    */
 };

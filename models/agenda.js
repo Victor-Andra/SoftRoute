@@ -338,4 +338,34 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     }
     */
+    /* 
+    ,agendaUpdateCampos: async (req,res) => {
+        let resultado;
+        let diaumjun = new Date(req.body.dataFinal);
+        let diaumjul = new Date(req.body.dataFinal);
+        diaumjun.setUTCDate(1);
+        diaumjul.setUTCDate(1);
+        diaumjul.setUTCMonth(6);
+        console.log("diaumjun: "+diaumjun.toISOString());
+        console.log("diaumjul: "+diaumjul.toISOString());
+        let beneidx = new ObjectId("62d1bef6ea444f5b7a0237a9");
+        let teraidx = new ObjectId("627174805f593cdfa51b9728");
+        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");
+
+        let novateraidx = new ObjectId("6255b81473ddf46dc778a6c0");
+
+        await AgendaModel.updateMany(
+            { agenda_data: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx },
+            {$set: {'agenda_terapiaid': novateraidx}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
+    }
+    */
 };

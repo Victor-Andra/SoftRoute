@@ -12,7 +12,6 @@
 					document.getElementById("Apoio").style.display = "none";
 					document.getElementById("Supervisão").style.display = "none";
 					document.getElementById("Pais").style.display = "none";
-					document.getElementById("Substituto").style.display = "none";
 					document.getElementById("Glosa").style.display = "none";
 					document.getElementById("Extra").style.display = "none";
 					document.getElementById("SubstitutoFixo").style.display = "none";
@@ -23,11 +22,11 @@
 					document.getElementById("Apoio").style.display = "";
 					document.getElementById("Supervisão").style.display = "";
 					document.getElementById("Pais").style.display = "";
-					document.getElementById("Substituto").style.display = "";
 					document.getElementById("Glosa").style.display = "";
 					document.getElementById("Extra").style.display = "";
 					document.getElementById("SubstitutoFixo").style.display = "";
 				}
+				this.mudaSubis();
 			}
 			function selectConv(){
 				var v1 = document.getElementById(document.getElementById("agendaBeneid").value).value.toString();
@@ -75,16 +74,9 @@
 			}
 			function mudaSubis() {
 				let tipodoc = document.getElementById("agendaCateg").value;
-				console.log(tipodoc)
-				if (tipodoc == "Padrão") {
-					document.getElementById('widgetboxSubs').style.display = 'none';
-					
-				} else if (tipodoc == "Substituto Fixo") {
+				console.log(tipodoc);
+				if (tipodoc == "Substituto Fixo") {
 					document.getElementById('widgetboxSubs').style.display = 'block';
-					
-				} else if (tipodoc == "Simples") {
-					document.getElementById('widgetboxSubs').style.display = 'none';
-					
 				} else {
 					document.getElementById('widgetboxSubs').style.display = 'none';
 					
