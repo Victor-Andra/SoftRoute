@@ -789,6 +789,14 @@ router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direcio
     fncAgenda.atualizaEvolucao(req, res);
 })
 
+//Cadastro Pontual de Faltas
+//Ao cadastrar a falta, ele acessa a agenda, e muda o status do(s) agendamento(s) para aquele dia definido, para falta, 
+//tanto por beneficiário como por terapeuta
+//
+router.get('/agenda/cadFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.carregaCadFaltas(req, res);
+})
+
 // Visualizar Agenda
 /*
 router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro A AGENDA.

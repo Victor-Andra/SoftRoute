@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Informação de Faltas Pontuais</title>
+		<script type="text/javascript">
+			
+			
+		
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Informação da Falta</a>
+							</li>
+
+							<li class="active"> - Pontual</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/agenda/agendaCadFaltas" method="POST">
+
+								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												
+												Faltante</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Importante!</strong>
+													Aqui você informa de forma pontual via Smartfone o Beneficiário ou Terapeuta que faltou,
+													Escolhe o Tipo de Falta, define a Data e a observação.
+													Todos os agendamentos da data especificada irão ser sinalizadas com o tipo e falta determinada,
+													sem necessidade de abrir a agenda. 
+												</div>
+												<div class="row">
+													<div class="col-xs-12" >
+														<label>Beneficiário</label>
+														<div class="form-group" >
+															<div class="col-sm-6">
+																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<label>Terapeuta</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha...">
+																	{{#each terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Data Agendamento</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label>Origem Agendamento</label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<select id="agendaOrg" name="agendaOrg" class="chosen-select" value="Administrativo">
+																	<option value="Administrativo">Administrativo</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label>Categoria</label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<select id="agendaCateg" name="agendaCateg" class="chosen-select" >
+																	<option id="Falta" value="Falta">Falta</option>
+																	<option id="FaltaJus" value="Falta Justificada">Falta Justificada</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>		
+									</div>
+								</div>
+			
+							
+
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Sinalizar!
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Cancelar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>

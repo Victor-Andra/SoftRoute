@@ -9604,6 +9604,22 @@ module.exports = {
             }
         })
     },
+    carregaCadFaltas(req,res){//Carrega o cadastro de faltas pontuais
+            Bene.find().then((bene) =>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                //console.log("Listagem Beneficiário!")
+                Conv.find().then((conv)=>{
+                    //console.log("Listagem Convenios!")
+                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                                //console.log("Listagem terapeutas!")
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+        res.render('agenda/agendaCadFaltas', {benes: bene, convs: conv, terapeutas: terapeuta})
+        })})})}).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
+        })
+    },
     carregaAgendaTemp(req, res){//CarregaEdiçãoAgenda
         let agenda_tempId = req.params.id;
         Agenda.findById(req.params.id).then((agenda) =>{
