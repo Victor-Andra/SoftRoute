@@ -69,6 +69,20 @@ module.exports = {
         
         return (dia+'/'+mes+'/'+dt.getFullYear()).toString();
     },
+    getDataContra(data){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        
+        return (dt.getFullYear()+'/'+mes+'/'+dia).toString();
+    },
     getDataInvert(dt){//yyyy-mm-dd -> dd-mm-yyyy
         let dia = dt.substring(8,10);
         let mes = dt.substring(5,7);

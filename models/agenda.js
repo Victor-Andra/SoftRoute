@@ -338,25 +338,29 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     }
     */
-    /* 
+    /*
     ,agendaUpdateCampos: async (req,res) => {
         let resultado;
         let diaumjun = new Date(req.body.dataFinal);
         let diaumjul = new Date(req.body.dataFinal);
         diaumjun.setUTCDate(1);
         diaumjul.setUTCDate(1);
-        diaumjul.setUTCMonth(6);
+        diaumjun.setUTCMonth(6);//0-11
+        diaumjul.setUTCMonth(7);//0-11
         console.log("diaumjun: "+diaumjun.toISOString());
         console.log("diaumjul: "+diaumjul.toISOString());
-        let beneidx = new ObjectId("62d1bef6ea444f5b7a0237a9");
-        let teraidx = new ObjectId("627174805f593cdfa51b9728");
-        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");
+        let beneidx = new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        let convidx = new ObjectId("62477742e416141415ff7a88");//particular
 
-        let novateraidx = new ObjectId("6255b81473ddf46dc778a6c0");
+        //Não esqueça de alterar os valores a Débito e Crédito
+        //let novateraidx = new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
 
         await AgendaModel.updateMany(
-            { agenda_data: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx },
-            {$set: {'agenda_terapiaid': novateraidx}}
+            { agenda_data: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx  },
+            {$set: {'agenda_convid': novaconvidx}}
         ).then((res) =>{
             console.log("XABLAU")
             resultado = "OK"

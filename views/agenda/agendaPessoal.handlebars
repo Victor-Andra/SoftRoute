@@ -47,6 +47,7 @@
 								if(e.id.indexOf("BeneId_") != -1){
 									val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
+									console.log("PINTANDO");
 									document.getElementsByName(tempId).forEach((ti)=>{
 										pintaAgenda(val, ti.value);
 									})
@@ -56,7 +57,9 @@
 								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
 									val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
+									console.log("PINTANDO"+tempId);
 									document.getElementsByName(tempId).forEach((ti)=>{
+										console.log("TI:"+ti)
 										pintaAgenda(val, ti.value);
 									})
 									//console.log("val")
@@ -159,6 +162,7 @@
 				}
 			}
 			function pintaAgenda(val, motivo){
+				console.log("motivo:"+motivo)
 				switch (motivo) {
 					case "Falta" :
 						val.style.backgroundColor = "yellow";
@@ -217,7 +221,7 @@
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
 										<i class="ace-icon fa fa-pencil bigger-130"></i>
-									</a>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
 								</div>
 							{{else}}
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">

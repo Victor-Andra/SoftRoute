@@ -796,6 +796,12 @@ router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direcio
 router.get('/agenda/cadFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
     fncAgenda.carregaCadFaltas(req, res);
 })
+//Substitução de Terpias
+//Substitui terapias cadastradas ou associadas a terapeutas/beneficiários de forma equivocada
+//
+router.get('/agenda/cadSubterapia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    fncAgenda.carregaSubterapia(req, res);
+})
 
 // Visualizar Agenda
 /*
@@ -1346,6 +1352,10 @@ fncSessao.listaSessaoTab(req, res);
 //Lista Todos os Atendimentos por Data Atual e Beneficiário vinculados pela AGENDA do Dia
 router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.listaEvoatend(req, res);
+})
+
+router.post('/area/evoatendfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncEvoatend.filtraEvoatend(req, res);
 })
 
 //Menu Minha Agenda Area Tecnicos

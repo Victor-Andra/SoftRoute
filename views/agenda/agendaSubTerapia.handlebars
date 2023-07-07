@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Informação de Faltas Pontuais</title>
+		<title>Substituição de Terapias</title>
 		<script type="text/javascript">
 			
 			
@@ -21,7 +21,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Informação da Falta</a>
+								<a href="#">Substituição de Terapias</a>
 							</li>
 
 							<li class="active"> - Pontual</li>
@@ -32,7 +32,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/agenda/agendaCadFaltas" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/agenda/agendaSubTerapia" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -40,7 +40,7 @@
 											<h4 class="widget-title">
 												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
 												
-												Faltante</h4>
+												Alteração de Terapia</h4>
 
 											<span class="widget-toolbar">
 
@@ -61,10 +61,32 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Importante!</strong>
-													Aqui você informa de forma pontual via Smartfone o Beneficiário ou Terapeuta que faltou,
-													Escolhe o Tipo de Falta, define a Data e a observação.
-													Todos os agendamentos da data especificada irão ser sinalizadas com o tipo e falta determinada,
-													sem necessidade de abrir a agenda. 
+													Quando se cadastra de forma equivocada terapias:
+													Com Associação Errada à Terapeutas;
+													Terapias com Valores diferentes para Beneficiários Específicos;
+													Terapias com Valores diferentes para Terapeutas Específicos.
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Data Inicial</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Data Final</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
 												</div>
 												<div class="row">
 													<div class="col-xs-12" >
@@ -92,25 +114,27 @@
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Data Agendamento</label>
-														<div class="row">
-															<div class="col-sm-6">
-																<div class="input-group">
-																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
-																</div>
-															</div>
-														</div>
-													</div><!-- /.span -->
+												
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Importante!</strong>
+													Onde vai alterar, somente na agenda, somente no atendimentos já criados, ou em ambos.
+													Se não escolher uma das três opções válidas, a requisição de alteração não é processada.
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Origem Agendamento</label>
+														<label>Abrangência</label>
 														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select" value="Administrativo">
-																	<option value="Administrativo">Administrativo</option>
+															<div class="col-sm-6">
+																<select id="agendaAbra" name="agendaAbra" class="chosen-select" data-placeholder="Escolha...">
+																	
+																		<option value="-">-</option>
+																		<option value="-">Somente Agenda</option>
+																		<option value="-">Somente Atendimento</option>
+																		<option value="-">Ambos</option>
+																	
 																</select>
 															</div>
 														</div>
@@ -118,13 +142,20 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Categoria</label>
+														<label> Valor da Terapia pelo Plano</label>
 														<div class="form-group">
-															<div class="col-sm-9">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" >
-																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="FaltaJus" value="Falta Justificada">Falta Justificada</option>
-																</select>
+															<div class="col-sm-2">
+																<input type="text" name="atendValorcre" id="atendValorcre" placeholder="" class="form-control"   />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label> Valor da Terapia para o Terapeuta</label>
+														<div class="form-group">
+															<div class="col-sm-2">
+																<input type="text" name="atendValordeb" id="atendValordeb" placeholder="" class="form-control"   />
 															</div>
 														</div>
 													</div>
@@ -132,18 +163,28 @@
 											</div>
 										</div>		
 									</div>
+									<div class="alert alert-danger">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										<strong>Atenção!</strong>
+										Cuidado com alterações em exercicios ou meses já apurados/encerrados o financeiro,
+										pois essa rotina altera "TUDO" dentro do intervalo especificado.
+										Confira Tudo antes de Prosseguir.
+									</div>
 								</div>
 			
 							
 
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-
+								<br>
 								<div class="form-actions">
+									
 									<div class="col-xs-12" style="text-align: center;" >
 										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											Sinalizar!
+											Alterar!
 										</button>
 
 										&nbsp; &nbsp; &nbsp;

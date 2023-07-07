@@ -3,21 +3,22 @@ const mongoose = require("mongoose")
 
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Evoatendamento 
-const evoatendClass = require("../models/evoatend")
+
+//Houve alteração na Estrutura e Banco da evolução de atendimentos, eles agora são vinculados à Agenda e Não ao Atendimento.
+const evoatendClass = require("../models/agenda")
 
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const fncGeral = require("./fncGeral")
 
 //Tabela Plano de Evoatendamento 
-const Evoatend = mongoose.model("tb_evoatend")
+const Evoatend = mongoose.model("tb_agenda")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 
@@ -27,32 +28,213 @@ const Terapia = mongoose.model("tb_terapia")
 
 module.exports = {
     listaEvoatend(req, res){
-        let convs = new Array();
-        console.log('listando Diários de Evoatend')
-        Evoatend.find().then((evoatend) =>{
-            console.log("Listagem Realizada dos Diários de Evoatend!")
-                Bene.findById(req.params.id).then((bene) =>{
-                    console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
-                        console.log("Listagem Realizada Usuário!")
-            res.render('area/evoatendLis', {Evoatends: evoatend, Usuarios: usuario, Benes: bene})
-        })})}).catch((err) =>{
+        let isAgendaTerapeuta = false;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+            }
+        })
+        let idTerapeuta = req.cookies['idUsu'];
+        let carregaFiltro = "false";
+        let idsAgendasEx;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        console.log("seg:"+seg);
+        console.log("sex:"+sex);
+        //let agora = seg.toISOString();
+        //let depois = sex.toISOString();
+        //console.log("Listagem Realizada de Atendimentos!")
+        Evoatend.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta }).then((evoatend)=>{
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Terapia")
+                        let agendamentos = evoatend;
+                        console.log(agendamentos.length);
+                        agendamentos.forEach((e)=>{
+                            e.agenda_data_dia = fncGeral.getData(e.agenda_data);
+                            console.log("HORA: "+e.agenda_hora);
+
+                            if (e.agenda_temp == true){
+                                agendaTemp.push(e.agenda_tempId);
+                            }
+                            
+                            let dat = new Date(e.agenda_data);
+                            e.agenda_data_dia = this.getDataFMT(dat);
+                            let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                            let min = ""+dat.getMinutes();
+                            if (hora.length == 1){hora = "0" + hora + "";}
+                            if (min.length == 1){min = "0" + min + "";}
+                            e.agenda_hora = hora+":"+min;
+                            e.agenda_aux = aux;
+                            aux++;
+            
+                            switch (dat.getUTCDay()){
+                                case 0:
+                                    e.agenda_data_semana = "dom"
+                                    break;
+                                case 1:
+                                    e.agenda_data_semana = "seg"
+                                    break;
+                                case 2:
+                                    e.agenda_data_semana = "ter"
+                                    break;
+                                case 3:
+                                    e.agenda_data_semana = "qua"
+                                    break;
+                                case 4:
+                                    e.agenda_data_semana = "qui"
+                                    break;
+                                case 5:
+                                    e.agenda_data_semana = "sex"
+                                    break;
+                                case 6:
+                                    e.agenda_data_semana = "sab"
+                                    break;
+                                default:
+                                    
+                                    console.log("erro");
+                                    break;
+                            }
+                            if(e.agenda_temp){
+                                idsAgendasEx.push(e.agenda_tempId.toString());
+                            }
+                        })
+                        if (idsAgendasEx > 0){
+                            idsAgendasEx.forEach((i)=>{
+                                agenda = agenda.filter(a => a.id != i);
+                                //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
+                            })
+                        }
+                        res.render("area/evol/evoatendlis", { evoatends: evoatend, benes: bene, terapeutas: terapeuta, terapias: terapia, carregaFiltro})
+        })})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Diários de Evoatend")
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
     },
+    filtraEvoatend(req, res){
+        let isAgendaTerapeuta = false;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+            }
+        })
+        let idTerapeuta = req.cookies['idUsu'];
+        let carregaFiltro = "false";
+        let idsAgendasEx;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        console.log("seg:"+seg);
+        console.log("sex:"+sex);
+        //let agora = seg.toISOString();
+        //let depois = sex.toISOString();
+        //console.log("Listagem Realizada de Atendimentos!")
+        Evoatend.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta }).then((evoatend)=>{
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Terapia")
+                        let agendamentos = evoatend;
+                        console.log(agendamentos.length);
+                        agendamentos.forEach((e)=>{
+                            e.agenda_data_dia = fncGeral.getData(e.agenda_data);
+                            console.log("HORA: "+e.agenda_hora);
 
+                            if (e.agenda_temp == true){
+                                agendaTemp.push(e.agenda_tempId);
+                            }
+                            
+                            let dat = new Date(e.agenda_data);
+                            e.agenda_data_dia = this.getDataFMT(dat);
+                            let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                            let min = ""+dat.getMinutes();
+                            if (hora.length == 1){hora = "0" + hora + "";}
+                            if (min.length == 1){min = "0" + min + "";}
+                            e.agenda_hora = hora+":"+min;
+                            e.agenda_aux = aux;
+                            aux++;
+            
+                            switch (dat.getUTCDay()){
+                                case 0:
+                                    e.agenda_data_semana = "dom"
+                                    break;
+                                case 1:
+                                    e.agenda_data_semana = "seg"
+                                    break;
+                                case 2:
+                                    e.agenda_data_semana = "ter"
+                                    break;
+                                case 3:
+                                    e.agenda_data_semana = "qua"
+                                    break;
+                                case 4:
+                                    e.agenda_data_semana = "qui"
+                                    break;
+                                case 5:
+                                    e.agenda_data_semana = "sex"
+                                    break;
+                                case 6:
+                                    e.agenda_data_semana = "sab"
+                                    break;
+                                default:
+                                    
+                                    console.log("erro");
+                                    break;
+                            }
+                            if(e.agenda_temp){
+                                idsAgendasEx.push(e.agenda_tempId.toString());
+                            }
+                        })
+                        if (idsAgendasEx > 0){
+                            idsAgendasEx.forEach((i)=>{
+                                agenda = agenda.filter(a => a.id != i);
+                                //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
+                            })
+                        }
+                        res.render("area/evol/evoatendlis", { evoatends: evoatend, benes: bene, terapeutas: terapeuta, terapias: terapia, carregaFiltro})
+        })})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
     carregaEvoatend(req,res){
-        Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evoatendCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+                                res.render("area/evoatendCad", {terapias: terapia, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
@@ -61,15 +243,15 @@ module.exports = {
     },
 
     carregaEvoatendEdi(req,res){
-        Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/evoatendEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -104,61 +286,4 @@ module.exports = {
             }
         })
     },
-
-    atualizaEvoatend(req,res){
-        let resultado
-        let resposta = new Resposta()
-        try{
-            evoatendClass.escolaEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resultado = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resultado == true){
-                    //Volta para a debitsubcateg de listagem
-                    console.log("Listagem Realizada!")
-                    resposta.texto = "Atualizado com Sucesso!"
-                    resposta.sucesso = "true"
-                    this.listaEvoatend(req,res,resposta)
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resultado)
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    this.listaEvoatend(req,res,resposta)
-                }
-            })
-        } catch(err1){
-            console.log(err1)
-            res.render('admin/erro')
-        }
-    },
-
-
-    deletaEvoatend(req,res){
-        Evoatendfisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Evoatendamento Fisioterapêutico deletado!")
-                res.render('area/evoatendLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
-                res.render('admin/erro')
-            })
-        })
-    }
-
-
 }
