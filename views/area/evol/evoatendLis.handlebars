@@ -3,12 +3,28 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
-
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				
+			}
+			function formataData(){
+				let dt = document.getElementById('dataFil').value;
+				let dia = dt.substring(8,10);
+				let mes = dt.substring(5,7);
+				let ano = dt.substring(0,4);
+				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+		</script>
 	</head>
-
 	<body onload="javascript:controlaNave();" class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">

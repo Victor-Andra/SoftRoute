@@ -24,7 +24,7 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 //Funções auxiliares
-
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaEvoatend(req, res){
@@ -38,7 +38,9 @@ module.exports = {
         })
         let idTerapeuta = req.cookies['idUsu'];
         let carregaFiltro = "false";
-        let idsAgendasEx;
+        let idsAgendasEx = [];
+        let aux = 1;
+        let agendaTemp =  [];
         let seg = new Date();
         let sex = new Date();
         seg.setHours(0);
@@ -68,12 +70,12 @@ module.exports = {
                             e.agenda_data_dia = fncGeral.getData(e.agenda_data);
                             console.log("HORA: "+e.agenda_hora);
 
-                            if (e.agenda_temp == true){
+                            if (e.agenda_temp){
                                 agendaTemp.push(e.agenda_tempId);
                             }
                             
                             let dat = new Date(e.agenda_data);
-                            e.agenda_data_dia = this.getDataFMT(dat);
+                            e.agenda_data_dia = fncGeral.getDataFMT(dat);
                             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
                             let min = ""+dat.getMinutes();
                             if (hora.length == 1){hora = "0" + hora + "";}
@@ -136,10 +138,13 @@ module.exports = {
             }
         })
         let idTerapeuta = req.cookies['idUsu'];
+        let idBeneficiario = new ObjectId(req.body.atendBeneficiario);
         let carregaFiltro = "false";
-        let idsAgendasEx;
-        let seg = new Date();
-        let sex = new Date();
+        let idsAgendasEx = [];
+        let aux = 1;
+        let agendaTemp =  [];
+        let seg = fncGeral.getDateFromString(req.body.dataFinal);
+        let sex = fncGeral.getDateFromString(req.body.dataFinal);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -151,7 +156,7 @@ module.exports = {
         //let agora = seg.toISOString();
         //let depois = sex.toISOString();
         //console.log("Listagem Realizada de Atendimentos!")
-        Evoatend.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta }).then((evoatend)=>{
+        Evoatend.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta, agenda_beneid : idBeneficiario }).then((evoatend)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
@@ -167,12 +172,12 @@ module.exports = {
                             e.agenda_data_dia = fncGeral.getData(e.agenda_data);
                             console.log("HORA: "+e.agenda_hora);
 
-                            if (e.agenda_temp == true){
+                            if (e.agenda_temp){
                                 agendaTemp.push(e.agenda_tempId);
                             }
                             
                             let dat = new Date(e.agenda_data);
-                            e.agenda_data_dia = this.getDataFMT(dat);
+                            e.agenda_data_dia = fncGeral.getDataFMT(dat);
                             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
                             let min = ""+dat.getMinutes();
                             if (hora.length == 1){hora = "0" + hora + "";}

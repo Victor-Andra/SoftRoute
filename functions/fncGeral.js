@@ -154,5 +154,19 @@ module.exports = {
 
         isoString = ano.toString()+"-"+mes.toString()+"-"+dia.toString()+"T"+hora+":"+mins+":"+segs+".000Z";
         return isoString;
+    },
+    getDataFMT(data){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        
+        return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
     }
 }
