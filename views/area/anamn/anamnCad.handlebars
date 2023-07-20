@@ -155,14 +155,14 @@
 											<li>
 												<a data-toggle="tab" href="#esf">
 													<i class="brown ace-icon fa fa-hand-peace-o bigger-120"></i>
-													Esficteriano
+													Esfincteriano
 													
 												</a>
 											</li>
 											<li>
 												<a data-toggle="tab" href="#hig">
 													<i class="green ace-icon fa fa-tint bigger-120"></i>
-													Higiene
+													Auto cuidado
 													
 												</a>
 											</li>																																												
@@ -213,7 +213,7 @@
 											<li>
 												<a data-toggle="tab" href="#ano">
 													<i class="orange ace-icon fa fa-pencil bigger-120"></i>
-													Anotações Adicionais
+													Conclusão e assinatura
 													
 												</a>
 											</li>																											
@@ -226,17 +226,18 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Identificação! </strong>
-													Aqui você informa os dados pessoais do beneficiário.
+													<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 													<br>
 												</div>
 												<div class="col-xs-6">
 													<div class="row">
 														<div class="col-xs-12 col-sm-6">
-															<label > Nome </label>
+															<label > Nome </label><!--Bene id e nome do beneficiário-->
 															<div class="row ">
 																<div class="input-group" >
 																	<div class="col-sm-4">
-																		<input  type="text" name="anamnBeneid" id="anamnBeneid" placeholder="" class="form-control" style="width: 400px;"/>
+																		<input class="hidden" type="text" name="anamnBeneid" id="anamnBeneid" placeholder="" class="form-control" style="width: 400px;"/>
+																		<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;" />
 																	</div>
 																</div>
 															</div>
@@ -244,7 +245,7 @@
 													</div>
 													<div class="row">
 														<div class="col-xs-12 col-sm-6">
-															<label > Apelido </label>
+															<label > Apelido </label><!--Apelido beneficiário-->
 															<div class="row">
 																<div class="input-group" >
 																	<div class="col-sm-3">
@@ -256,7 +257,7 @@
 													</div>	
 													<div class="row">
 														<div class="col-xs-12 col-sm-2">
-															<label> Idade</label>
+															<label> Idade</label><!--idade beneficiário-->
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-1">
@@ -266,7 +267,7 @@
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-4">
-															<label for="id-date-picker-1">Data Nascimento</label>
+															<label for="id-date-picker-1">Data nascimento</label><!--Data nascimento beneficiário-->
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
@@ -276,58 +277,26 @@
 															</div>
 														</div>
 													</div>
-													<label> Mãe</label>
+													<label> Mãe</label><!--Mãe beneficiário-->
 													<div class="input-group">
 														<div>
 															<input type="text" name="anamnMaenome" id="anamnMaenome" placeholder="" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
-													<label> Pai</label>
+													<label> Pai</label><!--Pai beneficiário-->
 													<div class="input-group">
 														<div>
 															<input type="text" name="anamnPainome" id="anamnPainome" placeholder="" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
-													<label> Outro</label>
+													<label> Outro</label><!--Resp beneficiário-->
 													<div class="input-group">
 														<div>
 															<input type="text" name="anamnRespnome" id="anamnRespnome" placeholder="" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 												</div>
-													<div class="col-xs-6">
-														<div class="row">
-															<div class="col-sm-12">
-																<div class="widget-box" style="height:250px; ">
-																	<div class="widget-header">
-																		<h4 class="widget-title">Foto</h4>
-
-																		<div class="widget-toolbar">
-																			<a href="#" data-action="collapse">
-																				<i class="ace-icon fa fa-chevron-up"></i>
-																			</a>
-																		</div>
-																	</div>
-
-																	<div class="widget-body">
-																		<div class="widget-main">
-																			<div class="form-group">
-																				<div class="col-xs-12">
-																					<input type="file" name="anamnBenefoto" id="anamnBenefoto" />
-																						<div class="input-group">
-																							<a href="" data-rel="colorbox" class="cboxElement">
-																							<img width="150" height="150" alt="150x150" src="">
-																							</a>
-																						</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-
-													</div>
+													
 													<div>
 
 											</div>
@@ -338,22 +307,21 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Motivo da Consulta?</strong>
-													 Informe as queijas, motivos e diagnóstico do beneficiário.
 													<br>
 												</div>
-												<label> Indicação</label>
+												<label> Indicação</label><!--Indica-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnIndica" id="anamnIndica" placeholder="" class="form-control" style="overflow-wrap: break-word; width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Queixa Principal </label>
+												<label> Queixa principal </label><!--Queixa beneficiário-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnQueixapri" id="anamnQueixapri" placeholder="" class="form-control" style="overflow-wrap: break-word; width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Diagnóstico </label>
+												<label> Diagnóstico </label><!--Diag beneficiário-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnDiag" id="anamnDiag" placeholder="" class="form-control" style="overflow-wrap: break-word; width: 1000px;"></textarea>
@@ -366,12 +334,11 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Gestação!</strong>
-													 Informe os dados sobre a gestação, principalmente as pontuações relevantes.
 													<br>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Houve tratamento para engravidar?</label>
+														<label> Houve tratamento para engravidar?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -384,7 +351,7 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnHouvetratengravdesc" id="anamnHouvetratengravdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
@@ -397,7 +364,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-2">
+													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnHouveplanfami" id="anamnHouveplanfami" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
@@ -406,7 +373,7 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnHouveplanfamidesc" id="anamnHouveplanfamidesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
@@ -415,7 +382,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Houve ameaça ou tentativa de aborto?</label>
+														<label> Houve ameaça ou tentativa de aborto?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -429,7 +396,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="anamnAmeacatenabortodesc" id="anamnAmeacatenabortodesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -437,7 +404,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Bebeu ou fumou durante a gravidez?</label>
+														<label> Bebeu ou fumou durante a gravidez?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -451,7 +418,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnBebeoufumagestadesc" id="anamnBebeoufumagestadesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -459,12 +426,12 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Houve traumas físicos, e ou, psíquicos, e ou doenças infecciosas?</label>
+														<label> Houve traumas físicos, psíquicos e/ou doenças infecciosas?</label>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
+														<div class="input-group"><!--Ok-->
 															<select name="anamnTraumafispsiinfec" id="anamnTraumafispsiinfec" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
@@ -473,7 +440,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnTraumafispsiinfecdesc" id="anamnTraumafispsiinfecdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -485,7 +452,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-2">
+													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnUsotranquil" id="anamnUsotranquil" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
@@ -495,19 +462,19 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnUsotranquildesc" id="anamnUsotranquildesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
-												<label> Adoção</label>
+												<label> Adoção</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnAdocao" id="anamnAdocao" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Observções adicionais sobre a gestação? </label>
+												<label> Observações </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsgesta" id="anamnObsgesta" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -520,12 +487,11 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Parto!</strong>
-													 Adicione informações sobre o parto.
 													<br>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Qual tipo de parto?</label>
+														<label> Tipo de parto?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -533,15 +499,15 @@
 														<div class="input-group">
 															<select name="anamnPartoqual" id="anamnPartoqual" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
+																	<option value="A Termo">A Termo</option>
+																	<option value="Prematuro">Prematuro</option>
 																	<option value="Normal">Normal</option>
 																	<option value="Cesárea">Cesárea</option>
-																	<option value="Termo">Termo</option>
-																	<option value="Prematuro">Prematuro</option>
 															</select>
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnPartoqualdesc" id="anamnPartoqualdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -549,7 +515,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Anorexia periparto?</label>
+														<label>Anoxia periparto?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -563,7 +529,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnAnorexiaperipartodesc" id="anamnAnorexiaperipartodesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -571,7 +537,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Chorou ao nascer?</label>
+														<label> Chorou ao nascer?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -585,42 +551,65 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnChorounascdesc" id="anamnChorounascdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-12">
-														<label>Apgar?</label>
+													<div class="col-xs-2">
+														<label>Apgar</label><!--Ok-->
+													</div>
+													<div class="col-xs-2">
+														<label>Grau</label>
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-2">
+													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnApgar" id="anamnApgar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
+															
 														</div>
 													</div>
-													<div class="col-xs-9">
+												
+													<div class="col-xs-2">
+														
+														<span class="input-icon"><!--Ok-->
+															<select name="anamnApgargrau" id="anamnApgargrau" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	<option value="5">5</option>
+																	<option value="6">6</option>
+																	<option value="7">7</option>
+																	<option value="8">8</option>
+																	<option value="9">9</option>
+																	<option value="10">10</option>
+															</select>
+														</span>
+													</div>
+													<div class="col-xs-4"><!--Ok-->
 														<span class="input-icon">
-															<input type="text" name="anamnApgardesc" id="anamnApgardesc" style="width: 800px;">
+															<input type="text" name="anamnApgardesc" id="anamnApgardesc" style="width: 600px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Icterícia?</label>
+														<label>Icterícia?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
+														<div class="input-group"><!--Ok-->
 															<select name="anamnIctericia" id="anamnIctericia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
@@ -629,7 +618,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnIctericiadesc" id="anamnIctericiadesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -637,7 +626,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Fototerapia?</label>
+														<label>Fototerapia?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -651,7 +640,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnFototerapiadesc" id="anamnFototerapiadesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -659,7 +648,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Internamento em UTI?</label>
+														<label>Internamento em UTI?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -673,7 +662,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnUtitempo" id="anamnUtitempo" placeholder="Se houve internação, ponha aqui o tempo de duração" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -681,12 +670,12 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Complicações do parto?</label>
+														<label>Complicações do parto?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
+														<div class="input-group"><!--Ok-->
 															<select name="anamnComplica" id="anamnComplica" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
@@ -695,7 +684,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnComplicadesc" id="anamnComplicadesc"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -703,12 +692,12 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>O Pai estava presente no nascimento?</label>
+														<label>O pai estava presente no nascimento?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
+														<div class="input-group"><!--Ok-->
 															<select name="anamnPaipresentenasc" id="anamnPaipresentenasc" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
@@ -717,25 +706,20 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnPaipresentenascdesc" id="anamnPaipresentenascdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>												
-												<label> Descrição do Parto</label>
+												<label> Descrição do parto / Reações do bebê</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnDescrparto" id="anamnDescrparto" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Reações do bebê</label>
-												<div class="input-group">
-													<div>
-														<textarea type="text" name="anamnReacbebe" id="anamnReacbebe" placeholder="" class="form-control" style="width: 1000px;"></textarea>
-													</div>
-												</div>
-												<label> Observações adicionais sobre o parto? </label>
+												
+												<label> Observações </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsparto" id="anamnObsparto" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -748,28 +732,27 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Núcleo Familiar!</strong>
-													 Insira informações sobre os familiares do beneficiário.
 													<br>
 												</div>
-												<label> Pessoas que moram na casa: </label>
+												<label> Pessoas que moram na casa com o beneficiário </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnPessmoracasa" id="anamnPessmoracasa" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label> Irmãos que moram na casa: </label>
+												<label> Irmãos que moram na casa: </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnIrmaosmoracasa" id="anamnIrmaosmoracasa" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label> Irmãos por parte de mãe: </label>
+												<label> Irmãos por parte de mãe: </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnIrmaospartemae" id="anamnIrmaospartemae" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label> Irmãos por parte de Pai:  </label>
+												<label> Irmãos por parte de pai:  </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnIrmaospartpai" id="anamnIrmaospartpai" placeholder="" class="form-control" style="width: 500px;"/>
@@ -777,7 +760,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>A mãe trabalha fora?</label>
+														<label>A mãe trabalha fora?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -790,14 +773,14 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnMaetrabquemfica" id="anamnMaetrabquemfica" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
-												<label> Observações adicionais sobre o núcleo familiar do beneficiário. </label>
+												<label> Observações </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsfami" id="anamnObsfami" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -810,12 +793,11 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Ambiente familiar:</strong>
-													 Informe sobre a interação do beneficiário no ambiente familiar onde vive.
 													<br>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Os Pais vivem juntos e bem?</label>
+														<label>Os pais vivem juntos e bem?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -829,7 +811,7 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnPaisvivemjuntosbemdesc" id="anamnPaisvivemjuntosbemdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
@@ -837,7 +819,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Há discursões na frente do beneficiário?</label>
+														<label>Há discursões na frente do beneficiário?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -850,20 +832,20 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnDiscussoesfreqdesc" id="anamnDiscussoesfreqdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
-												<label>Como foi a separação para a criança?</label>
+												<label>Como foi a separação para o menor?</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnComofoisepara" id="anamnComofoisepara" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label>Qual a reação do beneficiário? </label>
+												<label>Qual a reação do beneficiário? </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnReacaocrianca" id="anamnReacaocrianca" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -871,7 +853,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Quem cede mais?</label>
+														<label>Quem cede mais?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
@@ -885,7 +867,7 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnQuemcedefacildesc" id="anamnQuemcedefacildesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
@@ -894,12 +876,12 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>O beneficiário é tratado de forma deferente de outras crianças ou adolescentes?</label>
+														<label>O beneficiário é tratado de forma diferente dos irmãos?</label><!--Ok-->
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
+														<div class="input-group"><!--Ok-->
 															<select name="anamnCriancatratdif" id="anamnCriancatratdif" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
@@ -908,25 +890,25 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
+														<span class="input-icon"><!--Ok-->
 															<input type="text" name="anamnCriancatratdifcomo" id="anamnCriancatratdifcomo" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
-												<label> Descreva a relação com os irmãos</label>
+												<label> Descreva a relação com os irmãos</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnRelacirmaos" id="anamnRelacirmaos" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Descreva o ambiente familiar? </label>
+												<label> Descreva o ambiente familiar </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnAmbientefami" id="anamnAmbientefami" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 													</div>
 												</div>
-												<label> Observações adicionais sobre a interação do beneficiário ao ambiente familiar:</label>
+												<label> Observações</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsfamiambiente" id="anamnObsfamiambiente" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -939,18 +921,18 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Religião!</strong>
-													 Informações adicionais sobre religiosidade.
+													 
 													<br>
 												</div>
 												<div class="row">
 														<div class="col-xs-12">
-															<label>Há educação religiosa?</label>
+															<label>Há educação religiosa?</label><!--Ok-->
 														</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-2">
-														<div class="input-group">
-															<select name="anamnHaeducarelig" id="anamnHaeducarelig" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+														<div class="input-group"><!--Ok-->
+															<select name="anamnHaeducarelig" id="anamnHaeducarelig" class="chosen-select" placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -958,8 +940,8 @@
 														</div>
 													</div>
 													<div class="col-xs-9">
-														<span class="input-icon">
-															<input type="text" name="anamnHaeducareligqual" id="anamnHaeducareligqual" style="width: 800px;">
+														<span class="input-icon"><!--Ok-->
+															<input type="text" name="anamnHaeducareligqual" id="anamnHaeducareligqual" placeholder="Escreva qual"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -970,7 +952,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-2">
+													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnDevpreccumpr" id="anamnDevpreccumpr" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
@@ -979,14 +961,14 @@
 															</select>
 														</div>
 													</div>
-													<div class="col-xs-9">
+													<div class="col-xs-9"><!--Ok-->
 														<span class="input-icon">
 															<input type="text" name="anamnDevpreccumprdesc" id="anamnDevpreccumprdesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>
-												<label>Observações adicionais</label>
+												<label>Observações</label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsreligiao" id="anamnObsreligiao" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -999,436 +981,646 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Enfermidades!</strong>
-													Dados enfermidades contraídas.
+													
 												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Sarampo</label>
-														<div class="row">
-															<div class="input-group">
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Sarampo</label><!--Ok-->
+															</div>
+															<div class="row">
 																<div class="input-group">
-																	<select name="anamnSarampo" id="anamnSarampo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+																	<div class="input-group">
+																		<select name="anamnSarampo" id="anamnSarampo" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Catapora</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCatapora" id="anamnCatapora" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2"><!--Ok-->
+															<div class="row">
+																<label>Rubéola</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnRubeola" id="anamnRubeola" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
 																</div>
 															</div>
 														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Coqueluche</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCpqueluche" id="anamnCpqueluche" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Meningite</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnMeningite" id="anamnMeningite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Otite</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnOtite" id="anamnOtite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
 													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Catapora</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnCatapora" id="anamnCatapora" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Caxumba</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCaxumba" id="anamnCaxumba" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Adenoide</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAdenoide" id="anamnAdenoide" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Amigdalite</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAmigdalites" id="anamnAmigdalites" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Alergia</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAlergias" id="anamnAlergias" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Acidente</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAcidentes" id="anamnAcidentes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Convulsão</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnConvulsoes" id="anamnConvulsoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
 													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Rubéola</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnRubeola" id="anamnRubeola" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Internação</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnInternacoes" id="anamnInternacoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Cirurgias</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCirurgia" id="anamnCirurgia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Complicação com Vacina</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnComplicavacina" id="anamnComplicavacina" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Coqueluche</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnCpqueluche" id="anamnCpqueluche" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Dengue</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnDengue" id="anamnDengue" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Meningite</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnMeningite" id="anamnMeningite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Zica</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnZica" id="anamnZica" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Otite</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnOtite" id="anamnOtite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Chikungunya</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnChikun" id="anamnChikun" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
-													</div>												
+
+
+													</div>
+												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>COVID</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCovid" id="anamnCovid" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>TCE</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnTce" id="anamnTce" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														
+
+
+													</div>
+												</div>
 												
-												
-												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Caxumba</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnCaxumba" id="anamnCaxumba" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label> Adenoide</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnAdenoide" id="anamnAdenoide" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Amigdalite</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnAmigdalites" id="anamnAmigdalites" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Alergias</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnAlergias" id="anamnAlergias" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Accidentes</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnAcidentes" id="anamnAcidentes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Convulsões</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnConvulsoes" id="anamnConvulsoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Internações</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnInternacoes" id="anamnInternacoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-										
-												
-												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label> Cirurgias</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnCirurgia" id="anamnCirurgia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-3">
-														<label for="id-date-picker-1">Complicações com Vacinas</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnComplicavacina" id="anamnComplicavacina" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-3">
-														<label for="id-date-picker-1">Doenças por Insetos, Dengue, Zica etc</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnZoonoses" id="anamnZoonoses" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-												</div>													
-												<div class="col-xs-12" class="row">
-													<br>																																			
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														<strong>Antecedentes!</strong>
-														Dados dos antecedentes do beneficiário.
-														<br>
-													</div>
-												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label> Avaliações Neurologicas</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnAvaliacaoneuro" id="anamnAvaliacaoneuro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-4">
-														<label> Quem Realizou?</label>
+												<div class="col-xs-12" >
+													<div class="row">
+														<label>Observações</label><!--Ok-->
 														<div class="input-group">
 															<div>
-																<input type="text" name="anamnAvaliacaoneurodesc" id="anamnAvaliacaoneurodesc" placeholder="" class="form-control" style="width: 300px;"/>
+																<textarea type="text" name="anamnObssaude" id="anamnObssaude" placeholder="" class="form-control" style="width: 1000px;"></textarea>
 															</div>
+														</div>
+													</div>										
+												</div>
+																									
+												<div class="col-xs-12">
+													<div  class="row">
+														<br>																																			
+														<div class="alert alert-warning">
+															<button type="button" class="close" data-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															<strong>Antecedentes!</strong>
+															
+															<br>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-3">
-														<label> Contato /Celular / WhatsApp?</label>
-														<div class="input-group">
-															<div>
-																<input type="text" name="anamnAvaliacaoneurotel" id="anamnAvaliacaoneurotel" placeholder="" class="form-control" style="width: 100px;"/>
-															</div>
-														</div>
-													</div>												
 												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label> Avaliações Psiquiátricas</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnAvaliacaopsico" id="anamnAvaliacaopsico" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+												<div class="col-xs-12">
+													<div  class="row">
+														<div class="col-xs-3 col-sm-3">
+															<div class="row">
+																<label>Acompanhado por Neurologista?</label><!--Ok-->
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<select name="anamnAvaliacaoneuro" id="anamnAvaliacaoneuro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																					<option value="Sem Info">Sem Informação</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																			</select>
+																		</div>
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-xs-12 col-sm-4">
-														<label> Quem Realizou?</label>
-														<div class="input-group">
-															<div>
-																<input type="text" name="anamnAvaliacaopsicodesc" id="anamnAvaliacaopsicodesc" placeholder="" class="form-control" style="width: 300px;"/>
+														<div class="col-xs-12 col-sm-4">
+															<label>Médico(a)</label><!--Ok-->
+															<div class="input-group">
+																<div>
+																	<input type="text" name="anamnAvaliacaoneurodesc" id="anamnAvaliacaoneurodesc" placeholder="" class="form-control" style="width: 300px;"/>
+																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-xs-12 col-sm-3">
-														<label> Contato /Celular / WhatsApp?</label>
-														<div class="input-group">
-															<div>
-																<input type="text" name="anamnAvaliacaopsicotel" id="anamnAvaliacaopsicotel" placeholder="" class="form-control" style="width: 100px;"/>
+														<div class="col-xs-12 col-sm-3"><!--Ok-->
+															<label> Contato /Celular / WhatsApp?</label>
+															<div class="input-group">
+																<div>
+																	<input type="text" name="anamnAvaliacaoneurotel" id="anamnAvaliacaoneurotel" placeholder="" class="form-control" style="width: 100px;"/>
+																</div>
 															</div>
 														</div>
-													</div>												
-												</div>										
-												<label> Exames Realizados? </label>
+													</div>											
+												</div>
+
+												<div class="col-xs-12">
+													<div  class="row">
+														<div class="col-xs-3 col-sm-3">
+															<div class="row">
+																<label>Acompanhado por Psiquiatra?</label><!--Ok-->
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<select name="anamnAvaliacaopsico" id="anamnAvaliacaopsico" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																					<option value="Sem Info">Sem Informação</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																			</select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-4">
+															<label>Médico(a)</label><!--Ok-->
+															<div class="input-group">
+																<div>
+																	<input type="text" name="anamnAvaliacaopsicodesc" id="anamnAvaliacaopsicodesc" placeholder="" class="form-control" style="width: 300px;"/>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label> Contato /Celular / WhatsApp?</label><!--Ok-->
+															<div class="input-group">
+																<div>
+																	<input type="text" name="anamnAvaliacaopsicotel" id="anamnAvaliacaopsicotel" placeholder="" class="form-control" style="width: 100px;"/>
+																</div>
+															</div>
+														</div>
+													</div>											
+												</div>
+								
+												<label> Exames Realizados? </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnExamesrealiza" id="anamnExamesrealiza" placeholder="" class="form-control" style="width: 900px;"/>
 													</div>
 												</div>
-												<label> Medicações? </label>
+												<label> Medicações? </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnMedicacaoquais" id="anamnMedicacaoquais" placeholder="" class="form-control" style="width: 900px;"/>
 													</div>
 												</div>
-												<label> Quando foi diagnosticado? </label>
+												<label>Diagnosticado(a)? </label><!--Ok-->
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnQuandodiag" id="anamnQuandodiag" placeholder="" class="form-control" style="width: 900px;"/>
 													</div>
 												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Nervoso?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnNervoso" id="anamnNervoso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Deficiente?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnDeficiente" id="anamnDeficiente" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Viciado?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnViciado" id="anamnViciado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Ataques?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnAtaques" id="anamnAtaques" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-												</div>												
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Dislexia?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnDislexia" id="anamnDislexia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">TDAH?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnTdah" id="anamnTdah" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Esquizofrenia?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnEsquizofre" id="anamnEsquizofre" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Outros?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnOutros" id="anamnOutros" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-9">
-														<label for="id-date-picker-1">Quais?</label>
-														<div class="row">
-															<div class="input-group">
-																<input type="text" name="anamnOutrosdesc" id="anamnOutrosdesc" placeholder="" class="form-control" style="width: 700px;"/>
-															</div>
-														</div>
+												<br>
+												<div class="row">
+													<div class="col-sm-2"><!--Ok-->
+														<label><b>Antecedente familiar com:</b></label>
 													</div>
 												</div>
-												<div class="col-xs-12" class="row">
-													<label>Observações adicionais</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="anamnObssaude" id="anamnObssaude" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Nervoso</label><!--Ok-->
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnNervoso" id="anamnNervoso" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
 														</div>
-													</div>												
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnNervosodesc" id="anamnNervosodesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Deficiente</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnDeficiente" id="anamnDeficiente" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnDeficientedesc" id="anamnDeficientedesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Viciado</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnViciado" id="anamnViciado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnViciadodesc" id="anamnViciadodesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Ataques</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnAtaques" id="anamnAtaques" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnAtaquesdesc" id="anamnAtaquesdesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>TDAH</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnTdah" id="anamnTdah" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnTdahdesc" id="anamnTdahdesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Esquizofrenia</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnEsquizofrenia" id="anamnEsquizofrenia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnEsquizofreniadesc" id="anamnEsquizofreniadesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Outro</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnOutros" id="anamnOutros" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnOutrosdesc" id="anamnOutrosdesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+
+																								
+												<div class="col-xs-12" >
+													<div class="row">
+														<label>Observações</label>
+														<div class="input-group">
+															<div>
+																<textarea type="text" name="anamnObssaude2" id="anamnObssaude2" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+															</div>
+														</div>
+													</div>										
 												</div>
 
 											</div>
@@ -1437,33 +1629,39 @@
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													<strong>Linguágem!</strong>
-													Dados sobre linguágem.
+													<strong>Linguagem</strong>
+													
 													<br>
 												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label> Idade</label>
+													<div class="col-xs-12 col-sm-4">
+														<label> Primeira palavra com qual idade?</label>
 														<div class="row">
 															<div class="input-group">
-																<div class="col-sm-1">
-																	<input type="text" name="anamnPripalavrasidade" id="anamnPripalavrasidade" placeholder="" class="form-control" style="width: 50px;" />
+																<div class="col-sm-3">
+																	<input type="text" name="anamnPripalavrasidade" id="anamnPripalavrasidade" placeholder="" class="form-control" style="width: 100px;" />
 																</div>
 															</div>
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-4">
-														<label> Linguagem compreensível? descreva.</label>
+														<label>Hoje a linguagem é compreensível</label>
 														<div class="input-group">
-															<div>
-																<input type="text" name="anamnLimguagemcompre" id="anamnLimguagemcompre" placeholder="" class="form-control" style="width: 800px;"/>
+															<div class="input-group">
+																<select name="anamnLimguagemcompre" id="anamnLimguagemcompre" class="chosen-select" value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
 															</div>
+															
 														</div>
 													</div>
 												</div>
+												<br>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Iniciou Fala e depois de um tempo parou?</label>
+														<label>Iniciou a fala e depois de um tempo parou?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -1482,265 +1680,346 @@
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
-												</div>												
-												<div class="col-xs-12" class="row">
-													<hr>
-													<div class="col-sm-3">
-														<label> Disfluência Verbal / Gagueira?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnGdiscluverbalgagueira" id="anamnGdiscluverbalgagueira" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-3">
-														<label for="id-date-picker-1">Dislalia / Troca de letras?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnDislalia" id="anamnDislalia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Quais</label>
-														<div class="row">
-															<div class="input-group">
-																<input type="text" name="anamnDislaliaqual" id="anamnDislaliaqual" placeholder="" class="form-control" style="width: 500px;"/>
-															</div>
-														</div>
-													</div>												
-												</div>											
-												<div class="col-xs-12" class="row">
-													<hr>
-													<div class="col-sm-2">
-														<label> Fala Vocal?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnFalavocal" id="anamnFalavocal" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Compreende Ordens?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnCompreendeordem" id="anamnCompreendeordem" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Cumpre ordens?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnCumpreordens" id="anamnCumpreordens" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Escolalia Imediata?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnEcolaliaimediata" id="anamnEcolaliaimediata" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Escolalia Tardia?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnEcolaliatardia" id="anamnEcolaliatardia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Aponta</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnAponta" id="anamnAponta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-												</div>											
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Faz Pedidos?</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnPede" id="anamnPede" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Nomeia / descreve cenas?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnNomeiadescenas" id="anamnNomeiadescenas" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Faz Perguntas?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnPergunta" id="anamnPergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Responde Perguntas?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnRespondepergunta" id="anamnRespondepergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Solicitar para Brincar?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnSolicitabrincar" id="anamnSolicitabrincar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Solicita para ir ao wc?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnSolicitairbanheiro" id="anamnSolicitairbanheiro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
-												</div>													
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label> Solicita beber Água</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnSolicitabeber" id="anamnSolicitabeber" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Solicita Alimento?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnSolicitacomer" id="anamnSolicitacomer" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-4">
-														<label for="id-date-picker-1">Realiza sons com a boca imotivadamente?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnRealizasombocainativ" id="anamnRealizasombocainativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
 												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-4">
-														<label>Realiza sons com a boca durante atividade?</label>
-														<div class="row">
-															<div class="input-group">
+												<br>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Disfluência verbal / Gagueira?</label>
+															</div>
+															<div class="row">
 																<div class="input-group">
-																	<select name="anamnRealizasombocaativ" id="anamnRealizasombocaativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
+																	<div class="input-group">
+																		<select name="anamnGdiscluverbalgagueira" id="anamnGdiscluverbalgagueira" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Dislalia / Troca de letras?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnDislalia" id="anamnDislalia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Quais</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<div class="input-group">
+																			<input type="text" name="anamnDislaliaqual" id="anamnDislaliaqual" placeholder="" class="form-control" style="width: 500px;"/>
+																		</div>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>												
-												<div class="col-xs-12" class="row">
-													<hr>
 												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Fala vocal?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnFalavocal" id="anamnFalavocal" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Compreende ordens?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnCompreendeordem" id="anamnCompreendeordem" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Escolalia imediata?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnEcolaliaimediata" id="anamnEcolaliaimediata" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Escolalia tardia?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnEcolaliatardia" id="anamnEcolaliatardia" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Aponta</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAponta" id="anamnAponta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Faz pedidos?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnPede" id="anamnPede" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Nomeia / descreve cenas?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnNomeiadescenas" id="anamnNomeiadescenas" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Faz perguntas?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnPergunta" id="anamnPergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Responde perguntas?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnRespondepergunta" id="anamnRespondepergunta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Solicitar para brinca?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnSolicitabrincar" id="anamnSolicitabrincar" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Solicita para ir ao WC?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnSolicitairbanheiro" id="anamnSolicitairbanheiro" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
+													</div>
+												</div>
+												<div class="col-xs-12">
+													<div class="row">
+
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Solicita para beber água</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnSolicitabeber" id="anamnSolicitabeber" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Solicita alimento?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnSolicitacomer" id="anamnSolicitacomer" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>													
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Ronca</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnRonca" id="anamnRonca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>	
 												
-												
-												<label> Frases de quantas palavras? </label>
+												<div class="col-xs-12">
+													<div class="row">		
+														<div class="col-sm-6">
+															<div class="row">
+																<label>Realiza sons com a boca imotivadamente?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnRealizasombocainativ" id="anamnRealizasombocainativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<div class="row">
+																<label>Realiza sons com a boca durante atividade?</label>
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnRealizasombocaativ" id="anamnRealizasombocaativ" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																				<option value="Sem Info">Sem Informação</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+												<br>										
+												<label> Pronuncia frases de quantas palavras? </label>
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnFrasequantaspalavras" id="anamnFrasequantaspalavras" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>												
-												<label>Observações adicionais de linguística</label>
+												<label>Observações</label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObslibguagem" id="anamnObslibguagem" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -1755,7 +2034,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Sexualidade!</strong>
-													Informações osbre a sexualidade do beneficiário e auto identificação.
 													<br>
 												</div>
 													<div class="row">
@@ -1802,13 +2080,30 @@
 														</span>
 													</div>
 												</div>
-												<label> Percebe a diferença entre os sexos? descreva.</label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="anamnPercebedifsex" id="anamnPercebedifsex" placeholder="" class="form-control" style="width: 900px;"/>
+												<div class="row">
+													<div class="col-xs-12">
+														<label> Percebe a diferença entre os sexos?</label>
 													</div>
 												</div>
-												<label>Observações Adicionais? </label>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnPercebedifsex" id="anamnPercebedifsex" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnPercebedifsexdesc" id="anamnPercebedifsexdesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												
+												<label>Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObssex" id="anamnObssex" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -1822,28 +2117,27 @@
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													<strong>Relações emocionais e de comportamento!</strong>
-													informações adicionais sobre convívio com o beneficiário.
+													<strong>Relações emocionais e comportamento!</strong>
 												</div>
-												<label>Proíbições, como reage? </label>
+												<label>Como reage à proíbição? </label>
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnComoreaproibi" id="anamnComoreaproibi" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label>Frustrações, como reage? </label>
+												<label>Como reage à frustração? </label>
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnComoreafrustra" id="anamnComoreafrustra" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label>Castigos, como reage? </label>
+												<label>Como reage à castigo? </label>
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnComoreacastig" id="anamnComoreacastig" placeholder="" class="form-control" style="width: 500px;"/>
 													</div>
 												</div>
-												<label>Novas Situações, como reage?</label>
+												<label>Como reage à nova situação?</label>
 												<div class="input-group">
 													<div>
 														<input type="text" name="anamnComoreanovasituacao" id="anamnComoreanovasituacao" placeholder="" class="form-control" style="width: 500px;"/>
@@ -1851,7 +2145,7 @@
 												</div>											
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Defende-se de agressão alheia?</label>
+														<label>Como reage à desafio?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -1895,7 +2189,7 @@
 												</div>											
 												<div class="col-xs-12" class="row">
 													<div class="col-xs-12 col-sm-2">
-														<label>Dependente?</label>
+														<label>Dependente</label>
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
@@ -1909,7 +2203,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Carinhoso?</label>
+														<label for="id-date-picker-1">Carinhoso</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnCarinho" id="anamnCarinho" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -1921,7 +2215,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Autoritário?</label>
+														<label for="id-date-picker-1">Autoritário</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnAutoritario" id="anamnAutoritario" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -1933,7 +2227,7 @@
 														</div>
 													</div>												
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Malcriado?</label>
+														<label for="id-date-picker-1">Malcriado</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnMalcriado" id="anamnMalcriado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -1945,7 +2239,7 @@
 														</div>
 													</div>												
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Exibicionista?</label>
+														<label for="id-date-picker-1">Exibicionista</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnExibicionista" id="anamnExibicionista" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -1971,7 +2265,7 @@
 												</div>	
 												<div class="col-xs-12" class="row">
 													<div class="col-sm-2">
-														<label> Calado?</label>
+														<label> Calado</label>
 														<div class="row">
 															<div class="input-group">
 																<div class="input-group">
@@ -1985,7 +2279,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Falante?</label>
+														<label for="id-date-picker-1">Falante</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnFalante" id="anamnFalante" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -2006,7 +2300,7 @@
 													</div>
 												</div>
 
-												<label> Observações adicionais sobre o núcleo familiar do beneficiário. </label>
+												<label>Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObscomportamento" id="anamnObscomportamento" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -2020,7 +2314,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Manipulações e Tiques!</strong>
-													 Adicione informações sobre manipulações e tiques.
 													<br>
 												</div>
 												<div class="row">
@@ -2069,7 +2362,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Roe unhas</label>
+														<label>Roe unhas?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2091,7 +2384,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Pucha orelha ou cabelo?</label>
+														<label> Puxa orelha ou cabelo?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2113,7 +2406,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Morde Lábios?</label>
+														<label>Morde lábios?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2135,7 +2428,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Bate os Pés, Esperneia?</label>
+														<label>Bate os pés - esperneia?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2207,7 +2500,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnMentejamentiu" id="anamnMentejamentiu" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+															<select name="anamnMentejamentiu" id="anamnMentejamentiu" class="chosen-select" value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2216,7 +2509,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnMentejamentiudesc" id="anamnMentejamentiudesc" placeholder="Exporadicamente, sempre etc" style="width: 800px;">
+															<input type="text" name="anamnMentejamentiudesc" id="anamnMentejamentiudesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -2229,7 +2522,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnAtiraobjetos" id="anamnAtiraobjetos" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+															<select name="anamnAtiraobjetos" id="anamnAtiraobjetos" class="chosen-select"  value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2238,7 +2531,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnAtiraobjetosdesc" id="anamnAtiraobjetosdesc" placeholder="Regularmente?, tem preferencias de objetos etc" style="width: 800px;">
+															<input type="text" name="anamnAtiraobjetosdesc" id="anamnAtiraobjetosdesc"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -2251,7 +2544,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnDesligase" id="anamnDesligase" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+															<select name="anamnDesligase" id="anamnDesligase" class="chosen-select"  value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2260,7 +2553,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnDesligasetempo" id="anamnDesligasetempo" placeholder="Regularmente?, tem preferencias de objetos etc" style="width: 800px;">
+															<input type="text" name="anamnDesligasetempo" id="anamnDesligasetempo"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -2273,7 +2566,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnObjetonuncalarga" id="anamnObjetonuncalarga" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+															<select name="anamnObjetonuncalarga" id="anamnObjetonuncalarga" class="chosen-select"  value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2282,7 +2575,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnObjetonuncalargaqual" id="anamnObjetonuncalargaqual" placeholder="Regularmente?, tem preferencias de objetos etc" style="width: 800px;">
+															<input type="text" name="anamnObjetonuncalargaqual" id="anamnObjetonuncalargaqual"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -2295,7 +2588,7 @@
 												<div class="row">
 													<div class="col-xs-2">
 														<div class="input-group">
-															<select name="anamnRepeteacao" id="anamnRepeteacao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+															<select name="anamnRepeteacao" id="anamnRepeteacao" class="chosen-select"  value="Sem Info">
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
@@ -2304,7 +2597,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnRepeteacaoqual" id="anamnRepeteacaoqual" placeholder="Regularmente?, tem preferencias de objetos etc" style="width: 800px;">
+															<input type="text" name="anamnRepeteacaoqual" id="anamnRepeteacaoqual" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -2326,12 +2619,12 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon">
-															<input type="text" name="anamnTiquedesc" id="anamnTiquedesc" placeholder="Regularmente?, tem preferencias de objetos etc" style="width: 800px;">
+															<input type="text" name="anamnTiquedesc" id="anamnTiquedesc"  style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
 												</div>	
-												<label> Observações adicionais sobre Manipulações e Tiques? </label>
+												<label> Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObstiques" id="anamnObstiques" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -2344,7 +2637,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>SONO!</strong>
-													 Informações sobre sono e hábitos noturnos.
 													<br>
 												</div>
 												<label>Dorme com quem? </label>
@@ -2428,8 +2720,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Fala</label>
-															<span class="help-button" data-rel="popover" data-trigger="hover" data-placement="left" data-content="More details." title="" data-original-title="Popover on hover">?</span>
+														<label for="id-date-picker-1">Fala / Soniloquismo </label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnFalanoite" id="anamnFalanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -2453,7 +2744,7 @@
 														</div>
 													</div>												
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Range os Dentes?</label>
+														<label for="id-date-picker-1">Range os dentes?</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnRangedenteanoite" id="anamnRangedenteanoite" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -2519,7 +2810,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Terror Noturno?</label>
+														<label for="id-date-picker-1">Terror noturno?</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnTerrornoturno" id="anamnTerrornoturno" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -2531,7 +2822,7 @@
 														</div>
 													</div>												
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Ronca / Apneia?</label>
+														<label for="id-date-picker-1">Ronca?</label>
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnRonca" id="anamnRonca" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
@@ -2554,48 +2845,39 @@
 															</div>
 														</div>
 													</div>												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Ronquidão?</label>
-														<div class="row">
-															<div class="input-group">
-																	<select name="anamnRonquidao" id="anamnRonquidao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-															</div>
-														</div>
-													</div>												
+																									
 												<div class="col-xs-12">
 													<hr>
 												</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<labelD>Durante o sono:</label>
+														<labelD>Apresenta:</label>
 													</div>
 												</div>
-												<div class="col-xs-12" class="row">
-													<div class="col-sm-2">
-														<label>Apresenta:</label>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="anamnSono" id="anamnSono" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																			<option value="Sem Info">Sem Informação</option>
-																			<option value="Tranquilo">Tranquilo</option>
-																			<option value="Entrecortado">Entrecortado</option>
-																			<option value="Agitado">Agitado</option>
-																	</select>
-																</div>
-															</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnSono" id="anamnSono" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Tranquilo">Tranquilo</option>
+																	<option value="Entrecortado">Entrecortado</option>
+																	<option value="Agitado">Agitado</option>
+															</select>
 														</div>
 													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnSonodesc" id="anamnSonodesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
 												</div>
+												
 												<div class="col-xs-12">
 													<hr>
 												</div>
-												<label> Observações adicionais sobre o Sono e comportamento noturno. </label>
+												<label> Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObssono" id="anamnObssono" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -2608,7 +2890,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Alimentação!</strong>
-													 Informações sobre alimentação.
 													<br>
 												</div>
 												<div class="row">
@@ -2677,7 +2958,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label> Durante a refeição é?</label>
+														<label> Voçe considera o menor:</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2797,7 +3078,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Alimenta-se?</label>
+														<label>Alimenta-se de?</label>
 													</div>
 												</div>
 	
@@ -2839,14 +3120,22 @@
 																	</select>
 															</div>
 														</div>
-													</div>												
+													</div>
+													<br>
+																									
 												</div>
 												<div class="col-xs-12">
+													<label> Informações adicionais quanto à alimentação </label>
+													<div class="input-group">
+														<div>
+															<textarea type="text" name="anamnAlimentacom" id="anamnAlimentacom" placeholder="" class="form-control" style="width: 1000px;"></textarea>
+														</div>
+													</div>	
 													<hr>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Tem dificuldade com algum tipo de cheiro??</label>
+														<label>Tem dificuldade com algum tipo de cheiro?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2896,7 +3185,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Tem dificuldade com texturas?</label>
+														<label>Tem dificuldade com texturas de alimento ou cor?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -2916,7 +3205,7 @@
 														</span>
 													</div>
 												</div>
-												<label> Observações adicionais sobre Alimetalção. </label>
+												<label> Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsalimentacao" id="anamnObsalimentacao" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -2928,8 +3217,7 @@
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													<strong>Controle Esficteriano!</strong>
-													- Informações sobre número 1 e número 2...
+													<strong>Controle esfincteriano!</strong>
 													<br>
 												</div>
 												<div class="row">
@@ -3020,7 +3308,7 @@
 													</div>												
 												</div>	
 												
-												<label>Observações esficterianas adicionais</label>
+												<label>Observações</label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsesficteriano" id="anamnObsesficteriano" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -3032,14 +3320,13 @@
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													<strong>Higiene!</strong>
-													Dados complementares sobre controle da higiene pessoal.
+													<strong>Auto cuidado</strong>
 												</div>
 												<div class="col-xs-12">
 													<div class="row">
 														<div class="col-sm-2">
 															<div class="row">
-																<label> Usa Vaso</label>
+																<label> Usa vaso sanitário?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3048,6 +3335,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																	</div>
 																</div>
@@ -3055,7 +3343,7 @@
 														</div>
 														<div class="col-sm-2">
 															<div class="row">
-																<label for="id-date-picker-1">Se Limpa</label>
+																<label for="id-date-picker-1">Limpa</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3063,13 +3351,14 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
 														</div>
 														<div class="col-sm-2">
 															<div class="row">
-																<label for="id-date-picker-1">Toma Banho Só</label>
+																<label for="id-date-picker-1">Toma banho</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3077,13 +3366,14 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-															<label for="id-date-picker-1">Escova dentes só</label>
+															<label for="id-date-picker-1">Escova dentes</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3091,6 +3381,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
@@ -3105,13 +3396,14 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Se Pentea</label>
+																<label>Pentear</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3119,13 +3411,14 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label> Despir-se</label>
+																<label> Despir</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3134,6 +3427,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																	</div>
 																</div>
@@ -3141,7 +3435,7 @@
 														</div>
 														<div class="col-sm-2">
 															<div class="row">
-																<label for="id-date-picker-1">Vestir-se</label>
+																<label for="id-date-picker-1">Vestir</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3149,6 +3443,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
@@ -3163,6 +3458,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
@@ -3177,13 +3473,14 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label for="id-date-picker-1">Lançar</label>
+																<label for="id-date-picker-1">Laçar</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3191,6 +3488,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
@@ -3205,6 +3503,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																</div>
 															</div>
@@ -3220,6 +3519,7 @@
 																				<option value="Sem Info">Sem Informação</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
+																				<option value="Com ajuda">Com ajuda</option>
 																		</select>
 																	</div>
 																</div>
@@ -3229,7 +3529,7 @@
 												</div>
 													
 												<br>
-												<label>Observações adicionais</label>
+												<label>Observações </label>
 												<div class="input-group">
 													<div>
 														<textarea type="text" name="anamnObsvestirhigi" id="anamnObsvestirhigi" placeholder="" class="form-control" style="width: 1000px;"></textarea>
@@ -3243,7 +3543,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Visão!</strong>
-													 Informações sobre a visão do beneficiário.
 													<br>
 												</div>												
 												<div class="row">
@@ -3268,32 +3567,11 @@
 														</span>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-xs-12">
-														<label>Olha para os objetos, evetos e ou atividades?</label>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-xs-2">
-														<div class="input-group">
-															<select name="anamnOlhaobjetivoatividade" id="anamnOlhaobjetivoatividade" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																	<option value="Sem Info">Sem Informação</option>
-																	<option value="Sim">Sim</option>
-																	<option value="Não">Não</option>
-															</select>
-														</div>
-													</div>
-													<div class="col-xs-9">
-														<span class="input-icon">
-															<input type="text" name="anamnOlhaobjetivoatividadedesc" id="anamnOlhaobjetivoatividadedesc" style="width: 800px;">
-															<i class="ace-icon fa fa-info-circle pink"></i>
-														</span>
-													</div>
-												</div>
+												
 												
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Usa Óculos</label>
+														<label>Usa óculos</label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -3331,6 +3609,30 @@
 														</div>
 													</div>
 												</div>
+												
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Olha para os objetos e/ou atividades durante a execução?</label>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-2">
+														<div class="input-group">
+															<select name="anamnOlhaobjetivoatividade" id="anamnOlhaobjetivoatividade" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																	<option value="Sem Info">Sem Informação</option>
+																	<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-xs-9">
+														<span class="input-icon">
+															<input type="text" name="anamnOlhaobjetivoatividadedesc" id="anamnOlhaobjetivoatividadedesc" style="width: 800px;">
+															<i class="ace-icon fa fa-info-circle pink"></i>
+														</span>
+													</div>
+												</div>
+												
 												<div class="col-xs-12">
 													<div class="row">											
 														<div class="col-sm-4">
@@ -3351,7 +3653,7 @@
 														</div>
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Se Incomoda com muita luz ou cores vibrantes?</label>
+																<label>Se incomoda com muita luz ou cores vibrantes?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3369,7 +3671,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Faz contato Visual?</label>
+																<label>Faz contato visual?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3385,7 +3687,7 @@
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Mantem contato Visual?</label>
+																<label>Mantem contato visual?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3405,7 +3707,7 @@
 												
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Observações adicionais</label>
+														<label>Observações </label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -3425,12 +3727,11 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Audição!</strong>
-													Informações sobre audição.
 													<br>
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Tem alguma dúvida sobre a capacidade auditiva do beneficiário:</label>
+														<label>Tem alguma dúvida sobre a capacidade auditiva do beneficiário?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -3480,7 +3781,7 @@
 													<div class="row">											
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Voz</label>
+																<label>Tom de voz</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3497,7 +3798,7 @@
 														</div>
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Audiometria?</label>
+																<label>Já fez audiometria?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3515,7 +3816,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Localiza os Sons?</label>
+																<label>Localiza os sons?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3566,7 +3867,7 @@
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Asusta com facilidade?</label>
+																<label>Assusta com facilidade?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3584,7 +3885,7 @@
 												<div class="row">
 													<div class="col-xs-12">
 														<hr>
-														<label>Fica irritado ou incomodado com sons altos ou pessoas conversando?</label>
+														<label>Fica irritado(a) ou incomodado(a) com sons altos ou pessoas conversando?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -3606,7 +3907,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Parece não escutar quando chamado pelo</label>
+														<label>Parece não escutar quando chamado(a) pelo nome</label>
 													</div>
 												</div>
 												<div class="row">
@@ -3630,7 +3931,7 @@
 												<div class="col-sm-4">
 													<div class="row">
 														<hr>
-														<label>Observações adicionais sobre audição</label>
+														<label>Observações</label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -3651,14 +3952,13 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Desenvolvimento Psicomotor e Vestibular!</strong>
-													 Informações adcionais sobre o desenvolvimento motor.
 													<br>
 												</div>												
 												<div class="col-xs-12">
 													<div class="row">											
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Controla a cabeça?</label>
+																<label>Controlar a cabeça?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3796,7 +4096,7 @@
 														</div>														
 														<div class="col-sm-3">
 															<div class="row">
-																<label>É desastrado. desajeitado?</label>
+																<label>É desastrado / desajeitado?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -3842,108 +4142,156 @@
 																</div>
 															</div>
 														</div>	
-														<div class="col-sm-2">
-															<div class="row">
+														
+														<div class="row">
+															<div class="col-xs-12">
 																<label>Demonstra medo de tirar os Pés do Chão?</label>
 															</div>
-															<div class="row">
+														</div>
+														<div class="row">
+															<div class="col-xs-2">
 																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnMedotirarpesdochao" id="anamnMedotirarpesdochao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
+																	<select name="anamnMedotirarpesdochao" id="anamnMedotirarpesdochao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																			<option value="Sem Info">Sem Informação</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																	</select>
 																</div>
 															</div>
-														</div>	
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Mostra medo nas experiências de movimento, especialmente quando ocorre mudanças nos planos?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnMostramedoexp" id="anamnMostramedoexp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>	
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Evita novas posições, quando os pés não estão em contato com o solo?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnEvitanovasposicoes" id="anamnEvitanovasposicoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>	
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Tem reações emocionais excessivas aos estímulos vestibulares (mudanças lentas na posição da cabeça)?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnReacaoemotivaexessi" id="anamnReacaoemotivaexessi" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>				
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Os movimentos tende a ser extremamente cuidadosos e restritos?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnMovisecuidado" id="anamnMovisecuidado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
+															<div class="col-xs-9">
+																<span class="input-icon">
+																	<input type="text" name="anamnMedotirarpesdochaodesc" id="anamnMedotirarpesdochaodesc" style="width: 800px;">
+																	<i class="ace-icon fa fa-info-circle pink"></i>
+																</span>
 															</div>
 														</div>
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Demonstra sentimentos de incômodo, náuseas, vômitos, excessivas tonturas e vertigem depois de movimentos lineares e rotacionais?</label>
+														
+														<div class="row">
+															<div class="col-xs-12">
+																<label>Mostra medo nas experiências de movimento, especialmente quando ocorre mudanças nos planos?</label>
 															</div>
-															<div class="row">
+														</div>
+														<div class="row">
+															<div class="col-xs-2">
 																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnTemexpnegativamov" id="anamnTemexpnegativamov" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
+																	<select name="anamnMostramedoexp" id="anamnMostramedoexp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																			<option value="Sem Info">Sem Informação</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																	</select>
 																</div>
 															</div>
-														</div>	
+															<div class="col-xs-9">
+																<span class="input-icon">
+																	<input type="text" name="anamnMostramedoexpdesc" id="anamnMostramedoexpdesc" style="width: 800px;">
+																	<i class="ace-icon fa fa-info-circle pink"></i>
+																</span>
+															</div>
+														</div>
+
+
+														<div class="row">
+															<div class="col-xs-12">
+																<label>Evita novas posições, quando os pés não estão em contato com o solo?</label>
+															</div>
+														</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnEvitanovasposicoes" id="anamnEvitanovasposicoes" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnEvitanovasposicoesdesc" id="anamnEvitanovasposicoesdesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
 													</div>
+
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Tem reações emocionais excessivas aos estímulos vestibulares (mudanças lentas da posição da cabeça)?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnReacaoemotivaexessi" id="anamnReacaoemotivaexessi" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnReacaoemotivaexessidesc" id="anamnReacaoemotivaexessidesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Os movimentos tende a ser extremamente cuidadosos e restritos?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnMovisecuidado" id="anamnMovisecuidado" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnMovisecuidadodesc" id="anamnMovisecuidadodesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Demonstra sentimentos de incômodo, náuseas, vômitos, excessivas tonturas e vertigem depois de movimentos lineares e rotacionais?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnTemexpnegativamov" id="anamnTemexpnegativamov" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnTemexpnegativamovdesc" id="anamnTemexpnegativamovdesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+														
+															
+												</div>
 												</div>
 												
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Observações adicionais</label>
+														<label>Observações</label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -3963,7 +4311,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Desenvolvimento Tatil e Proprioceptivo!</strong>
-													 Informações adcionais.
 													<br>
 												</div>												
 												<div class="col-xs-12">
@@ -4021,7 +4368,7 @@
 														</div>													
 														<div class="col-sm-2">
 															<div class="row">
-																<label>tinta?</label>
+																<label>Tinta?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4085,7 +4432,7 @@
 														</div>
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Aceita Abraço?</label>
+																<label>Aceita abraço?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4100,94 +4447,129 @@
 															</div>
 														</div>		
 													</div>
+													<hr>
 													<div class="row">
-														<div class="col-sm-12">
-															<div class="row">Toca em objetos, superficies e pessoas constatemente?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnTocapessoasobjconsta" id="anamnTocapessoasobjconsta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>												
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Bate, cai tropeça ou esbarra em objetos e pessoas sem noção do perigo?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnBatecaisemnocao" id="anamnBatecaisemnocao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>												
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Segura objetos com:</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnSeguraobj" id="anamnSeguraobj" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Muita força">Muita força</option>
-																				<option value="Pouca força">Pouca força</option>
-																				<option value="Normal">Normal</option>
-																		
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>														
-														<div class="col-sm-12">
-															<div class="row">
-																<label>Busca atividades de puxar, empurrar, arastar, levantar?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnBuscaatvpuxaremp" id="anamnBuscaatvpuxaremp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
+														<div class="col-xs-12">
+															<label>Toca em objetos, superficies e pessoas constantemente?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnTocapessoasobjconsta" id="anamnTocapessoasobjconsta" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
 															</div>
 														</div>
-														<div class="col-sm-4">
-															<div class="row">
-																<label>Mastiga objetos ou roupas?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<select name="anamnMastigaobjroupa" id="anamnMastigaobjroupa" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
-																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-														</div>	
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnTocapessoasobjconstadesc" id="anamnTocapessoasobjconstadesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
 													</div>
+													
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Bate, cai tropeça ou esbarra em objetos e pessoas sem noção do perigo?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnBatecaisemnocao" id="anamnBatecaisemnocao" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnBatecaisemnocaodesc" id="anamnBatecaisemnocaodesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+													
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Segura objetos com:</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnSeguraobj" id="anamnSeguraobj" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnSeguraobjdesc" id="anamnSeguraobjdesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Busca atividades de puxar, empurrar, arastar ou levantar?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnBuscaatvpuxaremp" id="anamnBuscaatvpuxaremp" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnBuscaatvpuxarempdesc" id="anamnBuscaatvpuxarempdesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-xs-12">
+															<label>Mastiga objetos ou roupas?</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2">
+															<div class="input-group">
+																<select name="anamnMastigaobjroupa" id="anamnMastigaobjroupa" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
+																		<option value="Sem Info">Sem Informação</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-xs-9">
+															<span class="input-icon">
+																<input type="text" name="anamnMastigaobjroupadesc" id="anamnMastigaobjroupadesc" style="width: 800px;">
+																<i class="ace-icon fa fa-info-circle pink"></i>
+															</span>
+														</div>
+													</div>
+
+													<hr>
 												</div>
 												
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Observações adicionais</label>
+														<label>Observações</label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -4207,7 +4589,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Sociabilidade, brincadeiras e brinquedos!</strong>
-													 Informações adcionais.
 													<br>
 												</div>												
 												<div class="col-xs-12">
@@ -4221,7 +4602,7 @@
 																	<div class="input-group">
 																		<select name="anamnPreferebrincarcom" id="anamnPreferebrincarcom" class="chosen-select" data-placeholder="Escolha..." value="Sem Info">
 																				<option value="Sem Info">Sem Informação</option>
-																				<option value="Meninas">Meminas</option>
+																				<option value="Meninas">Meninas</option>
 																				<option value="Meninos">Meninos</option>
 																		</select>
 																	</div>
@@ -4260,7 +4641,7 @@
 														</div>													
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Empresa brinquedos?</label>
+																<label>Empresta brinquedos?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4324,7 +4705,7 @@
 														</div>
 														<div class="col-sm-2">
 															<div class="row">
-																<label>Gosta de Música?</label>
+																<label>Gosta de música?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4387,7 +4768,7 @@
 														</div>												
 														<div class="col-sm-2">
 															<div class="row">
-																<label>O Brincar é funcional?</label>
+																<label>O brincar é funcional?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4435,7 +4816,7 @@
 														</div>
 														<div class="col-sm-12">
 															<div class="row">
-																<label>Brinquedos Preferidos?</label>
+																<label>Brinquedos preferidos?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4451,7 +4832,7 @@
 												</div>
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Observações adicionais</label>
+														<label>Observações</label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -4471,7 +4852,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Escolaridade!</strong>
-													 Informações sobre educação escolar e escolas.
 													<br>
 												</div>												
 												<div class="col-xs-12">
@@ -4492,7 +4872,7 @@
 														</div>
 														<div class="col-sm-4">
 															<div class="row">
-																<label>Tempo?</label>
+																<label>Quanto tempo estuda nessa escola?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4534,7 +4914,7 @@
 														</div>													
 														<div class="col-sm-12">
 															<div class="row">
-																<label>Escola Anterior?</label>
+																<label>Escola anterior?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4613,7 +4993,7 @@
 														</div>												
 														<div class="col-sm-3">
 															<div class="row">
-																<label>Necessita de Orientação?</label>
+																<label>Necessita de orientação?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4677,7 +5057,7 @@
 														</div>
 														<div class="col-sm-3">
 															<div class="row">
-																<label>Pulou Séries?</label>
+																<label>Pulou séries?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4707,7 +5087,7 @@
 														</div>
 														<div class="col-sm-12">
 															<div class="row">
-																<label>Idade de Alfabetização?</label>
+																<label>Idade de alfabetização?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4721,7 +5101,7 @@
 														</div>
 														<div class="col-sm-12">
 															<div class="row">
-																<label>Como foi o Processo de alfabetização?</label>
+																<label>Como foi o processo de alfabetização?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4735,7 +5115,7 @@
 														</div>
 														<div class="col-sm-3">
 															<div class="row">
-																<label>Dificuldades Escolares?</label>
+																<label>Dificuldades escolares?</label>
 															</div>
 															<div class="row">
 																<div class="input-group">
@@ -4767,7 +5147,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Ler?</label>
+														<label>Lê?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -4777,6 +5157,7 @@
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
+																	<option value="Com dificuldade">Com dificuldade</option>
 															</select>
 														</div>
 													</div>
@@ -4789,7 +5170,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Escrever?</label>
+														<label>Escreve?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -4799,6 +5180,7 @@
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
+																	<option value="Com dificuldade">Com dificuldade</option>
 															</select>
 														</div>
 													</div>
@@ -4821,6 +5203,7 @@
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
+																	<option value="Com dificuldade">Com dificuldade</option>
 															</select>
 														</div>
 													</div>
@@ -4833,7 +5216,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Contar?</label>
+														<label>Conta?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -4843,6 +5226,7 @@
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
+																	<option value="Com dificuldade">Com dificuldade</option>
 															</select>
 														</div>
 													</div>
@@ -4855,7 +5239,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Calcular?</label>
+														<label>Calcula?</label>
 													</div>
 												</div>
 												<div class="row">
@@ -4865,6 +5249,7 @@
 																	<option value="Sem Info">Sem Informação</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
+																	<option value="Com dificuldade">Com dificuldade</option>
 															</select>
 														</div>
 													</div>
@@ -4929,20 +5314,8 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
-															<div class="row">
-																<label>Contato?</label>
-															</div>
-															<div class="row">
-																<div class="input-group">
-																	<div class="input-group">
-																		<div>
-																			<input type="text" name="anamnProfparticulartel" id="anamnProfparticulartel" placeholder="" class="form-control" style="width: 100px;"/>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
+													</div>
+													<div class="row">
 														<div class="col-sm-2">
 															<div class="row">
 																<label>Horário Extra?</label>
@@ -4977,7 +5350,7 @@
 												</div>
 												<div class="col-sm-2">
 													<div class="row">
-														<label>Observações adicionais</label>
+														<label>Observações </label>
 													</div>
 													<div class="row">
 														<div class="input-group">
@@ -4997,7 +5370,6 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Rotinas!</strong>
-													  As rotinas diárias e semanais da criança, bem como as dificuldades do dia-a-dia.
 													<br>
 												</div>
 												<div class="col-sm-12">
@@ -5014,70 +5386,53 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-12">
-													<div class="row">
-														<label>Apresenta algumas dificuldades?</label>
-													</div>
-													<div class="row">
-														<div class="input-group">
-															<div class="input-group">
-																<div>
-																	<textarea type="text" name="anamnDificuldaderotina" id="anamnDificuldaderotina" placeholder="" class="form-control" style="width: 1000px; height:350px"></textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>	
 											</div>
 											<div id="ano" class="tab-pane fade">
 												<div class="alert alert-warning">
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													<strong>Anotações!</strong>
-													 Anotações Extras, Upload de Arquivos, fotos, laudos e documento pertencentes a Anamnese.
+													<strong>Anotações extras!</strong>
 													<br>
 												</div>
-													<div class="col-sm-12">
-														<div class="row">
-															<label>Descreva anotações extras e nome de arquivos de upload como referência.?</label>
-														</div>
-														<div class="row">
+												<div class="col-sm-12">
+													<div class="row">
+														<label>Descreva anotações extras, nomes de arquivos, localização de pasta de sigilo etc?</label>
+													</div>
+													<div class="row">
+														<div class="input-group">
 															<div class="input-group">
-																<div class="input-group">
-																	<div>
-																		<textarea type="text" name="anamnObsescola" id="anamnObsescola" placeholder="" class="form-control"  style="width: 1000px; height:500px"></textarea>
-																	</div>
+																<div>
+																	<textarea type="text" name="anamnObsextras" id="anamnObsextras" placeholder="" class="form-control"  style="width: 1000px; height:250px"></textarea>
 																</div>
 															</div>
 														</div>
+													</div>
+													
+													
+												</div>
+												<div class="col-xs-12">
+														<label>Terapeuta</label>
+														<div class="form-group">
+															<div class="col-xs-8">
+																<select name="anamnTerapeutanome" id="anamnTerapeutanome" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+																	{{#each usuarios}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>												
+													<div class="col-xs-12 ">
+														<label for="id-date-picker-1">Data</label>
 														<div class="row">
-															<div class="col-sm-12">
-																<div class="widget-box">
-																	<div class="widget-header">
-																		<h4 class="widget-title">Inserir arquivos complementares</h4>
-
-																		<div class="widget-toolbar">
-																			<a href="#" data-action="collapse">
-																				<i class="ace-icon fa fa-chevron-up"></i>
-																			</a>
-																		</div>
-																	</div>
-
-																	<div class="widget-body">
-																		<div class="widget-main">
-																			<div class="form-group">
-																				<div class="col-xs-12">
-																					<input type="file" id="id-input-file-2" />
-																				</div>
-																			</div>
-																		</div>
-																	</div>
+															<div class="col-xs-4">
+																<div class="input-group">
+																	<input name="anamnDatacad" id="anamnDatacad" type="date" onchange="javascript:atualizaData()" />
 																</div>
 															</div>
 														</div>
-														
-													</div>	
+													</div>
 											</div>			
 										</div>
 									</div>

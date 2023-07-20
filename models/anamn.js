@@ -3,116 +3,145 @@ const ObjectId = mongoose.Types.ObjectId
 
 const AnamnSchema = mongoose.Schema({
     anamn_id:{ type: ObjectId, required: false },
-    anamn_beneid: { type: ObjectId, required: false },
-    anamn_benefoto: { type: String, required: false }, //A foto não será armazenada no banco e sim numa pasta, aqui ficara cadastrado apenas o link para a pasta de armazenamento
-    anamn_benenome: { type: String, required: false },
-    anamn_beneapelido: { type: String, required: false },
-    anamn_benedatanasc: { type: String, required: false },
-    anamn_beneidade: { type: String, required: false },
-    anamn_painome: { type: String, required: false },
-    anamn_maenome: { type: String, required: false },
-    anamn_respnome: { type: String, required: false },
-    anamn_indica: { type: String, required: false },
-    anamn_queixapri: { type: String, required: false },
-    anamn_diag: { type: String, required: false },
-    anamn_houvetratengrav: { type: String, required: false },
-    anamn_houvetratengravdesc: { type: String, required: false },
-    anamn_houveplanfami: { type: String, required: false },
-    anamn_houveplanfamidesc: { type: String, required: false },
-    anamn_ameacatenaborto: { type: String, required: false },
-    anamn_ameacatenabortodesc: { type: String, required: false },
-    anamn_bebeoufumagesta: { type: String, required: false },
-    anamn_bebeoufumagestadesc: { type: String, required: false },
-    anamn_traumafispsiinfec: { type: String, required: false },
-    anamn_traumafispsiinfecdesc: { type: String, required: false },
-    anamn_usotranquil: { type: String, required: false },
-    anamn_usotranquildesc: { type: String, required: false },
-    anamn_adocao: { type: String, required: false },
-    anamn_obsgesta: { type: String, required: false },
-    anamn_partoqual: { type: String, required: false },
-    anamn_partoqualdesc: { type: String, required: false },
-    anamn_anorexiaperiparto: { type: String, required: false },
-    anamn_anorexiaperipartodesc: { type: String, required: false },
-    anamn_apgar: { type: String, required: false },
-    anamn_apgardesc: { type: String, required: false },
-    anamn_chorounasc: { type: String, required: false },
-    anamn_chorounascdesc: { type: String, required: false },
-    anamn_ictericia: { type: String, required: false },
-    anamn_ictericiadesc: { type: String, required: false },
-    anamn_fototerapia: { type: String, required: false },
-    anamn_fototerapiadesc: { type: String, required: false },
-    anamn_uti: { type: String, required: false },
-    anamn_utitempo: { type: String, required: false },
-    anamn_complica: { type: String, required: false },
-    anamn_complicadesc: { type: String, required: false },
-    anamn_paipresentenasc: { type: String, required: false },
-    anamn_paipresentenascdesc: { type: String, required: false },
-    anamn_descrparto: { type: String, required: false },
-    anamn_reacbebe: { type: String, required: false },
-    anamn_obsparto: { type: String, required: false },
-    anamn_pessmoracasa: { type: String, required: false },
-    anamn_irmaosmoracasa: { type: String, required: false },
-    anamn_irmaospartemae: { type: String, required: false },
-    anamn_irmaospartpai: { type: String, required: false },
-    anamn_maetrab: { type: String, required: false },
-    anamn_maetrabquemfica: { type: String, required: false },
-    anamn_obsfami: { type: String, required: false },
-    anamn_paisvivemjuntosbem: { type: String, required: false },
-    anamn_paisvivemjuntosbemdesc: { type: String, required: false },
-    anamn_discussoesfreq: { type: String, required: false },
-    anamn_discussoesfreqdesc: { type: String, required: false },
-    anamn_comofoisepara: { type: String, required: false },
-    anamn_reacaocrianca: { type: String, required: false },
-    anamn_quemcedefacil: { type: String, required: false },
-    anamn_quemcedefacildesc: { type: String, required: false },
-    anamn_criancatratdif: { type: String, required: false },
-    anamn_criancatratdifcomo: { type: String, required: false },
-    anamn_relacirmaos: { type: String, required: false },
-    anamn_ambientefami: { type: String, required: false },
-    anamn_obsfamiambiente: { type: String, required: false },
-    anamn_haeducarelig: { type: String, required: false },
-    anamn_haeducareligqual: { type: String, required: false },
-    anamn_devpreccumpr: { type: String, required: false },
-    anamn_devpreccumprdesc: { type: String, required: false },
-    anamn_obsreligiao: { type: String, required: false },
-    anamn_sarampo: { type: String, required: false },
-    anamn_catapora: { type: String, required: false },
-    anamn_caxumba: { type: String, required: false },
-    anamn_rubeola: { type: String, required: false },
-    anamn_cpqueluche: { type: String, required: false },
-    anamn_meningite: { type: String, required: false },
-    anamn_complicavacina: { type: String, required: false },
+    anamn_data: { type: String, required: false }, //Ok
+    anamn_hora: { type: String, required: false }, //Ok
+    anamn_beneid: { type: ObjectId, required: false }, // removido Ok
+    anamn_benefoto: { type: String, required: false }, //Removido A foto não será armazenada no banco e sim numa pasta, aqui ficara cadastrado apenas o link para a pasta de armazenamento
+    anamn_benenome: { type: String, required: false }, //Ok
+    anamn_beneapelido: { type: String, required: false }, //Ok
+    anamn_benedatanasc: { type: String, required: false }, //Ok
+    anamn_beneidade: { type: String, required: false }, //Ok
+    anamn_painome: { type: String, required: false }, //Ok
+    anamn_maenome: { type: String, required: false }, //Ok
+    anamn_respnome: { type: String, required: false }, //Ok
+    anamn_indica: { type: String, required: false }, //Ok
+    anamn_queixapri: { type: String, required: false }, //Ok
+    anamn_diag: { type: String, required: false }, //Ok
+    anamn_houvetratengrav: { type: String, required: false }, //Ok
+    anamn_houvetratengravdesc: { type: String, required: false }, //Ok
+    anamn_houveplanfami: { type: String, required: false }, //Ok
+    anamn_houveplanfamidesc: { type: String, required: false }, //Ok
+    anamn_ameacatenaborto: { type: String, required: false }, //Ok
+    anamn_ameacatenabortodesc: { type: String, required: false }, //Ok
+    anamn_bebeoufumagesta: { type: String, required: false }, //Ok
+    anamn_bebeoufumagestadesc: { type: String, required: false }, //Ok
+    anamn_traumafispsiinfec: { type: String, required: false }, //Ok
+    anamn_traumafispsiinfecdesc: { type: String, required: false }, //Ok
+    anamn_usotranquil: { type: String, required: false }, //Ok
+    anamn_usotranquildesc: { type: String, required: false }, //Ok
+    anamn_adocao: { type: String, required: false }, //Ok
+    anamn_obsgesta: { type: String, required: false }, //Ok
+    //Parto
+    anamn_partoqual: { type: String, required: false }, //Ok
+    anamn_partoqualdesc: { type: String, required: false }, //Ok
+    anamn_anorexiaperiparto: { type: String, required: false }, //Ok
+    anamn_anorexiaperipartodesc: { type: String, required: false }, //Ok
+    
+    anamn_apgar: { type: String, required: false }, //Ok
+    anamn_apgargrau: { type: String, required: false }, //Incluido
+    anamn_apgardesc: { type: String, required: false }, //Ok
+    
+    anamn_chorounasc: { type: String, required: false }, //Ok
+    anamn_chorounascdesc: { type: String, required: false }, //Ok
+    anamn_ictericia: { type: String, required: false }, //Ok
+    anamn_ictericiadesc: { type: String, required: false }, //Ok
+    anamn_fototerapia: { type: String, required: false }, //Ok
+    anamn_fototerapiadesc: { type: String, required: false }, //Ok
+    anamn_uti: { type: String, required: false }, //Ok
+    anamn_utitempo: { type: String, required: false }, //Ok
+    anamn_complica: { type: String, required: false }, //Ok 
+    anamn_complicadesc: { type: String, required: false }, //Ok
+    anamn_paipresentenasc: { type: String, required: false },  //Ok
+    anamn_paipresentenascdesc: { type: String, required: false }, //Ok
+    anamn_descrparto: { type: String, required: false }, //Ok
+    anamn_reacbebe: { type: String, required: false }, //Ok
+    anamn_obsparto: { type: String, required: false }, //Ok
+    //Parto
+    anamn_pessmoracasa: { type: String, required: false }, //Ok
+    anamn_irmaosmoracasa: { type: String, required: false }, //Ok
+    anamn_irmaospartemae: { type: String, required: false }, //Ok
+    anamn_irmaospartpai: { type: String, required: false }, //Ok
+    anamn_maetrab: { type: String, required: false }, //Ok
+    anamn_maetrabquemfica: { type: String, required: false }, //Ok
+    anamn_obsfami: { type: String, required: false }, //Ok
+    //Ambiente familiar
+    anamn_paisvivemjuntosbem: { type: String, required: false }, //Ok
+    anamn_paisvivemjuntosbemdesc: { type: String, required: false }, //Ok
+    anamn_discussoesfreq: { type: String, required: false }, //Ok
+    anamn_discussoesfreqdesc: { type: String, required: false }, //Ok
+    anamn_comofoisepara: { type: String, required: false }, //Ok
+    anamn_reacaocrianca: { type: String, required: false }, //Ok
+    anamn_quemcedefacil: { type: String, required: false }, //Ok
+    anamn_quemcedefacildesc: { type: String, required: false }, //Ok
+    anamn_criancatratdif: { type: String, required: false }, //Ok
+    anamn_criancatratdifcomo: { type: String, required: false }, //Ok
+    anamn_relacirmaos: { type: String, required: false }, //Ok
+    anamn_ambientefami: { type: String, required: false }, //Ok
+    anamn_obsfamiambiente: { type: String, required: false }, //Ok
+    //Religião
+    anamn_haeducarelig: { type: String, required: false }, //Ok
+    anamn_haeducareligqual: { type: String, required: false }, //Ok
+    anamn_devpreccumpr: { type: String, required: false }, //Ok
+    anamn_devpreccumprdesc: { type: String, required: false }, //Ok
+    anamn_obsreligiao: { type: String, required: false }, //Ok
+    //Enfermidades
+    anamn_sarampo: { type: String, required: false }, //Ok
+    anamn_catapora: { type: String, required: false }, //Ok
+    anamn_caxumba: { type: String, required: false }, //Ok
+    anamn_rubeola: { type: String, required: false }, //Ok
+    anamn_cpqueluche: { type: String, required: false }, //Ok
+    anamn_meningite: { type: String, required: false }, //Ok
+    anamn_complicavacina: { type: String, required: false }, //Ok
+
+    anamn_dengue: { type: String, required: false }, //Incluir
+    anamn_zica: { type: String, required: false }, //Incluir
+    anamn_chikun: { type: String, required: false }, //Incluir
+    anamn_covid: { type: String, required: false }, //Incluir
+    anamn_tce: { type: String, required: false }, //Incluir
+    anamn_obssaude: { type: String, required: false }, //Incluir
+
     anamn_zoonoses: { type: String, required: false },
-    anamn_otite: { type: String, required: false },
-    anamn_adenoide: { type: String, required: false },
-    anamn_amigdalites: { type: String, required: false },
-    anamn_alergias: { type: String, required: false },
-    anamn_acidentes: { type: String, required: false },
-    anamn_convulsoes: { type: String, required: false },
-    anamn_internacoes: { type: String, required: false },
-    anamn_cirurgia: { type: String, required: false },
-    anamn_avaliacaoneuro: { type: String, required: false },
-    anamn_avaliacaoneurodesc: { type: String, required: false },
-    anamn_avaliacaoneurotel: { type: String, required: false },
-    anamn_avaliacaopsico: { type: String, required: false },
-    anamn_avaliacaopsicodesc: { type: String, required: false },
-    anamn_avaliacaopsicotel: { type: String, required: false },
+    anamn_otite: { type: String, required: false }, //Ok
+    anamn_adenoide: { type: String, required: false }, //Ok
+    anamn_amigdalites: { type: String, required: false }, //Ok
+    anamn_alergias: { type: String, required: false }, //Ok
+    anamn_acidentes: { type: String, required: false }, //Ok
+    anamn_convulsoes: { type: String, required: false }, //Ok
+    anamn_internacoes: { type: String, required: false }, //Ok
+    anamn_cirurgia: { type: String, required: false }, //Ok
+    //Enfermidades, antecedentes
+    anamn_avaliacaoneuro: { type: String, required: false }, //Ok
+    anamn_avaliacaoneurodesc: { type: String, required: false }, //Ok nome do Médico
+    anamn_avaliacaoneurotel: { type: String, required: false }, //Ok
+    anamn_avaliacaopsico: { type: String, required: false }, //Ok
+    anamn_avaliacaopsicodesc: { type: String, required: false }, //Ok nome psic
+    anamn_avaliacaopsicotel: { type: String, required: false }, //Ok
     anamn_quem: { type: String, required: false },
     anamn_contatotel: { type: String, required: false },
-    anamn_examesrealiza: { type: String, required: false },
-    anamn_medicacaoquais: { type: String, required: false },
-    anamn_quandodiag: { type: String, required: false },
-    anamn_antecfamidesc: { type: String, required: false },
-    anamn_nervoso: { type: String, required: false },
-    anamn_deficiente: { type: String, required: false },
-    anamn_viciado: { type: String, required: false },
-    anamn_ataques: { type: String, required: false },
-    anamn_dislexia: { type: String, required: false },
-    anamn_TDAH: { type: String, required: false },
-    anamn_esquizofre: { type: String, required: false },
-    anamn_outros: { type: String, required: false },
-    anamn_outrosdesc: { type: String, required: false },
-    anamn_obssaude: { type: String, required: false },
+    anamn_examesrealiza: { type: String, required: false }, //Ok
+    anamn_medicacaoquais: { type: String, required: false }, //Ok
+    anamn_quandodiag: { type: String, required: false }, //Ok
+    anamn_antecfamidesc: { type: String, required: false }, //Ok
+    //Enfermidades, antecedente familiar 
+    anamn_nervoso: { type: String, required: false }, //Ok
+    anamn_deficiente: { type: String, required: false }, //Ok
+    anamn_viciado: { type: String, required: false }, //Ok
+    anamn_ataques: { type: String, required: false }, //Ok
+    anamn_dislexia: { type: String, required: false }, //Ok
+    anamn_TDAH: { type: String, required: false }, //Ok
+    anamn_esquizofre: { type: String, required: false }, //Ok
+
+    anamn_nervosodesc: { type: String, required: false }, //Incluir
+    anamn_deficientedesc: { type: String, required: false }, //Incluir
+    anamn_viciadodesc: { type: String, required: false }, //Incluir
+    anamn_ataquesdesc: { type: String, required: false }, //Incluir
+    anamn_tdahdesc: { type: String, required: false }, //Incluir
+    anamn_esquizofreniadesc: { type: String, required: false }, //Incluir
+
+    anamn_outros: { type: String, required: false }, //Ok
+    anamn_outrosdesc: { type: String, required: false }, //Ok
+    anamn_obssaude2: { type: String, required: false }, //Ok
+
     anamn_pripalavrasidade: { type: String, required: false },
     anamn_limguagemcompre: { type: String, required: false },
     anamn_inicioufalaparou: { type: String, required: false },
@@ -388,6 +417,8 @@ const AnamnSchema = mongoose.Schema({
 class Anamn{
     constructor(
         anamn_id, 
+        anamn_data ,
+        anamn_hora ,
         anamn_beneid, 
         anamn_benenome,
         anamn_beneapelido,
@@ -772,6 +803,8 @@ class Anamn{
         anamn_tecid
          ){
             this.anamn_id = anamn_id, 
+            this.anamn_data = anamn_data,
+            this.anamn_hora = anamn_hora,
             this.anamn_beneid = anamn_beneid,
             this.anamn_benefoto = anamn_benefoto,  
             this.anamn_benenome = anamn_benenome,

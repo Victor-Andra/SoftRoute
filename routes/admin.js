@@ -57,7 +57,7 @@ const estadoClass = require("../models/estado")
 const Estado = mongoose.model("tb_estado")
 const fncEstado = require("../functions/fncEstado")
 
-//usuario, cadstro dos usuários
+//usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
 const Usuario = mongoose.model("tb_usuario")
 const fncUsuario = require("../functions/fncUsuario")
@@ -324,7 +324,7 @@ router.get('/login', (req,res)=>{
 router.get('/recuperarSenha', (req,res)=>{
     console.log("recuperarSenha")
     lvl = "x";
-    res.render("/menu/ferramentas/usuario/recuperaSenha", {nivel: lvl})
+    res.render("/menu/ferramentas/usuario/mudarSenha", {nivel: lvl})
 })
 
 /*
@@ -2137,6 +2137,10 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/usuario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
            fncUsuario.atualizaUsuario(req, res); 
         })
+
+        router.post('/ferramentas/usuario/carregaMudarsenha', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
+            fncUsuario.carregaMudarsenha(req, res); 
+         })
 
 //Menu Ferramentas
     //Ajuda

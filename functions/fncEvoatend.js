@@ -290,5 +290,5 @@ module.exports = {
                 res.render('admin/erro', resposta);
             }
         })
-    },
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Informação de Faltas Pontuais</title>
+		<title>Alterar Senha</title>
 		<script type="text/javascript">
 			
 			
@@ -21,10 +21,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Informação da Falta</a>
+								<a href="#">Alterar Senha</a>
 							</li>
 
-							<li class="active"> - Pontual</li>
+							<li class="active"> - Aqui você altera a senha cadastrada por padrão</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -40,7 +40,7 @@
 											<h4 class="widget-title">
 												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
 												
-												Faltante</h4>
+												Senha Nova</h4>
 
 											<span class="widget-toolbar">
 
@@ -61,24 +61,15 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Importante!</strong>
-													Aqui você informa de forma pontual via Smartfone o Beneficiário ou Terapeuta que faltou,
-													Escolhe o Tipo de Falta, define a Data e a observação.
-													Todos os agendamentos da data especificada irão ser sinalizadas com o tipo e falta determinada,
-													sem necessidade de abrir a agenda. 
+													A Senha é sua assinatura eletrônica, <br>
+													Ao acessar o sistema, cadastrar, editar, listar e deletar fica registrado que voçe e somente voçe realizou as tarefas.<br>
+													Portanto deve ser segura, fácil de lembrar e jamais deve ser compartilhada.<dr>
+													Deve conter letras Maiúsculas e minúsculas, números e caracteres especiais como: , . ; : - = ! @ # $ % ¨ & * ) (<br>
+													O sistema irá testar sua nova senha, se considerar fraca, ele reseta e voçe deverá criar uma nova compativel.
+
 												</div>
 												<div class="row">
 													<div class="col-xs-12" >
-														<label>Beneficiário</label>
-														<div class="form-group" >
-															<div class="col-sm-6">
-																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." >
-																	<option value="-">-</option>
-																	{{#each benes}}
-																		<option value="{{_id}}">{{bene_nome}}</option>
-																	{{/each}}
-																</select>
-															</div>
-														</div>
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-6">
@@ -94,7 +85,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Data Agendamento</label>
+														<label for="id-date-picker-1">Palavra Chave</label>
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
@@ -106,39 +97,39 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Origem Agendamento</label>
+														<label>Senha</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select" value="Administrativo">
-																	<option value="Administrativo">Administrativo</option>
-																</select>
+																<input name="ususenha" id="ususenha" type="date" style="width: 200px;" >
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Categoria</label>
+														<label>Digite novamente a senha</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" >
-																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="FaltaJus" value="Falta Justificada">Falta Justificada</option>
-																</select>
+																<input name="ususenhare" id="ususenhare" type="date" style="width: 200px;" >
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-12">													
-														<label> Observação de agenda</label>
+													<div class="col-xs-12 col-sm-6">
 														<div class="form-group">
-															<div class="col-xs-12 ">
-																<input type="text" id="agendaObs" name="agendaObs" class="form-control" />
+															<label>Letras minúsculas</label>
+															<label>Letras MAIÚSCULAS</label>
+															<label>Números</label>
+															<label>Caracteres Especiais</label>
+															<label>Tamanho mínimo de 8 Caracteres</label>
+															<div class="col-sm-9">
+																<input name="ususenhare" id="ususenhare" type="date" style="width: 200px;" >
 															</div>
 														</div>
 													</div>
 												</div>
+												
 											</div>
 										</div>		
 									</div>

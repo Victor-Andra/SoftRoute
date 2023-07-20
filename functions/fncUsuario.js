@@ -111,6 +111,55 @@ module.exports = {
             console.log(err1)
         }
     },
+    carregaMudarsenha(req,res){
+        Usuario.findById(req.params.id).then((usuario) =>{
+            console.log("Listagem Realizada!")
+            console.log("usuario:")
+            console.log(usuario)
+                Estado.find().then((estado)=>{
+                    console.log("Listagem Realizada de Ufs!")
+                        Perfil.find().then((perfil)=>{
+                            console.log("Listagem Realizada de Ufs!")
+                                Funcao.find().then((funcao)=>{
+                                    console.log("Listagem Realizada de Ufs!")
+                                        Especialidade.find().then((especialidade)=>{//Graduação
+                                            console.log("Listagem Realizada de Ufs!")
+                                            Especializacao.find().then((especializacao)=>{
+                                                console.log("Listagem Realizada de Especializacao!")
+            res.render('ferramentas/usuario/mudarSenha', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
+        })})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.render('admin/erro')
+        })
+    },
+    mudarsenha(req,res){
+        let resposta;
+        try{
+            usuarioClass.usuarioEditar(req,res).then((res)=>{
+                console.log("Atualização Realizada!")
+                console.log(res)
+                resposta = res;
+            }).catch((err) =>{
+                console.log("error1")
+                console.log(err)
+                resposta = err;
+                res.render('admin/erro')
+            }).finally(() =>{
+                if(resposta){
+                    //Volta para a usuario de listagem
+                    this.listaUsuario(req,res);
+                }else{
+                    //passar classe de erro
+                    console.log("error")
+                    console.log(resposta)
+                    res.render('admin/erro')
+                }
+            })
+        } catch(err1){
+            console.log(err1)
+        }
+    },
     deletaUsuario(req, res){
         Usuario.deleteOne({_id: req.params.id}).then(() =>{
             Usuario.find().then((usuario) =>{

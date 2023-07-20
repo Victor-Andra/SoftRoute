@@ -159,7 +159,7 @@ module.exports = {
                     dia = "0"+dia;
                 }
                 let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.datacad=fulldate;
+                b.anamn_data=fulldate;
             })
 
             console.log("anamn:");
@@ -167,9 +167,9 @@ module.exports = {
             console.log("Listagem Realizada das Anamneses!")
                 Bene.findById(req.params.id).then((bene) =>{
                     console.log("Listagem Realizada bene!")
-                        Usuario.find().then((usuario)=>{
+                    Usuario.find().then((usuario)=>{
                         console.log("Listagem Realizada Usuário!")
-                        if(resposta.sucesso == ""){
+                        /*if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
                             flash.texto = ""
                             flash.sucesso = ""
@@ -177,7 +177,7 @@ module.exports = {
                             console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
                             flash.texto = resposta.texto
                             flash.sucesso = resposta.sucesso
-                        }
+                        }*/
             res.render('area/anamn/anamnLis', {anamns: anamn, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)

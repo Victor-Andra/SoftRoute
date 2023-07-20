@@ -13,24 +13,19 @@
 				console.log(tipodoc)
 				if (tipodoc == "Padrão") {
 					document.getElementById('is').style.display = 'none';
-					document.getElementById('avd').style.display = 'none';
+					
 					document.getElementById('padrao').style.display = 'block';
-					document.getElementById('fisio').style.display = 'none';
+					
 				} else if (tipodoc == "Ocupacional") {
 					document.getElementById('is').style.display = 'block';
-					document.getElementById('avd').style.display = 'block';
+					
 					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('fisio').style.display = 'none';
-				} else if (tipodoc == "Fisioterápico") {
-					document.getElementById('is').style.display = 'none';
-					document.getElementById('avd').style.display = 'none';
-					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('fisio').style.display = 'block';
+					
 				} else {
 					document.getElementById('is').style.display = 'none';
-					document.getElementById('avd').style.display = 'none';
+					
 					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('fisio').style.display = 'none';
+					
 				}
 				document.getElementById('tratPlanotipo').ReadOnly
    			}
@@ -101,7 +96,6 @@
 																	<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaPlano()">
 																		<option value="Não Informado">Não Informado</option>
 																		<option value="Padrão">Padrão</option>
-																		<option value="Fisioterápico">Fisioterápico</option>
 																		<option value="Ocupacional">Ocupacional</option>
 																	</select>
 																</div>
@@ -193,7 +187,6 @@
 																<div class="col-sm-4">
 																	<select name="tratEspecialidadepad" id="tratEspecialidadepad" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:mudaPlano({{planFisioTerapeutaid.value}})">
 																		<option value="Padrão">Padrão</option>
-																		<option value="Fisioterápico">Fisioterápico</option>
 																		<option value="Ocupacional">Ocupacional</option>
 																	</select>
 																</div>
@@ -253,79 +246,13 @@
 										</div>		
 									</div>
 								</div>
-								<div class="col-sm-12" name="fisio" id="fisio"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="orange ace-icon fa fa-male bigger-110"></i>
-												Fisioterápico</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												
-												</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">												
-												<label>Terapeuta</label>
-												<div class="form-group">
-														<div class="col-sm-8">
-															<select name="tratTerapeutaidfis" id="tratTerapeutaidfis" class="chosen-select" data-placeholder="Escolha..." style="width:400px;">
-																{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
-																{{/each}}
-															</select>
-														</div>
-												</div>											
-												<label>Histórico Clínico</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="tratHistclinicofis" id="tratHistclinicofis" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-														</textarea>
-													</div>
-												</div>
-												<label>Metas a Curto Prazo</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="tratMetacurtofis" id="tratMetacurtofis" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-														</textarea>
-													</div>
-												</div>
-												<label>Metas a Médio Prazo</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="tratMetamediofis" id="tratMetamediofis" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-														</textarea>
-													</div>
-												</div>
-												<label>Metas a Longo Prazo</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="tratMetalongofis" id="tratMetalongofis" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-														</textarea>
-													</div>
-												</div>			
-												<label>Estratégias e objetivos</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<textarea type="text" name="tratObjetivofis" id="tratObjetivofis" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-														</textarea>
-													</div>
-												</div>													
-											</div>
-										</div>
-									</div>
-								</div>				
-								<div class="col-sm-6" name="is" id="is"><!-- Widget Dados Básicos -->
+										
+								<div class="col-sm-12" name="is" id="is"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="red ace-icon fa fa-rss bigger-110"></i>
-												IS - Integralção Sensorial</h4>
+												IS e AVD</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -376,29 +303,9 @@
 														<textarea type="text" name="tratObjetivois" id="tratObjetivois" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
 														</textarea>
 													</div>
-												</div>													
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-6" name="avd" id="avd"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="pink ace-icon fa fa-tachometer bigger-110"></i>
-												AVD - Atividades de Vida Diária</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-									
-												</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">												
+												</div>
+
+																								
 												<label>Terapeuta</label>
 												<div class="form-group">
 														<div class="col-sm-8">
@@ -438,10 +345,13 @@
 														</textarea>
 													</div>
 												</div>													
+											
+
 											</div>
 										</div>
 									</div>
-								</div>								
+								</div>
+																
 
 								<div class="space-4"></div>							
 								<div class="space-4"></div>

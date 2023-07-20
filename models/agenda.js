@@ -372,4 +372,53 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     }
     */
+   /*
+    ,agendaFaltaDia: async (req,res) => {
+        let resultado;
+        let diaini = new Date(req.body.dataFinal);
+        let diafim = new Date(req.body.dataFinal);
+        diaini.setUTCDate(1);
+        diafim.setUTCDate(1);
+        diaini.setUTCMonth(6);//0-11
+        diafim.setUTCMonth(7);//0-11
+        console.log("diaini: "+diaini.toISOString());
+        console.log("diafim: "+diafim.toISOString());
+        
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { agenda_data: { $gte : diaini.toISOString(), $lte:  diafim.toISOString() } }
+                break;
+            case "Beneficiario":
+                busca = { agenda_data: { $gte : diaini.toISOString(), $lte:  diafim.toISOString() } , agenda_beneid: req.body.atendBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { agenda_data: { $gte : diaini.toISOString(), $lte:  diafim.toISOString() } , agenda_usuid: req.body.atendTerapeuta };
+                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                break;
+            default:
+                break;
+        }
+        let beneidx = new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        let convidx = new ObjectId("62477742e416141415ff7a88");//particular
+
+        //Não esqueça de alterar os valores a Débito e Crédito
+        //let novateraidx = new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
+
+        await AgendaModel.updateMany(
+            busca,
+            {$set: {'agenda_convid': novaconvidx}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
+    }
+    */
 };
