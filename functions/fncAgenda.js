@@ -10817,6 +10817,8 @@ module.exports = {
                                 //console.log("migrado?"+a.agenda_migrado)
                             }
                             */
+console.log("a.agendaCateg:"+a.agendaCateg);
+
                             if(!a.agenda_migrado){
                                 nextNum = nextNum + 1;
                                 agendaSemanal.forEach((s)=>{
@@ -11351,6 +11353,7 @@ module.exports = {
 
                                             break;
                                         case "Substituto Fixo":
+                                            console.log("SUBFIX");
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";

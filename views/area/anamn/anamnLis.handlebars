@@ -76,6 +76,7 @@
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data Anamnese: activate to sort column ascending">Data</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Idade</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta: activate to sort column ascending">Terapeuta</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data Cadastro: activate to sort column ascending">Data Cadastro</th>
 													<th>Ação</th>
 												</tr>
 											</thead>
@@ -93,10 +94,11 @@
 														<td>{{anamn_data}}</td>
 														<td>{{anamn_beneidade}}</td>
 														{{#each ../usuarios}}<!-- Ok -->
-															{{#ifEqual this._id ../anamn_usuid}}
-																<td>{{anamn_usuid}}</td>
+															{{#ifEqual this._id ../anamn_terapeutaid}}
+																<td>{{usuario_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
+														<td>{{anamn_datacad}}</td>
 														<td>
 															<div class="action-buttons">
 																<a class="blue" href="/menu/area/anamn/imp/{{_id}}">

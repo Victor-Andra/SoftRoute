@@ -6,17 +6,27 @@ const TerapiaSchema = mongoose.Schema({
     terapia_nomecid: { type: String, required: false },
     terapia_cid: { type: String, required: false },
     terapia_descricao: { type: String, required: false },
+    terapia_status :  { type: String, required: false },
     terapia_datacad: { type: Date },
     terapia_dataedi: { type: Date }
     
 })
 
 class Terapia{
-    constructor(terapia_nome, terapia_descricao, terapia_datacad, terapia_dataedi){
+    constructor(
+        terapia_nome,
+        terapia_nomecid,
+        terapia_cid,
+        terapia_descricao,
+        terapia_status,
+        terapia_datacad,
+        terapia_dataedi
+        ){
         this.terapia_nome = terapia_nome,
-        this.terapia_descricao = terapia_nomecid,
-        this.terapia_descricao = terapia_cid,
+        this.terapia_nomecid = terapia_nomecid,
+        this.terapia_cid = terapia_cid,
         this.terapia_descricao = terapia_descricao,
+        this.terapia_status = terapia_status,
         this.terapia_datacad = terapia_datacad,
         this.terapia_dataedi = terapia_dataedi
     }
@@ -38,6 +48,7 @@ module.exports = {TerapiaModel,TerapiaSchema,
                 terapia_nomecid: req.body.terapiaNomeCid,
                 terapia_cid: req.body.terapiaCid,
                 terapia_descricao: req.body.terapiaDescricao,
+                terapia_status: req.body.terapiaStatus,
                 terapia_dataedi: dataAtual
                 }}
         ).then((res) =>{
@@ -72,6 +83,7 @@ module.exports = {TerapiaModel,TerapiaSchema,
                 terapia_nomecid: req.body.terapiaNomeCid,
                 terapia_cid: req.body.terapiaCid,
                 terapia_descricao: req.body.terapiaDescricao,
+                terapia_status: req.body.terapiaStatus,
                 terapia_datacad: dataAtual
             });
             console.log("newTerapia save");
