@@ -5,8 +5,6 @@ const AnamnSchema = mongoose.Schema({
     anamn_id:{ type: ObjectId, required: false },
     anamn_data: { type: String, required: false }, //Ok
     anamn_hora: { type: String, required: false }, //Ok
-    anamn_beneid: { type: ObjectId, required: false }, // removido Ok
-    anamn_benefoto: { type: String, required: false }, //Removido A foto não será armazenada no banco e sim numa pasta, aqui ficara cadastrado apenas o link para a pasta de armazenamento
     anamn_benenome: { type: String, required: false }, //Ok
     anamn_beneapelido: { type: String, required: false }, //Ok
     anamn_benedatanasc: { type: String, required: false }, //Ok
@@ -127,12 +125,12 @@ const AnamnSchema = mongoose.Schema({
     anamn_ataques: { type: String, required: false }, //Ok
     anamn_dislexia: { type: String, required: false }, //Ok
     anamn_TDAH: { type: String, required: false }, //Ok
-    anamn_esquizofre: { type: String, required: false }, //Ok
     anamn_nervosodesc: { type: String, required: false }, //Incluir
     anamn_deficientedesc: { type: String, required: false }, //Incluir
     anamn_viciadodesc: { type: String, required: false }, //Incluir
     anamn_ataquesdesc: { type: String, required: false }, //Incluir
     anamn_tdahdesc: { type: String, required: false }, //Incluir
+    anamn_esquizofrenia: { type: String, required: false }, //Incluir
     anamn_esquizofreniadesc: { type: String, required: false }, //Incluir
     anamn_outros: { type: String, required: false }, //Ok
     anamn_outrosdesc: { type: String, required: false }, //Ok
@@ -170,6 +168,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_masturbase: { type: String, required: false }, //Ok
     anamn_masturbasedesc: { type: String, required: false }, //Ok
     anamn_percebedifsex: { type: String, required: false }, //Ok
+    anamn_percebedifsexdesc: { type: String, required: false }, //Ok
     anamn_obssex: { type: String, required: false }, //Ok
     //Rel emocionais
     anamn_comoreaproibi: { type: String, required: false }, //Ok
@@ -435,9 +434,11 @@ const AnamnSchema = mongoose.Schema({
     //Rotinas
     anamn_rotanadiasemanal: { type: String, required: false }, //Ok
     anamn_anotaextra: { type: String, required: false }, //Ok
+    anamn_dataanamnese:{ type: Date, required: false }, //incluir data que a anamnese foi criada
     anamn_datacad: { type: Date, required: false }, //Ok
+    anamn_usuidcad: { type: ObjectId, required: false }, //Ok
     anamn_dataedi: { type: Date, required: false }, //Ok
-    anamn_usuid: { type: ObjectId, required: false }, //Ok
+    anamn_usuidedi: { type: ObjectId, required: false }, //Ok
     anamn_terapeutaid: { type: ObjectId, required: false } //Ok
 })
 
@@ -446,8 +447,6 @@ class Anamn{
     anamn_id,
     anamn_data, //Ok
     anamn_hora, //Ok
-    anamn_beneid, // removido Ok
-    anamn_benefoto, //Removido A foto não será armazenada no banco e sim numa pasta, aqui ficara cadastrado apenas o link para a pasta de armazenamento
     anamn_benenome, //Ok
     anamn_beneapelido, //Ok
     anamn_benedatanasc, //Ok
@@ -568,12 +567,12 @@ class Anamn{
     anamn_ataques, //Ok
     anamn_dislexia, //Ok
     anamn_TDAH, //Ok
-    anamn_esquizofre, //Ok
     anamn_nervosodesc, //Incluir
     anamn_deficientedesc, //Incluir
     anamn_viciadodesc, //Incluir
     anamn_ataquesdesc, //Incluir
     anamn_tdahdesc, //Incluir
+    anamn_esquizofrenia, //Incluir
     anamn_esquizofreniadesc, //Incluir
     anamn_outros, //Ok
     anamn_outrosdesc, //Ok
@@ -611,6 +610,7 @@ class Anamn{
     anamn_masturbase, //Ok
     anamn_masturbasedesc, //Ok
     anamn_percebedifsex, //Ok
+    anamn_percebedifsexdesc,
     anamn_obssex, //Ok
     //Rel emocionais
     anamn_comoreaproibi, //Ok
@@ -876,9 +876,11 @@ class Anamn{
     //Rotinas
     anamn_rotanadiasemanal, //Ok
     anamn_anotaextra, //Ok
+    anamn_dataanamnese,
     anamn_datacad, //Ok
     anamn_dataedi, //Ok
-    anamn_usuid, //Ok
+    anamn_usuidcad, //Ok
+    anamn_usuidedi, //Ok
     anamn_terapeutaid //Ok
          ){
             this.anamn_id = anamn_id, 
@@ -1006,12 +1008,12 @@ class Anamn{
             this.anamn_ataques = anamn_ataques,
             this.anamn_dislexia = anamn_dislexia,
             this.anamn_TDAH = anamn_TDAH,
-            this.anamn_esquizofre = anamn_esquizofre,
             this.anamn_nervosodesc = anamn_nervosodesc,
             this.anamn_deficientedesc = anamn_deficientedesc,
             this.anamn_viciadodesc = anamn_viciadodesc,
             this.anamn_ataquesdesc = anamn_ataquesdesc,
             this.anamn_tdahdesc = anamn_tdahdesc,
+            this.anamn_esquizofrenia = anamn_esquizofrenia,
             this.anamn_esquizofreniadesc = anamn_esquizofreniadesc,
             this.anamn_outros = anamn_outros,
             this.anamn_outrosdesc = anamn_outrosdesc,
@@ -1049,6 +1051,7 @@ class Anamn{
             this.anamn_masturbase = anamn_masturbase,
             this.anamn_masturbasedesc = anamn_masturbasedesc,
             this.anamn_percebedifsex = anamn_percebedifsex,
+            this.anamn_percebedifsexdesc = anamn_percebedifsexdesc,
             this.anamn_obssex = anamn_obssex,
             //Rel emocionais
             this.anamn_comoreaproibi = anamn_comoreaproibi,
@@ -1314,10 +1317,12 @@ class Anamn{
             //Rotinas
             this.anamn_rotanadiasemanal = anamn_rotanadiasemanal,
             this.anamn_anotaextra = anamn_anotaextra,
+            this.anamn_dataanamnese = anamn_dataanamnese,
             this.anamn_datacad = anamn_datacad,
             this.anamn_dataedi = anamn_dataedi,
-            this.anamn_usuid = anamn_usuid,
-            this.anamn_terapeutaid = anamn_terapeutaid//Ok
+            this.anamn_usuidcad = anamn_usuidcad,
+            this.anamn_usuidedi = anamn_usuidedi,
+            this.anamn_terapeutaid = anamn_terapeutaid
 
     }
 }
@@ -1334,7 +1339,6 @@ module.exports = {AnamnModel,AnamnSchema,
         await AnamnModel.findByIdAndUpdate(req.body.anamnId, 
             {$set: {
                 anamn_id: req.body.anamnId,
-                anamn_benefoto: req.body.anamnBenefoto,
                 anamn_benenome: req.body.anamnBenenome,
                 anamn_beneapelido: req.body.anamnBeneapelido,
                 anamn_benedatanasc: req.body.anamnBenedatanasc,
@@ -1455,12 +1459,12 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_ataques: req.body.anamnAtaques,
                 anamn_dislexia: req.body.anamnDislexia,
                 anamn_TDAH: req.body.anamnTdah,
-                anamn_esquizofre: req.body.anamnEsquizofre,
                 anamn_nervosodesc: req.body.anamnNervosodesc,
                 anamn_deficientedesc: req.body.anamnDeficientedesc,
                 anamn_viciadodesc: req.body.anamnViciadodesc,
                 anamn_ataquesdesc: req.body.anamnAtaquesdesc,
                 anamn_tdahdesc: req.body.anamnTdahdesc,
+                anamn_esquizofrenia: req.body.anamnEsquizofrenia,
                 anamn_esquizofreniadesc: req.body.anamnEsquizofreniadesc,
                 anamn_outros: req.body.anamnOutros,
                 anamn_outrosdesc: req.body.anamnOutrosdesc,
@@ -1498,6 +1502,7 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_masturbase: req.body.anamnMasturbase,
                 anamn_masturbasedesc: req.body.anamnMasturbasedesc,
                 anamn_percebedifsex: req.body.anamnPercebedifsex,
+                anamn_percebedifsexdesc: req.body.anamnPercebedifsexdesc,
                 anamn_obssex: req.body.anamnObssex,
                 //Rel emocionais
                 anamn_comoreaproibi: req.body.anamnComoreaproibi,
@@ -1763,8 +1768,11 @@ module.exports = {AnamnModel,AnamnSchema,
                 //Rotinas
                 anamn_rotanadiasemanal: req.body.anamnRotanadiasemanal,
                 anamn_anotaextra: req.body.anamnAnotaextra,
+                anamn_dataanamnese: req.body.anamnDataanamnese,
+                anamn_datacad: req.body.anamnDatacad, //Somente leitura
                 anamn_dataedi: dataAtual,
-                anamn_usuid: req.body.anamnUsuid,
+                anamn_usuidcad: req.body.anamnUsuidcad, //Somente leitura
+                anamn_usuidedi: idUsu,
                 anamn_terapeutaid: req.body.anamnTerapeutaid
                 
                 }}
@@ -1782,9 +1790,16 @@ module.exports = {AnamnModel,AnamnSchema,
         //Validar se a Anamnese existe
         console.log("anamnmodel");
         let dataAtual = new Date();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
         const newAnamn = new AnamnModel({
             anamn_id: req.body.anamnId,
-            anamn_benefoto: req.body.anamnBenefoto,
             anamn_benenome: req.body.anamnBenenome,
             anamn_beneapelido: req.body.anamnBeneapelido,
             anamn_benedatanasc: req.body.anamnBenedatanasc+"T00:00:00.000Z",
@@ -1905,12 +1920,12 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_ataques: req.body.anamnAtaques,
             anamn_dislexia: req.body.anamnDislexia,
             anamn_TDAH: req.body.anamnTdah,
-            anamn_esquizofre: req.body.anamnEsquizofre,
             anamn_nervosodesc: req.body.anamnNervosodesc,
             anamn_deficientedesc: req.body.anamnDeficientedesc,
             anamn_viciadodesc: req.body.anamnViciadodesc,
             anamn_ataquesdesc: req.body.anamnAtaquesdesc,
             anamn_tdahdesc: req.body.anamnTdahdesc,
+            anamn_esquizofrenia: req.body.anamnEsquizofrenia,
             anamn_esquizofreniadesc: req.body.anamnEsquizofreniadesc,
             anamn_outros: req.body.anamnOutros,
             anamn_outrosdesc: req.body.anamnOutrosdesc,
@@ -1948,6 +1963,7 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_masturbase: req.body.anamnMasturbase,
             anamn_masturbasedesc: req.body.anamnMasturbasedesc,
             anamn_percebedifsex: req.body.anamnPercebedifsex,
+            anamn_percebedifsexdesc: req.body.anamnPercebedifsexdesc,
             anamn_obssex: req.body.anamnObssex,
             //Rel emocionais
             anamn_comoreaproibi: req.body.anamnComoreaproibi,
@@ -2213,9 +2229,12 @@ module.exports = {AnamnModel,AnamnSchema,
             //Rotinas
             anamn_rotanadiasemanal: req.body.anamnRotanadiasemanal,
             anamn_anotaextra: req.body.anamnAnotaextra,
+            anamn_dataanamnese: req.body.anamnDataanamnese,
             anamn_datacad: dataAtual,
-            anamn_usuid: req.body.anamnUsuid,
-            anamn_terapeutaid: req.body.anamnTerapeutaid  
+            //anamn_dataedi: dataAtual, //somente na edição é habilitado
+            anamn_usuidcad: idUsu,
+            //anamn_usuidedi: idUsu, //somente na edição é habilitado
+            anamn_terapeutaid: req.body.anamnTerapeutaid 
         });
         console.log("newAnamn save");
         await newAnamn.save().then(()=>{

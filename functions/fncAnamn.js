@@ -75,18 +75,13 @@ module.exports = {
 
     deletaAnamn(req,res){
         Anamn.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Laudoamento Fisioterapêutico deletado!")
-                res.render('area/laudo/laudoLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+                req.flash("success_message", "Anamnese deletada!")
+                this.listaAnamn(req,res);
+            }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
+                req.flash("error_message", "houve um erro ao deletar a anamnese")
                 res.render('admin/erro')
             })
         })
@@ -131,10 +126,9 @@ module.exports = {
 
     carregaAnamnEdi(req, res){
         Anamn.findById(req.params.id).then((anamn) =>{
-            console.log(anamn)
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                    console.log("Listagem Realizada de beneficiarios")
-            res.render('area/anamn/anamnEdi', {banes: bene, anamn})
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
+            res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario})
         })}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

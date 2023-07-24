@@ -1393,7 +1393,10 @@ router.post('/area/anamn/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//at
 router.get('/area/anamn/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escola
     fncAnamn.carregaAnamnEdi(req, res); 
 })
-
+//Carrega deletar Anamnese Selecionada
+router.get('/area/anamn/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escola
+    fncAnamn.deletaAnamn(req, res); 
+})
 //Menu Bordo ** Area Tecnicos   
 //Lista Todos os Diários de Bordo por Data, Beneficiário
 router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.

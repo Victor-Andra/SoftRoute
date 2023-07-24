@@ -248,7 +248,7 @@
 															<div class="row">
 																<div class="input-group" >
 																	<div class="col-sm-3">
-																		<input  type="text" name="anamnApelido" id="anamnApelido" placeholder="" class="form-control" style="width: 300px;" />
+																		<input  type="text" name="anamnBeneapelido" id="anamnBeneapelido" placeholder="" class="form-control" style="width: 300px;" />
 																	</div>
 																</div>
 															</div>
@@ -396,7 +396,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon"><!--Ok-->
-															<input type="anamnAmeacatenabortodesc" id="anamnAmeacatenabortodesc" style="width: 800px;">
+															<input type="text" name="anamnAmeacatenabortodesc" id="anamnAmeacatenabortodesc" style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>
@@ -4912,7 +4912,7 @@
 												</div>												
 												<div class="col-xs-12">
 													<div class="row">
-														<div class="col-sm-8">
+														<div class="col-sm-6">
 															<div class="row">
 																<label>Escola?</label><!--Ok-->
 															</div>
@@ -4940,6 +4940,8 @@
 																</div>
 															</div>
 														</div>													
+													</div>	
+													<div class="row">
 														<div class="col-sm-2">
 															<div class="row">
 																<label>Série?</label><!--Ok-->
@@ -5135,7 +5137,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<div>
-																			<input type="text" name="anamnPulouseriedesc" id="anamnPulouseriedesc" placeholder="" class="form-control" style="width: 100px;"/>
+																			<input type="text" name="anamnPulouseriedesc" id="anamnPulouseriedesc" placeholder="" class="form-control" style="width: 400px;"/>
 																		</div>
 																	</div>
 																</div>
@@ -5459,7 +5461,7 @@
 														<div class="input-group">
 															<div class="input-group">
 																<div>
-																	<textarea type="text" name="anamnObsextras" id="anamnObsextras" placeholder="" class="form-control"  style="width: 1000px; height:250px"></textarea>
+																	<textarea type="text" name="anamnAnotaextra" id="anamnAnotaextra" placeholder="" class="form-control"  style="width: 1000px; height:250px"></textarea>
 																</div>
 															</div>
 														</div>
@@ -5467,28 +5469,70 @@
 													
 													
 												</div>
-												<div class="col-xs-12">
-														<label>Terapeuta</label>
-														<div class="form-group">
-															<div class="col-xs-8">
-																<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select"  onchange="javascript:atualizaConvId()">
-																	{{#each usuarios}}
-																		<option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-																</select>
-															</div>
-														</div>
-													</div>												
-													<div class="col-xs-12 ">
-														<label for="id-date-picker-1">Data</label>
-														<div class="row">
-															<div class="col-xs-4">
-																<div class="input-group">
-																	<input name="anamnDatacad" id="anamnDatacad" type="date" onchange="javascript:atualizaData()" />
-																</div>
+												<div class="col-xs-12 ">
+													<label for="id-date-picker-1">Data da realização da anamnese</label>
+													<div class="row">
+														<div class="col-xs-4">
+															<div class="input-group">
+																<input name="anamnDataanamnese" id="anamnDataanamnese" type="date" onchange="javascript:atualizaData()" />
 															</div>
 														</div>
 													</div>
+												</div>
+												<div class="col-xs-12">
+													<label>Terapeuta que realizou a anamnese</label>
+													<div class="form-group">
+														<div class="col-xs-8">
+															<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select"  >
+																{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+												</div>
+																								
+												<div class="col-xs-12 ">
+													<label class="hidden" for="id-date-picker-1">Data de digitação no sistema</label>
+													<div class="row">
+														<div class="col-xs-4">
+															<div class="input-group">
+																<input class="hidden" name="anamnDatacad" id="anamnDatacad" type="date" onchange="javascript:atualizaData()" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 ">
+													<label class="hidden" for="id-date-picker-1">Id do usuário que digitou no sistema</label>
+													<div class="row">
+														<div class="col-xs-4">
+															<div class="input-group">
+																<input class="hidden" name="anamnUsuidcad" id="anamnUsuidcad" type="text" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 ">
+													<label class="hidden" for="id-date-picker-1">Data da alteração digitada no sistema</label>
+													<div class="row">
+														<div class="col-xs-4">
+															<div class="input-group">
+																<input class="hidden" name="anamnDataedi" id="anamnDataedi" type="date" onchange="javascript:atualizaData()" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 ">
+													<label class="hidden" for="id-date-picker-1">Id do usuário que alterou no sistema</label>
+													<div class="row">
+														<div class="col-xs-4">
+															<div class="input-group">
+																<input class="hidden" name="anamnDatacad" id="anamnDatacad" type="text" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 											</div>			
 										</div>
 									</div>
