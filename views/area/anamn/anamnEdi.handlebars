@@ -21,24 +21,11 @@
 			document.getElementById("a").value = dataFmt;
 		}
 		function carregaBody(){
-			document.getElementById("anamnDatacad").value = new Date();
-			
-			//Quando quero calcular a idade do beneficiário
-			let dtnsc = new Date(document.getElementById("anamnBenedatanascEdi").value);
-			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-			document.getElementById("anamnBenedatanasc").value = fulldate;
+			//document.getElementById("anamnDatacad").value = new Date();
 			//Rotinas
 			document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 			document.getElementById("anamnBeneapelido").value = document.getElementById("anamnBeneapelidoEdi").value;
-			document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
+			//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
 			document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
 			document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
 			document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
@@ -463,13 +450,48 @@
 			//Grupo
 			document.getElementById("anamnRotanadiasemanal").value = document.getElementById("anamnRotanadiasemanalEdi").value;
 			document.getElementById("anamnAnotaextra").value = document.getElementById("anamnAnotaextraEdi").value;
-			document.getElementById("anamnDataanamnese").value = document.getElementById("anamnDataanamneseEdi").value;
+			//document.getElementById("anamnDataanamnese").value = document.getElementById("anamnDataanamneseEdi").value;
 			document.getElementById("anamnDatacad").value = document.getElementById("anamnDatacadEdi").value;
 			document.getElementById("anamnDataedi").value = document.getElementById("anamnDataediEdi").value;
-			document.getElementById("anamnUsuid").value = document.getElementById("anamnUsuidEdi").value;
+			//document.getElementById("anamnUsuid").value = document.getElementById("anamnUsuidEdi").value;
 			//Grupo
 			document.getElementById("anamnTerapeutaid").value = document.getElementById("anamnTerapeutaidEdi").value;
-			
+			//anamnDataanamnese
+			let dtnsc = new Date(document.getElementById("anamnDataanamneseEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("anamnDataanamnese").value = fulldate;
+			//anamnBenedatanasc
+			dtnsc = new Date(document.getElementById("anamnBenedatanascEdi").value);
+			mes = (dtnsc.getMonth()+1).toString();
+			dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("anamnBenedatanasc").value = fulldate;
+			//anamnBenedatanascEdi
+			dtnsc = new Date(document.getElementById("anamnBenedatanascEdi").value);
+			mes = (dtnsc.getMonth()+1).toString();
+			dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("anamnBenedatanasc").value = fulldate;
 		}
 	</script>
 	</head>
@@ -1165,7 +1187,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" value="{{anamn.anamn_benedatanasc}}">
+																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date">
 																	</div>
 																</div>
 															</div>
@@ -6423,16 +6445,15 @@
 
 									<div class="col-md-12">
 										<hr>
-									</div>								
+									</div>
 									<div class="form-actions">
 										<div class="col-xs-12" style="text-align: center;" >
-
 											<button class="btn btn-info" name="acao" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
 											</button>
 											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"  type="reset">
+											<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar"  href="/menu/area/anamn/lis">
 												<i class="ace-icon fa fa-undo bigger-110"></i>
 												Voltar
 											</button>

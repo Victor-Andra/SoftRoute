@@ -249,31 +249,29 @@ module.exports = {AtendModel,AtendSchema,
             return err;
         });
     }
-    /*
+    
     ,atendUpdateCampos: async (req,res) => {
         let resultado;
-        let diaumjun = new Date(req.body.dataFinal);
-        let diaumjul = new Date(req.body.dataFinal);
-        diaumjun.setUTCDate(1);
-        diaumjul.setUTCDate(1);
-        diaumjun.setUTCMonth(5);//0-11
-        diaumjul.setUTCMonth(6);//0-11
-        console.log("diaumjun: "+diaumjun.toISOString());
-        console.log("diaumjul: "+diaumjul.toISOString());
-        let beneidx = new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
-        let teraidx = new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
-        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
-        let convidx = new ObjectId("62477742e416141415ff7a88");//particular
+        let ini = new Date(req.body.agendaData);
+        let fim = new Date(req.body.dataFinal);
+        
+        console.log("ini: "+ini.toISOString());
+        console.log("fim: "+fim.toISOString());
+        //Ta com o nome de agenda pq vem da agenda, mas o id é esse
+        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = req.body.agendaBeneid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        //let convidx = req.body.agendaBeneid;//new ObjectId("62477742e416141415ff7a88");//particular
 
         //Não esqueça de alterar os valores a Débito e Crédito
-        //let novateraidx = new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
-        let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
-        let novavalorcrex = "203,00";
-        let novavalordebx = "52,42";
+        let novateraidx = req.body.agendaTeraSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        //let novaconvidx = req.body.agendaBeneid;//new ObjectId("624dee503339548ba06c4adc");//amil
+        let novavalorcrex = req.vody.atendValorcre;
+        let novavalordebx = req.vody.atendValordeb;
 
         await AtendModel.updateMany(
-            { atend_atenddata: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, atend_terapiaid: tpiaidx, atend_terapeutaid: teraidx , atend_beneid: beneidx, atend_convid: convidx },
-            {$set: {'atend_valorcre': novavalorcrex, 'atend_convid': novaconvidx}}// Alterar Débito e Crédito //, 'atend_terapiaid': novateraidx  //, 'atend_valordeb': novavalordebx
+            { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_terapeutaid: teraidx , atend_beneid: beneidx },
+            {$set: {'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx, 'atend_terapiaid': novateraidx}}// Alterar Débito e Crédito //, 'atend_terapiaid': novateraidx  //, 'atend_valordeb': novavalordebx
         ).then((res) =>{
             console.log("XABLAU")
             resultado = "OK"
@@ -284,5 +282,5 @@ module.exports = {AtendModel,AtendSchema,
         });
         return resultado;
     }
-    */
+    
 };

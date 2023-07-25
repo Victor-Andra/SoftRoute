@@ -4,7 +4,16 @@
 		<title>Substituição de Terapias</title>
 		<script type="text/javascript">
 			
-			
+			function formataDataIni(){
+				let fulldate=(document.getElementById('dataIni').value+' 00:00:00.000Z').toString();
+				document.getElementById('agendaDataIni').value = fulldate;
+				//console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+			function formataDataFim(){
+				let fulldate=(document.getElementById('dataFim').value+' 00:00:00.000Z').toString();
+				document.getElementById('agendaDataFim').value = fulldate;
+				//console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
 		
 		</script>
 	</head>
@@ -32,7 +41,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/agenda/agendaSubTerapia" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/agenda/agendaSubTerapiaEdi" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -72,7 +81,8 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+																	<input name="dataIni" id="dataIni" type="date" style="width: 200px;" onchange="javascript:formataDataIni();" >
+																	<input class="hidden" name="agendaDataIni" id="agendaDataIni" >
 																</div>
 															</div>
 														</div>
@@ -82,7 +92,8 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+																	<input name="dataFim" id="dataFim" type="date" style="width: 200px;" onchange="javascript:formataDataFim();" >
+																	<input class="hidden" name="agendaDataFim" id="agendaDataFim" >
 																</div>
 															</div>
 														</div>
@@ -114,7 +125,6 @@
 														</div>
 													</div>
 												</div>
-												
 												<div class="alert alert-warning">
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
@@ -122,6 +132,32 @@
 													<strong>Importante!</strong>
 													Onde vai alterar, somente na agenda, somente no atendimentos já criados, ou em ambos.
 													Se não escolher uma das três opções válidas, a requisição de alteração não é processada.
+												</div>
+												<div class="row">
+													<div class="col-xs-12" >
+														<label>Terapia Original</label>
+														<div class="form-group" >
+															<div class="col-sm-6">
+																<select name="agendaTeraFindid" id="agendaTeraFindid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="-">-</option>
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<label>Terapia Substituta</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select id="agendaTeraSubsid" name="agendaTeraSubsid" class="chosen-select" data-placeholder="Escolha...">
+																	<option value="-">-</option>
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">

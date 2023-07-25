@@ -797,12 +797,17 @@ router.get('/agenda/cadFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direcio
     fncAgenda.carregaCadFaltas(req, res);
 })
 //Substitução de Terpias
+router.post('/agenda/addFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.agendaFaltaDiaFill(req, res);
+})
 //Substitui terapias cadastradas ou associadas a terapeutas/beneficiários de forma equivocada
-//
+//agendaAddFaltas
 router.get('/agenda/cadSubterapia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
     fncAgenda.carregaSubterapia(req, res);
 })
-
+router.post('/agenda/agendaSubTerapiaEdi', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.agendaAtualizaTerapia(req, res);
+})
 // Visualizar Agenda
 /*
 router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro A AGENDA.

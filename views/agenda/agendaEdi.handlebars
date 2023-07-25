@@ -19,6 +19,8 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
+				this.controlaCategoria();
+
 				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
 				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
 				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
@@ -39,7 +41,7 @@
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
 				}
-				if (document.getElementById("agendaCateg").value == 'Substituto Fixo'){
+				if (document.getElementById("agendaCateg").value == 'SubstitutoFixo'){
 					document.getElementById("agendaMergeterapeutaid").value = document.getElementById("agendaMergeterapeutaidEdi").value;
 					document.getElementById("agendaMergeterapiaid").value = document.getElementById("agendaMergeterapiaidEdi").value;
 				}
@@ -56,7 +58,7 @@
 				}
 			}
 			function controlaCategoria(){
-				let origem = document.getElementById("agendaOrg").value;
+				let origem = document.getElementById("agendaOrgEdi").value;
 				if(origem == "Padrão"){
 					document.getElementById("agendaCateg").value = "Padrão";
 					document.getElementById("Padrão").style.display = "";
@@ -82,7 +84,7 @@
 			}
 			function mudaSubis() {
 				let tipodoc = document.getElementById("agendaCateg").value;
-				if (tipodoc == "Substituto Fixo") {
+				if (tipodoc == "SubstitutoFixo") {
 					document.getElementById('widgetboxSubs').style.display = 'block';
 				} else {
 					document.getElementById('widgetboxSubs').style.display = 'none';
@@ -90,7 +92,7 @@
    			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -171,7 +173,7 @@
 																	<option id="Glosa" value="Glosa">Glosa</option>
 																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																	<option id="Pais" value="Pais">Pais</option>
-																	<option id="SubstitutoFixo" value="Substituto Fixo">Substituto Fixo</option>
+																	<option id="SubstitutoFixo" value="SubstitutoFixo">Substituto Fixo</option>
 																	<option id="Supervisão" value="Supervisão">Supervisão</option>
 																</select>
 															</div>

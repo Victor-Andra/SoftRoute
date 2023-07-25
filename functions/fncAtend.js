@@ -863,7 +863,7 @@ module.exports = {
                                             atendConv = at.atend_convid;
 
                                             break;
-                                        case "Substituto Fixo":
+                                        case "SubstitutoFixo":
                                             atendValor = at.atend_mergevalorcre;//REVER A GERAÇÃO DO ATEND
                                             atendTerapia = at.atend_mergeterapiaid;
                                             atendConv = at.atend_convid;
@@ -1239,6 +1239,7 @@ module.exports = {
         let atends;
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        console.log("relAtendimentoBeneConsFiltro");
 
         //console.log("SEG:"+seg);
         //console.log("SEX:"+sex);
@@ -1265,9 +1266,10 @@ module.exports = {
                                 qtdIds = 0;
                                 creValFinal = 0;
                                 atends = [];
-
+                                console.log("at:length: "+at.length);
                                 at.forEach((ats)=>{
                                     categorias = ats.atend_categoria
+                                    console.log("categorias: "+categorias);
                                     switch (categorias){
                                         case "Apoio":
                                             terapiaAtend = ats.atend_terapiaid;
@@ -1293,7 +1295,7 @@ module.exports = {
                                         case "Substituição":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
-                                        case "Substituto Fixo":
+                                        case "SubstitutoFixo":
                                             console.log("ASDASDASDS")
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
@@ -1344,7 +1346,7 @@ module.exports = {
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
-                                        case "Substituto Fixo":
+                                        case "SubstitutoFixo":
                                             console.log("ASDASDASDS2")
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;

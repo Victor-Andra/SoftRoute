@@ -11,8 +11,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_salaid :{ type: ObjectId, required: false },
     agenda_terapiaid :{ type: ObjectId, required: false },
     agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
-    agenda_mergeterapeutaid :{type: ObjectId, required: false }, //Id do terapeuta merge (para Substituto Fixo)
-    agenda_mergeterapiaid :{type: ObjectId, required: false }, //Id do terapia merge (para Substituto Fixo)
+    agenda_mergeterapeutaid :{type: ObjectId, required: false }, 
+    agenda_mergeterapiaid :{type: ObjectId, required: false }, 
     agenda_migrado :{ type: Boolean, required: false }, //Status se o agendamento gerou agendamento
     agenda_datacad :{ type: String, required: false },
     agenda_dataedi :{ type: String, required: false },
@@ -40,8 +40,8 @@ class Agenda{
         agenda_salaid,
         agenda_terapiaid,
         agenda_usuid,
-        agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituto Fixo)
-        agenda_mergeterapiaid,//Id do terapia merge (para Substituto Fixo)
+        agenda_mergeterapeutaid,
+        agenda_mergeterapiaid,
         agenda_migrado,
         agenda_datacad,
         agenda_dataedi,
@@ -66,8 +66,8 @@ class Agenda{
         this.agenda_salaid = agenda_salaid,
         this.agenda_terapiaid = agenda_terapiaid,
         this.agenda_usuid = agenda_usuid,
-        this.agenda_mergeterapeutaid = agenda_mergeterapeutaid,//Id do terapeuta merge (para Substituto Fixo)
-        this.agenda_mergeterapiaid = mergeterapiaid,//Id do terapia merge (para Substituto Fixo)
+        this.agenda_mergeterapeutaid = agenda_mergeterapeutaid,
+        this.agenda_mergeterapiaid = mergeterapiaid,
         this.agenda_migrado = agenda_migrado,
         this.agenda_datacad = agenda_datacad,
         this.agenda_dataedi = agenda_dataedi,
@@ -103,8 +103,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
-                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
@@ -145,8 +145,8 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
+            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
             agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
@@ -184,8 +184,8 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_salaid : req.body.agendaSalaid ,
             agenda_terapiaid : req.body.agendaTerapiaid ,
             agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
+            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
             agenda_migrado : false ,
             agenda_categoria : req.body.agendaCateg ,
             agenda_org : req.body.agendaOrg ,
@@ -223,8 +223,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_salaid : req.body.agendaSalaid ,
                 agenda_terapiaid : req.body.agendaTerapiaid ,
                 agenda_usuid : req.body.agendaUsuid ,
-                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,//Id do terapeuta merge (para Substituto Fixo)
-                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,//Id do terapia merge (para Substituto Fixo)
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
@@ -301,6 +301,64 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     }
+    ,agendaFaltaDia: async (req,res) => {
+        let resultado;
+        let ini = new Date(req.body.agendaDataIni);
+        let fim = new Date(req.body.agendaDataFim);
+        
+        console.log("ini: "+ini.toISOString());
+        console.log("fim: "+fim.toISOString());
+        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        //let convidx = req.body.agendaBeneid;//new ObjectId("62477742e416141415ff7a88");//particular
+
+        //Não esqueça de alterar os valores a Débito e Crédito
+        let novateraidx = req.body.agendaTeraSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
+
+        await AgendaModel.updateMany(
+            { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx },
+            {$set: {'agenda_categoria': "Falta", 'agenda_org': "Administrativo"}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
+    },agendaUpdateCampos: async (req,res) => {
+        let resultado;
+        let ini = new Date(req.body.agendaDataIni);
+        let fim = new Date(req.body.agendaDataFim);
+        
+        console.log("ini: "+ini.toISOString());
+        console.log("fim: "+fim.toISOString());
+        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        //let convidx = req.body.agendaBeneid;//new ObjectId("62477742e416141415ff7a88");//particular
+
+        //Não esqueça de alterar os valores a Débito e Crédito
+        let novateraidx = req.body.agendaTeraSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
+
+        await AgendaModel.updateMany(
+            { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx },
+            {$set: {'agenda_convid': novaconvidx}}
+        ).then((res) =>{
+            console.log("XABLAU")
+            resultado = "OK"
+        }).catch((err) =>{
+            resultado = err
+            console.log("erro mongo:")
+            console.log(err)
+        });
+        return resultado;
+    }
+    
     /*
     ,kaskopstusagenda: async (id) => {
         console.log("id:"+id)
@@ -327,40 +385,6 @@ module.exports = {AgendaModel,AgendaSchema,
         await AgendaModel.updateMany(
             {agenda_extra: undefined},
             {$set: {'agenda_extra': false}}
-        ).then((res) =>{
-            console.log("XABLAU")
-            resultado = "OK"
-        }).catch((err) =>{
-            resultado = err
-            console.log("erro mongo:")
-            console.log(err)
-        });
-        return resultado;
-    }
-    */
-    /*
-    ,agendaUpdateCampos: async (req,res) => {
-        let resultado;
-        let diaumjun = new Date(req.body.dataFinal);
-        let diaumjul = new Date(req.body.dataFinal);
-        diaumjun.setUTCDate(1);
-        diaumjul.setUTCDate(1);
-        diaumjun.setUTCMonth(6);//0-11
-        diaumjul.setUTCMonth(7);//0-11
-        console.log("diaumjun: "+diaumjun.toISOString());
-        console.log("diaumjul: "+diaumjul.toISOString());
-        let beneidx = new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
-        let teraidx = new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
-        let tpiaidx = new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
-        let convidx = new ObjectId("62477742e416141415ff7a88");//particular
-
-        //Não esqueça de alterar os valores a Débito e Crédito
-        //let novateraidx = new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
-        let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
-
-        await AgendaModel.updateMany(
-            { agenda_data: { $gte : diaumjun.toISOString(), $lte:  diaumjul.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx  },
-            {$set: {'agenda_convid': novaconvidx}}
         ).then((res) =>{
             console.log("XABLAU")
             resultado = "OK"
