@@ -26,18 +26,38 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 module.exports = {
-    listaTrat(req,res){
-        console.log('listando Planos de Tratamentos')
+    listaTrat(req, res){
+        console.log('listando trats')
         Trat.find().then((trat) =>{
-            Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                console.log("Listagem Realizada de beneficiarios")
-                        res.render('area/plano/tratLis', {banes: bene,trats: trat})
-        })}).catch((err) =>{
+            
+            trat.forEach((b)=>{
+                console.log("b.datanasc"+b.trat_datacad)
+                let datacad = new Date(b.trat_datacad)
+                let mes = (datacad.getMonth()+1).toString();
+                let dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datacad=fulldate;
+            })
+
+        console.log("Listagem Realizada Bene!")
+                Bene.find().then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.benenome) ? -1 : 0));//Ordena o convênio por nome 
+                console.log("Listagem Realizada Convênio!")
+                        Terapia.find().then((terapia)=>{
+                                Usuario.find().then((usuario)=>{
+                                console.log("Listagem Realizada Usuário!")
+            res.render('area/plano/tratLis', {usuarios: usuario, terapias: terapia, benes: bene, trats: trat})
+        })})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Planos de Tratamentos")
+            req.flash("error_message", "houve um erro ao listar Benes")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaTrat(req,res){

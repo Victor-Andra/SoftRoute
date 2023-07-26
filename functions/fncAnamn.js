@@ -71,8 +71,6 @@ module.exports = {
             })
         },
 
-
-
     deletaAnamn(req,res){
         Anamn.deleteOne({_id: req.params.id}).then(() =>{
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -86,41 +84,32 @@ module.exports = {
             })
         })
     },
-    
-    
-
 
     atualizaAnamn(req,res){
-        let resultado
-        let resposta = new Resposta()
+        let resposta;
         try{
             anamnClass.anamnEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resultado = res;
+                resposta = res;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resultado = err;
+                resposta = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resultado == true){
-                    //Volta para a debitsubcateg de listagem
-                    console.log("Listagem Realizada!")
-                    resposta.texto = "Atualizado com Sucesso!"
-                    resposta.sucesso = "true"
+                if(resposta){
+                    //Volta para a Anamn de listagem
+                    this.listaAnamn(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")
-                    console.log(resultado)
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
+                    console.log(resposta)
+                    res.render('admin/erro')
                 }
-                this.listaAnamn(req,res,resposta)
             })
         } catch(err1){
             console.log(err1)
-            res.render('admin/erro')
         }
     },
 

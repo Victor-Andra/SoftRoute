@@ -37,7 +37,8 @@ const TratSchema = mongoose.Schema({
     trat_metalongofis :{ type: String, required: false },
     trat_objetivofis :{ type: String, required: false },
     //Dados para de Sistema, quem fez, data criação e quem alterou
-    trat_usuid :{ type: String, required: false },
+    trat_usuid :{ type: ObjectId, required: false },
+    trat_usuidedi :{ type: ObjectId, required: false },
     trat_datacad :{ type: Date, required: false },
     trat_dataedi :{ type: Date, required: false }
 })
@@ -81,6 +82,7 @@ class Trat{
         //Dados para de Sistema, quem fez, data criação e quem alterou
         trat_usuid,
         trat_datacad,
+        trat_usuidedi,
         trat_dataedi
         ){
         this.trat_planotipo = trat_planotipo,
@@ -119,6 +121,7 @@ class Trat{
         //Dados para de Sistema, quem fez, data criação e quem alterou
         this.trat_usuid = trat_usuid,
         this.trat_datacad = trat_datacad,
+        this.trat_usuidedi = trat_usuidedi,
         this.trat_dataedi = trat_dataedi   
     }
 }
@@ -171,6 +174,7 @@ module.exports = {TratModel,TratSchema,
         //Dados para de Sistema, quem fez, data criação e quem alterou
         trat_usuid : req.body.tratUsuid,
         trat_datacad : req.body.tratDatacad,
+        trat_usuidedi: req.body.tratUsuidedi,
         trat_dataedi : dataAtual.toISOString()
         }}
         ).then((res) =>{
@@ -223,6 +227,7 @@ module.exports = {TratModel,TratSchema,
             trat_objetivofis : req.body.tratObjetivofis,
             //Dados para de Sistema, quem fez, data criação e quem alterou
             trat_usuid : req.body.tratUsuid,
+            trat_usuidedi: req.body.tratUsuidedi,
             trat_dataedi : req.body.tratDataedi,
             trat_datacad : dataAtual.toISOString()
             

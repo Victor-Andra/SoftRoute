@@ -794,7 +794,10 @@ router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direcio
 //tanto por beneficiário como por terapeuta
 //
 router.get('/agenda/cadFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
-    fncAgenda.carregaCadFaltas(req, res);
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncAgenda.carregaCadFaltas(req, res, resposta);
 })
 //Substitução de Terpias
 router.post('/agenda/addFaltas', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
@@ -2148,6 +2151,10 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
         router.post('/ferramentas/usuario/carregaMudarsenha', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
             fncUsuario.carregaMudarsenha(req, res); 
+         })
+        
+        router.post('/ferramentas/usuario/carregaResetarchave', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
+            fncUsuario.carregaResetarchave(req, res); 
          })
 
 //Menu Ferramentas

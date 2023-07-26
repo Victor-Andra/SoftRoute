@@ -133,6 +133,18 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    carregaResetarchave(req,res){
+        Usuario.findById(req.params.id).then((usuario) =>{
+                        Perfil.find().then((perfil)=>{
+                                Funcao.find().then((funcao)=>{
+            res.render('ferramentas/usuario/resetaChave', {usuario, perfils: perfil, funcoes: funcao})
+        })})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao carregar o formulário para resetar a chave!")
+            res.render('admin/erro')
+        })
+    },
+
     mudarsenha(req,res){
         let resposta;
         try{

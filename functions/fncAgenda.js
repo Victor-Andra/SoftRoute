@@ -9624,17 +9624,28 @@ module.exports = {
             }
         })
     },
-    carregaCadFaltas(req,res){//Carrega o cadastro de faltas pontuais
-            Bene.find().then((bene) =>{
-                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                //console.log("Listagem Beneficiário!")
-                Conv.find().then((conv)=>{
-                    //console.log("Listagem Convenios!")
-                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                                //console.log("Listagem terapeutas!")
-                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-        res.render('agenda/agendaCadFaltas', {benes: bene, convs: conv, terapeutas: terapeuta})
+    carregaCadFaltas(req,res,resposta){//Carrega o cadastro de faltas pontuais
+        let flash = new Resposta()
+        let resultado;
+        Bene.find().then((bene) =>{
+            bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+            //console.log("Listagem Beneficiário!")
+            Conv.find().then((conv)=>{
+                //console.log("Listagem Convenios!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                    //console.log("Listagem terapeutas!")
+                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                        if(resposta.sucesso == ""){
+                            //console.log(' objeto vazio');
+                            flash.texto = "";
+                            flash.sucesso = "";
+                        } else {
+                            //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                            flash.texto = resposta.texto;
+                            flash.sucesso = resposta.sucesso;
+                        }
+                        res.render('agenda/agendaCadFaltas', {benes: bene, convs: conv, terapeutas: terapeuta, flash})
         })})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -12004,7 +12015,55 @@ console.log("a.agendaCateg:"+a.agendaCateg);
         }
     },
     agendaFaltaDiaFill(req,res){
-        agendaClass.agendaFaltaDia(req,res);
+        let flash = new Resposta();
+        let resultado = "true";
+        let busca;
+        let dataIni = fncGeral.getDateFromString(req.body.agendaData, "ini");
+        let dataFim = fncGeral.getDateFromString(req.body.agendaData, "fim");
+        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        console.log("ini: "+fncGeral.getDateToIsostring(dataIni));
+        console.log("fim: "+fncGeral.getDateToIsostring(dataFim));
+        let stringo ;
+        if (beneidx == "-" && req.body.agendaMergeterapeutaid == "-") {
+            resultado = "false";
+        } else if (beneidx != "-" && teraidx == "-") {
+            console.log("falta bene")
+            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
+            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx }).then((agenda)=>{
+                console.log("agenda.kength"+agenda.length);
+            })
+        } else if (beneidx == "-" && teraidx != "-") {
+            console.log("falta terapeuta")
+            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
+            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx }).then((agenda)=>{
+                console.log("agenda.kength"+agenda.length);
+            })
+        } else {
+            console.log("falta de um bene para um terapeuta")
+            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
+            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx }).then((agenda)=>{
+                console.log("agenda.kength"+agenda.length);
+            })
+        }
+
+        if (resultado == "true"){
+            agendaClass.agendaFaltaDia(req,res,busca);
+            if (res.retorno = "true") {
+                flash.sucesso = "true"
+                flash.texto = "Cadastro de faltas realizados!"
+                this.carregaCadFaltas(req,res,flash);
+            } else {
+                flash.sucesso = "false"
+                flash.texto = "Erro ao realizar faltas: "+res.retorno
+                this.carregaCadFaltas(req,res,flash);
+            }
+        } else {
+            flash.sucesso = "false"
+            flash.texto = "É necessário selecionar um beneficiário ou um terapeuta para a falta!"
+            this.carregaCadFaltas(req,res,flash);
+        }
     },
     /*
     deletaAgendaAtend(req, res){

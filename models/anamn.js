@@ -1776,15 +1776,16 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_terapeutaid: req.body.anamnTerapeutaid
                 
                 }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-        })
-        return resultado;
+                ).then((res) =>{
+                    console.log("Salvo")
+                    resultado = true;
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                })
+                return resultado;
+            
     },
     anamnAdicionar: async (req,res) => {
         //Validar se a Anamnese existe
