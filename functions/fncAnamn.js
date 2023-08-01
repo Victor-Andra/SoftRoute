@@ -96,7 +96,6 @@ module.exports = {
                 console.log("error1")
                 console.log(err)
                 resposta = err;
-                res.render('admin/erro')
             }).finally(() =>{
                 if(resposta){
                     //Volta para a Anamn de listagem
@@ -114,7 +113,7 @@ module.exports = {
     },
 
     carregaAnamnEdi(req, res){
-        Anamn.findById(req.params.id).then((anamn) =>{
+        Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
             res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario})
@@ -127,11 +126,11 @@ module.exports = {
 
     listaAnamn(req, res, resposta){
         let flash = new Resposta();
-        console.log('listando Anamneses')
+        //console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
 
             anamn.forEach((b)=>{
-                console.log("b.datacad"+b.anamn_datacad)
+                //console.log("b.datacad"+b.anamn_datacad)
                 let datacad = new Date(b.anamn_datacad)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
@@ -143,15 +142,41 @@ module.exports = {
                 }
                 let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.anamn_data=fulldate;
+                
+                //console.log("b.dataana"+b.anamn_dataanamnese)
+                datacad = new Date(b.anamn_dataanamnese)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.anamn_dataanamn=fulldate;
+
+                //console.log("d.dataanaedi"+d.anamn_dataedi)
+                datacad = new Date(b.anamn_dataedi)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.anamn_edi=fulldate;
             })
 
-            console.log("anamn:");
-            console.log(anamn);
-            console.log("Listagem Realizada das Anamneses!")
+            //console.log("anamn:");
+            //console.log(anamn);
+            //console.log("Listagem Realizada das Anamneses!")
                 Bene.findById(req.params.id).then((bene) =>{
-                    console.log("Listagem Realizada bene!")
+                    //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
-                        console.log("Listagem Realizada Usuário!")
+                        //console.log("Listagem Realizada Usuário!")
                         /*if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
                             flash.texto = ""

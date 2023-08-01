@@ -32,6 +32,8 @@ const AnamnSchema = mongoose.Schema({
     //Parto
     anamn_partoqual: { type: String, required: false }, //Ok
     anamn_partoqualdesc: { type: String, required: false }, //Ok
+    anamn_tempogestacional: { type: String, required: false }, //Ok
+    anamn_tempogestacionaldesc: { type: String, required: false }, //Ok
     anamn_anorexiaperiparto: { type: String, required: false }, //Ok
     anamn_anorexiaperipartodesc: { type: String, required: false }, //Ok
     anamn_apgar: { type: String, required: false }, //Ok
@@ -143,6 +145,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_gdiscluverbalgagueira: { type: String, required: false }, //Ok
     anamn_dislalia: { type: String, required: false }, //Ok
     anamn_dislaliaqual: { type: String, required: false }, //Ok
+    
     anamn_falavocal: { type: String, required: false }, //Ok
     anamn_compreendeordem: { type: String, required: false }, //Ok
     anamn_cumpreordens: { type: String, required: false },
@@ -160,6 +163,24 @@ const AnamnSchema = mongoose.Schema({
     anamn_rouco: { type: String, required: false }, //Incluir
     anamn_realizasombocainativ: { type: String, required: false }, //Ok 
     anamn_realizasombocaativ: { type: String, required: false }, //Ok
+    anamn_falavocaldesc: { type: String, required: false }, //Ok
+    anamn_compreendeordemdesc: { type: String, required: false }, //Ok
+    anamn_cumpreordensdesc: { type: String, required: false },
+    anamn_ecolaliaimediatadesc: { type: String, required: false }, //Ok
+    anamn_ecolaliatardiadesc: { type: String, required: false }, //Ok
+    anamn_apontadesc: { type: String, required: false }, //Ok
+    anamn_pededesc: { type: String, required: false }, //Ok
+    anamn_nomeiadescenasdesc: { type: String, required: false }, //Ok
+    anamn_perguntadesc: { type: String, required: false }, //Ok
+    anamn_respondeperguntadesc: { type: String, required: false }, //Ok
+    anamn_solicitabrincardesc: { type: String, required: false }, //Ok
+    anamn_solicitairbanheirodesc: { type: String, required: false }, //Ok
+    anamn_solicitabeberdesc: { type: String, required: false }, //Ok
+    anamn_solicitacomerdesc: { type: String, required: false }, //Ok
+    anamn_roucodesc: { type: String, required: false }, //Incluir
+    anamn_realizasombocainativdesc: { type: String, required: false }, //Ok 
+    anamn_realizasombocaativdesc: { type: String, required: false }, //Ok
+    
     anamn_frasequantaspalavras: { type: String, required: false }, //Ok
     anamn_obslibguagem: { type: String, required: false }, //Ok
     //Sexualidade
@@ -180,6 +201,8 @@ const AnamnSchema = mongoose.Schema({
     anamn_defendeseagressaocomo: { type: String, required: false },//Ok
     anamn_autolesivo: { type: String, required: false }, //Ok
     anamn_autolesivodesc: { type: String, required: false }, //Ok
+    anamn_agressivo: { type: String, required: false }, //Ok
+    anamn_agressivodesc: { type: String, required: false }, //Ok
     anamn_dependente: { type: String, required: false }, //Ok
     anamn_dependentedesc: { type: String, required: false }, //Incluir
     anamn_carinho: { type: String, required: false }, //Ok
@@ -235,6 +258,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_dromequantotempo: { type: String, required: false }, //Ok
     anamn_vaiparacamapais: { type: String, required: false }, //Ok
     anamn_vaiparacamapaisdesc: { type: String, required: false }, //Ok
+    
     anamn_choranoite: { type: String, required: false }, //Ok
     anamn_falanoite: { type: String, required: false }, //Ok
     anamn_gritanoite: { type: String, required: false }, //Ok
@@ -246,6 +270,20 @@ const AnamnSchema = mongoose.Schema({
     anamn_terrornoturno: { type: String, required: false }, //Ok
     anamn_ronca: { type: String, required: false }, //Ok
     anamn_respiraoral: { type: String, required: false }, //Ok
+    anamn_proximoolhos: { type: String, required: false }, //Ok
+    anamn_proximoolhosdesc: { type: String, required: false }, //Ok
+    anamn_choranoitedesc: { type: String, required: false }, //Ok
+    anamn_falanoitedesc: { type: String, required: false }, //Ok
+    anamn_gritanoitedesc: { type: String, required: false }, //Ok
+    anamn_rangedenteanoitedesc: { type: String, required: false }, //Ok
+    anamn_insonianoitedesc: { type: String, required: false }, //Ok
+    anamn_babanoitedesc: { type: String, required: false }, //Ok
+    anamn_pesadelodesc: { type: String, required: false }, //Ok
+    anamn_sudoresedesc: { type: String, required: false }, //Ok
+    anamn_terrornoturnodesc: { type: String, required: false }, //Ok
+    anamn_roncadesc: { type: String, required: false }, //Ok
+    anamn_respiraoraldesc: { type: String, required: false }, //Ok
+    
     anamn_sono: { type: String, required: false }, //Ok
     anamn_sonodesc: { type: String, required: false }, //Inserir
     anamn_obssono: { type: String, required: false }, //Ok
@@ -320,12 +358,21 @@ const AnamnSchema = mongoose.Schema({
     anamn_duvidacapaccitaauditivadesc: { type: String, required: false }, //Ok
     anamn_jaexpostoruidoexplosao: { type: String, required: false }, //Ok
     anamn_jaexpostoruidoexplosaodesc: { type: String, required: false }, //Ok
+    
     anamn_voz: { type: String, required: false }, //Ok
     anamn_audiometria: { type: String, required: false }, //Ok
     anamn_localizasons: { type: String, required: false }, //Ok
     anamn_tampaouvidosruido: { type: String, required: false }, //Ok
     anamn_aproximaruidos: { type: String, required: false }, //Ok
     anamn_asustafacil: { type: String, required: false }, //Ok
+    
+    anamn_vozdesc: { type: String, required: false }, //Ok
+    anamn_audiometriadesc: { type: String, required: false }, //Ok
+    anamn_localizasonsdesc: { type: String, required: false }, //Ok
+    anamn_tampaouvidosruidodesc: { type: String, required: false }, //Ok
+    anamn_aproximaruidosdesc: { type: String, required: false }, //Ok
+    anamn_asustafacildesc: { type: String, required: false }, //Ok
+
     anamn_seicomodapessoasfalando: { type: String, required: false }, //Ok
     anamn_seicomodapessoasfalandodesc: { type: String, required: false }, //Ok
     anamn_escutachamado: { type: String, required: false }, //Ok
@@ -366,6 +413,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_recusaamoeba: { type: String, required: false }, //Ok
     anamn_evitatoqueleve: { type: String, required: false }, //Ok
     anamn_aceitaabreco: { type: String, required: false }, //Ok
+    anamn_aceitaabrecodesc: { type: String, required: false }, //Ok
     anamn_tocapessoasobjconsta: { type: String, required: false }, //Ok
     anamn_batecaisemnocao: { type: String, required: false }, //Ok
     anamn_seguraobj: { type: String, required: false }, //Ok
@@ -380,19 +428,36 @@ const AnamnSchema = mongoose.Schema({
     //Sociabilidade
     anamn_preferebrincarcom: { type: String, required: false }, //Ok
     anamn_preferebrincaridade: { type: String, required: false }, //Ok
+    anamn_preferebrincarcomdesc: { type: String, required: false }, //Ok
+    
     anamn_fazamigosfacil: { type: String, required: false }, //Ok
     anamn_emprestabrinquedos: { type: String, required: false }, //Ok
     anamn_brincacooperado: { type: String, required: false }, //Ok
     anamn_gostamandar: { type: String, required: false }, //Ok
     anamn_gostasubmeter: { type: String, required: false }, //Ok
+    
+    anamn_fazamigosfacildesc: { type: String, required: false }, //Ok
+    anamn_emprestabrinquedosdesc: { type: String, required: false }, //Ok
+    anamn_brincacooperadodesc: { type: String, required: false }, //Ok
+    anamn_gostamandardesc: { type: String, required: false }, //Ok
+    anamn_gostasubmeterdesc: { type: String, required: false }, //Ok
+
     anamn_gostamusica: { type: String, required: false }, //Ok
     anamn_gostamusicaquais: { type: String, required: false }, //Ok
+    
     anamn_socializapares: { type: String, required: false }, //Ok
     anamn_brincaparque: { type: String, required: false }, //Ok
     anamn_brincarfuncional: { type: String, required: false }, //Ok
     anamn_criabrincadeiras: { type: String, required: false }, //Ok
-    anamn_brinquedopreferidosquais: { type: String, required: false }, //Ok
     anamn_recusaengajardemanda: { type: String, required: false }, //Ok
+
+    anamn_socializaparesdesc: { type: String, required: false }, //Ok
+    anamn_brincaparquedesc: { type: String, required: false }, //Ok
+    anamn_brincarfuncionaldesc: { type: String, required: false }, //Ok
+    anamn_criabrincadeirasdesc: { type: String, required: false }, //Ok
+    anamn_recusaengajardemandadesc: { type: String, required: false }, //Ok
+    
+    anamn_brinquedopreferidosquais: { type: String, required: false }, //Ok
     anamn_obssocial: { type: String, required: false }, //Ok
     //Escolaridade
     anamn_escola: { type: String, required: false }, //Ok
@@ -474,6 +539,8 @@ class Anamn{
     //Parto
     anamn_partoqual, //Ok
     anamn_partoqualdesc, //Ok
+    anamn_tempogestacional, //Ok
+    anamn_tempogestacionaldesc, //Ok
     anamn_anorexiaperiparto, //Ok
     anamn_anorexiaperipartodesc, //Ok
     anamn_apgar, //Ok
@@ -585,6 +652,7 @@ class Anamn{
     anamn_gdiscluverbalgagueira, //Ok
     anamn_dislalia, //Ok
     anamn_dislaliaqual, //Ok
+   
     anamn_falavocal, //Ok
     anamn_compreendeordem, //Ok
     anamn_cumpreordens,
@@ -602,6 +670,25 @@ class Anamn{
     anamn_rouco, //Incluir
     anamn_realizasombocainativ, //Ok 
     anamn_realizasombocaativ, //Ok
+
+    anamn_falavocaldesc, //Ok
+    anamn_compreendeordemdesc, //Ok
+    anamn_cumpreordensdesc,
+    anamn_ecolaliaimediatadesc, //Ok
+    anamn_ecolaliatardiadesc, //Ok
+    anamn_apontadesc, //Ok
+    anamn_pededesc, //Ok
+    anamn_nomeiadescenasdesc, //Ok
+    anamn_perguntadesc, //Ok
+    anamn_respondeperguntadesc, //Ok
+    anamn_solicitabrincardesc, //Ok
+    anamn_solicitairbanheirodesc, //Ok
+    anamn_solicitabeberdesc, //Ok
+    anamn_solicitacomerdesc, //Ok
+    anamn_roucodesc, //Incluir
+    anamn_realizasombocainativdesc, //Ok 
+    anamn_realizasombocaativdesc, //Ok
+
     anamn_frasequantaspalavras, //Ok
     anamn_obslibguagem, //Ok
     //Sexualidade
@@ -622,6 +709,8 @@ class Anamn{
     anamn_defendeseagressaocomo,//Ok
     anamn_autolesivo, //Ok
     anamn_autolesivodesc, //Ok
+    anamn_agressivo, //Ok
+    anamn_agressivodesc, //Ok
     anamn_dependente, //Ok
     anamn_dependentedesc, //Incluir
     anamn_carinho, //Ok
@@ -677,6 +766,7 @@ class Anamn{
     anamn_dromequantotempo, //Ok
     anamn_vaiparacamapais, //Ok
     anamn_vaiparacamapaisdesc, //Ok
+    
     anamn_choranoite, //Ok
     anamn_falanoite, //Ok
     anamn_gritanoite, //Ok
@@ -688,6 +778,20 @@ class Anamn{
     anamn_terrornoturno, //Ok
     anamn_ronca, //Ok
     anamn_respiraoral, //Ok
+
+    anamn_choranoitedesc, //Ok
+    anamn_falanoitedesc, //Ok
+    anamn_gritanoitedesc, //Ok
+    anamn_rangedenteanoitedesc, //Ok
+    anamn_insonianoitedesc, //Ok
+    anamn_babanoitedesc, //Ok
+    anamn_pesadelodesc, //Ok
+    anamn_sudoresedesc, //Ok
+    anamn_terrornoturnodesc, //Ok
+    anamn_roncadesc, //Ok
+    anamn_respiraoraldesc, //Ok
+    anamn_proximoolhos, //Ok
+    anamn_proximoolhosdesc, //Ok
     anamn_sono, //Ok
     anamn_sonodesc, //Inserir
     anamn_obssono, //Ok
@@ -762,12 +866,21 @@ class Anamn{
     anamn_duvidacapaccitaauditivadesc, //Ok
     anamn_jaexpostoruidoexplosao, //Ok
     anamn_jaexpostoruidoexplosaodesc, //Ok
+    
     anamn_voz, //Ok
     anamn_audiometria, //Ok
     anamn_localizasons, //Ok
     anamn_tampaouvidosruido, //Ok
     anamn_aproximaruidos, //Ok
     anamn_asustafacil, //Ok
+
+    anamn_vozdesc, //Ok
+    anamn_audiometriadesc, //Ok
+    anamn_localizasonsdesc, //Ok
+    anamn_tampaouvidosruidodesc, //Ok
+    anamn_aproximaruidosdesc, //Ok
+    anamn_asustafacildesc, //Ok
+
     anamn_seicomodapessoasfalando, //Ok
     anamn_seicomodapessoasfalandodesc, //Ok
     anamn_escutachamado, //Ok
@@ -808,6 +921,7 @@ class Anamn{
     anamn_recusaamoeba, //Ok
     anamn_evitatoqueleve, //Ok
     anamn_aceitaabreco, //Ok
+    anamn_aceitaabrecodesc, //Incluir
     anamn_tocapessoasobjconsta, //Ok
     anamn_batecaisemnocao, //Ok
     anamn_seguraobj, //Ok
@@ -822,19 +936,36 @@ class Anamn{
     //Sociabilidade
     anamn_preferebrincarcom, //Ok
     anamn_preferebrincaridade, //Ok
+    anamn_preferebrincarcomdesc, //Ok
+    
     anamn_fazamigosfacil, //Ok
     anamn_emprestabrinquedos, //Ok
     anamn_brincacooperado, //Ok
     anamn_gostamandar, //Ok
     anamn_gostasubmeter, //Ok
+    
+    anamn_fazamigosfacildesc, //Ok
+    anamn_emprestabrinquedosdesc, //Ok
+    anamn_brincacooperadodesc, //Ok
+    anamn_gostamandardesc, //Ok
+    anamn_gostasubmeterdesc, //Ok
+    
     anamn_gostamusica, //Ok
     anamn_gostamusicaquais, //Ok
+
     anamn_socializapares, //Ok
     anamn_brincaparque, //Ok
     anamn_brincarfuncional, //Ok
     anamn_criabrincadeiras, //Ok
-    anamn_brinquedopreferidosquais, //Ok
     anamn_recusaengajardemanda, //Ok
+    
+    anamn_socializaparesdesc, //Ok
+    anamn_brincaparquedesc, //Ok
+    anamn_brincarfuncionaldesc, //Ok
+    anamn_criabrincadeirasdesc, //Ok
+    anamn_recusaengajardemandadesc, //Ok
+
+    anamn_brinquedopreferidosquais, //Ok
     anamn_obssocial, //Ok
     //Escolaridade
     anamn_escola, //Ok
@@ -915,6 +1046,8 @@ class Anamn{
             //Parto
             this.anamn_partoqual = anamn_partoqual,
             this.anamn_partoqualdesc = anamn_partoqualdesc,
+            this.anamn_tempogestacional = anamn_tempogestacional,
+            this.anamn_tempogestacionaldesc = anamn_tempogestacionaldesc,
             this.anamn_anorexiaperiparto = anamn_anorexiaperiparto,
             this.anamn_anorexiaperipartodesc = anamn_anorexiaperipartodesc,
             this.anamn_apgar = anamn_apgar,
@@ -1026,6 +1159,7 @@ class Anamn{
             this.anamn_gdiscluverbalgagueira = anamn_gdiscluverbalgagueira,
             this.anamn_dislalia = anamn_dislalia,
             this.anamn_dislaliaqual = anamn_dislaliaqual,
+            
             this.anamn_falavocal = anamn_falavocal,
             this.anamn_compreendeordem = anamn_compreendeordem,
             this.anamn_cumpreordens = anamn_cumpreordens,
@@ -1043,6 +1177,25 @@ class Anamn{
             this.anamn_rouco = anamn_rouco,
             this.anamn_realizasombocainativ = anamn_realizasombocainativ,
             this.anamn_realizasombocaativ = anamn_realizasombocaativ,
+
+            this.anamn_falavocaldesc = anamn_falavocaldesc,
+            this.anamn_compreendeordemdesc = anamn_compreendeordemdesc,
+            this.anamn_cumpreordensdesc = anamn_cumpreordensdesc,
+            this.anamn_ecolaliaimediatadesc = anamn_ecolaliaimediatadesc,
+            this.anamn_ecolaliatardiadesc = anamn_ecolaliatardiadesc,
+            this.anamn_apontadesc = anamn_apontadesc,
+            this.anamn_pededesc = anamn_pededesc,
+            this.anamn_nomeiadescenasdesc = anamn_nomeiadescenasdesc,
+            this.anamn_perguntadesc = anamn_perguntadesc,
+            this.anamn_respondeperguntadesc = anamn_respondeperguntadesc,
+            this.anamn_solicitabrincardesc = anamn_solicitabrincardesc,
+            this.anamn_solicitairbanheirodesc = anamn_solicitairbanheirodesc,
+            this.anamn_solicitabeberdesc = anamn_solicitabeberdesc,
+            this.anamn_solicitacomerdesc = anamn_solicitacomerdesc,
+            this.anamn_roucodesc = anamn_roucodesc,
+            this.anamn_realizasombocainativdesc = anamn_realizasombocainativdesc,
+            this.anamn_realizasombocaativdesc = anamn_realizasombocaativdesc,
+
             this.anamn_frasequantaspalavras = anamn_frasequantaspalavras,
             this.anamn_obslibguagem = anamn_obslibguagem,
             //Sexualidade
@@ -1063,6 +1216,8 @@ class Anamn{
             this.anamn_defendeseagressaocomo = anamn_defendeseagressaocomo,
             this.anamn_autolesivo = anamn_autolesivo,
             this.anamn_autolesivodesc = anamn_autolesivodesc,
+            this.anamn_agressivo = anamn_agressivo,
+            this.anamn_agressivodesc = anamn_agressivodesc,           
             this.anamn_dependente = anamn_dependente,
             this.anamn_dependentedesc = anamn_dependentedesc,
             this.anamn_carinho = anamn_carinho,
@@ -1118,6 +1273,7 @@ class Anamn{
             this.anamn_dromequantotempo = anamn_dromequantotempo,
             this.anamn_vaiparacamapais = anamn_vaiparacamapais,
             this.anamn_vaiparacamapaisdesc = anamn_vaiparacamapaisdesc,
+            
             this.anamn_choranoite = anamn_choranoite,
             this.anamn_falanoite = anamn_falanoite,
             this.anamn_gritanoite = anamn_gritanoite,
@@ -1129,6 +1285,20 @@ class Anamn{
             this.anamn_terrornoturno = anamn_terrornoturno,
             this.anamn_ronca = anamn_ronca,
             this.anamn_respiraoral = anamn_respiraoral,
+            this.anamn_proximoolhos = anamn_proximoolhos,
+            this.anamn_proximoolhosdesc = anamn_proximoolhosdesc,
+            this.anamn_choranoitedesc = anamn_choranoitedesc,
+            this.anamn_falanoitedesc = anamn_falanoitedesc,
+            this.anamn_gritanoitedesc = anamn_gritanoitedesc,
+            this.anamn_rangedenteanoitedesc = anamn_rangedenteanoitedesc,
+            this.anamn_insonianoitedesc = anamn_insonianoitedesc,
+            this.anamn_babanoitedesc = anamn_babanoitedesc,
+            this.anamn_pesadelodesc = anamn_pesadelodesc,
+            this.anamn_sudoresedesc = anamn_sudoresedesc,
+            this.anamn_terrornoturnodesc = anamn_terrornoturnodesc,
+            this.anamn_roncadesc = anamn_roncadesc,
+            this.anamn_respiraoraldesc = anamn_respiraoraldesc,
+
             this.anamn_sono = anamn_sono,
             this.anamn_sonodesc = anamn_sonodesc,
             this.anamn_obssono = anamn_obssono,
@@ -1203,12 +1373,21 @@ class Anamn{
             this.anamn_duvidacapaccitaauditivadesc = anamn_duvidacapaccitaauditivadesc,
             this.anamn_jaexpostoruidoexplosao = anamn_jaexpostoruidoexplosao,
             this.anamn_jaexpostoruidoexplosaodesc = anamn_jaexpostoruidoexplosaodesc,
+            
             this.anamn_voz = anamn_voz,
             this.anamn_audiometria = anamn_audiometria,
             this.anamn_localizasons = anamn_localizasons,
             this.anamn_tampaouvidosruido = anamn_tampaouvidosruido,
             this.anamn_aproximaruidos = anamn_aproximaruidos,
             this.anamn_asustafacil = anamn_asustafacil,
+
+            this.anamn_vozdesc = anamn_vozdesc,
+            this.anamn_audiometriadesc = anamn_audiometriadesc,
+            this.anamn_localizasonsdesc = anamn_localizasonsdesc,
+            this.anamn_tampaouvidosruidodesc = anamn_tampaouvidosruidodesc,
+            this.anamn_aproximaruidosdesc = anamn_aproximaruidosdesc,
+            this.anamn_asustafacildesc = anamn_asustafacildesc,
+
             this.anamn_seicomodapessoasfalando = anamn_seicomodapessoasfalando,
             this.anamn_seicomodapessoasfalandodesc = anamn_seicomodapessoasfalandodesc,
             this.anamn_escutachamado = anamn_escutachamado,
@@ -1249,6 +1428,7 @@ class Anamn{
             this.anamn_recusaamoeba = anamn_recusaamoeba,
             this.anamn_evitatoqueleve = anamn_evitatoqueleve,
             this.anamn_aceitaabreco = anamn_aceitaabreco,
+            this.anamn_aceitaabrecodesc = anamn_aceitaabrecodesc,
             this.anamn_tocapessoasobjconsta = anamn_tocapessoasobjconsta,
             this.anamn_batecaisemnocao = anamn_batecaisemnocao,
             this.anamn_seguraobj = anamn_seguraobj,
@@ -1263,19 +1443,36 @@ class Anamn{
             //Sociabilidade
             this.anamn_preferebrincarcom = anamn_preferebrincarcom,
             this.anamn_preferebrincaridade = anamn_preferebrincaridade,
+            this.anamn_preferebrincarcomdesc = anamn_preferebrincarcomdesc,
+
             this.anamn_fazamigosfacil = anamn_fazamigosfacil,
             this.anamn_emprestabrinquedos = anamn_emprestabrinquedos,
             this.anamn_brincacooperado = anamn_brincacooperado,
             this.anamn_gostamandar = anamn_gostamandar,
             this.anamn_gostasubmeter = anamn_gostasubmeter,
+            
+            this.anamn_fazamigosfacildesc = anamn_fazamigosfacildesc,
+            this.anamn_emprestabrinquedosdesc = anamn_emprestabrinquedosdesc,
+            this.anamn_brincacooperadodesc = anamn_brincacooperadodesc,
+            this.anamn_gostamandardesc = anamn_gostamandardesc,
+            this.anamn_gostasubmeterdesc = anamn_gostasubmeterdesc,
+
             this.anamn_gostamusica = anamn_gostamusica,
             this.anamn_gostamusicaquais = anamn_gostamusicaquais,
+
             this.anamn_socializapares = anamn_socializapares,
             this.anamn_brincaparque = anamn_brincaparque,
             this.anamn_brincarfuncional = anamn_brincarfuncional,
             this.anamn_criabrincadeiras = anamn_criabrincadeiras,
-            this.anamn_brinquedopreferidosquais = anamn_brinquedopreferidosquais,
             this.anamn_recusaengajardemanda = anamn_recusaengajardemanda,
+            
+            this.anamn_socializaparesdesc = anamn_socializaparesdesc,
+            this.anamn_brincaparquedesc = anamn_brincaparquedesc,
+            this.anamn_brincarfuncionaldesc = anamn_brincarfuncionaldesc,
+            this.anamn_criabrincadeirasdesc = anamn_criabrincadeirasdesc,
+            this.anamn_recusaengajardemandadesc = anamn_recusaengajardemandadesc,
+
+            this.anamn_brinquedopreferidosquais = anamn_brinquedopreferidosquais,
             this.anamn_obssocial = anamn_obssocial,
             //Escolaridade
             this.anamn_escola = anamn_escola,
@@ -1333,12 +1530,21 @@ module.exports = {AnamnModel,AnamnSchema,
     anamnEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
+        let anamnId = new ObjectId(req.body.id);
         //Pega data atual
-        
+        console.log("req.body.id:"+req.body.id)
+        console.log("anamnId:"+anamnId)
         //Realiza Atualização
-        await AnamnModel.findByIdAndUpdate(req.body.anamnId, 
+        await AnamnModel.findByIdAndUpdate(req.body.id, 
             {$set: {
-                anamn_id: req.body.anamnId,
                 anamn_benenome: req.body.anamnBenenome,
                 anamn_beneapelido: req.body.anamnBeneapelido,
                 anamn_benedatanasc: req.body.anamnBenedatanasc,
@@ -1366,6 +1572,8 @@ module.exports = {AnamnModel,AnamnSchema,
                 //Parto
                 anamn_partoqual: req.body.anamnPartoqual,
                 anamn_partoqualdesc: req.body.anamnPartoqualdesc,
+                anamn_tempogestacional: req.body.anamnTempogestacional,
+                anamn_tempogestacionaldesc: req.body.anamnTempogestacionaldesc,
                 anamn_anorexiaperiparto: req.body.anamnAnorexiaperiparto,
                 anamn_anorexiaperipartodesc: req.body.anamnAnorexiaperipartodesc,
                 anamn_apgar: req.body.anamnApgar,
@@ -1477,6 +1685,7 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_gdiscluverbalgagueira: req.body.anamnGdiscluverbalgagueira,
                 anamn_dislalia: req.body.anamnDislalia,
                 anamn_dislaliaqual: req.body.anamnDislaliaqual,
+                
                 anamn_falavocal: req.body.anamnFalavocal,
                 anamn_compreendeordem: req.body.anamnCompreendeordem,
                 anamn_cumpreordens: req.body.anamnCumpreordens,
@@ -1494,6 +1703,25 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_rouco: req.body.anamnRouco,
                 anamn_realizasombocainativ: req.body.anamnRealizasombocainativ,
                 anamn_realizasombocaativ: req.body.anamnRealizasombocaativ,
+
+                anamn_falavocaldesc: req.body.anamnFalavocaldesc,
+                anamn_compreendeordemdesc: req.body.anamnCompreendeordemdesc,
+                anamn_cumpreordensdesc: req.body.anamnCumpreordensdesc,
+                anamn_ecolaliaimediatadesc: req.body.anamnEcolaliaimediatadesc,
+                anamn_ecolaliatardiadesc: req.body.anamnEcolaliatardiadesc,
+                anamn_apontadesc: req.body.anamnApontadesc,
+                anamn_pededesc: req.body.anamnPededesc,
+                anamn_nomeiadescenasdesc: req.body.anamnNomeiadescenasdesc,
+                anamn_perguntadesc: req.body.anamnPerguntadesc,
+                anamn_respondeperguntadesc: req.body.anamnRespondeperguntadesc,
+                anamn_solicitabrincardesc: req.body.anamnSolicitabrincardesc,
+                anamn_solicitairbanheirodesc: req.body.anamnSolicitairbanheirodesc,
+                anamn_solicitabeberdesc: req.body.anamnSolicitabeberdesc,
+                anamn_solicitacomerdesc: req.body.anamnSolicitacomerdesc,
+                anamn_roucodesc: req.body.anamnRoucodesc,
+                anamn_realizasombocainativdesc: req.body.anamnRealizasombocainativdesc,
+                anamn_realizasombocaativdesc: req.body.anamnRealizasombocaativdesc,
+
                 anamn_frasequantaspalavras: req.body.anamnFrasequantaspalavras,
                 anamn_obslibguagem: req.body.anamnObslibguagem,
                 //Sexualidade
@@ -1514,6 +1742,8 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_defendeseagressaocomo: req.body.anamnDefendeseagressaocomo,
                 anamn_autolesivo: req.body.anamnAutolesivo,
                 anamn_autolesivodesc: req.body.anamnAutolesivodesc,
+                anamn_agressivo: req.body.anamnAgressivo,
+                anamn_agressivodesc: req.body.anamnAgressivodesc,                
                 anamn_dependente: req.body.anamnDependente,
                 anamn_dependentedesc: req.body.anamnDependentedesc,
                 anamn_carinho: req.body.anamnCarinho,
@@ -1569,6 +1799,7 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_dromequantotempo: req.body.anamnDromequantotempo,
                 anamn_vaiparacamapais: req.body.anamnVaiparacamapais,
                 anamn_vaiparacamapaisdesc: req.body.anamnVaiparacamapaisdesc,
+                
                 anamn_choranoite: req.body.anamnChoranoite,
                 anamn_falanoite: req.body.anamnFalanoite,
                 anamn_gritanoite: req.body.anamnGritanoite,
@@ -1580,6 +1811,20 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_terrornoturno: req.body.anamnTerrornoturno,
                 anamn_ronca: req.body.anamnRonca,
                 anamn_respiraoral: req.body.anamnRespiraoral,
+                anamn_proximoolhos: req.body.anamnProximoolhos,
+                anamn_proximoolhosdesc: req.body.anamnProximoolhosdesc,
+                anamn_choranoitedesc: req.body.anamnChoranoitedesc,
+                anamn_falanoitedesc: req.body.anamnFalanoitedesc,
+                anamn_gritanoitedesc: req.body.anamnGritanoitedesc,
+                anamn_rangedenteanoitedesc: req.body.anamnRangedenteanoitedesc,
+                anamn_insonianoitedesc: req.body.anamnInsonianoitedesc,
+                anamn_babanoitedesc: req.body.anamnBabanoitedesc,
+                anamn_pesadelodesc: req.body.anamnPesadelodesc,
+                anamn_sudoresedesc: req.body.anamnSudoresedesc,
+                anamn_terrornoturnodesc: req.body.anamnTerrornoturnodesc,
+                anamn_roncadesc: req.body.anamnRoncadesc,
+                anamn_respiraoraldesc: req.body.anamnRespiraoraldesc,
+
                 anamn_sono: req.body.anamnSono,
                 anamn_sonodesc: req.body.anamnSonodesc,
                 anamn_obssono: req.body.anamnObssono,
@@ -1654,12 +1899,21 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_duvidacapaccitaauditivadesc: req.body.anamnDuvidacapaccitaauditivadesc,
                 anamn_jaexpostoruidoexplosao: req.body.anamnJaexpostoruidoexplosao,
                 anamn_jaexpostoruidoexplosaodesc: req.body.anamnJaexpostoruidoexplosaodesc,
+                
                 anamn_voz: req.body.anamnVoz,
                 anamn_audiometria: req.body.anamnAudiometria,
                 anamn_localizasons: req.body.anamnLocalizasons,
                 anamn_tampaouvidosruido: req.body.anamnTampaouvidosruido,
                 anamn_aproximaruidos: req.body.anamnAproximaruidos,
                 anamn_asustafacil: req.body.anamnAsustafacil,
+
+                anamn_vozdesc: req.body.anamnVozdesc,
+                anamn_audiometriadesc: req.body.anamnAudiometriadesc,
+                anamn_localizasonsdesc: req.body.anamnLocalizasonsdesc,
+                anamn_tampaouvidosruidodesc: req.body.anamnTampaouvidosruidodesc,
+                anamn_aproximaruidosdesc: req.body.anamnAproximaruidosdesc,
+                anamn_asustafacildesc: req.body.anamnAsustafacildesc,
+
                 anamn_seicomodapessoasfalando: req.body.anamnSeicomodapessoasfalando,
                 anamn_seicomodapessoasfalandodesc: req.body.anamnSeicomodapessoasfalandodesc,
                 anamn_escutachamado: req.body.anamnEscutachamado,
@@ -1700,6 +1954,7 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_recusaamoeba: req.body.anamnRecusaamoeba,
                 anamn_evitatoqueleve: req.body.anamnEvitatoqueleve,
                 anamn_aceitaabreco: req.body.anamnAceitaabreco,
+                anamn_aceitaabrecodesc: req.body.anamnAceitaabrecodesc,
                 anamn_tocapessoasobjconsta: req.body.anamnTocapessoasobjconsta,
                 anamn_batecaisemnocao: req.body.anamnBatecaisemnocao,
                 anamn_seguraobj: req.body.anamnSeguraobj,
@@ -1714,19 +1969,36 @@ module.exports = {AnamnModel,AnamnSchema,
                 //Sociabilidade
                 anamn_preferebrincarcom: req.body.anamnPreferebrincarcom,
                 anamn_preferebrincaridade: req.body.anamnPreferebrincaridade,
+                anamn_preferebrincarcomdesc: req.body.anamnPreferebrincarcomdesc,
+
                 anamn_fazamigosfacil: req.body.anamnFazamigosfacil,
                 anamn_emprestabrinquedos: req.body.anamnEmprestabrinquedos,
                 anamn_brincacooperado: req.body.anamnBrincacooperado,
                 anamn_gostamandar: req.body.anamnGostamandar,
                 anamn_gostasubmeter: req.body.anamnGostasubmeter,
+
+                anamn_fazamigosfacildesc: req.body.anamnFazamigosfacildesc,
+                anamn_emprestabrinquedosdesc: req.body.anamnEmprestabrinquedosdesc,
+                anamn_brincacooperadodesc: req.body.anamnBrincacooperadodesc,
+                anamn_gostamandardesc: req.body.anamnGostamandardesc,
+                anamn_gostasubmeterdesc: req.body.anamnGostasubmeterdesc,
+
                 anamn_gostamusica: req.body.anamnGostamusica,
                 anamn_gostamusicaquais: req.body.anamnGostamusicaquais,
+
                 anamn_socializapares: req.body.anamnSocializapares,
                 anamn_brincaparque: req.body.anamnBrincaparque,
                 anamn_brincarfuncional: req.body.anamnBrincarfuncional,
                 anamn_criabrincadeiras: req.body.anamnCriabrincadeiras,
-                anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
                 anamn_recusaengajardemanda: req.body.anamnRecusaengajardemanda,
+
+                anamn_socializaparesdesc: req.body.anamnSocializaparesdesc,
+                anamn_brincaparquedesc: req.body.anamnBrincaparquedesc,
+                anamn_brincarfuncionaldesc: req.body.anamnBrincarfuncionaldesc,
+                anamn_criabrincadeirasdesc: req.body.anamnCriabrincadeirasdesc,
+                anamn_recusaengajardemandadesc: req.body.anamnRecusaengajardemandadesc,
+
+                anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
                 anamn_obssocial: req.body.anamnObssocial,
                 //Escolaridade
                 anamn_escola: req.body.anamnEscola,
@@ -1769,9 +2041,9 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_rotanadiasemanal: req.body.anamnRotanadiasemanal,
                 anamn_anotaextra: req.body.anamnAnotaextra,
                 anamn_dataanamnese: req.body.anamnDataanamnese,
-                anamn_datacad: req.body.anamnDatacad, //Somente leitura
+                //anamn_datacad: req.body.anamnDatacad, //Somente leitura
                 anamn_dataedi: dataAtual,
-                anamn_usuidcad: req.body.anamnUsuidcad, //Somente leitura
+                //anamn_usuidcad: req.body.anamnUsuidcad, //Somente leitura
                 anamn_usuidedi: idUsu,
                 anamn_terapeutaid: req.body.anamnTerapeutaid
                 
@@ -1828,6 +2100,8 @@ module.exports = {AnamnModel,AnamnSchema,
             //Parto
             anamn_partoqual: req.body.anamnPartoqual,
             anamn_partoqualdesc: req.body.anamnPartoqualdesc,
+            anamn_tempogestacional: req.body.anamnTempogestacional,
+            anamn_tempogestacionaldesc: req.body.anamnTempogestacionaldesc,
             anamn_anorexiaperiparto: req.body.anamnAnorexiaperiparto,
             anamn_anorexiaperipartodesc: req.body.anamnAnorexiaperipartodesc,
             anamn_apgar: req.body.anamnApgar,
@@ -1885,7 +2159,6 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_cpqueluche: req.body.anamnCpqueluche,
             anamn_meningite: req.body.anamnMeningite,
             anamn_complicavacina: req.body.anamnComplicavacina,
-            //Inclusoes adcionais em 20/07/23
             anamn_dengue: req.body.anamnDengue,
             anamn_zica: req.body.anamnZica,
             anamn_chikun: req.body.anamnChikun,
@@ -1956,6 +2229,23 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_rouco: req.body.anamnRouco,
             anamn_realizasombocainativ: req.body.anamnRealizasombocainativ,
             anamn_realizasombocaativ: req.body.anamnRealizasombocaativ,
+            anamn_falavocaldesc: req.body.anamnFalavocaldesc,
+            anamn_compreendeordemdesc: req.body.anamnCompreendeordemdesc,
+            anamn_cumpreordensdesc: req.body.anamnCumpreordensdesc,
+            anamn_ecolaliaimediatadesc: req.body.anamnEcolaliaimediatadesc,
+            anamn_ecolaliatardiadesc: req.body.anamnEcolaliatardiadesc,
+            anamn_apontadesc: req.body.anamnApontadesc,
+            anamn_pededesc: req.body.anamnPededesc,
+            anamn_nomeiadescenasdesc: req.body.anamnNomeiadescenasdesc,
+            anamn_perguntadesc: req.body.anamnPerguntadesc,
+            anamn_respondeperguntadesc: req.body.anamnRespondeperguntadesc,
+            anamn_solicitabrincardesc: req.body.anamnSolicitabrincardesc,
+            anamn_solicitairbanheirodesc: req.body.anamnSolicitairbanheirodesc,
+            anamn_solicitabeberdesc: req.body.anamnSolicitabeberdesc,
+            anamn_solicitacomerdesc: req.body.anamnSolicitacomerdesc,
+            anamn_roucodesc: req.body.anamnRoucodesc,
+            anamn_realizasombocainativdesc: req.body.anamnRealizasombocainativdesc,
+            anamn_realizasombocaativdesc: req.body.anamnRealizasombocaativdesc,
             anamn_frasequantaspalavras: req.body.anamnFrasequantaspalavras,
             anamn_obslibguagem: req.body.anamnObslibguagem,
             //Sexualidade
@@ -1976,6 +2266,8 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_defendeseagressaocomo: req.body.anamnDefendeseagressaocomo,
             anamn_autolesivo: req.body.anamnAutolesivo,
             anamn_autolesivodesc: req.body.anamnAutolesivodesc,
+            anamn_agressivo: req.body.anamnAgressivo,
+            anamn_agressivodesc: req.body.anamnAgressivodesc,            
             anamn_dependente: req.body.anamnDependente,
             anamn_dependentedesc: req.body.anamnDependentedesc,
             anamn_carinho: req.body.anamnCarinho,
@@ -2031,6 +2323,7 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_dromequantotempo: req.body.anamnDromequantotempo,
             anamn_vaiparacamapais: req.body.anamnVaiparacamapais,
             anamn_vaiparacamapaisdesc: req.body.anamnVaiparacamapaisdesc,
+            
             anamn_choranoite: req.body.anamnChoranoite,
             anamn_falanoite: req.body.anamnFalanoite,
             anamn_gritanoite: req.body.anamnGritanoite,
@@ -2042,6 +2335,20 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_terrornoturno: req.body.anamnTerrornoturno,
             anamn_ronca: req.body.anamnRouco,
             anamn_respiraoral: req.body.anamnRespiraoral,
+            anamn_proximoolhos: req.body.anamnProximoolhos,
+            anamn_proximoolhosdesc: req.body.anamnProximoolhosdesc,
+            anamn_choranoitedesc: req.body.anamnChoranoitedesc,
+            anamn_falanoitedesc: req.body.anamnFalanoitedesc,
+            anamn_gritanoitedesc: req.body.anamnGritanoitedesc,
+            anamn_rangedenteanoitedesc: req.body.anamnRangedenteanoitedesc,
+            anamn_insonianoitedesc: req.body.anamnInsonianoitedesc,
+            anamn_babanoitedesc: req.body.anamnBabanoitedesc,
+            anamn_pesadelodesc: req.body.anamnPesadelodesc,
+            anamn_sudoresedesc: req.body.anamnSudoresedesc,
+            anamn_terrornoturnodesc: req.body.anamnTerrornoturnodesc,
+            anamn_roncadesc: req.body.anamnRoncadesc,
+            anamn_respiraoraldesc: req.body.anamnRespiraoraldesc,
+
             anamn_sono: req.body.anamnSono,
             anamn_sonodesc: req.body.anamnSonodesc,
             anamn_obssono: req.body.anamnObssono,
@@ -2116,12 +2423,21 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_duvidacapaccitaauditivadesc: req.body.anamnDuvidacapaccitaauditivadesc,
             anamn_jaexpostoruidoexplosao: req.body.anamnJaexpostoruidoexplosao,
             anamn_jaexpostoruidoexplosaodesc: req.body.anamnJaexpostoruidoexplosaodesc,
+            
             anamn_voz: req.body.anamnVoz,
             anamn_audiometria: req.body.anamnAudiometria,
             anamn_localizasons: req.body.anamnLocalizasons,
             anamn_tampaouvidosruido: req.body.anamnTampaouvidosruido,
             anamn_aproximaruidos: req.body.anamnAproximaruidos,
             anamn_asustafacil: req.body.anamnAsustafacil,
+            
+            anamn_vozdesc: req.body.anamnVozdesc,
+            anamn_audiometriadesc: req.body.anamnAudiometriadesc,
+            anamn_localizasonsdesc: req.body.anamnLocalizasonsdesc,
+            anamn_tampaouvidosruidodesc: req.body.anamnTampaouvidosruidodesc,
+            anamn_aproximaruidosdesc: req.body.anamnAproximaruidosdesc,
+            anamn_asustafacildesc: req.body.anamnAsustafacildesc,
+
             anamn_seicomodapessoasfalando: req.body.anamnSeicomodapessoasfalando,
             anamn_seicomodapessoasfalandodesc: req.body.anamnSeicomodapessoasfalandodesc,
             anamn_escutachamado: req.body.anamnEscutachamado,
@@ -2162,6 +2478,7 @@ module.exports = {AnamnModel,AnamnSchema,
             anamn_recusaamoeba: req.body.anamnRecusaamoeba,
             anamn_evitatoqueleve: req.body.anamnEvitatoqueleve,
             anamn_aceitaabreco: req.body.anamnAceitaabreco,
+            anamn_aceitaabrecodesc: req.body.anamnAceitaabrecodesc,
             anamn_tocapessoasobjconsta: req.body.anamnTocapessoasobjconsta,
             anamn_batecaisemnocao: req.body.anamnBatecaisemnocao,
             anamn_seguraobj: req.body.anamnSeguraobj,
@@ -2176,19 +2493,36 @@ module.exports = {AnamnModel,AnamnSchema,
             //Sociabilidade
             anamn_preferebrincarcom: req.body.anamnPreferebrincarcom,
             anamn_preferebrincaridade: req.body.anamnPreferebrincaridade,
+            anamn_preferebrincarcomdesc: req.body.anamnPreferebrincarcomdesc,
+
             anamn_fazamigosfacil: req.body.anamnFazamigosfacil,
             anamn_emprestabrinquedos: req.body.anamnEmprestabrinquedos,
             anamn_brincacooperado: req.body.anamnBrincacooperado,
             anamn_gostamandar: req.body.anamnGostamandar,
             anamn_gostasubmeter: req.body.anamnGostasubmeter,
+
+            anamn_fazamigosfacildesc: req.body.anamnFazamigosfacildesc,
+            anamn_emprestabrinquedosdesc: req.body.anamnEmprestabrinquedosdesc,
+            anamn_brincacooperadodesc: req.body.anamnBrincacooperadodesc,
+            anamn_gostamandardesc: req.body.anamnGostamandardesc,
+            anamn_gostasubmeterdesc: req.body.anamnGostasubmeterdesc,
+
             anamn_gostamusica: req.body.anamnGostamusica,
             anamn_gostamusicaquais: req.body.anamnGostamusicaquais,
+
             anamn_socializapares: req.body.anamnSocializapares,
             anamn_brincaparque: req.body.anamnBrincaparque,
             anamn_brincarfuncional: req.body.anamnBrincarfuncional,
             anamn_criabrincadeiras: req.body.anamnCriabrincadeiras,
-            anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
             anamn_recusaengajardemanda: req.body.anamnRecusaengajardemanda,
+
+            anamn_socializaparesdesc: req.body.anamnSocializaparesdesc,
+            anamn_brincaparquedesc: req.body.anamnBrincaparquedesc,
+            anamn_brincarfuncionaldesc: req.body.anamnBrincarfuncionaldesc,
+            anamn_criabrincadeirasdesc: req.body.anamnCriabrincadeirasdesc,
+            anamn_recusaengajardemandadesc: req.body.anamnRecusaengajardemandadesc,
+
+            anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
             anamn_obssocial: req.body.anamnObssocial,
             //Escolaridade
             anamn_escola: req.body.anamnEscola,
