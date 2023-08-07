@@ -268,6 +268,8 @@ const passport = require('passport')
 //Financeiro
 const fncFinanceiro = require("../functions/fncFinanceiro")
 
+//Dashboards
+const fncDash = require("../functions/fncDash")
 
 /*
 //Referencias de Atendimentos (vinculadas diretamente aos Atendimantos)
@@ -482,6 +484,17 @@ router.get('/logout', function(req, res, next) {
 });
 
 //Menu DashBoard
+router.get("/dash/dashFinan", fncGeral.IsAuthenticated, function(req,res){//direciona Dash.
+    fncDash.carregaDashfinan(req, res);
+})
+router.get("/dash/dashAdminin", fncGeral.IsAuthenticated, function(req,res){//direciona Dash.
+    fncDash.carregaDashadminin(req, res);
+})
+router.get("/dash/dashEstatis", fncGeral.IsAuthenticated, function(req,res){//direciona Dash.
+    fncDash.carregaDashestatis(req, res);
+})
+
+
 
 //Menu Agenda
 router.get("/agenda/lis", fncGeral.IsAuthenticated, function(req,res){//direciona o cadstro de Agenda, com Ufs e Convênios.

@@ -659,6 +659,8 @@ module.exports = {
         let atendIds = [];
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        console.log("periodoDe:"+periodoDe);
+        console.log("periodoAte:"+periodoAte);
         let conv_nome;
         let continuando = "true";
 

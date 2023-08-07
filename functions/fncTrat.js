@@ -23,15 +23,15 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 //Funções auxiliares
-
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    listaTrat(req, res){
-        console.log('listando trats')
+    listaTrat(req, res, resposta){
+        let flash = new Resposta();
+        //console.log('listando plano de tratamento')
         Trat.find().then((trat) =>{
-            
+
             trat.forEach((b)=>{
-                console.log("b.datanasc"+b.trat_datacad)
                 let datacad = new Date(b.trat_datacad)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
@@ -43,22 +43,57 @@ module.exports = {
                 }
                 let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.datacad=fulldate;
+                
+                datacad = new Date(b.trat_tratdata)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.tratdata=fulldate;
+
+                datacad = new Date(b.trat_dataedi)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataedi=fulldate;
             })
 
-        console.log("Listagem Realizada Bene!")
+            //console.log("trat:");
+            //console.log(trat);
+            //console.log("Listagem Realizada das Trateses!")
                 Bene.find().then((bene)=>{
-                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.benenome) ? -1 : 0));//Ordena o convênio por nome 
-                console.log("Listagem Realizada Convênio!")
-                        Terapia.find().then((terapia)=>{
-                                Usuario.find().then((usuario)=>{
-                                console.log("Listagem Realizada Usuário!")
-            res.render('area/plano/tratLis', {usuarios: usuario, terapias: terapia, benes: bene, trats: trat})
-        })})})}).catch((err) =>{
+                    //console.log("Listagem Realizada bene!")
+                    Usuario.find().then((usuario)=>{
+                        //console.log("Listagem Realizada Usuário!")
+                        /*if(resposta.sucesso == ""){
+                            console.log(' objeto vazio');
+                            flash.texto = ""
+                            flash.sucesso = ""
+                        } else {
+                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                            flash.texto = resposta.texto
+                            flash.sucesso = resposta.sucesso
+                        }*/
+            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
+        })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Benes")
+            req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
         })
     },
+    
+  
 
     carregaTrat(req,res){
         Conv.find().then((conv)=>{
@@ -98,7 +133,8 @@ module.exports = {
     cadastraTrat(req,res){
         let resposta
         let cadastro = tratClass.tratAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
+        var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
+
         cadastro.then((result)=>{
             resposta = true;
         }).catch((err)=>{
@@ -154,19 +190,14 @@ module.exports = {
 
 
     deletaTrat(req,res){
-        Tratfisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
+        Trat.deleteOne({_id: req.params.id}).then(() =>{
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Tratamento Fisioterapêutico deletado!")
-                res.render('area/plano/tratLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+                req.flash("success_message", "Anamnese deletada!")
+                this.listaTrat(req,res);
+            }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
+                req.flash("error_message", "houve um erro ao deletar a anamnese")
                 res.render('admin/erro')
             })
         })

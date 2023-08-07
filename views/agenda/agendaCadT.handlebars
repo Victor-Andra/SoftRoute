@@ -64,12 +64,13 @@
 					console.log(chck.value);
 				}
 			}
-			function alteraCheck(checkboxid){
+			function alteraCheck(checkboxid, elementoid){
 				let chck = document.getElementById(checkboxid);
+				let elemento = document.getElementById(elementoid);
 				if(chck.checked){
-					chck.value="true";
+					elemento.value="true";
 				} else {
-					chck.value="false";
+					elemento.value="false";
 				}
 			}
 			function mudaSubis() {
@@ -173,10 +174,10 @@
 														<label style="color: crimson;">Extraordinário: </label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<input id="agendaExtra" name="agendaExtra" type="checkbox" onchange="javascript:alteraCheck('agendaExtra');" value="false" />
+																<input class="hidden" id="agendaExtra" name="agendaExtra" value="false" />
+																<input id="extra" name="extra" type="checkbox" onchange="javascript:alteraCheck('extra','agendaExtra');" />
 																<label style="color: crimson;">Marque somente em caso de agendamento Extraordinário.</label>
-																<span class="lbl"></span>
-																
+																<span id="spamid" class="lbl"></span>
 															</div>
 														</div>
 													</div>

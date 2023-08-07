@@ -224,7 +224,7 @@
 <div style="padding-bottom: 2px;" class="main-container ace-save-state" id="main-container">
 		<div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse          ace-save-state sidebar-fixed"  data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="false" style="margin-top: 0px;">
 			<ul class="nav nav-list">
-				<li class="hover"><!-- /DashBoard-->
+				<li class="hover"><!-- /Menu DashBoard-->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-tachometer purple"></i>
 							<label class="sidebar-label">Dashboard</label>
@@ -233,16 +233,23 @@
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="hover">
-							<a href="#">
+							<a href="/menu/dash/dashAdminin">
 								<i class="menu-icon fa fa-line-chart green"></i>
-								<label class="sidebar-label">Estatístico</label>
+								<label class="sidebar-label">Administrativo</label>
 							</a>
 							<b class="arrow"></b>
 						</li>
 						<li class="hover">
-							<a href="#">
-								<i class="menu-icon fa fa-diamond green"></i>
+							<a href="/menu/dash/dashFinan">
+								<i class="menu-icon fa fa-diamond orange"></i>
 								<label class="sidebar-label">Financeiro</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<li class="hover">
+							<a href="/menu/dash/dashEstatis">
+								<i class="menu-icon fa fa-line-chart green"></i>
+								<label class="sidebar-label">Estatístico</label>
 							</a>
 							<b class="arrow"></b>
 						</li>
@@ -387,7 +394,43 @@
 						</li>
 					</ul>
 				</li>
-				
+				<li class="hover"> <!-- /Menu MinhaAgenda 3 Níveis-->
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-calendar-o green"></i>
+
+							<label class="sidebar-label">Minha Agenda</label>
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+
+					<b class="arrow"></b>
+
+					<ul class="submenu">
+
+						<li class="hover">
+							<a href="/menu/agenda/lisPessoal">
+								<i class="menu-icon fa fa-calendar-check-o orange"></i>
+								<label class="sidebar-label">Do Dia</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+
+						<li class="hover">
+							<a href="/menu/agenda/lisPessoalSemanal">
+								<i class="menu-icon fa fa-calendar-o pink"></i>
+								<label class="sidebar-label">Da Semana</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<li class="hover">
+							<a href="/menu/area/evoatendlis">
+								<i class="menu-icon fa fa-tasks green"></i>
+								<label class="sidebar-label">Lista Evolução</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+
+					</ul>
+				</li>
 				<li class="hover"> <!-- /Menu Atendimento -->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-coffee orange"></i>
@@ -622,10 +665,7 @@
 						</li>
 					</ul>
 				</li>
-				
-				
-				
-								
+							
 				<li class="hover"> <!-- /Menu Convênios -->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-heartbeat red"></i>

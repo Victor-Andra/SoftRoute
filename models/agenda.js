@@ -409,31 +409,134 @@ module.exports = {AgendaModel,AgendaSchema,
         return retorno;
     },agendaUpdateCampos: async (req,res) => {
         let resultado;
-        let ini = new Date(req.body.agendaDataIni);
-        let fim = new Date(req.body.agendaDataFim);
+        let busca;
+        let troca;
+        let ini;
+        let fim;
+        //-dataini
+        let dt = new Date(req.body.agendaDataIni);
         
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+
+        let data = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+        let ano = data.substring(0,4);
+        mes = data.substring(5,7);
+        dia = data.substring(8,10);
+
+        let formatData = new Date();
+        formatData.setFullYear(ano);
+        //console.log("formatData1:"+formatData)
+        formatData.setUTCMonth((parseInt(mes)-1).toString());//recebendo o mes 1-12 passando para 0-11;
+        //console.log("formatData2:"+formatData)
+        formatData.setDate(dia);
+        //console.log("formatData3:"+formatData)
+        formatData.setHours(0);
+        formatData.setMinutes(0);
+        formatData.setSeconds(0);
+        ini = formatData;
+        //-dataini
+        //-datafim
+        dt = new Date(req.body.agendaDataFim);
+        
+        mes = (dt.getUTCMonth()+1).toString();
+        dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        
+        data = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+        ano = data.substring(0,4);
+        mes = data.substring(5,7);
+        dia = data.substring(8,10);
+
+        formatData = new Date();
+        formatData.setFullYear(ano);
+        //console.log("formatData1:"+formatData)
+        formatData.setUTCMonth((parseInt(mes)-1).toString());//recebendo o mes 1-12 passando para 0-11;
+        //console.log("formatData2:"+formatData)
+        formatData.setDate(dia);
+        //console.log("formatData3:"+formatData)
+        formatData.setHours(23);
+        formatData.setMinutes(59);
+        formatData.setSeconds(59);
+        fim = formatData;
+        //-datafim
         console.log("ini: "+ini.toISOString());
         console.log("fim: "+fim.toISOString());
         let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
-        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let teraidx = req.body.agendaTerapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
-        //let convidx = req.body.agendaBeneid;//new ObjectId("62477742e416141415ff7a88");//particular
+        let convidx = req.body.agendaConvid;//new ObjectId("62477742e416141415ff7a88");//particular
 
         //Não esqueça de alterar os valores a Débito e Crédito
-        let novateraidx = req.body.agendaTeraSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let novoteraidx = req.body.agendaTerapeutaSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let novatpiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
+        console.log("beneidx:"+beneidx)
+        if (beneidx != "-") {
 
-        await AgendaModel.updateMany(
-            { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx },
-            {$set: {'agenda_convid': novaconvidx}}
-        ).then((res) =>{
-            console.log("XABLAU")
-            resultado = "OK"
-        }).catch((err) =>{
-            resultado = err
-            console.log("erro mongo:")
-            console.log(err)
-        });
+            if (teraidx != "-" && tpiaidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx };
+                console.log("1-"+tpiaidx+"-"+teraidx)
+            } else if (teraidx == "-" && tpiaidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
+                console.log("2")
+            } else if (teraidx != "-" && tpiaidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
+                console.log("3")
+            } else if (teraidx == "-" && tpiaidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
+                console.log("4")
+            }
+
+            if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-"){//convenio
+                troca = {'agenda_convid': novoconvidx};
+                console.log("1")
+            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-") {//terapeuta
+                troca = {'agenda_usuid': novoteraidx};
+                console.log("2")
+            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapia
+                troca = {'agenda_terapiaid': novatpiaidx};
+                console.log("3")
+            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapeuta e terapia
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx};
+                console.log("4-"+novoteraidx+"-"+novatpiaidx)
+            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-") {//terapeuta e convenio
+                troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx};
+                console.log("5")
+            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-") {//terapia e convenio
+                troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
+                console.log("6")
+            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-") {//todos
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
+                console.log("7")
+            }
+            await AgendaModel.find(busca).then((ag)=>{console.log("ag.lenhgt"+ag.length)})
+            await AgendaModel.updateMany(
+                busca,{$set: troca}
+            ).then((res) =>{
+                console.log("XABLAU")
+                resultado = "OK"
+            }).catch((err) =>{
+                resultado = err
+                console.log("erro mongo:")
+                console.log(err)
+            });
+        } else {
+            resultado = "Campos de busca vazios;"
+        }
+
         return resultado;
     }
     

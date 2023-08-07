@@ -10813,8 +10813,8 @@ module.exports = {
                     })
                 })
                 //console.log(convdeb)
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false}).then((agendaFixa)=>{
-            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true}).then((agendaSemanal)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agendaFixa)=>{
+            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, agenda_extra: false}).then((agendaSemanal)=>{
             //-------------------------
             //console.log(agenda)
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
@@ -10830,7 +10830,7 @@ module.exports = {
                                 //console.log("migrado?"+a.agenda_migrado)
                             }
                             */
-console.log("a.agendaCateg:"+a.agendaCateg);
+                            console.log("a.agenda_categoria:"+a.agenda_categoria);
 
                             if(!a.agenda_migrado){
                                 nextNum = nextNum + 1;
@@ -10855,7 +10855,9 @@ console.log("a.agendaCateg:"+a.agendaCateg);
 
                                     hora = hor+":"+min;
 
-                                    switch (a.agendaCateg){
+                                    console.log("agendaSub.agenda_categoria:"+agendaSub.agenda_categoria);
+
+                                    switch (a.agenda_categoria){
                                         case "Apoio"://ANALISE
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((ccre)=>{
@@ -11365,7 +11367,7 @@ console.log("a.agendaCateg:"+a.agendaCateg);
                                             })
 
                                             break;
-                                        case "Substituto Fixo":
+                                        case "SubstitutoFixo":
                                             console.log("SUBFIX");
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
                                             convcre.forEach((ccre)=>{
@@ -11399,7 +11401,7 @@ console.log("a.agendaCateg:"+a.agendaCateg);
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                                atend_categoria : "Substituto Fixo",//Para quando o convenio não paga o que deve
+                                                atend_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
                                                 atend_beneid : a.agenda_beneid,//
                                                 atend_convid : a.agenda_convid,//
                                                 atend_usuid : "Usuario Atual",
@@ -11420,7 +11422,7 @@ console.log("a.agendaCateg:"+a.agendaCateg);
 
                                             newCre = new Cre({
                                                 credit_atendnum : nextNum ,
-                                                credit_categoria : "Substituto Fixo" ,
+                                                credit_categoria : "SubstitutoFixo" ,
                                                 credit_terapiaid : a.agenda_mergeterapiaid ,
                                                 credit_terapeutaid : a.agenda_usuid ,
                                                 credit_convid : a.agenda_convid ,
@@ -11434,7 +11436,7 @@ console.log("a.agendaCateg:"+a.agendaCateg);
 
                                             newDeb = new Deb({
                                                 debit_atendnum : nextNum ,
-                                                debit_categoria : "Substituto Fixo" ,
+                                                debit_categoria : "SubstitutoFixo" ,
                                                 debit_terapiaid : agendaSub.agenda_terapiaid ,
                                                 debit_terapeutaid : agendaSub.agenda_usuid ,
                                                 debit_convid : a.agenda_convid ,
@@ -11740,7 +11742,88 @@ console.log("a.agendaCateg:"+a.agendaCateg);
 
                                     hora = hor+":"+min;
                                     
-                                    agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+"";
+                                    if (a.agenda_categoria == "SubstitutoFixo") {
+                                        console.log("SUBFIX");
+                                        agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
+                                        convcre.forEach((ccre)=>{
+                                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                            if( convcreTes == agendacreTes){
+                                                //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                convcreval = ccre.convcre_valor;
+                                            }
+                                        })
+
+                                        agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                        convdeb.forEach((cdeb)=>{
+                                            if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                convdebval = "0,00";
+                                            } else {
+                                                convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                if(convdebTes == agendadebTes){
+                                                    //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                    convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                    convdebval = cdeb.convdeb_valor;
+                                                }
+                                            }
+                                        })
+
+                                        Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                            if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                convdebval = "0,00";
+                                            }
+                                        })
+        
+                                        newAtend = new Atend({
+                                            atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                            atend_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
+                                            atend_beneid : a.agenda_beneid,//
+                                            atend_convid : a.agenda_convid,//
+                                            atend_usuid : "Usuario Atual",
+                                            atend_atenddata : agendaSub.agenda_data,//
+                                            atend_atendhora : hora,//
+                                            atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
+                                            atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                            atend_salaid : a.agenda_salaid,//
+                                            atend_valorcre : "0,00",//Convenio não paga
+                                            atend_valordeb : convdebval,//Paga ao musico
+                                            atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
+                                            atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
+                                            atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
+                                            atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                            atend_num : nextNum,
+                                            atend_datacad : dataAtual.toISOString()
+                                        });
+
+                                        newCre = new Cre({
+                                            credit_atendnum : nextNum ,
+                                            credit_categoria : "SubstitutoFixo" ,
+                                            credit_terapiaid : a.agenda_mergeterapiaid ,
+                                            credit_terapeutaid : a.agenda_usuid ,
+                                            credit_convid : a.agenda_convid ,
+                                            credit_nome : "Atendimento "+nextNum ,
+                                            credit_cpfcnpj : convCreCpfCnpj ,
+                                            credit_dataevento : agendaSub.agenda_data,
+                                            credit_datavenci : dataVenci ,
+                                            credit_valorprev : convcreval ,
+                                            credit_datacad : dataAtual
+                                        })
+
+                                        newDeb = new Deb({
+                                            debit_atendnum : nextNum ,
+                                            debit_categoria : "SubstitutoFixo" ,
+                                            debit_terapiaid : agendaSub.agenda_terapiaid ,
+                                            debit_terapeutaid : agendaSub.agenda_usuid ,
+                                            debit_convid : a.agenda_convid ,
+                                            debit_nome : "Atendimento "+nextNum ,
+                                            debit_cpfcnpj : convCreCpfCnpj ,
+                                            debit_dataevento : agendaSub.agenda_data,
+                                            debit_datavenci : dataVenci ,
+                                            debit_valorprev : convdebval ,
+                                            debit_datacad : dataAtual
+                                        })
+                                    } else {
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+"";
                                     convcre.forEach((ccre)=>{
                                         convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
                                         if( convcreTes == agendacreTes){
@@ -11814,6 +11897,8 @@ console.log("a.agendaCateg:"+a.agendaCateg);
                                         debit_valorprev : convdebval ,
                                         debit_datacad : dataAtual
                                     })
+                                    }
+                                    
                                 }
                                 //console.log("newAtend:"+newAtend)
                                 nextNum = nextNum ++;
@@ -12007,7 +12092,7 @@ console.log("a.agendaCateg:"+a.agendaCateg);
                 atendClass.atendUpdateCampos(req,res);
                 res.render("admin/branco");
                 break;
-            case "both":
+            case "ambos":
                 agendaClass.agendaUpdateCampos(req,res);
                 atendClass.atendUpdateCampos(req,res);
                 res.render("admin/branco");

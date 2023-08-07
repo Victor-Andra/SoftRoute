@@ -112,15 +112,28 @@
 																</select>
 															</div>
 														</div>
-														<label>Terapeuta</label>
+														<label>Terapeuta Original</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha...">
+																<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
 																</select>
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Terapeuta Substituto</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select id="agendaTerapeutaSubsid" name="agendaTerapeutaSubsid" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			{{#each terapeutas}}
+																				<option value="{{_id}}">{{usuario_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -136,7 +149,7 @@
 												<div class="row">
 													<div class="col-xs-12" >
 														<label>Terapia Original</label>
-														<div class="form-group" >
+														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="agendaTeraFindid" id="agendaTeraFindid" class="chosen-select" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
@@ -145,14 +158,41 @@
 																	{{/each}}
 																</select>
 															</div>
-														</div>
-														<label>Terapia Substituta</label>
-														<div class="form-group">
-															<div class="col-sm-6">
-																<select id="agendaTeraSubsid" name="agendaTeraSubsid" class="chosen-select" data-placeholder="Escolha...">
+															<div class="col-xs-12 col-sm-6">
+																<label>Terapia Substituto</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select id="agendaTpiaSubsid" name="agendaTpiaSubsid" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+																</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+													<div class="col-xs-12" >
+														<label>Convênio Original</label>
+														<div class="form-group" >
+															<div class="col-sm-6">
+																<select name="agendaConvid" id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="-">-</option>
+																	{{#each convs}}
+																		<option value="{{_id}}">{{conv_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<label>Convênio Substituto</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select name="agendaConvSubsid" id="agendaConvSubsid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
+																	<option value="-">-</option>
+																	{{#each convs}}
+																		<option value="{{_id}}">{{conv_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -167,9 +207,9 @@
 																<select id="agendaAbra" name="agendaAbra" class="chosen-select" data-placeholder="Escolha...">
 																	
 																		<option value="-">-</option>
-																		<option value="-">Somente Agenda</option>
-																		<option value="-">Somente Atendimento</option>
-																		<option value="-">Ambos</option>
+																		<option value="agenda">Somente Agenda</option>
+																		<option value="atend">Somente Atendimento</option>
+																		<option value="ambos">Ambos</option>
 																	
 																</select>
 															</div>
