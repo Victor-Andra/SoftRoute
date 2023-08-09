@@ -329,6 +329,20 @@ router.get('/recuperarSenha', (req,res)=>{
     res.render("/menu/ferramentas/usuario/mudarSenha", {nivel: lvl})
 })
 
+//Mudar Senha
+router.post("/ferramentas/usuario/carregaMudarsenha", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a Mudar Senha
+    fncUsuario.carregaMudarsenha(req, res);
+})
+
+//Cadastrar Chave
+router.post("/ferramentas/usuario/carregaCadastrarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
+    fncUsuario.carregaCadastrarchave(req, res);
+})
+
+//Resetar Chave
+router.post("/ferramentas/usuario/carregaResetarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a resetar chave
+    fncUsuario.carregaResetarchave(req, res);
+})
 /*
 router.post('/login', fncGeral.IsAuthenticated, (req,res,next)=>{
     console.log("---------")

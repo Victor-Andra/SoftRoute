@@ -111,37 +111,37 @@ module.exports = {
             console.log(err1)
         }
     },
-    carregaMudarsenha(req,res){
+    carregaMudarsenha(req,res){/*
         Usuario.findById(req.params.id).then((usuario) =>{
-            console.log("Listagem Realizada!")
-            console.log("usuario:")
-            console.log(usuario)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Ufs!")
                         Perfil.find().then((perfil)=>{
-                            console.log("Listagem Realizada de Ufs!")
-                                Funcao.find().then((funcao)=>{
-                                    console.log("Listagem Realizada de Ufs!")
-                                        Especialidade.find().then((especialidade)=>{//Graduação
-                                            console.log("Listagem Realizada de Ufs!")
-                                            Especializacao.find().then((especializacao)=>{
-                                                console.log("Listagem Realizada de Especializacao!")
-            res.render('ferramentas/usuario/mudarSenha', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
-        })})})})})}).catch((err) =>{
+            res.render('ferramentas/usuario/mudarSenha', {usuario, perfils: perfil})
+        })}.catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            req.flash("error_message", "houve um erro ao Realizar as listas!")*/
             res.render('admin/erro')
-        })
+        //})
     },
     carregaResetarchave(req,res){
         Usuario.findById(req.params.id).then((usuario) =>{
                         Perfil.find().then((perfil)=>{
                                 Funcao.find().then((funcao)=>{
-            res.render('ferramentas/usuario/resetaChave', {usuario, perfils: perfil, funcoes: funcao})
+            res.render('ferramentas/usuario/resetarChave', {usuario, perfils: perfil, funcoes: funcao})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao carregar o formulário para resetar a chave!")
             res.render('admin/erro')
+        })
+    },
+
+    carregaCadastrarchave(req,res){
+        Usuario.findById(req.params.id).then((usuario) =>{
+            Perfil.find().then((perfil)=>{
+                    Funcao.find().then((funcao)=>{
+        res.render('ferramentas/usuario/cadastrarChave', {usuario, perfils: perfil, funcoes: funcao})
+        })})}).catch((err) =>{
+        console.log(err)
+        req.flash("error_message", "houve um erro ao carregar o formulário para resetar a chave!")
+        res.render('admin/erro')
         })
     },
 

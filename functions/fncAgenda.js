@@ -11780,10 +11780,10 @@ module.exports = {
                                             atend_beneid : a.agenda_beneid,//
                                             atend_convid : a.agenda_convid,//
                                             atend_usuid : "Usuario Atual",
-                                            atend_atenddata : agendaSub.agenda_data,//
+                                            atend_atenddata : a.agenda_data,//
                                             atend_atendhora : hora,//
-                                            atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                            atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                            atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                            atend_terapiaid : a.agenda_terapiaid,//Musica
                                             atend_salaid : a.agenda_salaid,//
                                             atend_valorcre : "0,00",//Convenio não paga
                                             atend_valordeb : convdebval,//Paga ao musico

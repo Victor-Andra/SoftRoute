@@ -672,6 +672,7 @@ module.exports = {
             at.forEach((a)=>{
                 atendIds.push(a.atend_num);
             })
+            //console.log("at.length: "+at.length)
             Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 console.log("cre:"+cre.length);
                 Conv.find().then((conv)=>{
@@ -1028,9 +1029,11 @@ module.exports = {
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
+        console.log("seg:"+seg)
+        console.log("sex:"+sex)
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
 
-        Atend.find(filtroAtend).then((at)=>{
+        Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
@@ -1068,7 +1071,8 @@ module.exports = {
                             });
                             at.forEach((atend)=>{
                                 rab.dt = (fncGeral.getData(atend.atend_atenddata));
-                                categorias = atend.atend_cartegoria
+                                categorias = atend.atend_categoria
+                                console.log("categorias:"+categorias)
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
@@ -1105,6 +1109,10 @@ module.exports = {
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;
                                         terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "SubstitutoFixo":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
@@ -1477,7 +1485,7 @@ module.exports = {
                                 })
                                 
                                 atends.forEach((atend)=>{
-                                    categorias = atend.atend_cartegoria
+                                    categorias = atend.atend_categoria
                                     switch (categorias){
                                         case "Apoio":
                                             terapiaAtend = atend.atend_terapiaid;
@@ -1514,6 +1522,10 @@ module.exports = {
                                         case "Supervisão":
                                             terapiaAtend = atend.atend_terapiaid;
                                             creVal = atend.atend_valorcre;
+                                            break;
+                                        case "SubstitutoFixo":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
                                             break;
                                         default:
                                             terapiaAtend = atend.atend_terapiaid;
@@ -1926,7 +1938,7 @@ module.exports = {
                             });
                             at.forEach((atend)=>{
                                 rab.dt = (fncGeral.getData(atend.atend_atenddata));
-                                categorias = atend.atend_cartegoria
+                                categorias = atend.atend_categoria
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
@@ -2058,7 +2070,7 @@ module.exports = {
                                 })
                                 
                                 atends.forEach((atend)=>{
-                                    categorias = atend.atend_cartegoria
+                                    categorias = atend.atend_categoria
                                     switch (categorias){
                                         case "Apoio":
                                             terapiaAtend = atend.atend_terapiaid;

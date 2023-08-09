@@ -328,13 +328,15 @@ module.exports = {AtendModel,AtendSchema,
         let novatpiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
-        if (beneidx == "-") {
-            let novavalorcrex = req.vody.atendValorcre;
-            let novavalordebx = req.vody.atendValordeb;
-
+        console.log("WHAT???")
+        if (beneidx != "-") {
+            let novavalorcrex = req.body.atendValorcre;
+            let novavalordebx = req.body.atendValordeb;
+            console.log("BUSCA")
             if (teraidx != "-" && tpiaidx != "-"){
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_usuid: teraidx , atend_beneid: beneidx };
             } else if (teraidx == "-" && tpiaidx != "-"){
+                console.log("2")
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_beneid: beneidx };
             } else if (teraidx != "-" && tpiaidx == "-"){
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_usuid: teraidx , atend_beneid: beneidx };
@@ -399,11 +401,15 @@ module.exports = {AtendModel,AtendSchema,
                 troca = {'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
             } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
                 troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//todos
+                troca = {'atend_valordeb': novavalordebx};
+            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
+                troca = {'atend_valorcre': novavalorcrex};
+                console.log("So cre")
             }
 
             await AtendModel.updateMany(
-                { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_terapeutaid: teraidx , atend_beneid: beneidx },
-                {$set: {'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx, 'atend_terapiaid': novateraidx}}// Alterar Débito e Crédito //, 'atend_terapiaid': novateraidx  //, 'atend_valordeb': novavalordebx
+                busca,{$set: troca}// Alterar Débito e Crédito //, 'atend_terapiaid': novateraidx  //, 'atend_valordeb': novavalordebx
             ).then((res) =>{
                 console.log("XABLAU")
                 resultado = "OK"
