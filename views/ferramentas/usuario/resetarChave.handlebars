@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Alterar Senha</title>
+		<title>Apagar Chave</title>
 		<script type="text/javascript">
 			
 			
@@ -21,10 +21,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Alterar Senha</a>
+								<a href="#">Apagar Chave</a>
 							</li>
 
-							<li class="active"> - Aqui você altera a senha cadastrada por padrão</li>
+							<li class="active"> - Aqui você cadastra sua Chave</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -32,15 +32,15 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/agenda/agendaCadFaltas" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/apagarChave" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="black ace-icon fa fa-times bigger-110"></i>
 												
-												Senha Nova</h4>
+												Apagar Chave</h4>
 
 											<span class="widget-toolbar">
 
@@ -61,90 +61,92 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Importante!</strong>
-													A Senha é sua assinatura eletrônica, <br>
-													Ao acessar o sistema, cadastrar, editar, listar e deletar fica registrado que voçe e somente voçe realizou as tarefas.<br>
-													Portanto deve ser segura, fácil de lembrar e jamais deve ser compartilhada.<dr>
-													Deve conter letras Maiúsculas e minúsculas, números e caracteres especiais como: , . ; : - = ! @ # $ % ¨ & * ) (<br>
-													O sistema irá testar sua nova senha, se considerar fraca, ele reseta e voçe deverá criar uma nova compativel.
+                                                    A Chave é a assinatura eletrônica, <br>
+                                                    Se for apagada o usuário deixará de acessar o sistema, mesmo que tenha senha e email.<br>
+													O mesmo deverá comparecer ao administrativo da Route para criar uma nova chave e voltar a ter acesso ao sistema.<br>
+													Só deve ser feito, se somente se, o usuário perder a chave ou "suspeitar" que a chave foi de alguma forma comprometida,<br>
+													ou suspensão do acesso do usuário pela diretoria.<br>
+
 
 												</div>
 												<div class="row">
-													<div class="col-xs-12" >
-														<label>Terapeuta</label>
-														<div class="form-group">
-															<div class="col-sm-6">
-																<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="-">-</option>
-																	{{#each terapeutas}}
-																		<option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-																</select>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Palavra Chave</label>
+														<label> Id Usuário administrativo responsável por apagar a chave:</label><!--Usuário acompanhante do cadastro da chave-->
 														<div class="row">
-															<div class="col-sm-6">
-																<div class="input-group">
-																	<input name="agendaData" id="agendaData" type="date" style="width: 200px;" >
+															<div class="input-group">
+																<div class="col-sm-1">
+																	<input type="text" name="usuarioIdacomp" id="usuarioIdacomp"  class="form-control" style="width: 200px;" />
 																</div>
 															</div>
 														</div>
-													</div><!-- /.span -->
-												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label>Senha</label>
-														<div class="form-group">
-															<div class="col-sm-9">
-																<input name="ususenha" id="ususenha" type="date" style="width: 200px;" >
+													</div>
+													<div class="col-xs-12 col-sm-4">
+														<label for="id-date-picker-1">Data de apagamento da chave:</label><!--data e hora do cadastro da chave-->
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="usuarioDataresetchave" name="usuarioDataresetchave" type="date">
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label>Digite novamente a senha</label>
-														<div class="form-group">
-															<div class="col-sm-9">
-																<input name="ususenhare" id="ususenhare" type="date" style="width: 200px;" >
+														<label> Usuário que a chave será apagada:</label><!--Usuário acompanhante do cadastro da chave-->
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<select id="usuarioId" name="usuarioId" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		{{#each usuarios}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-4">
+														<label>Repetir usuário que terá a chave apagada:</label><!--data e hora do cadastro da chave-->
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<select id="usuarioId" name="usuarioId" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		{{#each usuarios}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<div class="form-group">
-															<label>Letras minúsculas</label>
-															<label>Letras MAIÚSCULAS</label>
-															<label>Números</label>
-															<label>Caracteres Especiais</label>
-															<label>Tamanho mínimo de 8 Caracteres</label>
-															<div class="col-sm-9">
-																<input name="ususenhare" id="ususenhare" type="date" style="width: 200px;" >
-															</div>
-														</div>
-													</div>
-												</div>
+											
 												
+												<div class="row">
+													<div class="col-xs-12" >
+														<label>Senha do usuário responsável:</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<input name="usuarioSenha" id="usuarioSenha" type="password" style="width: 200px;" >
+															</div>
+														</div>
+													</div>
+												</div>
+
 											</div>
 										</div>		
 									</div>
+									<hr>
 								</div>
-			
-							
-
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
 
 								<div class="form-actions">
 									<div class="col-xs-12" style="text-align: center;" >
 										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											Sinalizar!
+											Apagar !
 										</button>
 
 										&nbsp; &nbsp; &nbsp;

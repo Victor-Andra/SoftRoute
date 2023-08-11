@@ -111,37 +111,33 @@ module.exports = {
             console.log(err1)
         }
     },
-    carregaMudarsenha(req,res){/*
-        Usuario.findById(req.params.id).then((usuario) =>{
-                        Perfil.find().then((perfil)=>{
-            res.render('ferramentas/usuario/mudarSenha', {usuario, perfils: perfil})
-        })}.catch((err) =>{
+    carregaMudarsenha(req,res){
+       Usuario.find().then((usuario)=>{
+            res.render("ferramentas/usuario/mudarSenha", {usuarios: usuario})
+        }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")*/
-            res.render('admin/erro')
-        //})
+            req.flash("error_message", "houve um erro ao acessar o mudar senha")
+            res.redirect('admin/erro')
+        })  
     },
     carregaResetarchave(req,res){
-        Usuario.findById(req.params.id).then((usuario) =>{
-                        Perfil.find().then((perfil)=>{
-                                Funcao.find().then((funcao)=>{
-            res.render('ferramentas/usuario/resetarChave', {usuario, perfils: perfil, funcoes: funcao})
-        })})}).catch((err) =>{
+        Usuario.find().then((usuario)=>{
+            res.render("ferramentas/usuario/resetarChave", {usuarios: usuario})
+        }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao carregar o formulário para resetar a chave!")
-            res.render('admin/erro')
+            req.flash("error_message", "houve um erro ao acessar o resetar chave")
+            res.redirect('admin/erro')
         })
     },
 
     carregaCadastrarchave(req,res){
-        Usuario.findById(req.params.id).then((usuario) =>{
-            Perfil.find().then((perfil)=>{
-                    Funcao.find().then((funcao)=>{
-        res.render('ferramentas/usuario/cadastrarChave', {usuario, perfils: perfil, funcoes: funcao})
-        })})}).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao carregar o formulário para resetar a chave!")
-        res.render('admin/erro')
+        Usuario.find().then((usuario)=>{
+            res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
+            usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o Usuário por nome 
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+            res.redirect('admin/erro')
         })
     },
 

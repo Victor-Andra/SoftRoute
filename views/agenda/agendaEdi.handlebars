@@ -19,8 +19,6 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
-				this.controlaCategoria();
-
 				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
 				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
 				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
@@ -29,9 +27,9 @@
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
 				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
+				this.controlaCategoria();
 				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
 				document.getElementById("agendaObs").value = document.getElementById("agendaObsEdi").value;
-
 				
 				atualizaData();
 				if (document.getElementById("agendaSelo").value == 'false'){
@@ -58,7 +56,7 @@
 				}
 			}
 			function controlaCategoria(){
-				let origem = document.getElementById("agendaOrgEdi").value;
+				let origem = document.getElementById("agendaOrg").value;
 				if(origem == "Padrão"){
 					document.getElementById("agendaCateg").value = "Padrão";
 					document.getElementById("Padrão").style.display = "";
@@ -79,8 +77,8 @@
 					document.getElementById("SubstitutoFixo").style.display = "";
 					document.getElementById("Glosa").style.display = "";
 					document.getElementById("Extra").style.display = "";
+					this.mudaSubis();
 				}
-				this.mudaSubis();
 			}
 			function mudaSubis() {
 				let tipodoc = document.getElementById("agendaCateg").value;
