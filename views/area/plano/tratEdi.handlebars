@@ -62,7 +62,7 @@
 							<a href="#">Route</a>
 						</li>
 
-						<li class="active">Visualização e Edição - Plano de Tratamentos</li>
+						<li class="active">Plano de Tratamentos</li>
 					</ul><!-- /.breadcrumb -->
 
 				</div>
@@ -70,7 +70,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- PAGE CONTENT BEGINS -->
-						<form class="form-horizontal" role="form" action="/menu/area/plano/edi" method="POST">
+						<form class="form-horizontal" role="form" action="/menu/area/plano/add" method="POST">
 							<div class="col-xs-12" >
 								<div class="row">
 									<div class="alert alert-warning">
@@ -78,10 +78,8 @@
 											<i class="ace-icon fa fa-times"></i>
 										</button>
 										<strong>Escolha o tipo de tratamento antes de prosseguir.</strong><br>
-										<hr>
-										A escolha do tipo de tratamento que definirá o layout e campos a serem preenchidos, basicamente são dois:<br>
-										- O plano de tratamento para TO IS e TO AVD.<br>
-										- Plano de tratamento padrão.<br>
+										
+										
 									</div>
 								</div>
 							</div>
@@ -90,13 +88,13 @@
 									<div class="col-sm-2">
 										<label>Tipo de plano de tratamento:</label>
 										<div class="form-group">
-											<div class="col-sm-4">
-												<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaPlano()">
-													<option value="Não Informado">Não Informado</option>
-													<option value="Padrão">Padrão</option>
-													<option value="Ocupacional">Ocupacional</option>
-												</select>
-											</div>
+												<div class="col-sm-4">
+													<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaPlano()">
+														<option value="Não Informado">Não Informado</option>
+														<option value="Padrão">Padrão</option>
+														<option value="Ocupacional">Ocupacional</option>
+													</select>
+												</div>
 										</div>	
 									</div>
 								</div>
@@ -141,24 +139,8 @@
 														</div>
 													</div>
 												</div>												
-												<div class="col-xs-12 col-sm-2">
-													<label for="id-date-picker-1">Data nascimento:</label>
-													<div class="row">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="tratBenedatanasc" id="tratBenedatanasc" type="date" onchange="javascript:atualizaData()" />
-															</div>
-														</div>
-													</div>
-												</div>												
-												<div class="col-xs-12 col-sm-2">
-													<label>Idade:</label>
-													<div class="input-group">
-														<div>
-															<input type="text" name="tratBeneidade" id="tratBeneidade" placeholder="Por idade exata." class="form-control" />
-														</div>
-													</div>
-												</div>												
+																						
+																							
 											</div>
 											<div class="row">
 												<div class="col-sm-4">
@@ -171,18 +153,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-4">
-													<label for="id-date-picker-1">Data aproximada de conclusão desse plano:</label>
-													<div class="row">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="tratTratdatavigencia" id="tratTratdatavigencia" type="date" onchange="javascript:atualizaData()" />
-																&nbsp;<i class="red ace-icon fa fa-tachometer bigger-120"></i>
-															</div>
-															
-														</div>
-													</div>
-												</div>
+												
 											</div>
 										</div>	
 									</div>	
@@ -480,7 +451,7 @@
 									<div class="widget-header">
 										<h4 class="widget-title">
 											<i class="purple ace-icon fa fa-rss bigger-110"></i>
-											TO IS e TO AVD</h4>
+											Plano de Tratamento</h4>
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
@@ -494,7 +465,7 @@
 									<div class="widget-body">
 										<div class="widget-main">												
 											
-											<label>Diagnóstico terapéutico ocupacional:</label>
+											<label>Diagnóstico terapêutico ocupacional:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
 													<textarea type="text" name="tratDiagnosticoocup" id="tratDiagnosticoocup" style="font-size: 12px" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="5"  data-iconlibrary="fa"></textarea>
@@ -509,13 +480,7 @@
 													</textarea>
 												</div>
 											</div>
-											<label>Metas à curto prazo:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea type="text" name="tratMetacurtoavd" id="tratMetacurtoavd" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
-												</div>
-											</div>
+											
 
 
 											<label>Metas à médio prazo:</label>
@@ -525,13 +490,7 @@
 													</textarea>
 												</div>
 											</div>
-											<label>Metas à médio prazo:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea type="text" name="tratMetamedioavd" id="tratMetamedioavd" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
-												</div>
-											</div>
+											
 
 
 											<label>Metas à longo Prazo</label>
@@ -541,13 +500,7 @@
 													</textarea>
 												</div>
 											</div>
-											<label>Metas à Longo Prazo</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea type="text" name="tratMetalongoavd" id="tratMetalongoavd" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
-												</div>
-											</div>	
+											
 
 
 											<label>Estratégias e objetivos</label>
@@ -557,13 +510,7 @@
 													</textarea>
 												</div>
 											</div>
-											<label>Estratégias e objetivos</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea type="text" name="tratObjetivoavd" id="tratObjetivoavd" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
-												</div>
-											</div>													
+																							
 										
 											<div class="col-xs-12 ">
 												<label class="hidden" for="id-date-picker-1">Id do usuário que digitou no sistema</label>

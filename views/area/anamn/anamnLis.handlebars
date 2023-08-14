@@ -73,7 +73,7 @@
 														</label>
 													</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Idade</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Nascimento</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Anamnese</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Cadastro</th>
@@ -92,7 +92,7 @@
 															</label>
 														</td>
 														<td>{{anamn_benenome}}</td>
-														<td>{{anamn_beneidade}}</td>
+														<td>{{anamn_benedatanasc}}</td>
 														{{#each ../usuarios}}<!-- Ok -->
 															{{#ifEqual this._id ../anamn_terapeutaid}}
 																<td>{{usuario_nome}}</td>
@@ -112,7 +112,7 @@
 																<a class="orange" href="">
 																	<i class="ace-icon fa fa-unlock bigger-130"></i>
 																</a>
-																<a class="hidden" class="red" href="/menu/area/anamn/del/{{_id}}">
+																<a class="red" href="/menu/area/anamn/del/{{_id}}">
 																	<i class="ace-icon fa fa-trash bigger-130"></i>
 																</a>
 															</div>
