@@ -16,7 +16,7 @@
 					</div>
 					<div class="page-header">
 						<h1>
-							DB
+							SET
 							<small>
 								<i class="ace-icon fa fa-angle-double-right"></i>
 								Diário de Bordo
@@ -139,7 +139,7 @@
 												<li class="">
 													<a data-toggle="tab" href="#comportamento" aria-expanded="false">
 														<i class="orange ace-icon fa fa-globe bigger-120"></i>
-														Parte 2
+														Comportamento
 													</a>
 												</li>
 												<li class="">
@@ -179,491 +179,210 @@
 													</div>
 													<div class="row">											
 														<div class="col-xs-12 col-sm-4">
-															
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dinamic-table" rownpan="1" colspan="1">Observação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Segue rotina:</td>
+																		<td name="Pontua">
+																			<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																		
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Apresentou extereotipias:</td>
+																		<td name="Pontua">
+																			<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Foco atencional:</td>
+																		<td name="Pontua">
+																			<select name="bordoFoco" id="bordoFoco" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Necessita de auto cuidado:</td>
+																		<td name="Pontua">
+																			<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Se alimenta com independência:</td>
+																		<td name="Pontua">
+																			<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Ecolalia:</td>
+																		<td name="Pontua">
+																			<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Participação no grupo:</td>
+																		<td name="Pontua">
+																			<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Segue instruções do professor:</td>
+																		<td name="Pontua">
+																			<select name="bordoSegue" id="bordoSegue" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Repertório de comunicação social:</td>
+																		<td name="Pontua">
+																			<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Se desorganiza ao trocar de atividade ou de ambiente:</td>
+																		<td name="Pontua">
+																			<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																</tbody>
+															</table>
 														
-															<div id="faq-list-3" class="panel-group accordion-style1 accordion-style2"><!-- .Accordis -->
-																
-																<div class="panel panel-default"><!-- /.. Segue rotina: 1-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-1" data-parent="#faq-list-3-1" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp; 1.Segue rotina:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-1">
-																		<div class="panel-body">
-																			
-																			<div class="row">
-																				<div class="col-sm-12">
-																					<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" data-placeholder="Escolha...">
-																							<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>	
-
-																<div class="panel panel-default"><!-- /.. Apresentou extereotipias:) 2-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-2" data-parent="#faq-list-3-2" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp; 2.Apresentou extereotipias:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-2">
-																		<div class="panel-body">
-																			
-																			<div class="row" >
-																				<div class="col-sm-12">
-																					<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																						<option value="00">00</option>
-																						<option value="01">01</option>
-																						<option value="02">02</option>
-																						<option value="03">03</option>
-																						<option value="04">04</option>
-																						<option value="05">05</option>
-																						<option value="06">06</option>
-																						<option value="07">07</option>
-																						<option value="08">08</option>
-																						<option value="09">09</option>
-																						<option value="10">10</option>
-																					</select>
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																				
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>	
-															
-																<div class="panel panel-default"><!-- /.. Foco atencional: 3-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-3" data-parent="#faq-list-3-3" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp; 3.Foco atencional:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-3">
-																		<div class="panel-body">
-																			
-																			<div class="row" >
-																				<div class="col-sm-12">
-																					<select name="bordoFoco" id="bordoFoco" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																						<option value="00">00</option>
-																						<option value="01">01</option>
-																						<option value="02">02</option>
-																						<option value="03">03</option>
-																						<option value="04">04</option>
-																						<option value="05">05</option>
-																						<option value="06">06</option>
-																						<option value="07">07</option>
-																						<option value="08">08</option>
-																						<option value="09">09</option>
-																						<option value="10">10</option>
-																					</select>
-
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<label>Comentários e Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>	
-
-																<div class="panel panel-default"><!-- /.. Necessita de auto cuidado: 4-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-4" data-parent="#faq-list-3-4" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp; 4.Necessita de auto cuidado:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-4">
-																		<div class="panel-body">
-																			
-																			<div class="row"  style="float:right;">
-																				<div class="col-sm-12">
-																					<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
-																				</div>
-																			</div>
-																			
-																			<div class="row">
-																				<div class="col-xs-12">
-																					
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>	
-
-																<div class="panel panel-default"><!-- /.. Se alimenta com independência: 5-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-5" data-parent="#faq-list-3-5" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;   5.Se alimenta com independência:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-5">
-																		<div class="panel-body">
-																			
-																			<div class="row">
-																				<div class="col-sm-12">
-																					<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																						<option value="00">00</option>
-																						<option value="01">01</option>
-																						<option value="02">02</option>
-																						<option value="03">03</option>
-																						<option value="04">04</option>
-																						<option value="05">05</option>
-																						<option value="06">06</option>
-																						<option value="07">07</option>
-																						<option value="08">08</option>
-																						<option value="09">09</option>
-																						<option value="10">10</option>
-																					</select>
-																				</div>
-																			</div>
-																			
-																			<div clas="row">
-																				<div class="col-xs-12">
-																					<label>Comentários e Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>
-
-																<div class="panel panel-default"><!-- /.. Ecolalia: 6-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-6" data-parent="#faq-list-3-6" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;    6.Ecolalia:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-6">
-																		<div class="panel-body">
-																			
-																			<div class="row"  style="float:right;">
-																				<div class="col-sm-12">
-																					<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" data-placeholder="Escolha...">
-																							<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
-																				</div>
-																			</div>
-																			
-																			<div class="row">
-																				<div class="col-xs-12">
-																					
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>
-
-																<div class="panel panel-default"><!-- /.. Participação no grupo: 7-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-7" data-parent="#faq-list-3-7" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;    7. Participação no grupo:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-7">
-																		<div class="panel-body">
-																			
-																			<div class="row"  style="float:right;">
-																				<div class="col-sm-12">
-																				<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																						<option value="00">00</option>
-																						<option value="01">01</option>
-																						<option value="02">02</option>
-																						<option value="03">03</option>
-																						<option value="04">04</option>
-																						<option value="05">05</option>
-																						<option value="06">06</option>
-																						<option value="07">07</option>
-																						<option value="08">08</option>
-																						<option value="09">09</option>
-																						<option value="10">10</option>
-																					</select>
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-
-																<div class="panel panel-default"><!-- /.. Segue instruções do professor: 8-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-8" data-parent="#faq-list-3-8" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;    8. Segue instruções do professor:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-8">
-																		<div class="panel-body">
-																			
-																			<div class="row"  style="float:right;">
-																				<div class="col-sm-12">
-																					<select name="bordoSegue" id="bordoSegue" class="chosen-select" data-placeholder="Escolha...">
-																							<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>
-
-																<div class="panel panel-default"><!-- /.. Repertório de comunicação social: 9-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-9" data-parent="#faq-list-3-9" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;    9. Repertório de comunicação social:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-9">
-																		<div class="panel-body">
-																			
-																			<div class="row">
-																				<div class="col-sm-12">
-																					<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" data-placeholder="Escolha...">
-																							<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
-																				</div>
-																			</div>
-																			
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<label>Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>
-
-																<div class="panel panel-default"><!-- /.. Se desorganiza ao trocar de atividade ou de ambiente: 10-->
-																	<div class="panel-heading">
-																		<a href="#faq-3-10" data-parent="#faq-list-3-10" data-toggle="collapse" class="accordion-toggle collapsed">
-																			<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
-																			&nbsp;    10. Se desorganiza ao trocar de atividade ou de ambiente:
-																		</a>
-																	</div>
-
-																	<div class="panel-collapse collapse" id="faq-3-10">
-																		<div class="panel-body">
-																			
-																			<div class="row"  style="float:right;">
-																				<div class="col-sm-12">
-																				<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" data-placeholder="Escolha...">
-																						<option value="-">-</option>
-																						<option value="00">00</option>
-																						<option value="01">01</option>
-																						<option value="02">02</option>
-																						<option value="03">03</option>
-																						<option value="04">04</option>
-																						<option value="05">05</option>
-																						<option value="06">06</option>
-																						<option value="07">07</option>
-																						<option value="08">08</option>
-																						<option value="09">09</option>
-																						<option value="10">10</option>
-																					</select>
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<label>Comentários e Anotações:</label>
-																					<div class="form-group">
-																						<div class="col-sm-12">
-																							<textarea type="text" name="folRegobs" id="folRegobs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																							</textarea>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-
-																		</div>
-																	</div>
-																</div>
-
-																
-																
-															</div><!-- /.Accordis -->
-
-
-
-
 														</div>
 													</div>
 												</div>
@@ -1180,10 +899,6 @@
 								</div>
 
 									
-
-
-
-
 								</div>
 								
 								</div>

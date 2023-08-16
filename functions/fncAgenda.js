@@ -11369,7 +11369,7 @@ module.exports = {
                                             break;
                                         case "SubstitutoFixo":
                                             console.log("SUBFIX");
-                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11379,7 +11379,7 @@ module.exports = {
                                                 }
                                             })
 
-                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+"";
                                             convdeb.forEach((cdeb)=>{
                                                 if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
                                                     convdebval = "0,00";
@@ -11744,7 +11744,7 @@ module.exports = {
                                     
                                     if (a.agenda_categoria == "SubstitutoFixo") {
                                         console.log("SUBFIX");
-                                        agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapeutaid+""
+                                        agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+""
                                         convcre.forEach((ccre)=>{
                                             convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                             if( convcreTes == agendacreTes){
@@ -11754,7 +11754,7 @@ module.exports = {
                                             }
                                         })
 
-                                        agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
+                                        agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+"";
                                         convdeb.forEach((cdeb)=>{
                                             if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
                                                 convdebval = "0,00";
