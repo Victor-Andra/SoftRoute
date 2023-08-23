@@ -144,6 +144,12 @@ const UsuarioSchema = mongoose.Schema({
     usuario_tipopix :{
         type: String,
     },
+    usuario_palavrachave :{
+        type: String,
+    },
+    usuario_palavraschaveantigas :{
+        type: String,
+    },
     usuario_obs :{
         type: String,
     },
@@ -164,7 +170,8 @@ class Usuario{
         usuario_banco, usuario_agencia, usuario_conta, usuario_contatipo, usuario_contrato,
         usuario_funcaoid, usuario_perfilid, usuario_status,
         usuario_senha, usuario_img, usuario_filhos, usuario_filhosqt, usuario_numconselho, 
-        usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix, usuario_obs,
+        usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix,
+        usuario_palavrachave, usuario_palavraschaveantigas, usuario_obs,
         usuario_datacad, usuario_dataedi
         ){
 
@@ -208,6 +215,8 @@ class Usuario{
         this.usuario_especializacao = usuario_especializacao ,
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
+        this.usuario_palavrachave = usuario_palavrachave ,
+        this.usuario_palavraschaveantigas = usuario_palavraschaveantigas ,
         this.usuario_obs = usuario_obs ,
         this.usuario_datacad = usuario_datacad ,
         this.usuario_dataedi = usuario_dataedi
@@ -348,5 +357,41 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 return err;
             });
         }
+    },
+    usuarioCadastrarPalavraChave: async (req, res) => {
+        //Realiza Atualização
+        await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+            {$set: {
+                
+                usuario_palavrachave : usuario_palavrachave
+                }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
+    },
+    usuarioDeletarPalavraChave: async (req, res) => {
+        //Realiza Atualização
+        await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+            {$set: {
+                usuario_palavraschaveantigas : "",
+                usuario_palavrachave : ""
+                }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
     }
 };
