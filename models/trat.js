@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const TratSchema = mongoose.Schema({
     //identificação do plano de tratamento
+    trat_id:{ type: ObjectId, required: false },
     trat_planotipo :{ type: String, required: true },
     trat_beneid :{ type: ObjectId, required: true },
     trat_beneidade :{ type: String, required: false },
@@ -47,6 +48,7 @@ const TratSchema = mongoose.Schema({
 class Trat{
     constructor(
         //identificação do plano de tratamento
+        trat_id,
         trat_planotipo,
         trat_beneid,
         trat_beneidade,
@@ -88,7 +90,7 @@ class Trat{
         trat_dataedi
 
         ){
-
+        this.trat_id = trat_id,
         this.trat_planotipo = trat_planotipo,
         this.trat_beneid = trat_beneid,
         this.trat_beneidade = trat_beneidade,

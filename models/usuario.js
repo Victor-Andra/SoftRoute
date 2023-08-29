@@ -138,6 +138,9 @@ const UsuarioSchema = mongoose.Schema({
     usuario_especializacao :{
         type: String,
     },
+    usuario_cr :{
+        type: String,
+    },
     usuario_pix :{
         type: String,
     },
@@ -145,6 +148,9 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
     },
     usuario_palavrachave :{
+        type: String,
+    },
+    usuario_palavrachavedatacad :{
         type: String,
     },
     usuario_palavraschaveantigas :{
@@ -171,7 +177,7 @@ class Usuario{
         usuario_funcaoid, usuario_perfilid, usuario_status,
         usuario_senha, usuario_img, usuario_filhos, usuario_filhosqt, usuario_numconselho, 
         usuario_escolaridade, usuario_graduacao, usuario_especializacao, usuario_pix,
-        usuario_palavrachave, usuario_palavraschaveantigas, usuario_obs,
+        usuario_palavrachave, usuario_palavrachavedatacad, usuario_palavraschaveantigas, usuario_obs,
         usuario_datacad, usuario_dataedi
         ){
 
@@ -213,9 +219,11 @@ class Usuario{
         this.usuario_escolaridade = usuario_escolaridade ,
         this.usuario_graduacao = usuario_graduacao ,
         this.usuario_especializacao = usuario_especializacao ,
+        this.usuario_cr = usuario_cr,
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
         this.usuario_palavrachave = usuario_palavrachave ,
+        this.usuario_palavrachavedatacad = usuario_palavrachavedatacad ,
         this.usuario_palavraschaveantigas = usuario_palavraschaveantigas ,
         this.usuario_obs = usuario_obs ,
         this.usuario_datacad = usuario_datacad ,
@@ -282,6 +290,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
                 usuario_escolaridade : req.body.usuarioEscolaridade ,//
                 usuario_graduacao : req.body.usuarioGraduacao ,//
                 usuario_especializacao : req.body.usuarioEspecializacao ,//
+                usuario_cr : req.body.usuarioCr ,
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
                 usuario_obs : req.body.usuarioObs,
@@ -343,6 +352,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
             usuario_escolaridade : req.body.usuarioEscolaridade ,
             usuario_graduacao : req.body.usuarioGraduacao ,
             usuario_especializacao : req.body.usuarioEspecializacao ,
+            usuario_cr : req.body.usuarioCr ,
             usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
             usuario_obs : req.body.usuarioObs,
@@ -360,20 +370,56 @@ module.exports = {UsuarioModel,UsuarioSchema,
     },
     usuarioCadastrarPalavraChave: async (req, res) => {
         //Realiza Atualização
+        let dataAtual = new Date();
         await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
             {$set: {
-                
-                usuario_palavrachave : usuario_palavrachave
+                usuario_palavrachavedatacad : dataAtual ,
+                usuario_palavrachave : req.body.usuarioChave
                 }}
         ).then((res) =>{
             console.log("Salvo")
-            resultado = true;
+            resultado = "true";
         }).catch((err) =>{
             console.log("erro mongo:")
             console.log(err)
             resultado = err;
             //res.redirect('admin/branco')
         })
+        return resultado;
+    },
+    usuarioMudarSenha: async (req, res) => {
+        //Realiza Atualização
+        let dataAtual = new Date();
+        let usuarioAtual = "-";
+        await Usuario.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
+            usuarioAtual = usu;
+        }).catch((err)=>{
+            console.log("ERRO!");
+        })
+        
+        if (usuarioAtual != "-"){
+            if (usuarioAtual.usuario_palavrachave == req.body.usuarioChave){
+                await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+                    {$set: {
+                        usuario_dataedi : dataAtual ,
+                        usuario_senha : req.body.usuarioSenha
+                        }}
+                ).then((res) =>{
+                    console.log("Salvo")
+                    resultado = "true";
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                    //res.redirect('admin/branco')
+                })
+            } else {
+                resultado = "Erro! A palavra chave está incorreta!";
+            }
+        } else {
+            resultado = "Erro! Usuario não encontrado!";
+        }
+
         return resultado;
     },
     usuarioDeletarPalavraChave: async (req, res) => {

@@ -1,0 +1,987 @@
+<head>
+	<title>Diário de Bordo</title>
+	<script >
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("bordoBeneid").value = document.getElementById("bordoBeneidEdi").value;
+			document.getElementById("bordoTerapeutaid").value = document.getElementById("bordoTerapeutaidEdi").value;
+			document.getElementById("bordoEscolaid").value = document.getElementById("bordoEscolaidEdi").value;
+			
+			//Quando quero calcular a idade do beneficiário
+			let dtnsc = new Date(document.getElementById("bordoDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("bordoDatanasc").value = fulldate;
+			//Rotinas
+			document.getElementById("bordoSeguerotina").value = document.getElementById("bordoSeguerotinaEdi").value;
+			document.getElementById("bordoEstereotipas").value = document.getElementById("bordoEstereotipasEdi").value;
+			document.getElementById("bordoFoco").value = document.getElementById("bordoFocoEdi").value;
+			document.getElementById("bordoAutocuidado").value = document.getElementById("bordoAutocuidadoEdi").value;
+			document.getElementById("bardoAliindepende").value = document.getElementById("bardoAliindependeEdi").value;
+			document.getElementById("bordoEscolalia").value = document.getElementById("bordoEscolaliaEdi").value;
+			document.getElementById("bordoParticipa").value = document.getElementById("bordoParticipaEdi").value;
+			document.getElementById("bordoSegue").value = document.getElementById("bordoSegueEdi").value;
+			document.getElementById("bordoRepertorio").value = document.getElementById("bordoRepertorioEdi").value;
+		    //Comportamento	
+			document.getElementById("bordoAutoagressao").value = document.getElementById("bordoAutoagressaoEdi").value;
+			document.getElementById("bordoAgrideadulto").value = document.getElementById("bordoAgrideadultoEdi").value;
+			document.getElementById("bordoAgridepares").value = document.getElementById("bordoAgrideparesEdi").value;
+			document.getElementById("bordoDestruir").value = document.getElementById("bordoDestruirEdi").value;
+			document.getElementById("bordoGritos").value = document.getElementById("bordoGritosEdi").value;
+			document.getElementById("bordoChoros").value = document.getElementById("bordoChorosEdi").value;
+			document.getElementById("bordoBirras").value = document.getElementById("bordoBirrasEdi").value;
+			 //Interação Verbal
+			document.getElementById("bordoMandosadulto").value = document.getElementById("bordoMandosadultoEdi").value;
+			document.getElementById("bordoMandospares").value = document.getElementById("bordoMandosparesEdi").value;
+			document.getElementById("bordoPergunta").value = document.getElementById("bordoPerguntaEdi").value;
+			document.getElementById("bordoRespond").value = document.getElementById("bordoRespondEdi").value;
+			document.getElementById("bordoImita").value = document.getElementById("bordoImitaEdi").value;
+			document.getElementById("bordoInteracaoverbal").value = document.getElementById("bordoInteracaoverbalEdi").value;
+			//Colaboração
+			document.getElementById("bordo_colab").value = document.getElementById("bordoColabEdi").value;
+			//Atividade
+			document.getElementById("bordoAtivsucedido").value = document.getElementById("bordoAtivsucedidoEdi").value;
+			document.getElementById("bordoAtivnaosucedido").value = document.getElementById("bordoAtivnaosucedido").value;
+			document.getElementById("bordoAdequadodificil").value = document.getElementById("bordoAdequadodificilEdi").value;
+			document.getElementById("bordoAdequadodifacil").value = document.getElementById("bordoAdequadodifacilEdi").value;
+			document.getElementById("bordoSemativ").value = document.getElementById("bordoSemativEdi").value;
+			document.getElementById("bordo_adaptacao").value = document.getElementById("benePaiidentEdi").value;
+			//Atividade Livre
+			document.getElementById("bordoBrincousolonge").value = document.getElementById("bordoBrincousolongeEdi").value;
+			document.getElementById("bordoBrincousoperto").value = document.getElementById("bordoBrincousopertoEdi").value;
+			document.getElementById("bordoTentoubrincar").value = document.getElementById("bordoTentoubrincarEdi").value;
+			document.getElementById("bordoBrincouparesindep").value = document.getElementById("bordoBrincouparesindepEdi").value;
+			document.getElementById("bordoNaobrincar").value = document.getElementById("bordoNaobrincarEdi").value;
+			//Observações Adicionais
+			document.getElementById("bordoForanormal").value = document.getElementById("bordoForanormalEdi").value;
+			document.getElementById("bordoHabilnova").value = document.getElementById("bordoHabilnovaEdi").value;
+			document.getElementById("bordoIncidente").value = document.getElementById("bordoIncidenteEdi").value;
+			document.getElementById("bordoObs").value = document.getElementById("bordoObsEdi").value;
+			
+		}
+	</script>
+</head>
+<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<div class="main-container " id="main-container">
+		<div class="page-header">
+			<h1>
+				Editar Diário de Bordo
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					Cadastro Geral dos Diários de Bordo
+				</small>
+			</h1>
+		</div><!-- /.page-header -->
+			<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="bordoBeneidEdi" name="bordoBeneidEdi" value="{{bordoEdi.bordo_beneid}}"/>
+			<input id="bordoTerapeutaidEdi" name="bordoTerapeutaidEdi" value="{{bordoEdi.bordo_terapeutaid}}"/>
+			<input id="bordoEscolaidEdi" name="bordoEscolaidEdi" value="{{bordoEdi.bordo_escolaid}}"/>
+
+			<input id="bordoSeguerotinaEdi" name="bordoSeguerotinaEdi" value="{{bordoEdi.bordo_seguerotina}}"/>
+			<input id="bordoEstereotipasEdi" name="bordoEstereotipasEdi" value="{{bordoEdi.bordo_estereotipas}}"/>
+			<input id="bordoFocoEdi" name="bordoFocoEdi" value="{{bordoEdi.bordo_foco}}"/>
+			<input id="bordoAutocuidadoEdi" name="bordoAutocuidadoEdi" value="{{bordoEdi.bordo_autocuidado}}"/>
+			<input id="bardoAliindependeEdi" name="bardoAliindependeEdi" value="{{bordoEdi.bardo_aliindepende}}"/>
+			<input id="bordoEscolaliaEdi" name="bordoEscolaliaEdi" value="{{bordoEdi.bordo_escolalia}}"/>
+			<input id="bordoParticipaEdi" name="bordoParticipaEdi" value="{{bordoEdi.bordo_participa}}"/>
+			<input id="bordoSegueEdi" name="bordoSegueEdi" value="{{bordoEdi.bordo_segue}}"/>
+			<input id="bordoRepertorioEdi" name="bordoRepertorioEdi" value="{{bordoEdi.bordo_repertorio}}"/>
+			
+			<input id="bordoAutoagressaoEdi" name="bordoAutoagressaoEdi" value="{{bordoEdi.bordo_autoagressao}}"/>
+			<input id="bordoAgrideadultoEdi" name="bordoAgrideadultoEdi" value="{{bordoEdi.bordo_agrideadulto}}"/>
+			<input id="bordoAgrideparesEdi" name="bordoAgrideparesEdi" value="{{bordoEdi.bordo_agridepares}}"/>
+			<input id="bordoDestruirEdi" name="bordoDestruirEdi" value="{{bordoEdi.bordo_destruir}}"/>
+			<input id="bordoGritosEdi" name="bordoGritosEdi" value="{{bordoEdi.bordo_gritos}}"/>
+			<input id="bordoChorosEdi" name="bordoChorosEdi" value="{{bordoEdi.bordo_choros}}"/>
+			<input id="bordoBirrasEdi" name="bordoBirrasEdi" value="{{bordoEdi.bordo_birras}}"/>
+
+			<input id="bordoMandosadultoEdi" name="bordoMandosadultoEdi" value="{{bordoEdi.bordo_mandosadulto}}"/>
+			<input id="bordoMandosparesEdi" name="bordoMandosparesEdi" value="{{bordoEdi.bordo_mandospares}}"/>
+			<input id="bordoPerguntaEdi" name="bordoPerguntaEdi" value="{{bordoEdi.bordo_pergunta}}"/>
+			<input id="bordoRespondEdi" name="bordoRespondEdi" value="{{bordoEdi.bordo_responde}}"/>
+			<input id="bordoImitaEdi" name="bordoImitaEdi" value="{{bordoEdi.bordo_imita}}"/>
+			<input id="bordoInteracaoverbalEdi" name="bordoInteracaoverbalEdi" value="{{bordoEdi.bordo_interacaoverbal}}"/>
+			
+			<input id="bordoColabEdi" name="bordoColabEdi" value="{{bordoEdi.bordo_colab}}"/>
+
+			<input id="bordoAtivsucedidoEdi" name="bordoAtivsucedidoEdi" value="{{bordoEdi.bordo_ativsucedido}}"/>
+			<input id="bordoAtivnaosucedidoEdi" name="bordoAtivnaosucedidoEdi" value="{{bordoEdi.bordo_ativnaosucedido}}"/>
+			<input id="bordoAdequadodificilEdi" name="bordoAdequadodificilEdi" value="{{bordoEdi.bordo_adequadodificil}}"/>
+			<input id="bordoAdequadodifacilEdi" name="bordoAdequadodifacilEdi" value="{{bordoEdi.bordo_adequadodifacil}}"/>
+			<input id="bordoSemativEdi" name="bordoSemativEdi" value="{{bordoEdi.bordo_semativ}}"/>
+			<input id="bordoMediacaoEdi" name="bordoMediacaoEdi" value="{{bordoEdi.bordo_mediacao}}"/>
+			<input id="bordoAdaptacaoEdi" name="bordoAdaptacaoEdi" value="{{bordoEdi.bordo_adaptacao}}"/>
+			
+			<input id="bordo_brincousolongeEdi" name="bordo_brincousolongeEdi" value="{{bordoEdi.bordo_brincousolonge}}"/>
+			<input id="bordo_brincousopertoEdi" name="bordo_brincousopertoEdi" value="{{bordoEdi.bordo_brincousoperto}}"/>
+			<input id="bordo_tentoubrincarEdi" name="bordo_tentoubrincarEdi" value="{{bordoEdi.bordo_tentoubrincar}}"/>
+			<input id="bordo_brincouparesindepEdi" name="bordo_brincouparesindepEdi" value="{{bordoEdi.bordo_brincouparesindep}}"/>
+			<input id="bordo_naobrincarEdi" name="bordo_naobrincarEdi" value="{{bordoEdi.bordo_naobrincar}}"/>
+
+			<input id="bordo_foranormalEdi" name="bordo_foranormalEdi" value="{{bordoEdi.bordo_foranormal}}"/>
+			<input id="bordo_habilnovaEdi" name="bordo_habilnovaEdi" value="{{bordoEdi.bordo_habilnova}}"/>
+			<input id="bordo_incidenteEdi" name="bordo_incidenteEdi" value="{{bordoEdi.bordo_incidente}}"/>
+			<input id="bordo_obsEdi" name="bordo_obsEdi" value="{{bordoEdi.bordo_obs}}"/>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form role="form" action="/menu/area/bordo/edi" method="POST">
+					<div class="col-xs-12">
+						<div class="alert alert-warning">
+							<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+								<i class="ace-icon fa fa-times"></i>
+							</button>
+							<strong>Observação! </strong>
+							O Diário de bordo é DIÁRIO, Você inseri as informações DO DIA com o beneficiário.
+							Para visualizar o RESUMO semanal deve ir ao MAPA do Diário de Bordo.
+							<br>
+						</div>
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="row">
+										<label>Beneficiário</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoBeneid" id="bordoBeneid" class="chosen-select" value="{{bordo.bordo_beneid}}">
+														{{#each benes}}
+															<option value="{{_id}}">{{bene_nome}}</option>
+														{{/each}}
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">-
+									<div class="row">
+										<label>Terapeuta</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" value="{{bordo.bordo_usuarioid}}">
+														{{#each usuarios}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+														{{/each}}
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<div class="row">
+										<label>Escola</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<div class="input-group">
+												<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" >
+														{{#each escolas}}
+															<option value="{{_id}}">{{escola_nome}}</option>
+														{{/each}}
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-2">
+									<div class="row">
+										<label >Data</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+												<input id="bordoDatacad" name="bordoDatacad" type="date">
+										</div>
+									</div>
+								</div>													
+												
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<hr>
+						</div>
+										<div class="tabbable">
+											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+												<li class="active">
+													<a data-toggle="tab" href="#rotina" aria-expanded="true">
+														<i class="orange ace-icon fa fa-cogs bigger-120"></i>
+														Rotina
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#comportamento" aria-expanded="false">
+														<i class="orange ace-icon fa fa-globe bigger-120"></i>
+														Comportamento
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#verbal" aria-expanded="false">
+														<i class="green ace-icon fa fa-money bigger-120"></i>
+														Verbal
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#colaboracao" aria-expanded="false">
+														<i class="pink ace-icon fa fa-handshake-o bigger-120"></i>
+														Colaboração
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#atividades" aria-expanded="false">
+														<i class="blue ace-icon fa fa-male bigger-120"></i>
+														Atividades
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#livre" aria-expanded="false">
+														<i class="brown ace-icon fa fa-gavel bigger-120"></i>
+														Livre
+													</a>
+												</li>
+											</ul>
+
+											<div class="tab-content">
+												<div id="rotina" class="tab-pane fade active in">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Pontuação sobre rotina do dia
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Segue Rotina</td>
+																		<td name="Pontua">
+																			<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Apresentou Estereotipas</td>
+																		<td name="Pontua">
+																			<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Foco Atencional</td>
+																		<td name="Pontua">
+																			<select name="bordoFoco" id="bordoFoco" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Necessita de Auto Cuidado</td>
+																		<td name="Pontua">
+																			<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Se Alimenta com Independência</td>
+																		<td name="Pontua">
+																			<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Escolalia</td>
+																		<td name="Pontua">
+																			<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Participação no grupo</td>
+																		<td name="Pontua">
+																			<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Segue Instruções do Professor</td>
+																		<td name="Pontua">
+																			<select name="bordoSegue" id="bordoSegue" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Repertório de Comunicação Social</td>
+																		<td name="Pontua">
+																			<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Se desorganiza ao trocar de atividade ou</td>
+																		<td name="Pontua">
+																			<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+												<div id="comportamento" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização com Problemas de Comportamento
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Autoagressão (bater em si mesmo)</td>
+																		<td name="Pontua">
+																			<select name="bordoAutoagressao" id="bordoAutoagressao" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Agride adultos</td>
+																		<td name="Pontua">
+																			<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Agride Pares</td>
+																		<td name="Pontua">
+																			<select name="bordoAgridepares" id="bordoAgridepares" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Destruição de objetos</td>
+																		<td name="Pontua">
+																			<select name="bordoDestruir" id="bordoDestruir" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Gritos</td>
+																		<td name="Pontua">
+																			<select name="bordoGritos" id="bordoGritos" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Choros</td>
+																		<td name="Pontua">
+																			<select name="bordoChoros" id="bordoChoros" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Birras</td>
+																		<td name="Pontua">
+																			<select name="bordoBirras" id="bordoBirras" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="00">00</option>
+																				<option value="01">01</option>
+																				<option value="02">02</option>
+																				<option value="03">03</option>
+																				<option value="04">04</option>
+																				<option value="05">05</option>
+																				<option value="06">06</option>
+																				<option value="07">07</option>
+																				<option value="08">08</option>
+																				<option value="09">09</option>
+																				<option value="10">10</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+												<div id="verbal" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização sobre Comportamento Verbal:
+														I => Independência :: A => Com Ajuda
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A Beneficiário emitiu mandos para os adultos</td>
+																		<td name="Pontua">
+																			<select name="bordoMandosadulto" id="bordoMandosadulto" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A Beneficiário emitiu mandos para os pares</td>
+																		<td name="Pontua">
+																			<select name="bordoMandospares" id="bordoMandospares" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O Beneficiário fez perguntas</td>
+																		<td name="Pontua">
+																			<select name="bordoPergunta" id="bordoPergunta" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O Beneficiário respondeu perguntas</td>
+																		<td name="Pontua">
+																			<select name="bordoResponde" id="bordoResponde" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O Beneficiário imitou os colegas</td>
+																		<td name="Pontua">
+																			<select name="bordoImita" id="bordoImita" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O Beneficiário iniciou interações verbais</td>
+																		<td name="Pontua">
+																			<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+												<div id="colaboracao" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização sobre Colaboração para execução das atividades
+														
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O Beneficiário foi colaborativo</td>
+																	</tr>
+																	<tr>
+																		<td name="Pontua">
+																			<select name="bordoColab" id="bordoColab" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">Não informado</option>
+																				<option value="0">Não Colaborou</option>
+																				<option value="1">Colaborou Pouco</option>
+																				<option value="2">Colaborou Menos da Metade do Tempo</option>
+																				<option value="3">Colaborou Metade do tempo</option>
+																				<option value="4">Colaborou Mais da Metade do Tempo</option>
+																				<option value="5">Colaborou o Tempo Integral</option>
+																				
+																			</select>
+																		</td>
+																	</tr>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+												<div id="atividades" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização das atividades em sala de aula
+														
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesmas atividades da turma e foi bem sucedido!</td>
+																		<td name="Pontua">
+																			<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesmas atividades da turma e Não realizou!</td>
+																		<td name="Pontua">
+																			<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																				
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A Professora passou atididade adequada, mas era muito dificil.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A Professora passou atididade adequada, mas era muito fácil.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A Professora NÃO passou atididade.</td>
+																		<td name="Pontua">
+																			<select name="bordoSemativ" id="bordoSemativ" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Com Mediação do Terapeuta para realizar.</td>
+																		<td name="Pontua">
+																			<select name="bordoMediacao" id="bordoMediacao" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Com adaptação de material do Terapeuta para realizar.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdaptacao" id="bordoAdaptacao" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+												<div id="livre" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização das atividades livres e de recreio.
+														
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+																		<th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho e longe dos pares</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho mais perto dos pares</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Tentou brincar com os pares</td>
+																		<td name="Pontua">
+																			<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">>Brincou com os pares mas de forma independente.</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Não quer brincar</td>
+																		<td name="Pontua">
+																			<select name="bordoNaobrincar" id="bordoNaobrincar" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="NI">NI</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																																
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+												</div>
+
+											</div>
+
+										</div>
+								<hr>
+								<div class="col-sm-12">
+									<div class="row">
+										<label>A beneficiário apresentou algum comportamento fora do normal (positivo ou negativo)?</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<textarea style="width: 320px;" type="text" name="bordoForanormal" id="bordoForanormal" placeholder="" class="form-control" ></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="row">
+										<label>O beneficiário demonstrou alguma habilidade nova? descreva.</label>
+									</div>
+									<div class="row" >
+										<div class="input-group">
+											<textarea style="width: 320px;"type="text" name="bordoHabilnova" id="bordoHabilnova" placeholder="" class="form-control"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="row">
+										<label>Houve algum incidente (machucado, brigas, dores etc) que precisou ser relatado aos pais? Especifique.</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											<textarea  style="width: 320px;" type="text" name="bordoIncidente" id="bordoIncidente" placeholder="" class="form-control" ></textarea>
+										</div>
+									</div>
+								</div>									
+								<div class="col-sm-12" >
+									<div class="row">
+										<label>Mais observações que mereçam ser descritas.</label>
+									</div>
+									<div class="row">
+										<div class="input-group">
+											'<textarea style="width: 320px;" type="text" name="bordoObs" id="bordoObs" placeholder="" class="form-control" ></textarea>
+										</div>
+									</div>
+								</div>	
+								<hr>					
+					
+					</div><!-- /.col -->
+					<div>
+						<div class="col-xs-12" style="text-align: center;" >
+							<button class="btn btn-info" name="acao" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								Salvar
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn btn-warning"  type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								Voltar
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>

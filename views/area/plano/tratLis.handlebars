@@ -75,8 +75,11 @@
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Plano:</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta(s):</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
+
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
+													
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
 													<th>Ação</th>
@@ -84,43 +87,91 @@
 											</thead>
 											<tbody>
 												{{#each trats}}
-
-													<tr role="row" class="odd">
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-														<td>{{trat_planotipo}}</td>
-														<td>{{tratdata}}</td>
-														{{#each ../benes}}
-															{{#ifEqual this._id ../trat_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														{{#each ../usuarios}}
-															{{#ifEqual this._id ../trat_terapeutaidpad}}
-																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<td>{{trat_especialidadepad}}</td>
-														<td>{{datacad}}</td>
-														<td>{{dataedi}}</td>
-														<td>
-															<div class="action-buttons">
-																<div class="action-buttons">
-																
-																<a class="green" href="/menu/area/plano/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-																<a  class="red" href="/menu/area/trat/del/{{_id}}">
-																	<i class="ace-icon fa fa-trash bigger-130"></i>
-																</a>
-															</div>
+													{{#ifEqual this.trat_planotipo 'Padrão'}}
+														<tr role="row" class="odd">
+															<td class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</td>
+															<td>{{trat_planotipo}}</td>
+															<td>{{tratdata}}</td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../trat_beneid}}
+																	<td>{{bene_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+															{{#each ../usuarios}}
+																{{#ifEqual this._id ../trat_terapeutaidpad}}
+																	<td>{{usuario_nome}}
+																{{/ifEqual}}
+															{{/each}}
+															- {{trat_especialidadepad}}</td>
 															
-														</td>
-													</tr>
+															<td>-</td>
+															<td>-</td>
+															
+															
+															<td>{{datacad}}</td>
+															<td>{{dataedi}}</td>
+															<td>
+																<div class="action-buttons">
+																	<div class="action-buttons">
+																	
+																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
+																	</a>
+																	
+																</div>
+																
+															</td>
+														</tr>
+													{{else}}
+													<tr role="row" class="odd">
+															<td class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</td>
+															<td>{{trat_planotipo}}</td>
+															<td>{{tratdata}}</td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../trat_beneid}}
+																	<td>{{bene_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+															<td>-</td>
+															{{#each ../usuarios}}
+																{{#ifEqual this._id ../trat_terapeutaidis}}
+																	<td>{{usuario_nome}}
+																{{/ifEqual}}
+																
+															{{/each}}
+															- {{trat_especialidadeis}}</td>
+															{{#each ../usuarios}}
+																{{#ifEqual this._id ../trat_terapeutaidavd}}
+																	<td>{{usuario_nome}}
+																{{/ifEqual}}
+																
+															{{/each}}
+															- {{trat_especialidadeavd}}</td>
+															<td>{{datacad}}</td>
+															<td>{{dataedi}}</td>
+															<td>
+																<div class="action-buttons">
+																	<div class="action-buttons">
+																	
+																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
+																	</a>
+																	
+																</div>
+																
+															</td>
+														</tr>
+													{{/ifEqual}}
 												{{/each}}
 											</tbody>
 										</table>
@@ -177,7 +228,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, { "bSortable": false }],
+					"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

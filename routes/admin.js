@@ -167,6 +167,21 @@ const Notasup = mongoose.model("tb_notasup")
 const fncNotasup = require("../functions/fncNotasup")
 
 
+//PECS
+const pecsClass = require("../models/pecs")
+const Pecs = mongoose.model("tb_pecs")
+const fncPecs = require("../functions/fncPecs")
+
+//Visual
+const visualClass = require("../models/visual")
+const Visual = mongoose.model("tb_visual")
+const fncVisual = require("../functions/fncVisual")
+
+//Acompanhamento, devolutiva e reuniões
+const acompClass = require("../models/acomp")
+const Acomp = mongoose.model("tb_acomp")
+const fncAcomp = require("../functions/fncAcomp")
+
 //Folha Registro - ABA
 const folregClass = require("../models/folreg")
 const Folreg = mongoose.model("tb_folreg")
@@ -329,14 +344,24 @@ router.get('/recuperarSenha', (req,res)=>{
     res.render("/menu/ferramentas/usuario/mudarSenha", {nivel: lvl})
 })
 
-//Mudar Senha
+//Carregar Mudar Senha
 router.get("/ferramentas/usuario/carregaMudarsenha", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a Mudar Senha
     fncUsuario.carregaMudarsenha(req, res);
+})
+
+//Mudar Senha
+router.post("/ferramentas/usuario/mudarSenha", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
+    fncUsuario.cadastrarchave(req, res);
 })
 
 //Cadastrar Chave
 router.get("/ferramentas/usuario/carregaCadastrarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
     fncUsuario.carregaCadastrarchave(req, res);
+})
+
+//Cadastrar Chave
+router.post("/ferramentas/usuario/cadastraChave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
+    fncUsuario.cadastrarchave(req, res);
 })
 
 //Resetar Chave
@@ -1299,7 +1324,11 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
     })
 
     router.post('/beneficiario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
-        fncBene.atualizaBene(req, res); 
+        fncBene.atualizaBene(req, res);
+    })
+    
+    router.get('/beneficiario/resplis', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
+        fncBene.listaResp(req, res);
     })
 
 //Evolucao
@@ -1728,6 +1757,67 @@ router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{
 //Lista Folha Registro ** Area Tecnicos e ABA
 router.get('/area/aba/folreg/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista de registros
     fncFolreg.listaFolreg(req, res);
+})
+
+//Menu pecs ** Area Tecnicos e ABA 
+//Carrega Cadastro pecs
+router.get('/area/aba/pecs/pecscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
+    fncPecs.carregaPecs(req, res);
+})
+
+//Lista Pecs
+router.get('/area/aba/pecs/pecslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
+    fncPecs.listaPecs(req, res);
+})
+
+//Adiciona Registro Pecs
+router.post('/area/aba/pecs/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona pecs
+    console.log("post")
+    fncPecs.cadastraPecs(req, res); 
+})
+
+//Carrega Editar Pecs
+router.get('/area/aba/pecs/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncPecs.carregaPecsedi(req,res);
+})
+
+//Carrega Atualizar Pecs
+router.post('/area/aba/pecs/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncPecs.atualizaPecs(req,res);
+})
+
+//Menu visual ** Area Tecnicos e ABA 
+//Carrega Cadastro visual
+router.get('/area/aba/visual/visualcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
+    fncVisual.carregaVisual(req, res);
+})
+
+//Lista Visual
+router.get('/area/aba/visual/visuallis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
+    fncVisual.listaVisual(req, res);
+})
+
+//Adiciona Registro Visual
+router.post('/area/aba/visual/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Visual
+    console.log("post")
+    fncVisual.cadastraVisual(req, res); 
+})
+
+//Menu Acompanhamento devolutivas e reuniões ** Area Tecnicos e ABA 
+//Carrega Cadastro Acompanhamento, devolutivas e reuniões
+router.get('/area/aba/acomp/acompcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
+    fncAcomp.carregaAcomp(req, res);
+})
+
+//Lista Pecs
+router.get('/area/aba/acomp/acomplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
+    fncAcomp.listaAcomp(req, res);
+})
+
+//Adiciona Registro acomp
+router.post('/area/aba/acomp/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Acompanhamento
+    console.log("post")
+    fncAcomp.cadastraAcomp(req, res); 
 })
 
 //Menu Gráfico ABC ** Area Tecnicos e ABA 
@@ -2176,10 +2266,6 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
            fncUsuario.atualizaUsuario(req, res); 
         })
 
-        router.post('/ferramentas/usuario/carregaMudarsenha', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
-            fncUsuario.carregaMudarsenha(req, res); 
-         })
-        
         router.post('/ferramentas/usuario/carregaResetarchave', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
             fncUsuario.carregaResetarchave(req, res); 
          })

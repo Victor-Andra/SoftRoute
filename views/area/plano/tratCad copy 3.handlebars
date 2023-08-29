@@ -85,10 +85,10 @@
 							</div>
 							<div class="col-xs-12" >
 								<div class="row">
-									<div class="col-sm-12">
+									<div class="col-sm-2">
 										<label>Tipo de plano de tratamento:</label>
 										<div class="form-group">
-												<div class="col-sm-9">
+												<div class="col-sm-4">
 													<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="-" onchange="javascript:mudaPlano()">
 														<option value="-">-</option>
 														<option value="Padrão">Padrão</option>
@@ -130,7 +130,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" data-placeholder="-" placeholder="Colocar nome completo." >
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" data-placeholder="-" placeholder="Colocar nome completo." onchange="javascript:atualizaConvId()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>

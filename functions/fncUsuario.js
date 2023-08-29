@@ -20,6 +20,10 @@ const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 
+//Funções Auxiliares
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
+
 module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
@@ -120,6 +124,32 @@ module.exports = {
             res.redirect('admin/erro')
         })  
     },
+    mudarSenha(req,res){
+        let flash = new Resposta();
+        let resposta = false;
+        usuarioClass.usuarioCadastrarPalavraChave(req,res).then((ok)=>{
+            if (ok == "true"){
+                resposta = true;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+            res.redirect('admin/erro')
+        }).finally(()=>{
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Palavra Chave cadastrada com sucesso!"
+                flash.sucesso = "true"
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Erro ao cadastrar chave!"
+                flash.sucesso = "false"
+                res.render('admin/branco', {flash});
+            }
+        })
+    },
     carregaResetarchave(req,res){
         Usuario.find().then((usuario)=>{
             res.render("ferramentas/usuario/resetarChave", {usuarios: usuario})
@@ -132,8 +162,8 @@ module.exports = {
 
     carregaCadastrarchave(req,res){
         Usuario.find().then((usuario)=>{
-            res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
             usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o Usuário por nome 
+            res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
@@ -141,7 +171,34 @@ module.exports = {
         })
     },
 
-    mudarsenha(req,res){
+    cadastrarchave(req,res){
+        let flash = new Resposta();
+        let resposta = false;
+        usuarioClass.usuarioCadastrarPalavraChave(req,res).then((ok)=>{
+            if (ok == "true"){
+                resposta = true;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+            res.redirect('admin/erro')
+        }).finally(()=>{
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Palavra Chave cadastrada com sucesso!"
+                flash.sucesso = "true"
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Erro ao cadastrar chave!"
+                flash.sucesso = "false"
+                res.render('admin/branco', {flash});
+            }
+        })
+    },
+
+    /*mudarsenha(req,res){
         let resposta;
         try{
             usuarioClass.usuarioEditar(req,res).then((res)=>{
@@ -168,6 +225,7 @@ module.exports = {
             console.log(err1)
         }
     },
+    */
     deletaUsuario(req, res){
         Usuario.deleteOne({_id: req.params.id}).then(() =>{
             Usuario.find().then((usuario) =>{

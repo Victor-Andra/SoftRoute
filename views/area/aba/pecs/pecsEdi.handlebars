@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Controle de PECS</title>
+		<script>
+		
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("pecsBeneid").value = document.getElementById("pecsBeneidEdi").value;
+			document.getElementById("pecsTerapeutaid").value = document.getElementById("pecsTerapeutaidEdi").value;
+			document.getElementById("pecsEscolaid").value = document.getElementById("pecsEscolaidEdi").value;
+			
+			//Quando quero calcular a idade do beneficiário
+			let dtnsc = new Date(document.getElementById("pecsDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			
+			document.getElementById("pecsTerapeutaid").value = document.getElementById("pecsTerapeutaidEdi").value;
+			document.getElementById("pecsBeneid").value = document.getElementById("pecsBeneidEdi").value;
+			document.getElementById("pecsData").value = document.getElementById("pecsDataEdi").value;
+			document.getElementById("pecsMes").value = document.getElementById("pecsMesEdi").value;
+			document.getElementById("pecsTipo").value = document.getElementById("pecsTipoEdi").value;
+			document.getElementById("pecsFase").value = document.getElementById("pecsFaseEdi").value;
+			document.getElementById("pecsAndamento").value = document.getElementById("pecsAndamentoEdi").value;
+			document.getElementById("pecsDatacad").value = document.getElementById("pecsDatacadEdi").value;
+			document.getElementById("pecsUsuidcad").value = document.getElementById("pecsUsuidcadEdi").value;
+			document.getElementById("pecsDataedi").value = document.getElementById("pecsDataediEdi").value;
+			document.getElementById("pecsUsuidedi").value = document.getElementById("pecsUsuidediEdi").value;
+
+		}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Controle de PECS</a>
+							</li>
+
+							<li class="active">Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/area/aba/pecs/atualizar" method="POST">
+								<input class="hidden" id="id" name="id" value="{{pecs._id}}" />
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													PECS
+												</h4>
+												<div id="divCarrega" name="divCarrega" class="hidden">
+													<input type="objectid" id="pecsTerapeutaidEdi" name="pecsTerapeutaidEdi" value="{{pecs.pecs_terapeutaid}}"/>
+													<input type="objectid" id="pecsBeneidEdi" name="pecsBeneidEdi" value="{{pecs.pecs_beneid}}"/>
+													<input type="date" id="pecsDataEdi" name="pecsDataEdi" value="{{pecs.pecs_data}}"/>
+													<input type="text" id="pecsMesEdi" name="pecsMesEdi" value="{{pecs.pecs_mes}}"/>
+													<input type="text" id="pecsTipoEdi" name="pecsTipoEdi" value="{{pecs.pecs_tipo}}"/>
+													<input type="text" id="pecsFaseEdi" name="pecsFaseEdi" value="{{pecs.pecs_fase}}"/>
+													<input type="text" id="pecsAndamentoEdi" name="pecsAndamentoEdi" value="{{pecs.pecs_andamento}}"/>
+													<input type="date" id="pecsDatacadEdi" name="pecsDatacadEdi" value="{{pecs.pecs_datacad}}"/>
+													<input type="text" id="pecsUsuidcadEdi" name="pecsUsuidcadEdi" value="{{pecs.pecs_usuid}}"/>
+													<input type="date" id="pecsDataediEdi" name="pecsDataediEdi" value="{{pecs.pecs_dataedi}}"/>
+													<input type="text" id="pecsUsuidediEdi" name="pecsUsuidediEdi" value="{{pecs.pecs_usuidedi}}"/>
+												</div>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Data </label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="pecsData" name="pecsData" type="date"  value="{{pecs.pecs_data}}">
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Ano e mês de referência</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-3">
+																		<input id="pecsMes" name="pecsMes" type="text"  value="{{pecs.pecs_mes}}">
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+
+														<div class="col-sm-6">
+															<label> Terapeuta</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="pecsTerapeutaid" id="pecsTerapeutaid" class="chosen-select"  >
+																		<option value="-">-</option>
+																		{{#each terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="pecsBeneid" id="pecsBeneid" class="chosen-select" >
+																		<option value="-">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														
+
+														<div class="col-sm-4">
+															<label> Tipo</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="pecsTipo" id="pecsTipo" class="form-control" value="{{pecs.pecs_tipo}}"/>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Fase</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="pecsFase" id="pecsFase" class="form-control" value="{{pecs.pecs_fase}}"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Andamento</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="pecsAndamento" id="pecsAndamento" class="chosen-select" value="{{pecs.pecs_andamento}}">
+																			<option value="Iniciado">Iniciado</option>
+																			<option value="Andamento">Andamento</option>
+																			<option value="Concluido">Concluido</option>
+																			<option value="Atualizar">Atualizar</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														
+
+														
+													</div>
+
+												</div>
+											</div>
+										</div>	
+										
+													
+
+
+								
+
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="row">
+									<div clas="col-xs-12">
+										
+										<div class="form-actions">
+											<div class="col-xs-12" style="text-align: center;" >
+
+												<button class="btn btn-info" name="acao" type="submit">
+													<i class="ace-icon fa fa-check bigger-110"></i>
+													Salvar
+												</button>
+												&nbsp; &nbsp; &nbsp;
+												<button class="btn btn-warning" onclick="menu/area/aba/pecs/lis">
+													<i class="ace-icon fa fa-undo bigger-110"></i>
+													Voltar
+												</button>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

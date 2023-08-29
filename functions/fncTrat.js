@@ -113,7 +113,7 @@ module.exports = {
     },
 
     carregaTratedi(req,res){
-        Trat.find().then((trat)=>{
+        Trat.findOne({_id : req.params.id}).then((trat)=>{
             console.log("Listagem Realizada de Planos de Tratamento")
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -121,7 +121,7 @@ module.exports = {
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratEdi", {trats: trat, terapias: terapia, usuarios: usuario, benes: bene})
+                                res.render("area/plano/tratEdi", {trat, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

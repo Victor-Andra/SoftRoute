@@ -155,5 +155,41 @@ module.exports = {
             console.log(err)
             res.render('admin/erro')
         })
+    },
+    listaResp(req, res){
+        let convs = new Array();
+        console.log('listando Resp')
+        Bene.find().then((bene) =>{
+            
+            bene.forEach((b)=>{
+                console.log("b.datanasc"+b.bene_datanasc)
+                let datanasc = new Date(b.bene_datanasc)
+                let mes = (datanasc.getMonth()+1).toString();
+                let dia = (datanasc.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datanasc=fulldate;
+            })
+
+        console.log("Listagem Realizada Resp!")
+                Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                console.log("Listagem Realizada Convênio!")
+                        Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                        console.log("Listagem Realizada Terapia!")
+                                Usuario.find().then((usuario)=>{
+                                console.log("Listagem Realizada Usuário!")
+            res.render('beneficiario/benerespLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+        })})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar Benes")
+            res.redirect('admin/erro')
+        })
     }
 }

@@ -4,20 +4,94 @@
 		<title>Cadastrar Chave</title>
 		<script type="text/javascript">
 			
-			function verificaCaracteres(){
-				let palavra = document.getElementById("usuarioChave").value;
+			function verificaCaracteres(usuarioChave){
+				let palavra = document.getElementById(usuarioChave).value;
 
-				//const regex = /[a-z]+/i
-				//const regex = /[A-Z]+/i
- 
-				if ()
+				let checkLength = false;
+				let checkMinusculo = false;
+				let checkMaiusculo = false;
+				let checkNumero = false;
+				let checkNAlpha = false;
+				
+				let tudoOk = false;
+
+				const regexMinusculo = /[a-z]/;
+				const regexMaiusculo = /[A-Z]/;
+				const regexNumero = /[0-9]/;
+				const regexNAlpha = /\W|_/;
+
+				if (palavra.length > 11){
+					console.log("TRUE palavra.length: "+palavra);
+					document.getElementById("verComprimento").checked = true;
+					checkLength = true;
+				} else {
+					console.log("FALSE palavra.length: "+palavra);
+					document.getElementById("verComprimento").checked = false;
+					checkLength = false;
+				}
+				if (regexMinusculo.test(palavra)){
+					console.log("TRUE regexMinusculo.test(palavra): "+palavra);
+					document.getElementById("verLetramin").checked = true;
+					checkMinusculo = true;
+				} else {
+					console.log("FALSE regexMinusculo.test(palavra): "+palavra);
+					document.getElementById("verLetramin").checked = false;
+					checkMinusculo = false;
+				}
+				if (regexMaiusculo.test(palavra)){
+					console.log("TRUE regexMaiusculo.test(palavra): "+palavra);
+					document.getElementById("verLetramai").checked = true;
+					checkMaiusculo = true;
+				} else {
+					console.log("FALSE regexMaiusculo.test(palavra): "+palavra);
+					document.getElementById("verLetramai").checked = false;
+					checkMaiusculo = false;
+				}
+				if (regexNumero.test(palavra)){
+					console.log("TRUE regexNumero.test(palavra): "+palavra);
+					document.getElementById("verLetranum").checked = true;
+					checkNumero = true;
+				} else {
+					console.log("FALSE regexNumero.test(palavra): "+palavra);
+					document.getElementById("verLetranum").checked = false;
+					checkNumero = false;
+				}
+				if (regexNAlpha.test(palavra)){
+					console.log("TRUE regexNAlpha.test(palavra): "+palavra);
+					document.getElementById("verLetraesp").checked = true;
+					checkNAlpha = true;
+				} else {
+					console.log("FALSE regexNAlpha.test(palavra): "+palavra);
+					document.getElementById("verLetraesp").checked = false;
+					checkNAlpha = false;
+				}
+
+				if (checkLength && checkMinusculo && checkMaiusculo && checkNumero && checkNAlpha){
+					return true;
+				} else {
+					return false;
+				}
 			}
 
-			function verificaPalavras(){
-				let palavra = document.getElementById("usuarioChave").value;
-				let repetir = document.getElementById("usuarioChaverepetida").value;
-				if (palavra !== repetir){
-					alert("ERRO: As palavras devem coincidir!");
+			function comparaChaves(usuarioChave, usuarioChaverepetida){
+				let palavra = document.getElementById(usuarioChave).value;
+				let repetir = document.getElementById(usuarioChaverepetida).value;
+
+				if (verificaCaracteres(usuarioChave)){
+					if (palavra !== repetir){
+						alert("ERRO: As palavras devem coincidir!");
+						return false;
+					} else {
+						return true;
+					}
+				}
+			}
+
+			function submitForm(){
+				if (comparaChaves("usuarioChave", "usuarioChaverepetida")) {
+					let form = document.getElementById("formCadastrarChave");
+					form.action = "/menu/ferramentas/usuario/cadastraChave";
+					form.submit();
 				}
 			}
 		
@@ -47,7 +121,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/cadastraChave" method="POST">
+							<form id="formCadastrarChave" name="formCadastrarChave" class="form-horizontal" role="form" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -76,7 +150,7 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Importante!</strong>
-                                                    A Chave é sua assinatura eletrônica, <br>
+                                                    A Chave é sua assinatura eletrônica dentro do SisRoute, <br>
                                                     Ela é usada somente para alterar sua senha de acesso ao sistema ou confirmar cadastro de relatórios.<br>
                                                     Portanto deve ser segura e jamais deve ser compartilhada.<br>
                                                     <strong>Ela só pode ser criada nas dependências administrativas da ROUTE.</strong><br>
@@ -86,31 +160,20 @@
 
 
 												</div>
+												<!--
 												<div class="row">
-														<div class="col-xs-12 col-sm-6">
-															<label> Id Usuário administrativo acompanhante:</label><!--Usuário acompanhante do cadastro da chave-->
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-1">
-																		<input type="text" name="usuarioIdacomp" id="usuarioIdacomp"  class="form-control" style="width: 200px;" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-xs-12 col-sm-4">
-															<label for="id-date-picker-1">Data cadastro:</label><!--data e hora do cadastro da chave-->
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-4">
-																		<input id="usuarioDatacadchave" name="usuarioDatacadchave" type="date">
-																	</div>
+													<div class="col-xs-12 col-sm-6">
+														<label> Id Usuário administrativo acompanhante:</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-1">
+																	<input type="text" name="usuarioIdacomp" id="usuarioIdacomp"  class="form-control" style="width: 200px;" />
 																</div>
 															</div>
 														</div>
 													</div>
-												
-												
-												
+												</div>
+												-->
 												<div class="row">
 													<div class="col-xs-12" >
 														<label>Usuário</label>
@@ -132,18 +195,19 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<input name="usuarioChave" id="usuarioChave" type="password" style="width: 200px;" >
+																	<input name="usuarioChave" id="usuarioChave" type="password" placeholder=" " style="width: 200px;" oninput="javascript:verificaCaracteres('usuarioChave');">
 																</div>
 															</div>
 														</div>
 													</div><!-- /.span -->
-												
+												</div>
+												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<label for="id-date-picker-1">Repetir Palavra Chave</label>
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<input name="usuarioChaverepetida" id="usuarioChaverepetida" type="password" style="width: 200px;" >
+																	<input name="usuarioChaverepetida" id="usuarioChaverepetida" type="password" placeholder=" " style="width: 200px;" onchange="javascript:comparaChaves('usuarioChave','usuarioChaverepetida')" >
 																</div>
 															</div>
 														</div>
@@ -179,7 +243,7 @@
 																	</div>
 																</td>
 																<td>	
-																	<span class="badge badge-danger">Letras minúsculas</span>
+																	<span class="badge badge-danger">Ao menos 2 Letras minúsculas</span>
 																</td>
 																
 															</tr>
@@ -193,7 +257,7 @@
 																	</div>
 																</td>
 																<td>	
-																	<span class="badge badge-warning">Letras MAIÚSCULAS</span>
+																	<span class="badge badge-warning">Ao menos 2 Letras MAIÚSCULAS</span>
 																</td>
 															</tr>
 															<tr><!-- 3Reg -->
@@ -206,7 +270,7 @@
 																	</div>
 																</td>
 																<td>	
-																	<span class="badge badge-success">Números</span>
+																	<span class="badge badge-success">Ao menos 2 Números</span>
 																</td>
 															</tr>
 															<tr><!-- 4Reg -->
@@ -219,20 +283,20 @@
 																	</div>
 																</td>
 																<td>	
-																	<span class="badge badge-info">Caracteres Especiais</span>
+																	<span class="badge badge-info">Ao menos 2 Caracteres Especiais</span>
 																</td>
 															</tr>
 															<tr><!-- 4Reg -->
 																<td>
 																	<div class="checkbox">
 																		<label class="block">
-																			<input name="verLetra8" id="verLetra8" type="checkbox" class="ace ">
+																			<input name="verComprimento" id="verComprimento" type="checkbox" class="ace ">
 																			<span class="lbl small"></span>
 																		</label>
 																	</div>
 																</td>
 																<td>	
-																	<span class="badge badge-pink">Tamanho mínimo de 8 Caracteres</span>
+																	<span class="badge badge-pink">Tamanho mínimo de 12 Caracteres</span>
 																</td>
 															</tr>
 														</tbody>
@@ -254,7 +318,7 @@
 
 								<div class="form-actions">
 									<div class="col-xs-12" style="text-align: center;" >
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" onclick="javascript:submitForm();">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>

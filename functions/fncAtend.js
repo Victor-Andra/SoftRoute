@@ -739,9 +739,9 @@ module.exports = {
                                         relAtendConv.total = this.mascaraValores(relAtendConv.total);
                                         rel.push(relAtendConv);
                                         //console.log("relAtendConv:"+relAtendConv.nomecid+"-"+relAtendConv.sessoes+"-"+relAtendConv.valor);
-                                        //console.log("qtdIds: "+qtdIds)
-                                        //console.log("creArray.length: "+creArray.length)
-                                        if (qtdIds == creArray.length){
+                                        console.log("qtdIds: "+qtdIds)
+                                        console.log("creArray.length: "+creArray.length)
+                                        if (qtdIds >= creArray.length){
                                             continuando = "false";
                                             //console.log("qtdIds == cre.length");
                                         }
@@ -1265,6 +1265,7 @@ module.exports = {
             //console.log("tamanho:"+at.length);
             //Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 //console.log("cre.length: "+cre.length)
+                console.log("at:length: "+at.length);
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -1276,7 +1277,6 @@ module.exports = {
                                 qtdIds = 0;
                                 creValFinal = 0;
                                 atends = [];
-                                console.log("at:length: "+at.length);
                                 at.forEach((ats)=>{
                                     categorias = ats.atend_categoria
                                     console.log("categorias: "+categorias);

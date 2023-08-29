@@ -3,12 +3,7 @@
 	<head>
 		<title>beneficiário Cadastro</title>
 		<script >
-		function atualizaData(){
-			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-			var dataFmt = new Date(dataIso);
-			console.log(dataFmt.toISOString());
-			document.getElementById("a").value = dataFmt;
-		}
+		
 		function copiaValoresMae() {
 			document.getElementById("beneOut").value = document.getElementById("beneMae").value;
 			document.getElementById("beneGraupar").value = "Mãe";
@@ -42,10 +37,7 @@
 			document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
 		}
 		function carregaBody(){
-			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
-			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
-			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
-			document.getElementById("beneSupervisor").value = document.getElementById("beneSupervisorEdi").value;
+
 			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
 			let dia = (dtnsc.getUTCDate()).toString();
@@ -56,6 +48,10 @@
 				dia = "0"+dia;
 			}
 			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
+			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
+			
 			document.getElementById("beneDatanasc").value = fulldate;
 			document.getElementById("beneNacionalidade").value = document.getElementById("beneNacionalidadeEdi").value;
 			document.getElementById("beneEnd").value = document.getElementById("beneEndEdi").value;
@@ -114,7 +110,7 @@
 		}
 	</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -254,7 +250,7 @@
 															<div class="row ">
 																<div class="input-group" >
 																	<div class="col-sm-4">
-																		<input  type="text" name="beneNome" id="beneNome" placeholder="" class="form-control" style="width: 400px;" value="{{bene_nome}}"/>
+																		<input  type="text" name="beneNome" id="beneNome"  class="form-control" style="width: 400px;" value="{{bene_nome}}"/>
 																	</div>
 																</div>
 															</div>
@@ -264,7 +260,7 @@
 															<div class="row">
 																<div class="input-group" >
 																	<div class="col-sm-3">
-																		<input  type="text" name="beneApelido" id="beneApelido" placeholder="" class="form-control" style="width: 300px;" value="{{bene_apelido}}" />
+																		<input  type="text" name="beneApelido" id="beneApelido" class="form-control" style="width: 300px;" value="{{bene_apelido}}" />
 																	</div>
 																</div>
 															</div>

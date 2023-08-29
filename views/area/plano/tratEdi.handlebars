@@ -9,12 +9,10 @@
 				document.getElementById("atendConvid").value = v1;
 			}
 			function defineplanopadrao(){
-				document.getElementById('is').style.display = 'none';
-				document.getElementById('padrao').style.display = 'none';
-				document.getElementById('terato').style.display = 'none';
+				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
 			}
 			function mudaPlano() {
-				let tipodoc = document.getElementById("tratPlanotipo").value;
+				let tipodoc = document.getElementById("tratPlanotipoEdi").value;
 				console.log(tipodoc)
 				if (tipodoc == "Padrão") {
 					document.getElementById('is').style.display = 'none';
@@ -49,10 +47,40 @@
 				
 				
 			}
+			function carregaBody(){
+					
+					
+			document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+			document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
+			
+			document.getElementById("tratTratdata").value = document.getElementById("tratTratdataEdi").value;
+			document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
+			document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
+			document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
+			document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
+			document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
+			document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
+			document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
+			document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
+			document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
+			document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
+			document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
+			document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
+			document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
+			document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
+			document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
+			document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
+			document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
+			document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
+			document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
+			document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
+			console.log("ta chegando aqui?");
+			
+			}
 		</script>
 	</head>
 
-	<body onload="javascript:controlaNave(); defineplanopadrao();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();mudaPlano();" class="no-skin">
 		<div class="main-content ace-save-state" id="main-container">
 			<div class="main-content-inner">
 				<div class="breadcrumbs" id="breadcrumbs">
@@ -62,9 +90,39 @@
 							<a href="#">Route</a>
 						</li>
 
-						<li class="active">Plano de Tratamentos</li>
+						<li class="active">Plano de Tratamentos - Visualizar</li>
 					</ul><!-- /.breadcrumb -->
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
+						<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
+						<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+						<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
+						<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
+						<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>
+						<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
+						<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
+						<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
+						<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
+						<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
+						<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
+						<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
+						<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
+						<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
+						<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
+						<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
+						<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
+						<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
+						<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
+						<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
+						<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
+						<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
+						<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
+						<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
+						
+						
+					
 
+					</div>
 				</div>
 
 				<div class="row">
@@ -89,8 +147,8 @@
 										<label>Tipo de plano de tratamento:</label>
 										<div class="form-group">
 												<div class="col-sm-4">
-													<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaPlano()">
-														<option value="Não Informado">Não Informado</option>
+													<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
+														<option value="-">-</option>
 														<option value="Padrão">Padrão</option>
 														<option value="Ocupacional">Ocupacional</option>
 													</select>
@@ -130,7 +188,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." onchange="javascript:atualizaConvId()">
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -148,7 +206,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="tratTratdata" id="tratTratdata" type="date" onchange="javascript:atualizaData()" />
+																<input  name="tratTratdata" id="tratTratdata" type="date" value="{{trat.trat_tratdata}}" />
 															</div>
 														</div>
 													</div>
