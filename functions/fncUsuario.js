@@ -127,7 +127,7 @@ module.exports = {
     mudarSenha(req,res){
         let flash = new Resposta();
         let resposta = false;
-        usuarioClass.usuarioCadastrarPalavraChave(req,res).then((ok)=>{
+        usuarioClass.usuarioMudarSenha(req,res).then((ok)=>{
             if (ok == "true"){
                 resposta = true;
             }

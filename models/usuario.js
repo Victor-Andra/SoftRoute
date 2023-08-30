@@ -371,7 +371,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
     usuarioCadastrarPalavraChave: async (req, res) => {
         //Realiza Atualização
         let dataAtual = new Date();
-        await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+        await UsuarioModel.findByIdAndUpdate(mongoose.Types.ObjectId(req.cookies['idUsu']), 
             {$set: {
                 usuario_palavrachavedatacad : dataAtual ,
                 usuario_palavrachave : req.body.usuarioChave
@@ -424,20 +424,38 @@ module.exports = {UsuarioModel,UsuarioSchema,
     },
     usuarioDeletarPalavraChave: async (req, res) => {
         //Realiza Atualização
-        await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
-            {$set: {
-                usuario_palavraschaveantigas : "",
-                usuario_palavrachave : ""
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
+        let usuarioAtual = "-";
+        let palavrasAntigas;
+
+        await Usuario.findOne({_id : req.body.usuarioId}).then((usu)=>{
+            usuarioAtual = usu;
+        }).catch((err)=>{
+            console.log("ERRO!");
         })
+
+        if (usuarioAtual != "-"){
+            if (usuarioAtual.usuario_palavraschaveantigas == ""){
+                palavrasAntigas = "["+usuarioAtual.usuario_palavrachave+"]"
+            } else {
+                palavrasAntigas = usuarioAtual.usuario_palavraschaveantigas+",["+usuarioAtual.usuario_palavrachave+"]"
+            }
+
+            await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+                {$set: {
+                    usuario_palavraschaveantigas : palavrasAntigas,
+                    usuario_palavrachave : ""
+                    }}
+            ).then((res) =>{
+                console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+        }
+        
         return resultado;
     }
 };

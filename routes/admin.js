@@ -332,7 +332,6 @@ router.get('/usuarioCad', fncGeral.IsAuthenticated, (req,res)=>{
 
 //Rota Login
 router.get('/login', (req,res)=>{
-    console.log("LOGIN")
     lvl = "x";
     res.render("ferramentas/usuario/login", {nivel: lvl})
 })
@@ -344,14 +343,14 @@ router.get('/recuperarSenha', (req,res)=>{
     res.render("/menu/ferramentas/usuario/mudarSenha", {nivel: lvl})
 })
 
-//Carregar Mudar Senha
+//Carregar Mudar Senha Ok
 router.get("/ferramentas/usuario/carregaMudarsenha", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a Mudar Senha
     fncUsuario.carregaMudarsenha(req, res);
 })
 
 //Mudar Senha
 router.post("/ferramentas/usuario/mudarSenha", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
-    fncUsuario.cadastrarchave(req, res);
+    fncUsuario.mudarSenha(req, res);
 })
 
 //Cadastrar Chave
@@ -402,7 +401,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let ativo;
 //Gerar cookie vazio aqui...?
     Usuario.findOne({usuario_email: req.body.email, usuario_senha: req.body.senha}).then((usu)=>{
-        console.log(usu);
+        //console.log(usu);
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
         ativo = usu.usuario_status;
@@ -635,7 +634,7 @@ router.get("/agenda/lisSala/", fncGeral.IsAuthenticated, (req,res) =>{//direcion
 })
 
 router.post("/agenda/filSala/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Sala.
-    console.log("Agenda Filtra Sala")
+    //console.log("Agenda Filtra Sala")
     fncAgenda.carregaAgendaFilSala(req, res);
 })
 

@@ -520,7 +520,7 @@ module.exports = {
         })
     },
     listarAtendAdm(req,res){
-        Atend.find().then((atend) =>{
+        Atend.findOne().then((atend) =>{
             console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
