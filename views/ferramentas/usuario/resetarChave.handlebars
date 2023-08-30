@@ -32,7 +32,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/apagarChave" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/resetarchave" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -114,7 +114,7 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<select id="usuarioId" name="usuarioId" class="chosen-select" data-placeholder="Escolha...">
+																	<select id="usuarioIdRep" name="usuarioIdRep" class="chosen-select" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		{{#each usuarios}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -132,7 +132,7 @@
 														<label>Senha do usuário responsável:</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<input name="usuarioSenha" id="usuarioSenha" type="password" style="width: 200px;" >
+																<input name="usuarioRespSenha" id="usuarioRespSenha" type="password" style="width: 200px;" >
 															</div>
 														</div>
 													</div>

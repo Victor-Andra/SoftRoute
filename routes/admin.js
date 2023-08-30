@@ -367,6 +367,10 @@ router.post("/ferramentas/usuario/cadastraChave", fncGeral.IsAuthenticated, (req
 router.get("/ferramentas/usuario/carregaResetarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a resetar chave
     fncUsuario.carregaResetarchave(req, res);
 })
+
+router.post("/ferramentas/usuario/resetarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a resetar chave
+    fncUsuario.resetarChave(req, res);
+})
 /*
 router.post('/login', fncGeral.IsAuthenticated, (req,res,next)=>{
     console.log("---------")

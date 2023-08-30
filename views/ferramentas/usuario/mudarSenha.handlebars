@@ -87,12 +87,18 @@
 				}
 			}
 
-			function submitForm(){
-				if (comparaChaves("usuarioChave", "usuarioChaverepetida")) {
+			function salvaFormulario(){
+				console.log("WTFFFFFFFFF?");
+				let resultado = comparaChaves("usuarioSenha", "usuarioSenharepetida");
+console.log("WTF222222?");
+/*
+				if (resultado) {
 					let form = document.getElementById("formMudarSenha");
 					form.action = "/menu/ferramentas/usuario/mudarSenha";
 					form.submit();
-				}
+				} else {
+					alert("ERRO: As palavras devem coincidir!");
+				}*/
 			}
 		
 		</script>
@@ -121,7 +127,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form id="formMudarSenha" name="formMudarSenha" class="form-horizontal" role="form" method="POST">
+							<form id="formMudarSenha" name="formMudarSenha" class="form-horizontal" action="/menu/ferramentas/usuario/mudarSenha" role="form" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -309,9 +315,9 @@
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
 
-								<div class="form-actions">
+								<div>
 									<div class="col-xs-12" style="text-align: center;" >
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" onclick="javascript:submitForm();">
+										<button class="btn btn-info" onclick="javascript:salvaFormulario();">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>

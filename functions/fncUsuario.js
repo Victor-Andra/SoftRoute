@@ -124,6 +124,7 @@ module.exports = {
             res.redirect('admin/erro')
         })  
     },
+    
     mudarSenha(req,res){
         let flash = new Resposta();
         let resposta = false;
@@ -133,18 +134,18 @@ module.exports = {
             }
         }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+            req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
             res.redirect('admin/erro')
         }).finally(()=>{
             if(resposta== true){
                 //Volta para a agenda de listagem
-                flash.texto = "Palavra Chave cadastrada com sucesso!"
+                flash.texto = "Senha alterada com sucesso!"
                 flash.sucesso = "true"
                 //console.log('verdadeiro')
                 res.render('admin/branco', {flash});
             }else{
                 //passar classe de erro
-                flash.texto = "Erro ao cadastrar chave!"
+                flash.texto = "Erro ao alterar senha!"
                 flash.sucesso = "false"
                 res.render('admin/branco', {flash});
             }
@@ -159,7 +160,49 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
+    resetarChave(req,res){
+        let flash = new Resposta();
+        let resposta = false;
+        usuarioClass.usuarioDeletarPalavraChave(req,res).then((ok)=>{
+            if (ok == "true"){
+                resposta = true;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o remover chave")
+            res.redirect('admin/erro')
+        }).finally(()=>{
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Chave removida com sucesso!"
+                flash.sucesso = "true"
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Chave removida com sucesso!";
+                flash.sucesso = "false"
+                res.render('admin/branco', {flash});
+                //CORRIGIR ERRO BIZONHO QUE TA RETORNANDO FALSE MEMSMO TENDO SALVO. MENSAGEM ERRADA!!!!!!!!!
+                /*
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                */
+            }
+        })
+    },
     carregaCadastrarchave(req,res){
         Usuario.find().then((usuario)=>{
             usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o Usuário por nome 

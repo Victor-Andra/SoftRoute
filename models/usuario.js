@@ -391,7 +391,8 @@ module.exports = {UsuarioModel,UsuarioSchema,
         //Realiza Atualização
         let dataAtual = new Date();
         let usuarioAtual = "-";
-        await Usuario.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
+        console.log("idusu: "+mongoose.Types.ObjectId(req.cookies['idUsu']))
+        await UsuarioModel.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
             usuarioAtual = usu;
         }).catch((err)=>{
             console.log("ERRO!");
@@ -399,7 +400,7 @@ module.exports = {UsuarioModel,UsuarioSchema,
         
         if (usuarioAtual != "-"){
             if (usuarioAtual.usuario_palavrachave == req.body.usuarioChave){
-                await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
+                await UsuarioModel.findByIdAndUpdate(mongoose.Types.ObjectId(req.cookies['idUsu']), 
                     {$set: {
                         usuario_dataedi : dataAtual ,
                         usuario_senha : req.body.usuarioSenha
@@ -425,16 +426,23 @@ module.exports = {UsuarioModel,UsuarioSchema,
     usuarioDeletarPalavraChave: async (req, res) => {
         //Realiza Atualização
         let usuarioAtual = "-";
+        let usuarioResp = "-";
         let palavrasAntigas;
 
-        await Usuario.findOne({_id : req.body.usuarioId}).then((usu)=>{
+        await UsuarioModel.findOne({_id : req.body.usuarioId}).then((usu)=>{
             usuarioAtual = usu;
         }).catch((err)=>{
             console.log("ERRO!");
         })
 
-        if (usuarioAtual != "-"){
-            if (usuarioAtual.usuario_palavraschaveantigas == ""){
+        await UsuarioModel.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
+            usuarioResp = usu;
+        }).catch((err)=>{
+            console.log("ERRO!");
+        })
+        //console.log("usuarioResp.usuario_senha == req.body.usuarioRespSenha //"+usuarioResp.usuario_senha +" == "+ req.body.usuarioRespSenha)
+        if (usuarioAtual != "-" && usuarioResp != "-" && usuarioResp.usuario_senha == req.body.usuarioRespSenha){
+            if (usuarioAtual.usuario_palavraschaveantigas.length < 8){
                 palavrasAntigas = "["+usuarioAtual.usuario_palavrachave+"]"
             } else {
                 palavrasAntigas = usuarioAtual.usuario_palavraschaveantigas+",["+usuarioAtual.usuario_palavrachave+"]"
