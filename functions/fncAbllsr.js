@@ -29,7 +29,7 @@ module.exports = {
     listaAbllsr(req, res){
         let abllsrs = new Array();
         console.log('listando Diários de Abllsr')
-        Abllsr.find().then((abllsr) =>{
+        Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada bene!")
@@ -46,7 +46,7 @@ module.exports = {
     carregaAbllsr(req,res){
         let abllsrs = new Array();
         console.log('listando Diários de Abllsr')
-        Abllsr.find().then((abllsr) =>{
+        Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 
@@ -65,7 +65,7 @@ module.exports = {
     carregaAbllsredi(req,res){
         let abllsrs = new Array();
         console.log('listando Diários de Abllsr')
-        Abllsr.find().then((abllsr) =>{
+        Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena os Beneficiarios por nome 

@@ -39,7 +39,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a atend de listagem
-                    Atend.find().then((atend) =>{
+                    Atend.findOne().then((atend) =>{
                         console.log("Listagem Realizada!")
                         this.listaAtend(req,res);
                     }).catch((err) =>{
@@ -68,7 +68,7 @@ module.exports = {
         })
     },
     listaEvolucao(req, res){
-        Atend.find().then((atend) =>{
+        Atend.findOne().then((atend) =>{
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
             console.log("Listagem Realizada de Atendimentos!")

@@ -11368,7 +11368,7 @@ module.exports = {
 
                                             break;
                                         case "SubstitutoFixo":
-                                            console.log("SUBFIX");
+                                            console.log("SUBFIX1");
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
@@ -11398,6 +11398,9 @@ module.exports = {
                                                     convdebval = "0,00";
                                                 }
                                             })
+
+                                            console.log("convdebval:"+convdebval)
+                                            console.log("convcreval:"+convcreval)
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -11743,8 +11746,11 @@ module.exports = {
                                     hora = hor+":"+min;
                                     
                                     if (a.agenda_categoria == "SubstitutoFixo") {
-                                        console.log("SUBFIX");
-                                        agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+""
+                                        console.log("SUBFIX2");
+                                        console.log("a.agenda_convid:"+a.agenda_convid)
+                                        console.log("agendaSub.agenda_mergeterapiaid:"+agendaSub.agenda_mergeterapiaid)
+                                        console.log("a.agenda_mergeterapiaid:"+a.agenda_mergeterapiaid)
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                         convcre.forEach((ccre)=>{
                                             convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                             if( convcreTes == agendacreTes){
@@ -11754,7 +11760,7 @@ module.exports = {
                                             }
                                         })
 
-                                        agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+"";
+                                        agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";
                                         convdeb.forEach((cdeb)=>{
                                             if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
                                                 convdebval = "0,00";
@@ -11768,11 +11774,14 @@ module.exports = {
                                             }
                                         })
 
-                                        Usuario.find({_id: agendaSub.agenda_usuid}).then((u)=>{
+                                        Usuario.find({_id: a.agenda_usuid}).then((u)=>{
                                             if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
                                                 convdebval = "0,00";
                                             }
                                         })
+
+                                        console.log("convdebval:"+convdebval)
+                                        console.log("convcreval:"+convcreval)
         
                                         newAtend = new Atend({
                                             atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -11803,7 +11812,7 @@ module.exports = {
                                             credit_convid : a.agenda_convid ,
                                             credit_nome : "Atendimento "+nextNum ,
                                             credit_cpfcnpj : convCreCpfCnpj ,
-                                            credit_dataevento : agendaSub.agenda_data,
+                                            credit_dataevento : a.agenda_data,
                                             credit_datavenci : dataVenci ,
                                             credit_valorprev : convcreval ,
                                             credit_datacad : dataAtual
@@ -11812,12 +11821,12 @@ module.exports = {
                                         newDeb = new Deb({
                                             debit_atendnum : nextNum ,
                                             debit_categoria : "SubstitutoFixo" ,
-                                            debit_terapiaid : agendaSub.agenda_terapiaid ,
-                                            debit_terapeutaid : agendaSub.agenda_usuid ,
+                                            debit_terapiaid : a.agenda_terapiaid ,
+                                            debit_terapeutaid : a.agenda_usuid ,
                                             debit_convid : a.agenda_convid ,
                                             debit_nome : "Atendimento "+nextNum ,
                                             debit_cpfcnpj : convCreCpfCnpj ,
-                                            debit_dataevento : agendaSub.agenda_data,
+                                            debit_dataevento : a.agenda_data,
                                             debit_datavenci : dataVenci ,
                                             debit_valorprev : convdebval ,
                                             debit_datacad : dataAtual

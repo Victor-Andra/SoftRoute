@@ -127,7 +127,7 @@ module.exports = {
     listaAcomp(req, res, resposta){
         let flash = new Resposta();
         //console.log('listando Acompeses')
-        Acomp.find().then((acomp) =>{
+        Acomp.findOne().then((acomp) =>{
             acomp.sort((a,b) => (a.acomp_benenome > b.acomp_benenome) ? 1 : ((b.acomp_benenome > a.acomp_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista acompese 
             acomp.forEach((b)=>{
                 //console.log("b.datacad"+b.acomp_datacad)

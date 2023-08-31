@@ -29,7 +29,7 @@ module.exports = {
     listaAta(req, res){
         let convs = new Array();
         console.log('listando Diários de Ata')
-        Ata.find().then((ata) =>{
+        Ata.findOne().then((ata) =>{
             console.log("Listagem Realizada dos Diários de Ata!")
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena por ordem alfabética 

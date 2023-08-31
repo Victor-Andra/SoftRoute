@@ -539,7 +539,7 @@ module.exports = {
     },
     deletaAtendAdm(req, res){
         Atend.deleteOne({_id: req.params.id}).then(() =>{
-            Atend.find().then((atend) =>{
+            Atend.find().limit(2).then((atend) =>{
                 req.flash("success_message", "Atend deletada!")
                 res.render('atendimento/atendadm/atendAdmLis', {atends: atend})
             }).catch((err) =>{

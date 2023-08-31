@@ -29,7 +29,7 @@ module.exports = {
     listaGrafabc(req, res){
         let convs = new Array();
         console.log('listando Diários de Grafabc')
-        Grafabc.find().then((grafabc) =>{
+        Grafabc.findOne().then((grafabc) =>{
             console.log("Listagem Realizada dos Diários de Grafabc!")
                 Bene.findById(req.params.id).then((bene) =>{
                     console.log("Listagem Realizada bene!")

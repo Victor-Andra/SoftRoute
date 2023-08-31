@@ -45,7 +45,7 @@ class BordoMapa{
 module.exports = {
     listaBordo(req, res){
         console.log('listando Diários de Bordo')
-        Bordo.find().then((bordo) =>{
+        Bordo.findOne().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
             bordo.forEach((b)=>{
                 b.bordo_data = fncGeral.getDataRevert(fncGeral.getData(b.bordo_datacad))

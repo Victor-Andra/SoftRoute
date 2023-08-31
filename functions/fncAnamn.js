@@ -127,7 +127,7 @@ module.exports = {
     listaAnamn(req, res, resposta){
         let flash = new Resposta();
         //console.log('listando Anamneses')
-        Anamn.find().then((anamn) =>{
+        Anamn.findOne().then((anamn) =>{
             anamn.sort((a,b) => (a.anamn_benenome > b.anamn_benenome) ? 1 : ((b.anamn_benenome > a.anamn_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista anamnese 
             anamn.forEach((b)=>{
                 //console.log("b.datacad"+b.anamn_datacad)

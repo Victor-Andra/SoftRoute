@@ -203,9 +203,7 @@ module.exports = {
                             })
                         })
                         Atend.deleteOne({_id: req.params.id}).then((a) =>{
-                            Atend.find().then((atend) =>{
-                                this.listaAtend(req,res)
-                            })
+                            this.listaAtend(req,res)
                         }).catch((err) =>{
                             console.log(err)
                             res.render('admin/erro')
@@ -218,33 +216,41 @@ module.exports = {
     deletaVariosAtends(req, res){
         let arrayIdString = req.body.idsDeletar;
         let arrayId = arrayIdString.split(",");
+        let tamanho = arrayId.length;
+        let aux = 1;
         arrayId.forEach((id)=>{
             console.log("id:"+id);
+            console.log("aux:"+aux);
             Atend.findOne({_id: id}).then((a)=>{
                 Credit.find({credit_atendnum: a.atend_num}).then((cre)=>{
-                    cre.forEach((c)=>{
-                        Credit.deleteOne({_id: c._id}).catch((err) =>{
-                            console.log(err)
-                            res.render('admin/erro')
-                        })
-                    })
-                    Debit.find({debit_atendnum: a.atend_num}).then((deb)=>{
-                        deb.forEach((d)=>{
-                            Debit.deleteOne({_id: d._id}).catch((err) =>{
+                    if (cre.length > 0){
+                        cre.forEach((c)=>{
+                            Credit.deleteOne({_id: c._id}).catch((err) =>{
                                 console.log(err)
                                 res.render('admin/erro')
                             })
                         })
-                        Tabil.find({tabil_atendnum: a.atend_num}).then((tab)=>{
-                            tab.forEach((t)=>{
-                                Tabil.deleteOne({_id: t._id}).catch((err) =>{
+                    }
+                    Debit.find({debit_atendnum: a.atend_num}).then((deb)=>{
+                        if (deb.length > 0){
+                            deb.forEach((d)=>{
+                                Debit.deleteOne({_id: d._id}).catch((err) =>{
                                     console.log(err)
                                     res.render('admin/erro')
                                 })
                             })
-                            Atend.deleteOne({_id: id}).then((a) =>{
-                                Atend.find().then((atend) =>{
+                        }
+                        Tabil.find({tabil_atendnum: a.atend_num}).then((tab)=>{
+                            if (tab.length > 0){
+                                tab.forEach((t)=>{
+                                    Tabil.deleteOne({_id: t._id}).catch((err) =>{
+                                        console.log(err)
+                                        res.render('admin/erro')
+                                    })
                                 })
+                            }
+                            Atend.deleteOne({_id: id}).then((a) =>{
+                                console.log("DELETED")
                             }).catch((err) =>{
                                 console.log(err)
                                 res.render('admin/erro')
@@ -254,6 +260,7 @@ module.exports = {
                 })
             })
         })
+        console.log("TERMINOU? tamanho:"+tamanho);
         this.listaAtend(req,res)
     },
     atualizaAtend(req, res){
@@ -271,14 +278,8 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a atend de listagem
-                    Atend.find().then((atend) =>{
-                        //console.log("Listagem Realizada!")
-                        this.listaAtend(req,res);
-                    }).catch((err) =>{
-                        //console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
+                    //console.log("Listagem Realizada!")
+                    this.listaAtend(req,res);
                 }else{
                     //passar classe de erro
                     //console.log("error")

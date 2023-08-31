@@ -29,7 +29,7 @@ module.exports = {
     listaAnafuncomp(req, res){
         let convs = new Array();
         console.log('listando Diários de Anafuncomp')
-        Anafuncomp.find().then((anafuncomp) =>{
+        Anafuncomp.findOne().then((anafuncomp) =>{
             console.log("Listagem Realizada dos Diários de Anafuncomp!")
                 Bene.findById(req.params.id).then((bene) =>{
                     console.log("Listagem Realizada bene!")

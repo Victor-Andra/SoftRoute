@@ -25,7 +25,7 @@ const Conv = mongoose.model("tb_conv")
 module.exports = {
 
     listaCorrente(req, res){
-        corrente.find().then((corrente) =>{
+        Corrente.findOne().then((corrente) =>{
             console.log("Listagem Realizada!")
             res.render('financeiro/corrente/correnteLis', {correntes: corrente})
         }).catch((err) =>{
@@ -68,7 +68,7 @@ module.exports = {
 
     deletaCorrente(req, res){
         Corrente.deleteOne({_id: req.params.id}).then(() =>{
-            Corrente.find().then((corrente) =>{
+            Corrente.findOne().then((corrente) =>{
                 req.flash("success_message", "Corrente deletada!")
                 res.render('financeiro/corrente/correnteLis', {correntes: corrente})
             }).catch((err) =>{
@@ -94,7 +94,7 @@ module.exports = {
             }).finally(() =>{
                 if(resposta){
                     //Volta para a corrente de listagem
-                    Corrente.find().then((corrente) =>{
+                    Corrente.findOne().then((corrente) =>{
                         console.log("Listagem Realizada!")
                         res.render('financeiro/corrente/correnteLis', {correntes: corrente})
                     }).catch((err) =>{
