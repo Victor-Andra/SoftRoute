@@ -925,7 +925,7 @@ router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{
 router.post('/atendimento/deleteAll/', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
-        //fncAtend.deletaVariosAtends(req, res);
+        fncAtend.deletaVariosAtends(req, res);
     } else {
         console.log("Acesso NEGADO!");
         let lvl = "x";
@@ -1088,7 +1088,7 @@ router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{/
 router.get('/atendimento/atendadm/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta atend
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
-        //fncAtendAdm.deletaAtendAdm(req, res);
+        fncAtendAdm.deletaAtendAdm(req, res);
     } else {
         console.log("Acesso NEGADO!");
         let lvl = "x";
