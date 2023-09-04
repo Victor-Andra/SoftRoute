@@ -2,9 +2,48 @@
 <html lang="pt-br">
 	<head>
 		<title>Acompanhamento de Devolutivas, Acolhimentos e Reuniões ABA</title>
+		<script>
+		
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("acompBeneid").value = document.getElementById("acompBeneidEdi").value;
+			document.getElementById("acompTerapeutaid").value = document.getElementById("acompTerapeutaidEdi").value;
+			document.getElementById("acompEscolaid").value = document.getElementById("acompEscolaidEdi").value;
+			
+			//Quando quero calcular a idade do beneficiário
+			let dtnsc = new Date(document.getElementById("acompDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			
+			document.getElementById("acompTerapeutaid").value = document.getElementById("acompTerapeutaidEdi").value;
+			document.getElementById("acompBeneid").value = document.getElementById("acompBeneidEdi").value;
+			document.getElementById("acompData").value = document.getElementById("acompDataEdi").value;
+			document.getElementById("acompMes").value = document.getElementById("acompMesEdi").value;
+			document.getElementById("acompTipo").value = document.getElementById("acompTipoEdi").value;
+			document.getElementById("acompResp").value = document.getElementById("acompRespEdi").value;
+			document.getElementById("acompAndamento").value = document.getElementById("acompAndamentoEdi").value;
+			document.getElementById("acompDatacad").value = document.getElementById("acompDatacadEdi").value;
+			document.getElementById("acompUsuidcad").value = document.getElementById("acompUsuidcadEdi").value;
+			document.getElementById("acompDataedi").value = document.getElementById("acompDataediEdi").value;
+			document.getElementById("acompUsuidedi").value = document.getElementById("acompUsuidediEdi").value;
+
+		}
+		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -19,7 +58,7 @@
 								<a href="#">Acompanhamento de Devolutivas, Acolhimentos e Reuniões ABA</a>
 							</li>
 
-							<li class="active">Cadastro</li>
+							<li class="active">Edição</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,7 +66,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/area/aba/acomp/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/area/aba/acomp/atualizar" method="POST">
+								<input class="hidden" id="id" name="id" value="{{acomp._id}}" />
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
@@ -36,6 +76,19 @@
 													<i class="ace-icon fa fa-bookmark-o"></i>
 													Acompanhamento de Devolutivas, Acolhimentos e Reuniões ABA
 												</h4>
+												<div id="divCarrega" name="divCarrega" class="hidden">
+													<input  id="acompTerapeutaidEdi" name="acompTerapeutaidEdi" value="{{acomp.acomp_terapeutaid}}"/>
+													<input  id="acompBeneidEdi" name="acompBeneidEdi" value="{{acomp.acomp_beneid}}"/>
+													<input  id="acompDataEdi" name="acompDataEdi" value="{{acomp.acomp_data}}"/>
+													<input  id="acompMesEdi" name="acompMesEdi" value="{{acomp.acomp_mes}}"/>
+													<input  id="acompTipoEdi" name="acompTipoEdi" value="{{acomp.acomp_tipo}}"/>
+													<input  id="acompRespEdi" name="acompRespEdi" value="{{acomp.acomp_resp}}"/>
+													<input  id="acompAndamentoEdi" name="acompAndamentoEdi" value="{{acomp.acomp_andamento}}"/>
+													<input id="acompDatacadEdi" name="acompDatacadEdi" value="{{acomp.acomp_datacad}}"/>
+													<input  id="acompUsuidcadEdi" name="acompUsuidcadEdi" value="{{acomp.acomp_usuid}}"/>
+													<input id="acompDataediEdi" name="acompDataediEdi" value="{{acomp.acomp_dataedi}}"/>
+													<input  id="acompUsuidediEdi" name="acompUsuidediEdi" value="{{acomp.acomp_usuidedi}}"/>
+												</div>
 
 												<span class="widget-toolbar">
 
@@ -59,7 +112,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="acompData" name="acompData" type="date">
+																		<input id="acompData" name="acompData" type="date"  value="{{acomp.acomp_data}}">
 																	</div>
 																</div>
 															</div>
@@ -70,7 +123,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-3">
-																		<input id="acompMes" name="acompMes" type="text" placeholder="0000/00">
+																		<input id="acompMes" name="acompMes" type="text"  value="{{acomp.acomp_mes}}">
 																	</div>
 																</div>
 															</div>
@@ -81,7 +134,7 @@
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="acompTerapeutaid" id="acompTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="acompTerapeutaid" id="acompTerapeutaid" class="chosen-select"  >
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -97,7 +150,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="acompBeneid" id="acompBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="acompBeneid" id="acompBeneid" class="chosen-select" >
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -108,37 +161,34 @@
 														</div>
 														
 														
-
-														
+											
 
 														<div class="col-sm-8">
 															<label> Responsáveis</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<input type="text" name="acompResp" id="acompResp" class="form-control" />
+																	<input type="text" name="acompResp" id="acompResp" class="form-control" value="{{acomp.acomp_resp}}"/>
 																</div>
 															</div>
 														</div>
 													</div>
-													
 													<div class="row">
 														<div class="col-sm-8">
 															<label> Tipo</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<input type="text" name="acompTipo" id="acompTipo" placeholder="Boas vindas, reunião, integração, etc." class="form-control" />
+																	<input type="text" name="acompTipo" id="acompTipo" class="form-control" value="{{acomp.acomp_tipo}}"/>
 																</div>
 															</div>
 														</div>
 													</div>
-
 													<div class="row">
 														<div class="col-sm-6">
 															<label> Sinalização</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="acompAndamento" id="acompAndamento" class="chosen-select" data-placeholder="Escolha..." >
-																			<option value="-">-</option>
+																	<select name="acompAndamento" id="acompAndamento" class="chosen-select" value="{{acomp.acomp_andamento}}">
+																			<option value="{{acomp.acomp_andamento}}">{{acomp.acomp_andamento}}</option>
 																			<option value="Amarelo">Amarelo</option>
 																			<option value="Laranja">Laranja</option>
 																			<option value="Rosa">Rosa</option>
@@ -178,9 +228,9 @@
 													Salvar
 												</button>
 												&nbsp; &nbsp; &nbsp;
-												<button class="btn btn-warning"  type="reset">
+												<button class="btn btn-warning" onclick="menu/area/aba/acomp/lis">
 													<i class="ace-icon fa fa-undo bigger-110"></i>
-													Cancelar
+													Voltar
 												</button>
 											</div>
 										</div>

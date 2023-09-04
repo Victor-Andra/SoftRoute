@@ -1794,6 +1794,10 @@ router.post('/area/aba/pecs/atualizar', fncGeral.IsAuthenticated, (req,res) =>{/
 router.get('/area/aba/visual/visualcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
     fncVisual.carregaVisual(req, res);
 })
+//Carrega Editar Visual
+router.get('/area/aba/visual/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncVisual.carregaVisualedi(req,res);
+})
 
 //Lista Visual
 router.get('/area/aba/visual/visuallis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
@@ -1806,21 +1810,36 @@ router.post('/area/aba/visual/add', fncGeral.IsAuthenticated, (req,res) =>{//adi
     fncVisual.cadastraVisual(req, res); 
 })
 
+//Carrega Atualizar Visual
+router.post('/area/aba/visual/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncVisual.atualizaVisual(req,res);
+})
+
 //Menu Acompanhamento devolutivas e reuniões ** Area Tecnicos e ABA 
 //Carrega Cadastro Acompanhamento, devolutivas e reuniões
 router.get('/area/aba/acomp/acompcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
     fncAcomp.carregaAcomp(req, res);
 })
 
-//Lista Pecs
+//Lista Acomp
 router.get('/area/aba/acomp/acomplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
     fncAcomp.listaAcomp(req, res);
 })
 
-//Adiciona Registro acomp
-router.post('/area/aba/acomp/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Acompanhamento
+//Adiciona Registro Acomp
+router.post('/area/aba/acomp/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona pecs
     console.log("post")
     fncAcomp.cadastraAcomp(req, res); 
+})
+
+//Carrega Editar Acomp
+router.get('/area/aba/acomp/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncAcomp.carregaAcompedi(req,res);
+})
+
+//Carrega Atualizar Acomp
+router.post('/area/aba/acomp/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncAcomp.atualizaAcomp(req,res);
 })
 
 //Menu Gráfico ABC ** Area Tecnicos e ABA 

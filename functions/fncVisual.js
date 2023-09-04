@@ -28,17 +28,18 @@ const bene = require("../models/bene")
 const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    carregaVisual(req, res){
-        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-            console.log("Listagem Realizada de Usuário")
+    carregaVisual(req,res){
+        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                    console.log("Listagem Realizada de beneficiarios")
-                        res.render("area/visual/visualCad", {usuarios: usuario, benes: bene})
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                       res.render("area/aba/visual/visualCad", {terapeutas: terapeuta, benes: bene})
         })}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
             res.redirect('admin/erro')
         })
+
     },
     
         cadastraVisual(req,res){
@@ -112,12 +113,14 @@ module.exports = {
         }
     },
 
-    carregaVisualEdi(req, res){
+    carregaVisualedi(req, res){
         Visual.findById(req.params.id).then((visual) =>{console.log("ID: "+visual._id)
-            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
-            res.render('area/visual/visualEdi', {visual, usuarios: usuario})
-        })}).catch((err) =>{
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+            res.render('area/aba/visual/visualEdi', {visual, terapeutas: terapeuta, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -131,7 +134,7 @@ module.exports = {
             visual.sort((a,b) => (a.visual_benenome > b.visual_benenome) ? 1 : ((b.visual_benenome > a.visual_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista visualese 
             visual.forEach((b)=>{
                 //console.log("b.datacad"+b.visual_datacad)
-                let datacad = new Date(b.visual_datacad)
+                let datacad = new Date(b.visual_data)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -154,7 +157,7 @@ module.exports = {
                     dia = "0"+dia;
                 }
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.visual_datavisual=fulldate;
+                b.visual_datacad=fulldate;
 
                 //console.log("d.dataanaedi"+d.visual_dataedi)
                 datacad = new Date(b.visual_dataedi)
@@ -167,13 +170,13 @@ module.exports = {
                     dia = "0"+dia;
                 }
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.visual_edi=fulldate;
+                b.visual_dataedi=fulldate;
             })
 
             //console.log("visual:");
             //console.log(visual);
             //console.log("Listagem Realizada das Visualeses!")
-                Bene.findById(req.params.id).then((bene) =>{
+                Bene.find().then((bene)=>{
                     //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")
@@ -193,13 +196,13 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    listaVisualImp(req, res){
+    listaVisualimp(req, res){
         Visual.findById(req.params.id).then((visual) =>{
             console.log("visual:");
             console.log(visual);
             Bene.findById(req.params.id).then((bene) =>{
                 console.log("Listagem Realizada bene!")
-                res.render('area/visual/visualLis', {visuals: visual, benes: bene})
+                res.render('area/aba/visual/visualLis', {visuals: visual, benes: bene})
         })}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

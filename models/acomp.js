@@ -2,12 +2,13 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const AcompSchema = mongoose.Schema({
+    acomp_id:{ type: ObjectId, required: false },
     acomp_terapeutaid:{type: ObjectId, required: true},
     acomp_beneid:{type: ObjectId, required: true},
     acomp_data: { type: String, required: false },
     acomp_mes: { type: String, required: false },
     acomp_tipo: { type: String, required: false },
-    acomp_fase: { type: String, required: false },
+    acomp_resp: { type: String, required: false },
     acomp_andamento: { type: String, required: false },
     //controle
     acomp_datacad: { type: Date, required: false },
@@ -19,12 +20,13 @@ const AcompSchema = mongoose.Schema({
 
 class Acomp{
     constructor(
+        acomp_id,
         acomp_terapeutaid,
         acomp_beneid,
         acomp_data, 
         acomp_mes, 
         acomp_tipo,
-        acomp_fase, 
+        acomp_resp, 
         acomp_andamento, 
         acomp_datacad, 
         acomp_usuidcad, 
@@ -32,12 +34,13 @@ class Acomp{
         acomp_usuidedi 
    
          ){
+            this.acomp_id = acomp_id,
             this.acomp_terapeutaid = acomp_terapeutaid, 
             this.acomp_beneid = acomp_beneid, //Ok
             this.acomp_data = acomp_data, //Ok
             this.acomp_mes = acomp_mes,
             this.acomp_tipo = acomp_tipo,
-            this.acomp_fase = acomp_fase,
+            this.acomp_resp = acomp_resp,
             this.acomp_andamento = acomp_andamento,
             this.acomp_datacad = acomp_datacad,
             this.acomp_usuidcad = acomp_usuidcad,
@@ -73,7 +76,7 @@ module.exports = {AcompModel,AcompSchema,
                 acomp_data : req.body.acompData,
                 acomp_mes : req.body.acompMes,
                 acomp_tipo : req.body.acompTipo,
-                acomp_fase : req.body.acompFase,
+                acomp_resp : req.body.acompResp,
                 acomp_andamento : req.body.acompAndamento,
                 
                 acomp_dataedi : dataAtual, 
@@ -105,12 +108,13 @@ module.exports = {AcompModel,AcompSchema,
             }
         })
         const newAcomp = new AcompModel({
-            acomp_terapeutaid : req.body.acompTerapeutaid,
+                acomp_id: req.body.acompId,
+                acomp_terapeutaid : req.body.acompTerapeutaid,
                 acomp_beneid : req.body.acompBeneid,
                 acomp_data : req.body.acompData,
                 acomp_mes : req.body.acompMes,
                 acomp_tipo : req.body.acompTipo,
-                acomp_fase : req.body.acompFase,
+                acomp_resp : req.body.acompResp,
                 acomp_andamento : req.body.acompAndamento,
                 acomp_datacad : dataAtual, 
                 acomp_usuidcad : idUsu

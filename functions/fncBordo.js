@@ -45,7 +45,7 @@ class BordoMapa{
 module.exports = {
     listaBordo(req, res){
         console.log('listando Diários de Bordo')
-        Bordo.findOne().then((bordo) =>{
+        Bordo.find().then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
             bordo.forEach((b)=>{
                 b.bordo_data = fncGeral.getDataRevert(fncGeral.getData(b.bordo_datacad))
@@ -320,8 +320,8 @@ module.exports = {
                                     console.log("Listagem Realizada de beneficiarios")
                                     Escola.find().then((escola) =>{
                                         escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                            req.flash("success_message", "Diário de Bordo Deletado!")
-                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, flash})
+                                            //req.flash("success_message", "Diário de Bordo Deletado!")
+                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene})
             })})})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Diários de Bordo")

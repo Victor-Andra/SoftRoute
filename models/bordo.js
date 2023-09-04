@@ -1,3 +1,4 @@
+const { data } = require('jquery')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
@@ -301,7 +302,6 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_terapeutaid: req.body.bordoTerapeutaid,
                 bordo_beneid: req.body.bordoBeneid,
                 bordo_escolaid: req.body.bordoEscolaid,
-                bordo_datacad: req.body.bordoDatacad,
                 bordo_frequencia: req.body.bordoFrequencia,
                 bordo_seguerotina: req.body.bordoSeguerotina,
                 bordo_seguerotinadesc: req.body.bordoSeguerotinadesc,
@@ -386,7 +386,6 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_obs: req.body.bordoObs,
                 bordo_selo: req.body.bordoSelo,
                 bordo_dataedi : req.body.bordoDataAtual.toISOString(),
-                bordo_usuidcad: req.body.bordoUsuidcad,
                 bordo_usuidedi: req.body.bordoUsuidedi
 
                 
@@ -411,7 +410,6 @@ module.exports = {BordoModel,BordoSchema,
             bordo_terapeutaid: req.body.bordoTerapeutaid,
             bordo_beneid: req.body.bordoBeneid,
             bordo_escolaid: req.body.bordoEscolaid,
-            bordo_datacad: req.body.bordoDataAtual.toISOString(),
             bordo_frequencia: req.body.bordoFrequencia,
             bordo_seguerotina: req.body.bordoSeguerotina,
             bordo_seguerotinadesc: req.body.bordoSeguerotinadesc,
@@ -495,9 +493,8 @@ module.exports = {BordoModel,BordoSchema,
             bordo_incidente: req.body.bordoIncidente,
             bordo_obs: req.body.bordoObs,
             bordo_selo: req.body.bordoSelo,
-            bordo_dataedi : req.body.bordoDataAtual.toISOString(),
-            bordo_usuidcad: req.body.bordoUsuidcad,
-            bordo_usuidedi: req.body.bordoUsuidedi
+            bordo_datacad: dataAtual,
+            bordo_usuidcad: req.body.bordoUsuidedi
             
         });
         console.log("newBordo save");

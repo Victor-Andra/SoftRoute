@@ -28,17 +28,18 @@ const bene = require("../models/bene")
 const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    carregaAcomp(req, res){
-        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-            console.log("Listagem Realizada de Usuário")
+    carregaAcomp(req,res){
+        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                    console.log("Listagem Realizada de beneficiarios")
-                        res.render("area/aba/acomp/acompCad", {usuarios: usuario, benes: bene})
+                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                       res.render("area/aba/acomp/acompCad", {terapeutas: terapeuta, benes: bene})
         })}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
             res.redirect('admin/erro')
         })
+
     },
     
         cadastraAcomp(req,res){
@@ -112,12 +113,14 @@ module.exports = {
         }
     },
 
-    carregaAcompEdi(req, res){
+    carregaAcompedi(req, res){
         Acomp.findById(req.params.id).then((acomp) =>{console.log("ID: "+acomp._id)
-            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
-            res.render('area/aba/acomp/acompEdi', {acomp, usuarios: usuario})
-        })}).catch((err) =>{
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+            res.render('area/aba/acomp/acompEdi', {acomp, terapeutas: terapeuta, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -127,11 +130,11 @@ module.exports = {
     listaAcomp(req, res, resposta){
         let flash = new Resposta();
         //console.log('listando Acompeses')
-        Acomp.findOne().then((acomp) =>{
+        Acomp.find().then((acomp) =>{
             acomp.sort((a,b) => (a.acomp_benenome > b.acomp_benenome) ? 1 : ((b.acomp_benenome > a.acomp_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista acompese 
             acomp.forEach((b)=>{
                 //console.log("b.datacad"+b.acomp_datacad)
-                let datacad = new Date(b.acomp_datacad)
+                let datacad = new Date(b.acomp_data)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -154,7 +157,7 @@ module.exports = {
                     dia = "0"+dia;
                 }
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.acomp_dataacomp=fulldate;
+                b.acomp_datacad=fulldate;
 
                 //console.log("d.dataanaedi"+d.acomp_dataedi)
                 datacad = new Date(b.acomp_dataedi)
@@ -167,13 +170,13 @@ module.exports = {
                     dia = "0"+dia;
                 }
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.acomp_edi=fulldate;
+                b.acomp_dataedi=fulldate;
             })
 
             //console.log("acomp:");
             //console.log(acomp);
             //console.log("Listagem Realizada das Acompeses!")
-                Bene.findById(req.params.id).then((bene) =>{
+                Bene.find().then((bene)=>{
                     //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")
@@ -193,7 +196,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    listaAcompImp(req, res){
+    listaAcompimp(req, res){
         Acomp.findById(req.params.id).then((acomp) =>{
             console.log("acomp:");
             console.log(acomp);

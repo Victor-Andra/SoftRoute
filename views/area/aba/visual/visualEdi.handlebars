@@ -1,10 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Controle Rotina Visual</title>
+		<title>Controle Rotina Visual Edição</title>
+		<script>
+		
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("visualBeneid").value = document.getElementById("visualBeneidEdi").value;
+			document.getElementById("visualTerapeutaid").value = document.getElementById("visualTerapeutaidEdi").value;
+			document.getElementById("visualEscolaid").value = document.getElementById("visualEscolaidEdi").value;
+			
+			//Quando quero calcular a idade do beneficiário
+			let dtnsc = new Date(document.getElementById("visualDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			
+			document.getElementById("visualTerapeutaid").value = document.getElementById("visualTerapeutaidEdi").value;
+			document.getElementById("visualBeneid").value = document.getElementById("visualBeneidEdi").value;
+			document.getElementById("visualData").value = document.getElementById("visualDataEdi").value;
+			document.getElementById("visualTipo").value = document.getElementById("visualTipoEdi").value;
+			document.getElementById("visualDatacad").value = document.getElementById("visualDatacadEdi").value;
+			document.getElementById("visualUsuidcad").value = document.getElementById("visualUsuidcadEdi").value;
+			document.getElementById("visualDataedi").value = document.getElementById("visualDataediEdi").value;
+			document.getElementById("visualUsuidedi").value = document.getElementById("visualUsuidediEdi").value;
+
+		}
+		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -19,7 +55,7 @@
 								<a href="#">Controle Rotina Visual</a>
 							</li>
 
-							<li class="active">Cadastro</li>
+							<li class="active">Edição</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,15 +63,26 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/area/aba/visual/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/area/aba/visual/atualizar" method="POST">
+								<input class="hidden" id="id" name="id" value="{{visual._id}}" />
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-bookmark-o"></i>
-													Rotina Visual
+													PECS
 												</h4>
+												<div id="divCarrega" name="divCarrega" class="hidden">
+													<input id="visualTerapeutaidEdi" name="visualTerapeutaidEdi" value="{{visual.visual_terapeutaid}}"/>
+													<input id="visualBeneidEdi" name="visualBeneidEdi" value="{{visual.visual_beneid}}"/>
+													<input id="visualDataEdi" name="visualDataEdi" value="{{visual.visual_data}}"/>
+													<input id="visualTipoEdi" name="visualTipoEdi" value="{{visual.visual_tipo}}"/>
+													<input id="visualDatacadEdi" name="visualDatacadEdi" value="{{visual.visual_datacad}}"/>
+													<input id="visualUsuidcadEdi" name="visualUsuidcadEdi" value="{{visual.visual_usuid}}"/>
+													<input id="visualDataediEdi" name="visualDataediEdi" value="{{visual.visual_dataedi}}"/>
+													<input id="visualUsuidediEdi" name="visualUsuidediEdi" value="{{visual.visual_usuidedi}}"/>
+												</div>
 
 												<span class="widget-toolbar">
 
@@ -59,18 +106,19 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="visualData" name="visualData" type="date">
+																		<input id="visualData" name="visualData" type="date"  value="{{visual.visual_data}}">
 																	</div>
 																</div>
 															</div>
 														</div>
+														
 																												
 
 														<div class="col-sm-6">
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="visualTerapeutaid" id="visualTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="visualTerapeutaid" id="visualTerapeutaid" class="chosen-select"  >
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -86,7 +134,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="visualBeneid" id="visualBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="visualBeneid" id="visualBeneid" class="chosen-select" >
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -102,9 +150,7 @@
 															<label> Observação</label>
 															<div class="form-group">
 																<div class="col-sm-12">
-																	<textarea type="text" name="visualTipo" id="visualTipo" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-																	</textarea>
-																	
+																<input name="visualTipo" id="visualTipo" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa" value="{{visual.visual_tipo}}">
 																</div>
 															</div>
 														</div>
@@ -139,9 +185,9 @@
 													Salvar
 												</button>
 												&nbsp; &nbsp; &nbsp;
-												<button class="btn btn-warning"  type="reset">
+												<button class="btn btn-warning" onclick="menu/area/aba/visual/lis">
 													<i class="ace-icon fa fa-undo bigger-110"></i>
-													Cancelar
+													Voltar
 												</button>
 											</div>
 										</div>

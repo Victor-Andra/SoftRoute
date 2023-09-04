@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const VisualSchema = mongoose.Schema({
+    visual_id:{ type: ObjectId, required: false },
     visual_terapeutaid:{type: ObjectId, required: true},
     visual_beneid:{type: ObjectId, required: true},
     visual_data: { type: String, required: false },
@@ -19,6 +20,7 @@ const VisualSchema = mongoose.Schema({
 
 class Visual{
     constructor(
+        visual_id,
         visual_terapeutaid,
         visual_beneid,
         visual_data, 
@@ -32,6 +34,7 @@ class Visual{
         visual_usuidedi 
    
          ){
+            this.visual_id = visual_id,
             this.visual_terapeutaid = visual_terapeutaid, 
             this.visual_beneid = visual_beneid, //Ok
             this.visual_data = visual_data, //Ok
@@ -105,7 +108,8 @@ module.exports = {VisualModel,VisualSchema,
             }
         })
         const newVisual = new VisualModel({
-            visual_terapeutaid : req.body.visualTerapeutaid,
+                visual_id: req.body.visualId,
+                visual_terapeutaid : req.body.visualTerapeutaid,
                 visual_beneid : req.body.visualBeneid,
                 visual_data : req.body.visualData,
                 visual_mes : req.body.visualMes,
