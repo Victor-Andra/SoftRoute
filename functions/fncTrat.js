@@ -157,7 +157,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            tratClass.escolaEditar(req,res).then((res)=>{
+            tratClass.tratEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;

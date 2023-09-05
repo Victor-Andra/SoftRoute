@@ -25,8 +25,8 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/area/bordo/add" method="POST">
-								<div class="form-horizontal" role="form">
-									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+								
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
@@ -55,7 +55,7 @@
 													<label> Terapeuta</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
+															<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" >
 																<option value="-">-</option>
 																{{#each terapeutas}}
 																<option value="{{_id}}">{{usuario_nome}}</option>
@@ -68,7 +68,7 @@
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="bordoBeneid" id="bordoBeneid" class="chosen-select" data-placeholder="Escolha..." >
+															<select name="bordoBeneid" id="bordoBeneid" class="chosen-select"  >
 																<option value="-">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -80,7 +80,7 @@
 													<label> Escola</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" data-placeholder="Escolha..." >
+															<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select"  >
 																<option value="-">-</option>
 																{{#each escolas}}
 																	<option value="{{_id}}">{{escola_nome}}</option>
@@ -107,7 +107,7 @@
 															<div class="row">
 																<div class="col-xs-12">
 																	<div class="input-group">
-																		<select name="bordofrequencia" id="bordofrequencia" class="chosen-select" data-placeholder="Escolha..." >
+																		<select name="bordofrequencia" id="bordofrequencia" class="chosen-select"  >
 																			<option value="-">-</option>
 																			<option value="Ausente">Ausente</option>
 																			<option value="Presente">Presente</option>
@@ -151,13 +151,7 @@
 											<div class="widget-body">
 												<div class="widget-main">
 
-												<div class="alert alert-warning">
-														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														Pontuação sobre rotina do dia
-														<br>
-													</div>
+												
 													<div class="row">											
 														<div class="col-xs-12 col-sm-4">
 															
@@ -179,20 +173,20 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" data-placeholder="Escolha...">
-																							<option value="-">-</option>
-																							<option value="00">00</option>
-																							<option value="01">01</option>
-																							<option value="02">02</option>
-																							<option value="03">03</option>
-																							<option value="04">04</option>
-																							<option value="05">05</option>
-																							<option value="06">06</option>
-																							<option value="07">07</option>
-																							<option value="08">08</option>
-																							<option value="09">09</option>
-																							<option value="10">10</option>
-																						</select>
+																					<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" >
+																						<option value="-">-</option>
+																						<option value="00">00</option>
+																						<option value="01">01</option>
+																						<option value="02">02</option>
+																						<option value="03">03</option>
+																						<option value="04">04</option>
+																						<option value="05">05</option>
+																						<option value="06">06</option>
+																						<option value="07">07</option>
+																						<option value="08">08</option>
+																						<option value="09">09</option>
+																						<option value="10">10</option>
+																					</select>
 																				</div>
 																			</div>
 																			<div class="row">
@@ -200,8 +194,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text" name="bordoSeguerotinadesc" id="bordoSeguerotinadesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoSeguerotinadesc" id="bordoSeguerotinadesc" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -225,7 +218,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="00">00</option>
 																						<option value="01">01</option>
@@ -247,8 +240,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoEstereotipasdesc" id="bordoEstereotipasdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoEstereotipasdesc" id="bordoEstereotipasdesc" class="form-control"></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -272,7 +264,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoFoco" id="bordoFoco" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoFoco" id="bordoFoco" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="00">00</option>
 																						<option value="01">01</option>
@@ -286,7 +278,6 @@
 																						<option value="09">09</option>
 																						<option value="10">10</option>
 																					</select>
-
 																				</div>
 																			</div>
 																			<div class="row">
@@ -294,8 +285,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoFocodesc" id="bordoFocodesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoFocodesc" id="bordoFocodesc" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -320,7 +310,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" >
 																						<option value="-">-</option>
 																							<option value="00">00</option>
 																							<option value="01">01</option>
@@ -343,8 +333,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoAutocuidadodesc" id="bordoAutocuidadodesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text"type="text" name="bordoAutocuidadodesc" id="bordoAutocuidadodesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -369,7 +358,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" >
 																						<option value="-">-</option>
 																							<option value="00">00</option>
 																							<option value="01">01</option>
@@ -392,8 +381,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bardoAliindependedesc" id="bardoAliindependedesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text"type="text" name="bardoAliindependedesc" id="bardoAliindependedesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -420,7 +408,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" >
 																							<option value="-">-</option>
 																							<option value="00">00</option>
 																							<option value="01">01</option>
@@ -443,8 +431,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoEscolaliadesc" id="bordoEscolaliadesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoEscolaliadesc" id="bordoEscolaliadesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -469,7 +456,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																				<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="00">00</option>
 																						<option value="01">01</option>
@@ -490,8 +477,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoParticipadesc" id="bordoParticipadesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoParticipadesc" id="bordoParticipadesc" placeholder="-" class="form-control"></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -515,7 +501,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoSegue" id="bordoSegue" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoSegue" id="bordoSegue" class="chosen-select" >
 																							<option value="-">-</option>
 																							<option value="00">00</option>
 																							<option value="01">01</option>
@@ -536,8 +522,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoSeguedesc" id="bordoSeguedesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text"name="bordoSeguedesc" id="bordoSeguedesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -562,7 +547,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="00">00</option>
 																						<option value="01">01</option>
@@ -584,8 +569,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoRepertoriodesc" id="bordoRepertoriodesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoRepertoriodesc" id="bordoRepertoriodesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -610,7 +594,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																				<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="00">00</option>
 																						<option value="01">01</option>
@@ -631,8 +615,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input name="bordoDesorganizadesc" id="bordoDesorganizadesc" placeholder="-" class="form-control"  >
-																							</input>
+																							<textarea name="bordoDesorganizadesc" id="bordoDesorganizadesc" placeholder="-" class="form-control"></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -682,13 +665,7 @@
 											<div class="widget-body">
 												<div class="widget-main">
 
-													<div class="alert alert-warning">
-														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														Problemas de comportamento
-														<br>
-													</div>
+													
 													<div class="row">											
 														<div class="col-xs-12 col-sm-4">
 
@@ -709,7 +686,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoAutoagressao" id="bordoAutoagressao" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoAutoagressao" id="bordoAutoagressao" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -721,8 +698,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoAutoagressaodesc" id="bordoAutoagressaodesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" name="bordoAutoagressaodesc" id="bordoAutoagressaodesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -746,7 +722,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -758,8 +734,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoAgrideadultodesc" id="bordoAgrideadultodesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" data-placeholder="-" name="bordoAgrideadultodesc" id="bordoAgrideadultodesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -783,7 +758,7 @@
 																			
 																			<div class="row" >
 																				<div class="col-sm-12">
-																					<select name="bordoAgridepares" id="bordoAgridepares" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoAgridepares" id="bordoAgridepares" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -796,8 +771,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoAgrideparesdesc" id="bordoAgrideparesdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" data-placeholder="-" name="bordoAgrideparesdesc" id="bordoAgrideparesdesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -822,7 +796,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoDestruir" id="bordoDestruir" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoDestruir" id="bordoDestruir" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -836,8 +810,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoDestruirdesc" id="bordoDestruirdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" data-placeholder="-" name="bordoDestruirdesc" id="bordoDestruirdesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -862,7 +835,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoGritos" id="bordoGritos" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoGritos" id="bordoGritos" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -875,8 +848,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoGritosdesc" id="bordoGritosdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" data-placeholder="-" name="bordoGritosdesc" id="bordoGritosdesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -901,7 +873,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoChoros" id="bordoChoros" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoChoros" id="bordoChoros" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -914,8 +886,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoChorosdesc" id="bordoChorosdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text" data-placeholder="-" name="bordoChorosdesc" id="bordoChorosdesc" placeholder="-" class="form-control" ></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -940,7 +911,7 @@
 																			
 																			<div class="row">
 																				<div class="col-sm-12">
-																					<select name="bordoBirras" id="bordoBirras" class="chosen-select" data-placeholder="Escolha...">
+																					<select name="bordoBirras" id="bordoBirras" class="chosen-select" >
 																						<option value="-">-</option>
 																						<option value="Sim">Sim</option>
 																						<option value="Não">Não</option>
@@ -952,8 +923,7 @@
 																					<label>Anotações</label>
 																					<div class="form-group">
 																						<div class="col-sm-12">
-																							<input type="text"type="text" name="bordoBirrasdesc" id="bordoBirrasdesc" placeholder="-" class="form-control"   >
-																							</input>
+																							<textarea type="text"type="text" name="bordoBirrasdesc" id="bordoBirrasdesc" placeholder="-" class="form-control"></textarea>
 																						</div>
 																					</div>
 																				</div>
@@ -975,15 +945,7 @@
 														</div>
 													</div>
 													<hr>
-													<div class="alert alert-warning">
-														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														
-														
-														<span class="label label label-danger arrowed-right">I</span> Independente &nbsp;&nbsp; <span class="label label label-warning arrowed-right">A</span>Com Ajuda
-														<br>
-													</div>
+											
 													<div class="row">											
 														<div class="col-xs-12 col-sm-6">
 															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
@@ -997,7 +959,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário emitiu mandos para os adultos?</td>
 																		<td name="Pontua">
-																			<select name="bordoMandosadulto" id="bordoMandosadulto" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoMandosadulto" id="bordoMandosadulto" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1007,7 +969,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário emitiu mandos para os pares?</td>
 																		<td name="Pontua">
-																			<select name="bordoMandospares" id="bordoMandospares" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoMandospares" id="bordoMandospares" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1018,7 +980,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário fez perguntas?</td>
 																		<td name="Pontua">
-																			<select name="bordoPergunta" id="bordoPergunta" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoPergunta" id="bordoPergunta" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1028,7 +990,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário respondeu perguntas?</td>
 																		<td name="Pontua">
-																			<select name="bordoResponde" id="bordoResponde" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoResponde" id="bordoResponde" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1038,7 +1000,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário imitou os colegas?</td>
 																		<td name="Pontua">
-																			<select name="bordoImita" id="bordoImita" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoImita" id="bordoImita" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1048,7 +1010,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário iniciou interações verbais?</td>
 																		<td name="Pontua">
-																			<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="I">I</option>
 																				<option value="A">A</option>
@@ -1071,8 +1033,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" >
 																			<div class="col-sm-12">
-																				<input type="text"type="text" name="bordoVerbaldesc" id="bordoVerbaldesc" placeholder="-" class="form-control" rows="13"  >
-																				</input>
+																				<textarea type="text" data-placeholder="-" name="bordoVerbaldesc" id="bordoVerbaldesc" placeholder="-" class="form-control" rows="13" ></textarea>
 																			</div>
 																		</td>
 																		
@@ -1085,14 +1046,7 @@
 														</div>
 													</div>
 													<hr>
-													<div class="alert alert-warning">
-														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														Sinalização sobre colaboração para execução das atividades?
-														
-														<br>
-													</div>
+													
 													<div id="faq-list-5" class="panel-group accordion-style1 accordion-style2"><!-- .Accordis -->
 															
 															<div class="panel panel-default"><!-- /.. Colaboração para execução das atividades 1-->
@@ -1110,7 +1064,7 @@
 																		
 																		<div class="row">
 																			<div class="col-sm-12">
-																				<select name="bordoColab" id="bordoColab" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColab" id="bordoColab" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1122,8 +1076,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabdesc" id="bordoColabdesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text" data-placeholder="-" name="bordoColabdesc" id="bordoColabdesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1147,7 +1100,7 @@
 																		
 																		<div class="row" >
 																			<div class="col-sm-12">
-																				<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1160,8 +1113,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabtodotempodesc" id="bordoColabtodotempodesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text" data-placeholder="-" name="bordoColabtodotempodesc" id="bordoColabtodotempodesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1185,7 +1137,7 @@
 																		
 																		<div class="row" >
 																			<div class="col-sm-12">
-																				<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1198,8 +1150,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabmaiortempodesc" id="bordoColabmaiortempodesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text"type="text" name="bordoColabmaiortempodesc" id="bordoColabmaiortempodesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1224,7 +1175,7 @@
 																		
 																		<div class="row">
 																			<div class="col-sm-12">
-																				<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1238,8 +1189,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabmetadetempodesc" id="bordoColabmetadetempodesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text" name="bordoColabmetadetempodesc" id="bordoColabmetadetempodesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1264,7 +1214,7 @@
 																		
 																		<div class="row">
 																			<div class="col-sm-12">
-																				<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1277,8 +1227,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabmenosmetadetempodesc" id="bordoColabmenosmetadetempodesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text" data-placeholder="-" name="bordoColabmenosmetadetempodesc" id="bordoColabmenosmetadetempodesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1303,7 +1252,7 @@
 																		
 																		<div class="row">
 																			<div class="col-sm-12">
-																				<select name="bordoColabnao" id="bordoColabnao" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="bordoColabnao" id="bordoColabnao" class="chosen-select" >
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -1317,8 +1266,7 @@
 																				<label>Anotações</label>
 																				<div class="form-group">
 																					<div class="col-sm-12">
-																						<input type="text"type="text" name="bordoColabnaodesc" id="bordoColabnaodesc" placeholder="-" class="form-control"   >
-																						</input>
+																						<textarea type="text" data-placeholder="-" name="bordoColabnaodesc" id="bordoColabnaodesc" placeholder="-" class="form-control" ></textarea>
 																					</div>
 																				</div>
 																			</div>
@@ -1347,9 +1295,9 @@
 																</thead>
 																<tbody>
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">Mesmas atividades que a turma e foi bem sucedida!</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesmas atividades que a turma e foi bem sucedida.</td>
 																		<td name="Pontua">
-																			<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1357,9 +1305,9 @@
 																		</td>
 																	</tr>
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">Mesma atividade que a turma e não conseguiu realizar!</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesma atividade que a turma e não conseguiu realizar.</td>
 																		<td name="Pontua">
-																			<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1371,7 +1319,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">A professora passou atividade adaptada, mas era muito difícil.</td>
 																		<td name="Pontua">
-																			<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1381,7 +1329,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">A professora passou atividade adaptada, mas era muito fácil.</td>
 																		<td name="Pontua">
-																			<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1391,7 +1339,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">A professora não passou nenhuma atividade para o beneficiário.</td>
 																		<td name="Pontua">
-																			<select name="bordoSemativ" id="bordoSemativ" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoSemativ" id="bordoSemativ" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1401,7 +1349,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Com mediação da terapeuta para realizar a atividade.</td>
 																		<td name="Pontua">
-																			<select name="bordoMediacao" id="bordoMediacao" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoMediacao" id="bordoMediacao" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1411,7 +1359,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Com adaptação de material da terapeuta para realizar.</td>
 																		<td name="Pontua">
-																			<select name="bordoAdaptacao" id="bordoAdaptacao" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoAdaptacao" id="bordoAdaptacao" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1434,8 +1382,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" >
 																			<div class="col-sm-12">
-																				<input type="text"type="text" name="bordoAtivsaladesc" id="bordoAtivsaladesc" placeholder="-" class="form-control" rows="13"  >
-																				</input>
+																				<textarea type="text" data-placeholder="-" name="bordoAtivsaladesc" id="bordoAtivsaladesc" placeholder="-" class="form-control" rows="13" ></textarea>
 																			</div>
 																		</td>
 																		
@@ -1462,7 +1409,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho e longe dos pares.</td>
 																		<td name="Pontua">
-																			<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1472,7 +1419,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho, mas perto dos pares.</td>
 																		<td name="Pontua">
-																			<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1483,7 +1430,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Tentou brincar com os pares.</td>
 																		<td name="Pontua">
-																			<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1493,7 +1440,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou com os pares de forma independente.</td>
 																		<td name="Pontua">
-																			<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1503,7 +1450,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Iniciou brincadeira com ajuda do terapeuta.</td>
 																		<td name="Pontua">
-																			<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1513,7 +1460,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">Não quer brincar.</td>
 																		<td name="Pontua">
-																			<select name="bordoNaobrincar" id="bordoNaobrincar" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoNaobrincar" id="bordoNaobrincar" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1535,9 +1482,8 @@
 																<tbody>
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" >
-																			<div class="col-sm-12">
-																				<input type="text"type="text" name="bordoBrincardesc" id="bordoBrincardesc" placeholder="-" class="form-control" rows="13"  >
-																				</input>
+																			<div class="col-sm-12" >
+																				<textarea type="text" data-placeholder="-" name="bordoBrincardesc" id="bordoBrincardesc" placeholder="-" class="form-control" rows="13"  ></textarea>
 																			</div>
 																		</td>
 																		
@@ -1564,7 +1510,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário sonsegue ler texto sozinha?</td>
 																		<td name="Pontua">
-																			<select name="bordolerso" id="bordolerso" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordolerso" id="bordolerso" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1574,18 +1520,28 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário precisa de ajuda na leitura?</td>
 																		<td name="Pontua">
-																			<select name="bordoLerajuda" id="bordoLerajuda" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoLerajuda" id="bordoLerajuda" class="chosen-select" >
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário compreende a leitura?</td>
+																		<td name="Pontua">
+																			<select name="bordoLercompreende" id="bordoLercompreende" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
 																			</select>
 																		</td>
 																	</tr>																		
-																<tbody>
+																
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer contas de somar?</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário consegue fazer contas de somar?</td>
 																		<td name="Pontua">
-																			<select name="bordoFazsoma" id="bordoFazsoma" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoFazsoma" id="bordoFazsoma" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1599,9 +1555,9 @@
 																		</td>
 																	</tr>
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de subtração?</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário consegue fazer conta de subtração?</td>
 																		<td name="Pontua">
-																			<select name="bordoSubtrai" id="bordoSubtrai" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="bordoSubtrai" id="bordoSubtrai" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="01">Sim</option>
 																				<option value="02">Não</option>
@@ -1615,7 +1571,7 @@
 																		</td>
 																	</tr>
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de dividir?</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário consegue fazer conta de dividir?</td>
 																		<td name="Pontua">
 																			<select name="bordoDividir" id="bordoDividir" class="chosen-select" placeholder="Escolha...">
 																				<option value="-">-</option>
@@ -1625,7 +1581,7 @@
 																		</td>
 																	</tr>
 																	<tr role="row" class="odd">
-																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de multiplicar?</td>
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário consegue fazer conta de multiplicar?</td>
 																		<td name="Pontua">
 																			<select name="bordoMultiplicar" id="bordoMultiplicar" class="chosen-select" placeholder="Escolha...">
 																				<option value="-">-</option>
@@ -1652,8 +1608,7 @@
 																	<tr role="row" class="odd">
 																		<td name="Desc" rowspan="1" >
 																			<div class="col-sm-12">
-																				<input type="text"type="text" name="bordoEscolardesc" id="bordoEscolardesc" placeholder="-" class="form-control" rows="13"  >
-																				</input>
+																				<textarea type="text" name="bordoEscolardesc" id="bordoEscolardesc" style="font-size: 12px" placeholder="-" class="form-control" rows="13"></textarea>
 																			</div>
 																		</td>
 																		
@@ -1705,7 +1660,7 @@
 																	<label>O beneficiário apresentou algum comportamento incomum ou atípico (positivo ou negativo)? Descreva.</label>
 																</div>
 																<div class="row">
-																	<input type="text" type="text" name="bordoForanormal" id="bordoForanormal" placeholder="-" class="form-control" ></input>
+																	<textarea type="text" data-placeholder="-" name="bordoForanormal" id="bordoForanormal" style="font-size: 12px" placeholder="-" class="form-control" ></textarea>
 																</div>
 															</div>
 															<div class="col-xs-12">
@@ -1713,7 +1668,7 @@
 																	<label>O beneficiário demonstrou alguma habilidade nova? Quais? Descreva.</label>
 																</div>
 																<div class="row" >
-																		<input type="text"type="text" name="bordoHabilnova" id="bordoHabilnova" placeholder="-" class="form-control"></input>
+																	<textarea type="text" data-placeholder="-" name="bordoHabilnova" id="bordoHabilnova" style="font-size: 12px" placeholder="-" class="form-control"></textarea>
 																</div>
 															</div>
 															<div class="col-xs-12">
@@ -1721,7 +1676,7 @@
 																	<label>Ocorreu ou aconteceu algum incidente (machucados, brigas, dores, etc.) que precisou ser relatado aos pais? Especifique.</label>
 																</div>
 																<div class="row">
-																	<input type="text"  type="text" name="bordoIncidente" id="bordoIncidente" placeholder="-" class="form-control" ></input>
+																	<textarea type="text" data-placeholder="-" name="bordoIncidente" id="bordoIncidente" style="font-size: 12px" placeholder="-" class="form-control" ></textarea>
 																</div>
 															</div>									
 															<div class="col-xs-12" >
@@ -1729,7 +1684,7 @@
 																	<label>Mais observações:</label>
 																</div>
 																<div class="row">
-																	<input type="text"type="text" name="bordoObs" id="bordoObs" placeholder="-" class="form-control" ></input>
+																	<textarea type="text"name="bordoObs" id="bordoObs" style="font-size: 12px" class="form-control" ></textarea>
 																</div>
 															</div>
 														</div>
@@ -1744,7 +1699,7 @@
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
-													<i class="ace-icon fa fa-bookmark-o"></i>
+													<i class="ace-icon green fa fa-check"></i>
 													Parte 04
 												</h4>
 
@@ -1829,7 +1784,7 @@
 
 								</div>
 								
-								</div>
+								
 								
 								
 									

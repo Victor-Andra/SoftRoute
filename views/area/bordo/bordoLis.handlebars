@@ -160,7 +160,7 @@
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
 					</div>
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="menu/area/bordo/bordoLis" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/area/bordo/bordoLis" method="POST">
 							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
@@ -329,16 +329,16 @@
 														
 														<td>
 															<div class="action-buttons">
-																<a class="pink" name="acaoLer" id="acaoLer" href="menu/area/bordo/edi/{{_id}}">
+																<a class="pink" href="/menu/area/bordo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
 																</a>
-																<a class="green" name="acaoEdi" id="acaoEdi" href="">
+																<a class="green" href="">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																<a class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
+																<a class="red" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-																<a class="blue" name="acaoMapabordo" id="acaoMapabordo" href="/menu/area/bordo/mapabordo">
+																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
 															</div>

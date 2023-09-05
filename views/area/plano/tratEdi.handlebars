@@ -3,11 +3,7 @@
 	<head>
 		<title>Plano de Tratamentos</title>
 		<script type="text/javascript">
-			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
-				console.log(v1)
-				document.getElementById("atendConvid").value = v1;
-			}
+			
 			function defineplanopadrao(){
 				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
 			}
@@ -39,21 +35,29 @@
 			}
 			function atualizaData(){
 				var hora = "00:00"
-				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var data = document.getElementById("tratTratdata").value+"T"+hora+":00.000Z";
 				var datafmt = new Date(data);
-				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+				document.getElementById("tratTratdata").value = datafmt.toISOString();
 			}
 			function permitirSalvar(){
 				
 				
 			}
 			function carregaBody(){
-					
+			let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 					
 			document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
 			document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
-			
-			document.getElementById("tratTratdata").value = document.getElementById("tratTratdataEdi").value;
+			document.getElementById("tratTratdata").value = fulldate;
 			document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
 			document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
 			document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
@@ -83,78 +87,97 @@
 	<body onload="javascript:controlaNave();carregaBody();mudaPlano();" class="no-skin">
 		<div class="main-content ace-save-state" id="main-container">
 			<div class="main-content-inner">
-				<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li>
-							<i class="ace-icon fa fa-home home-icon"></i>
-							<a href="#">Route</a>
-						</li>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="breadcrumbs" id="breadcrumbs">
+							<ul class="breadcrumb">
+								<li>
+									<i class="ace-icon fa fa-home home-icon"></i>
+									<a href="#">Route</a>
+								</li>
 
-						<li class="active">Plano de Tratamentos - Visualizar</li>
-					</ul><!-- /.breadcrumb -->
-					<div id="divCarrega" name="divCarrega" class="hidden">
-						<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
-						<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
-						<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
-						<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
-						<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
-						<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>
-						<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
-						<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
-						<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
-						<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
-						<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
-						<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
-						<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
-						<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
-						<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
-						<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
-						<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
-						<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
-						<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
-						<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
-						<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
-						<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
-						<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
-						<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
-						<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
-						
-						
-					
+								<li class="active">Plano de Tratamentos - Visualizar</li>
+							</ul><!-- /.breadcrumb -->
+							<div id="divCarrega" name="divCarrega" class="hidden">
+								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
+								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
+								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+								<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
+								<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
+								<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>
+								<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
+								<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
+								<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
+								<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
+								<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
+								<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
+								<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
+								<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
+								<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
+								<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
+								<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
+								<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
+								<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
+								<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
+								<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
+								<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
+								<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
+								<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
+								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
+								
+								
+							
 
+							</div>
+						</div>
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-sm-12">
 						<!-- PAGE CONTENT BEGINS -->
-						<form class="form-horizontal" role="form" action="/menu/area/plano/add" method="POST">
-							<div class="col-xs-12" >
-								<div class="row">
-									<div class="alert alert-warning">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-										<strong>Escolha o tipo de tratamento antes de prosseguir.</strong><br>
+						<form class="form-horizontal" role="form" action="/menu/area/plano/atualizar" method="POST">
+							<input class="hidden" id="tratId" name="tratId" value="{{trat._id}}" />
+							<div class="col-sm-12" name="plan" id="plan"><!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="brown ace-icon fa fa-child bigger-110"></i>
+											Tipo plano de tratamento
+										</h4>
 										
-										
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
 									</div>
-								</div>
-							</div>
-							<div class="col-xs-12" >
-								<div class="row">
-									<div class="col-sm-2">
-										<label>Tipo de plano de tratamento:</label>
-										<div class="form-group">
-												<div class="col-sm-4">
-													<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
-														<option value="-">-</option>
-														<option value="Padrão">Padrão</option>
-														<option value="Ocupacional">Ocupacional</option>
-													</select>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="row">
+												<div class="col-sm-2">
+													<label>Escolha o plano de tratamento:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
+																<option value="-">-</option>
+																<option value="Padrão">Padrão</option>
+																<option value="Ocupacional">Ocupacional</option>
+															</select>
+														</div>
+													</div>	
 												</div>
+											</div>
 										</div>	
-									</div>
+									</div>	
 								</div>
 							</div>
 							
@@ -206,7 +229,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input  name="tratTratdata" id="tratTratdata" type="date" value="{{trat.trat_tratdata}}" />
+																<input name="tratTratdata" id="tratTratdata" type="date" />
 															</div>
 														</div>
 													</div>
@@ -255,7 +278,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="chosen-select" placeholder="Escolha..." >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
@@ -534,8 +557,7 @@
 											<label>Metas à curto prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
+													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -544,8 +566,7 @@
 											<label>Metas à médio prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetamediois" id="tratMetamediois" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
+													<textarea type="text" name="tratMetamediois" id="tratMetamediois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -554,8 +575,7 @@
 											<label>Metas à longo Prazo</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetalongois" id="tratMetalongois" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
+													<textarea type="text" name="tratMetalongois" id="tratMetalongois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -564,8 +584,7 @@
 											<label>Estratégias e objetivos</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratObjetivois" id="tratObjetivois" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa">
-													</textarea>
+													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 																							
