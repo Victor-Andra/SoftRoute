@@ -50,6 +50,9 @@ module.exports = {
             bordo.forEach((b)=>{
                 b.bordo_data = fncGeral.getDataRevert(fncGeral.getData(b.bordo_datacad))
             })
+            bordo.forEach((c)=>{
+                c.bordo_ativ = fncGeral.getDataRevert(fncGeral.getData(c.bordo_dataativ))
+            })
                 Bene.find().then((bene) =>{
                     bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
                         Escola.find().then((escola) =>{

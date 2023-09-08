@@ -299,10 +299,11 @@
 																<span class="lbl"></span>
 															</label>
 													</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data atividade</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 150px;">Ação</th>
+													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 90px;">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -314,7 +315,8 @@
 																<span class="lbl"></span>
 															</label>
 														</td>
-														<td>{{bordo_data}}</td>			
+														<td>{{bordo_ativ}}</td>	
+														<td> {{bordo_data}}</td>			
 														{{#each ../benes}}
 															{{#ifEqual this._id ../bordo_beneid}}
 																<td>{{bene_nome}}</td>
@@ -332,12 +334,7 @@
 																<a class="pink" href="/menu/area/bordo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
 																</a>
-																<a class="green" href="">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-																<a class="red" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
+																															
 																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
@@ -399,7 +396,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, { "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null{ "bSortable": false }],
 					"aaSorting": [],
 					
 					

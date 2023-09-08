@@ -5,7 +5,7 @@
 		<script type="text/javascript">
 			
 			function mudaSeausente() {
-				let mudaausente = document.getElementById("bordofrequencia").value;
+				let mudaausente = document.getElementById("bordoFrequencia").value;
 				
 				if (mudaausente == "Ausente") {
 					document.getElementById('parte01').style.display = 'none';
@@ -23,12 +23,6 @@
 				
    			}
 			
-			function atualizaData(){
-				var hora = "00:00"
-				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
-				var datafmt = new Date(data);
-				document.getElementById("atendAtenddata").value = datafmt.toISOString();
-			}
 			
 		</script>
 	</head>
@@ -121,21 +115,21 @@
 												<div class="row">
 													
 													<div class="col-xs-12 col-sm-4">
-														<label for="id-date-picker-1">Data atividade</label><!--Data nascimento beneficiário-->
+														<label for="id-date-picker-1">Data atividade</label><!--Data atividade-->
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
-																	<input id="bordoDatacad" name="bordoDatacad" type="date">
+																	<input id="bordoDataativ" name="bordoDataativ" type="date" >
 																</div>
 															</div>
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label> Frequência</label><!--idade beneficiário-->
+														<label> Frequência</label>
 														<div class="row">
-															<div class="col-xs-12">
+															<div class="col-sm-5">
 																<div class="input-group">
-																	<select name="bordofrequencia" id="bordofrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
+																	<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
 																		<option value="-">-</option>
 																		<option value="Ausente">Ausente</option>
 																		<option value="Presente">Presente</option>
@@ -146,7 +140,7 @@
 															</div>
 														</div>
 													</div>
-
+															
 												</div>
 
 												
@@ -1014,7 +1008,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">Quantos números?</td>
 																	<td name="Pontua">
-																		<input type="text" name="bordoFazsomaqtnum" id="bordoFazsomaqtnum" class="form-control" />
+																		<input type="text" name="bordoFazsomaqtnum" id="bordoFazsomaqtnum"  data-placeholder="-" placeholder="-" class="form-control" />
 																	</td>
 																</tr>
 																<tr role="row" class="odd">
@@ -1030,7 +1024,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">Quantos números?</td>
 																	<td name="Pontua">
-																		<input type="text" name="bordoSubtraiqtnum" id="bordoSubtraiqtnum" class="form-control" />
+																		<input type="text" name="bordoSubtraiqtnum" id="bordoSubtraiqtnum" data-placeholder="-" placeholder="-" class="form-control" />
 																	</td>
 																</tr>
 																<tr role="row" class="odd">
@@ -1220,21 +1214,17 @@
 																	<button id="alertaForm" type="button" class="close" data-dismiss="alert">
 																		<i class="ace-icon fa fa-times"></i>
 																	</button>
-																	<b>Após marcar este campo não será mais possível editar o diário de bordo e ele será
-																	enviado para a composição do mapa do diário de bordo.</b>
+																	<b>Após marcar este campo não será mais possível editar o diário de bordo.</b>
 																	
 																	<br>
 																</div>
 
 																<label class="pos-rel">
-																		{{#isTrue selo}}
-																		<input type="checkbox" style="display: none;" name="bordoSelo" id="bordoSelo" value="{{agenda.agenda_selo}}" />
-																		<b>Diário de bordo finalizado!</b>
-																		{{else}}
-																		<input type="checkbox" name="bordoSelo" id="bordoSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+																	
+																		<input type="checkbox" name="bordoSelo" id="bordoSelo" />
 																		Diário de bordo finalizado? <br>
 																		Marcando esse campo você assina o relatório.
-																		{{/isTrue}}
+																		
 																</label>
 															</div>
 														</div>

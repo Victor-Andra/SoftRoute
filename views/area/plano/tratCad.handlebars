@@ -3,11 +3,7 @@
 	<head>
 		<title>Plano de Tratamentos</title>
 		<script type="text/javascript">
-			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
-				console.log(v1)
-				document.getElementById("atendConvid").value = v1;
-			}
+			
 			function defineplanopadrao(){
 				
 				document.getElementById('is').style.display = 'none';
@@ -40,14 +36,12 @@
 				}
 				document.getElementById('tratPlanotipo').ReadOnly
    			}
-			function atualizaTerapeutaId(){
-				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
-			}
+			
 			function atualizaData(){
 				var hora = "00:00"
-				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var data = document.getElementById("tratDatacad").value+"T"+hora+":00.000Z";
 				var datafmt = new Date(data);
-				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+				document.getElementById("tratDatacad").value = datafmt.toISOString();
 			}
 			
 		</script>

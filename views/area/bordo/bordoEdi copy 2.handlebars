@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Visualizar Diário de Bordo</title>
+
+		<script >
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("bordoBeneid").value = document.getElementById("bordoBeneidEdi").value;
+			document.getElementById("bordoTerapeutaid").value = document.getElementById("bordoTerapeutaidEdi").value;
+			document.getElementById("bordoEscolaid").value = document.getElementById("bordoEscolaidEdi").value;
+			
+			
+			
+			//bordodataedi
+			dtedi = new Date(document.getElementById("bordoDataedi").value);
+			mes = (dtnsc.getMonth()+1).toString();
+			dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("bordoDataativ").value = document.getElementById("bordodataativEdi").value;
+			document.getElementById("bordoDatacad").value = fulldate;
+			document.getElementById("bordofrequencia").value = document.getElementById("bordofrequenciaEdi").value;
+			document.getElementById("bordoSeguerotina").value = document.getElementById("bordoSeguerotinaEdi").value;
+			document.getElementById("bordoSeguerotinadesc").value = document.getElementById("bordoSeguerotinadescEdi").value;
+			document.getElementById("bordoEstereotipas").value = document.getElementById("bordoEstereotipasEdi").value;
+			document.getElementById("bordoEstereotipasdesc").value = document.getElementById("bordoEstereotipasdescEdi").value;
+			document.getElementById("bordoFoco").value = document.getElementById("bordoFocoEdi").value;
+			document.getElementById("bordoFocodesc").value = document.getElementById("bordoFocodescEdi").value;
+			document.getElementById("bordoAutocuidado").value = document.getElementById("bordoAutocuidadoEdi").value;
+			document.getElementById("bordoAutocuidadodesc").value = document.getElementById("bordoAutocuidadodescEdi").value;
+			document.getElementById("bardoAliindepende").value = document.getElementById("bardoAliindependeEdi").value;
+			document.getElementById("bardoAliindependedesc").value = document.getElementById("bardoAliindependedescEdi").value;
+			document.getElementById("bordoEscolalia").value = document.getElementById("bordoEscolaliaEdi").value;
+			document.getElementById("bordoEscolaliadesc").value = document.getElementById("bordoEscolaliadescEdi").value;
+			document.getElementById("bordoParticipa").value = document.getElementById("bordoParticipaEdi").value;
+			document.getElementById("bordoParticipadesc").value = document.getElementById("bordoParticipadescEdi").value;
+			document.getElementById("bordoSegue").value = document.getElementById("bordoSegueEdi").value;
+			document.getElementById("bordoSeguedesc").value = document.getElementById("bordoSeguedescEdi").value;
+			document.getElementById("bordoRepertorio").value = document.getElementById("bordoRepertorioEdi").value;
+			document.getElementById("bordoRepertoriodesc").value = document.getElementById("bordoRepertoriodescEdi").value;
+			document.getElementById("bordoDesorganiza").value = document.getElementById("bordoDesorganizaEdi").value;
+			document.getElementById("bordoDesorganizadesc").value = document.getElementById("bordoDesorganizadescEdi").value;
+			document.getElementById("bordoAutoagressao").value = document.getElementById("bordoAutoagressaoEdi").value;
+			document.getElementById("bordoAutoagressaodesc").value = document.getElementById("bordoAutoagressaodescEdi").value;
+			document.getElementById("bordoAgrideadulto").value = document.getElementById("bordoAgrideadultoEdi").value;
+			document.getElementById("bordoAgrideadultodesc").value = document.getElementById("bordoAgrideadultodescEdi").value;
+			document.getElementById("bordoAgridepares").value = document.getElementById("bordoAgrideparesEdi").value;
+			document.getElementById("bordoAgrideparesdesc").value = document.getElementById("bordoAgrideparesdescEdi").value;
+			document.getElementById("bordoDestruir").value = document.getElementById("bordoDestruirEdi").value;
+			document.getElementById("bordoDestruirdesc").value = document.getElementById("bordoDestruirdescEdi").value;
+			document.getElementById("bordoGritos").value = document.getElementById("bordoGritosEdi").value;
+			document.getElementById("bordoGritosdesc").value = document.getElementById("bordoGritosdescEdi").value;
+			document.getElementById("bordoChoros").value = document.getElementById("bordoChorosEdi").value;
+			document.getElementById("bordoChorosdesc").value = document.getElementById("bordoChorosdescEdi").value;
+			document.getElementById("bordoBirras").value = document.getElementById("bordoBirrasEdi").value;
+			document.getElementById("bordoBirrasdesc").value = document.getElementById("bordoBirrasdescEdi").value;
+			document.getElementById("bordoMandosadulto").value = document.getElementById("bordoMandosadultoEdi").value;
+			document.getElementById("bordoMandospares").value = document.getElementById("bordoMandosparesEdi").value;
+			document.getElementById("bordoPergunta").value = document.getElementById("bordoPerguntaEdi").value;
+			document.getElementById("bordoResponde").value = document.getElementById("bordoRespondeEdi").value;
+			document.getElementById("bordoImita").value = document.getElementById("bordoImitaEdi").value;
+			document.getElementById("bordoInteracaoverbal").value = document.getElementById("bordoInteracaoverbalEdi").value;
+			document.getElementById("bordoVerbaldesc").value = document.getElementById("bordoVerbaldescEdi").value;
+			document.getElementById("bordoColab").value = document.getElementById("bordoColabEdi").value;
+			document.getElementById("bordoColabdesc").value = document.getElementById("bordoColabdescEdi").value;
+			document.getElementById("bordoColabtodotempo").value = document.getElementById("bordoColabtodotempoEdi").value;
+			document.getElementById("bordoColabtodotempodesc").value = document.getElementById("bordoColabtodotempodescEdi").value;
+			document.getElementById("bordoColabmaiortempo").value = document.getElementById("bordoColabmaiortempoEdi").value;
+			document.getElementById("bordoColabmaiortempodesc").value = document.getElementById("bordoColabmaiortempodescEdi").value;
+			document.getElementById("bordoColabmetadetempo").value = document.getElementById("bordoColabmetadetempoEdi").value;
+			document.getElementById("bordoColabmetadetempodesc").value = document.getElementById("bordoColabmetadetempodescEdi").value;
+			document.getElementById("bordoColabmenosmetadetempo").value = document.getElementById("bordoColabmenosmetadetempoEdi").value;
+			document.getElementById("bordoColabmenosmetadetempodesc").value = document.getElementById("bordoColabmenosmetadetempodescEdi").value;
+			document.getElementById("bordoColabnao").value = document.getElementById("bordoColabnaoEdi").value;
+			document.getElementById("bordoColabnaodesc").value = document.getElementById("bordoColabnaodescEdi").value;
+			document.getElementById("bordoAtivsucedido").value = document.getElementById("bordoAtivsucedidoEdi").value;
+			document.getElementById("bordoAtivnaosucedido").value = document.getElementById("bordoAtivnaosucedidoEdi").value;
+			document.getElementById("bordoAdequadodificil").value = document.getElementById("bordoAdequadodificilEdi").value;
+			document.getElementById("bordoAdequadodifacil").value = document.getElementById("bordoAdequadodifacilEdi").value;
+			document.getElementById("bordoSemativ").value = document.getElementById("bordoSemativEdi").value;
+			document.getElementById("bordoMediacao").value = document.getElementById("bordoMediacaoEdi").value;
+			document.getElementById("bordoAdaptacao").value = document.getElementById("bordoAdaptacaoEdi").value;
+			document.getElementById("bordoAtivsaladesc").value = document.getElementById("bordoAtivsaladescEdi").value;
+			document.getElementById("bordoBrincousolonge").value = document.getElementById("bordoBrincousolongeEdi").value;
+			document.getElementById("bordoBrincousoperto").value = document.getElementById("bordoBrincousopertoEdi").value;
+			document.getElementById("bordoTentoubrincar").value = document.getElementById("bordoTentoubrincarEdi").value;
+			document.getElementById("bordoBrincouparesindep").value = document.getElementById("bordoBrincouparesindepEdi").value;
+			document.getElementById("bordoBrincouparesterapeuta").value = document.getElementById("bordoBrincouparesterapeutaEdi").value;
+			document.getElementById("bordoNaobrincar").value = document.getElementById("bordoNaobrincarEdi").value;
+			document.getElementById("bordoBrincardesc").value = document.getElementById("bordoBrincardescEdi").value;
+			document.getElementById("bordolerso").value = document.getElementById("bordolersoEdi").value;
+			document.getElementById("bordoLerajuda").value = document.getElementById("bordoLerajudaEdi").value;
+			document.getElementById("bordoFazsoma").value = document.getElementById("bordoFazsomaEdi").value;
+			document.getElementById("bordoFazsomaqtnum").value = document.getElementById("bordoFazsomaqtnumEdi").value;
+			document.getElementById("bordoSubtrai").value = document.getElementById("bordoSubtraiEdi").value;
+			document.getElementById("bordoSubtraiqtnum").value = document.getElementById("bordoSubtraiqtnumEdi").value;
+			document.getElementById("bordoDividir").value = document.getElementById("bordoDividirEdi").value;
+			document.getElementById("bordoMultiplicar").value = document.getElementById("bordoMultiplicarEdi").value;
+			document.getElementById("bordoEscolardesc").value = document.getElementById("bordoEscolardescEdi").value;
+			document.getElementById("bordoForanormal").value = document.getElementById("bordoForanormalEdi").value;
+			document.getElementById("bordoHabilnova").value = document.getElementById("bordoHabilnovaEdi").value;
+			document.getElementById("bordoIncidente").value = document.getElementById("bordoIncidenteEdi").value;
+			document.getElementById("bordoObs").value = document.getElementById("bordoObsEdi").value;
+			document.getElementById("bordoSelo").value = document.getElementById("bordoSeloEdi").value;
+			document.getElementById("bordoDataedi").value = fulldate;
+			document.getElementById("bordoUsuidcad").value = document.getElementById("bordoUsuidcadEdi").value;
+			document.getElementById("bordoUsuidedi").value = document.getElementById("bordoUsuidediEdi").value;
+
+		}
+		</script>
+	</head>
+
+	<body  class="no-skin" onload="javascript:controlaNave();carregaBody();">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Visualizar Diário de Bordo
+							
+						</h1>
+						<!-- Dados carregar -->
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<input id="bordoTerapeutaidEdi" name="bordoTerapeutaidEdi" value="{{bordo.bordo_terapeutaid}}"/>
+							<input id="bordoBeneidEdi" name="bordoBeneidEdi" value="{{bordo.bordo_beneid}}"/>
+							<input id="bordoEscolaidEdi" name="bordoEscolaidEdi" value="{{bordo.bordo_escolaid}}"/>
+							<input id="bordoDataativEdi" name="bordoDataativEdi" value="{{bordo.bordo_dataativ}}"/>
+							<input id="bordoDatacadEdi" name="bordoDatacadEdi" value="{{bordo.bordo_datacad}}"/>
+							<input id="bordofrequenciaEdi" name="bordofrequenciaEdi" value="{{bordo.bordo_frequencia}}"/>
+							<input id="bordoSeguerotinaEdi" name="bordoSeguerotinaEdi" value="{{bordo.bordo_seguerotina}}"/>
+							<input id="bordoSeguerotinadescEdi" name="bordoSeguerotinadescEdi" value="{{bordo.bordo_seguerotinadesc}}"/>
+							<input id="bordoEstereotipasEdi" name="bordoEstereotipasEdi" value="{{bordo.bordo_estereotipas}}"/>
+							<input id="bordoEstereotipasdescEdi" name="bordoEstereotipasdescEdi" value="{{bordo.bordo_estereotipasdesc}}"/>
+							<input id="bordoFocoEdi" name="bordoFocoEdi" value="{{bordo.bordo_foco}}"/>
+							<input id="bordoFocodescEdi" name="bordoFocodescEdi" value="{{bordo.bordo_focodesc}}"/>
+							<input id="bordoAutocuidadoEdi" name="bordoAutocuidadoEdi" value="{{bordo.bordo_autocuidado}}"/>
+							<input id="bordoAutocuidadodescEdi" name="bordoAutocuidadodescEdi" value="{{bordo.bordo_autocuidadodesc}}"/>
+							<input id="bardoAliindependeEdi" name="bardoAliindependeEdi" value="{{bordo.bordo_aliindepende}}"/>
+							<input id="bardoAliindependedescEdi" name="bardoAliindependedescEdi" value="{{bordo.bordo_aliindependedesc}}"/>
+							<input id="bordoEscolaliaEdi" name="bordoEscolaliaEdi" value="{{bordo.bordo_escolalia}}"/>
+							<input id="bordoEscolaliadescEdi" name="bordoEscolaliadescEdi" value="{{bordo.bordo_escolaliadesc}}"/>
+							<input id="bordoParticipaEdi" name="bordoParticipaEdi" value="{{bordo.bordo_participa}}"/>
+							<input id="bordoParticipadescEdi" name="bordoParticipadescEdi" value="{{bordo.bordo_participadesc}}"/>
+							<input id="bordoSegueEdi" name="bordoSegueEdi" value="{{bordo.bordo_segue}}"/>
+							<input id="bordoSeguedescEdi" name="bordoSeguedescEdi" value="{{bordo.bordo_seguedesc}}"/>
+							<input id="bordoRepertorioEdi" name="bordoRepertorioEdi" value="{{bordo.bordo_repertorio}}"/>
+							<input id="bordoRepertoriodescEdi" name="bordoRepertoriodescEdi" value="{{bordo.bordo_repertoriodesc}}"/>
+							<input id="bordoDesorganizaEdi" name="bordoDesorganizaEdi" value="{{bordo.bordo_desorganiza}}"/>
+							<input id="bordoDesorganizadescEdi" name="bordoDesorganizadescEdi" value="{{bordo.bordo_desorganizadesc}}"/>
+							<input id="bordoAutoagressaoEdi" name="bordoAutoagressaoEdi" value="{{bordo.bordo_autoagressao}}"/>
+							<input id="bordoAutoagressaodescEdi" name="bordoAutoagressaodescEdi" value="{{bordo.bordo_autoagressaodesc}}"/>
+							<input id="bordoAgrideadultoEdi" name="bordoAgrideadultoEdi" value="{{bordo.bordo_agrideadulto}}"/>
+							<input id="bordoAgrideadultodescEdi" name="bordoAgrideadultodescEdi" value="{{bordo.bordo_agrideadultodesc}}"/>
+							<input id="bordoAgrideparesEdi" name="bordoAgrideparesEdi" value="{{bordo.bordo_agridepares}}"/>
+							<input id="bordoAgrideparesdescEdi" name="bordoAgrideparesdescEdi" value="{{bordo.bordo_agrideparesdesc}}"/>
+							<input id="bordoDestruirEdi" name="bordoDestruirEdi" value="{{bordo.bordo_destruir}}"/>
+							<input id="bordoDestruirdescEdi" name="bordoDestruirdescEdi" value="{{bordo.bordo_destruirdesc}}"/>
+							<input id="bordoGritosEdi" name="bordoGritosEdi" value="{{bordo.bordo_gritos}}"/>
+							<input id="bordoGritosdescEdi" name="bordoGritosdescEdi" value="{{bordo.bordo_gritosdesc}}"/>
+							<input id="bordoChorosEdi" name="bordoChorosEdi" value="{{bordo.bordo_choros}}"/>
+							<input id="bordoChorosdescEdi" name="bordoChorosdescEdi" value="{{bordo.bordo_chorosdesc}}"/>
+							<input id="bordoBirrasEdi" name="bordoBirrasEdi" value="{{bordo.bordo_birras}}"/>
+							<input id="bordoBirrasdescEdi" name="bordoBirrasdescEdi" value="{{bordo.bordo_birrasdesc}}"/>
+							<input id="bordoMandosadultoEdi" name="bordoMandosadultoEdi" value="{{bordo.bordo_mandosadulto}}"/>
+							<input id="bordoMandosparesEdi" name="bordoMandosparesEdi" value="{{bordo.bordo_mandospares}}"/>
+							<input id="bordoPerguntaEdi" name="bordoPerguntaEdi" value="{{bordo.bordo_pergunta}}"/>
+							<input id="bordoRespondeEdi" name="bordoRespondeEdi" value="{{bordo.bordo_responde}}"/>
+							<input id="bordoImitaEdi" name="bordoImitaEdi" value="{{bordo.bordo_imita}}"/>
+							<input id="bordoInteracaoverbalEdi" name="bordoInteracaoverbalEdi" value="{{bordo.bordo_interacaoverbal}}"/>
+							<input id="bordoVerbaldescEdi" name="bordoVerbaldescEdi" value="{{bordo.bordo_verbaldesc}}"/>
+							<input id="bordoColabEdi" name="bordoColabEdi" value="{{bordo.bordo_colab}}"/>
+							<input id="bordoColabdescEdi" name="bordoColabdescEdi" value="{{bordo.bordo_colabdesc}}"/>
+							<input id="bordoColabtodotempoEdi" name="bordoColabtodotempoEdi" value="{{bordo.bordo_colabtodotempo}}"/>
+							<input id="bordoColabtodotempodescEdi" name="bordoColabtodotempodescEdi" value="{{bordo.bordo_colabtodotempodesc}}"/>
+							<input id="bordoColabmaiortempoEdi" name="bordoColabmaiortempoEdi" value="{{bordo.bordo_colabmaiortempo}}"/>
+							<input id="bordoColabmaiortempodescEdi" name="bordoColabmaiortempodescEdi" value="{{bordo.bordo_colabmaiortempodesc}}"/>
+							<input id="bordoColabmetadetempoEdi" name="bordoColabmetadetempoEdi" value="{{bordo.bordo_colabmetadetempo}}"/>
+							<input id="bordoColabmetadetempodescEdi" name="bordoColabmetadetempodescEdi" value="{{bordo.bordo_colabmetadetempodesc}}"/>
+							<input id="bordoColabmenosmetadetempoEdi" name="bordoColabmenosmetadetempoEdi" value="{{bordo.bordo_colabmenosmetadetempo}}"/>
+							<input id="bordoColabmenosmetadetempodescEdi" name="bordoColabmenosmetadetempodescEdi" value="{{bordo.bordo_colabmenosmetadetempodesc}}"/>
+							<input id="bordoColabnaoEdi" name="bordoColabnaoEdi" value="{{bordo.bordo_colabnao}}"/>
+							<input id="bordoColabnaodescEdi" name="bordoColabnaodescEdi" value="{{bordo.bordo_colabnaodesc}}"/>
+							<input id="bordoAtivsucedidoEdi" name="bordoAtivsucedidoEdi" value="{{bordo.bordo_ativsucedido}}"/>
+							<input id="bordoAtivnaosucedidoEdi" name="bordoAtivnaosucedidoEdi" value="{{bordo.bordo_ativnaosucedido}}"/>
+							<input id="bordoAdequadodificilEdi" name="bordoAdequadodificilEdi" value="{{bordo.bordo_adequadodificil}}"/>
+							<input id="bordoAdequadodifacilEdi" name="bordoAdequadodifacilEdi" value="{{bordo.bordo_adequadodifacil}}"/>
+							<input id="bordoSemativEdi" name="bordoSemativEdi" value="{{bordo.bordo_semativ}}"/>
+							<input id="bordoMediacaoEdi" name="bordoMediacaoEdi" value="{{bordo.bordo_mediacao}}"/>
+							<input id="bordoAdaptacaoEdi" name="bordoAdaptacaoEdi" value="{{bordo.bordo_adaptacao}}"/>
+							<input id="bordoAtivsaladescEdi" name="bordoAtivsaladescEdi" value="{{bordo.bordo_ativsaladesc}}"/>
+							<input id="bordoBrincousolongeEdi" name="bordoBrincousolongeEdi" value="{{bordo.bordo_brincousolonge}}"/>
+							<input id="bordoBrincousopertoEdi" name="bordoBrincousopertoEdi" value="{{bordo.bordo_brincousoperto}}"/>
+							<input id="bordoTentoubrincarEdi" name="bordoTentoubrincarEdi" value="{{bordo.bordo_tentoubrincar}}"/>
+							<input id="bordoBrincouparesindepEdi" name="bordoBrincouparesindepEdi" value="{{bordo.bordo_brincouparesindep}}"/>
+							<input id="bordoBrincouparesterapeutaEdi" name="bordoBrincouparesterapeutaEdi" value="{{bordo.bordo_brincouparesterapeuta}}"/>
+							<input id="bordoNaobrincarEdi" name="bordoNaobrincarEdi" value="{{bordo.bordo_naobrincar}}"/>
+							<input id="bordoBrincardescEdi" name="bordoBrincardescEdi" value="{{bordo.bordo_brincardesc}}"/>
+							<input id="bordolersoEdi" name="bordolersoEdi" value="{{bordo.bordo_lerso}}"/>
+							<input id="bordoLerajudaEdi" name="bordoLerajudaEdi" value="{{bordo.bordo_lerajuda}}"/>
+							<input id="bordoFazsomaEdi" name="bordoFazsomaEdi" value="{{bordo.bordo_fazsoma}}"/>
+							<input id="bordoFazsomaqtnumEdi" name="bordoFazsomaqtnumEdi" value="{{bordo.bordo_fazsomaqtnum}}"/>
+							<input id="bordoSubtraiEdi" name="bordoSubtraiEdi" value="{{bordo.bordo_subtrai}}"/>
+							<input id="bordoSubtraiqtnumEdi" name="bordoSubtraiqtnumEdi" value="{{bordo.bordo_subtraiqtnum}}"/>
+							<input id="bordoDividirEdi" name="bordoDividirEdi" value="{{bordo.bordo_dividir}}"/>
+							<input id="bordoMultiplicarEdi" name="bordoMultiplicarEdi" value="{{bordo.bordo_multiplicar}}"/>
+							<input id="bordoEscolardescEdi" name="bordoEscolardescEdi" value="{{bordo.bordo_escolardesc}}"/>
+							<input id="bordoForanormalEdi" name="bordoForanormalEdi" value="{{bordo.bordo_foranormal}}"/>
+							<input id="bordoHabilnovaEdi" name="bordoHabilnovaEdi" value="{{bordo.bordo_habilnova}}"/>
+							<input id="bordoIncidenteEdi" name="bordoIncidenteEdi" value="{{bordo.bordo_incidente}}"/>
+							<input id="bordoObsEdi" name="bordoObsEdi" value="{{bordo.bordo_obs}}"/>
+							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
+							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
+							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+						</div>
+					</div><!-- /.page-header -->
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/bordo/atualizar" method="POST">
+								<input class="hidden" id="bordoId" name="bordoId" value="{{bordo._id}}" />
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho do Diário de Bordo
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+
+													
+													<label> Terapeuta</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+
+
+													<label> Beneficiário</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<select name="bordoBeneid" id="bordoBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																<option value="-">-</option>
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+
+													<label> Escola</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" data-placeholder="Escolha..." >
+																
+																{{#each escolas}}
+																	<option value="{{_id}}">{{escola_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+
+
+													<div class="row">
+														
+														<div class="col-xs-12 col-sm-4">
+															<label for="id-date-picker-1">Data atividade</label><!--Data nascimento beneficiário-->
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="bordoDatacad" name="bordoDatacad" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-2">
+															<label> Frequência</label><!--idade beneficiário-->
+															<div class="row">
+																<div class="col-xs-12">
+																	<div class="input-group">
+																		<select name="bordofrequencia" id="bordofrequencia" class="chosen-select" placeholder="Escolha..." >
+																			<option value="-">-</option>
+																			<option value="Ausente">Ausente</option>
+																			<option value="Presente">Presente</option>
+																			<option value="Presente chegou com atraso">Presente chegou com atraso</option>
+																			<option value="Presente saiu mais cedo">Presente saiu mais cedo</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+													
+
+
+												</div>
+											</div>
+										</div>	
+									<div class="tabbable">
+											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+												<li class="active">
+													<a data-toggle="tab" href="#parte1" aria-expanded="true">
+														<i class="green ace-icon fa fa-puzzle-piece bigger-120"></i>
+														Parte 1
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#parte2" aria-expanded="false">
+														<i class="orange ace-icon fa fa-puzzle-piece bigger-120"></i>
+														Parte 2
+													</a>
+												</li>
+												
+												<li class="">
+													<a data-toggle="tab" href="#parte3" aria-expanded="false">
+														<i class="red ace-icon fa fa-puzzle-piece bigger-120"></i>
+														Parte 3
+													</a>
+												</li>
+
+												
+												
+											</ul>
+
+											<div class="tab-content">
+												<div id="parte1" class="tab-pane fade active in">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Pontuação sobre rotina do dia
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+															
+														
+															<div id="faq-list-1" class="panel-group accordion-style1 accordion-style2"><!-- .Accordis -->
+																
+																<div class="panel panel-default"><!-- /.. Segue rotina: 1-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-1" data-parent="#faq-list-1-1" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 1. Segue rotina
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse" id="faq-1-1">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" data-placeholder="Escolha...">
+																							<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoSeguerotinadesc" id="bordoSeguerotinadesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Apresentou extereotipias:) 2-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-2" data-parent="#faq-list-1-2" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 2. Apresentou extereotipias
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-2">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="00">00</option>
+																						<option value="01">01</option>
+																						<option value="02">02</option>
+																						<option value="03">03</option>
+																						<option value="04">04</option>
+																						<option value="05">05</option>
+																						<option value="06">06</option>
+																						<option value="07">07</option>
+																						<option value="08">08</option>
+																						<option value="09">09</option>
+																						<option value="10">10</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-12">
+																				
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoEstereotipasdesc" id="bordoEstereotipasdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+															
+																<div class="panel panel-default"><!-- /.. Foco atencional: 3-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-3" data-parent="#faq-list-1-3" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 3. Foco atencional
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-3">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoFoco" id="bordoFoco" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="00">00</option>
+																						<option value="01">01</option>
+																						<option value="02">02</option>
+																						<option value="03">03</option>
+																						<option value="04">04</option>
+																						<option value="05">05</option>
+																						<option value="06">06</option>
+																						<option value="07">07</option>
+																						<option value="08">08</option>
+																						<option value="09">09</option>
+																						<option value="10">10</option>
+																					</select>
+
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoFocodesc" id="bordoFocodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Necessita de auto cuidado: 4-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-4" data-parent="#faq-list-1-4" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 4. Necessita de auto cuidado
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-4">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-12">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoAutocuidadodesc" id="bordoAutocuidadodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Necessita de auto cuidado: 4-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-5" data-parent="#faq-list-1-5" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 5. Se alimenta com independência
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-5">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bardoAliindepende" id="bardoAliindepende" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-12">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bardoAliindependedesc" id="bardoAliindependedesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+													
+
+																<div class="panel panel-default"><!-- /.. Ecolalia: 6-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-6" data-parent="#faq-list-1-6" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;6. Ecolalia
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-6">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" data-placeholder="Escolha...">
+																							<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-12">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoEscolaliadesc" id="bordoEscolaliadesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Participação no grupo: 7-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-7" data-parent="#faq-list-1-7" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;7. Participação no grupo
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-7">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																				<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="00">00</option>
+																						<option value="01">01</option>
+																						<option value="02">02</option>
+																						<option value="03">03</option>
+																						<option value="04">04</option>
+																						<option value="05">05</option>
+																						<option value="06">06</option>
+																						<option value="07">07</option>
+																						<option value="08">08</option>
+																						<option value="09">09</option>
+																						<option value="10">10</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoParticipadesc" id="bordoParticipadesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Segue instruções do professor: 8-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-8" data-parent="#faq-list-1-8" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    8. Segue instruções do professor
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-8">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoSegue" id="bordoSegue" class="chosen-select" data-placeholder="Escolha...">
+																							<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-12">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoSeguedesc" id="bordoSeguedesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Repertório de comunicação social: 9-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-9" data-parent="#faq-list-1-9" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    9. Repertório de comunicação social
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-9">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" data-placeholder="Escolha...">
+																							<option value="-">-</option>
+																							<option value="00">00</option>
+																							<option value="01">01</option>
+																							<option value="02">02</option>
+																							<option value="03">03</option>
+																							<option value="04">04</option>
+																							<option value="05">05</option>
+																							<option value="06">06</option>
+																							<option value="07">07</option>
+																							<option value="08">08</option>
+																							<option value="09">09</option>
+																							<option value="10">10</option>
+																						</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoRepertoriodesc" id="bordoRepertoriodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Se desorganiza ao trocar de atividade ou de ambiente: 10-->
+																	<div class="panel-heading">
+																		<a href="#faq-1-10" data-parent="#faq-list-1-10" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    10. Se desorganiza ao trocar de atividade ou de ambiente
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-1-10">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																				<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="00">00</option>
+																						<option value="01">01</option>
+																						<option value="02">02</option>
+																						<option value="03">03</option>
+																						<option value="04">04</option>
+																						<option value="05">05</option>
+																						<option value="06">06</option>
+																						<option value="07">07</option>
+																						<option value="08">08</option>
+																						<option value="09">09</option>
+																						<option value="10">10</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoDesorganizadesc" id="bordoDesorganizadesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																
+																
+															</div><!-- /.Accordis -->
+
+
+
+
+														</div>
+													</div>
+												</div>
+
+												<div id="parte2" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Problemas de comportamento
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-4">
+
+															<div id="faq-list-4" class="panel-group accordion-style1 accordion-style2"><!-- .Accordis -->
+																
+																<div class="panel panel-default"><!-- /.. Segue rotina: 1-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-1" data-parent="#faq-list-4-1" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 1. Autoagressão (bater em si mesmo)
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse" id="faq-4-1">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoAutoagressao" id="bordoAutoagressao" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoAutoagressaodesc" id="bordoAutoagressaodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Apresentou extereotipias:) 2-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-2" data-parent="#faq-list-4-2" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 2. Agride adultos
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-2">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoAgrideadultodesc" id="bordoAgrideadultodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+															
+																<div class="panel panel-default"><!-- /.. Foco atencional: 3-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-3" data-parent="#faq-list-4-3" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 3. Agride pares
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-3">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoAgridepares" id="bordoAgridepares" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>			
+
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoAgrideparesdesc" id="bordoAgrideparesdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Necessita de auto cuidado: 4-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-4" data-parent="#faq-list-4-4" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 4. Destruição de objetos
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-4">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoDestruir" id="bordoDestruir" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoDestruirdesc" id="bordoDestruirdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. Se alimenta com independência: 5-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-5" data-parent="#faq-list-4-5" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;   5. Gritos
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-5">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoGritos" id="bordoGritos" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>		
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoGritosdesc" id="bordoGritosdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Ecolalia: 6-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-6" data-parent="#faq-list-4-6" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    6. Choros
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-6">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoChoros" id="bordoChoros" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>		
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoChorosdesc" id="bordoChorosdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. Birras 7-->
+																	<div class="panel-heading">
+																		<a href="#faq-4-7" data-parent="#faq-list-4-7" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    7. Birras
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-4-7">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoBirras" id="bordoBirras" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>	
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoBirrasdesc" id="bordoBirrasdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+
+																	<hr>
+																
+
+
+
+																		
+															</div><!-- /.Accordis -->
+
+														
+														</div>
+													</div>
+													<hr>
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														
+														
+														<span class="label label label-danger arrowed-right">I</span> Independente &nbsp;&nbsp; <span class="label label label-warning arrowed-right">A</span>Com Ajuda
+														<br>
+													</div>
+													<div class="row">											
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Comportamento verbal</th>
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário emitiu mandos para os adultos?</td>
+																		<td name="Pontua">
+																			<select name="bordoMandosadulto" id="bordoMandosadulto" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário emitiu mandos para os pares?</td>
+																		<td name="Pontua">
+																			<select name="bordoMandospares" id="bordoMandospares" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário fez perguntas?</td>
+																		<td name="Pontua">
+																			<select name="bordoPergunta" id="bordoPergunta" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário respondeu perguntas?</td>
+																		<td name="Pontua">
+																			<select name="bordoResponde" id="bordoResponde" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário imitou os colegas?</td>
+																		<td name="Pontua">
+																			<select name="bordoImita" id="bordoImita" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário iniciou interações verbais?</td>
+																		<td name="Pontua">
+																			<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="I">I</option>
+																				<option value="A">A</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	
+																</tbody>
+															</table>
+														
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" >
+																			<div class="col-sm-12">
+																				<textarea type="text" name="bordoVerbaldesc" id="bordoVerbaldesc" placeholder="" class="form-control" rows="13"  data-iconlibrary="fa">
+																				</textarea>
+																			</div>
+																		</td>
+																		
+																	</tr>
+																				
+																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+													<hr>
+													<div class="alert alert-warning">
+														<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Sinalização sobre colaboração para execução das atividades?
+														
+														<br>
+													</div>
+														<div id="faq-list-5" class="panel-group accordion-style1 accordion-style2"><!-- .Accordis -->
+																
+																<div class="panel panel-default"><!-- /.. Colaboração para execução das atividades 1-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-1" data-parent="#faq-list-5-1" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 1. Colaboração para execução das atividades
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse" id="faq-5-1">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoColab" id="bordoColab" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabdesc" id="bordoColabdesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. O Beneficiário foi colaborativo todo o tempo? 2-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-2" data-parent="#faq-list-5-2" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 2. O Beneficiário foi colaborativo todo o tempo?
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-5-2">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																				
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabtodotempodesc" id="bordoColabtodotempodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>	
+															
+																<div class="panel panel-default"><!-- /.. O Beneficiário foi colaborativo maior parte do tempo 3-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-3" data-parent="#faq-list-5-3" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 3. O Beneficiário foi colaborativo maior parte do tempo?
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-5-3">
+																		<div class="panel-body">
+																			
+																			<div class="row" >
+																				<div class="col-sm-12">
+																					<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>			
+
+																				</div>
+																			</div>
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabmaiortempodesc" id="bordoColabmaiortempodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. O Beneficiário foi colaborativo medade do tempo? 4-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-4" data-parent="#faq-list-5-4" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp; 4. O Beneficiário foi colaborativo metade do tempo?
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-5-4">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabmetadetempodesc" id="bordoColabmetadetempodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>	
+
+																<div class="panel panel-default"><!-- /.. O Beneficiário foi colaborativo menos da metade do tempo? 5-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-5" data-parent="#faq-list-5-5" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;   5. O Beneficiário foi colaborativo menos da metade do tempo?
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse" id="faq-5-5">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>		
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabmenosmetadetempodesc" id="bordoColabmenosmetadetempodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																<div class="panel panel-default"><!-- /.. O Beneficiário não colaborou em nenhum momento? 6-->
+																	<div class="panel-heading">
+																		<a href="#faq-5-6" data-parent="#faq-list-5-6" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<i class="ace-icon fa fa-chevron-right pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+
+																			<i class="ace-icon fa fa-chevron-right smaller-80" data-icon-hide="ace-icon fa fa-chevron-down align-top" data-icon-show="ace-icon fa fa-chevron-right"></i>&nbsp;
+																			&nbsp;    6. O Beneficiário não colaborou em nenhum momento?
+																		</a>
+																	</div>
+
+																	<div class="panel-collapse " id="faq-5-6">
+																		<div class="panel-body">
+																			
+																			<div class="row">
+																				<div class="col-sm-12">
+																					<select name="bordoColabnao" id="bordoColabnao" class="chosen-select" data-placeholder="Escolha...">
+																						<option value="-">-</option>
+																						<option value="Sim">Sim</option>
+																						<option value="Não">Não</option>
+																					</select>		
+																				</div>
+																			</div>
+																			
+																			<div class="row">
+																				<div class="col-xs-6">
+																					
+																					<label>Anotações</label>
+																					<div class="form-group">
+																						<div class="col-sm-12">
+																							<textarea type="text" name="bordoColabnaodesc" id="bordoColabnaodesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																							</textarea>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+
+																
+																
+														
+
+															</div><!-- /.Accordis -->
+													
+
+													
+													
+													<hr>
+													
+													<div class="row">											
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th  tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Atividades realizadas</th>
+																		<th  tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesmas atividades que a turma e foi bem sucedida!</td>
+																		<td name="Pontua">
+																			<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Mesma atividade que a turma e não conseguiu realizar!</td>
+																		<td name="Pontua">
+																			<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																				
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A professora passou atividade adaptada, mas era muito difícil.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A professora passou atividade adaptada, mas era muito fácil.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">A professora não passou nenhuma atividade para o beneficiário.</td>
+																		<td name="Pontua">
+																			<select name="bordoSemativ" id="bordoSemativ" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Com mediação da terapeuta para realizar a atividade.</td>
+																		<td name="Pontua">
+																			<select name="bordoMediacao" id="bordoMediacao" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>			
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Com adaptação de material da terapeuta para realizar.</td>
+																		<td name="Pontua">
+																			<select name="bordoAdaptacao" id="bordoAdaptacao" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																	
+																																	
+																</tbody>
+															</table>
+														
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" >
+																			<div class="col-sm-12">
+																				<textarea type="text" name="bordoAtivsaladesc" id="bordoAtivsaladesc" placeholder="" class="form-control" rows="13"  data-iconlibrary="fa">
+																				</textarea>
+																			</div>
+																		</td>
+																		
+																	</tr>
+																				
+																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+													<hr>
+													
+													<div class="row">											
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Recreio ou brincar livre</th>
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho e longe dos pares.</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou sozinho, mas perto dos pares.</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Tentou brincar com os pares.</td>
+																		<td name="Pontua">
+																			<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Brincou com os pares de forma independente.</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Iniciou brincadeira com ajuda do terapeuta.</td>
+																		<td name="Pontua">
+																			<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Não quer brincar.</td>
+																		<td name="Pontua">
+																			<select name="bordoNaobrincar" id="bordoNaobrincar" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>	
+																																
+																</tbody>
+															</table>
+														
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" >
+																			<div class="col-sm-12">
+																				<textarea type="text" name="bordoBrincardesc" id="bordoBrincardesc" placeholder="" class="form-control" rows="13"  data-iconlibrary="fa">
+																				</textarea>
+																			</div>
+																		</td>
+																		
+																	</tr>
+																				
+																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+													<hr>
+													
+													<div class="row">											
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Atividades escolares</th>
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário sonsegue ler texto sozinha?</td>
+																		<td name="Pontua">
+																			<select name="bordolerso" id="bordolerso" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário precisa de ajuda na leitura?</td>
+																		<td name="Pontua">
+																			<select name="bordoLerajuda" id="bordoLerajuda" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>																		
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer contas de somar?</td>
+																		<td name="Pontua">
+																			<select name="bordoFazsoma" id="bordoFazsoma" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Quantos números?</td>
+																		<td name="Pontua">
+																			<input type="text" name="bordoFazsomaqtnum" id="bordoFazsomaqtnum" class="form-control" />
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de subtração?</td>
+																		<td name="Pontua">
+																			<select name="bordoSubtrai" id="bordoSubtrai" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">Quantos números?</td>
+																		<td name="Pontua">
+																			<input type="text" name="bordoSubtraiqtnum" id="bordoSubtraiqtnum" class="form-control" />
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de dividir?</td>
+																		<td name="Pontua">
+																			<select name="bordoDividir" id="bordoDividir" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="01">Sim</option>
+																				<option value="02">Não</option>
+																			</select>
+																		</td>
+																	</tr>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" style="width: 400px;">O beneficiário concegue fazer conta de multiplicar?</td>
+																		<td name="Pontua">
+																			<input type="text" name="bordoMultiplicar" id="bordoMultiplicar" class="form-control" />
+																		</td>
+																	</tr>
+																																
+																		
+																																
+																</tbody>
+															</table>
+														
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="odd">
+																		<td name="Desc" rowspan="1" >
+																			<div class="col-sm-12">
+																				<textarea type="text" name="bordoEscolardesc" id="bordoEscolardesc" placeholder="" class="form-control" rows="13"  data-iconlibrary="fa">
+																				</textarea>
+																			</div>
+																		</td>
+																		
+																	</tr>
+																				
+																	
+																</tbody>
+															</table>
+														
+														</div>
+													</div>
+													<hr>
+												</div>
+
+												<div id="parte3" class="tab-pane fade">
+													<div class="row">
+														<div class="col-sm-12">
+															<div class="col-sm-12">
+																<div class="row">
+																	<label>O beneficiário apresentou algum comportamento incomum ou atípico (positivo ou negativo)? Descreva.</label>
+																</div>
+																<div class="row">
+																	<textarea  type="text" name="bordoForanormal" id="bordoForanormal" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>
+															<div class="col-xs-12">
+																<div class="row">
+																	<label>O beneficiário demonstrou alguma habilidade nova? Quais? Descreva.</label>
+																</div>
+																<div class="row" >
+																		<textarea type="text" name="bordoHabilnova" id="bordoHabilnova" placeholder="" class="form-control"></textarea>
+																</div>
+															</div>
+															<div class="col-xs-12">
+																<div class="row">
+																	<label>Ocorreu ou aconteceu algum incidente (machucados, brigas, dores, etc.) que precisou ser relatado aos pais? Especifique.</label>
+																</div>
+																<div class="row">
+																	<textarea   type="text" name="bordoIncidente" id="bordoIncidente" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>									
+															<div class="col-xs-12" >
+																<div class="row">
+																	<label>Mais observações:</label>
+																</div>
+																<div class="row">
+																	<textarea type="text" name="bordoObs" id="bordoObs" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div id="parte4" class="tab-pane fade">
+													<div class="row">
+														<div class="col-xs-12">
+															<div id="divBordo" style="display: block;"  >
+																<div class="col-sm-6">													
+																	<div class="alert alert-warning">
+																		<button id="alertaForm" type="button" class="close" data-dismiss="alert">
+																			<i class="ace-icon fa fa-times"></i>
+																		</button>
+																		<b>Após marcar este campo não será mais possível editar o diário de bordo e ele será
+																		enviado para a composição do mapa<br> do diário de bordo.</b>
+																		
+																		<br>
+																	</div>
+
+																	<label class="pos-rel">
+																			{{#isTrue selo}}
+																			<input type="checkbox" style="display: none;" name="bordoSelo" id="bordoSelo" value="{{agenda.agenda_selo}}" />
+																			<b>Diário de bordo finalizado!</b>
+																			{{else}}
+																			<input type="checkbox" name="bordoSelo" id="bordoSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+																			Diário de bordo finalizado? <br>
+																			Marcando esse campo você assina o relatório.
+																			{{/isTrue}}
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="form-actions">
+														<div class="col-xs-12" style="text-align: center;" >
+
+															<button class="btn btn-info" name="acao" type="submit">
+																<i class="ace-icon fa fa-check bigger-110"></i>
+																Salvar
+															</button>
+															&nbsp; &nbsp; &nbsp;
+															<button class="btn btn-warning"  type="reset" href="/menu/area/aba/bordo/lis">
+																<i class="ace-icon fa fa-undo bigger-110"></i>
+																Cancelar
+															</button>
+														</div>
+													</div>
+												</div>
+
+											</div>
+
+										</div>
+								<hr>
+								
+								
+
+									
+
+
+
+
+								</div>
+								
+								</div>
+								
+								
+									
+								
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>
