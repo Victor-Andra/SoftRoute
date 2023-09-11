@@ -2003,6 +2003,16 @@ module.exports = {
                         rel.push(rab);
                         rab = new RelAtendBene();
                     });
+                    rel.sort(function(a, b) {
+                        let d1 = new Date(a.dt).setHours(0, 0, 0, 0);
+                        let d2 = new Date(b.dt).setHours(0, 0, 0, 0);
+
+                        if(d1 == d2){
+                            return true;//a.especialidade > b.especialidade ? 1 : -1;
+                        } else {
+                            return d1 > d2 ? 1 : -1;
+                        }
+                    }); 
                 res.render("atendimento/atendreltera/relatendteraana", {terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, terapeuta_nome})
             })
         })
@@ -2246,12 +2256,14 @@ module.exports = {
         sex.setSeconds(59);
         
         Bene.findOne().then((bene)=>{
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                        res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, benes: bene})
-        })})}).catch((err) =>{
+                        res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, terapeutas: terapeuta, benes: bene})
+        })})})}).catch((err) =>{
             console.log(err)
         })
     },
@@ -2267,10 +2279,10 @@ module.exports = {
         let total;//objeto valor total cre
         let teraID;
         let qtdIds;
-        let creVal;
+        let debVal;
         let categorias;
         let terapiaAtend;
-        let creValFinal;
+        let debValFinal;
         let atends;
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
@@ -2282,23 +2294,25 @@ module.exports = {
         let atendIds = [];
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
-        let bene_nome;
+        let terapeuta_nome;
 
-        Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
-            console.log("{atend_beneid:"+ req.body.relBeneid+", atend_atenddata: { $gte: "+seg+", $lte:"+ sex+"}}")
+        Atend.find({atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
+            console.log("{atend_terapeutaid:"+ req.body.relTeraid+", atend_atenddata: { $gte: "+seg+", $lte:"+ sex+"}}")
             console.log("tamanho:"+at.length);
-            //Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética     
+                //Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 //console.log("cre.length: "+cre.length)
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                    Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
-                        bene_nome = b.bene_nome;
+                    Usuario.findOne({_id: req.body.relTeraid}).then((b)=>{
+                        terapeuta_nome = b.usuario_nome;
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                             terapia.forEach((t)=>{
                                 //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
                                 qtdIds = 0;
-                                creValFinal = 0;
+                                debValFinal = 0;
                                 atends = [];
 
                                 at.forEach((ats)=>{
@@ -2312,49 +2326,49 @@ module.exports = {
                                     switch (categorias){
                                         case "Apoio":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Extra":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Falta":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Falta Justificada":
                                             terapiaAtend = atend.atend_mergeterapiaid;
-                                            creVal = atend.atend_mergevalorcre;
+                                            debVal = atend.atend_mergevalorcre;
                                             break;
                                         case "Glosa":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Padrão":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Pais":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         case "Substituição":
                                             terapiaAtend = atend.atend_mergeterapiaid;
-                                            creVal = atend.atend_mergevalorcre;
+                                            debVal = atend.atend_mergevalorcre;
                                             break;
                                         case "Supervisão":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                         default:
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            debVal = atend.atend_valordeb;
                                             break;
                                     }
 
                                     if ((""+t._id) === (""+terapiaAtend)){
                                         qtdIds++;
-                                        creValFinal = creVal;
+                                        debValFinal = debVal;
                                         console.log("TERAPIA OK")
                                     }
                                 })
@@ -2362,9 +2376,9 @@ module.exports = {
                                 if(qtdIds != 0){
                                     a.sessoes = qtdIds;
                                     a.nomecid = t._id;
-                                    a.valor = creVal;
+                                    a.valor = debVal;
 
-                                    console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - creVal: "+creVal)
+                                    console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - debVal: "+debVal)
                                 }
                                 
                                 if(qtdIds != 0){
@@ -2373,6 +2387,8 @@ module.exports = {
                                     a = new RelAtend();
                                 }
                             })
+
+                            console.log("rel.length"+rel.length)
                             rel.forEach((r)=>{
                                 val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                                 val = this.mascaraValores(val);
@@ -2386,11 +2402,11 @@ module.exports = {
                             })
                             total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
 
-                            res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome})
+                            res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, terapeutas: terapeuta, benes: bene, rels: rel, total, periodoDe, periodoAte, terapeuta_nome})
                         })
                     })
                 })
-            //})
+            })
         })
     }
 }

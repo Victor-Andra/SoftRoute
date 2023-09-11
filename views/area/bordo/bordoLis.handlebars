@@ -5,6 +5,10 @@
 		<title>Lista de Diários de Bordo</title>
 
 		<script type="text/javascript">
+			function ocultaEditar(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				document.getElementById("botaoEditar").value;
+			}
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
@@ -331,7 +335,7 @@
 														
 														<td>
 															<div class="action-buttons">
-																<a class="pink" href="/menu/area/bordo/edi/{{_id}}">
+																<a id="botaoEditar" class="pink" href="/menu/area/bordo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
 																</a>
 																															
