@@ -2,113 +2,51 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const SondaSchema = mongoose.Schema({
-    sonda_planotipo :{
-        type: String,
-        required: true
-    },
-    sonda_beneid :{
-        type: ObjectId,
-        required: true
-    },
-    sonda_beneidade :{
-        type: String,
-        required: false
-    },
-    sonda_convid :{
-        type: ObjectId,
-        required: true
-    },
-    sonda_usuid :{
-        type: String,
-        required: true
-    },
-    sonda_sondadata :{
-        type: Date,
-        required: true
-    },
-    sonda_terapeutaid :{
-        type: ObjectId,
-        required: true
-    },
-    sonda_terapiaid :{
-        type: ObjectId,
-        required: false
-    },
-     sonda_num :{
-        type: Number,
-        required: true
-    },
-    sonda_diagnostico :{
-        type: String,
-        required: false
-    },
-    sonda_histclinico:{
-        type: String,
-        required: false
-    },
-    sonda_metacurto :{
-        type: String,
-        required: false
-    },
-    sonda_metamedio :{
-        type: String,
-        required: false
-    },
-    sonda_metalongo :{
-        type: String,
-        required: false
-    },
-    sonda_objetivo :{
-        type: String,
-        required: false
-    },
-    sonda_datacad :{
-        type: Date,
-        required: false
-    },
-    sonda_dataedi :{
-        type: Date,
-        required: false
-    }
+    sonda_id:{ type: ObjectId, required: false },
+    sonda_terapeutaid:{type: ObjectId, required: true},
+    sonda_beneid:{type: ObjectId, required: true},
+    sonda_data: { type: String, required: false },
+    sonda_mes: { type: String, required: false },
+    sonda_tipo: { type: String, required: false },
+    sonda_fase: { type: String, required: false },
+    sonda_andamento: { type: String, required: false },
+    //controle
+    sonda_datacad: { type: Date, required: false },
+    sonda_usuidcad: { type: ObjectId, required: false },
+    sonda_dataedi: { type: Date, required: false },
+    sonda_usuidedi: { type: ObjectId, required: false },
+    
 })
 
 class Sonda{
     constructor(
-        sonda_planotipo,
-        sonda_beneidade,
-        sonda_beneid,
-        sonda_convid,
-        sonda_usuid,
-        sonda_sondadata,
+        sonda_id,
         sonda_terapeutaid,
-        sonda_terapiaid,
-        sonda_num,
-        sonda_diagnostico,
-        sonda_histclinico,
-        sonda_metacurto,
-        sonda_metamedio,
-        sonda_metalongo,
-        sonda_objetivo,
-        sonda_datacad,
-        sonda_dataedi
-        ){
-        this.sonda_planotipo = sonda_planotipo,
-        this.sonda_beneidade = sonda_beneidade,
-        this.sonda_beneid = sonda_beneid,
-        this.sonda_convid = sonda_convid,
-        this.sonda_usuid = sonda_usuid,
-        this.sonda_sondadata = sonda_sondadata,
-        this.sonda_terapeutaid = sonda_terapeutaid,
-        this.sonda_terapiaid = sonda_terapiaid,
-        this.sonda_num = sonda_num,
-        this.sonda_diagnostico = diagnostico,
-        this.sonda_histclinico = sonda_histclinico,
-        this.sonda_metacurto = sonda_metacurto,
-        this.sonda_metamedio = sonda_metamedio,
-        this.sonda_metalongo = sonda_metalongo,
-        this.sonda_objetivo = sonda_objetivo,
-        this.sonda_datacad = sonda_datacad,
-        this.sonda_dataedi = sonda_dataedi       
+        sonda_beneid,
+        sonda_data, 
+        sonda_mes, 
+        sonda_tipo,
+        sonda_fase, 
+        sonda_andamento, 
+        sonda_datacad, 
+        sonda_usuidcad, 
+        sonda_dataedi, 
+        sonda_usuidedi 
+   
+         ){
+            this.sonda_id = sonda_id,
+            this.sonda_terapeutaid = sonda_terapeutaid, 
+            this.sonda_beneid = sonda_beneid, //Ok
+            this.sonda_data = sonda_data, //Ok
+            this.sonda_mes = sonda_mes,
+            this.sonda_tipo = sonda_tipo,
+            this.sonda_fase = sonda_fase,
+            this.sonda_andamento = sonda_andamento,
+            this.sonda_datacad = sonda_datacad,
+            this.sonda_usuidcad = sonda_usuidcad,
+            this.sonda_dataedi = sonda_dataedi,
+            this.sonda_usuidedi = sonda_usuidedi
+
     }
 }
 
@@ -118,63 +56,72 @@ module.exports = {SondaModel,SondaSchema,
     sondaEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
-        //Pega data atual
-        
-        //Realiza Atualização
-        await SondaModel.findByIdAndUpdate(req.body.sondaId, 
-            {$set: {
-                sonda_planotipo : req.body.sondaPlanotipo,
-                sonda_beneidade : req.body.sondaIdade,
-                sonda_beneid : req.body.sondaBeneid,
-                sonda_convid : req.body.sondaConvid,
-                sonda_usuid : req.body.sondaUsuid,
-                sonda_sondadata : req.body.sondadata,
-                sonda_terapeutaid : req.body.sondaTerapeutaid,
-                sonda_terapiaid : req.body.sondaTerapiaid,
-                sonda_diagnostico : req.body.sondaDiagnostico,
-                sonda_histclinico : req.body.sondaHistclinico,
-                sonda_metacurto : req.body.sondaMetacurto,
-                sonda_metamedio : req.body.sondaMetamedio,
-                sonda_metalongo : req.body.sondaMetalongo,
-                sonda_objetivo : req.body.sondaObjetivo,
-                sonda_dataedi : dataAtual.toISOString()
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
         })
-        return resultado;
+        let sondaId = new ObjectId(req.body.id);
+        //Pega data atual
+        console.log("req.body.id:"+req.body.id)
+        console.log("sondaId:"+sondaId)
+        //Realiza Atualização
+        await SondaModel.findByIdAndUpdate(req.body.id, 
+            {$set: {
+                sonda_terapeutaid : req.body.sondaTerapeutaid,
+                sonda_beneid : req.body.sondaBeneid,
+                sonda_data : req.body.sondaData,
+                sonda_mes : req.body.sondaMes,
+                sonda_tipo : req.body.sondaTipo,
+                sonda_fase : req.body.sondaFase,
+                sonda_andamento : req.body.sondaAndamento,
+                
+                sonda_dataedi : dataAtual, 
+                sonda_usuidedi : idUsu
+                
+                
+                }}
+                ).then((res) =>{
+                    console.log("Salvo")
+                    resultado = true;
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                })
+                return resultado;
+            
     },
     sondaAdicionar: async (req,res) => {
-        let dataAtual = new Date();
+        //Validar se a Sondaese existe
         console.log("sondamodel");
-        console.log("req.body.sondadata:")
-        console.log(req.body.sondadata)
-        const NewSonda = new SondaModel({
-            sonda_planotipo : req.body.sondaPlanotipo,
-            sonda_beneidade : req.body.sondaBeneidade,
-            sonda_beneid : req.body.sondaBeneid,
-            sonda_convid : req.body.sondaConvid,
-            sonda_usuid : req.body.sondaUsuid,
-            sonda_sondadata : req.body.sondadata,
-            sonda_terapeutaid : req.body.sondaTerapeutaid,
-            sonda_terapiaid : req.body.sondaTerapiaid,
-            sonda_num : req.body.nextNum,
-            sonda_diagnostico : req.body.sondaDiagnostico,
-            sonda_histclinico : req.body.sondaHistclinico,
-            sonda_metacurto : req.body.sondaMetacurto,
-            sonda_metamedio : req.body.sondaMetamedio,
-            sonda_metalongo : req.body.sondaMetalongo,
-            sonda_objetivo : req.body.sondaObjetivo,
-            sonda_datacad : dataAtual.toISOString()
-            
+        let dataAtual = new Date();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
+        const newSonda = new SondaModel({
+                sonda_id: req.body.sondaId,
+                sonda_terapeutaid : req.body.sondaTerapeutaid,
+                sonda_beneid : req.body.sondaBeneid,
+                sonda_data : req.body.sondaData,
+                sonda_mes : req.body.sondaMes,
+                sonda_tipo : req.body.sondaTipo,
+                sonda_fase : req.body.sondaFase,
+                sonda_andamento : req.body.sondaAndamento,
+                sonda_datacad : dataAtual, 
+                sonda_usuidcad : idUsu
+                
         });
-        console.log("newAtend save");
-        await newAtend.save().then(()=>{
+        console.log("newSonda save");
+        await newSonda.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
