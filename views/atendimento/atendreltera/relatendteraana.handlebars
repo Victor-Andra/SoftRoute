@@ -102,7 +102,7 @@
 													</div>
 													<div class="row">
 														<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
-															<b>Informações do Relatório</b>
+															<b>Informações do Terapeuta</b>
 														</div>
 													</div>
 													<div>
@@ -128,7 +128,7 @@
 														<tr>
 															<th>Data do Atendimento</th>
 															<th>Especialidade</th>
-															<th>Profissional</th>
+															<th>Beneficiário</th>
 														</tr>
 													</thead>
 													{{#each rels}}
@@ -140,9 +140,9 @@
 																		<td>{{terapia_nomecid}}</td>
 																	{{/ifEqual}}
 																{{/each}}
-																{{#each ../terapeutas}}
+																{{#each ../benes}}
 																	{{#ifEqual this._id ../profissional}}
-																		<td>{{usuario_nomecompleto}}</td>
+																		<td>{{bene_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
 															</tr>
