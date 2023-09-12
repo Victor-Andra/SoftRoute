@@ -68,6 +68,198 @@ module.exports = {
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.dataedi=fulldate;
             })
+            //console.log("trat:");
+            //console.log(trat);
+            //console.log("Listagem Realizada das Trateses!")
+                Bene.find().then((bene)=>{
+                    //console.log("Listagem Realizada bene!")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
+                        //console.log("Listagem Realizada Usuário!")
+                        /*if(resposta.sucesso == ""){
+                            console.log(' objeto vazio');
+                            flash.texto = ""
+                            flash.sucesso = ""
+                        } else {
+                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                            flash.texto = resposta.texto
+                            flash.sucesso = resposta.sucesso
+                        }*/
+            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
+        })})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar!")
+            res.redirect('admin/erro')
+        })
+    },
+    filtraTrat(req, res, resposta){
+        let flash = new Resposta();
+        let tipoPessoa = req.body.bordoTipoPessoa;
+        let tipoData = req.body.tipoData;
+        let dataIni;
+        let dataFim;
+        let seg;
+        let sex;
+        let busca;
+        let data;
+        let ano;
+        let mes;
+        let dia;
+
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesBordo);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoBordo);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setHours(0, 0, 0, 0);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23, 59, 59, 0);
+
+                break;
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0, 0, 0, 0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23, 59, 59, 0);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                
+                break;
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0, 0, 0, 0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23,59,59,0);
+
+                break;
+            default:
+                
+                break;
+        }
+        console.log("new Date(dataIni):"+new Date(dataIni))
+        console.log("new Date(dataFim):"+new Date(dataFim))
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+            case "Beneficiario":
+                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: req.body.bordoTerapeuta };
+                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                break;
+            default:
+                break;
+        }
+        //console.log('listando plano de tratamento')
+        Trat.find().then((trat) =>{
+            trat.forEach((b)=>{
+                let datacad = new Date(b.trat_datacad)
+                let mes = (datacad.getMonth()+1).toString();
+                let dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datacad=fulldate;
+                
+                datacad = new Date(b.trat_tratdata)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.tratdata=fulldate;
+
+                datacad = new Date(b.trat_dataedi)
+                mes = (datacad.getMonth()+1).toString();
+                dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataedi=fulldate;
+            })
 
             //console.log("trat:");
             //console.log(trat);
@@ -92,9 +284,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    
-  
-
     carregaTrat(req,res){
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{

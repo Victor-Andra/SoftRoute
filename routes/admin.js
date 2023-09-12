@@ -1469,6 +1469,9 @@ router.get('/area/anamn/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//direc
 router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.listaBordo(req, res);
 })
+router.post('/area/bordo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
+    fncBordo.filtraBordo(req, res);
+})
 //Carrega Cadastro de Diário de Bordo
 router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.carregaBordo(req,res);
@@ -1497,6 +1500,10 @@ router.get('/area/bordo/mapabordo', fncGeral.IsAuthenticated, (req,res) =>{//Abr
 //Lista Todos Planos de Tratamento
 router.get('/area/plano/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     fncTrat.listaTrat(req, res);
+})
+//Filtra Todos Planos de Tratamento
+router.post('/area/plano/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
+    fncTrat.filtraTrat(req, res);
 })
 //Carrega Cadastro de Plano de Tratamento
 router.get('/area/plano/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.

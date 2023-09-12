@@ -12,7 +12,7 @@
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
+					let id = "bordodata"+elementox.id;
 					let dat = new Date(elementox.value);
 					let mes = (dat.getMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
@@ -31,7 +31,7 @@
 				let tipo = document.getElementById("tipoData").value;
 				console.log("tipoData:"+tipoData);
 				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
 					let mes = (dat.getUTCMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
 					if (mes.length == 1){
@@ -74,30 +74,30 @@
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
 				if(fill == "Ano/Mes"){
-					document.getElementById("divAnoAtend").hidden = false;
-					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
 					document.getElementById("divDataFil").hidden = true;
 				} else if (fill == "Semana"){
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
 					document.getElementById("divDataFil").hidden = false;
 				} else {
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
 					document.getElementById("divDataFil").hidden = false;
 				}
 			}
 			function trocaFilpessoa() {
-				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value;
 				if(fillTipopessoa == "Geral"){
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = true;
 				} else if(fillTipopessoa == "Beneficiario"){
-					document.getElementById("divAtendBeneficiario").hidden = false;
-					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("divBordoBeneficiario").hidden = false;
+					document.getElementById("divBordoTerapeuta").hidden = true;
 				} else {
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = false;
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = false;
 				}
 			}
 			function carregaBody(){
@@ -107,21 +107,21 @@
 				if (document.getElementById("carregaFiltro").value == "true"){
 					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
 					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
+						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
 					} else if (document.getElementById("tipoData").value == "Semana"){
 						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
 					} else if (document.getElementById("tipoData").value == "Dia"){
 						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
 					}
 
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+					document.getElementById("bordoTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("bordoTipoPessoa").value == "Geral"){
 
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					} else if (document.getElementById("bordoTipoPessoa").value == "Beneficiario"){
+						document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil").value
+					} else if (document.getElementById("bordoTipoPessoa").value == "Terapeuta"){
+						document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil").value;
 					}
 
 				}
@@ -153,18 +153,18 @@
 					{{/each}}
 					<div class="hidden">
 						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
-						<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
-						<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+						<input id="bordoTerapeutaFil" value="{{bordoTerapeuta.bordoTerapeuta}}" />
+						<input id="bordoBeneficiarioFil" value="{{bordoBeneficiario.bordoBeneficiario}}" />
 						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
-						<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
-						<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+						<input id="mesBordoFil" value="{{mesBordo.mesBordo}}" />
+						<input id="anoBordoFil" value="{{anoBordo.anoBordo}}" />
 						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
 						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
 					</div>
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/area/bordo/bordoLis" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
 							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
@@ -192,11 +192,11 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAnoAtend" class="col-xs-12 col-sm-1">
+								<div id="divAnoBordo" class="col-xs-12 col-sm-1">
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+											<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
 												<option value="2022">2022</option>
 												<option value="2023">2023</option>
 												<option value="2024">2024</option>
@@ -205,11 +205,11 @@
 										</div>
 									</div>
 								</div>
-								<div id="divMesAtend" class="col-xs-12 col-sm-2">
+								<div id="divMesBordo" class="col-xs-12 col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+											<select name="mesBordo" id="mesBordo" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>
@@ -238,7 +238,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+											<select name="bordoTipoPessoa" id="bordoTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
 												<option value="Terapeuta">Terapeuta</option>
@@ -246,11 +246,11 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAtendBeneficiario" class="col-xs-12 col-sm-4">
+								<div id="divBordoBeneficiario" class="col-xs-12 col-sm-4">
 									<div class="row">
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="bordoBeneficiario" id="bordoBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
 												{{#each benes}}
 													<option value="{{_id}}">{{bene_nome}}</option>
 												{{/each}}
@@ -258,11 +258,11 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAtendTerapeuta" class="col-xs-12 col-sm-2">
+								<div id="divBordoTerapeuta" class="col-xs-12 col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
-											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="bordoTerapeuta" id="bordoTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}
@@ -303,10 +303,10 @@
 																<span class="lbl"></span>
 															</label>
 													</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data atividade</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data atividade</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 90px;">Ação</th>
 												</tr>
 											</thead>
@@ -400,7 +400,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					
