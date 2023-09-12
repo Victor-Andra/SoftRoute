@@ -50,7 +50,7 @@ module.exports = {
             bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
             Escola.find().then((escola) =>{
                 escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                     console.log("Listagem Realizada Usuário!")
                     res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene})
@@ -72,6 +72,14 @@ module.exports = {
         let ano;
         let mes;
         let dia;
+        let isAgendaTerapeuta = false;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+            }
+        })
 
         switch (tipoData){
             case "Ano/Mes":
@@ -177,13 +185,25 @@ module.exports = {
         console.log("new Date(dataFim):"+new Date(dataFim))
         switch (tipoPessoa){
             case "Geral":
-                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                } else {
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                }
                 break;
             case "Beneficiario":
-                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario };
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: lvlUsu }
+                } else {
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario };
+                }
                 break;
             case "Terapeuta":
-                busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: req.body.bordoTerapeuta };
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                } else {
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: req.body.bordoTerapeuta };
+                }
                 console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:

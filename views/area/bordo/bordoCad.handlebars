@@ -11,19 +11,16 @@
 					document.getElementById('parte01').style.display = 'none';
 					document.getElementById('parte02').style.display = 'none';
 					document.getElementById('parte03').style.display = 'none';
-			
-				
 				} else {
 				document.getElementById('parte01').style.display = 'block';
 					document.getElementById('parte02').style.display = 'block';
 					document.getElementById('parte03').style.display = 'block';
-				
-
 				}
-				
    			}
 			
-			
+			function validaCampos(){
+
+			}
 		</script>
 	</head>
 
@@ -90,7 +87,7 @@
 												<label> Beneficiário</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoBeneid" id="bordoBeneid" class="chosen-select"  >
+														<select name="bordo" id="bordoBeneid" class="chosen-select"  >
 															<option value="-">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -102,7 +99,7 @@
 												<label> Atendimento realizado em:</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoAtendem" id="bordoAtendem" class="chosen-select" >
+														<select name="bordo" id="bordoAtendem" class="chosen-select" >
 															<option value="-">-</option>
 															<option value="Escola">Escola</option>
 															<option value="Casa">Casa</option>
@@ -115,7 +112,7 @@
 													<div class="row">
 														<div class="input-group">
 															<div class="col-sm-4">
-																<input id="bordoOndefoi" name="bordoOndefoi" type="text" >
+																<input id="bordoOndefoi" name="bordo" type="text" >
 															</div>
 														</div>
 													</div>
@@ -124,7 +121,7 @@
 												<label> Escola</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select"  >
+														<select name="bordo" id="bordoEscolaid" class="chosen-select"  >
 															<option value="-">-</option>
 															{{#each escolas}}
 																<option value="{{_id}}">{{escola_nome}}</option>
@@ -151,7 +148,7 @@
 														<div class="row">
 															<div class="col-sm-5">
 																<div class="input-group">
-																	<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
+																	<select name="bordo" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
 																		<option value="-">-</option>
 																		<option value="Ausente">Ausente</option>
 																		<option value="Presente">Presente</option>

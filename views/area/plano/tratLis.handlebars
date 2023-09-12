@@ -52,6 +52,123 @@
 						{{/compareString}}
 					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/plano/lisF" method="POST">
+							<div class="col-xs-12" class="row">
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro Data:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mes</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoBordo" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2022">2022</option>
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesBordo" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesBordo" id="mesBordo" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="tratTipoPessoa" id="tratTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												<option value="Terapeuta">Terapeuta</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divBordoBeneficiario" class="col-xs-12 col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Beneficiário:&nbsp;</label>
+											<select name="tratBeneficiario" id="tratBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divBordoTerapeuta" class="col-xs-12 col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Terapeuta:&nbsp;</label>
+											<select name="tratTerapeuta" id="tratTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each terapeutas}}
+													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									
+								</div>
+								<hr>
+							</div>
+							
+						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
