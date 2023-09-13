@@ -185,25 +185,25 @@ module.exports = {
         console.log("new Date(dataFim):"+new Date(dataFim))
         switch (tipoPessoa){
             case "Geral":
-                //if (isAgendaTerapeuta){
-                //    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
-                //} else {
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                } else {
                     busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
-                //}
+                }
                 break;
             case "Beneficiario":
-                //if (isAgendaTerapeuta){
-                //    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: lvlUsu }
-                //} else {
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: lvlUsu }
+                } else {
                     busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario };
-                //}
+                }
                 break;
             case "Terapeuta":
-                //if (isAgendaTerapeuta){
-                //    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
-                //} else {
+                if (isAgendaTerapeuta){
+                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                } else {
                     busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: req.body.bordoTerapeuta };
-                //}
+                }
                 console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
