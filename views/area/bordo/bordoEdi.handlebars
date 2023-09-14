@@ -209,10 +209,10 @@
 							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
 							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
 							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+							<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly=“true” value="{{bordo.bordo_terapeutaid}}" />
 							{{#each terapeutas}}
 								<input id="{{_id}}" value="{{usuario_nome}}" />
 							{{/each}}
-							<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly=“true” value="{{usuarioAtual}}" />
 						</div>
 					</div><!-- /.page-header -->
 
@@ -291,7 +291,7 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-4">
-														<label for="id-date-picker-1">Data atividade</label><!--Data atividade-->
+														<label>Data atividade</label><!--Data atividade-->
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
