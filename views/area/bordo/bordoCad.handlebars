@@ -18,13 +18,13 @@
 				}
    			}
 			
-			function validaCampos(){
-
+			function carregaBody(){
+				document.getElementById("usuarioAtual").value = document.getElementById(document.getElementById("bordoTerapeutaid").value).value;
 			}
 		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();mudaSeausente()" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -40,7 +40,12 @@
 							
 						</h1>
 					</div><!-- /.page-header -->
-
+					<div id="divCarrega" class="hidden">
+						{{#each terapeutas}}
+							<input id="{{_id}}" value="{{usuario_nome}}" />
+						{{/each}}
+						<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly=“true” value="{{usuarioAtual}}" />
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -69,25 +74,16 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-
-												
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" >
-															<option value="-">-</option>
-															{{#each terapeutas}}
-															<option value="{{_id}}">{{usuario_nome}}</option>
-															{{/each}}
-														</select>
+														<input style="width: 400px;" type="text" id="usuarioAtual" name="usuarioAtual" readonly=“true”  value="" />
 													</div>
 												</div>
-
-
 												<label> Beneficiário</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordo" id="bordoBeneid" class="chosen-select"  >
+														<select name="bordoBeneid" id="bordoBeneid" class="chosen-select"  >
 															<option value="-">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -95,11 +91,10 @@
 														</select>
 													</div>
 												</div>
-
 												<label> Atendimento realizado em:</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordo" id="bordoAtendem" class="chosen-select" >
+														<select name="bordoAtendem" id="bordoAtendem" class="chosen-select" >
 															<option value="-">-</option>
 															<option value="Escola">Escola</option>
 															<option value="Casa">Casa</option>
@@ -111,14 +106,14 @@
 													<div class="row">
 														<div class="input-group">
 															<div class="col-sm-4">
-																<input id="bordoOndefoi" name="bordo" type="text" style="width: 400px;">
+																<input id="bordoOndefoi" name="bordoOndefoi" type="text" style="width: 400px;">
 															</div>
 														</div>
 													</div>
 												<label> Escola</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordo" id="bordoEscolaid" class="chosen-select"  >
+														<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select"  >
 															<option value="-">-</option>
 															{{#each escolas}}
 																<option value="{{_id}}">{{escola_nome}}</option>
@@ -145,7 +140,7 @@
 														<div class="row">
 															<div class="col-sm-5">
 																<div class="input-group">
-																	<select name="bordo" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
+																	<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
 																		<option value="-">-</option>
 																		<option value="Ausente">Ausente</option>
 																		<option value="Presente">Presente</option>
@@ -1054,12 +1049,8 @@
 																		</select>
 																	</td>
 																</tr>
-																															
-																	
-																															
 															</tbody>
 														</table>
-													
 													</div>
 													<div class="col-xs-12 col-sm-6">
 														<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
@@ -1085,11 +1076,6 @@
 													</div>
 												</div>
 												<hr>
-											
-
-												
-
-
 											</div>
 										</div>
 									</div>										
@@ -1146,10 +1132,6 @@
 														
 													</div>
 												</div>
-
-												
-
-
 											</div>
 										</div>
 									</div>

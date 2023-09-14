@@ -27,6 +27,7 @@ const Escola = mongoose.model("tb_escola")
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
 const fncGeral = require("./fncGeral")
+const ObjectId = require('mongodb').ObjectId;
 
 class BordoMapa{
     constructor(
@@ -43,7 +44,9 @@ class BordoMapa{
 }
 
 module.exports = {
-    listaBordo(req, res){
+    listaBordo(req, res, resposta){
+        let flash = new Resposta()
+        let resultado;
         let bordo = [];
         console.log('listando Diários de Bordo')
         Bene.find().then((bene) =>{
@@ -53,7 +56,16 @@ module.exports = {
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                     console.log("Listagem Realizada Usuário!")
-                    res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene})
+                    if(resposta.sucesso == ""){
+                        //console.log(' objeto vazio');
+                        flash.texto = "";
+                        flash.sucesso = "";
+                    } else {
+                        //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                        flash.texto = resposta.texto;
+                        flash.sucesso = resposta.sucesso;
+                    }
+                    res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
@@ -73,8 +85,9 @@ module.exports = {
         let mes;
         let dia;
         let isAgendaTerapeuta = false;
+        let idUsu = req.cookies['idUsu'];
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['62421903a12aa557219a0fd3','6242191fa12aa557219a0fd9','6242190fa12aa557219a0fd6','624218f5a12aa557219a0fd0'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;
@@ -109,15 +122,16 @@ module.exports = {
                 seg = new Date();
                 seg.setFullYear(ano);
                 seg.setUTCMonth(mes);
-                seg.setUTCDate(dia);
+                seg.setDate(dia);
                 seg.setHours(0, 0, 0, 0);
 
                 sex = new Date();
                 sex.setFullYear(ano);
                 sex.setUTCMonth(mes);
-                sex.setUTCDate(dia);
+                sex.setDate(dia);
                 sex.setHours(23, 59, 59, 0);
-
+console.log("seg:"+seg)
+console.log("sex:"+sex)
                 switch (seg.getUTCDay()){
                     case 0://DOM
                         seg.setUTCDate(seg.getUTCDate() + 1);
@@ -164,45 +178,57 @@ module.exports = {
                 mes = data.substring(5,7);
                 dia = data.substring(8,10);
 
+                console.log("mes:"+mes)
+                console.log("dia:"+dia)
                 dataIni = new Date();
                 dataIni.setFullYear(ano);
+                console.log("dataIni"+dataIni)
                 dataIni.setUTCMonth(mes);
-                dataIni.setUTCDate(dia);
+                console.log("dataIni"+dataIni)
+                dataIni.setDate(dia);
+                console.log("dataIni"+dataIni)
                 dataIni.setHours(0, 0, 0, 0);
+                console.log("dataIni"+dataIni)
 
                 dataFim = new Date();
                 dataFim.setFullYear(ano);
+                console.log("dataFim"+dataFim)
                 dataFim.setUTCMonth(mes);
-                dataFim.setUTCDate(dia);
+                console.log("dataFim"+dataFim)
+                dataFim.setDate(dia);
+                console.log("dataFim"+dataFim)
                 dataFim.setHours(23,59,59,0);
+                console.log("dataFim"+dataFim)
 
                 break;
             default:
                 
                 break;
         }
+        console.log("(dataIni):"+dataIni)
+        console.log("(dataFim):"+dataFim)
         console.log("new Date(dataIni):"+new Date(dataIni))
         console.log("new Date(dataFim):"+new Date(dataFim))
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: lvlUsu }
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_beneid: req.body.bordoBeneficiario };
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario };
                 }
                 break;
             case "Terapeuta":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: lvlUsu }
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , bordo_terapeutaid: req.body.bordoTerapeuta };
+                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: req.body.bordoTerapeuta };
                 }
                 console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
@@ -225,22 +251,26 @@ module.exports = {
                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada Usuário!")
-                        res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene})
-        })})})}).catch((err) =>{
+                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
+                            terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                            console.log("Listagem Realizada Usuário!")
+                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
         })
     },
     carregaBordo(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        console.log("usuarioAtual:"+usuarioAtual)
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                    Escola.find().sort({escola_nome: 1}).then((escola)=>{
-                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
-                                    res.render("area/bordo/bordoCad", {escolas: escola, terapeutas: terapeuta, benes: bene})
+            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
+                Escola.find().sort({escola_nome: 1}).then((escola)=>{
+                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
+                    res.render("area/bordo/bordoCad", {escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
@@ -422,35 +452,35 @@ module.exports = {
     cadastraBordo(req,res){
         console.log("chegou")
         let resultado
-        let resposta = new Resposta();
+        let flash = new Resposta();
         
         bordoClass.bordoAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
-            console.log(res)
+            console.log(result)
             resultado = true;
         }).catch((err)=>{
             resultado = err
-            console.log("ERRO:"+err)
+            console.log("ERRO:")
         }).finally(()=>{
             if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+                flash.texto = "Cadastrado com sucesso!"
+                flash.sucesso = "true"
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaBordo(req,res,resposta)
+                this.listaBordo(req,res,flash)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
+                flash.texto = resultado
+                flash.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro', flash);
             }
         })
     },
 
     atualizaBordo(req,res){
         let resultado
-        let resposta = new Resposta()
+        let flash = new Resposta()
         try{
             bordoClass.bordoEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
@@ -465,16 +495,16 @@ module.exports = {
                 if(resultado == true){
                     //Volta para a debitsubcateg de listagem
                     console.log("Listagem Realizada!")
-                    resposta.texto = "Atualizado com Sucesso!"
-                    resposta.sucesso = "true"
-                    this.listaBordo(req,res,resposta)
+                    flash.texto = "Atualizado com Sucesso!"
+                    flash.sucesso = "true"
+                    this.listaBordo(req,res,flash)
                 }else{
                     //passar classe de erro
                     console.log("error")
                     console.log(resultado)
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    this.listaBordo(req,res,resposta)
+                    flash.texto = resultado
+                    flash.sucesso = "false"
+                    this.listaBordo(req,res,flash)
                 }
             })
         } catch(err1){

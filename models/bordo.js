@@ -1,5 +1,6 @@
 const { data } = require('jquery')
 const mongoose = require('mongoose')
+const usuario = require('./usuario')
 const ObjectId = mongoose.Types.ObjectId
 
 const BordoSchema = mongoose.Schema({
@@ -7,7 +8,7 @@ const BordoSchema = mongoose.Schema({
     bordo_beneid:{type: ObjectId, required: true},
     bordo_atendem :{type: String, required: false},
     bordo_ondefoi :{type: String, required: false},
-    bordo_escolaid:{type: ObjectId, required: true},
+    bordo_escolaid:{type: ObjectId, required: false},
     bordo_dataativ :{type: Date, required: false},
     bordo_frequencia :{type: String, required: false},
     bordo_seguerotina :{type: String, required: false},
@@ -396,8 +397,7 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_habilnova: req.body.bordoHabilnova,
                 bordo_incidente: req.body.bordoIncidente,
                 bordo_obs: req.body.bordoObs,
-                bordo_selo: req.body.bordoSelo,
-                bordo_dataedi : req.body.bordoDataAtual.toISOString(),
+                bordo_dataedi : dataAtual,
                 bordo_usuidedi: req.cookies['idUsu']
                 }}
         ).then((res) =>{
@@ -412,11 +412,14 @@ module.exports = {BordoModel,BordoSchema,
     },
     bordoAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+        
+        //let 
         console.log("bordomodel");
-        console.log("req.body.bordoDatacad:")
-        console.log(req.body.bordodata)
+        console.log("req.body.bordoDataativ:")
+        console.log(req.body.bordoDataativ)
         const newBordo = new BordoModel({
-            bordo_terapeutaid: req.body.bordoTerapeutaid,
+            bordo_terapeutaid: usuarioAtual,
             bordo_beneid: req.body.bordoBeneid,
             bordo_atendem: req.body.bordoAtendem,
             bordo_ondefoi: req.body.bordoOndefoi,
@@ -506,9 +509,8 @@ module.exports = {BordoModel,BordoSchema,
             bordo_habilnova: req.body.bordoHabilnova,
             bordo_incidente: req.body.bordoIncidente,
             bordo_obs: req.body.bordoObs,
-            bordo_selo: req.body.bordoSelo,
             bordo_datacad: dataAtual,
-            bordo_usuidcad: req.cookies['idUsu']
+            bordo_usuidcad: usuarioAtual
         });
         console.log("newBordo save");
         await newBordo.save().then(()=>{

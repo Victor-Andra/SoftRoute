@@ -1465,7 +1465,10 @@ router.get('/area/anamn/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//direc
 //Menu Bordo ** Area Tecnicos   
 //Lista Todos os Diários de Bordo por Data, Beneficiário
 router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
-    fncBordo.listaBordo(req, res);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncBordo.listaBordo(req, res, resposta);
 })
 router.post('/area/bordo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.filtraBordo(req, res);
