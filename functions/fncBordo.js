@@ -431,7 +431,7 @@ module.exports = {
     },
     
 
-     Bordo(req,res){
+    cadastraBordo(req,res){
         console.log("chegou")
         let resultado
         let flash = new Resposta();
