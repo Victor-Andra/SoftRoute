@@ -427,6 +427,7 @@ console.log("sex:"+sex)
         })
     },
     carregaBordoedi(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
         Bordo.findById(req.params.id).then((bordo) =>{console.log("ID: "+bordo._id)
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
@@ -439,7 +440,7 @@ console.log("sex:"+sex)
                                 console.log("Listagem Realizada de beneficiarios")
                                 Escola.find().then((escola) =>{
                                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                        res.render("area/bordo/bordoEdi", {bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene})
+                                        res.render("area/bordo/bordoEdi", {bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, usuarioAtual})
         })})})})})}).catch((err) =>{
         
             console.log(err)

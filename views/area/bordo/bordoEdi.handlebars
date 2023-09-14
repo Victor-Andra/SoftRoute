@@ -11,6 +11,7 @@
 			document.getElementById("a").value = dataFmt;
 		}
 		function carregaBody(){
+			document.getElementById("usuarioAtual").value = document.getElementById(document.getElementById("bordoTerapeutaid").value).value;
 			let dtnsc = new Date(document.getElementById("bordoDataativEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
 			let dia = (dtnsc.getUTCDate()).toString();
@@ -24,7 +25,6 @@
 
 			document.getElementById("bordoDataativ").value = fulldate;
 			document.getElementById("bordoBeneid").value = document.getElementById("bordoBeneidEdi").value;
-			document.getElementById("bordoTerapeutaid").value = document.getElementById("bordoTerapeutaidEdi").value;
 
 			document.getElementById("bordoAtendem").value = document.getElementById("bordoAtendemEdi").value;
 			document.getElementById("bordoOndefoi").value = document.getElementById("bordoOndefoiEdi").value;
@@ -118,7 +118,6 @@
 						</h1>
 						<!-- Dados carregar -->
 						<div id="divCarrega" name="divCarrega" class="hidden">
-							<input id="bordoTerapeutaidEdi" name="bordoTerapeutaidEdi" value="{{bordo.bordo_terapeutaid}}"/>
 							<input id="bordoBeneidEdi" name="bordoBeneidEdi" value="{{bordo.bordo_beneid}}"/>
 							<input id="bordoEscolaidEdi" name="bordoEscolaidEdi" value="{{bordo.bordo_escolaid}}"/>
 							
@@ -210,6 +209,10 @@
 							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
 							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
 							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+							{{#each terapeutas}}
+								<input id="{{_id}}" value="{{usuario_nome}}" />
+							{{/each}}
+							<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly=“true” value="{{usuarioAtual}}" />
 						</div>
 					</div><!-- /.page-header -->
 
@@ -242,12 +245,7 @@
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="chosen-select" >
-															<option value="-">-</option>
-															{{#each terapeutas}}
-															<option value="{{_id}}">{{usuario_nome}}</option>
-															{{/each}}
-														</select>
+														<input style="width: 400px;" type="text" id="usuarioAtual" name="usuarioAtual" readonly=“true”  value="" />
 													</div>
 												</div>
 												<label> Beneficiário</label>
