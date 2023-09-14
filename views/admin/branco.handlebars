@@ -3,7 +3,7 @@
 	<head>
 		<title>Página em Branco</title>
 	</head>
-	<body class="no-skin" onload="javascript:controlaNave();">
+	<body class="no-skin" background-image="/assets/images/papelparede/temaLogin.png" onload="javascript:controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -19,7 +19,6 @@
 								</button>
 							</p>
 						</div>
-						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
 						{{#compareString flash.sucesso "false"}}
 							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
@@ -35,6 +34,18 @@
 							</div>
 							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{else}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-warning">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{/compareString}}
 					{{/compareString}}
 				</div>

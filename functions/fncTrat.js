@@ -75,7 +75,7 @@ module.exports = {
                     //console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")
-                        /*if(resposta.sucesso == ""){
+                        if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
                             flash.texto = ""
                             flash.sucesso = ""
@@ -83,7 +83,7 @@ module.exports = {
                             console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
                             flash.texto = resposta.texto
                             flash.sucesso = resposta.sucesso
-                        }*/
+                        }
             res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
@@ -92,7 +92,6 @@ module.exports = {
         })
     },
     filtraTrat(req, res, resposta){
-        let flash = new Resposta();
         let tipoPessoa = req.body.tratTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
@@ -105,6 +104,7 @@ module.exports = {
         let mes;
         let dia;
         let isAgendaTerapeuta = false;
+        let idUsu = req.cookies['idUsu'];
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421903a12aa557219a0fd3','6242191fa12aa557219a0fd9','6242190fa12aa557219a0fd6','624218f5a12aa557219a0fd0'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -141,13 +141,13 @@ module.exports = {
                 seg = new Date();
                 seg.setFullYear(ano);
                 seg.setUTCMonth(mes);
-                seg.setUTCDate(dia);
+                seg.setDate(dia);
                 seg.setHours(0, 0, 0, 0);
 
                 sex = new Date();
                 sex.setFullYear(ano);
                 sex.setUTCMonth(mes);
-                sex.setUTCDate(dia);
+                sex.setDate(dia);
                 sex.setHours(23, 59, 59, 0);
 
                 switch (seg.getUTCDay()){
@@ -185,10 +185,6 @@ module.exports = {
                 dataIni = seg.toISOString();
                 dataFim = sex.toISOString();
 
-                //console.log("req.body.dataFinal:"+req.body.dataFinal)
-                //console.log("seg:"+seg);
-                //console.log("sex:"+sex);
-                
                 break;
             case "Dia":
                 data = req.body.dataFinal;
@@ -199,13 +195,13 @@ module.exports = {
                 dataIni = new Date();
                 dataIni.setFullYear(ano);
                 dataIni.setUTCMonth(mes);
-                dataIni.setUTCDate(dia);
+                dataIni.setDate(dia);
                 dataIni.setHours(0, 0, 0, 0);
 
                 dataFim = new Date();
                 dataFim.setFullYear(ano);
                 dataFim.setUTCMonth(mes);
-                dataFim.setUTCDate(dia);
+                dataFim.setDate(dia);
                 dataFim.setHours(23,59,59,0);
 
                 break;
@@ -213,36 +209,34 @@ module.exports = {
                 
                 break;
         }
-        console.log("new Date(dataIni):"+new Date(dataIni))
-        console.log("new Date(dataFim):"+new Date(dataFim))
+
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: lvlUsu }
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaid: lvlUsu }
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario };
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_beneid: req.body.tratBeneficiario };
                 }
                 break;
             case "Terapeuta":
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: lvlUsu }
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_tratdata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: req.body.tratTerapeuta };
+                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: req.body.tratTerapeuta };
                 }
-                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
                 break;
         }
         //console.log('listando plano de tratamento')
-        Trat.find().then((trat) =>{
+        Trat.find(busca).then((trat) =>{
             trat.forEach((b)=>{
                 let datacad = new Date(b.trat_datacad)
                 let mes = (datacad.getMonth()+1).toString();
@@ -288,7 +282,7 @@ module.exports = {
                     //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")
-                        /*if(resposta.sucesso == ""){
+                        if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
                             flash.texto = ""
                             flash.sucesso = ""
@@ -296,7 +290,7 @@ module.exports = {
                             console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
                             flash.texto = resposta.texto
                             flash.sucesso = resposta.sucesso
-                        }*/
+                        }
             res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
@@ -323,6 +317,7 @@ module.exports = {
     },
 
     carregaTratedi(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
         Trat.findOne({_id : req.params.id}).then((trat)=>{
             console.log("Listagem Realizada de Planos de Tratamento")
             Terapia.find().then((terapia)=>{
@@ -331,7 +326,7 @@ module.exports = {
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratEdi", {trat, terapias: terapia, usuarios: usuario, benes: bene})
+                                res.render("area/plano/tratEdi", {trat, terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -341,24 +336,29 @@ module.exports = {
 
    
     cadastraTrat(req,res){
-        let resposta
+        let resultado
+        let flash = new Resposta();
         let cadastro = tratClass.tratAdicionar(req,res);//variavel para armazenar a função que armazena o async
         var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');//hexadecimal de void123456id
 
         cadastro.then((result)=>{
-            resposta = true;
+            resultado = true;
         }).catch((err)=>{
-            resposta = err
+            resultado = err
             console.log("ERRO:"+err)
         }).finally(()=>{
-            if (resposta == true){
+            if (resultado == true){
+                flash.texto = "Cadastrado com sucesso!"
+                flash.sucesso = "true"
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaTrat(req,res)
+                this.listaTrat(req,res,flash)
             } else {
+                flash.texto = resultado
+                flash.sucesso = "false"
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro');
+                res.render('admin/erro', flash);
             }
         })
     },

@@ -454,6 +454,25 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             */
             res.redirect("/menu/branco");
             /*
+            let flash = new Resposta();
+            
+            if (usu.usuario_palavraChave == ("undefined" || undefined)){
+                console.log("PU")
+                flash.sucesso = "almost";
+                flash.texto = "Você ainda não cadastrou sua Palavra Chave, ela é responsável por permitir que você edite sua senha em caso de erro e garante que é você quem está acessando o sistema. Cadastre-a o mais breve possível!";
+            } else if (usu.usuario_senha == "123456789"){
+                console.log("SU")
+                flash.sucesso = "almost";
+                flash.texto = "Você ainda não alterou sua senha temporária, a senha temporária tem o intuito de permitir o primeiro acesso ao sistema para que o usuário possa cadastrar sua Palavra Chave e sua Senha. Altere-a o mais breve possível!";
+            } else {
+                console.log("TRUE")
+                flash.sucesso = "true";
+                flash.texto = "Logado com sucesso!" 
+            }
+           
+            res.render("branco", flash);
+            */
+            /*
             if(lvl == 0){
                 res.redirect("/menu/branco")
             } else if (lvl == 1){
@@ -1500,7 +1519,10 @@ router.get('/area/bordo/mapabordo', fncGeral.IsAuthenticated, (req,res) =>{//Abr
 //Menu Plano de Tratamentos ** Area Tecnicos   
 //Lista Todos Planos de Tratamento
 router.get('/area/plano/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
-    fncTrat.listaTrat(req, res);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncTrat.listaTrat(req, res, resposta);
 })
 //Filtra Todos Planos de Tratamento
 router.post('/area/plano/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.

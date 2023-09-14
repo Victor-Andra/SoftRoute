@@ -130,8 +130,7 @@ module.exports = {
                 sex.setUTCMonth(mes);
                 sex.setDate(dia);
                 sex.setHours(23, 59, 59, 0);
-console.log("seg:"+seg)
-console.log("sex:"+sex)
+
                 switch (seg.getUTCDay()){
                     case 0://DOM
                         seg.setUTCDate(seg.getUTCDate() + 1);
@@ -167,10 +166,6 @@ console.log("sex:"+sex)
                 dataIni = seg.toISOString();
                 dataFim = sex.toISOString();
 
-                //console.log("req.body.dataFinal:"+req.body.dataFinal)
-                //console.log("seg:"+seg);
-                //console.log("sex:"+sex);
-                
                 break;
             case "Dia":
                 data = req.body.dataFinal;
@@ -178,37 +173,24 @@ console.log("sex:"+sex)
                 mes = data.substring(5,7);
                 dia = data.substring(8,10);
 
-                console.log("mes:"+mes)
-                console.log("dia:"+dia)
                 dataIni = new Date();
                 dataIni.setFullYear(ano);
-                console.log("dataIni"+dataIni)
                 dataIni.setUTCMonth(mes);
-                console.log("dataIni"+dataIni)
                 dataIni.setDate(dia);
-                console.log("dataIni"+dataIni)
                 dataIni.setHours(0, 0, 0, 0);
-                console.log("dataIni"+dataIni)
 
                 dataFim = new Date();
                 dataFim.setFullYear(ano);
-                console.log("dataFim"+dataFim)
                 dataFim.setUTCMonth(mes);
-                console.log("dataFim"+dataFim)
                 dataFim.setDate(dia);
-                console.log("dataFim"+dataFim)
                 dataFim.setHours(23,59,59,0);
-                console.log("dataFim"+dataFim)
 
                 break;
             default:
                 
                 break;
         }
-        console.log("(dataIni):"+dataIni)
-        console.log("(dataFim):"+dataFim)
-        console.log("new Date(dataIni):"+new Date(dataIni))
-        console.log("new Date(dataFim):"+new Date(dataFim))
+
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
@@ -230,7 +212,6 @@ console.log("sex:"+sex)
                 } else {
                     busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: req.body.bordoTerapeuta };
                 }
-                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
                 break;
@@ -450,7 +431,7 @@ console.log("sex:"+sex)
     },
     
 
-    cadastraBordo(req,res){
+     Bordo(req,res){
         console.log("chegou")
         let resultado
         let flash = new Resposta();

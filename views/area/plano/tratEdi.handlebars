@@ -79,7 +79,12 @@
 			document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
 			document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
 			console.log("ta chegando aqui?");
-			
+			let usuarioAtual = document.getElementById("usuarioAtual").value;
+			if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual){
+				document.getElementById("acaoSalvar").style.display = '';
+			} else {
+				document.getElementById("acaoSalvar").style.display = 'none';
+			}
 			}
 		</script>
 	</head>
@@ -124,10 +129,7 @@
 								<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
 								<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
 								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
-								
-								
-							
-
+								<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
 							</div>
 						</div>
 					</div>
@@ -651,7 +653,7 @@
 									</button>
 
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+									<button class="hidden btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>
