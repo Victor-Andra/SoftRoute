@@ -2,8 +2,13 @@
 <html lang="pt-br">
 	<head>
 		<title>Página em Branco</title>
+		<script>
+			function OcultaMsg(){
+				document.getElementById("alertMsgFlash").hidden = true;
+			}
+		</script>
 	</head>
-	<body class="no-skin" background-image="/assets/images/papelparede/temaLogin.png" onload="javascript:controlaNave();">
+	<body class="no-skin" background-image="/assets/images/papelparede/temaLogin.png" onload="javascript:controlaNave();"  >
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -35,10 +40,10 @@
 							</div>
 							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{else}}
-							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-alert">
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-warning">
 								<p>
 									<strong>
-										<i class="ace-icon fa fa-times"></i>
+										<i class="ace-icon fa fa-check"></i>
 										{{flash.texto}}
 									</strong>
 									<button type="button" class="close" onclick="javascript:OcultaMsg()">

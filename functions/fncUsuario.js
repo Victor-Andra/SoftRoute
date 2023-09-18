@@ -124,7 +124,43 @@ module.exports = {
             res.redirect('admin/erro')
         })  
     },
-    
+    carregaEsqueciMinhasenha(req,res){
+        Usuario.find().then((usuario)=>{
+             res.render("ferramentas/usuario/esqueciMinhaSenha", {usuarios: usuario})
+        }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o mudar senha")
+             res.redirect('admin/erro')
+        })  
+    },
+    definirSenha(req,res){
+        let flash = new Resposta();
+        let resposta = false;
+        usuarioClass.usuarioDefinirSenha(req,res).then((retorno)=>{
+            if (retorno == "true"){
+                resposta = true;
+            } else {
+                resposta = retorno;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
+            res.redirect('admin/erro')
+        }).finally(()=>{
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Senha alterada com sucesso!";
+                flash.sucesso = "true";
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Erro ao alterar senha! "+resposta;
+                flash.sucesso = "false";
+                res.render('admin/branco', {flash});
+            }
+        })
+    },
     mudarSenha(req,res){
         let flash = new Resposta();
         let resposta = false;
@@ -142,6 +178,8 @@ module.exports = {
                 flash.texto = "Senha alterada com sucesso!"
                 flash.sucesso = "true"
                 //console.log('verdadeiro')
+                res.clearCookie('lvlUsu', { path: '/' })
+                res.clearCookie('idUsu', { path: '/' })
                 res.render('admin/branco', {flash});
             }else{
                 //passar classe de erro

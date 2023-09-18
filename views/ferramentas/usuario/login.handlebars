@@ -45,6 +45,10 @@
 				document.getElementById("pesquisaData").style.display = "";			
 				document.getElementById("containet-principal-side-nav").style = "padding-left: 200px";
 			}
+			function mudaAcao(acaoNome){
+				document.getElementById("acaoForm").action = acaoNome;
+				document.getElementById("acaoForm").submit();
+			}
 		</script>
 	</head>
 
@@ -87,7 +91,7 @@
 
 											<div class="space-6"></div>
 
-											<form action="/menu/login" method="post">
+											<form id="acaoForm" action="/menu/login" method="post">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -112,23 +116,20 @@
 														</button>
 													</div>
 											
-									</fieldset>
-											<br>			
-													<div class="space-4"></div>
-													<div class="col-xs-12" style="text-align: center;" >
-														<button href="" class=" btn btn-sm ">
-															<i class="ace-icon fa fa-key"></i>
-															<span class="bigger-110">Esqueci minha Senha!</span>
-														</button>
-													</div>
-								</form>
-
+												</fieldset>
+												<br>			
+												<div class="space-4"></div>
+											</form>
+											<div class="col-xs-12" style="text-align: center;" >
+												<button class=" btn btn-sm " onclick="javascript:mudaAcao('/menu/ferramentas/usuario/esqueciMinhaSenha');">
+													<i class="ace-icon fa fa-key"></i>
+													<span class="bigger-110">Esqueci minha Senha!</span>
+												</button>
+											</div>
 										</div><!-- /.widget-main -->
 									</div><!-- /.widget-body -->
 								</div><!-- /.login-box -->
 							</div><!-- /.position-relative -->
-
-
 						</div>
 					</div><!-- /.col -->
 				</div><!-- /.row -->

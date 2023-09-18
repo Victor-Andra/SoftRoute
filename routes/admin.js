@@ -398,6 +398,15 @@ router.post('/login', (req,res,next)=>{
 })
 */
 
+//Carregar Esqueci Minha Senha
+router.post("/ferramentas/usuario/esqueciMinhaSenha", (req,res) =>{//Direciona a Mudar Senha
+    fncUsuario.carregaEsqueciMinhasenha(req, res);
+})
+
+router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
+    fncUsuario.definirSenha(req, res);
+})
+
 router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/login', failureMessage: true }), function(req, res) {
     let lvl;
     let idUsu;
@@ -452,12 +461,13 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                     break;
             }
             */
-            res.redirect("/menu/branco");
-            /*
-            let flash = new Resposta();
+            //res.redirect("/menu/branco");
             
-            if (usu.usuario_palavraChave == ("undefined" || undefined)){
-                console.log("PU")
+            let flash = new Resposta();
+            console.log("usu.usuario_palavrachave:"+usu.usuario_palavrachave);
+            console.log("usu.usuario_senha:"+usu.usuario_senha);
+            if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined){
+                console.log("PU");
                 flash.sucesso = "almost";
                 flash.texto = "Você ainda não cadastrou sua Palavra Chave, ela é responsável por permitir que você edite sua senha em caso de erro e garante que é você quem está acessando o sistema. Cadastre-a o mais breve possível!";
             } else if (usu.usuario_senha == "123456789"){
@@ -465,13 +475,13 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                 flash.sucesso = "almost";
                 flash.texto = "Você ainda não alterou sua senha temporária, a senha temporária tem o intuito de permitir o primeiro acesso ao sistema para que o usuário possa cadastrar sua Palavra Chave e sua Senha. Altere-a o mais breve possível!";
             } else {
-                console.log("TRUE")
+                console.log("TU")
                 flash.sucesso = "true";
                 flash.texto = "Logado com sucesso!" 
             }
-           
-            res.render("branco", flash);
-            */
+
+            res.render("branco", {flash});
+            
             /*
             if(lvl == 0){
                 res.redirect("/menu/branco")
@@ -537,6 +547,8 @@ router.get('/logout', function(req, res, next) {
         if (err) {
             return next(err);
         } else {
+            res.clearCookie('lvlUsu', { path: '/' })
+            res.clearCookie('idUsu', { path: '/' })
             res.redirect('/menu/login');
         }
     });

@@ -445,16 +445,14 @@ module.exports = {
             console.log("ERRO:")
         }).finally(()=>{
             if (resultado == true){
-                flash.texto = "Cadastrado com sucesso!"
+                flash.texto = "Diário de Bordo cadastrado com sucesso!"
                 flash.sucesso = "true"
                 console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
                 this.listaBordo(req,res,flash)
             } else {
                 flash.texto = resultado
                 flash.sucesso = "false"
                 console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
                 res.render('admin/erro', flash);
             }
         })
@@ -497,27 +495,24 @@ module.exports = {
 
 
     deletaBordo(req,res){
+        let resposta;
+        let flash = new Resposta()
         Bordo.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    bene.sort((a,b) => (a.bene_nome > b.bene_nome) ? 1 : ((b.bene_nome > a.bene_nome) ? -1 : 0));//Ordena o bene por nome
-                                    console.log("Listagem Realizada de beneficiarios")
-                                    Escola.find().then((escola) =>{
-                                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                            //req.flash("success_message", "Diário de Bordo Deletado!")
-                res.render('area/bordo/bordoLis', {convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene})
-            })})})})}).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
-                res.render('admin/erro')
-            })
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar os Diários de Bordo")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "Diário Bordo deletado!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar Diário Bordo";
+                flash.sucesso = "false";
+            }
+            this.listaBordo(req,res, resposta)
         })
     }
-
-
 }

@@ -423,6 +423,41 @@ module.exports = {UsuarioModel,UsuarioSchema,
 
         return resultado;
     },
+    usuarioDefinirSenha: async (req, res) => {
+        //Realiza Atualização
+        let dataAtual = new Date();
+        let usuarioAtual = "-";
+        await UsuarioModel.findOne({usuario_email : req.body.usuarioEmail}).then((usu)=>{
+            usuarioAtual = usu;
+        }).catch((err)=>{
+            console.log("ERRO!");
+        })
+        
+        if (usuarioAtual != "-" && usuarioAtual != "undefined" && usuarioAtual != undefined){
+            if (usuarioAtual.usuario_palavrachave == req.body.usuarioChave){
+                await UsuarioModel.findByIdAndUpdate(usuarioAtual._id, 
+                    {$set: {
+                        usuario_dataedi : dataAtual ,
+                        usuario_senha : req.body.usuarioSenha
+                        }}
+                ).then((res) =>{
+                    console.log("Salvo")
+                    resultado = "true";
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                    //res.redirect('admin/branco')
+                })
+            } else {
+                resultado = "A palavra chave está incorreta!";
+            }
+        } else {
+            resultado = "Email não encontrado!";
+        }
+
+        return resultado;
+    },
     usuarioDeletarPalavraChave: async (req, res) => {
         //Realiza Atualização
         let usuarioAtual = "-";

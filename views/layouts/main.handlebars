@@ -91,6 +91,7 @@
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveTerapeuta");
 				} else if (biscoito == "62421857a12aa557219a0fc1"){//Socios
 					//console.log("2: "+(biscoito== "62421857a12aa557219a0fc1")+"biscoito == 62421857a12aa557219a0fc1")
@@ -102,6 +103,7 @@
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "624218f5a12aa557219a0fd0"){//Administradores e Financeiro
 					//console.log("2: "+(biscoito== "624218f5a12aa557219a0fd0")+"biscoito == 624218f5a12aa557219a0fd0")
@@ -113,6 +115,7 @@
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "62421903a12aa557219a0fd3"){//Terapeutas
 					//console.log("2: "+(biscoito== "62421903a12aa557219a0fd3")+"biscoito == 62421903a12aa557219a0fd3")
@@ -124,6 +127,7 @@
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "6242190fa12aa557219a0fd6"){//Recepcionistas
 					//console.log("2: "+(biscoito== "6242190fa12aa557219a0fd6")+"biscoito == 6242190fa12aa557219a0fd6")
@@ -135,6 +139,7 @@
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "6242191fa12aa557219a0fd9"){//AT
 					//console.log("2: "+(biscoito== "6242191fa12aa557219a0fd9")+"biscoito == 6242191fa12aa557219a0fd9")
@@ -146,6 +151,7 @@
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "644742e378166939169f82a1"){//Coordenador 644742e378166939169f82a1
 					//console.log("2: "+(biscoito== "644742e378166939169f82a1")+"biscoito == 644742e378166939169f82a1")
@@ -157,6 +163,7 @@
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "644743aa78166939169f8486"){//Supervisor
 					//console.log("2: "+(biscoito== "644743aa78166939169f8486")+"biscoito == 644743aa78166939169f8486")
@@ -168,9 +175,11 @@
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else {
 					//console.log("3: "+(biscoito== "undefined")+"biscoito == undefined")
+					document.getElementById("naveVazia").style.display = '';
 					document.getElementById("naveRoot").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
@@ -209,6 +218,9 @@
 		<div name="navbarPrincipalSelect" id="naveSupervisor" style="display: none;">
 		{{>_navbarSU}}
 		</div>
+		<div name="navbarPrincipalSelect" id="naveVazia" style="display: none;">
+		{{>_navbarVazia}}
+		</div>
 		<!--DIV para espaçamento entre nav e body-->
 		<div style="margin-bottom: 75px;"></div>
 		<!--validação-->
@@ -223,13 +235,13 @@
 	
 	<br>
 	<br>
+	<input class="hidden" id="flashMain" value="{{flash.mensagem}}" >
 	<div class="footer">
 		<div class="footer-inner">
 			<div class="footer-content">
 				<span class="bigger-120">
 					<span class="pink bolder">Soft</span>
 					<span class="blue bolder">Route</span>
-					- Sistema de Gestão Clínica e Suporte Documental &copy; 2022-2023
 				</span>
 
 				&nbsp; &nbsp;
