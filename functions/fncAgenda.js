@@ -10830,7 +10830,7 @@ module.exports = {
                                 //console.log("migrado?"+a.agenda_migrado)
                             }
                             */
-                            console.log("a.agenda_categoria:"+a.agenda_categoria);
+                            //console.log("a.agenda_categoria:"+a.agenda_categoria);
 
                             if(!a.agenda_migrado){
                                 nextNum = nextNum + 1;
@@ -10855,9 +10855,7 @@ module.exports = {
 
                                     hora = hor+":"+min;
 
-                                    console.log("agendaSub.agenda_categoria:"+agendaSub.agenda_categoria);
-
-                                    switch (a.agenda_categoria){
+                                    switch (agendaSub.agenda_categoria){
                                         case "Apoio"://ANALISE
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((ccre)=>{
@@ -11747,12 +11745,13 @@ module.exports = {
                                     
                                     if (a.agenda_categoria == "SubstitutoFixo") {
                                         console.log("SUBFIX2");
+                                        console.log("A:"+a)
                                         console.log("a.agenda_convid:"+a.agenda_convid)
-                                        console.log("agendaSub.agenda_mergeterapiaid:"+agendaSub.agenda_mergeterapiaid)
                                         console.log("a.agenda_mergeterapiaid:"+a.agenda_mergeterapiaid)
-                                        agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                        console.log("a.agenda_mergeterapiaid:"+a.agenda_mergeterapiaid)
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
                                         convcre.forEach((ccre)=>{
-                                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                            convcreTes = ""+ccre.convcre_convid + ccre.agenda_mergeterapiaid+"";
                                             if( convcreTes == agendacreTes){
                                                 //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                 convCreCpfCnpj = ccre.convcre_convCpfCnpj;
@@ -11782,6 +11781,7 @@ module.exports = {
 
                                         console.log("convdebval:"+convdebval)
                                         console.log("convcreval:"+convcreval)
+                                        console.log("Sala: "+a.agenda_salaid)
         
                                         newAtend = new Atend({
                                             atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -12043,24 +12043,46 @@ module.exports = {
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
-                dataaux.setDate(dataaux.getDate()+7);
+                dataaux.setFullYear(2024)//2024
+                dataaux.setUTCMonth(11)//dez
+                dataaux.setDate(dataaux.getDate()+5);
                 //console.log("date")
                 //console.log(dataaux)
                 a.agenda_data = dataaux.toISOString();
-                const newAgenda = new Agenda({
-                    agenda_data : a.agenda_data,//
-                    agenda_beneid : a.agenda_beneid,//
-                    agenda_convid : a.agenda_convid,//
-                    agenda_salaid : a.agenda_salaid,//
-                    agenda_terapiaid : a.agenda_terapiaid,//
-                    agenda_usuid : a.agenda_usuid,//
-                    agenda_categoria : a.agenda_categoria,//
-                    agenda_org : a.agenda_org,//
-                    agenda_obs : a.agenda_obs,//
-                    agenda_temp : a.agenda_temp,//
-                    agenda_extra : a.agenda_extra,//
-                    agenda_datacad: dataAtual//
-                });
+                if (a.agenda_categoria == "SubstitutoFixo"){
+                    const newAgenda = new Agenda({
+                        agenda_data : a.agenda_data,//
+                        agenda_beneid : a.agenda_beneid,//
+                        agenda_convid : a.agenda_convid,//
+                        agenda_salaid : a.agenda_salaid,//
+                        agenda_terapiaid : a.agenda_terapiaid,//
+                        agenda_usuid : a.agenda_usuid,//
+                        agenda_categoria : a.agenda_categoria,//
+                        agenda_org : a.agenda_org,//
+                        agenda_obs : a.agenda_obs,//
+                        agenda_temp : a.agenda_temp,//
+                        agenda_extra : a.agenda_extra,//
+                        agenda_datacad: dataAtual,//
+                        agenda_mergeterapiaid: a.agenda_mergeterapiaid,//
+                        agenda_mergeterapeutaid: a.agenda_mergeterapeutaid//
+                    });
+                } else {
+                    const newAgenda = new Agenda({
+                        agenda_data : a.agenda_data,//
+                        agenda_beneid : a.agenda_beneid,//
+                        agenda_convid : a.agenda_convid,//
+                        agenda_salaid : a.agenda_salaid,//
+                        agenda_terapiaid : a.agenda_terapiaid,//
+                        agenda_usuid : a.agenda_usuid,//
+                        agenda_categoria : a.agenda_categoria,//
+                        agenda_org : a.agenda_org,//
+                        agenda_obs : a.agenda_obs,//
+                        agenda_temp : a.agenda_temp,//
+                        agenda_extra : a.agenda_extra,//
+                        agenda_datacad: dataAtual//
+                    });
+                }
+                
                 this.salvaAgenda(newAgenda);
             })
             //console.log(agenda)

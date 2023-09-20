@@ -588,6 +588,7 @@ module.exports = {
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 //console.log("Listagem Realizada de Terapia")
+                                
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro, tipoData, tipoPessoa, dataIni, dataFim, dataFinal, mesAtend, anoAtend, atendTerapeuta, atendBeneficiario})
         })})})})}).catch((err) =>{
             console.log(err)

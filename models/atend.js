@@ -319,13 +319,13 @@ module.exports = {AtendModel,AtendSchema,
         console.log("fim: "+fim.toISOString());
         //Ta com o nome de agenda pq vem da agenda, mas o id é esse
         let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
-        let teraidx = req.body.agendaTerapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
-        let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
+        let terapeutaidx = req.body.agendaTerapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let terapiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
         let convidx = req.body.agendaConvid;//new ObjectId("62477742e416141415ff7a88");//particular
 
         //Não esqueça de alterar os valores a Débito e Crédito
-        let novoteraidx = req.body.agendaTerapeutaSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
-        let novatpiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let novoterapeutaidx = req.body.agendaTerapeutaSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let novaterapiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
         console.log("WHAT???")
@@ -333,83 +333,86 @@ module.exports = {AtendModel,AtendSchema,
             let novavalorcrex = req.body.atendValorcre;
             let novavalordebx = req.body.atendValordeb;
             console.log("BUSCA")
-            if (teraidx != "-" && tpiaidx != "-"){
-                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_usuid: teraidx , atend_beneid: beneidx };
-            } else if (teraidx == "-" && tpiaidx != "-"){
+            if (terapeutaidx != "-" && terapiaidx != "-"){
+                console.log("1")
+                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: terapiaidx, atend_usuid: terapeutaidx , atend_beneid: beneidx };
+            } else if (terapeutaidx == "-" && terapiaidx != "-"){
                 console.log("2")
-                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: tpiaidx, atend_beneid: beneidx };
-            } else if (teraidx != "-" && tpiaidx == "-"){
-                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_usuid: teraidx , atend_beneid: beneidx };
-            } else if (teraidx == "-" && tpiaidx == "-"){
+                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: terapiaidx, atend_beneid: beneidx };
+            } else if (terapeutaidx != "-" && terapiaidx == "-"){
+                console.log("3")
+                busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_usuid: terapeutaidx , atend_beneid: beneidx };
+            } else if (terapeutaidx == "-" && terapiaidx == "-"){
+                console.log("4")
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_beneid: beneidx };
             }
 
-            if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-"){//convenio
+            if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-"){//convenio
                 troca = {'atend_convid': novoconvidx};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta
-                troca = {'atend_usuid': novoteraidx};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapia
-                troca = {'atend_terapiaid': novatpiaidx};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta e terapia
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta e convenio
-                troca = {'atend_usuid': novoteraidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapia e convenio
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//todos
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-"){//convenio
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta
+                troca = {'atend_usuid': novoterapeutaidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapia
+                troca = {'atend_terapiaid': novaterapiaidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta e terapia
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta e convenio
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapia e convenio
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx == "-") {//todos
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-"){//convenio
                 troca = {'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta
-                troca = {'atend_usuid': novoteraidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapia
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta e terapia
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta e convenio
-                troca = {'atend_usuid': novoteraidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapia e convenio
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapia
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta e terapia
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapeuta e convenio
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//terapia e convenio
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
             } else 
-            if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalordebx != "-"){//convenio
+            if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalordebx != "-"){//convenio
                 troca = {'atend_convid': novoconvidx};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta
-                troca = {'atend_usuid': novoteraidx};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapia
-                troca = {'atend_terapiaid': novatpiaidx};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta e terapia
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta e convenio
-                troca = {'atend_usuid': novoteraidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapia e convenio
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//todos
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx};
-            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-"){//convenio
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta
+                troca = {'atend_usuid': novoterapeutaidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapia
+                troca = {'atend_terapiaid': novaterapiaidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta e terapia
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta e convenio
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapia e convenio
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex == "-" && novavalordebx != "-") {//todos
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-"){//convenio
                 troca = {'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta
-                troca = {'atend_usuid': novoteraidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapia
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta e terapia
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta e convenio
-                troca = {'atend_usuid': novoteraidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapia e convenio
-                troca = {'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
-                troca = {'atend_usuid': novoteraidx, 'atend_terapiaid': novatpiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//todos
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapia
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta e terapia
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapeuta e convenio
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//terapia e convenio
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
+                troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//todos
                 troca = {'atend_valordeb': novavalordebx};
-            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
                 troca = {'atend_valorcre': novavalorcrex};
                 console.log("So cre")
             }
 
             await AtendModel.updateMany(
-                busca,{$set: troca}// Alterar Débito e Crédito //, 'atend_terapiaid': novateraidx  //, 'atend_valordeb': novavalordebx
+                busca,{$set: troca}// Alterar Débito e Crédito //, 'atend_terapiaid': novaterapeutaidx  //, 'atend_valordeb': novavalordebx
             ).then((res) =>{
                 console.log("XABLAU")
                 resultado = "OK"

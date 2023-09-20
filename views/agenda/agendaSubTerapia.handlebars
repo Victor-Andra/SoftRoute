@@ -163,20 +163,21 @@
 																<div class="row">
 																	<div class="col-sm-6">
 																		<select id="agendaTpiaSubsid" name="agendaTpiaSubsid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="-">-</option>
-																	{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{/each}}
-																</select>
+																			<option value="-">-</option>
+																			{{#each terapias}}
+																				<option value="{{_id}}">{{terapia_nome}}</option>
+																			{{/each}}
+																		</select>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
+												<div class="row">
 													<div class="col-xs-12" >
 														<label>Convênio Original</label>
-														<div class="form-group" >
+														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="agendaConvid" id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
@@ -185,16 +186,18 @@
 																	{{/each}}
 																</select>
 															</div>
-														</div>
-														<label>Convênio Substituto</label>
-														<div class="form-group">
-															<div class="col-sm-6">
-																<select name="agendaConvSubsid" id="agendaConvSubsid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
-																	<option value="-">-</option>
-																	{{#each convs}}
-																		<option value="{{_id}}">{{conv_nome}}</option>
-																	{{/each}}
-																</select>
+															<div class="col-xs-12 col-sm-6">
+																<label>Convênio Substituto</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select name="agendaConvSubsid" id="agendaConvSubsid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
+																			<option value="-">-</option>
+																			{{#each convs}}
+																				<option value="{{_id}}">{{conv_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -217,22 +220,46 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label> Valor da Terapia pelo Plano</label>
+													<div class="col-xs-12" >
+														<label>Valor da Terapia pelo Plano</label>
 														<div class="form-group">
-															<div class="col-sm-2">
-																<input type="text" name="atendValorcre" id="atendValorcre" placeholder="" class="form-control" value="-"  />
+															<div class="col-sm-6">
+																<input type="text" name="atendValorcre" id="atendValorcre" placeholder="" class="form-control" value="-" style="width: 500px;" />
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Valor da Terapia para o Terapeuta</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<input type="text" name="atendValordeb" id="atendValordeb" placeholder="" class="form-control" value="-" style="width: 500px;" />
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label> Valor da Terapia para o Terapeuta</label>
-														<div class="form-group">
-															<div class="col-sm-2">
-																<input type="text" name="atendValordeb" id="atendValordeb" placeholder="" class="form-control" value="-"  />
-															</div>
+												<div class="col-xs-12 col-sm-6">
+													<label>Terapeuta Substituto Fixo</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<select id="agendaTerapeutaMergeSubsid" name="agendaTerapeutaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+																<option value="-">-</option>
+																{{#each terapeutas}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-6">
+													<label>Terapia Substituto Fixo</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<select id="agendaTerapiaMergeSubsid" name="agendaTerapiaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+																<option value="-">-</option>
+																{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																{{/each}}
+															</select>
 														</div>
 													</div>
 												</div>

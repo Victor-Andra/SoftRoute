@@ -464,18 +464,13 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             //res.redirect("/menu/branco");
             
             let flash = new Resposta();
-            console.log("usu.usuario_palavrachave:"+usu.usuario_palavrachave);
-            console.log("usu.usuario_senha:"+usu.usuario_senha);
             if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined){
-                console.log("PU");
                 flash.sucesso = "almost";
                 flash.texto = "Você ainda não cadastrou sua Palavra Chave, ela é responsável por permitir que você edite sua senha em caso de erro e garante que é você quem está acessando o sistema. Cadastre-a o mais breve possível!";
             } else if (usu.usuario_senha == "123456789"){
-                console.log("SU")
                 flash.sucesso = "almost";
                 flash.texto = "Você ainda não alterou sua senha temporária, a senha temporária tem o intuito de permitir o primeiro acesso ao sistema para que o usuário possa cadastrar sua Palavra Chave e sua Senha. Altere-a o mais breve possível!";
             } else {
-                console.log("TU")
                 flash.sucesso = "true";
                 flash.texto = "Logado com sucesso!" 
             }

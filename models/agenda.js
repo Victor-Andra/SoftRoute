@@ -112,7 +112,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_dataedi : dataAtual
                 }}
         ).then((res) =>{
-            console.log("Salvo")
+            //console.log("Salvo")
             resultado = true;
         }).catch((err) =>{
             console.log("erro mongo:")
@@ -126,8 +126,8 @@ module.exports = {AgendaModel,AgendaSchema,
         let dataAtual = new Date();
         let agenda_temp = false;
         let extra = false;
-        console.log("req.body.agendaData:"+req.body.agendaData)
-        console.log("req.body.agendaExtra:"+req.body.agendaExtra);
+        //console.log("req.body.agendaData:"+req.body.agendaData)
+        //console.log("req.body.agendaExtra:"+req.body.agendaExtra);
         if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
             extra = true;
         }
@@ -135,9 +135,9 @@ module.exports = {AgendaModel,AgendaSchema,
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         //console.log(dataAgenda);
-        console.log("data:"+data);
-        console.log("dataAgenda:"+dataAgenda);
-        console.log("agendamodel");
+        //console.log("data:"+data);
+        //console.log("dataAgenda:"+dataAgenda);
+        //console.log("agendamodel");
         const newAgenda = new AgendaModel({
             agenda_data : dataAgenda ,
             agenda_beneid : req.body.agendaBeneid ,
@@ -157,9 +157,9 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_copia: false ,
             agenda_datacad : dataAtual
         });
-        console.log("newAgenda save");
+        //console.log("newAgenda save");
         await newAgenda.save().then(()=>{
-            console.log("Cadastro realizado!");
+            //console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
             console.log(err)
@@ -169,14 +169,14 @@ module.exports = {AgendaModel,AgendaSchema,
     agendaAdicionarTemp: async (req,res) => {
         let dataAtual = new Date();
         let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
-        console.log("agendaTempId:"+agendaTempId)
-        console.log("req.body.agendaData:"+req.body.agendaData)
+        //console.log("agendaTempId:"+agendaTempId)
+        //console.log("req.body.agendaData:"+req.body.agendaData)
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         //console.log(dataAgenda);
-        console.log("data:"+data);
-        console.log("dataAgenda:"+dataAgenda);
-        console.log("agendamodel");
+        //console.log("data:"+data);
+        //console.log("dataAgenda:"+dataAgenda);
+        //console.log("agendamodel");
         const newAgenda = new AgendaModel({
             agenda_data : dataAgenda ,
             agenda_beneid : req.body.agendaBeneid ,
@@ -197,9 +197,9 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_copia : false,
             agenda_datacad : dataAtual
         });
-        console.log("newAgenda save");
+        //console.log("newAgenda save");
         await newAgenda.save().then(()=>{
-            console.log("Cadastro realizado!");
+            //console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
             console.log(err)
@@ -235,7 +235,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 
                 }}
         ).then((res) =>{
-            console.log("Salvo")
+            //console.log("Salvo")
             resultado = true;
         }).catch((err) =>{
             console.log("erro mongo:")
@@ -251,7 +251,7 @@ module.exports = {AgendaModel,AgendaSchema,
         
         //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findOne({_id: id}).then((res) =>{
-            console.log("Salvo")
+            //console.log("Salvo")
             resultado = res;
         }).catch((err) =>{
             console.log("erro mongo:")
@@ -267,27 +267,27 @@ module.exports = {AgendaModel,AgendaSchema,
         let selamento;
         await AgendaModel.find({_id: req.body.id}).then((a)=>{
             selo = a.agendaSelo;
-            console.log("req.body.agendaId:"+req.body.id)
+            //console.log("req.body.agendaId:"+req.body.id)
         })
-        console.log("req.body.agendaSelamento:"+req.body.agendaSelamento)
+        //console.log("req.body.agendaSelamento:"+req.body.agendaSelamento)
         if (req.body.agendaSelamento == "true"){
             selamento = true;
         } else {
             selamento = false;
         }
-        console.log("req.body.agendaEvolucao:"+req.body.agendaEvolucao)
+        //console.log("req.body.agendaEvolucao:"+req.body.agendaEvolucao)
         if(selo){
             resultado = "A Evolução já foi finalizada, não é possível editar as informações sem autorização administrativa!";
             console.log(resultado);
         } else {
-            console.log("SALVANDO!")
+            //console.log("SALVANDO!")
             await AgendaModel.findByIdAndUpdate(req.body.id, 
                 {$set: {
                     agenda_evolucao : req.body.agendaEvolucao ,
                     agenda_selo : selamento
                 }}
             ).then((res) =>{
-                console.log("Salvo")
+                //console.log("Salvo")
                 resultado = true;
             }).catch((err) =>{
                 console.log("erro mongo:")
@@ -297,7 +297,7 @@ module.exports = {AgendaModel,AgendaSchema,
             })
         }
         await AgendaModel.find({_id: req.body.id}).then((a)=>{
-            console.log("agenda:"+a)
+            //console.log("agenda:"+a)
         })
         return resultado;
     }
@@ -307,7 +307,7 @@ module.exports = {AgendaModel,AgendaSchema,
         let dataAtual = new Date();
 
         await AgendaModel.find(busca).then((agenda)=>{
-            console.log("agenda.kength"+agenda.length);
+            //console.log("agenda.kength"+agenda.length);
             agenda.forEach(a => {
                 if (a.agenda_mergeterapeutaid == undefined){
                     let newAgenda = new AgendaModel({
@@ -356,7 +356,7 @@ module.exports = {AgendaModel,AgendaSchema,
         })
 
         await AgendaModel.insertMany(arrayAgendasNovas).then((res) =>{
-            console.log("XABLAU");
+            //console.log("XABLAU");
             retorno = "true";
         }).catch((err) =>{
             retorno = err
@@ -365,14 +365,14 @@ module.exports = {AgendaModel,AgendaSchema,
         });
         /*
         let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
-        console.log("agendaTempId:"+agendaTempId)
-        console.log("req.body.agendaData:"+req.body.agendaData)
+        //console.log("agendaTempId:"+agendaTempId)
+        //console.log("req.body.agendaData:"+req.body.agendaData)
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         //console.log(dataAgenda);
-        console.log("data:"+data);
-        console.log("dataAgenda:"+dataAgenda);
-        console.log("agendamodel");
+        //console.log("data:"+data);
+        //console.log("dataAgenda:"+dataAgenda);
+        //console.log("agendamodel");
         let newAgenda = new AgendaModel({
             agenda_data : dataAgenda ,
             agenda_beneid : req.body.agendaBeneid ,
@@ -399,7 +399,7 @@ module.exports = {AgendaModel,AgendaSchema,
             busca,
             {$set: {'agenda_categoria': req.body.agendaCateg, 'agenda_org': "Administrativo"}}
         ).then((res) =>{
-            console.log("XABLAU");
+            //console.log("XABLAU");
             retorno = "true";
         }).catch((err) =>{
             retorno = err
@@ -471,8 +471,8 @@ module.exports = {AgendaModel,AgendaSchema,
         formatData.setSeconds(59);
         fim = formatData;
         //-datafim
-        console.log("ini: "+ini.toISOString());
-        console.log("fim: "+fim.toISOString());
+        //console.log("ini: "+ini.toISOString());
+        //console.log("fim: "+fim.toISOString());
         let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
         let teraidx = req.body.agendaTerapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
@@ -482,51 +482,73 @@ module.exports = {AgendaModel,AgendaSchema,
         let novoteraidx = req.body.agendaTerapeutaSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         let novatpiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
+        let novomergeteraidx = req.body.agendaTerapeutaMergeSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let novamergetpiaidx = req.body.agendaTerapiaMergeSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
-        console.log("beneidx:"+beneidx)
+        //console.log("beneidx:"+beneidx)
         if (beneidx != "-") {
-
-            if (teraidx != "-" && tpiaidx != "-"){
+            if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_categoria: "SubstitutoFixo" };
+                //console.log("0")
+                console.log("TROCA SUBFIX")
+            } else if (teraidx != "-" && tpiaidx != "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx };
-                console.log("1-"+tpiaidx+"-"+teraidx)
-            } else if (teraidx == "-" && tpiaidx != "-"){
+                //console.log("1")
+            } else if (teraidx == "-" && tpiaidx != "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
-                console.log("2")
-            } else if (teraidx != "-" && tpiaidx == "-"){
+                //console.log("2")
+            } else if (teraidx != "-" && tpiaidx == "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
-                console.log("3")
-            } else if (teraidx == "-" && tpiaidx == "-"){
+                //console.log("3")
+            } else if (teraidx == "-" && tpiaidx == "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
-                console.log("4")
+                //console.log("4")
+            } else if (teraidx != "-" && tpiaidx != "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("1-"+tpiaidx+"-"+teraidx)
+            } else if (teraidx == "-" && tpiaidx != "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("2")
+            } else if (teraidx != "-" && tpiaidx == "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("3")
+            } else if (teraidx == "-" && tpiaidx == "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("4")
             }
 
-            if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-"){//convenio
+            if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
+                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx};
+                console.log('agenda_mergeterapeutaid: '+ novomergeteraidx+ ' / agenda_mergeterapiaid: '+ novamergetpiaidx)
+                console.log("0 TROCA SUBFIX")
+            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio
                 troca = {'agenda_convid': novoconvidx};
-                console.log("1")
+                //console.log("1")
             } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-") {//terapeuta
                 troca = {'agenda_usuid': novoteraidx};
-                console.log("2")
+                //console.log("2")
             } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapia
                 troca = {'agenda_terapiaid': novatpiaidx};
-                console.log("3")
+                //console.log("3")
             } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapeuta e terapia
                 troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx};
-                console.log("4-"+novoteraidx+"-"+novatpiaidx)
+                //console.log("4")
             } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-") {//terapeuta e convenio
                 troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx};
-                console.log("5")
+                //console.log("5")
             } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-") {//terapia e convenio
                 troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
-                console.log("6")
+                //console.log("6")
             } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-") {//todos
                 troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
-                console.log("7")
+                //console.log("7")
             }
+
             await AgendaModel.find(busca).then((ag)=>{console.log("ag.lenhgt"+ag.length)})
             await AgendaModel.updateMany(
                 busca,{$set: troca}
             ).then((res) =>{
-                console.log("XABLAU")
+                //console.log("XABLAU")
                 resultado = "OK"
             }).catch((err) =>{
                 resultado = err
@@ -542,14 +564,14 @@ module.exports = {AgendaModel,AgendaSchema,
     
     /*
     ,kaskopstusagenda: async (id) => {
-        console.log("id:"+id)
+        //console.log("id:"+id)
         //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findByIdAndUpdate(id, 
             {$set: {
                 agenda_extra : false
                 }}
         ).then(() =>{
-            console.log("Salvo")
+            //console.log("Salvo")
             resultado = true;
         }).catch((err) =>{
             console.log("erro mongo:")
@@ -567,7 +589,7 @@ module.exports = {AgendaModel,AgendaSchema,
             {agenda_extra: undefined},
             {$set: {'agenda_extra': false}}
         ).then((res) =>{
-            console.log("XABLAU")
+            //console.log("XABLAU")
             resultado = "OK"
         }).catch((err) =>{
             resultado = err
@@ -586,8 +608,8 @@ module.exports = {AgendaModel,AgendaSchema,
         diafim.setUTCDate(1);
         diaini.setUTCMonth(6);//0-11
         diafim.setUTCMonth(7);//0-11
-        console.log("diaini: "+diaini.toISOString());
-        console.log("diafim: "+diafim.toISOString());
+        //console.log("diaini: "+diaini.toISOString());
+        //console.log("diafim: "+diafim.toISOString());
         
         switch (tipoPessoa){
             case "Geral":
@@ -598,7 +620,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 break;
             case "Terapeuta":
                 busca = { agenda_data: { $gte : diaini.toISOString(), $lte:  diafim.toISOString() } , agenda_usuid: req.body.atendTerapeuta };
-                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                //console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
                 break;
@@ -616,7 +638,7 @@ module.exports = {AgendaModel,AgendaSchema,
             busca,
             {$set: {'agenda_convid': novaconvidx}}
         ).then((res) =>{
-            console.log("XABLAU")
+            //console.log("XABLAU")
             resultado = "OK"
         }).catch((err) =>{
             resultado = err
