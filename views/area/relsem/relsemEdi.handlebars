@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Relatório semestral</title>
+		<script>
+		
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
+			document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaidEdi").value;
+			document.getElementById("relsemEscolaid").value = document.getElementById("relsemEscolaidEdi").value;
+			
+			//Quando quero calcular a idade do beneficiário
+			let dtnsc = new Date(document.getElementById("relsemDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			
+			document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaidEdi").value;
+			document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
+			document.getElementById("relsemData").value = document.getElementById("relsemDataEdi").value;
+			document.getElementById("relsemMes").value = document.getElementById("relsemMesEdi").value;
+			document.getElementById("relsemTipo").value = document.getElementById("relsemTipoEdi").value;
+			document.getElementById("relsemFase").value = document.getElementById("relsemFaseEdi").value;
+			document.getElementById("relsemAndamento").value = document.getElementById("relsemAndamentoEdi").value;
+			document.getElementById("relsemDatacad").value = document.getElementById("relsemDatacadEdi").value;
+			document.getElementById("relsemUsuidcad").value = document.getElementById("relsemUsuidcadEdi").value;
+			document.getElementById("relsemDataedi").value = document.getElementById("relsemDataediEdi").value;
+			document.getElementById("relsemUsuidedi").value = document.getElementById("relsemUsuidediEdi").value;
+
+		}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Relatório semestral</a>
+							</li>
+
+							<li class="active">Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/area/aba/relsem/atualizar" method="POST">
+								<input class="hidden" id="id" name="id" value="{{relsem._id}}" />
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													PECS
+												</h4>
+												<div id="divCarrega" name="divCarrega" class="hidden">
+													<input type="objectid" id="relsemTerapeutaidEdi" name="relsemTerapeutaidEdi" value="{{relsem.relsem_terapeutaid}}"/>
+													<input type="objectid" id="relsemBeneidEdi" name="relsemBeneidEdi" value="{{relsem.relsem_beneid}}"/>
+													<input type="date" id="relsemDataEdi" name="relsemDataEdi" value="{{relsem.relsem_data}}"/>
+													<input type="text" id="relsemMesEdi" name="relsemMesEdi" value="{{relsem.relsem_mes}}"/>
+													<input type="text" id="relsemTipoEdi" name="relsemTipoEdi" value="{{relsem.relsem_tipo}}"/>
+													<input type="text" id="relsemFaseEdi" name="relsemFaseEdi" value="{{relsem.relsem_fase}}"/>
+													<input type="text" id="relsemAndamentoEdi" name="relsemAndamentoEdi" value="{{relsem.relsem_andamento}}"/>
+													<input type="date" id="relsemDatacadEdi" name="relsemDatacadEdi" value="{{relsem.relsem_datacad}}"/>
+													<input type="text" id="relsemUsuidcadEdi" name="relsemUsuidcadEdi" value="{{relsem.relsem_usuid}}"/>
+													<input type="date" id="relsemDataediEdi" name="relsemDataediEdi" value="{{relsem.relsem_dataedi}}"/>
+													<input type="text" id="relsemUsuidediEdi" name="relsemUsuidediEdi" value="{{relsem.relsem_usuidedi}}"/>
+												</div>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Data </label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="relsemData" name="relsemData" type="date"  value="{{relsem.relsem_data}}">
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Ano e mês de referência</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-3">
+																		<input id="relsemMes" name="relsemMes" type="text"  value="{{relsem.relsem_mes}}">
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+
+														<div class="col-sm-6">
+															<label> Terapeuta</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select"  >
+																		<option value="-">-</option>
+																		{{#each terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" >
+																		<option value="-">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														
+
+														<div class="col-sm-4">
+															<label> Tipo</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="relsemTipo" id="relsemTipo" class="form-control" value="{{relsem.relsem_tipo}}"/>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Fase</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="relsemFase" id="relsemFase" class="form-control" value="{{relsem.relsem_fase}}"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Andamento</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="relsemAndamento" id="relsemAndamento" class="chosen-select" value="{{relsem.relsem_andamento}}">
+																			<option value="Iniciado">Iniciado</option>
+																			<option value="Andamento">Andamento</option>
+																			<option value="Concluido">Concluido</option>
+																			<option value="Atualizar">Atualizar</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														
+
+														
+													</div>
+
+												</div>
+											</div>
+										</div>	
+										
+													
+
+
+								
+
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="row">
+									<div clas="col-xs-12">
+										
+										<div class="form-actions">
+											<div class="col-xs-12" style="text-align: center;" >
+
+												<button class="btn btn-info" name="acao" type="submit">
+													<i class="ace-icon fa fa-check bigger-110"></i>
+													Salvar
+												</button>
+												&nbsp; &nbsp; &nbsp;
+												<button class="btn btn-warning" onclick="menu/area/aba/relsem/lis">
+													<i class="ace-icon fa fa-undo bigger-110"></i>
+													Voltar
+												</button>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>

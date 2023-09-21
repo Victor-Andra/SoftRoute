@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Laudos Diversos</title>
+		<title>Laudos</title>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -11,10 +11,10 @@
 					</div>
 					<div class="page-header">
 						<h1>
-							Laudos Diversos
+							Laudos
 							<small>
 								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro e Índice Geral Laudos para Upload
+								Cadastro e Índice Geral Laudos
 							</small>
 						</h1>
 					</div><!-- /.page-header -->
@@ -22,107 +22,224 @@
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/laudo/add" method="POST">
 								<div class="col-xs-12">
-									<div class="col-xs-12">
-										<div class="row">
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Beneficiário</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" data-placeholder="Escolha..." >
-																{{#each benes}}
-																	<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-															</select>
-													</div>
-												</div>
+
+									<div class="col-sm-12" name="ident" id="ident"><!-- Widget Beneficiario-->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="brown ace-icon fa fa-child bigger-110"></i>
+													Beneficiário
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
 											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Terapeuta Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<select name="laudoUsuid" id="laudoUsuid" class="chosen-select" data-placeholder="Escolha...">
-																{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
-																{{/each}}
-															</select>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													
+													<div class="row">
+														<div class="col-xs-12 col-sm-4">
+															<label>Beneficiário:</label>
+															<div class="form-group">
+																<div class="col-sm-8">
+																	<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" data-placeholder="-" placeholder="Colocar nome completo." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>												
 													</div>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<label>Tipo de Laudo</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-														<div class="input-group">
-															<input type="text" name="laudoTipo" id="laudoTipo" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
-														</div>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-6">
-												<div class="row">
-													<label >Médico Responsável</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input type="text" name="laudoMedico" id="laudoMedico" placeholder="Padrão" class="form-control" value="Padrão" style="width: 400px;"/>
-													</div>
-												</div>
-											</div>													
-											<div class="col-sm-2">
-												<div class="row">
-													<label>Data Laudo</label>
-												</div>
-												<div class="row">
-													<div class="input-group">
-															<input id="laudoLaudodata" name="laudoLaudodata" type="date">
-													</div>
-												</div>
-											</div>													
-										</div>
-										<div class="row">
-										<div class="col-sm-5">
-											<div class="row">
-												<label>Upload de Laudo</label>
-											</div>
-										</div>
+												</div>	
+											</div>	
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="widget-box">
-												<div class="widget-header">
-													<h4 class="widget-title">Inserir arquivo</h4>
+									<div class="col-sm-12" name="infobene" id="infobene"><!-- Widget Beneficiario-->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="brown ace-icon fa fa-commenting-o bigger-110"></i>
+													Informações complemetares
+												</h4>
+												
+												<span class="widget-toolbar">
 
-													<div class="widget-toolbar">
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-													</div>
-												</div>
-												<div class="alert alert-danger">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-													<strong>ATENÇÃO! </strong>
-													O Arquivo escolhido para UpLoad não pode ter tamanho maior que <strong>13MB ou 13.000 KBytes</strong>.
-													<br>
-												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-														<div class="form-group">
-															<div class="col-xs-12">
-																<input type="file" id="id-input-file-2" />
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																Os campos aqui são preenchidos automaticamente.
 															</div>
 														</div>
 													</div>
-												</div>
+													<div class="row">
+														<div class="col-xs-5 col-sm-5">
+															<label>Data nascimento:</label>
+															<div class="form-group">
+																<div class="col-sm-5">
+																	<div class="input-group">
+																		<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
+																	</div>
+																</div>
+															</div>
+														</div>												
+													
+														<div class="col-xs-3 col-sm-3">
+															<label for="id-date-picker-1">Idade:</label>
+															<div class="row">
+																<div class="col-sm-3">
+																	<div class="input-group">
+																		<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+													<div class="row">
+														<div class="col-xs-6 col-sm-6">
+															<label for="id-date-picker-1">Nome mãe:</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="beneMae" id="beneMae"  class="readonly" class="form-control" />
+																	</div>
+																	
+																</div>
+															</div>
+														</div>
+													
+														<div class="col-xs-6 col-sm-6">
+															<label for="id-date-picker-1">Nome pai:</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="benePai" id="benePai" class="readonly" class="form-control" />
+																	</div>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+													
+													
+													
+													
+												</div>	
+											</div>	
+										</div>
+									</div>
+									<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações do Laudo -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="green ace-icon fa fa-search bigger-110"></i>
+													Informações do laudo
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
 											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																O campo do diagnóstico é importantíssimo e será consultado em todos os formulários no sistema,<br>
+																atenção na hora de copiá-lo do laudo original e deve conter os códigos da tabela CID e texto.
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-6" >
+															<label for="id-date-picker-1">Diagnóstico:</label>
+															<div class="row">
+																<div class="col-xs-12 col-sm-6">
+																	<textarea name="laudoDiagnostico" id="laudoDiagnostico" style="font-size: 12px" data-placeholder="-" value="-" placeholder="Utilizar o diagnóstico que está escrito no laudo médico." class="form-control"></textarea>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-6 col-sm-6">
+															<label for="id-date-picker-1">Médico responsável:</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="laudoMedicoresp" id="laudoMedicoresp" class="readonly" class="form-control"  />
+																	</div>
+																</div>
+															</div>
+														</div>
+													
+														<div class="col-sm-12">
+															<label for="id-date-picker-1">Especialidade:</label>
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="input-group">
+																		<input type="text" name="laudoEspecialidade" id="laudoEspecialidade" class="readonly" class="form-control" />
+																	</div>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-4">
+															<label for="id-date-picker-1">Data do laudo:</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="laudoTratdata" id="laudoTratdata" type="date" onchange="javascript:atualizaData()" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+													
+												</div>	
+											</div>	
 										</div>
 									</div>
 									

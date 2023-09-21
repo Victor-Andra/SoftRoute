@@ -527,7 +527,11 @@
 														{{/each}}
 														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
 														<td>{{atend_categoria}}</td>
-														<td>{{atend_valorcre}}</td>
+														<td>{{#ifEqual atend_categoria "SubstitutoFixo"}}
+															{{atend_mergevalorcre}}
+															{{else}}
+															{{atend_valorcre}}
+															{{/ifEqual}}</td>
 														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
 														<td>
 															<div class="action-buttons">

@@ -43,6 +43,14 @@
 				var datafmt = new Date(data);
 				document.getElementById("tratDatacad").value = datafmt.toISOString();
 			}
+			//Calcular a idade do beneficiário ao escolher o beneficiário 
+			function calculaIdade(){
+				
+			}
+			//ao mudar o beneficiário carregar os campos do dados complemetares automaticamente
+			function mudaBeneficiario(){
+				
+			}
 			
 		</script>
 	</head>
@@ -110,7 +118,7 @@
 							</div>
 								
 							
-							<div class="col-sm-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+							<div class="col-sm-12" name="ident" id="ident"><!-- Widget Beneficiario-->
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
@@ -166,6 +174,7 @@
 									</div>	
 								</div>
 							</div>
+
 
 							<div class="col-sm-12" name="tera" id="tera"><!-- Widget Dados Básicos -->
 								<div class="widget-box">
@@ -308,7 +317,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" placeholder="Escolha..." >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nome}}</option>
@@ -333,6 +342,142 @@
 									</div>	
 								</div>
 							</div>		
+
+
+							<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações Complementar -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="green ace-icon fa fa-archive bigger-110"></i>
+											Informações do laudo
+										</h4>
+										
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														Dados originados do último laudo cadastrado no sistema para o beneficiário escolhido.<br>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-4 col-sm-4">
+													<label>Data nascimento:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
+															</div>
+														</div>
+													</div>
+												</div>												
+											
+												<div class="col-xs-4 col-sm-4">
+													<label for="id-date-picker-1">Idade:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+											<div class="row">
+												<div class="col-xs-6 col-sm-6" >
+													<label for="id-date-picker-1">Diagnóstico:</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="input-group">
+																<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
+															</div>
+														</div>
+													</div>
+												</div>
+											
+												<div class="col-xs-6 col-sm-6">
+													<label for="id-date-picker-1">Médico responsável:</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="input-group">
+																<input type="text" name="laudoMedicoresp" id="laudoMedicoresp" class="readonly" class="form-control"  />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<label for="id-date-picker-1">Especialidade:</label>
+													<div class="row">
+														<div class="col-sm-12">
+															<div class="input-group">
+																<input type="text" name="laudoEspecialidade" id="laudoEspecialidade" class="readonly" class="form-control" />
+															</div>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12 col-sm-4">
+													<label>Data ultimo laudo:</label>
+													<div class="form-group">
+														<div class="col-sm-8">
+															<div class="input-group">
+																<input name="laudoDatalau" id="laudoDatalau" type="date" class="readonly" onchange="javascript:atualizaData()" />
+															</div>
+														</div>
+													</div>
+												</div>												
+											</div>
+											<div class="row">
+												<div class="col-xs-6 col-sm-6">
+													<label for="id-date-picker-1">Nome mãe:</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="input-group">
+																<input type="text" name="beneMae" id="beneMae"  class="readonly" class="form-control" />
+															</div>
+															
+														</div>
+													</div>
+												</div>
+											
+												<div class="col-xs-6 col-sm-6">
+													<label for="id-date-picker-1">Nome pai:</label>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="input-group">
+																<input type="text" name="benePai" id="benePai" class="readonly" class="form-control" />
+															</div>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>	
+									</div>	
+								</div>
+							</div>
 
 							<div class="col-sm-12" name="diag" id="diag"><!-- Widget Diagnóstico clínico -->
 								<div class="widget-box">
@@ -363,13 +508,11 @@
 														<button type="button" class="close" data-dismiss="alert">
 															<i class="ace-icon fa fa-times"></i>
 														</button>
-														Utilizar o diagnóstico que está escrito no laudo médico, e não o que consta na anamnese (pode acontecer alguma alteração no laudo depois da realização da anamnese e o diagnóstico ter sido alterado).<br>
-														- Atenção as atualizações do laudo do beneficiário!<br>
-														- O diagnóstico precisa ser escrito por completo (não apenas a sigla do transtorno);<br>
-														- Incluindo o CID;<br>
-														- Não usar a palavra "paciente" no plano de tratamento.<br>
+														Favor não usar a palavra "paciente" no plano de tratamento.<br>
 													</div>
 												</div>
+											</div>
+											<div class="row">
 												<div class="col-sm-12">
 													<label>Diagnóstico clínico:</label>
 													<div class="form-group">
@@ -383,6 +526,7 @@
 									</div>	
 								</div>
 							</div>
+
 
 							<div class="col-sm-12" name="padrao" id="padrao" ><!-- Widget Padrão -->
 								<div class="widget-box">

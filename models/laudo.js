@@ -2,19 +2,23 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const LaudoSchema = mongoose.Schema({
+    laudo_id:{ 
+        type: ObjectId, 
+        required: false 
+    },
     laudo_beneid :{
         type: ObjectId,
-        required: false
+        required: true
     },
-    laudo_usuid :{
-        type: ObjectId,
-        required: false
-    },
-    laudo_tipo :{
+    laudo_medico :{
         type: String,
         required: false
-    },   
-    laudo_medico :{
+    },
+    laudo_medicoesp :{
+        type: String,
+        required: false
+    },
+    laudo_diag :{
         type: String,
         required: false
     },
@@ -22,8 +26,16 @@ const LaudoSchema = mongoose.Schema({
         type: Date,
         required: false
     },
+    laudo_usuid :{
+        type: ObjectId,
+        required: false
+    },
     laudo_datacad :{
         type: Date,
+        required: false
+    },
+    laudo_usuidedi :{
+        type: ObjectId,
         required: false
     },
     laudo_dataedi :{
@@ -34,20 +46,26 @@ const LaudoSchema = mongoose.Schema({
 
 class Laudo{
     constructor(
+        laudo_id,
         laudo_beneid,
-        laudo_usuid,
-        laudo_tipo,   
+        laudo_diag,   
         laudo_medico,
+        laudo_medicoesp,
         laudo_laudodata,
+        laudo_usuid,
         laudo_datacad,
+        laudo_usuidedi,
         laudo_dataedi
         ){
+        this.laudo_id = laudo_id,
         this.laudo_beneid = laudo_beneid,
-        this.laudo_usuid = laudo_usuid,
-        this.laudo_tipo = laudo_tipo,   
+        this.laudo_diag = laudo_diag,   
         this.laudo_medico = laudo_medico,
+        this.laudo_medicoesp = laudo_medicoesp,
         this.laudo_laudodata = laudo_laudodata,
+        this.laudo_usuid = laudo_usuid,
         this.laudo_datacad = laudo_datacad,
+        this.laudo_usuidedi = laudo_usuidedi,
         this.laudo_dataedi = laudo_dataedi       
     }
 }
@@ -58,40 +76,71 @@ module.exports = {LaudoModel,LaudoSchema,
     laudoEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
-        //Pega data atual
-        
-        //Realiza Atualização
-        await LaudoModel.findByIdAndUpdate(req.body.laudoId, 
-            {$set: {
-                laudo_beneid : req.body.laudoBeneid,
-                laudo_usuid: req.body.laudoUsuid,
-                laudo_tipo: req.body.laudoTipo,   
-                laudo_medico: req.body.laudoMedico,
-                laudo_laudodata: req.body.laudoLaudodata,
-                laudo_dataedi : dataAtual.toISOString()
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
         })
-        return resultado;
+        let laudoId = new ObjectId(req.body.id);
+        //Pega data atual
+        console.log("req.body.id:"+req.body.id)
+        console.log("laudoId:"+laudoId)
+        //Realiza Atualização
+        await LaudoModel.findByIdAndUpdate(req.body.id, 
+            {$set: {
+                
+                laudo_beneid : req.body.laudoBeneid,
+                laudo_diag : req.body.laudoDiag,   
+                laudo_medico : req.body.laudoMedico,
+                laudo_medicoesp : req.body.laudoMedicoesp,
+                laudo_laudodata : req.body.laudoLaudodata,
+                
+                laudo_usuid : req.body.laudoUsuid,
+                laudo_datacad : req.body.laudoDatacad,
+                laudo_usuidedi : idUsu,
+                laudo_dataedi : dataAtual
+                
+                
+                }}
+                ).then((res) =>{
+                    console.log("Salvo")
+                    resultado = true;
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                })
+                return resultado;
+            
     },
     laudoAdicionar: async (req,res) => {
-        let dataAtual = new Date();
+        //Validar se a Laudoese existe
         console.log("laudomodel");
-        console.log("req.body.laudodata:")
-        console.log(req.body.laudodata)
+        let dataAtual = new Date();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
         const newLaudo = new LaudoModel({
-            laudo_beneid : req.body.laudoBeneid,
-            laudo_usuid: req.body.laudoUsuid,
-            laudo_tipo: req.body.laudoTipo,   
-            laudo_medico: req.body.laudoMedico,
-            laudo_laudodata: req.body.laudoLaudodata,
-            laudo_datacad : dataAtual.toISOString()
+                laudo_id: req.body.laudoId,
+                laudo_beneid : req.body.laudoBeneid,
+                laudo_diag : req.body.laudoDiag,   
+                laudo_medico : req.body.laudoMedico,
+                laudo_medicoesp : req.body.laudoMedicoesp,
+                laudo_laudodata : req.body.laudoLaudodata,
+                
+                laudo_usuid : idUsu,
+                laudo_datacad : dataAtual,
+                
+                
+                
         });
         console.log("newLaudo save");
         await newLaudo.save().then(()=>{

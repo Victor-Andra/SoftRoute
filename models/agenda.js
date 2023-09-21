@@ -488,7 +488,7 @@ module.exports = {AgendaModel,AgendaSchema,
         //console.log("beneidx:"+beneidx)
         if (beneidx != "-") {
             if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_categoria: "SubstitutoFixo" };
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
                 //console.log("0")
                 console.log("TROCA SUBFIX")
             } else if (teraidx != "-" && tpiaidx != "-" && convidx == "-"){
@@ -518,8 +518,7 @@ module.exports = {AgendaModel,AgendaSchema,
             }
 
             if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
-                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx};
-                console.log('agenda_mergeterapeutaid: '+ novomergeteraidx+ ' / agenda_mergeterapiaid: '+ novamergetpiaidx)
+                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo'};
                 console.log("0 TROCA SUBFIX")
             } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio
                 troca = {'agenda_convid': novoconvidx};

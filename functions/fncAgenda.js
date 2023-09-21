@@ -11366,7 +11366,7 @@ module.exports = {
 
                                             break;
                                         case "SubstitutoFixo":
-                                            console.log("SUBFIX1");
+                                            //console.log("SUBFIX1");
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
@@ -11397,8 +11397,8 @@ module.exports = {
                                                 }
                                             })
 
-                                            console.log("convdebval:"+convdebval)
-                                            console.log("convcreval:"+convcreval)
+                                            //console.log("convdebval:"+convdebval)
+                                            //console.log("convcreval:"+convcreval)
             
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
@@ -11563,9 +11563,9 @@ module.exports = {
                                             break;
                                         case "Nenhuma Observação":
                                             if(a.agenda_beneid+"" === "62d17a1eea444f5b7a02323c"){
-                                                console.log("ESSE DAQUI Ó:")
-                                                console.log("a:"+a)
-                                                console.log("agendaSub:"+agendaSub)
+                                                //console.log("ESSE DAQUI Ó:")
+                                                //console.log("a:"+a)
+                                                //console.log("agendaSub:"+agendaSub)
                                             }
                                             
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";
@@ -11748,16 +11748,16 @@ module.exports = {
                                         console.log("A:"+a)
                                         console.log("a.agenda_convid:"+a.agenda_convid)
                                         console.log("a.agenda_mergeterapiaid:"+a.agenda_mergeterapiaid)
-                                        console.log("a.agenda_mergeterapiaid:"+a.agenda_mergeterapiaid)
-                                        agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                         convcre.forEach((ccre)=>{
-                                            convcreTes = ""+ccre.convcre_convid + ccre.agenda_mergeterapiaid+"";
+                                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
                                             if( convcreTes == agendacreTes){
                                                 //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                 convCreCpfCnpj = ccre.convcre_convCpfCnpj;
                                                 convcreval = ccre.convcre_valor;
                                             }
                                         })
+                                        console.log("convcreval:"+convcreval)
 
                                         agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";
                                         convdeb.forEach((cdeb)=>{

@@ -177,6 +177,12 @@ const visualClass = require("../models/visual")
 const Visual = mongoose.model("tb_visual")
 const fncVisual = require("../functions/fncVisual")
 
+//Relsem
+const relsemClass = require("../models/relsem")
+const Relsem = mongoose.model("tb_relsem")
+const fncRelsem = require("../functions/fncRelsem")
+
+
 //Acompanhamento, devolutiva e reuniões
 const acompClass = require("../models/acomp")
 const Acomp = mongoose.model("tb_acomp")
@@ -1585,27 +1591,27 @@ router.get('/area/laudo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//delet
 })
 
 //Menu Evoluções ** Area Tecnicos   
-//Carrega Cadastro de Relatório Evolutivo
+//Carrega Cadastro de Relatório semestral
 router.get('/area/evol/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncEvol.carregaEvol(req, res);
 })
-//Adiciona Registro de Relatório Evolutivo
+//Adiciona Registro de Relatório semestral
 router.post('/area/evol/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
     fncEvol.cadastraEvol(req,res);
 })
-//Lista Todos os Relatório Evolutivo
+//Lista Todos os Relatório semestral
 router.get('/area/evol/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.listaEvol(req, res);
 })
-//Carrega Relatório Evolutivo Selecionado para Edição
+//Carrega Relatório semestral Selecionado para Edição
 router.get('/area/evol/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.carregaEvoledi(req, res);
 })
-//Atualiza Relatório Evolutivo Selecionado
+//Atualiza Relatório semestral Selecionado
 router.get('/area/evol/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.atualizaEvol(req, res);
 })
-//Deleta Exclui Relatório Evolutivo
+//Deleta Exclui Relatório semestral
 router.get('/area/evol/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncEvol.deletaEvol(req, res);
 })
@@ -1850,6 +1856,33 @@ router.post('/area/aba/visual/add', fncGeral.IsAuthenticated, (req,res) =>{//adi
 //Carrega Atualizar Visual
 router.post('/area/aba/visual/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncVisual.atualizaVisual(req,res);
+})
+
+//Menu Relsem ** Area Terapeutas
+//Carrega Cadastro Relsem
+router.get('/area/relsem/relsemcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Relsem
+    fncRelsem.carregaRelsem(req, res);
+})
+
+//Lista Relsem
+router.get('/area/relsem/relsemlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Relsem
+    fncRelsem.listaRelsem(req, res);
+})
+
+//Adiciona Registro Relsem
+router.post('/area/relsem/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem
+    console.log("post")
+    fncRelsem.cadastraRelsem(req, res); 
+})
+
+//Carrega Editar Relsem
+router.get('/area/relsem/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncRelsem.carregaRelsemedi(req,res);
+})
+
+//Carrega Atualizar Relsem
+router.post('/area/relsem/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncRelsem.atualizaRelsem(req,res);
 })
 
 //Menu Acompanhamento devolutivas e reuniões ** Area Tecnicos e ABA 
