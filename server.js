@@ -72,7 +72,7 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 compareString: function (v1, v2, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    //console.log("/"+v1+"="+v2+"/")
+                    console.log("/"+v1+"="+v2+"/")
                     if (v1 === v2) {
                         return options.fn(this);
                     } else {

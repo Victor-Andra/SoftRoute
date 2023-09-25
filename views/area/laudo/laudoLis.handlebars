@@ -40,11 +40,61 @@
 		<script src="../../../assets/js/html5shiv.min.js"></script>
 		<script src="../../../assets/js/respond.min.js"></script>
 		<![endif]-->
+		<script>
+			function carregaBody(){
+				let arraydt = document.getElementsByName("datalaudo");
+				let arraydtedi = document.getElementsByName("datalaudoedi");
+				arraydt.forEach((e)=>{
+					let dt = new Date(e.value);
+					let mes = (dt.getUTCMonth()+1).toString();
+					let dia = (dt.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					
+					let resultado = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+					let val = document.getElementById("moldedata").cloneNode(true);
+					val.value = resultado;
+					document.getElementById(e.id+"dt").append(val);
+				})
+
+				arraydtedi.forEach((e)=>{
+					if (e.value == undefined || e.value == "undefined" || e.value == "" || e.value == null){
+						let val = document.getElementById("moldedata").cloneNode(true);
+						val.value = "-";
+						document.getElementById(e.id+"edi").append(val);
+					} else {
+						let dt = new Date(e.value);
+						let mes = (dt.getUTCMonth()+1).toString();
+						let dia = (dt.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						
+						let resultado = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+						let val = document.getElementById("moldedata").cloneNode(true);
+						val.value = resultado;
+						document.getElementById(e.id+"edi").append(val);
+					}
+				})
+			}
+		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
-
-
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="hidden">
+			<input type="text" id="moldedata" readonly="true"  />
+			{{#each laudos}}
+				<input id="{{_id}}" name="datalaudo" value="{{laudo_data}}" />
+				<input id="{{_id}}" name="datalaudoedi" value="{{laudo_dataedi}}" />
+			{{/each}}
+		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -76,24 +126,22 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="center">
+													<th class="center" tabindex="1">
 														<label class="pos-rel">
 															<input type="checkbox" class="ace" />
 															<span class="lbl"></span>
 														</label>
 													</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tipo Plano: activate to sort column ascending">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Benficiário: activate to sort column ascending">Ano/Mês</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Beneficiário</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Terapeuta</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data: activate to sort column ascending">Tipo</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta:     activate to sort column ascending">Fase</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta:     activate to sort column ascending">Andamento</th>
-													<th>Ação</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Laudo</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
+													<th tabindex="7">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
-												{{#each pecss}}
+												{{#each laudos}}
 
 													<tr role="row" class="odd">
 														<td class="center">
@@ -102,24 +150,18 @@
 																<span class="lbl"></span>
 															</label>
 														</td>
-														<td>{{pecs_data}}</td>
-														<td>{{pecs_mes}}</td>
 														{{#each ../benes}}
-															{{#ifEqual this._id ../pecs_beneid}}
+															{{#ifEqual this._id ../laudo_beneid}}
 																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#each ../usuarios}}
-															{{#ifEqual this._id ../pecs_terapeutaid}}
-																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<td>{{pecs_tipo}}</td>
-														<td>{{pecs_fase}}</td>
-														<td>{{pecs_andamento}}</td>
+														<td id="{{_id}}dt"></td>
+														<td>{{laudo_medico}}</td>
+														<td>{{laudo_medicoesp}}</td>
+														<td id="{{_id}}edi"></td>
 														<td>
 															<div class="action-buttons">
-																<a class="green" href="/menu/area/aba/pecs/edi/{{_id}}">
+																<a class="green" href="/menu/area/laudo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
 																<a class="hidden" class="blue" href="">
@@ -189,7 +231,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null, null, null, { "bSortable": false }],
+					"aoColumns": [{ "bSortable": false }, null, null, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

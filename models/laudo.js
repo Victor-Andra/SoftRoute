@@ -22,7 +22,7 @@ const LaudoSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    laudo_laudodata :{
+    laudo_data :{
         type: Date,
         required: false
     },
@@ -51,7 +51,7 @@ class Laudo{
         laudo_diag,   
         laudo_medico,
         laudo_medicoesp,
-        laudo_laudodata,
+        laudo_data,
         laudo_usuid,
         laudo_datacad,
         laudo_usuidedi,
@@ -62,7 +62,7 @@ class Laudo{
         this.laudo_diag = laudo_diag,   
         this.laudo_medico = laudo_medico,
         this.laudo_medicoesp = laudo_medicoesp,
-        this.laudo_laudodata = laudo_laudodata,
+        this.laudo_data = laudo_data,
         this.laudo_usuid = laudo_usuid,
         this.laudo_datacad = laudo_datacad,
         this.laudo_usuidedi = laudo_usuidedi,
@@ -96,7 +96,7 @@ module.exports = {LaudoModel,LaudoSchema,
                 laudo_diag : req.body.laudoDiag,   
                 laudo_medico : req.body.laudoMedico,
                 laudo_medicoesp : req.body.laudoMedicoesp,
-                laudo_laudodata : req.body.laudoLaudodata,
+                laudo_data : req.body.laudoData,
                 
                 laudo_usuid : req.body.laudoUsuid,
                 laudo_datacad : req.body.laudoDatacad,
@@ -134,7 +134,7 @@ module.exports = {LaudoModel,LaudoSchema,
                 laudo_diag : req.body.laudoDiag,   
                 laudo_medico : req.body.laudoMedico,
                 laudo_medicoesp : req.body.laudoMedicoesp,
-                laudo_laudodata : req.body.laudoLaudodata,
+                laudo_data : req.body.laudoData,
                 
                 laudo_usuid : idUsu,
                 laudo_datacad : dataAtual,

@@ -327,13 +327,19 @@ module.exports = {AtendModel,AtendSchema,
         let novoterapeutaidx = req.body.agendaTerapeutaSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         let novaterapiaidx = req.body.agendaTpiaSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
+        let novomergeteraidx = req.body.agendaTerapeutaMergeSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        let novamergetpiaidx = req.body.agendaTerapiaMergeSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
-        console.log("WHAT???")
+
         if (beneidx != "-") {
             let novavalorcrex = req.body.atendValorcre;
             let novavalordebx = req.body.atendValordeb;
-            console.log("BUSCA")
-            if (terapeutaidx != "-" && terapiaidx != "-"){
+            
+            if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
+                busca = { atend_atenddata: {$gte : ini.toISOString(), $lte: fim.toISOString()}, atend_terapiaid: terapiaidx, atend_beneid: beneidx, atend_usuid: terapeutaidx };
+                console.log("0")
+                console.log("TROCA SUBFIX")
+            } else if (terapeutaidx != "-" && terapiaidx != "-"){
                 console.log("1")
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_terapiaid: terapiaidx, atend_usuid: terapeutaidx , atend_beneid: beneidx };
             } else if (terapeutaidx == "-" && terapiaidx != "-"){
@@ -347,7 +353,11 @@ module.exports = {AtendModel,AtendSchema,
                 busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_beneid: beneidx };
             }
 
-            if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-"){//convenio
+            if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
+                troca = {'atend_mergeterapeutaid': novomergeteraidx, 'atend_mergeterapiaid': novamergetpiaidx, 'atend_mergevalorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
+                //console.log("0")
+                console.log("TROCA SUBFIX")
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-"){//convenio
                 troca = {'atend_convid': novoconvidx};
             } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx == "-") {//terapeuta
                 troca = {'atend_usuid': novoterapeutaidx};
@@ -375,8 +385,7 @@ module.exports = {AtendModel,AtendSchema,
                 troca = {'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
             } else if (novoterapeutaidx != "-" && novaterapiaidx != "-" && novoconvidx != "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
                 troca = {'atend_usuid': novoterapeutaidx, 'atend_terapiaid': novaterapiaidx, 'atend_convid': novoconvidx, 'atend_valordeb': novavalorcrex};
-            } else 
-            if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalordebx != "-"){//convenio
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-" && novavalordebx != "-"){//convenio
                 troca = {'atend_convid': novoconvidx};
             } else if (novoterapeutaidx != "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex == "-" && novavalordebx != "-") {//terapeuta
                 troca = {'atend_usuid': novoterapeutaidx};
@@ -408,9 +417,14 @@ module.exports = {AtendModel,AtendSchema,
                 troca = {'atend_valordeb': novavalordebx};
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
                 troca = {'atend_valorcre': novavalorcrex};
-                console.log("So cre")
             }
 
+            console.log("terapeutaidx:"+terapeutaidx)
+            console.log("beneidx:"+beneidx)
+            console.log("terapiaidx:"+terapiaidx)
+            console.log("ini.toISOString():"+ini.toISOString())
+            console.log("fim.toISOString():"+fim.toISOString())
+            await AtendModel.find({atend_terapiaid: terapiaidx, atend_beneid: beneidx, atend_usuid: terapeutaidx}).then((atend)=>{console.log("atend.length"+atend.length)})
             await AtendModel.updateMany(
                 busca,{$set: troca}// Alterar Débito e Crédito //, 'atend_terapiaid': novaterapeutaidx  //, 'atend_valordeb': novavalordebx
             ).then((res) =>{
@@ -426,5 +440,4 @@ module.exports = {AtendModel,AtendSchema,
             resultado = "Campos de busca vazios;"
         }
     }
-    
 };
