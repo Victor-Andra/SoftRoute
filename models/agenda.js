@@ -484,13 +484,15 @@ module.exports = {AgendaModel,AgendaSchema,
         let novoconvidx = req.body.agendaConvSubsid;//new ObjectId("62477742e416141415ff7a88");//particular
         let novomergeteraidx = req.body.agendaTerapeutaMergeSubsid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         let novamergetpiaidx = req.body.agendaTerapiaMergeSubsid;//new ObjectId("63b8315c41a2918c14381a4d");//Nova Terapia ok
+        let categoriaidx = req.body.agendaCategoria;
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
         //console.log("beneidx:"+beneidx)
         if (beneidx != "-") {
-            if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
+            if (categoriaidx != "-") {
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
+            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
                 //console.log("0")
-                console.log("TROCA SUBFIX")
             } else if (teraidx != "-" && tpiaidx != "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx };
                 //console.log("1")
@@ -517,7 +519,13 @@ module.exports = {AgendaModel,AgendaSchema,
                 //console.log("4")
             }
 
-            if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
+            if (categoriaidx != "-") {
+                if (categoriaidx == "Padrão") {
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Padrão'};
+                } else {
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Administrativo'};
+                }
+            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
                 troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo'};
                 console.log("0 TROCA SUBFIX")
             } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio

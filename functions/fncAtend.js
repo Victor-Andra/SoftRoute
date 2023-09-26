@@ -1083,47 +1083,47 @@ module.exports = {
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Extra":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalordeb;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Padrão":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Pais":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Substituição":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalordeb;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "SubstitutoFixo":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valordeb;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                 }
 

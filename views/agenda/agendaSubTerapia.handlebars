@@ -70,10 +70,7 @@
 														<i class="ace-icon fa fa-times"></i>
 													</button>
 													<strong>Importante!</strong>
-													Quando se cadastra de forma equivocada terapias:
-													Com Associação Errada à Terapeutas;
-													Terapias com Valores diferentes para Beneficiários Específicos;
-													Terapias com Valores diferentes para Terapeutas Específicos.
+													Utilizado para correção de agenda e atendimentos. O alcance da alteração depende do que for preenchido na data e dados originais e a troca depende dos dados de substituto.
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
@@ -138,14 +135,6 @@
 														</div>
 													</div>
 												</div>
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-													<strong>Importante!</strong>
-													Onde vai alterar, somente na agenda, somente no atendimentos já criados, ou em ambos.
-													Se não escolher uma das três opções válidas, a requisição de alteração não é processada.
-												</div>
 												<div class="row">
 													<div class="col-xs-12" >
 														<label>Terapia Original</label>
@@ -203,21 +192,47 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-6">
+													<div class="col-xs-12" >
 														<label>Abrangência</label>
 														<div class="form-group">
 															<div class="col-sm-6">
 																<select id="agendaAbra" name="agendaAbra" class="chosen-select" data-placeholder="Escolha...">
-																	
-																		<option value="-">-</option>
-																		<option value="agenda">Somente Agenda</option>
-																		<option value="atend">Somente Atendimento</option>
-																		<option value="ambos">Ambos</option>
-																	
+																	<option value="-">-</option>
+																	<option value="agenda">Somente Agenda</option>
+																	<option value="atend">Somente Atendimento</option>
+																	<option value="ambos">Ambos</option>
 																</select>
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Categoria</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select id="agendaCategoria" name="agendaCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()"  onchange="javascript: mudaSubis()">
+																			<option value="-">-</option>
+																			<option id="Apoio" value="Apoio">Apoio</option>
+																			<option id="Extra" value="Extra">Extra</option>
+																			<option id="Falta" value="Falta">Falta</option>
+																			<option id="Glosa" value="Glosa">Glosa</option>
+																			<option id="Padrão" value="Padrão">Padrão</option>
+																			<option id="Pais" value="Pais">Pais</option>
+																			<option id="Substituto" value="Substituto">Substituto</option>
+																			<option id="SubstitutoFixo" value="SubstitutoFixo">Substituto Fixo</option>
+																			<option id="Supervisão" value="Supervisão">Supervisão</option>
+																		</select>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
+												</div>
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Importante!</strong>
+													Onde vai alterar, somente na agenda, somente no atendimentos já criados, ou em ambos.<br>
+													Se não escolher uma das três opções válidas, a requisição de alteração não é processada.<br>
+													Apenas preencha a categoria para alterar a mesma, se o campo <strong>Categoria</strong> estiver preenchido apenas ele será alterado.
 												</div>
 												<div class="row">
 													<div class="col-xs-12" >
@@ -237,31 +252,40 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-12 col-sm-6">
-													<label>Terapeuta Substituto Fixo</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<select id="agendaTerapeutaMergeSubsid" name="agendaTerapeutaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+												<div class="row">
+													<div class="col-xs-12" >
+														<label>Terapeuta Substituto Fixo</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select id="agendaTerapeutaMergeSubsid" name="agendaTerapeutaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
 															</select>
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Terapia Substituto Fixo</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select id="agendaTerapiaMergeSubsid" name="agendaTerapiaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="-">-</option>
+																			{{#each terapias}}
+																				<option value="{{_id}}">{{terapia_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-12 col-sm-6">
-													<label>Terapia Substituto Fixo</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<select id="agendaTerapiaMergeSubsid" name="agendaTerapiaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
-																<option value="-">-</option>
-																{{#each terapias}}
-																	<option value="{{_id}}">{{terapia_nome}}</option>
-																{{/each}}
-															</select>
-														</div>
-													</div>
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Importante!</strong>
+													Caso preencha os substitutos fixos a agenda e/ou atendimento receberá a categoria <strong>Substituto Fixo</strong> e apenas os dados <strong>Terapeuta Substituto Fixo</strong> e <strong>Terapia Substituto Fixo</strong> serão alterados.
 												</div>
 											</div>
 										</div>		
@@ -273,7 +297,7 @@
 										<strong>Atenção!</strong>
 										Cuidado com alterações em exercicios ou meses já apurados/encerrados o financeiro,
 										pois essa rotina altera "TUDO" dentro do intervalo especificado.
-										Confira Tudo antes de Prosseguir.
+										<strong>Confira tudo antes de Prosseguir.</strong>
 									</div>
 								</div>
 			

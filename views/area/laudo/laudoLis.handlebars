@@ -112,6 +112,26 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/laudo/lisF" method="POST">
+							<div id="divAtendBeneficiario" class="col-xs-12 col-sm-4">
+								<div class="row">
+									<div class="input-group">
+										<label>Beneficiário:&nbsp;</label>
+										<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" data-placeholder="Escolha..." value="">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_nome}}</option>
+											{{/each}}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+								</div>
+						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->

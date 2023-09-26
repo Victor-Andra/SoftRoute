@@ -1585,6 +1585,10 @@ router.get('/area/laudo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//dir
 router.get('/area/laudo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncLaudo.listaLaudo(req,res);
 })
+//Lista todos os Laudos
+router.post('/area/laudo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncLaudo.filtraLaudo(req,res);
+})
 //Deleta Laudo Selecionado
 router.get('/area/laudo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncLaudo.deletaLaudo(req,res);
