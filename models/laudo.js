@@ -89,17 +89,13 @@ module.exports = {LaudoModel,LaudoSchema,
         console.log("req.body.id:"+req.body.id)
         console.log("laudoId:"+laudoId)
         //Realiza Atualização
-        await LaudoModel.findByIdAndUpdate(req.body.id, 
+        await LaudoModel.findByIdAndUpdate(new ObjectId(req.body.id), 
             {$set: {
                 
-                laudo_beneid : req.body.laudoBeneid,
                 laudo_diag : req.body.laudoDiag,   
                 laudo_medico : req.body.laudoMedico,
                 laudo_medicoesp : req.body.laudoMedicoesp,
                 laudo_data : req.body.laudoData,
-                
-                laudo_usuid : req.body.laudoUsuid,
-                laudo_datacad : req.body.laudoDatacad,
                 laudo_usuidedi : idUsu,
                 laudo_dataedi : dataAtual
                 

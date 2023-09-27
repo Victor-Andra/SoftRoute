@@ -527,7 +527,7 @@ module.exports = {
         let valorPrev;
         let dataEdi;
         Debit.findOne({debit_atendnum: req.body.nextNum}).then((deb)=>{
-            if (deb._id){
+            if (deb){
                 switch (req.body.atendCategoria){
                     case "Apoio":
                         dataEvento = new Date(req.body.atendAtenddata);

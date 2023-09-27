@@ -1578,7 +1578,7 @@ router.get('/area/laudo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direc
     fncLaudo.carregaLaudoedi(req,res);
 })
 //Atualiza Laudo selecionado editado
-router.get('/area/laudo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+router.post('/area/laudo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncLaudo.atualizaLaudo(req,res);
 })
 //Lista todos os Laudos
