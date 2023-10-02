@@ -626,6 +626,15 @@ router.post("/agenda/filSB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
     fncAgenda.carregaAgendaFilSB(req, res);
 })
 
+router.get("/agenda/lisST/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Beneficiario  Semanal.
+    fncAgenda.carregaAgendaST(req, res);
+})
+
+router.post("/agenda/filST", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios Semanal.
+    fncAgenda.carregaAgendaFilST(req, res);
+})
+
+
 router.get("/agenda/lisTB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Terapeuta Semanal.
     fncAgenda.carregaAgendaTB(req, res);
 })
@@ -1873,6 +1882,11 @@ router.get('/area/relsem/relsemlis', fncGeral.IsAuthenticated, (req,res) =>{//di
     fncRelsem.listaRelsem(req, res);
 })
 
+//Lista todos os Relsem
+router.post('/area/relsem/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
+    fncRelsem.filtraRelsem(req,res);
+})
+
 //Adiciona Registro Relsem
 router.post('/area/relsem/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem
     console.log("post")
@@ -1887,6 +1901,14 @@ router.get('/area/relsem/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adic
 //Carrega Atualizar Relsem
 router.post('/area/relsem/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
     fncRelsem.atualizaRelsem(req,res);
+})
+
+router.get('/area/relsem/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncRelsem.relsemImp(req,res);
+})
+
+router.post('/area/relsem/impFil', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncRelsem.relsemImpFiltro(req,res);
 })
 
 //Menu Acompanhamento devolutivas e reuniões ** Area Tecnicos e ABA 

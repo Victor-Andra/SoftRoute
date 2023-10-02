@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL</title>
+		<style>
+			@media print {
+               .noprint {
+                  display: none;
+               }
+            }
+		</style>
+		<script type="text/javascript">
+			function atualizaDataIni(){
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataIni').value = fulldate;
+			}
+			function atualizaDataFin(){
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFim').value = fulldate;
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner noprint">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-map"></i>
+							</li>
+							<li class="active">RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<form role="form" action="/menu/area/relsem/impFil" method="POST">
+						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
+							<ul class="breadcrumb">
+								<label>Beneficiário: </label>
+								<select style="height: 30px; width:300px;" name="relsemBeneid"  id="relsemBeneid" class="chosen-select" data-placeholder="Escolha...">
+									{{#each benes}}
+										<option value="{{_id}}">{{bene_nome}}</option>
+									{{/each}}
+								</select>
+								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+									<i class="ace-icon fa fa-search bigger-110"></i>
+									Pesquisar
+								</button>
+							</ul><!-- /.breadcrumb -->
+						</div>
+					</form>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="space-6"></div>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+									<div style="text-align: center;">
+										<img width="140" height="60" alt="150x150" style="alight: center" src="/images/gallery/logo_route_centro.png">
+									</div>
+										<div class="widget-header widget-header-large">
+											<h3 class="widget-title grey lighter">
+												<i class="ace-icon fa fa-leaf green"></i>
+												RELATÓRIO DE ACOMPANHAMENTO
+											</h3>
+										</div>
+									<div class="widget-body">
+										<div class="widget-main padding-24">
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
+															<b>Informações do Prestador</b>
+														</div>
+													</div>
+													<div>
+														<ul class="list-unstyled">
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>Prestador: </b>Route Centro de Terapia e Apoio Infantil
+															</li>
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ: </b> 33.346.423/0001-17
+															</li>
+														</ul>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+															<b>Informações do Relatório</b>
+														</div>
+													</div>
+													<div>
+														<ul class="list-unstyled ">
+															<li>
+																<i class="ace-icon fa fa-caret-right green"></i><b>Periodo de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
+															</li>
+															<li>
+																<i class="ace-icon fa fa-caret-right green"></i><b>Beneficiario: </b>{{bene_nome}}
+															</li>
+															<li>
+																<i class="ace-icon fa fa-caret-right green"></i><b>Convênio:</b> {{conv_nome}}
+															</li>
+														</ul>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
+															<b>Informações dos Atendimentos</b>
+														</div>
+													</div>
+											</div><!-- /.row -->
+											<div>
+												<table class="table table-striped table-bordered">
+													<thead>
+														<tr>
+															
+															<th style="width:10%">Data do Atendimento</th>
+															<th>Especialidade</th>
+															<th>Profissional</th>														
+														</tr>
+													</thead>
+													{{#each rels}}
+														<tbody>
+															<tr>
+																
+																<td style="width:10%">{{dt}}</td>
+																{{#each ../terapias}}
+																	{{#ifEqual this._id ../especialidade}}
+																		<td>{{terapia_nomecid}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+																{{#each ../terapeutas}}
+																	{{#ifEqual this._id ../profissional}}
+																		<td>{{usuario_nomecompleto}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															</tr>
+														</tbody>
+													{{/each}}
+													<footer>
+														<tr class="hr-double">
+															<td><b>-</b></td>
+															<td><b>-</b></td>
+															<td><b>-</b></td>
+														</tr>
+													</footer>
+												</table>
+											</div>
+											<div class="row"><!-- Área reservada para Assinaturas -->
+												<div class="space space-32"></div>
+												<div class="col-xs-4 col-sm-4">
+													<div class="hr"></div>
+													<label>Assinatura do Responsável</label>
+												</div>
+												<div class="col-xs-4 col-sm-4">
+													<div class=""></div>
+													<label></label>
+												</div>
+												<div class="col-xs-4 col-sm-4">
+													<div class="hr"></div>
+													<label>Assinatura da Clínica</label>
+												</div>
+											</div><!-- /.Área reservada para Assinaturas -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div><!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container --><!-- basic scripts -->
+	</body>
+</html>

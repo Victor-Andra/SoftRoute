@@ -16,7 +16,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Relatório semestral</a>
+								<a href="#">Relatório acompanhamento semestral</a>
 							</li>
 
 							<li class="active">Cadastro</li>
@@ -34,7 +34,7 @@
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-bookmark-o"></i>
-													RELATÓRIO SEMESTRAL
+													RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL
 												</h4>
 
 												<span class="widget-toolbar">
@@ -76,23 +76,6 @@
 															</div>
 														</div>
 														
-
-														<div class="col-sm-6">
-															<label> Terapeuta</label>
-															<div class="form-group">
-																<div class="col-sm-6">
-																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
-																		<option value="-">-</option>
-																		{{#each terapeutas}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<div class="row">
 														<div class="col-sm-6">
 															<label> Beneficiário</label>
 															<div class="form-group">
@@ -106,68 +89,65 @@
 																</div>
 															</div>
 														</div>
-														
-														
 
-														<div class="col-sm-4">
-															<label> Tipo</label>
-															<div class="form-group">
-																<div class="col-sm-3">
-																	<input type="text" name="relsemTipo" id="relsemTipo" class="form-control" />
-																</div>
-															</div>
-														</div>
-
-														<div class="col-sm-3">
-															<label> Fase</label>
-															<div class="form-group">
-																<div class="col-sm-4">
-																	<input type="text" name="relsemFase" id="relsemFase" class="form-control" />
-																</div>
-															</div>
-														</div>
+														
 													</div>
 
 													<div class="row">
 														<div class="col-sm-6">
-															<label> Andamento</label>
+															<label> Terapeuta</label>
 															<div class="form-group">
-																<div class="col-sm-4">
-																	<select name="relsemAndamento" id="relsemAndamento" class="chosen-select" data-placeholder="Escolha..." >
-																			<option value="-">-</option>
-																			<option value="Iniciado">Iniciado</option>
-																			<option value="Andamento">Andamento</option>
-																			<option value="Concluido">Concluido</option>
-																			<option value="Atualizar">Atualizar</option>
+																<div class="col-sm-6">
+																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="-">-</option>
+																		{{#each terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
 																	</select>
 																</div>
 															</div>
 														</div>
 														
-														
+														<div class="col-sm-5">
+															<label> Nº Conselho</label>
+															<div class="form-group">
+																<div class="col-sm-5">
+																	<input type="text" name="relsemConselho" id="relsemConselho" class="form-control" />
+																</div>
+															</div>
+														</div>
 
-														
+														<div class="col-sm-6">
+															<label> Terapia</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<input type="text" name="relsemTerapia" id="relsemTerapia" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-12">
+															<label> Relatório</label>
+															<div class="form-group">
+																<div class="col-sm-12" >
+																	<textarea type="text" data-placeholder="-" name="relsemDesc" id="relsemDesc" placeholder="-" class="form-control" rows="62"  ></textarea>
+																</div>
+															</div>
+														</div>
 													</div>
-
 												</div>
 											</div>
-										</div>	
-										
-													
-
-
+										</div>
+									</div>	
+								</div>
+								
 								
 
-									</div>
-								</div>
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-
 								<div class="row">
-									<div clas="col-xs-12">
+									<div clas="col-sm-12">
 										
 										<div class="form-actions">
-											<div class="col-xs-12" style="text-align: center;" >
+											<div  style="text-align: center;" >
 
 												<button class="btn btn-info" name="acao" type="submit">
 													<i class="ace-icon fa fa-check bigger-110"></i>

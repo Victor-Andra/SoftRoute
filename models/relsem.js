@@ -7,9 +7,9 @@ const RelsemSchema = mongoose.Schema({
     relsem_beneid:{type: ObjectId, required: true},
     relsem_data: { type: String, required: false },
     relsem_mes: { type: String, required: false },
-    relsem_tipo: { type: String, required: false },
-    relsem_fase: { type: String, required: false },
-    relsem_andamento: { type: String, required: false },
+    relsem_conselho: { type: String, required: false },
+    relsem_terapia: { type: String, required: false },
+    relsem_desc: { type: String, required: false },
     //controle
     relsem_datacad: { type: Date, required: false },
     relsem_usuidcad: { type: ObjectId, required: false },
@@ -25,9 +25,9 @@ class Relsem{
         relsem_beneid,
         relsem_data, 
         relsem_mes, 
-        relsem_tipo,
-        relsem_fase, 
-        relsem_andamento, 
+        relsem_conselho,
+        relsem_terapia, 
+        relsem_desc, 
         relsem_datacad, 
         relsem_usuidcad, 
         relsem_dataedi, 
@@ -39,9 +39,9 @@ class Relsem{
             this.relsem_beneid = relsem_beneid, //Ok
             this.relsem_data = relsem_data, //Ok
             this.relsem_mes = relsem_mes,
-            this.relsem_tipo = relsem_tipo,
-            this.relsem_fase = relsem_fase,
-            this.relsem_andamento = relsem_andamento,
+            this.relsem_conselho = relsem_conselho,
+            this.relsem_terapia = relsem_terapia,
+            this.relsem_desc = relsem_desc,
             this.relsem_datacad = relsem_datacad,
             this.relsem_usuidcad = relsem_usuidcad,
             this.relsem_dataedi = relsem_dataedi,
@@ -71,18 +71,13 @@ module.exports = {RelsemModel,RelsemSchema,
         //Realiza Atualização
         await RelsemModel.findByIdAndUpdate(req.body.id, 
             {$set: {
-                relsem_terapeutaid : req.body.relsemTerapeutaid,
-                relsem_beneid : req.body.relsemBeneid,
                 relsem_data : req.body.relsemData,
                 relsem_mes : req.body.relsemMes,
-                relsem_tipo : req.body.relsemTipo,
-                relsem_fase : req.body.relsemFase,
-                relsem_andamento : req.body.relsemAndamento,
-                
+                relsem_conselho : req.body.relsemConselho,
+                relsem_terapia : req.body.relsemTerapia,
+                relsem_desc : req.body.relsemDesc,
                 relsem_dataedi : dataAtual, 
                 relsem_usuidedi : idUsu
-                
-                
                 }}
                 ).then((res) =>{
                     console.log("Salvo")
@@ -113,9 +108,9 @@ module.exports = {RelsemModel,RelsemSchema,
                 relsem_beneid : req.body.relsemBeneid,
                 relsem_data : req.body.relsemData,
                 relsem_mes : req.body.relsemMes,
-                relsem_tipo : req.body.relsemTipo,
-                relsem_fase : req.body.relsemFase,
-                relsem_andamento : req.body.relsemAndamento,
+                relsem_conselho : req.body.relsemConselho,
+                relsem_terapia : req.body.relsemTerapia,
+                relsem_desc : req.body.relsemDesc,
                 relsem_datacad : dataAtual, 
                 relsem_usuidcad : idUsu
                 
