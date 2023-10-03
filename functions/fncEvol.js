@@ -2,7 +2,7 @@
 const mongoose = require("mongoose")
 
 //As classe tem que ser declaradas antes das tabelas
-//Classe  Relatório semestral 
+//Classe  Relatório Semestral 
 const evolClass = require("../models/evol")
 
 
@@ -10,7 +10,7 @@ const evolClass = require("../models/evol")
 const beneClass = require("../models/bene")
 const usuarioClass = require("../models/usuario")
 
-//Tabela Relatório semestral 
+//Tabela Relatório Semestral 
 const Evol = mongoose.model("tb_evol")
 
 //Tabelas Extrangeiras

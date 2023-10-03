@@ -1604,27 +1604,27 @@ router.get('/area/laudo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//delet
 })
 
 //Menu Evoluções ** Area Tecnicos   
-//Carrega Cadastro de Relatório semestral
+//Carrega Cadastro de Relatório Semestral
 router.get('/area/evol/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncEvol.carregaEvol(req, res);
 })
-//Adiciona Registro de Relatório semestral
+//Adiciona Registro de Relatório Semestral
 router.post('/area/evol/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
     fncEvol.cadastraEvol(req,res);
 })
-//Lista Todos os Relatório semestral
+//Lista Todos os Relatório Semestral
 router.get('/area/evol/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.listaEvol(req, res);
 })
-//Carrega Relatório semestral Selecionado para Edição
+//Carrega Relatório Semestral Selecionado para Edição
 router.get('/area/evol/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.carregaEvoledi(req, res);
 })
-//Atualiza Relatório semestral Selecionado
+//Atualiza Relatório Semestral Selecionado
 router.get('/area/evol/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncEvol.atualizaEvol(req, res);
 })
-//Deleta Exclui Relatório semestral
+//Deleta Exclui Relatório Semestral
 router.get('/area/evol/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncEvol.deletaEvol(req, res);
 })

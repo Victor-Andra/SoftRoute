@@ -71,19 +71,19 @@ module.exports = {
             //console.log("trat:");
             //console.log(trat);
             //console.log("Listagem Realizada das Trateses!")
-                Bene.find().then((bene)=>{
-                    //console.log("Listagem Realizada bene!")
-                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
-                        //console.log("Listagem Realizada Usuário!")
-                        if(resposta.sucesso == ""){
-                            console.log(' objeto vazio');
-                            flash.texto = ""
-                            flash.sucesso = ""
-                        } else {
-                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                            flash.texto = resposta.texto
-                            flash.sucesso = resposta.sucesso
-                        }
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                //console.log("Listagem Realizada bene!")
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
+                    //console.log("Listagem Realizada Usuário!")
+                    if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }
             res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
@@ -305,7 +305,7 @@ module.exports = {
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/plano/tratCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
@@ -324,7 +324,7 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/plano/tratEdi", {trat, terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual})
         })})})}).catch((err) =>{
