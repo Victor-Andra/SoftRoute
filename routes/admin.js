@@ -2386,7 +2386,18 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
         router.post('/ferramentas/usuario/carregaResetarchave', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
             fncUsuario.carregaResetarchave(req, res); 
-         })
+        })
+
+        router.get('/ferramentas/usuario/carregaMudarNomeTerapeuta', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de usuario
+            let resposta = new Resposta()
+            resposta.texto = ""
+            resposta.sucesso = ""
+            fncUsuario.carregaMudarNomeTerapeuta(req, res, resposta);
+        })
+
+        router.post('/ferramentas/usuario/mudarNomeTerapeuta', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
+            fncUsuario.mudarNomeTerapeuta(req, res);
+        })
 
 //Menu Ferramentas
     //Ajuda

@@ -255,7 +255,7 @@ module.exports = {
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
-                    bene.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Convenios")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         //console.log("Listagem Realizada de Usuário")
@@ -11460,7 +11460,7 @@ module.exports = {
                                             atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
                                             atend_terapiaid : a.agenda_terapiaid,//Musica
                                             atend_salaid : a.agenda_salaid,//
-                                            atend_valorcre : "0,00",//Convenio não paga
+                                            atend_valorcre : convcreval,//Convenio não paga
                                             atend_valordeb : convdebval,//Paga ao musico
                                             atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
                                             atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA

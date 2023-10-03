@@ -349,5 +349,34 @@ module.exports = {
         }).catch((err) =>{
             console.log(err)
         })
+    },
+    carregaMudarNomeTerapeuta(req,res){
+        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{
+            usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+            res.render('ferramentas/usuario/mudarNomeTerapeuta', {usuarios: usuario})
+        })
+    },
+    mudarNomeTerapeuta(req,res){
+        let flash = new Resposta();
+        usuarioClass.mudarNome(req,res).then((res)=>{
+            console.log("res")
+        });
+        let resultado = "true"
+console.log("resultado:"+resultado)
+        if (resultado == "true"){
+            flash.texto = "Nome alterado com sucesso";
+            flash.sucesso = "true";
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((usuario)=>{
+                    usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                    res.render('ferramentas/usuario/mudarNomeTerapeuta', {usuarios: usuario, flash})
+            })})
+        } else {
+            console.log(resultado)
+            flash.texto = resultado;
+            flash.sucesso = "false";
+            req.flash("error_message", "Houve um erro ao mudar o nome")
+            res.render('admin/erro', {flash})
+        }
     }
 }

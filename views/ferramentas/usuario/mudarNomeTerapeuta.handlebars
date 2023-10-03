@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Cadastrar Chave</title>
+		<script type="text/javascript">
+
+			function submitForm(){
+				let form = document.getElementById("formMudarNome");
+				form.action = "/menu/ferramentas/usuario/mudarNomeTerapeuta";
+				form.submit();
+			}
+
+			function trocaTerapeuta(){
+				let id = document.getElementById("terapeutaId").value;
+				document.getElementById("usuarioNomeOrigin").value = document.getElementById(id+"nome").value
+				document.getElementById("usuarioNome").value = document.getElementById(id+"nome").value
+				document.getElementById("usuarioApelidoOrigin").value = document.getElementById(id+"apelido").value
+				document.getElementById("usuarioApelido").value = document.getElementById(id+"apelido").value
+			}
+		
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-warning">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{/compareString}}
+					{{/compareString}}
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Cadastrar Chave</a>
+							</li>
+							<li class="active"> - Aqui você cadastra sua Chave</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form id="formMudarNome" name="formMudarNome" class="form-horizontal" role="form" method="POST">
+
+								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-key bigger-110"></i>
+												
+												Cadastrar Nova Chave</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body" style="padding-bottom: 20px;">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12 col-sm-4">
+														<label>Terapeuta:</label>
+														<div class="form-group">
+															<div class="col-sm-8">
+																<select name="terapeutaId" id="terapeutaId" class="chosen-select" onchange="javascript:trocaTerapeuta()" style="width: 400px;">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each usuarios}}
+																		<option value="{{_id}}">{{usuario_nomecompleto}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>												
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Nome Completo Original</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input readonly="true" name="usuarioNomeOrigin" id="usuarioNomeOrigin" placeholder=" " style="width: 400px;">
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Apelido Original</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input readonly="true" name="usuarioApelidoOrigin" id="usuarioApelidoOrigin" placeholder=" " style="width: 400px;">
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Nome Completo</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="usuarioNome" id="usuarioNome" placeholder=" " style="width: 400px;">
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Apelido</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="usuarioApelido" id="usuarioApelido" placeholder=" " style="width: 400px;">
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>		
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" onclick="javascript:submitForm();">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Cancelar
+										</button>
+									</div>
+								</div>
+							</form>
+							<div id="divCarrega" class="hidden">
+								{{#each usuarios}}
+									<input id="{{_id}}nome" value="{{usuario_nomecompleto}}">
+									<input id="{{_id}}apelido" value="{{usuario_nome}}">
+								{{/each}}
+							</div>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>

@@ -500,5 +500,21 @@ module.exports = {UsuarioModel,UsuarioSchema,
         }
         
         return resultado;
+    },
+    mudarNome: async (req, res) => {
+        await UsuarioModel.findByIdAndUpdate(req.body.terapeutaId, 
+            {$set: {
+                usuario_nomecompleto : req.body.usuarioNome,
+                usuario_nome : req.body.usuarioApelido
+                }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = "true";
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
     }
 };

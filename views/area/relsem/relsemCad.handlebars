@@ -2,6 +2,17 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório Semestral</title>
+		<script>
+			function verificaSalvar(){
+				let podeSalvar = (document.getElementById("atendTerapiaid").value == "-");
+				if (podeSalvar){
+
+				} else {
+					document.getElementById("atendTerapiaid").focus;
+					alert("A terapia deve ser escolhida!");
+				}
+			}
+		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -55,28 +66,6 @@
 												<div class="widget-main">
 													<div class="row">
 														<div class="col-sm-3">
-															<label for="id-date-picker-1"> Data </label>
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-4">
-																		<input id="relsemData" name="relsemData" type="date">
-																	</div>
-																</div>
-															</div>
-														</div>
-														
-														<div class="col-sm-3">
-															<label for="id-date-picker-1"> Ano e mês de referência</label>
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-3">
-																		<input id="relsemMes" name="relsemMes" type="text" placeholder="0000/00">
-																	</div>
-																</div>
-															</div>
-														</div>
-														
-														<div class="col-sm-6">
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
@@ -89,39 +78,59 @@
 																</div>
 															</div>
 														</div>
-
-														
-													</div>
-
-													<div class="row">
-														<div class="col-sm-6">
+														<div class="col-sm-3">
 															<label> Terapeuta</label>
 															<div class="form-group">
-																<div class="col-sm-6">
+																<div class="col-sm-4">
 																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
+																			<option value="{{_id}}">{{usuario_nomecompleto}}</option>
 																		{{/each}}
 																	</select>
 																</div>
 															</div>
 														</div>
-														
-														<div class="col-sm-5">
+														<div class="col-sm-3">
 															<label> Nº Conselho</label>
 															<div class="form-group">
-																<div class="col-sm-5">
+																<div class="col-sm-4">
 																	<input type="text" name="relsemConselho" id="relsemConselho" class="form-control" />
 																</div>
 															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-6">
+															
+														</div>
+														
+														<div class="col-sm-5">
+															
 														</div>
 
 														<div class="col-sm-6">
 															<label> Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<input type="text" name="relsemTerapia" id="relsemTerapia" class="form-control" />
+																	<select name="atendTerapiaid" id="atendTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		<option value="Fisioterapia">Fisioterapia</option>
+																		<option value="Fonoaudiologia">Fonoaudiologia</option>
+																		<option value="Musicoterapia">Musicoterapia</option>
+																		<option value="Nutrição">Nutrição</option>
+																		<option value="Psicologia">Psicologia</option>
+																		<option value="Psicomotricista">Psicomotricista</option>
+																		<option value="PsicomotricistaFuncional">Psicomotricista Funcional</option>
+																		<option value="PsicomotricistaRelacional">Psicomotricista Relacional</option>
+																		<option value="Psicopedagogia">Psicopedagogia</option>
+																		<option value="Psicologia">Psicologia</option>
+																		<option value="TerapiaCognitivoComportamental">Terapia Cognitivo Comportamental</option>
+																		<option value="TerapiaOcupacional">Terapia Ocupacional</option>
+																		<option value="TerapiaOcupacionalcomAbordagememIntegraçãoSensorial">Terapia Ocupacional com Abordagem em Integração Sensorial</option>
+																		<option value="TerapiaAnáliseDoComportamentoAplicada-ABA">Terapia Análise Do Comportamento Aplicada - ABA</option>
+																		<option value="TerapiaAnáliseDoComportamentoAplicada-ABAEscolar">Terapia Análise Do Comportamento Aplicada - ABA Escolar</option>
+																	</select>
 																</div>
 															</div>
 														</div>
