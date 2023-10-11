@@ -305,14 +305,14 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada de Usuário")
+                    Laudo.find().then((laudo)=>{
                         Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/plano/tratCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+             })})})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar plano de tratamento")
             res.redirect('admin/erro')
         })
 

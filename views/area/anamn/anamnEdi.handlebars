@@ -21,58 +21,56 @@
 			document.getElementById("a").value = dataFmt;
 		}
 		function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
+			/*
+			let beneid = document.getElementById("anamnBeneid").value;
 
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
-				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-			}
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+			if (dataIso != undefined && dataIso != "undefined"){
 				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
+				document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+				document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+			}*/
+			//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+			//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+		}
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function formataData(date) {//yyyy-MM-dd
+			var d = new Date(date);
+			if (d.getTimezoneOffset() == 180){
+				d.setHours(d.getHours()+3);
 			}
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
+			console.log("d:"+d);
+				month = '' + (d.getMonth() + 1);
+				day = '' + d.getDate();
+				year = d.getFullYear();
 
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
-
-				return [year, month, day].join('-');
+			if (month.length == 1) {
+				month = '0' + month;
 			}
+				
+			if (day.length == 1) {
+				day = '0' + day;
+			}
+
+			return [year, month, day].join('-');
+		}
 
 		function carregaBody(){
 			//document.getElementById("anamnDatacad").value = new Date();
 			//Rotinas
 			document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
-			document.getElementById("anamnBeneapelido").value = document.getElementById("anamnBeneapelidoEdi").value;
+			document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
 			//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
 			document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
 			document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
 			document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
 			document.getElementById("anamnRespnome").value = document.getElementById("anamnRespnomeEdi").value;
-			console.log("anamnIndica");
-			console.log(anamnIndica);
-			
-			document.getElementById("anamnIndica").value = document.getElementById("anamnIndicaEdi").value;
+
 			document.getElementById("anamnQueixapri").value = document.getElementById("anamnQueixapriEdi").value;
 			document.getElementById("anamnDiag").value = document.getElementById("anamnDiagEdi").value;
 			
@@ -543,6 +541,9 @@
 			//document.getElementById("anamnUsuid").value = document.getElementById("anamnUsuidEdi").value;
 			//Grupo
 			document.getElementById("anamnTerapeutaid").value = document.getElementById("anamnTerapeutaidEdi").value;
+
+			document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
+			document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
 			//anamnDataanamnese
 			let dtnsc = new Date(document.getElementById("anamnDataanamneseEdi").value);
 			let mes = (dtnsc.getMonth()+1).toString();
@@ -579,6 +580,20 @@
 			}
 			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 			document.getElementById("anamnBenedatanasc").value = fulldate;
+
+			let dtnascbene = new Date(document.getElementById("beneDatanascEdi").value);
+			console.log("dtnascbene:"+dtnascbene)
+			mes = (dtnascbene.getMonth()+1).toString();
+			dia = (dtnascbene.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("beneDatanasc").value = fulldate;
+			document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
 		}
 	</script>
 	</head>
@@ -635,14 +650,15 @@
 
 						<!-- Dados carregados -->
 						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
-						<input id="anamnBeneapelidoEdi" name="anamnBeneapelidoEdi" value="{{anamn.anamn_beneapelido}}"/>
+						<input id="anamnBeneidEdi" name="anamnBeneidEdi" value="{{anamn.anamn_beneid}}"/>
+						
 						<input id="anamnBenedatanascEdi" name="anamnBenedatanascEdi" value="{{anamn.anamn_benedatanasc}}"/>
 						<input id="anamnBeneidadeEdi" name="anamnBeneidadeEdi" value="{{anamn.anamn_beneidade}}"/>
 						<input id="anamnPainomeEdi" name="anamnPainomeEdi" value="{{anamn.anamn_painome}}"/>
 						<input id="anamnMaenomeEdi" name="anamnMaenomeEdi" value="{{anamn.anamn_maenome}}"/>
 						<input id="anamnRespnomeEdi" name="anamnRespnomeEdi" value="{{anamn.anamn_respnome}}"/>
 						
-						<input id="anamnIndicaEdi" name="anamnIndicaEdi" value="{{anamn.anamn_indica}}"/>
+						
 						<input id="anamnQueixapriEdi" name="anamnQueixapriEdi" value="{{anamn.anamn_queixapri}}"/>
 						<input id="anamnDiagEdi" name="anamnDiagEdi" value="{{anamn.anamn_diag}}" />
 						
@@ -1132,6 +1148,11 @@
 						<input id="anamnDataediEdi" name="anamnDataediEdi" value="{{anamn.anamn_dataedi}}"/>
 						<input id="anamnDataanamneseEdi" name="anamnDataanamneseEdi" value="{{anamn.anamn_dataanamnese}}"/>
 						<input id="anamnTerapeutaidEdi" name="anamnTerapeutaidEdi" value="{{anamn.anamn_terapeutaid}}"/>
+						{{#each benes}}
+							<input type="text" id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
+							<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
+							<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
+						{{/each}}
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -1304,6 +1325,18 @@
 													<br>
 												</div>
 												<div class="col-xs-6">
+													<div class="row">
+														<div class="col-xs-12 col-sm-6">
+															<label > Nome </label><!--Bene id e nome do beneficiário-->
+															<div class="row ">
+																<div class="input-group" >
+																	<div class="col-sm-4">
+																		<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">

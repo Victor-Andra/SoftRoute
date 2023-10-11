@@ -235,7 +235,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="tratEspecialidadepad" id="tratEspecialidadepad" value="-" placeholder="Colocar nome da sua terapia." class="form-control" />
+															<input type="text" name="tratEspecialidadepad" id="tratEspecialidadepad" placeholder="Colocar nome da sua terapia." class="form-control" />
 														</div>
 													</div>	
 												</div>
@@ -263,7 +263,7 @@
 													<label>Registro do conselho:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<input type="text" name="tratRegconselhopad" id="tratRegconselhopad" value="-" class="form-control" />
+															<input type="text" name="tratRegconselhopad" id="tratRegconselhopad" data-placeholder="-" class="form-control" />
 														</div>
 													</div>	
 												</div>
@@ -302,7 +302,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="tratEspecialidadeis" id="tratEspecialidadeis" value="-" class="form-control" class="readonly"/>
+															<input type="text" name="tratEspecialidadeis" id="tratEspecialidadeis" data-placeholder="-" class="form-control" class="readonly"/>
 														</div>
 													</div>	
 												</div>
@@ -312,7 +312,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="chosen-select" placeholder="Escolha..." >
+															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="chosen-select" data-placeholder="-" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -327,7 +327,7 @@
 													<label>Registro do conselho:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<input type="text" name="tratRegconselhois" id="tratRegconselhois"  value="-" class="form-control" />
+															<input type="text" name="tratRegconselhois" id="tratRegconselhois"  data-placeholder="-" class="form-control" />
 														</div>
 													</div>	
 												</div>
@@ -338,7 +338,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="tratEspecialidadeavd" id="tratEspecialidadeavd"  value="-"class="form-control" class="readonly"/>
+															<input type="text" name="tratEspecialidadeavd" id="tratEspecialidadeavd"  data-placeholder="-" class="form-control" class="readonly"/>
 														</div>
 													</div>	
 												</div>
@@ -348,7 +348,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" placeholder="Escolha..." >
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" data-placeholder="-" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -363,7 +363,7 @@
 													<label>Registro do conselho:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<input type="text" name="tratRegconselhoavd" id="tratRegconselhoavd" value="-" class="form-control" />
+															<input type="text" name="tratRegconselhoavd" id="tratRegconselhoavd" data-placeholder="-" class="form-control" />
 														</div>
 													</div>	
 												</div>
@@ -490,7 +490,7 @@
 													<label>Diagnóstico clínico:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea name="tratDiagnostico" id="tratDiagnostico" style="font-size: 12px" data-placeholder="-" value="-" placeholder="Utilizar o diagnóstico que está escrito no laudo médico." class="form-control"></textarea>
+															<textarea name="tratDiagnostico" id="tratDiagnostico" style="font-size: 12px" placeholder="Utilizar o diagnóstico que está escrito no laudo médico." class="form-control"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -529,7 +529,7 @@
 													<label>Histórico clínico:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea  name="tratHistoricopad" id="tratHistoricopad"  style="font-size: 12px" data-placeholder="-" value="-" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="3" ></textarea>
+															<textarea  name="tratHistoricopad" id="tratHistoricopad"  style="font-size: 12px" data-placeholder="-" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="3" ></textarea>
 														</div>	
 													</div>
 												</div>
@@ -538,7 +538,7 @@
 													<label>Objetivos gerais:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea name="tratObjgeralpad" id="tratObjgeralpad"  style="font-size: 12px" data-placeholder="-" value="-" placeholder="Descreva os objetivos da sua intervenção terapêutica para os próximos 6 meses de forma geral, seguindo uma sequência de acontecimentos ou informando a sua organização / planejamento com o beneficiário." class="form-control" rows="3"></textarea>
+															<textarea name="tratObjgeralpad" id="tratObjgeralpad"  style="font-size: 12px" data-placeholder="-" placeholder="Descreva os objetivos da sua intervenção terapêutica para os próximos 6 meses de forma geral, seguindo uma sequência de acontecimentos ou informando a sua organização / planejamento com o beneficiário." class="form-control" rows="3"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -547,7 +547,7 @@
 													<label>Objetivos específicos:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea  name="tratObjespecificopad" id="tratObjespecificopad"  style="font-size: 12px" data-placeholder="-" value="-" placeholder="Descreva os objetivos específicos da sua intervenção terapêutica, detalhando métodos, técnicas e meios utilizados para a evolução do beneficiário." class="form-control" rows="3" ></textarea>
+															<textarea  name="tratObjespecificopad" id="tratObjespecificopad"  style="font-size: 12px" data-placeholder="-" placeholder="Descreva os objetivos específicos da sua intervenção terapêutica, detalhando métodos, técnicas e meios utilizados para a evolução do beneficiário." class="form-control" rows="3" ></textarea>
 														</div>
 													</div>	
 												</div>
@@ -556,7 +556,7 @@
 													<label>Estratégias:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea  name="tratEstrategiapad" id="tratEstrategiapad"  style="font-size: 12px" data-placeholder="-" value="-" placeholder="Descreva suas estratégias para os próximos seis meses de intervenção terapêutica." class="form-control" rows="3" ></textarea>
+															<textarea  name="tratEstrategiapad" id="tratEstrategiapad"  style="font-size: 12px" data-placeholder="-" placeholder="Descreva suas estratégias para os próximos seis meses de intervenção terapêutica." class="form-control" rows="3" ></textarea>
 														</div>
 													</div>	
 												</div>
@@ -565,7 +565,7 @@
 													<label>Observações:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea  name="tratObspad" id="tratObspad"  style="font-size: 12px" data-placeholder="-" value="-" placeholder="" class="form-control" rows="3" ></textarea>
+															<textarea  name="tratObspad" id="tratObspad"  style="font-size: 12px" data-placeholder="-" placeholder="" class="form-control" rows="3" ></textarea>
 															
 														</div>
 													</div>	
@@ -600,7 +600,7 @@
 											<label>Diagnóstico terapêutico ocupacional:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup" style="font-size: 12px" value="-" placeholder="" class="form-control" rows="5" ></textarea>
+													<textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="5" ></textarea>
 												</div>
 											</div>	
 
@@ -608,7 +608,7 @@
 											<label>Metas à curto prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratMetacurtois" id="tratMetacurtois" style="font-size: 12px" value="-" placeholder="" class="form-control" rows="2" ></textarea>
+													<textarea  name="tratMetacurtois" id="tratMetacurtois" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -617,7 +617,7 @@
 											<label>Metas à médio prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea name="tratMetamediois" id="tratMetamediois" style="font-size: 12px" value="-" placeholder="" class="form-control" rows="2" ></textarea>
+													<textarea name="tratMetamediois" id="tratMetamediois" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -626,7 +626,7 @@
 											<label>Metas à longo Prazo</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea name="tratMetalongois" id="tratMetalongois" style="font-size: 12px" value="-" placeholder="" class="form-control" rows="2" ></textarea>
+													<textarea name="tratMetalongois" id="tratMetalongois" style="font-size: 12px" placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -635,7 +635,7 @@
 											<label>Estratégias e objetivos</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratObjetivois" id="tratObjetivois" style="font-size: 12px" value="-" placeholder="" class="form-control" rows="2"   ></textarea>
+													<textarea  name="tratObjetivois" id="tratObjetivois" style="font-size: 12px" placeholder="-" class="form-control" rows="2"   ></textarea>
 												</div>
 											</div>
 																							
@@ -645,7 +645,7 @@
 												<div class="row">
 													<div class="col-xs-4">
 														<div class="input-group">
-															<input class="hidden" name="tratUsuidcad" id="tratUsuidcad" type="text" style="font-size: 12px" value="-" placeholder="" class="form-control" />
+															<input class="hidden" name="tratUsuidcad" id="tratUsuidcad" type="text" style="font-size: 12px" placeholder="-" class="form-control" />
 															
 														</div>
 													</div>

@@ -8,48 +8,49 @@
 					var data = document.getElementById("anamndatacad").value+"T"+hora+":00.000Z";
 					var datafmt = new Date(data);
 					document.getElementById("anamndatacad").value = datafmt.toISOString();
-				}
+				},
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
-				}
-				function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
-
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
+				},
+				function atualizaData(){
+					var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
-				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-			}
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
+					console.log(dataFmt.toISOString());
+					document.getElementById("a").value = dataFmt;
+				},
+				function formataData(date) {//yyyy-MM-dd
+					var d = new Date(date);
+					if (d.getTimezoneOffset() == 180){
+						d.setHours(d.getHours()+3);
+					}
+					console.log("d:"+d);
+						month = '' + (d.getMonth() + 1);
+						day = '' + d.getDate();
+						year = d.getFullYear();
 
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
+					if (month.length == 1) {
+						month = '0' + month;
+					}
+						
+					if (day.length == 1) {
+						day = '0' + day;
+					}
 
-				return [year, month, day].join('-');
-			}
+					return [year, month, day].join('-');
+				},
+				function atualizaDadosbene(){
+					let beneid = document.getElementById("anamnBeneid").value;
+
+					var dataIso = document.getElementById(beneid+"_anamnBenedatanasc").value;
+					if (dataIso != undefined && dataIso != "undefined"){
+						var dataFmt = new Date(dataIso);
+						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+						document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+					}
+					document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+					document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+				}
+				
 			</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -71,10 +72,9 @@
 								<!-- /.importante Id de indice-->
 								<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 								{{#each benes}}
-									<input type="text" id="{{_id}}_anamnBenedatanasc" name="anamnBenedatanascEdi" value="{{bene_datanasc}}"/>
-									<input type="text" id="{{_id}}_anamnMaenome" name="anamnMaenomeEdi" value="{{bene_Maenome}}"/>
-									<input type="text" id="{{_id}}_anamnPainome" name="anamnPainomeEdi" value="{{bene_Painome}}"/>
-									<input type="text" id="{{_id}}_anamnRespnome" name="anamnRespnomeEdi" value="{{bene_Respnome}}"/>
+									<input type="text" id="{{_id}}_anamnBenedatanasc" name="{{_id}}_anamnBenedatanasc" value="{{bene_datanasc}}"/>
+									<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
+									<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
 								{{/each}}
 							</div>
 						</div><!-- /.page-header -->
@@ -278,6 +278,7 @@
 													<br>
 												</div>
 												<div class="col-xs-6">
+													
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">

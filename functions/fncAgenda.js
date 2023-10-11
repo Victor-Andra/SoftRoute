@@ -11710,11 +11710,7 @@ module.exports = {
             console.log("agenda:"+agenda.length)
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
-                dataaux.setFullYear(2024)
-                dataaux.setMonth(11)
-                //dataaux.setDate(dataaux.getDate()+7);
-                //console.log("date")
-                //console.log(dataaux)
+                dataaux.setDate(dataaux.getDate()+7);
                 a.agenda_data = dataaux.toISOString();
                 var newAgenda;
                 if (a.agenda_categoria == "SubstitutoFixo"){
