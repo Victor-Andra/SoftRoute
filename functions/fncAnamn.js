@@ -32,6 +32,7 @@ module.exports = {
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
             console.log("Listagem Realizada de Usuário")
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     console.log("Listagem Realizada de beneficiarios")
                         res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})
         })}).catch((err) =>{
@@ -114,10 +115,12 @@ module.exports = {
 
     carregaAnamnEdi(req, res){
         Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
-            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));
-            res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario})
-        })}).catch((err) =>{
+                     res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -129,6 +132,7 @@ module.exports = {
         //console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
             anamn.sort((a,b) => (a.anamn_benenome > b.anamn_benenome) ? 1 : ((b.anamn_benenome > a.anamn_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista anamnese 
+            anamn.sort((a,b) => ((a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             anamn.forEach((b)=>{
                 //console.log("b.datacad"+b.anamn_datacad)
                 let datacad = new Date(b.anamn_datacad)

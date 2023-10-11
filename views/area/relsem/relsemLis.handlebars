@@ -108,9 +108,7 @@
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Benficiário: activate to sort column ascending">Ano/Mês</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Beneficiário</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Terapeuta</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data: activate to sort column ascending">Tipo</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta:     activate to sort column ascending">Fase</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Tarapeuta:     activate to sort column ascending">Andamento</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Idade:     activate to sort column ascending">Terapia</th>
 													<th>Ação</th>
 												</tr>
 											</thead>
@@ -136,9 +134,7 @@
 																<td>{{usuario_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														<td>{{relsem_tipo}}</td>
-														<td>{{relsem_fase}}</td>
-														<td>{{relsem_andamento}}</td>
+														<td>{{relsem_terapia}}</td>
 														<td>
 															<div class="action-buttons">
 																<a class="green" href="/menu/area/relsem/edi/{{_id}}">
@@ -146,6 +142,9 @@
 																</a>
 																<a class="blue" href="/menu/area/relsem/imp/{{_id}}">
 																	<i class="ace-icon fa fa-print bigger-130"></i>
+																</a>
+																<a class="brown" href="/menu/area/relsem/capa/{{_id}}">
+																	<i class="ace-icon fa fa-bookmark-o bigger-130"></i>
 																</a>
 																<a class="hidden" class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
@@ -211,7 +210,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null, null, null, { "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, { "bSortable": false }],
 					"aaSorting": [],
 					
 					

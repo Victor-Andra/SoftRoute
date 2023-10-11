@@ -37,19 +37,43 @@
 				document.getElementById('tratPlanotipo').ReadOnly
    			}
 			
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("laudoBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
 			function atualizaData(){
-				var hora = "00:00"
-				var data = document.getElementById("tratDatacad").value+"T"+hora+":00.000Z";
-				var datafmt = new Date(data);
-				document.getElementById("tratDatacad").value = datafmt.toISOString();
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
 			}
-			//Calcular a idade do beneficiário ao escolher o beneficiário 
-			function calculaIdade(){
-				
-			}
-			//ao mudar o beneficiário carregar os campos do dados complemetares automaticamente
-			function mudaBeneficiario(){
-				
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
 			}
 			
 		</script>
@@ -81,7 +105,14 @@
 											<i class="brown ace-icon fa fa-child bigger-110"></i>
 											Tipo plano de tratamento
 										</h4>
-										
+										<div id="divCarrega" name="divCarrega" class="hidden">
+											<!-- /.importante Id de indice-->
+											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+											{{#each benes}}
+												<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+
+											{{/each}}
+										</div>
 										<span class="widget-toolbar">
 
 											<a href="#" data-action="reload">
@@ -147,7 +178,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" data-placeholder="-" placeholder="Colocar nome completo." >
+															<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -155,7 +186,7 @@
 															</select>
 														</div>
 													</div>
-												</div>												
+												</div>
 											</div>
 											<div class="row">
 												<div class="col-sm-4">
@@ -414,67 +445,8 @@
 													</div>
 												</div>
 											
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Médico responsável:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="laudoMedico" id="laudoMedico" class="readonly" class="form-control"  />
-															</div>
-														</div>
-													</div>
-												</div>
 											</div>
-											<div class="row">
-												<div class="col-sm-12">
-													<label for="id-date-picker-1">Especialidade:</label>
-													<div class="row">
-														<div class="col-sm-12">
-															<div class="input-group">
-																<input type="text" name="laudoMedicoesp" id="laudoMedicoesp" class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-xs-12 col-sm-4">
-													<label>Data ultimo laudo:</label>
-													<div class="form-group">
-														<div class="col-sm-8">
-															<div class="input-group">
-																<input name="laudoData" id="laudoData" type="date" class="readonly" onchange="javascript:atualizaData()" />
-															</div>
-														</div>
-													</div>
-												</div>												
-											</div>
-											<div class="row">
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Nome mãe:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="beneMae" id="beneMae"  class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
 											
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Nome pai:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="benePai" id="benePai" class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
-											</div>
 										</div>	
 									</div>	
 								</div>

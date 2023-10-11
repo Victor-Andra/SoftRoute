@@ -20,6 +20,45 @@
 			console.log(dataFmt.toISOString());
 			document.getElementById("a").value = dataFmt;
 		}
+		function atualizaDadosbene(){
+				let beneid = document.getElementById("laudoBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+
 		function carregaBody(){
 			//document.getElementById("anamnDatacad").value = new Date();
 			//Rotinas
@@ -1265,47 +1304,37 @@
 													<br>
 												</div>
 												<div class="col-xs-6">
-													<div class="row">
-														<div class="col-xs-12 col-sm-6">
-															<label > Nome: </label><!--Bene id e nome do beneficiário-->
-															<div class="row ">
-																<div class="input-group" >
-																	<div class="col-sm-4">
-																		<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;" />
-																	</div>
-																</div>
-															</div>
+													<label> Beneficiário</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()" >
+																<option value="766f69643132333435366964">-</option>
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
 														</div>
 													</div>
+													
+																										
 													<div class="row">
-														<div class="col-xs-12 col-sm-6">
-															<label > Apelido: </label><!--Apelido beneficiário-->
-															<div class="row">
-																<div class="input-group" >
-																	<div class="col-sm-3">
-																		<input  type="text" name="anamnBeneapelido" id="anamnBeneapelido" placeholder="" class="form-control" style="width: 300px;" />
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>	
-													<div class="row">
-														<div class="col-xs-12 col-sm-2">
-															<label> Idade:</label><!--idade beneficiário-->
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-1">
-																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder="" class="form-control" style="width: 50px;" value="{{anamn.anamn_beneidade}}"/>
-																	</div>
-																</div>
-															</div>
-														</div>
+														
 														<div class="col-xs-12 col-sm-6">
 															<label for="id-date-picker-1">Data nascimento</label><!--Data nascimento beneficiário-->
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
 																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label> Idade:</label><!--idade beneficiário-->
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-3">
+																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder="" class="form-control" style="width: 50px;" value="{{anamn.anamn_beneidade}}"/>
 																	</div>
 																</div>
 															</div>
@@ -1343,12 +1372,7 @@
 													<strong>Motivo da Consulta:</strong>
 													<br>
 												</div>
-												<label> Indicação:</label><!--Indica-->
-												<div class="input-group">
-													<div>
-														<textarea  name="anamnIndica" id="anamnIndica" placeholder="" class="form-control" style="width: 800px;" value="{{anamn.anamn_indica}}"></textarea>
-													</div>
-												</div>
+												
 												<label> Queixa principal:</label><!--Queixa beneficiário-->
 												<div class="input-group">
 													<div>

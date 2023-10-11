@@ -86,6 +86,44 @@
 				document.getElementById("acaoSalvar").style.display = 'none';
 			}
 			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("laudoBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
 		</script>
 	</head>
 
@@ -213,7 +251,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." >
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo."  onchange="javascript:atualizaDadosbene()" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -472,68 +510,8 @@
 														</div>
 													</div>
 												</div>
-											
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Médico responsável:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="laudoMedico" id="laudoMedico" class="readonly" class="form-control"  />
-															</div>
-														</div>
-													</div>
-												</div>
 											</div>
-											<div class="row">
-												<div class="col-sm-12">
-													<label for="id-date-picker-1">Especialidade:</label>
-													<div class="row">
-														<div class="col-sm-12">
-															<div class="input-group">
-																<input type="text" name="laudoMedicoesp" id="laudoMedicoesp" class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-xs-12 col-sm-4">
-													<label>Data ultimo laudo:</label>
-													<div class="form-group">
-														<div class="col-sm-8">
-															<div class="input-group">
-																<input name="laudoData" id="laudoData" type="date" class="readonly" onchange="javascript:atualizaData()" />
-															</div>
-														</div>
-													</div>
-												</div>												
-											</div>
-											<div class="row">
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Nome mãe:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="beneMae" id="beneMae"  class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
-											
-												<div class="col-xs-6 col-sm-6">
-													<label for="id-date-picker-1">Nome pai:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="benePai" id="benePai" class="readonly" class="form-control" />
-															</div>
-															
-														</div>
-													</div>
-												</div>
-											</div>
+																																
 										</div>	
 									</div>	
 								</div>

@@ -119,6 +119,7 @@ module.exports = {
             })
 
             Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find().then((usuario)=>{
                     //console.log("Listagem Realizada Usuário!")
                     /*if(resposta.sucesso == ""){
@@ -259,13 +260,55 @@ module.exports = {
             this.listaRelsem(req,res, resposta)
         })
     },
+    
     relsemImp(req,res){
-        let relsem = []
-        Bene.find().then((bene)=>{
-            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            res.render('area/relsem/relsemImp', {relsems: relsem, benes: bene})
+        let usuarioAtual = req.cookies['idUsu'];
+        Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
+            Conv.find().then((conv)=>{
+                Terapia.find().then((terapia)=>{
+                    console.log("Listagem Realizada de terapias")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find().then((beneficiarios)=>{
+                            Bene.findOne({_id: relsem.relsem_beneid}).then((bene)=>{
+                                //bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                                console.log("Listagem Realizada de beneficiarios")
+                                Escola.find().then((escola) =>{
+                                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                                    res.render("area/relsem/relsemImp", {relsem, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
+        })})})})})})}).catch((err) =>{
+        
+            console.log(err)
+            req.flash("error_message", "houve um erro ao abrir a impressão!")
+            res.render('admin/erro')
         })
     },
+
+    relsemImpcapa(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
+            Conv.find().then((conv)=>{
+                Terapia.find().then((terapia)=>{
+                    console.log("Listagem Realizada de terapias")
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find().then((beneficiarios)=>{
+                            Bene.findOne({_id: relsem.relsem_beneid}).then((bene)=>{
+                                //bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                                console.log("Listagem Realizada de beneficiarios")
+                                Escola.find().then((escola) =>{
+                                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                                    res.render("area/relsem/relsemImpcapa", {relsem, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
+        })})})})})})}).catch((err) =>{
+        
+            console.log(err)
+            req.flash("error_message", "houve um erro ao abrir a impressão da capa!")
+            res.render('admin/erro')
+        })
+    },
+
     relsemImpFiltro(req,res){
         Relsem.find({relsem_beneid: req.body.relsemBeneid}).then((relsem) =>{
             Bene.find().then((bene)=>{

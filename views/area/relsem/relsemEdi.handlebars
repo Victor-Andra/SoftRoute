@@ -70,6 +70,93 @@
 								<input class="hidden" id="id" name="id" value="{{relsem._id}}" />
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+																				<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Dados do Beneficiário
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" >
+																		<option value="-">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																Os campos aqui são preenchidos automaticamente.
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-5 col-sm-5">
+															<label>Data nascimento:</label>
+															<div class="form-group">
+																<div class="col-sm-5">
+																	<div class="input-group">
+																		<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
+																	</div>
+																</div>
+															</div>
+														</div>												
+													
+														<div class="col-xs-3 col-sm-3">
+															<label>Idade:</label>
+															<div class="row">
+																<div class="col-sm-3">
+																	<div class="input-group">
+																		<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12" >
+															<label for="id-date-picker-1">Diagnóstico:</label>
+															<div class="row">
+																<div class="col-xs-12">
+																	<div class="input-group">
+																		<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											
+											</div>
+										</div>
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
@@ -130,19 +217,7 @@
 														</div>
 														
 
-														<div class="col-sm-6">
-															<label> Beneficiário</label>
-															<div class="form-group">
-																<div class="col-sm-4">
-																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" >
-																		<option value="-">-</option>
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
+														
 													</div>
 
 													<div class="row">

@@ -1906,6 +1906,9 @@ router.post('/area/relsem/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//a
 router.get('/area/relsem/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
     fncRelsem.relsemImp(req,res);
 })
+router.get('/area/relsem/capa/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncRelsem.relsemImpcapa(req,res);
+})
 
 router.post('/area/relsem/impFil', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
     fncRelsem.relsemImpFiltro(req,res);

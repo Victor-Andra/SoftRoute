@@ -5,6 +5,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_id:{ type: ObjectId, required: false },
     anamn_data: { type: String, required: false }, //Ok
     anamn_hora: { type: String, required: false }, //Ok
+    anamn_beneid: { type: ObjectId, required: false }, //Ok
     anamn_benenome: { type: String, required: false }, //Ok
     anamn_beneapelido: { type: String, required: false }, //Ok
     anamn_benedatanasc: { type: String, required: false }, //Ok
@@ -512,6 +513,7 @@ class Anamn{
     anamn_id,
     anamn_data, //Ok
     anamn_hora, //Ok
+    anamn_beneid, //Ok
     anamn_benenome, //Ok
     anamn_beneapelido, //Ok
     anamn_benedatanasc, //Ok
@@ -1546,6 +1548,7 @@ module.exports = {AnamnModel,AnamnSchema,
         await AnamnModel.findByIdAndUpdate(req.body.id, 
             {$set: {
                 anamn_benenome: req.body.anamnBenenome,
+                anamn_beneid: req.body.anamnBeneid,
                 anamn_beneapelido: req.body.anamnBeneapelido,
                 anamn_benedatanasc: req.body.anamnBenedatanasc,
                 anamn_beneidade: req.body.anamnBeneidade,
@@ -2073,6 +2076,7 @@ module.exports = {AnamnModel,AnamnSchema,
         })
         const newAnamn = new AnamnModel({
             anamn_id: req.body.anamnId,
+            anamn_beneid: req.body.anamnBeneid,
             anamn_benenome: req.body.anamnBenenome,
             anamn_beneapelido: req.body.anamnBeneapelido,
             anamn_benedatanasc: req.body.anamnBenedatanasc+"T00:00:00.000Z",

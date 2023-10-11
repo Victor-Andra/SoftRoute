@@ -13,8 +13,8 @@
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
 				}
-				document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}
 			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
@@ -42,9 +42,7 @@
 
 				return [year, month, day].join('-');
 			}
-			function carregaBody(){
-				
-			}
+			
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -66,8 +64,7 @@
 							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 							{{#each benes}}
 								<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-								<input type="text" id="{{_id}}_beneMae" name="beneMaeEdi" value="{{bene_mae}}"/>
-								<input type="text" id="{{_id}}_benePai" name="benePaiEdi" value="{{bene_pai}}"/>
+
 							{{/each}}
 						</div>
 					</div><!-- /.page-header -->
@@ -113,7 +110,7 @@
 																	</select>
 																</div>
 															</div>
-														</div>												
+														</div>
 													</div>
 												</div>	
 											</div>	
@@ -176,35 +173,7 @@
 														</div>
 														
 													</div>
-													<div class="row">
-														<div class="col-xs-6 col-sm-6">
-															<label>Nome mãe:</label>
-															<div class="row">
-																<div class="col-sm-6">
-																	<div class="input-group">
-																		<input type="text" name="beneMae" id="beneMae"  class="readonly" class="form-control" />
-																	</div>
-																	
-																</div>
-															</div>
-														</div>
-													
-														<div class="col-xs-6 col-sm-6">
-															<label>Nome pai:</label>
-															<div class="row">
-																<div class="col-sm-6">
-																	<div class="input-group">
-																		<input type="text" name="benePai" id="benePai" class="readonly" class="form-control" />
-																	</div>
-																	
-																</div>
-															</div>
-														</div>
-													</div>
-													
-													
-													
-													
+																												
 												</div>	
 											</div>	
 										</div>
