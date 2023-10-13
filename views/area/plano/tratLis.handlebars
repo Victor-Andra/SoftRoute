@@ -123,14 +123,14 @@
 					} else if (document.getElementById("tratTipoPessoa").value == "Terapeuta"){
 						document.getElementById("tratTerapeuta").value = document.getElementById("tratTerapeutaFil").value;
 					}
-
 				}
+				this.ocultaDelete();
 			}
 
 			function confirmeDeletar(id){
 				let confirmado = confirm("Quer mesmo deletar este plano de tratamento?");
 				if(confirmado == true){
-					window.location.href=("/menu/area/trat/del/"+id);
+					window.location.href=("/menu/area/plano/del/"+id);
 				}
 			}
 
@@ -154,46 +154,61 @@
 			}
 			function formataData(){
 				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipoData);
+				console.log("tipoData:"+tipo);
 				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-					let mes = (dat.getUTCMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
+					if (document.getElementById('anoAtend').value && document.getElementById('mesAtend').value){
+						let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+						let mes = (dat.getUTCMonth()+1).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
 					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
 				} else if (tipo == "Semana"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
+					if (document.getElementById('dataFil').value){
+						let dat = new Date(document.getElementById('dataFil').value);
+						let mes = (dat.getUTCMonth()).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
 					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
 				} else if (tipo == "Dia"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
+					if (document.getElementById('dataFil').value){
+						let dat = new Date(document.getElementById('dataFil').value);
+						let mes = (dat.getUTCMonth()).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
 					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function ocultaDelete(){
+				let perfilAtual = document.getElementById("perfilAtual").value;
+				if (perfilAtual == '62421801a12aa557219a0fb9'){
+					console.log("Ok")
+				} else {
+					document.getElementById("acaoDel").remove();
+					console.log("NOT Ok")
 				}
 			}
 		</script>
@@ -213,6 +228,9 @@
 							</li>
 							<li class="active">Lista de Planos de Tratamentos</li>
 						</ul><!-- /.breadcrumb -->
+					</div>
+					<div id="divCarrega" class="hidden">
+						<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
 					</div>
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
@@ -432,13 +450,17 @@
 																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
 																		<i class="ace-icon fa fa-search bigger-130"></i>
 																	</a>
+
+																	<a class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
 																	
 																</div>
 																
 															</td>
 														</tr>
 													{{else}}
-													<tr role="row" class="odd">
+														<tr role="row" class="odd">
 															<td class="center">
 																<label class="pos-rel">
 																	<input type="checkbox" class="ace" />
@@ -477,6 +499,13 @@
 																		<i class="ace-icon fa fa-search bigger-130"></i>
 																	</a>
 																	
+																	<a class="hidden" class="blue" href="">
+																		<i class="ace-icon fa fa-print bigger-130"></i>
+																	</a>
+															
+																	<a class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
 																</div>
 																
 															</td>

@@ -57,6 +57,7 @@ module.exports = {RelsemModel,RelsemSchema,
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
+        let usuarioAtual = req.cookies['idUsu'];
         let idUsu;
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -77,17 +78,17 @@ module.exports = {RelsemModel,RelsemSchema,
                 relsem_terapia : req.body.relsemTerapia,
                 relsem_desc : req.body.relsemDesc,
                 relsem_dataedi : dataAtual, 
-                relsem_usuidedi : idUsu
-                }}
-                ).then((res) =>{
-                    console.log("Salvo")
-                    resultado = true;
-                }).catch((err) =>{
-                    console.log("erro mongo:")
-                    console.log(err)
-                    resultado = err;
-                })
-                return resultado;
+                relsem_usuidedi : usuarioAtual
+            }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+        })
+        return resultado;
             
     },
     relsemAdicionar: async (req,res) => {
@@ -95,6 +96,7 @@ module.exports = {RelsemModel,RelsemSchema,
         console.log("relsemmodel");
         let dataAtual = new Date();
         let lvlUsu = req.cookies['lvlUsu'];
+        let usuarioAtual = req.cookies['idUsu'];
         let idUsu;
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -103,16 +105,16 @@ module.exports = {RelsemModel,RelsemSchema,
             }
         })
         const newRelsem = new RelsemModel({
-                relsem_id: req.body.relsemId,
-                relsem_terapeutaid : req.body.relsemTerapeutaid,
-                relsem_beneid : req.body.relsemBeneid,
-                relsem_data : req.body.relsemData,
-                relsem_mes : req.body.relsemMes,
-                relsem_conselho : req.body.relsemConselho,
-                relsem_terapia : req.body.relsemTerapia,
-                relsem_desc : req.body.relsemDesc,
-                relsem_datacad : dataAtual, 
-                relsem_usuidcad : idUsu
+            relsem_id: req.body.relsemId,
+            relsem_terapeutaid : usuarioAtual,
+            relsem_beneid : req.body.relsemBeneid,
+            relsem_data : req.body.relsemData,
+            relsem_mes : req.body.relsemMes,
+            relsem_conselho : req.body.relsemConselho,
+            relsem_terapia : req.body.relsemTerapia,
+            relsem_desc : req.body.relsemDesc,
+            relsem_datacad : dataAtual, 
+            relsem_usuidcad : usuarioAtual
                 
         });
         console.log("newRelsem save");

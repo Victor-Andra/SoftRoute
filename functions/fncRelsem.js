@@ -12,6 +12,7 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const escolaClass = require("../models/escola")
+const laudoClass = require("../models/laudo")
 
 //Tabela Plano de Relsemamento 
 const Relsem = mongoose.model("tb_relsem")
@@ -22,6 +23,7 @@ const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Escola = mongoose.model("tb_escola")
+const Laudo = mongoose.model("tb_laudo")
 
 //Funções auxiliares
 const respostaClass = require("../models/resposta")
@@ -38,61 +40,11 @@ module.exports = {
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find().then((usuario)=>{
-                    //console.log("Listagem Realizada Usuário!")
-                    /*if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }*/
                     res.render('area/relsem/relsemLis', {relsems: relsem, usuarios: usuario, benes: bene, flash})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
-        })
-    },
-    carregaRelsem(req,res){
-        let usuarioAtual = req.cookies['idUsu'];
-        console.log("usuarioAtual:"+usuarioAtual)
-        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-            terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-            Bene.find().sort({bene_nome: 1, bene_status: "true"}).then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Escola.find().sort({escola_nome: 1}).then((escola)=>{
-                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
-                    res.render("area/relsem/relsemCad", {escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
-        })})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar os  Relsem")
-            res.redirect('admin/erro')
-        })
-
-    },
-    carregaRelsemedi(req,res){
-        let usuarioAtual = req.cookies['idUsu'];
-        Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada de Usuário")
-                        Bene.find().then((beneficiarios)=>{
-                            Bene.findOne({_id: relsem.relsem_beneid}).then((bene)=>{
-                                //bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                                console.log("Listagem Realizada de beneficiarios")
-                                Escola.find().then((escola) =>{
-                                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    res.render("area/relsem/relsemEdi", {relsem, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
-        })})})})})})}).catch((err) =>{
-        
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
         })
     },
     filtraRelsem(req, res, resposta){
@@ -143,17 +95,17 @@ module.exports = {
         console.log("usuarioAtual:"+usuarioAtual)
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
-            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+            Bene.find({bene_status: "Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Escola.find().sort({escola_nome: 1}).then((escola)=>{
-                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
-                    res.render("area/relsem/relsemCad", {escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
-        })})}).catch((err) =>{
+                Laudo.find().then((laudo)=>{
+                    Escola.find().sort({escola_nome: 1}).then((escola)=>{
+                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
+                        res.render("area/relsem/relsemCad", {escolas: escola, laudos: laudo, terapeutas: terapeuta, benes: bene, usuarioAtual})
+                })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar os  Relsem")
             res.redirect('admin/erro')
         })
-
     },
     carregaRelsemedi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
@@ -164,15 +116,16 @@ module.exports = {
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                         console.log("Listagem Realizada de Usuário")
-                        Bene.find().then((beneficiarios)=>{
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        Bene.find({bene_status: "Ativo"}).then((beneficiario)=>{
+                            beneficiario.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             Bene.findOne({_id: relsem.relsem_beneid}).then((bene)=>{
                                 //bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                                 console.log("Listagem Realizada de beneficiarios")
                                 Escola.find().then((escola) =>{
                                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    res.render("area/relsem/relsemEdi", {relsem, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
-        })})})})})})}).catch((err) =>{
+                                    Laudo.find().then((laudo)=>{
+                                        res.render("area/relsem/relsemEdi", {relsem, laudos: laudo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes: beneficiario})
+        })})})})})})})}).catch((err) =>{
         
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

@@ -4,16 +4,16 @@
 		<title>Relatório Semestral</title>
 		<script>
 			function verificaSalvar(){
-				let podeSalvar = (document.getElementById("atendTerapiaid").value == "-");
+				let podeSalvar = (document.getElementById("relsemTerapia").value == "-");
 				if (podeSalvar){
 
 				} else {
-					document.getElementById("atendTerapiaid").focus;
+					document.getElementById("relsemTerapia").focus;
 					alert("A terapia deve ser escolhida!");
 				}
 			}
 			function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
+				let beneid = document.getElementById("relsemBeneid").value;
 
 				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
 				if (dataIso != undefined && dataIso != "undefined"){
@@ -21,8 +21,8 @@
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
 				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+				console.log("benediag: "+(beneid+"_laudoDiagEdi"))
+				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
 			}
 			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
@@ -50,10 +50,13 @@
 
 				return [year, month, day].join('-');
 			}
+			function carregaBody(){
+				document.getElementById("relsemTerapeutaid").value = document.getElementById("usuarioAtualEdi").value;
+			}
 		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -72,7 +75,17 @@
 						</ul><!-- /.breadcrumb -->
 
 					</div>
-
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<!-- /.importante Id de indice-->
+						<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+						{{#each benes}}
+							<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+						{{/each}}
+						{{#each laudos}}
+							<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
+						{{/each}}
+						<input type="text" id="usuarioAtualEdi" name="usuarioAtualEdi" value="{{usuarioAtual}}"/>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -85,14 +98,6 @@
 													<i class="ace-icon fa fa-bookmark-o"></i>
 													Beneficiário
 												</h4>
-												<div id="divCarrega" name="divCarrega" class="hidden">
-													<!-- /.importante Id de indice-->
-													<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
-													{{#each benes}}
-														<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-
-													{{/each}}
-												</div>
 												<span class="widget-toolbar">
 
 													<a href="#" data-action="reload">
@@ -115,7 +120,7 @@
 															<label>Beneficiário:</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()">
+																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -142,7 +147,7 @@
 															<div class="form-group">
 																<div class="col-sm-5">
 																	<div class="input-group">
-																		<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
+																		<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
 																	</div>
 																</div>
 															</div>
@@ -153,7 +158,7 @@
 															<div class="row">
 																<div class="col-sm-3">
 																	<div class="input-group">
-																		<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
+																		<input name="beneIdade" id="beneIdade" type="text" readonly="true"  />
 																	</div>
 																</div>
 															</div>
@@ -161,11 +166,11 @@
 													</div>
 													<div class="row">
 														<div class="col-xs-12" >
-															<label for="id-date-picker-1">Diagnóstico:</label>
+															<label >Diagnóstico:</label>
 															<div class="row">
 																<div class="col-xs-12">
 																	<div class="input-group">
-																		<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
+																		<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px; width: 400px;" data-placeholder="-" class="form-control"></textarea>
 																	</div>
 																</div>
 															</div>
@@ -229,7 +234,7 @@
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" data-placeholder="Escolha..." realonly="true">
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -248,13 +253,11 @@
 														</div>
 													</div>
 													<div class="row">
-														
-
 														<div class="col-sm-6">
 															<label> Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="atendTerapiaid" id="atendTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="Fisioterapia">Fisioterapia</option>
 																		<option value="Fonoaudiologia">Fonoaudiologia</option>
@@ -275,12 +278,11 @@
 																</div>
 															</div>
 														</div>
-
 														<div class="col-sm-12">
 															<label> Relatório</label>
 															<div class="form-group">
 																<div class="col-sm-12" >
-																	<textarea type="text" data-placeholder="-" name="relsemDesc" id="relsemDesc" placeholder="-" class="form-control" rows="62"  ></textarea>
+																	<textarea name="relsemDesc" id="relsemDesc" style="font-size: 12px" data-placeholder="-" class="form-control"></textarea>
 																</div>
 															</div>
 														</div>

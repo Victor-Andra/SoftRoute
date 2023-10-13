@@ -9,7 +9,7 @@
 				document.getElementById('is').style.display = 'none';
 				document.getElementById('padrao').style.display = 'none';
 				document.getElementById('terato').style.display = 'none';
-				
+
 			}
 			function mudaPlano() {
 				let tipodoc = document.getElementById("tratPlanotipo").value;
@@ -38,7 +38,7 @@
    			}
 			
 			function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
+				let beneid = document.getElementById("tratBeneid").value;
 
 				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
 				if (dataIso != undefined && dataIso != "undefined"){
@@ -46,6 +46,7 @@
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
 				}
+				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}
@@ -102,7 +103,7 @@
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
-											<i class="brown ace-icon fa fa-child bigger-110"></i>
+											<i class="orange ace-icon fa fa-check-square bigger-110"></i>
 											Tipo plano de tratamento
 										</h4>
 										<div id="divCarrega" name="divCarrega" class="hidden">
@@ -110,7 +111,9 @@
 											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 											{{#each benes}}
 												<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-
+											{{/each}}
+											{{#each laudos}}
+												<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
 											{{/each}}
 										</div>
 										<span class="widget-toolbar">
@@ -130,10 +133,10 @@
 										<div class="widget-main">
 											
 											<div class="row">
-												<div class="col-sm-12">
+												<div class="col-sm-4">
 													<label>Tipo de plano de tratamento:</label>
 													<div class="form-group">
-														<div class="col-sm-9">
+														<div class="col-sm-4">
 															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" data-placeholder="-" onchange="javascript:mudaPlano()">
 																<option value="-">-</option>
 																<option value="Padrão">Padrão</option>
@@ -142,7 +145,22 @@
 														</div>
 													</div>	
 												</div>
+												
+												<div class="col-sm-4">
+													<label for="id-date-picker-1">Data plano:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="tratTratdata" id="tratTratdata" type="date" onchange="javascript:atualizaData()" />
+															</div>
+														</div>
+													</div>
+												</div>
+
 											</div>
+											
+												
+											
 										</div>	
 									</div>	
 								</div>
@@ -153,7 +171,7 @@
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
-											<i class="brown ace-icon fa fa-child bigger-110"></i>
+											<i class="pink ace-icon fa fa-child bigger-110"></i>
 											Beneficiário
 										</h4>
 										
@@ -178,7 +196,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()">
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -189,23 +207,57 @@
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-sm-4">
-													<label for="id-date-picker-1">Data plano:</label>
-													<div class="row">
+												<div class="col-sm-12">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														As informações complementares são preenchidas automaticamente pelo último laudo emitido e cadastro no sistema.<br>
+                                                        
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-4 col-sm-4">
+													<label>Data nascimento:</label>
+													<div class="form-group">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="tratTratdata" id="tratTratdata" type="date" onchange="javascript:atualizaData()" />
+																<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
+															</div>
+														</div>
+													</div>
+												</div>												
+											
+												<div class="col-xs-4 col-sm-4">
+													<label>Idade:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group" >
+																<input name="beneIdade" id="beneIdade" type="text" readonly="true" />
 															</div>
 														</div>
 													</div>
 												</div>
 												
 											</div>
+											
+											<div class="row">
+												<div class="col-sm-12">
+													<label>Diagnóstico:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" class="form-control" readonly="true"></textarea>
+														</div>
+													</div>	
+												</div>
+											</div>
+
 										</div>	
 									</div>	
 								</div>
 							</div>
-
+							
 
 							<div class="col-sm-12" name="tera" id="tera"><!-- Widget Dados Básicos -->
 								<div class="widget-box">
@@ -235,7 +287,24 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="tratEspecialidadepad" id="tratEspecialidadepad" placeholder="Colocar nome da sua terapia." class="form-control" />
+															<select name="tratEspecialidadepad" id="tratEspecialidadepad" class="chosen-select" data-placeholder="Escolha...">
+																<option value="-">-</option>
+																<option value="Fisioterapia">Fisioterapia</option>
+																<option value="Fonoaudiologia">Fonoaudiologia</option>
+																<option value="Musicoterapia">Musicoterapia</option>
+																<option value="Nutrição">Nutrição</option>
+																<option value="Psicologia">Psicologia</option>
+																<option value="Psicomotricista">Psicomotricista</option>
+																<option value="PsicomotricistaFuncional">Psicomotricista Funcional</option>
+																<option value="PsicomotricistaRelacional">Psicomotricista Relacional</option>
+																<option value="Psicopedagogia">Psicopedagogia</option>
+																<option value="Psicologia">Psicologia</option>
+																<option value="TerapiaCognitivoComportamental">Terapia Cognitivo Comportamental</option>
+																<option value="TerapiaOcupacional">Terapia Ocupacional</option>
+																<option value="TerapiaOcupacionalcomAbordagememIntegraçãoSensorial">Terapia Ocupacional com Abordagem em Integração Sensorial</option>
+																<option value="TerapiaAnáliseDoComportamentoAplicada-ABA">Terapia Análise Do Comportamento Aplicada - ABA</option>
+																<option value="TerapiaAnáliseDoComportamentoAplicada-ABAEscolar">Terapia Análise Do Comportamento Aplicada - ABA Escolar</option>
+															</select>
 														</div>
 													</div>	
 												</div>
@@ -375,82 +444,7 @@
 							</div>		
 
 
-							<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações Complementar -->
-								<div class="widget-box">
-									<div class="widget-header">
-										<h4 class="widget-title">
-											<i class="green ace-icon fa fa-archive bigger-110"></i>
-											Informações complemetares
-										</h4>
-										
-										<span class="widget-toolbar">
 
-											<a href="#" data-action="reload">
-												<i class="ace-icon fa fa-refresh"></i>
-											</a>
-
-											<a href="#" data-action="collapse">
-												<i class="ace-icon fa fa-chevron-up"></i>
-											</a>
-
-										</span>
-									</div>
-
-									<div class="widget-body">
-										<div class="widget-main">
-											<div class="row">
-												<div class="col-xs-12">
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														As informações complementares são preenchidas automaticamente pelo último laudo emitido e cadastro no sistema.<br>
-                                                        
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-xs-4 col-sm-4">
-													<label>Data nascimento:</label>
-													<div class="form-group">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
-															</div>
-														</div>
-													</div>
-												</div>												
-											
-												<div class="col-xs-4 col-sm-4">
-													<label for="id-date-picker-1">Idade:</label>
-													<div class="row">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
-															</div>
-														</div>
-													</div>
-												</div>
-												
-											</div>
-											<div class="row">
-												<div class="col-xs-6 col-sm-6" >
-													<label for="id-date-picker-1">Diagnóstico:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
-															</div>
-														</div>
-													</div>
-												</div>
-											
-											</div>
-											
-										</div>	
-									</div>	
-								</div>
-							</div>
 
 							<div class="col-sm-12" name="diag" id="diag"><!-- Widget Diagnóstico clínico -->
 								<div class="widget-box">

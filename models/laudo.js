@@ -131,7 +131,6 @@ module.exports = {LaudoModel,LaudoSchema,
                 laudo_medico : req.body.laudoMedico,
                 laudo_medicoesp : req.body.laudoMedicoesp,
                 laudo_data : req.body.laudoData,
-                
                 laudo_usuid : idUsu,
                 laudo_datacad : dataAtual,
                 

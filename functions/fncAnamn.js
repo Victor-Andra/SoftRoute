@@ -31,7 +31,7 @@ module.exports = {
     carregaAnamn(req, res){
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
             console.log("Listagem Realizada de Usuário")
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                Bene.find({bene_status: "Ativo"}).then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     console.log("Listagem Realizada de beneficiarios")
                         res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})

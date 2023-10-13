@@ -33,71 +33,56 @@
 			function atualizaTerapeutaId(){
 				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
 			}
-			function atualizaData(){
-				var hora = "00:00"
-				var data = document.getElementById("tratTratdata").value+"T"+hora+":00.000Z";
-				var datafmt = new Date(data);
-				document.getElementById("tratTratdata").value = datafmt.toISOString();
-			}
-			function permitirSalvar(){
-				
-				
-			}
+			
+			
 			function carregaBody(){
-			let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
-			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-					
-			document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
-			document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
-			document.getElementById("tratTratdata").value = fulldate;
-			document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
-			document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
-			document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
-			document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
-			document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
-			document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
-			document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
-			document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
-			document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
-			document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
-			document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
-			document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
-			document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
-			document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
-			document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
-			document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
-			document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
-			document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
-			document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
-			document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
-			console.log("ta chegando aqui?");
-			let usuarioAtual = document.getElementById("usuarioAtual").value;
-			if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual){
-				document.getElementById("acaoSalvar").style.display = '';
-			} else {
-				document.getElementById("acaoSalvar").style.display = 'none';
-			}
-			}
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
-
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
+				let mes = (dtnsc.getMonth()+1).toString();
+				let dia = (dtnsc.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
 				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+						
+				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+				document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
+				document.getElementById("tratTratdata").value = fulldate;
+				
+				
+				document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
+				document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
+				document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
+				document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
+				document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
+				document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
+				document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
+				document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
+				document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
+				document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
+				document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
+				document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
+				document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
+				document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
+				document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
+				document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
+				document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
+				document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
+				document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
+				document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
+				console.log("ta chegando aqui?");
+				let usuarioAtual = document.getElementById("usuarioAtual").value;
+				let perfilAtual = document.getElementById("perfilAtual").value;
+				if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual || perfilAtual == "644743aa78166939169f8486" || perfilAtual == "644742e378166939169f82a1" || perfilAtual == "62421857a12aa557219a0fc1"){
+					document.getElementById("acaoSalvar").style.display = '';
+				} else {
+					document.getElementById("acaoSalvar").style.display = 'none';
+				}
+				this.atualizaDadosbene();
 			}
+		
 			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 				var dataFmt = new Date(dataIso);
@@ -124,6 +109,19 @@
 
 				return [year, month, day].join('-');
 			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("tratBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
 		</script>
 	</head>
 
@@ -145,6 +143,7 @@
 								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
 								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
 								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+								<input id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
 								<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
 								<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
 								<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>
@@ -168,6 +167,7 @@
 								<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
 								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
 								<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
+								<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
 							</div>
 						</div>
 					</div>
@@ -182,10 +182,19 @@
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
-											<i class="brown ace-icon fa fa-child bigger-110"></i>
+											<i class="orange ace-icon fa fa-check-square bigger-110"></i>
 											Tipo plano de tratamento
 										</h4>
-										
+										<div id="divCarrega" name="divCarrega" class="hidden">
+											<!-- /.importante Id de indice-->
+											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+											{{#each benes}}
+												<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+											{{/each}}
+											{{#each laudos}}
+												<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
+											{{/each}}
+										</div>
 										<span class="widget-toolbar">
 
 											<a href="#" data-action="reload">
@@ -203,7 +212,7 @@
 										<div class="widget-main">
 											
 											<div class="row">
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<label>Escolha o plano de tratamento:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
@@ -215,7 +224,20 @@
 														</div>
 													</div>	
 												</div>
+												
+												<div class="col-sm-4">
+													<label for="id-date-picker-1">Data plano:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="tratTratdata" id="tratTratdata" type="date" />
+															</div>
+														</div>
+													</div>
+												</div>
+												
 											</div>
+											
 										</div>	
 									</div>	
 								</div>
@@ -225,7 +247,7 @@
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
-											<i class="brown ace-icon fa fa-child bigger-110"></i>
+											<i class="pink ace-icon fa fa-child bigger-110"></i>
 											Beneficiário
 										</h4>
 										
@@ -251,7 +273,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo."  onchange="javascript:atualizaDadosbene()" >
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." readonly="true" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -264,18 +286,51 @@
 																							
 											</div>
 											<div class="row">
-												<div class="col-sm-4">
-													<label for="id-date-picker-1">Data plano:</label>
+												<div class="col-xs-12">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														As informações adicionais são oriundas do cadastro do beneficiário e último laudo emitido e cadastrado no sistema.<br>
+                                                        Qualquer informação divergente contante aqui, deve ser reportado IMEDIATAMENTE ao administrativo.<br>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-4 col-sm-4">
+													<label>Data nascimento:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
+															</div>
+														</div>
+													</div>
+												</div>												
+											
+												<div class="col-xs-4 col-sm-4">
+													<label >Idade:</label>
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="tratTratdata" id="tratTratdata" type="date" />
+																<input name="beneIdade" id="beneIdade" type="text" readonly="true"  />
 															</div>
 														</div>
 													</div>
 												</div>
 												
 											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<label>Diagnóstico:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" class="form-control" readonly="true"></textarea>
+														</div>
+													</div>	
+												</div>
+											</div>
+											
 										</div>	
 									</div>	
 								</div>
@@ -441,81 +496,6 @@
 								</div>
 							</div>		
 
-							<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações Complementar -->
-								<div class="widget-box">
-									<div class="widget-header">
-										<h4 class="widget-title">
-											<i class="green ace-icon fa fa-archive bigger-110"></i>
-											Informações complemetares
-										</h4>
-										
-										<span class="widget-toolbar">
-
-											<a href="#" data-action="reload">
-												<i class="ace-icon fa fa-refresh"></i>
-											</a>
-
-											<a href="#" data-action="collapse">
-												<i class="ace-icon fa fa-chevron-up"></i>
-											</a>
-
-										</span>
-									</div>
-
-									<div class="widget-body">
-										<div class="widget-main">
-											<div class="row">
-												<div class="col-xs-12">
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														As informações adicionais são oriundas do cadastro do beneficiário e último laudo emitido e cadastrado no sistema.<br>
-                                                        Qualquer informação divergente contante aqui, deve ser reportado IMEDIATAMENTE ao administrativo.<br>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-xs-4 col-sm-4">
-													<label>Data nascimento:</label>
-													<div class="form-group">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
-															</div>
-														</div>
-													</div>
-												</div>												
-											
-												<div class="col-xs-4 col-sm-4">
-													<label for="id-date-picker-1">Idade:</label>
-													<div class="row">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
-															</div>
-														</div>
-													</div>
-												</div>
-												
-											</div>
-											<div class="row">
-												<div class="col-xs-6 col-sm-6" >
-													<label for="id-date-picker-1">Diagnóstico:</label>
-													<div class="row">
-														<div class="col-sm-6">
-															<div class="input-group">
-																<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-																																
-										</div>	
-									</div>	
-								</div>
-							</div>
 
 							<div class="col-sm-12" name="diag" id="diag"><!-- Widget Diagnóstico clínico -->
 								<div class="widget-box">
@@ -661,7 +641,7 @@
 											<label>Metas à curto prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois"  style="font-size: 12px" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -670,7 +650,7 @@
 											<label>Metas à médio prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetamediois" id="tratMetamediois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetamediois" id="tratMetamediois"  style="font-size: 12px" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -679,7 +659,7 @@
 											<label>Metas à longo Prazo</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetalongois" id="tratMetalongois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetalongois" id="tratMetalongois"  style="font-size: 12px" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -688,7 +668,7 @@
 											<label>Estratégias e objetivos</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  style="font-size: 12px" placeholder="" class="form-control" rows="2"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  style="font-size: 12px" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 																							

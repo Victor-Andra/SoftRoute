@@ -11,6 +11,7 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const laudoClass = require("../models/laudo")
 
 //Tabela Plano de Tratamento 
 const Trat = mongoose.model("tb_trat")
@@ -20,7 +21,7 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
-
+const Laudo = mongoose.model("tb_laudo")
 
 //Funções auxiliares
 const Resposta = mongoose.model("tb_resposta")
@@ -28,6 +29,7 @@ const Resposta = mongoose.model("tb_resposta")
 module.exports = {
     listaTrat(req, res, resposta){
         let flash = new Resposta();
+        let perfilAtual = req.cookies['lvlUsu'];
         //console.log('listando plano de tratamento')
         Trat.find().then((trat) =>{
 
@@ -85,7 +87,7 @@ module.exports = {
                         flash.texto = resposta.texto
                         flash.sucesso = resposta.sucesso
                     }
-            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
+            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, perfilAtual, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -93,6 +95,7 @@ module.exports = {
         })
     },
     filtraTrat(req, res, resposta){
+        let perfilAtual = req.cookies['lvlUsu'];
         let tipoPessoa = req.body.tratTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
@@ -292,7 +295,7 @@ module.exports = {
                             flash.texto = resposta.texto
                             flash.sucesso = resposta.sucesso
                         }
-            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, flash})
+            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, perfilAtual, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -300,16 +303,21 @@ module.exports = {
         })
     },
     carregaTrat(req,res){
+        let idsBene = [];
+
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    Laudo.find().then((laudo)=>{
-                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
+                        usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                                    bene.forEach((b)=>{
+                                        idsBene.push(b._id)
+                                    })
+                                    Laudo.find({laudo_beneid: {$in:idsBene}}).then((laudo)=>{
+                                        console.log("Listagem Realizada de beneficiarios")
+                                        res.render("area/plano/tratCad", {laudos: laudo, convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
              })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar plano de tratamento")
@@ -320,17 +328,19 @@ module.exports = {
 
     carregaTratedi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
+        let perfilAtual = req.cookies['lvlUsu'];
         Trat.findOne({_id : req.params.id}).then((trat)=>{
             console.log("Listagem Realizada de Planos de Tratamento")
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    Laudo.find().then((laudo)=>{
                         Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratEdi", {trat, terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual})
-        })})})}).catch((err) =>{
+                                res.render("area/plano/tratEdi", {trat, laudos: laudo,terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual, perfilAtual})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -406,11 +416,11 @@ module.exports = {
         Trat.deleteOne({_id: req.params.id}).then(() =>{
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                req.flash("success_message", "Anamnese deletada!")
+                req.flash("success_message", "Plano de tratamento deletado!")
                 this.listaTrat(req,res);
             }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao deletar a anamnese")
+                req.flash("error_message", "houve um erro ao deletar o Plano de tratamento")
                 res.render('admin/erro')
             })
         })

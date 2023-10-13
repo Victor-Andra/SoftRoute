@@ -3,52 +3,57 @@
 	<head>
 		<title>Relatório Semestral</title>
 		<script>
-		
-		function atualizaData(){
-			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-			var dataFmt = new Date(dataIso);
-			console.log(dataFmt.toISOString());
-			document.getElementById("a").value = dataFmt;
-		}
-		function carregaBody(){
-			document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
-			document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaidEdi").value;
-			document.getElementById("relsemEscolaid").value = document.getElementById("relsemEscolaidEdi").value;
-			
-			//Quando quero calcular a idade do beneficiário
-			let dtnsc = new Date(document.getElementById("relsemDatanascEdi").value);
-			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-			
-			document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaidEdi").value;
-			document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
-			document.getElementById("relsemData").value = document.getElementById("relsemDataEdi").value;
-			document.getElementById("relsemMes").value = document.getElementById("relsemMesEdi").value;
-			document.getElementById("relsemTipo").value = document.getElementById("relsemTipoEdi").value;
-			document.getElementById("relsemFase").value = document.getElementById("relsemFaseEdi").value;
-			document.getElementById("relsemAndamento").value = document.getElementById("relsemAndamentoEdi").value;
-			document.getElementById("relsemDatacad").value = document.getElementById("relsemDatacadEdi").value;
-			document.getElementById("relsemUsuidcad").value = document.getElementById("relsemUsuidcadEdi").value;
-			document.getElementById("relsemDataedi").value = document.getElementById("relsemDataediEdi").value;
-			document.getElementById("relsemUsuidedi").value = document.getElementById("relsemUsuidediEdi").value;
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
 
-		}
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("relsemBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				console.log("benediag: "+(beneid+"_laudoDiagEdi"))
+				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
+			}
+			function carregaBody(){
+				document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
+				document.getElementById("relsemTerapia").value = document.getElementById("relsemTerapiaEdi").value;
+				document.getElementById("relsemData").value = document.getElementById("relsemDataEdi").value;
+				document.getElementById("relsemMes").value = document.getElementById("relsemMesEdi").value;
+				document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaid").value;
+
+				this.atualizaDadosbene();
+			}
 		</script>
 	</head>
-
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -57,12 +62,24 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Relatório Semestral</a>
 							</li>
-
 							<li class="active">Edição</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input type="text" id="relsemTerapeutaidEdi" name="relsemTerapeutaidEdi" value="{{relsem.relsem_terapeutaid}}"/>
+						<input type="text" id="relsemBeneidEdi" name="relsemBeneidEdi" value="{{relsem.relsem_beneid}}"/>
+						<input type="text" id="relsemTerapiaEdi" name="relsemTerapiaEdi" value="{{relsem.relsem_terapia}}"/>
+						<input type="text" id="beneIdadeEdi" name="beneIdadeEdi" value="{{relsem.relsem_mes}}"/>
+						<input type="text" id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
+						<input type="date" id="relsemDataEdi" name="relsemDataEdi" value="{{relsem.relsem_data}}"/>
+						<input type="text" id="relsemMesEdi" name="relsemMesEdi" value="{{relsem.relsem_mes}}"/>
+						{{#each benes}}
+							<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+						{{/each}}
+						{{#each laudos}}
+							<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
+						{{/each}}
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -70,15 +87,13 @@
 								<input class="hidden" id="id" name="id" value="{{relsem._id}}" />
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
-																				<div class="widget-box">
+										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-bookmark-o"></i>
 													Dados do Beneficiário
 												</h4>
-
 												<span class="widget-toolbar">
-
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
@@ -88,7 +103,6 @@
 													<a href="#" data-action="collapse">
 														<i class="ace-icon fa fa-chevron-up"></i>
 													</a>
-
 												</span>
 											</div>
 											<div class="widget-body">
@@ -98,7 +112,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" >
+																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();">
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -124,18 +138,17 @@
 															<div class="form-group">
 																<div class="col-sm-5">
 																	<div class="input-group">
-																		<input name="beneDatanasc" id="beneDatanasc" type="date" class="readonly" onchange="javascript:atualizaData()" />
+																		<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"/>
 																	</div>
 																</div>
 															</div>
-														</div>												
-													
+														</div>
 														<div class="col-xs-3 col-sm-3">
 															<label>Idade:</label>
 															<div class="row">
 																<div class="col-sm-3">
 																	<div class="input-group">
-																		<input name="beneIdade" id="beneIdade" type="text" class="readonly" onchange="" />
+																		<input name="beneIdade" id="beneIdade" type="text" readonly="true" />
 																	</div>
 																</div>
 															</div>
@@ -143,18 +156,17 @@
 													</div>
 													<div class="row">
 														<div class="col-xs-12" >
-															<label for="id-date-picker-1">Diagnóstico:</label>
+															<label >Diagnóstico:</label>
 															<div class="row">
 																<div class="col-xs-12">
 																	<div class="input-group">
-																		<input type="text" name="laudoDiag" id="laudoDiag" class="readonly" class="form-control"  />
+																		<textarea name="laudoDiag" id="laudoDiag" style="width: 400px;" readonly="true" ></textarea>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-											
 											</div>
 										</div>
 										<div class="widget-box">
@@ -163,22 +175,7 @@
 													<i class="ace-icon fa fa-bookmark-o"></i>
 													RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL
 												</h4>
-												<div id="divCarrega" name="divCarrega" class="hidden">
-													<input type="objectid" id="relsemTerapeutaidEdi" name="relsemTerapeutaidEdi" value="{{relsem.relsem_terapeutaid}}"/>
-													<input type="objectid" id="relsemBeneidEdi" name="relsemBeneidEdi" value="{{relsem.relsem_beneid}}"/>
-													<input type="date" id="relsemDataEdi" name="relsemDataEdi" value="{{relsem.relsem_data}}"/>
-													<input type="text" id="relsemMesEdi" name="relsemMesEdi" value="{{relsem.relsem_mes}}"/>
-													<input type="text" id="relsemTipoEdi" name="relsemTipoEdi" value="{{relsem.relsem_tipo}}"/>
-													<input type="text" id="relsemFaseEdi" name="relsemFaseEdi" value="{{relsem.relsem_fase}}"/>
-													<input type="text" id="relsemAndamentoEdi" name="relsemAndamentoEdi" value="{{relsem.relsem_andamento}}"/>
-													<input type="date" id="relsemDatacadEdi" name="relsemDatacadEdi" value="{{relsem.relsem_datacad}}"/>
-													<input type="text" id="relsemUsuidcadEdi" name="relsemUsuidcadEdi" value="{{relsem.relsem_usuid}}"/>
-													<input type="date" id="relsemDataediEdi" name="relsemDataediEdi" value="{{relsem.relsem_dataedi}}"/>
-													<input type="text" id="relsemUsuidediEdi" name="relsemUsuidediEdi" value="{{relsem.relsem_usuidedi}}"/>
-												</div>
-
 												<span class="widget-toolbar">
-
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
@@ -188,7 +185,6 @@
 													<a href="#" data-action="collapse">
 														<i class="ace-icon fa fa-chevron-up"></i>
 													</a>
-
 												</span>
 											</div>
 											<div class="widget-body">
@@ -215,17 +211,34 @@
 																</div>
 															</div>
 														</div>
-														
-
-														
 													</div>
-
 													<div class="row">
 														<div class="col-sm-6">
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select"  >
+																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select"  realonly="true">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapeutas}}
+																			<option value="{{_id}}">{{usuario_nomecompleto}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-4">
+															<label> Nº Conselho</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="relsemConselho" id="relsemConselho" class="form-control" value="{{relsem.relsem_conselho}}"/>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-3">
+															<label> Terapia</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="Fisioterapia">Fisioterapia</option>
 																		<option value="Fonoaudiologia">Fonoaudiologia</option>
@@ -246,28 +259,7 @@
 																</div>
 															</div>
 														</div>
-														
-														
-
-														<div class="col-sm-4">
-															<label> Nº Conselho</label>
-															<div class="form-group">
-																<div class="col-sm-3">
-																	<input type="text" name="relsemConselho" id="relsemConselho" class="form-control" value="{{relsem.relsem_conselho}}"/>
-																</div>
-															</div>
-														</div>
-
-														<div class="col-sm-3">
-															<label> Terapia</label>
-															<div class="form-group">
-																<div class="col-sm-6">
-																	<input type="text" name="relsemTerapia" id="relsemTerapia" class="form-control" value="{{relsem.relsem_terapia}}" />
-																</div>
-															</div>
-														</div>
 													</div>
-
 													<div class="row">
 														<div class="col-sm-12">
 															<label> Relatório</label>
@@ -285,13 +277,10 @@
 								</div>
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-
 								<div class="row">
 									<div clas="col-xs-12">
-										
 										<div class="form-actions">
 											<div class="col-xs-12" style="text-align: center;" >
-
 												<button class="btn btn-info" name="acao" type="submit">
 													<i class="ace-icon fa fa-check bigger-110"></i>
 													Salvar
@@ -303,29 +292,13 @@
 												</button>
 											</div>
 										</div>
-										
 									</div>
 								</div>
 							</form>
-
-							
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

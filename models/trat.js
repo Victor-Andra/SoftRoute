@@ -8,7 +8,7 @@ const TratSchema = mongoose.Schema({
     trat_beneid :{ type: ObjectId, required: true },
     trat_beneidade :{ type: String, required: false },
     trat_benedatanasc :{ type: String, required: false },
-    trat_tratdata :{ type: Date, required: false },
+    trat_tratdata :{ type: Date, required: true },
     trat_tratdatavigencia:{ type: Date, required: false },
     trat_diagnostico :{ type: String, required: false },
     //plano padrao
@@ -192,9 +192,7 @@ module.exports = {TratModel,TratSchema,
         trat_metalongoavd : req.body.tratMetalongoavd,
         trat_objetivoavd : req.body.tratObjetivoavd,
         //Dados para de Sistema, quem fez, data criação e quem alterou
-        //trat_usuidcad : req.body.tratUsuidcad,
-        //trat_datacad : req.body.tratDatacad,
-        trat_usuidedi: idUsu,
+        trat_usuidedi: usuarioAtual,
         trat_dataedi : dataAtual
         }}
         ).then((res) =>{
@@ -210,6 +208,7 @@ module.exports = {TratModel,TratSchema,
     tratAdicionar: async (req,res) => {
         console.log("tratmodel");
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
         let lvlUsu = req.cookies['lvlUsu'];
         let idUsu;
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
@@ -255,9 +254,7 @@ module.exports = {TratModel,TratSchema,
             trat_metalongoavd : req.body.tratMetalongoavd,
             trat_objetivoavd : req.body.tratObjetivoavd,
             //Dados para de Sistema, quem fez, data criação e quem alterou
-            trat_usuidcad : idUsu,
-            trat_usuidedi: "766f69643132333435366964",
-            //trat_dataedi : req.body.tratDataedi,
+            trat_usuidcad : usuarioAtual,
             trat_datacad : dataAtual
             
         });

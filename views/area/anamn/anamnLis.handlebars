@@ -73,7 +73,6 @@
 														</label>
 													</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Nascimento</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Anamnese</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Cadastro</th>
@@ -92,7 +91,6 @@
 															</label>
 														</td>
 														<td>{{anamn_benenome}}</td>
-														<td>{{anamn_benedatanasc}}</td>
 														{{#each ../usuarios}}<!-- Ok -->
 															{{#ifEqual this._id ../anamn_terapeutaid}}
 																<td>{{usuario_nome}}</td>
@@ -174,7 +172,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					

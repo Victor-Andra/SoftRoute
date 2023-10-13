@@ -1873,12 +1873,12 @@ router.post('/area/aba/visual/atualizar', fncGeral.IsAuthenticated, (req,res) =>
 
 //Menu Relsem ** Area Terapeutas
 //Carrega Cadastro Relsem
-router.get('/area/relsem/relsemcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Relsem
+router.get('/area/relsem/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Relsem
     fncRelsem.carregaRelsem(req, res);
 })
 
 //Lista Relsem
-router.get('/area/relsem/relsemlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Relsem
+router.get('/area/relsem/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Relsem
     fncRelsem.listaRelsem(req, res);
 })
 

@@ -8,16 +8,16 @@
 					var data = document.getElementById("anamndatacad").value+"T"+hora+":00.000Z";
 					var datafmt = new Date(data);
 					document.getElementById("anamndatacad").value = datafmt.toISOString();
-				},
+				}
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
-				},
+				}
 				function atualizaData(){
 					var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 					var dataFmt = new Date(dataIso);
 					console.log(dataFmt.toISOString());
 					document.getElementById("a").value = dataFmt;
-				},
+				}
 				function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
 					if (d.getTimezoneOffset() == 180){
@@ -37,7 +37,7 @@
 					}
 
 					return [year, month, day].join('-');
-				},
+				}
 				function atualizaDadosbene(){
 					let beneid = document.getElementById("anamnBeneid").value;
 
@@ -45,12 +45,12 @@
 					if (dataIso != undefined && dataIso != "undefined"){
 						var dataFmt = new Date(dataIso);
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-						document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+						console.log("dataFmt:"+dataFmt)
+						document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
 					}
-					document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-					document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
+					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;
 				}
-				
 			</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -73,8 +73,8 @@
 								<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 								{{#each benes}}
 									<input type="text" id="{{_id}}_anamnBenedatanasc" name="{{_id}}_anamnBenedatanasc" value="{{bene_datanasc}}"/>
-									<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
-									<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
+									<input type="text" id="{{_id}}_benePai" name="{{_id}}_benePai" value="{{bene_pai}}"/>
+									<input type="text" id="{{_id}}_beneMae" name="{{_id}}_beneMae" value="{{bene_mae}}"/>
 								{{/each}}
 							</div>
 						</div><!-- /.page-header -->
@@ -282,7 +282,7 @@
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()" >
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -290,7 +290,14 @@
 															</select>
 														</div>
 													</div>
-													
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														<strong>Os dados de identificação abaixo, serão preenchidos automaticamente. </strong>
+														<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
+														<br>
+													</div>
 																									
 													<div class="row">
 														
@@ -299,17 +306,17 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date">
+																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" readonly="true">
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-3">
+														<div class="col-xs-12 col-sm-5">
 															<label> Idade:</label><!--idade beneficiário-->
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-3">
-																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder="" class="form-control" style="width: 50px;" />
+																	<div class="col-sm-5">
+																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder=""  readonly="true" class="form-control" style="width: 50px;" />
 																	</div>
 																</div>
 															</div>
@@ -319,19 +326,19 @@
 													<label> Mãe:</label><!--Mãe beneficiário-->
 													<div class="input-group">
 														<div>
-															<input type="text" name="anamnMaenome" id="anamnMaenome" placeholder="" class="form-control" style="width: 500px;"/>
+															<input type="text" name="anamnMaenome" id="anamnMaenome" placeholder=""  readonly="true"class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 													<label> Pai:</label><!--Pai beneficiário-->
 													<div class="input-group">
 														<div>
-															<input type="text" name="anamnPainome" id="anamnPainome" placeholder="" class="form-control" style="width: 500px;"/>
+															<input type="text" name="anamnPainome" id="anamnPainome" placeholder="" readonly="true" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 													<label> Outro:</label><!--Resp beneficiário-->
 													<div class="input-group">
 														<div>
-															<input type="text" name="anamnRespnome" id="anamnRespnome" placeholder="" class="form-control" style="width: 500px;"/>
+															<input type="text" name="anamnRespnome" id="anamnRespnome" placeholder=""  readonly="true" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 												</div>
