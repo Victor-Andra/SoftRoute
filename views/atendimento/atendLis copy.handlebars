@@ -470,12 +470,6 @@
 										
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
-												<tr>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="6" style="width: 100px;" >Atendimento</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
-												</tr>
 												<tr role="row">
 													<th class="" class="center" tabindex="0">
 														<label class="pos-rel">
@@ -483,41 +477,33 @@
 															<span class="lbl"></span>
 														</label>
 													</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Data</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1"  >Hora</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
-													
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-													
-													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-
-													<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 100px;">Ação</th>
 												</tr>
 											</thead>
-											<tbody style="font-size: 11px;">
+											<tbody>
 												{{#each atends}}
 													<tr role="row" class="odd">
 														<td class="center">
-															<label class="pos-rel" >
+															<label class="pos-rel">
 																<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
 																<span class="lbl"></span>
 															</label>
-															<input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
-															<input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
 														</td>
 														<td>
-															{{data}}
+															<input style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
 														</td>	
 														<td>
-															{{atend_atendhora}}
+															<input style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
 														</td>				
 														{{#each ../benes}}
 															{{#ifEqual this._id ../atend_beneid}}
@@ -529,13 +515,6 @@
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
-															<td><span class="label label-sm label-danger">{{atend_categoria}}</span></td>
-															{{else}}
-															<td><span class="label label-sm label-success">{{atend_categoria}}</span></td>
-														{{/ifEqual}}
-
-
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../atend_terapiaid}}
 																<td>{{terapia_nome}}</td>
@@ -546,61 +525,14 @@
 																<td>{{usuario_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														
-
-														{{#ifEqual this.atend_valorcre "0,00"}}
-															<td><span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span></td>
+														<td>{{atend_org}}</td><!-- Deve aparecer a terapia e não o id -->
+														<td>{{atend_categoria}}</td>
+														<td>{{#ifEqual atend_categoria "SubstitutoFixo"}}
+															{{atend_mergevalorcre}}
 															{{else}}
-															<td>{{atend_valorcre}}</td>
-														{{/ifEqual}}
-														{{#ifEqual this.atend_valordeb "0,00"}}
-															<td ><span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span></td>
-															{{else}}
-															<td>{{atend_valordeb}}</td>
-														{{/ifEqual}}
-
-																												
-														{{#if atend_mergeterapiaid}}
-															{{#each ../terapias}}<!-- Ok -->
-																{{#ifEqual this._id ../atend_mergeterapiaid}}
-																	<td>{{terapia_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
-														{{else}}
-															<td>&nbsp;</td>
-														{{/if}}
-
-
-														{{#if atend_mergeterapeutaid}}
-															{{#each ../terapeutas}}<!-- Ok -->
-																{{#ifEqual this._id ../atend_mergeterapeutaid}}
-																	<td>{{usuario_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
-														{{else}}
-															<td>&nbsp;</td>
-														{{/if}}
-
-														{{#if atend_mergevalorcre}}
-															{{#ifEqual this.atend_mergevalorcre "0,00"}}
-																<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
-																{{else}}
-																<td>{{atend_mergevalorcre}}</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>&nbsp;</td>
-														{{/if}}
-														
-														{{#if atend_mergevalordeb}}
-															{{#ifEqual this.atend_mergevalordeb "0,00"}}
-																<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
-																{{else}}
-																<td>{{atend_mergevalordeb}}</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>&nbsp;</td>
-														{{/if}}
-														
+															{{atend_valorcre}}
+															{{/ifEqual}}</td>
+														<td>{{atend_valordeb}}</td> <!-- Nome Usuário que é Terapeuta -->	
 														<td>
 															<div class="action-buttons">
 																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
@@ -671,7 +603,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [ { "bSortable": false }, null, null, null, null, null,  null, null, null, null,null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [ { "bSortable": false }, null, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					

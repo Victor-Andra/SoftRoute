@@ -100,6 +100,14 @@
 															</a>
 														</li>
 
+														<li class="">
+															<a data-toggle="tab" href="#carimbo" aria-expanded="false">
+																<i class="blue ace-icon fa fa-picture-o bigger-120"></i>
+																Carimbo
+																
+															</a>
+														</li>
+
 
 													</ul>
 
@@ -486,19 +494,22 @@
 																		</div>
 																	</div>
 																</div><!-- /.span -->
-																<div class="col-xs-4 col-sm-4">
-																	<label>Perfil</label>
-																	<div class="form-group">
-																		<div class="col-sm-4">
-																			<select id="usuarioPerfilid" name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
-																				{{#each perfils}}
-																				<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
-																				{{else}}
-																				{{/each}}
-																			</select>
+																
+																	<div class="col-xs-4 col-sm-4">
+																		<label>Perfil</label>
+																		<div class="form-group">
+																			<div class="col-sm-4">
+																				<select id="usuarioPerfilid" name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																					{{#each perfils}}
+																					<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
+																					{{else}}
+																					{{/each}}
+																				</select>
+																			</div>
 																		</div>
-																	</div>
-																</div><!-- /.span -->
+																	</div><!-- /.span -->
+																
+																
 																<div class="col-xs-4 col-sm-4">
 																	<label>Status</label>
 																	<div class="form-group">
@@ -513,6 +524,52 @@
 															</div>
 															
 															
+														</div>
+
+														<div id="carimbo" class="tab-pane fade">
+															<h4 class="widget-title">Inserir Imagem e Assinatura para Impressão</h4>
+
+															<div class="widget-body">
+																<div class="widget-main">
+																	<div class="form-group">
+																		<div class="col-xs-6">
+																			<label class="ace-file-input">
+																				<input type="file" id="id-input-file-2">
+																				<span class="ace-file-container" data-title="Choose">
+																					<span class="ace-file-name" data-title="No File ...">
+																						<i class=" ace-icon fa fa-upload"></i>
+																					</span>
+																				</span>
+																				<a class="remove" href="#">
+																					<i class=" ace-icon fa fa-times"></i>
+																				</a>
+																			</label>
+																		</div>
+																	</div>
+
+																	<div class="form-group">
+																		<div class="col-xs-6">
+																			<label class="ace-file-input ace-file-multiple">
+																				<input multiple="" type="file" id="id-input-file-3">
+																				<span class="ace-file-container" data-title="Drop files here or click to choose">
+																					<span class="ace-file-name" data-title="No File ...">
+																						<i class=" ace-icon ace-icon fa fa-cloud-upload"></i>
+																					</span>
+																				</span>
+																				<a class="remove" href="#">
+																					<i class=" ace-icon fa fa-times"></i>
+																				</a>
+																			</label>
+																		</div>
+																	</div>
+
+																	<label>
+																		<input type="checkbox" name="file-format" id="id-file-format" class="ace" value="on" >
+																		<span class="lbl"> Somente Imagens</span>
+																	</label>
+																</div>
+															</div>
+											
 														</div>
 													</div>
 												</div>
