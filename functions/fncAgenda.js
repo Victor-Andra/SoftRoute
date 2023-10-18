@@ -2377,7 +2377,6 @@ module.exports = {
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 bene.forEach(e => {
                     nomeBene = e.bene_nome
-                    nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
                 //console.log("Listagem Realizada de Beneficiários!")
