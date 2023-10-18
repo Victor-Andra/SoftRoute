@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Supervisão dos Diários de Bordo</title>
+
+		<script type="text/javascript">
+			function ocultaEditar(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				document.getElementById("botaoEditar").value;
+			}
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "bordodata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divBordoBeneficiario").hidden = false;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
+						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("bordoTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("bordoTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("bordoTipoPessoa").value == "Beneficiario"){
+						document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil").value
+					} else if (document.getElementById("bordoTipoPessoa").value == "Terapeuta"){
+						document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil").value;
+					}
+
+				}
+			}
+
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este diário de bordo?");
+				if(confirmado == true){
+					window.location.href=("/menu/area/bordo/del/"+id);
+				}
+			}
+
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+						<div class="espace">
+						</div>
+						<div class="page-header">
+							<h1>
+								Supervisão dos Diários de Bordo
+							</h1>
+						</div><!-- /.page-header -->
+
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
+					<div class="hidden">
+						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+						<input id="bordoTerapeutaFil" value="{{bordoTerapeuta.bordoTerapeuta}}" />
+						<input id="bordoBeneficiarioFil" value="{{bordoBeneficiario.bordoBeneficiario}}" />
+						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+						<input id="mesBordoFil" value="{{mesBordo.mesBordo}}" />
+						<input id="anoBordoFil" value="{{anoBordo.anoBordo}}" />
+						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+					</div>
+					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
+							<div class="col-xs-12" class="row">
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro Data:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mes</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoBordo" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Ano:&nbsp;</label>
+											<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2022">2022</option>
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesBordo" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Mês:&nbsp;</label>
+											<select name="mesBordo" id="mesBordo" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+
+							
+								<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									
+								</div>
+								<hr>
+							</div>
+							
+						</form>
+					
+						<div class="row"><!--.row -->
+							<div class="col-xs-8">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-8">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
+										
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+	
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >QtAgenda</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >QtDiários</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Saldo</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Info</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each bordos}}
+													<tr role="row">
+														
+														
+														{{#each ../terapeutas}}<!-- Ok -->
+															{{#ifEqual this._id ../bordo_terapeutaid}}
+																<td>{{usuario_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														<td>10</td>
+														<td>9</td>
+														<td>1</td>
+														<td>
+															<a style="vertical-align: middle" class="pink" id="open-event" href="#" title="datas dos dias que falta o diário exemplo: 01/09/2023; 06/09/2023">
+															<i class="ace-icon fa fa-comment bigger-110"></i>
+															&nbsp;
+															</a>
+														</td>
+														
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="../../../assets/js/jquery-1.11.3.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="../../../assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+		<script src="../../../assets/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script src="../../../assets/js/dataTables.buttons.min.js"></script>
+		<script src="../../../assets/js/buttons.flash.min.js"></script>
+		<script src="../../../assets/js/buttons.html5.min.js"></script>
+		<script src="../../../assets/js/buttons.print.min.js"></script>
+		<script src="../../../assets/js/buttons.colVis.min.js"></script>
+		<script src="../../../assets/js/dataTables.select.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="../../../assets/js/ace-elements.min.js"></script>
+		<script src="../../../assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				//initiate dataTables plugin
+				var myTable = 
+				$('#dynamic-table')
+				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+				.DataTable( {
+					bAutoWidth: false,
+					"aoColumns": [ null, null, null, null, { "bSortable": false }],
+					"aaSorting": [],
+					
+					
+					//"bProcessing": true,
+			        //"bServerSide": true,
+			        //"sAjaxSource": "http://127.0.0.1/table.php"	,
+			
+					//,
+					//"sScrollY": "200px",
+					"bPaginate": true,
+			
+					//"sScrollX": "100%",
+					//"sScrollXInner": "120%",
+					//"bScrollCollapse": true,
+					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+			
+					//"iDisplayLength": 50
+			
+			
+					select: {
+						style: 'multi'
+					}
+			    } );
+			
+				
+				
+			
+			
+				$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
+					e.stopImmediatePropagation();
+					e.stopPropagation();
+					e.preventDefault();
+				});
+				
+				
+				
+				//And for the first simple table, which doesn't have TableTools or dataTables
+				//select/deselect all rows according to table header checkbox
+				var active_class = 'active';
+				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+					
+					$(this).closest('table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+					});
+				});
+				
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
+					var $row = $(this).closest('tr');
+					if($row.is('.detail-row ')) return;
+					if(this.checked) $row.addClass(active_class);
+					else $row.removeClass(active_class);
+				});
+			
+				
+			
+				/********************************/
+				//add tooltip for small view action buttons in dropdown menu
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				
+				//tooltip placement on right or left
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					//var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+				
+				
+				
+				
+				/***************/
+				$('.show-details-btn').on('click', function(e) {
+					e.preventDefault();
+					$(this).closest('tr').next().toggleClass('open');
+					$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+				});
+				/***************/
+				
+
+			
+			})
+		</script>
+	</body>
+</html>

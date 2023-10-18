@@ -12,12 +12,6 @@
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
 				}
-				function atualizaData(){
-					var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-					var dataFmt = new Date(dataIso);
-					console.log(dataFmt.toISOString());
-					document.getElementById("a").value = dataFmt;
-				}
 				function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
 					if (d.getTimezoneOffset() == 180){
@@ -316,7 +310,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-5">
-																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder=""  readonly="true" class="form-control" style="width: 50px;" />
+																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder=""  readonly="true" class="form-control" style="width: 150px;" />
 																	</div>
 																</div>
 															</div>

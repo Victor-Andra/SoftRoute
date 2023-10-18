@@ -54,11 +54,13 @@ class RelAtendBene{
     constructor(
         dt,
         especialidade,
-        profissional
+        profissional,
+        hora
         ){
         this.dt = dt,
         this.especialidade = especialidade,
-        this.profissional = profissional
+        this.profissional = profissional,
+        this.hora = hora
     }
 }
 
@@ -909,7 +911,11 @@ module.exports = {
                                 }
                             });
                             at.forEach((atend)=>{
-                                rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                if (req.body.porHoras == "sim"){
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora;
+                                } else {
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                }
                                 categorias = atend.atend_categoria
                                 console.log("categorias:"+categorias)
                                 switch (categorias){

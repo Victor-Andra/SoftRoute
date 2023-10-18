@@ -64,7 +64,7 @@
 										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 										</div>
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
+											<thead style="font-size: 11px;">
 												<tr role="row">
 													<th class="center">
 														<label class="pos-rel">
@@ -73,14 +73,15 @@
 														</label>
 													</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Anamnese</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Cadastro</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Atualização</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Aniversário</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Anamnese</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Cadastro</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Atualização</th>
 													<th>Ação</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody style="font-size: 11px;"> 
 												{{#each anamns}}
 
 													<tr role="row" class="odd">
@@ -91,14 +92,26 @@
 															</label>
 														</td>
 														<td>{{anamn_benenome}}</td>
+														<td>{{anamn_benedatanasc}}</td>
 														{{#each ../usuarios}}<!-- Ok -->
 															{{#ifEqual this._id ../anamn_terapeutaid}}
 																<td>{{usuario_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
+														
 														<td>{{anamn_dataanamn}}</td>
 														<td>{{anamn_data}}</td>
-														<td>{{anamn_edi}}</td>
+
+														{{#if anamn_edi}}
+																{{#ifEqual this.anamn_edi "NaN-NaN-NaN"}}
+																	<td>&nbsp;</td>
+																	{{else}}
+																	<td>{{anamn_edi}}</td>
+																{{/ifEqual}}
+															{{else}}
+																<td>&nbsp;</td>
+															{{/if}}
+														
 														<td>
 															<div class="action-buttons">
 																<a class="blue" href="/menu/area/anamn/imp/{{_id}}">
@@ -172,7 +185,7 @@
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 				.DataTable( {
 					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null,{ "bSortable": false }],
+					"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null,{ "bSortable": false }],
 					"aaSorting": [],
 					
 					

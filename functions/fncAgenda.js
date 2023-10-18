@@ -2424,7 +2424,7 @@ module.exports = {
                                 });
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
-                                    benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    benenomeconv = nomeBene+" / "+nomeConv;
                                     //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
@@ -4043,7 +4043,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    /*
     carregaAgendaST(req,res){
         let aux = 1;
         let is = false;
@@ -4165,12 +4164,6 @@ module.exports = {
             //console.log(agenda)
             Bene.find().then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            Bene.find({_id: b._id}).then((bene)=>{
-                bene.forEach(e => {
-                    nomeBene = e.bene_apelido
-                    nomeSup = e.bene_supervisor
-                    beneConvid = e.bene_convid
-                });
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
                     conv.forEach(e => {
@@ -4183,42 +4176,39 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                //console.log("Listagem Realizada de Horario")
-                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
-                                let segASex = ["seg","ter","qua","qui","sex"];
-                                
-                                segASex.forEach((diaDaSemana)=>{
-                                    haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
-                                    //console.log("Tem "+z+"?"+haddia)
-                                    this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
-                                })
+                            Sala.find().then((sala)=>{
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                    //console.log("Listagem Realizada de Horario")
+                                    let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                    let segASex = ["seg","ter","qua","qui","sex"];
+                                    
+                                    segASex.forEach((diaDaSemana)=>{
+                                        haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                        //console.log("Tem "+z+"?"+haddia)
+                                        this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                    })
 
-                                agenda.sort(function(a, b) {
-                                    let h1 = a.agenda_hora.substring(0,2);
-                                    let m1 = a.agenda_hora.substring(3,5);
-                                    let h2 = b.agenda_hora.substring(0,2);
-                                    let m2 = b.agenda_hora.substring(3,5);
-                                    if(h1 == h2){
-                                        if(m1 < m2) {
-                                            return -1;
+                                    agenda.sort(function(a, b) {
+                                        let h1 = a.agenda_hora.substring(0,2);
+                                        let m1 = a.agenda_hora.substring(3,5);
+                                        let h2 = b.agenda_hora.substring(0,2);
+                                        let m2 = b.agenda_hora.substring(3,5);
+                                        if(h1 == h2){
+                                            if(m1 < m2) {
+                                                return -1;
+                                            } else {
+                                                return true;
+                                            }
                                         } else {
-                                            return true;
+                                            if(h1 < h2) {
+                                                return -1;
+                                            } else {
+                                                return true;
+                                            }
                                         }
-                                    } else {
-                                        if(h1 < h2) {
-                                            return -1;
-                                        } else {
-                                            return true;
-                                        }
-                                    }
-                                });
-                                Sala.find().then((sala)=>{
-                                    //console.log("Listagem Realizada de Terapia")
-                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                    //console.log("benenomeconv:"+benenomeconv)
-                                    res.render("agenda/agendaBeneficiarioSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
-        })})})})})})})})}).catch((err) =>{
+                                    });
+                                    res.render("agenda/agendaTerapeutaSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -4422,7 +4412,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    */
     carregaAgendaTB(req,res){
         let aux = 1;
         let is = false;

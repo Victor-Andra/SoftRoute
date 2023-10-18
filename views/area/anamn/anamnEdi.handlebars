@@ -12,590 +12,566 @@
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
 				}
+				function atualizaDadosbene(){
+					
+					let beneid = document.getElementById("anamnBeneid").value;
+
+					var dataIso = document.getElementById(beneid+"_beneDatanascEdi").value;
+					if (dataIso != undefined && dataIso != "undefined"){
+						var dataFmt = new Date(dataIso);
+						console.log("dataFmt:"+dataFmt)
+						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+						//document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+					}
+					//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+					//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+				}
+				function formataData(date) {//yyyy-MM-dd
+					var d = new Date(date);
+					if (d.getTimezoneOffset() == 180){
+						d.setHours(d.getHours()+3);
+					}
+					console.log("d:"+d);
+						month = '' + (d.getMonth() + 1);
+						day = '' + d.getDate();
+						year = d.getFullYear();
+
+					if (month.length == 1) {
+						month = '0' + month;
+					}
+						
+					if (day.length == 1) {
+						day = '0' + day;
+					}
+
+					return [year, month, day].join('-');
+				}
+
+				function carregaBody(){
+					//document.getElementById("anamnDatacad").value = new Date();
+					//Rotinas
+					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
+					document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
+					//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
+					document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
+					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
+					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
+					document.getElementById("anamnRespnome").value = document.getElementById("anamnRespnomeEdi").value;
+
+					document.getElementById("anamnQueixapri").value = document.getElementById("anamnQueixapriEdi").value;
+					document.getElementById("anamnDiag").value = document.getElementById("anamnDiagEdi").value;
+					
+					document.getElementById("anamnHouvetratengrav").value = document.getElementById("anamnHouvetratengravEdi").value;
+					//document.getElementById("anamnHouvetratengravdesc").value = document.getElementById("anamnHouvetratengravdescEdi").value;
+					document.getElementById("anamnHouveplanfami").value = document.getElementById("anamnHouveplanfamiEdi").value;
+					//document.getElementById("anamnHouveplanfamidesc").value = document.getElementById("anamnHouveplanfamidescEdi").value;
+					document.getElementById("anamnAmeacatenaborto").value = document.getElementById("anamnAmeacatenabortoEdi").value;
+					//document.getElementById("anamnAmeacatenabortodesc").value = document.getElementById("anamnAmeacatenabortodescEdi").value;
+					document.getElementById("anamnBebeoufumagesta").value = document.getElementById("anamnBebeoufumagestaEdi").value;
+					//document.getElementById("anamnBebeoufumagestadesc").value = document.getElementById("anamnBebeoufumagestadescEdi").value;
+					document.getElementById("anamnTraumafispsiinfec").value = document.getElementById("anamnTraumafispsiinfecEdi").value;
+					//document.getElementById("anamnTraumafispsiinfecdesc").value = document.getElementById("anamnTraumafispsiinfecdescEdi").value;
+					document.getElementById("anamnUsotranquil").value = document.getElementById("anamnUsotranquilEdi").value;
+					//document.getElementById("anamnUsotranquildesc").value = document.getElementById("anamnUsotranquildescEdi").value;
+					document.getElementById("anamnAdocao").value = document.getElementById("anamnAdocaoEdi").value;
+					document.getElementById("anamnObsgesta").value = document.getElementById("anamnObsgestaEdi").value;
+					//Grupo
+					document.getElementById("anamnPartoqual").value = document.getElementById("anamnPartoqualEdi").value;
+					//document.getElementById("anamnPartoqualdesc").value = document.getElementById("anamnPartoqualdescEdi").value;
+					document.getElementById("anamnTempogestacional").value = document.getElementById("anamnTempogestacionalEdi").value;
+					//document.getElementById("anamnanamnTempogestacionaldesc").value = document.getElementById("anamnTempogestacionaldescEdi").value;
+					document.getElementById("anamnAnorexiaperiparto").value = document.getElementById("anamnAnorexiaperipartoEdi").value;
+					//document.getElementById("anamnAnorexiaperipartodesc").value = document.getElementById("anamnAnorexiaperipartodescEdi").value;
+					document.getElementById("anamnApgar").value = document.getElementById("anamnApgarEdi").value;
+					document.getElementById("anamnApgargrau").value = document.getElementById("anamnApgargrauEdi").value;
+					//document.getElementById("anamnApgardesc").value = document.getElementById("anamnApgardescEdi").value;
+					console.log("anamnChorounascEdi");
+					console.log(document.getElementById("anamnChorounascEdi").value);
+					document.getElementById("anamnChorounasc").value = document.getElementById("anamnChorounascEdi").value;
+					//document.getElementById("anamnChorounascdesc").value = document.getElementById("anamnChorounascdescEdi").value;
+					document.getElementById("anamnIctericia").value = document.getElementById("anamnIctericiaEdi").value;
+					//document.getElementById("anamnIctericiadesc").value = document.getElementById("anamnIctericiadescEdi").value;
+					document.getElementById("anamnFototerapia").value = document.getElementById("anamnFototerapiaEdi").value;
+					//document.getElementById("anamnFototerapiadesc").value = document.getElementById("anamnFototerapiadescEdi").value;
+					document.getElementById("anamnUti").value = document.getElementById("anamnUtiEdi").value;
+					document.getElementById("anamnUtitempo").value = document.getElementById("anamnUtitempoEdi").value;
+					document.getElementById("anamnComplica").value = document.getElementById("anamnComplicaEdi").value;
+					//document.getElementById("anamnComplicadesc").value = document.getElementById("anamnComplicadescEdi").value;
+					document.getElementById("anamnPaipresentenasc").value = document.getElementById("anamnPaipresentenascEdi").value;
+					//document.getElementById("anamnPaipresentenascdesc").value = document.getElementById("anamnPaipresentenascdescEdi").value;
+					document.getElementById("anamnDescrparto").value = document.getElementById("anamnDescrpartoEdi").value;
+					console.log("anamnObsparto");
+					console.log(document.getElementById("anamnObspartoEdi").value);
+					document.getElementById("anamnObsparto").value = document.getElementById("anamnObspartoEdi").value;
+					//Grupo
+					document.getElementById("anamnPessmoracasa").value = document.getElementById("anamnPessmoracasaEdi").value;
+					document.getElementById("anamnIrmaosmoracasa").value = document.getElementById("anamnIrmaosmoracasaEdi").value;
+					document.getElementById("anamnIrmaospartemae").value = document.getElementById("anamnIrmaospartemaeEdi").value;
+					document.getElementById("anamnIrmaospartpai").value = document.getElementById("anamnIrmaospartpaiEdi").value;
+					document.getElementById("anamnMaetrab").value = document.getElementById("anamnMaetrabEdi").value;
+					document.getElementById("anamnMaetrabquemfica").value = document.getElementById("anamnMaetrabquemficaEdi").value;
+					document.getElementById("anamnObsfami").value = document.getElementById("anamnObsfamiEdi").value;
+					document.getElementById("anamnPaisvivemjuntosbem").value = document.getElementById("anamnPaisvivemjuntosbemEdi").value;
+					//document.getElementById("anamnPaisvivemjuntosbemdesc").value = document.getElementById("anamnPaisvivemjuntosbemdescEdi").value;
+					document.getElementById("anamnDiscussoesfreq").value = document.getElementById("anamnDiscussoesfreqEdi").value;
+					//document.getElementById("anamnDiscussoesfreqdesc").value = document.getElementById("anamnDiscussoesfreqdescEdi").value;
+					document.getElementById("anamnComofoisepara").value = document.getElementById("anamnComofoiseparaEdi").value;
+					document.getElementById("anamnReacaocrianca").value = document.getElementById("anamnReacaocriancaEdi").value;
+					document.getElementById("anamnQuemcedefacil").value = document.getElementById("anamnQuemcedefacilEdi").value;
+					//document.getElementById("anamnQuemcedefacildesc").value = document.getElementById("anamnQuemcedefacildescEdi").value;
+					document.getElementById("anamnCriancatratdif").value = document.getElementById("anamnCriancatratdifEdi").value;
+					//document.getElementById("anamnCriancatratdifcomo").value = document.getElementById("anamnCriancatratdifcomoEdi").value;
+					document.getElementById("anamnRelacirmaos").value = document.getElementById("anamnRelacirmaosEdi").value;
+					document.getElementById("anamnAmbientefami").value = document.getElementById("anamnAmbientefamiEdi").value;
+					document.getElementById("anamnObsfamiambiente").value = document.getElementById("anamnObsfamiambienteEdi").value;
+					//Grupo
+					document.getElementById("anamnHaeducarelig").value = document.getElementById("anamnHaeducareligEdi").value;
+					document.getElementById("anamnHaeducareligqual").value = document.getElementById("anamnHaeducareligqualEdi").value;
+					document.getElementById("anamnDevpreccumpr").value = document.getElementById("anamnDevpreccumprEdi").value;
+					//document.getElementById("anamnDevpreccumprdesc").value = document.getElementById("anamnDevpreccumprdescEdi").value;
+					document.getElementById("anamnObsreligiao").value = document.getElementById("anamnObsreligiaoEdi").value;
+					//Grupo
+					document.getElementById("anamnSarampo").value = document.getElementById("anamnSarampoEdi").value;
+					document.getElementById("anamnCatapora").value = document.getElementById("anamnCataporaEdi").value;
+					document.getElementById("anamnCaxumba").value = document.getElementById("anamnCaxumbaEdi").value;
+					document.getElementById("anamnRubeola").value = document.getElementById("anamnRubeolaEdi").value;
+					document.getElementById("anamnCpqueluche").value = document.getElementById("anamnCpquelucheEdi").value;
+					document.getElementById("anamnMeningite").value = document.getElementById("anamnMeningiteEdi").value;
+					document.getElementById("anamnComplicavacina").value = document.getElementById("anamnComplicavacinaEdi").value;
+					//grupo
+					document.getElementById("anamnDengue").value = document.getElementById("anamnDengueEdi").value;
+					document.getElementById("anamnZica").value = document.getElementById("anamnZicaEdi").value;
+					document.getElementById("anamnChikun").value = document.getElementById("anamnChikunEdi").value;
+					document.getElementById("anamnCovid").value = document.getElementById("anamnCovidEdi").value;
+					document.getElementById("anamnTce").value = document.getElementById("anamnTceEdi").value;
+					document.getElementById("anamnObssaude").value = document.getElementById("anamnObssaudeEdi").value;
+					document.getElementById("anamnObssaude2").value = document.getElementById("anamnObssaude2Edi").value;
+					//Grupo
+					document.getElementById("anamnOtite").value = document.getElementById("anamnOtiteEdi").value;
+					document.getElementById("anamnAdenoide").value = document.getElementById("anamnAdenoideEdi").value;
+					document.getElementById("anamnAmigdalites").value = document.getElementById("anamnAmigdalitesEdi").value;
+					document.getElementById("anamnAlergias").value = document.getElementById("anamnAlergiasEdi").value;
+					document.getElementById("anamnAcidentes").value = document.getElementById("anamnAcidentesEdi").value;
+					document.getElementById("anamnConvulsoes").value = document.getElementById("anamnConvulsoesEdi").value;
+					document.getElementById("anamnInternacoes").value = document.getElementById("anamnInternacoesEdi").value;
+					document.getElementById("anamnCirurgia").value = document.getElementById("anamnCirurgiaEdi").value;
+					//grupo
+					document.getElementById("anamnAvaliacaoneuro").value = document.getElementById("anamnAvaliacaoneuroEdi").value;
+					document.getElementById("anamnAvaliacaoneurodesc").value = document.getElementById("anamnAvaliacaoneurodescEdi").value;
+					document.getElementById("anamnAvaliacaopsico").value = document.getElementById("anamnAvaliacaopsicoEdi").value;
+					document.getElementById("anamnAvaliacaopsicodesc").value = document.getElementById("anamnAvaliacaopsicodescEdi").value;
+					//Grupo
+					document.getElementById("anamnExamesrealiza").value = document.getElementById("anamnExamesrealizaEdi").value;
+					document.getElementById("anamnMedicacaoquais").value = document.getElementById("anamnMedicacaoquaisEdi").value;
+					document.getElementById("anamnQuandodiag").value = document.getElementById("anamnQuandodiagEdi").value;
+					document.getElementById("anamnNervoso").value = document.getElementById("anamnNervosoEdi").value;
+					document.getElementById("anamnDeficiente").value = document.getElementById("anamnDeficienteEdi").value;
+					document.getElementById("anamnViciado").value = document.getElementById("anamnViciadoEdi").value;
+					document.getElementById("anamnAtaques").value = document.getElementById("anamnAtaquesEdi").value;
+					document.getElementById("anamnTdah").value = document.getElementById("anamnTdahEdi").value;
+					document.getElementById("anamnNervosodesc").value = document.getElementById("anamnNervosodescEdi").value;
+					document.getElementById("anamnDeficientedesc").value = document.getElementById("anamnDeficientedescEdi").value;
+					document.getElementById("anamnViciadodesc").value = document.getElementById("anamnViciadodescEdi").value;
+					document.getElementById("anamnAtaquesdesc").value = document.getElementById("anamnAtaquesdescEdi").value;
+					document.getElementById("anamnTdahdesc").value = document.getElementById("anamnTdahdescEdi").value;
+					document.getElementById("anamnEsquizofrenia").value = document.getElementById("anamnEsquizofreniaEdi").value;
+					document.getElementById("anamnEsquizofreniadesc").value = document.getElementById("anamnEsquizofreniadescEdi").value;
+					document.getElementById("anamnOutros").value = document.getElementById("anamnOutrosEdi").value;
+					document.getElementById("anamnOutrosdesc").value = document.getElementById("anamnOutrosdescEdi").value;
+					document.getElementById("anamnObssaude2").value = document.getElementById("anamnObssaude2Edi").value;
+					document.getElementById("anamnPripalavrasidade").value = document.getElementById("anamnPripalavrasidadeEdi").value;
+					document.getElementById("anamnLimguagemcompre").value = document.getElementById("anamnLimguagemcompreEdi").value;
+					document.getElementById("anamnInicioufalaparou").value = document.getElementById("anamnInicioufalaparouEdi").value;
+					document.getElementById("anamnInicioufalaparoudesc").value = document.getElementById("anamnInicioufalaparoudescEdi").value;
+					document.getElementById("anamnGdiscluverbalgagueira").value = document.getElementById("anamnGdiscluverbalgagueiraEdi").value;
+					document.getElementById("anamnDislalia").value = document.getElementById("anamnDislaliaEdi").value;
+					document.getElementById("anamnDislaliaqual").value = document.getElementById("anamnDislaliaqualEdi").value;
+					
+					document.getElementById("anamnFalavocal").value = document.getElementById("anamnFalavocalEdi").value;
+					document.getElementById("anamnCompreendeordem").value = document.getElementById("anamnCompreendeordemEdi").value;
+					document.getElementById("anamnCumpreordens").value = document.getElementById("anamnCumpreordensEdi").value;
+					document.getElementById("anamnEcolaliaimediata").value = document.getElementById("anamnEcolaliaimediataEdi").value;
+					document.getElementById("anamnEcolaliatardia").value = document.getElementById("anamnEcolaliatardiaEdi").value;
+					document.getElementById("anamnAponta").value = document.getElementById("anamnApontaEdi").value;
+					document.getElementById("anamnPede").value = document.getElementById("anamnPedeEdi").value;
+					document.getElementById("anamnNomeiadescenas").value = document.getElementById("anamnNomeiadescenasEdi").value;
+					document.getElementById("anamnPergunta").value = document.getElementById("anamnPerguntaEdi").value;
+					document.getElementById("anamnRespondepergunta").value = document.getElementById("anamnRespondeperguntaEdi").value;
+					document.getElementById("anamnSolicitabrincar").value = document.getElementById("anamnSolicitabrincarEdi").value;
+					document.getElementById("anamnSolicitairbanheiro").value = document.getElementById("anamnSolicitairbanheiroEdi").value;
+					document.getElementById("anamnSolicitabeber").value = document.getElementById("anamnSolicitabeberEdi").value;
+					document.getElementById("anamnSolicitacomer").value = document.getElementById("anamnSolicitacomerEdi").value;
+					document.getElementById("anamnRouco").value = document.getElementById("anamnRoucoEdi").value;
+					document.getElementById("anamnRealizasombocainativ").value = document.getElementById("anamnRealizasombocainativEdi").value;
+					document.getElementById("anamnRealizasombocaativ").value = document.getElementById("anamnRealizasombocaativEdi").value;
+					document.getElementById("anamnFrasequantaspalavras").value = document.getElementById("anamnFrasequantaspalavrasEdi").value;
+					document.getElementById("anamnObslibguagem").value = document.getElementById("anamnObslibguagemEdi").value;
+					//Grupo
+					document.getElementById("anamnCuriosidadesex").value = document.getElementById("anamnCuriosidadesexEdi").value;
+					document.getElementById("anamnCuriosidadesexdesc").value = document.getElementById("anamnCuriosidadesexdescEdi").value;
+					document.getElementById("anamnMasturbase").value = document.getElementById("anamnMasturbaseEdi").value;
+					document.getElementById("anamnMasturbasedesc").value = document.getElementById("anamnMasturbasedescEdi").value;
+					document.getElementById("anamnPercebedifsex").value = document.getElementById("anamnPercebedifsexEdi").value;
+					document.getElementById("anamnPercebedifsexdesc").value = document.getElementById("anamnPercebedifsexdescEdi").value;
+					document.getElementById("anamnObssex").value = document.getElementById("anamnObssexEdi").value;
+					
+					document.getElementById("anamnComoreaproibi").value = document.getElementById("anamnComoreaproibiEdi").value;
+					document.getElementById("anamnComoreafrustra").value = document.getElementById("anamnComoreafrustraEdi").value;
+					document.getElementById("anamnComoreacastig").value = document.getElementById("anamnComoreacastigEdi").value;
+					document.getElementById("anamnComoreanovasituacao").value = document.getElementById("anamnComoreanovasituacaoEdi").value;
+					document.getElementById("anamnDefendeseagressaocomo").value = document.getElementById("anamnDefendeseagressaocomoEdi").value;
+					//Grupo
+					document.getElementById("anamnAutolesivo").value = document.getElementById("anamnAutolesivoEdi").value;
+					document.getElementById("anamnAutolesivodesc").value = document.getElementById("anamnAutolesivodescEdi").value;
+					document.getElementById("anamnAgressivo").value = document.getElementById("anamnAgressivoEdi").value;
+					document.getElementById("anamnAgressivodesc").value = document.getElementById("anamnAgressivodescEdi").value;
+					document.getElementById("anamnDependente").value = document.getElementById("anamnDependenteEdi").value;
+					document.getElementById("anamnDependentedesc").value = document.getElementById("anamnDependentedescEdi").value;
+					document.getElementById("anamnCarinho").value = document.getElementById("anamnCarinhoEdi").value;
+					document.getElementById("anamnCarinhodesc").value = document.getElementById("anamnCarinhodescEdi").value;
+					document.getElementById("anamnAutoritario").value = document.getElementById("anamnAutoritarioEdi").value;
+					document.getElementById("anamnAutoritariodesc").value = document.getElementById("anamnAutoritariodescEdi").value;
+					document.getElementById("anamnMalcriado").value = document.getElementById("anamnMalcriadoEdi").value;
+					document.getElementById("anamnMalcriadodesc").value = document.getElementById("anamnMalcriadodescEdi").value;
+					document.getElementById("anamnExibicionista").value = document.getElementById("anamnExibicionistaEdi").value;
+					document.getElementById("anamnExibicionistadesc").value = document.getElementById("anamnExibicionistadescEdi").value;
+					document.getElementById("anamnAnsioso").value = document.getElementById("anamnAnsiosoEdi").value;
+					document.getElementById("anamnAnsiosodesc").value = document.getElementById("anamnAnsiosodescEdi").value;
+					document.getElementById("anamnCalado").value = document.getElementById("anamnCaladoEdi").value;
+					document.getElementById("anamnCaladodesc").value = document.getElementById("anamnCaladodescEdi").value;
+					document.getElementById("anamnFalante").value = document.getElementById("anamnFalanteEdi").value;
+					document.getElementById("anamnFalantedesc").value = document.getElementById("anamnFalantedescEdi").value;
+					document.getElementById("anamnEsteriotipiasquandoocorre").value = document.getElementById("anamnEsteriotipiasquandoocorreEdi").value;
+					document.getElementById("anamnObscomportamento").value = document.getElementById("anamnObscomportamentoEdi").value;
+					//Grupo
+					document.getElementById("anamnChupeta").value = document.getElementById("anamnChupetaEdi").value;
+					document.getElementById("anamnChupetatempo").value = document.getElementById("anamnChupetatempoEdi").value;
+					document.getElementById("anamnDedo").value = document.getElementById("anamnDedoEdi").value;
+					document.getElementById("anamnDedotempo").value = document.getElementById("anamnDedotempoEdi").value;
+					document.getElementById("anamnRoeuouroiunhas").value = document.getElementById("anamnRoeuouroiunhasEdi").value;
+					//Grupo
+					document.getElementById("anamnPuxaorelhascabelo").value = document.getElementById("anamnPuxaorelhascabeloEdi").value;
+					document.getElementById("anamnPuxaorelhascabelotempo").value = document.getElementById("anamnPuxaorelhascabelotempoEdi").value;
+					document.getElementById("anamnMordelabios").value = document.getElementById("anamnMordelabiosEdi").value;
+					document.getElementById("anamnMordelabiostempo").value = document.getElementById("anamnMordelabiostempoEdi").value;
+					document.getElementById("anamnBatepes").value = document.getElementById("anamnBatepesEdi").value;
+					document.getElementById("anamnBatepestempo").value = document.getElementById("anamnBatepestempoEdi").value;
+					document.getElementById("anamnBatecabeca").value = document.getElementById("anamnBatecabecaEdi").value;
+					document.getElementById("anamnBatecabecadesc").value = document.getElementById("anamnBatecabecadescEdi").value;
+					document.getElementById("anamnTemmedos").value = document.getElementById("anamnTemmedosEdi").value;
+					document.getElementById("anamnTemmedosdesc").value = document.getElementById("anamnTemmedosdescEdi").value;
+					document.getElementById("anamnMentejamentiu").value = document.getElementById("anamnMentejamentiuEdi").value;
+					document.getElementById("anamnMentejamentiudesc").value = document.getElementById("anamnMentejamentiudescEdi").value;
+					document.getElementById("anamnAtiraobjetos").value = document.getElementById("anamnAtiraobjetosEdi").value;
+					document.getElementById("anamnAtiraobjetosdesc").value = document.getElementById("anamnAtiraobjetosdescEdi").value;
+					document.getElementById("anamnDesligase").value = document.getElementById("anamnDesligaseEdi").value;
+					document.getElementById("anamnDesligasetempo").value = document.getElementById("anamnDesligasetempoEdi").value;
+					document.getElementById("anamnObjetonuncalarga").value = document.getElementById("anamnObjetonuncalargaEdi").value;
+					document.getElementById("anamnObjetonuncalargaqual").value = document.getElementById("anamnObjetonuncalargaqualEdi").value;
+					document.getElementById("anamnTique").value = document.getElementById("anamnTiqueEdi").value;
+					document.getElementById("anamnTiquedesc").value = document.getElementById("anamnTiquedescEdi").value;
+					document.getElementById("anamnRepeteacao").value = document.getElementById("anamnRepeteacaoEdi").value;
+					document.getElementById("anamnRepeteacaoqual").value = document.getElementById("anamnRepeteacaoqualEdi").value;
+					document.getElementById("anamnObstiques").value = document.getElementById("anamnObstiquesEdi").value;
+					//Grupo
+					document.getElementById("anamnDormecomquem").value = document.getElementById("anamnDormecomquemEdi").value;
+					document.getElementById("anamnVaissozinhocama").value = document.getElementById("anamnVaissozinhocamaEdi").value;
+					//document.getElementById("anamnVaissozinhocamadesc").value = document.getElementById("anamnVaissozinhocamadescEdi").value;
+					//document.getElementById("anamnDromequantotempo").value = document.getElementById("anamnDromequantotempoEdi").value;
+					document.getElementById("anamnVaiparacamapais").value = document.getElementById("anamnVaiparacamapaisEdi").value;
+					//document.getElementById("anamnVaiparacamapaisdesc").value = document.getElementById("anamnVaiparacamapaisdescEdi").value;
+					document.getElementById("anamnChoranoite").value = document.getElementById("anamnChoranoiteEdi").value;
+					document.getElementById("anamnFalanoite").value = document.getElementById("anamnFalanoiteEdi").value;
+					document.getElementById("anamnGritanoite").value = document.getElementById("anamnGritanoiteEdi").value;
+					document.getElementById("anamnRangedenteanoite").value = document.getElementById("anamnRangedenteanoiteEdi").value;
+					document.getElementById("anamnInsonianoite").value = document.getElementById("anamnInsonianoiteEdi").value;
+					document.getElementById("anamnBabanoite").value = document.getElementById("anamnBabanoiteEdi").value;
+					document.getElementById("anamnPesadelo").value = document.getElementById("anamnPesadeloEdi").value;
+					document.getElementById("anamnSudorese").value = document.getElementById("anamnSudoreseEdi").value;
+					document.getElementById("anamnTerrornoturno").value = document.getElementById("anamnTerrornoturnoEdi").value;
+					document.getElementById("anamnRonca").value = document.getElementById("anamnRoncaEdi").value;
+					document.getElementById("anamnRespiraoral").value = document.getElementById("anamnRespiraoralEdi").value;
+					document.getElementById("anamnProximoolhos").value = document.getElementById("anamnProximoolhosEdi").value;
+
+					document.getElementById("anamnChoranoitedesc").value = document.getElementById("anamnChoranoitedescEdi").value;
+					document.getElementById("anamnFalanoitedesc").value = document.getElementById("anamnFalanoitedescEdi").value;
+					document.getElementById("anamnGritanoitedesc").value = document.getElementById("anamnGritanoitedescEdi").value;
+					document.getElementById("anamnRangedenteanoitedesc").value = document.getElementById("anamnRangedenteanoitedescEdi").value;
+					document.getElementById("anamnInsonianoitedesc").value = document.getElementById("anamnInsonianoitedescEdi").value;
+					document.getElementById("anamnBabanoitedesc").value = document.getElementById("anamnBabanoitedescEdi").value;
+					document.getElementById("anamnPesadelodesc").value = document.getElementById("anamnPesadelodescEdi").value;
+					document.getElementById("anamnSudoresedesc").value = document.getElementById("anamnSudoresedescEdi").value;
+					document.getElementById("anamnTerrornoturnodesc").value = document.getElementById("anamnTerrornoturnodescEdi").value;
+					document.getElementById("anamnRoncadesc").value = document.getElementById("anamnRoncadescEdi").value;
+					document.getElementById("anamnRespiraoraldesc").value = document.getElementById("anamnRespiraoraldescEdi").value;
+					document.getElementById("anamnProximoolhosdesc").value = document.getElementById("anamnProximoolhosdescEdi").value;
+					
+					document.getElementById("anamnSono").value = document.getElementById("anamnSonoEdi").value;
+					document.getElementById("anamnSonodesc").value = document.getElementById("anamnSonodescEdi").value;
+					document.getElementById("anamnObssono").value = document.getElementById("anamnObssonoEdi").value;
+					//Grupo
+					document.getElementById("anamnAleitamaterno").value = document.getElementById("anamnAleitamaternoEdi").value;
+					document.getElementById("anamnTempoaleitamaterno").value = document.getElementById("anamnTempoaleitamaternoEdi").value;
+					document.getElementById("anamnBoasuccaoamamenta").value = document.getElementById("anamnBoasuccaoamamentaEdi").value;
+					document.getElementById("anamnBoasuccaoamamentadesc").value = document.getElementById("anamnBoasuccaoamamentadescEdi").value;
+					document.getElementById("anamnTempoomamadeira").value = document.getElementById("anamnTempoomamadeiraEdi").value;
+					document.getElementById("anamnTempoomamadeiradesc").value = document.getElementById("anamnTempoomamadeiradescEdi").value;
+					document.getElementById("anamnDurefeicao").value = document.getElementById("anamnDurefeicaoEdi").value;
+					document.getElementById("anamnDurefeicaodesc").value = document.getElementById("anamnDurefeicaodescEdi").value;
+					document.getElementById("anamnRestricaoalimentar").value = document.getElementById("anamnRestricaoalimentarEdi").value;
+					document.getElementById("anamnAliso").value = document.getElementById("anamnAlisoEdi").value;
+					document.getElementById("anamnAlisodesc").value = document.getElementById("anamnAlisodescEdi").value;
+					document.getElementById("anamnUtilizatalher").value = document.getElementById("anamnUtilizatalherEdi").value;
+					document.getElementById("anamnUtilizatalherdesc").value = document.getElementById("anamnUtilizatalherdescEdi").value;
+					document.getElementById("anamnUsacopo").value = document.getElementById("anamnUsacopoEdi").value;
+					document.getElementById("anamnUsacopodesc").value = document.getElementById("anamnUsacopodescEdi").value;
+					document.getElementById("anamnMastiga").value = document.getElementById("anamnMastigaEdi").value;
+					document.getElementById("anamnMastigadesc").value = document.getElementById("anamnMastigadescEdi").value;
+					document.getElementById("anamnAlimentaseliqui").value = document.getElementById("anamnAlimentaseliquiEdi").value;
+					document.getElementById("anamnAlimentasepasto").value = document.getElementById("anamnAlimentasepastoEdi").value;
+					document.getElementById("anamnAlimentasesolido").value = document.getElementById("anamnAlimentasesolidoEdi").value;
+					document.getElementById("anamnAlimentacom").value = document.getElementById("anamnAlimentacomEdi").value;
+					document.getElementById("anamnDificuldadetipocheiro").value = document.getElementById("anamnDificuldadetipocheiroEdi").value;
+					document.getElementById("anamnDificuldadetipocheiroquais").value = document.getElementById("anamnDificuldadetipocheiroquaisEdi").value;
+					document.getElementById("anamnComportamentorefeicao").value = document.getElementById("anamnComportamentorefeicaoEdi").value;
+					document.getElementById("anamnDegluticaoquadroengasgo").value = document.getElementById("anamnDegluticaoquadroengasgoEdi").value;
+					document.getElementById("anamnDegluticaoquadroengasgodesc").value = document.getElementById("anamnDegluticaoquadroengasgodescEdi").value;
+					document.getElementById("anamnDificuldadetextura").value = document.getElementById("anamnDificuldadetexturaEdi").value;
+					document.getElementById("anamnDificuldadetexturadesc").value = document.getElementById("anamnDificuldadetexturadescEdi").value;
+					document.getElementById("anamnObsalimentacao").value = document.getElementById("anamnObsalimentacaoEdi").value;
+					//grupo
+					document.getElementById("anamnControlefezesdiurna").value = document.getElementById("anamnControlefezesdiurnaEdi").value;
+					document.getElementById("anamnControlefezesnoturna").value = document.getElementById("anamnControlefezesnoturnaEdi").value;
+					document.getElementById("anamnControlefezesdesc").value = document.getElementById("anamnControlefezesdescEdi").value;
+					document.getElementById("anamnControleurinadiurna").value = document.getElementById("anamnControleurinadiurnaEdi").value;
+					document.getElementById("anamnControleurinanoturna").value = document.getElementById("anamnControleurinanoturnaEdi").value;
+					document.getElementById("anamnControleurinadesc").value = document.getElementById("anamnControleurinadescEdi").value;
+					document.getElementById("anamnObsesficteriano").value = document.getElementById("anamnObsesficterianoEdi").value;
+					//grupo
+					document.getElementById("anamnUsovaso").value = document.getElementById("anamnUsovasoEdi").value;
+					document.getElementById("anamnLimpaso").value = document.getElementById("anamnLimpasoEdi").value;
+					document.getElementById("anamnBanhoso").value = document.getElementById("anamnBanhosoEdi").value;
+					document.getElementById("anamnEscovaso").value = document.getElementById("anamnEscovasoEdi").value;
+					document.getElementById("anamnLavamaos").value = document.getElementById("anamnLavamaosEdi").value;
+					document.getElementById("anamnPenteaso").value = document.getElementById("anamnPenteasoEdi").value;
+					document.getElementById("anamnDespesvestese").value = document.getElementById("anamnDespesvesteseEdi").value;
+					document.getElementById("anamnVestese").value = document.getElementById("anamnVesteseEdi").value;
+					document.getElementById("anamnCalcar").value = document.getElementById("anamnCalcarEdi").value;
+					document.getElementById("anamnDeixacortarcabelo").value = document.getElementById("anamnDeixacortarcabeloEdi").value;
+					document.getElementById("anamnAbotoaso").value = document.getElementById("anamnAbotoasoEdi").value;
+					document.getElementById("anamnLacarso").value = document.getElementById("anamnLacarsoEdi").value;
+					document.getElementById("anamnDeixacortarunhas").value = document.getElementById("anamnDeixacortarunhasEdi").value;
+					document.getElementById("anamnObsvestirhigi").value = document.getElementById("anamnObsvestirhigiEdi").value;
+					//Grupo
+					document.getElementById("anamnProblemavisao").value = document.getElementById("anamnProblemavisaoEdi").value;
+					document.getElementById("anamnProblemavisaodesc").value = document.getElementById("anamnProblemavisaodescEdi").value;
+					document.getElementById("anamnOlhaobjetivoatividade").value = document.getElementById("anamnOlhaobjetivoatividadeEdi").value;
+					document.getElementById("anamnOlhaobjetivoatividadedesc").value = document.getElementById("anamnOlhaobjetivoatividadedescEdi").value;
+					document.getElementById("anamnUsaoculos").value = document.getElementById("anamnUsaoculosEdi").value;
+					document.getElementById("anamnUsaoculosmotivo").value = document.getElementById("anamnUsaoculosmotivoEdi").value;
+					document.getElementById("anamnUsaoculosquando").value = document.getElementById("anamnUsaoculosquandoEdi").value;
+					document.getElementById("anamnPrefereambienteescuro").value = document.getElementById("anamnPrefereambienteescuroEdi").value;
+					document.getElementById("anamnImcomodamuitaluzcor").value = document.getElementById("anamnImcomodamuitaluzcorEdi").value;
+					document.getElementById("anamnFazconatatovisual").value = document.getElementById("anamnFazconatatovisualEdi").value;
+					document.getElementById("anamnPermanececontatovisual").value = document.getElementById("anamnPermanececontatovisualEdi").value;
+					document.getElementById("anamnObsvisao").value = document.getElementById("anamnObsvisaoEdi").value;
+					//Grupo
+					document.getElementById("anamnDuvidacapaccitaauditiva").value = document.getElementById("anamnDuvidacapaccitaauditivaEdi").value;
+					document.getElementById("anamnDuvidacapaccitaauditivadesc").value = document.getElementById("anamnDuvidacapaccitaauditivadescEdi").value;
+					document.getElementById("anamnJaexpostoruidoexplosao").value = document.getElementById("anamnJaexpostoruidoexplosaoEdi").value;
+					document.getElementById("anamnJaexpostoruidoexplosaodesc").value = document.getElementById("anamnJaexpostoruidoexplosaodescEdi").value;
+					
+					document.getElementById("anamnVoz").value = document.getElementById("anamnVozEdi").value;
+					document.getElementById("anamnAudiometria").value = document.getElementById("anamnAudiometriaEdi").value;
+					document.getElementById("anamnLocalizasons").value = document.getElementById("anamnLocalizasonsEdi").value;
+					document.getElementById("anamnTampaouvidosruido").value = document.getElementById("anamnTampaouvidosruidoEdi").value;
+					document.getElementById("anamnAproximaruidos").value = document.getElementById("anamnAproximaruidosEdi").value;
+					document.getElementById("anamnAsustafacil").value = document.getElementById("anamnAsustafacilEdi").value;
+					
+					document.getElementById("anamnVozdesc").value = document.getElementById("anamnVozdescEdi").value;
+					document.getElementById("anamnAudiometriadesc").value = document.getElementById("anamnAudiometriadescEdi").value;
+					document.getElementById("anamnLocalizasonsdesc").value = document.getElementById("anamnLocalizasonsdescEdi").value;
+					document.getElementById("anamnTampaouvidosruidodesc").value = document.getElementById("anamnTampaouvidosruidodescEdi").value;
+					document.getElementById("anamnAproximaruidosdesc").value = document.getElementById("anamnAproximaruidosdescEdi").value;
+					document.getElementById("anamnAsustafacildesc").value = document.getElementById("anamnAsustafacildescEdi").value;
+
+					document.getElementById("anamnSeicomodapessoasfalando").value = document.getElementById("anamnSeicomodapessoasfalandoEdi").value;
+					document.getElementById("anamnSeicomodapessoasfalandodesc").value = document.getElementById("anamnSeicomodapessoasfalandodescEdi").value;
+					document.getElementById("anamnEscutachamado").value = document.getElementById("anamnEscutachamadoEdi").value;
+					document.getElementById("anamnEscutachamadodesc").value = document.getElementById("anamnEscutachamadodescEdi").value;
+					document.getElementById("anamnObsaudicao").value = document.getElementById("anamnObsaudicaoEdi").value;
+					//grupo
+					document.getElementById("anamnControlacabeca").value = document.getElementById("anamnControlacabecaEdi").value;
+					document.getElementById("anamnRolou").value = document.getElementById("anamnRolouEdi").value;
+					document.getElementById("anamnEngatinhou").value = document.getElementById("anamnEngatinhouEdi").value;
+					document.getElementById("anamnUsouandaja").value = document.getElementById("anamnUsouandajaEdi").value;
+					document.getElementById("anamnAndou").value = document.getElementById("anamnAndouEdi").value;
+					document.getElementById("anamnAndoudesc").value = document.getElementById("anamnAndoudescEdi").value;
+					document.getElementById("anamnUsaescada").value = document.getElementById("anamnUsaescadaEdi").value;
+					document.getElementById("anamnPulacorre").value = document.getElementById("anamnPulacorreEdi").value;
+					document.getElementById("anamnAndapontadope").value = document.getElementById("anamnAndapontadopeEdi").value;
+					document.getElementById("anamnMedotirarpesdochao").value = document.getElementById("anamnMedotirarpesdochaoEdi").value;
+					document.getElementById("anamnMedotirarpesdochaodesc").value = document.getElementById("anamnMedotirarpesdochaodescEdi").value;
+					document.getElementById("anamnDesastrado").value = document.getElementById("anamnDesastradoEdi").value;
+					document.getElementById("anamnSeescondeembaixoobj").value = document.getElementById("anamnSeescondeembaixoobjEdi").value;
+					document.getElementById("anamnEscalasobeobj").value = document.getElementById("anamnEscalasobeobjEdi").value;
+					document.getElementById("anamnMostramedoexp").value = document.getElementById("anamnMostramedoexpEdi").value;
+					document.getElementById("anamnMostramedoexpdesc").value = document.getElementById("anamnMostramedoexpdescEdi").value;
+					document.getElementById("anamnEvitanovasposicoes").value = document.getElementById("anamnEvitanovasposicoesEdi").value;
+					document.getElementById("anamnEvitanovasposicoesdesc").value = document.getElementById("anamnEvitanovasposicoesdescEdi").value;
+					document.getElementById("anamnReacaoemotivaexessi").value = document.getElementById("anamnReacaoemotivaexessiEdi").value;
+					document.getElementById("anamnReacaoemotivaexessidesc").value = document.getElementById("anamnReacaoemotivaexessidescEdi").value;
+					document.getElementById("anamnMovisecuidado").value = document.getElementById("anamnMovisecuidadoEdi").value;
+					//document.getElementById("anamnMovisecuidadodesc").value = document.getElementById("anamnMovisecuidadodescEdi").value;
+					document.getElementById("anamnTemexpnegativamov").value = document.getElementById("anamnTemexpnegativamovEdi").value;
+					//document.getElementById("anamnTemexpnegativamovdesc").value = document.getElementById("anamnTemexpnegativamovdescEdi").value;
+					document.getElementById("anamnObspsicomotor").value = document.getElementById("anamnObspsicomotorEdi").value;
+					//grupo
+					document.getElementById("anamnRecusapisargrama").value = document.getElementById("anamnRecusapisargramaEdi").value;
+					document.getElementById("anamnRecusapisarmolhado").value = document.getElementById("anamnRecusapisarmolhadoEdi").value;
+					document.getElementById("anamnRecusaareia").value = document.getElementById("anamnRecusaareiaEdi").value;
+					document.getElementById("anamnRecusatinta").value = document.getElementById("anamnRecusatintaEdi").value;
+					document.getElementById("anamnRecusaplastilina").value = document.getElementById("anamnRecusaplastilinaEdi").value;
+					document.getElementById("anamnRecusaamoeba").value = document.getElementById("anamnRecusaamoebaEdi").value;
+					document.getElementById("anamnEvitatoqueleve").value = document.getElementById("anamnEvitatoqueleveEdi").value;
+					document.getElementById("anamnAceitaabreco").value = document.getElementById("anamnAceitaabrecoEdi").value;
+					document.getElementById("anamnAceitaabrecodesc").value = document.getElementById("anamnAceitaabrecodescEdi").value;
+					document.getElementById("anamnTocapessoasobjconsta").value = document.getElementById("anamnTocapessoasobjconstaEdi").value;
+					document.getElementById("anamnBatecaisemnocao").value = document.getElementById("anamnBatecaisemnocaoEdi").value;
+					document.getElementById("anamnSeguraobj").value = document.getElementById("anamnSeguraobjEdi").value;
+					document.getElementById("anamnBuscaatvpuxaremp").value = document.getElementById("anamnBuscaatvpuxarempEdi").value;
+					document.getElementById("anamnMastigaobjroupa").value = document.getElementById("anamnMastigaobjroupaEdi").value;
+					//document.getElementById("anamnTocapessoasobjconstadesc").value = document.getElementById("anamnTocapessoasobjconstadescEdi").value;
+					//document.getElementById("anamnBatecaisemnocaodesc").value = document.getElementById("anamnBatecaisemnocaodescEdi").value;
+					//document.getElementById("anamnSeguraobjdesc").value = document.getElementById("anamnSeguraobjdescEdi").value;
+					//document.getElementById("anamnBuscaatvpuxarempdesc").value = document.getElementById("anamnBuscaatvpuxarempdescEdi").value;
+					//document.getElementById("anamnMastigaobjroupadesc").value = document.getElementById("anamnMastigaobjroupadescEdi").value;
+					document.getElementById("anamnObstatil").value = document.getElementById("anamnObstatilEdi").value;
+					//Grupo
+					document.getElementById("anamnPreferebrincarcom").value = document.getElementById("anamnPreferebrincarcomEdi").value;
+					document.getElementById("anamnPreferebrincaridade").value = document.getElementById("anamnPreferebrincaridadeEdi").value;
+					document.getElementById("anamnPreferebrincarcomdesc").value = document.getElementById("anamnPreferebrincarcomdescEdi").value;
+					
+					document.getElementById("anamnFazamigosfacil").value = document.getElementById("anamnFazamigosfacilEdi").value;
+					document.getElementById("anamnEmprestabrinquedos").value = document.getElementById("anamnEmprestabrinquedosEdi").value;
+					document.getElementById("anamnBrincacooperado").value = document.getElementById("anamnBrincacooperadoEdi").value;
+					document.getElementById("anamnGostamandar").value = document.getElementById("anamnGostamandarEdi").value;
+					document.getElementById("anamnGostasubmeter").value = document.getElementById("anamnGostasubmeterEdi").value;
+
+					document.getElementById("anamnFazamigosfacildesc").value = document.getElementById("anamnFazamigosfacildescEdi").value;
+					document.getElementById("anamnEmprestabrinquedosdesc").value = document.getElementById("anamnEmprestabrinquedosdescEdi").value;
+					document.getElementById("anamnBrincacooperadodesc").value = document.getElementById("anamnBrincacooperadodescEdi").value;
+					document.getElementById("anamnGostamandardesc").value = document.getElementById("anamnGostamandardescEdi").value;
+					document.getElementById("anamnGostasubmeterdesc").value = document.getElementById("anamnGostasubmeterdescEdi").value;
+					
+					
+					document.getElementById("anamnGostamusica").value = document.getElementById("anamnGostamusicaEdi").value;
+					document.getElementById("anamnGostamusicaquais").value = document.getElementById("anamnGostamusicaquaisEdi").value;
+
+					document.getElementById("anamnSocializapares").value = document.getElementById("anamnSocializaparesEdi").value;
+					document.getElementById("anamnBrincaparque").value = document.getElementById("anamnBrincaparqueEdi").value;
+					document.getElementById("anamnBrincarfuncional").value = document.getElementById("anamnBrincarfuncionalEdi").value;
+					document.getElementById("anamnCriabrincadeiras").value = document.getElementById("anamnCriabrincadeirasEdi").value;
+					document.getElementById("anamnRecusaengajardemanda").value = document.getElementById("anamnRecusaengajardemandaEdi").value;
+
+					document.getElementById("anamnSocializaparesdesc").value = document.getElementById("anamnSocializaparesdescEdi").value;
+					document.getElementById("anamnBrincaparquedesc").value = document.getElementById("anamnBrincaparquedescEdi").value;
+					document.getElementById("anamnBrincarfuncionaldesc").value = document.getElementById("anamnBrincarfuncionaldescEdi").value;
+					document.getElementById("anamnCriabrincadeirasdesc").value = document.getElementById("anamnCriabrincadeirasdescEdi").value;
+					document.getElementById("anamnRecusaengajardemandadesc").value = document.getElementById("anamnRecusaengajardemandadescEdi").value;
+					
+					document.getElementById("anamnBrinquedopreferidosquais").value = document.getElementById("anamnBrinquedopreferidosquaisEdi").value;
+					document.getElementById("anamnObssocial").value = document.getElementById("anamnObssocialEdi").value;
+					//Grupo
+					//document.getElementById("anamnEscola").value = document.getElementById("anamnEscolaEdi").value;
+					//document.getElementById("anamnTempo").value = document.getElementById("anamnTempoEdi").value;
+					//document.getElementById("anamnTurno").value = document.getElementById("anamnTurnoEdi").value;
+					//document.getElementById("anamnSerie").value = document.getElementById("anamnSerieEdi").value;
+					//document.getElementById("anamnEscolaanterior").value = document.getElementById("anamnEscolaanteriorEdi").value;
+					document.getElementById("anamnPaisestudamcomcrianca").value = document.getElementById("anamnPaisestudamcomcriancaEdi").value;
+					document.getElementById("anamnLocaladequadoestudo").value = document.getElementById("anamnLocaladequadoestudoEdi").value;
+					document.getElementById("anamnExecutatarefascaseiras").value = document.getElementById("anamnExecutatarefascaseirasEdi").value;
+					document.getElementById("anamnTemautonomiaestuda").value = document.getElementById("anamnTemautonomiaestudaEdi").value;
+					document.getElementById("anamnNecessitaorienta").value = document.getElementById("anamnNecessitaorientaEdi").value;
+					document.getElementById("anamnUsamuitaborracha").value = document.getElementById("anamnUsamuitaborrachaEdi").value;
+					document.getElementById("anamnRendimentoescolarbaixo").value = document.getElementById("anamnRendimentoescolarbaixoEdi").value;
+					document.getElementById("anamnReprovado").value = document.getElementById("anamnReprovadoEdi").value;
+					document.getElementById("anamnPulouserie").value = document.getElementById("anamnPulouserieEdi").value;
+					//document.getElementById("anamnPulouseriedesc").value = document.getElementById("anamnPulouseriedescEdi").value;
+					document.getElementById("anamnIdadealfa").value = document.getElementById("anamnIdadealfaEdi").value;
+					document.getElementById("anamnComofoialfabet").value = document.getElementById("anamnComofoialfabetEdi").value;
+					document.getElementById("anamnDificuldadeescolar").value = document.getElementById("anamnDificuldadeescolarEdi").value;
+					//document.getElementById("anamnDificuldademateriaquais").value = document.getElementById("anamnDificuldademateriaquaisEdi").value;
+					document.getElementById("anamnLer").value = document.getElementById("anamnLerEdi").value;
+					document.getElementById("anamnLerobs").value = document.getElementById("anamnLerobsEdi").value;
+					document.getElementById("anamnEscreve").value = document.getElementById("anamnEscreveEdi").value;
+					document.getElementById("anamnEscreveobs").value = document.getElementById("anamnEscreveobsEdi").value;
+					document.getElementById("anamnMotrici").value = document.getElementById("anamnMotriciEdi").value;
+					document.getElementById("anamnMotriciobs").value = document.getElementById("anamnMotriciobsEdi").value;
+					document.getElementById("anamnContar").value = document.getElementById("anamnContarEdi").value;
+					document.getElementById("anamnContarobs").value = document.getElementById("anamnContarobsEdi").value;
+					document.getElementById("anamnCalcular").value = document.getElementById("anamnCalcularEdi").value;
+					document.getElementById("anamnCalcularobs").value = document.getElementById("anamnCalcularobsEdi").value;
+					document.getElementById("anamnAtencao").value = document.getElementById("anamnAtencaoEdi").value;
+					document.getElementById("anamnAtencaoobs").value = document.getElementById("anamnAtencaoobsEdi").value;
+					document.getElementById("anamnProfparticular").value = document.getElementById("anamnProfparticularEdi").value;
+					//document.getElementById("anamnProfparticularnome").value = document.getElementById("anamnProfparticularnomeEdi").value;
+					document.getElementById("anamnAtiviextra").value = document.getElementById("anamnAtiviextraEdi").value;
+					//document.getElementById("anamnAtiviextrahorario").value = document.getElementById("anamnAtiviextrahorarioEdi").value;
+					document.getElementById("anamnObsescola").value = document.getElementById("anamnObsescolaEdi").value;
+					//Grupo
+					document.getElementById("anamnRotanadiasemanal").value = document.getElementById("anamnRotanadiasemanalEdi").value;
+					document.getElementById("anamnAnotaextra").value = document.getElementById("anamnAnotaextraEdi").value;
+					document.getElementById("anamnDataanamnese").value = document.getElementById("anamnDataanamneseEdi").value;
+					document.getElementById("anamnDatacad").value = document.getElementById("anamnDatacadEdi").value;
+					document.getElementById("anamnDataedi").value = document.getElementById("anamnDataediEdi").value;
+					//document.getElementById("anamnUsuid").value = document.getElementById("anamnUsuidEdi").value;
+					//Grupo
+					document.getElementById("anamnTerapeutaid").value = document.getElementById("anamnTerapeutaidEdi").value;
+
+					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
+					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
+					//anamnDataanamnese
+					let beneid = document.getElementById("anamnBeneid").value;
+					let dtnsc = new Date(document.getElementById("anamnDataanamneseEdi").value);
+					let mes = (dtnsc.getMonth()+1).toString();
+					let dia = (dtnsc.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+					document.getElementById("anamnDataanamnese").value = fulldate;
+					//anamnBenedatanasc
+					dtnsc = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
+					mes = (dtnsc.getMonth()+1).toString();
+					dia = (dtnsc.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+					document.getElementById("anamnBenedatanasc").value = fulldate;
+					let dtnascbene = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
+					console.log(document.getElementById(beneid+"_beneDatanascEdi").value);
+					mes = (dtnascbene.getMonth()+1).toString();
+					dia = (dtnascbene.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
+					console.log(fulldate)
+					document.getElementById("anamnBenedatanasc").value = fulldate;
+					document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
+				}
 			</script>
-			<script >
-		function atualizaData(){
-			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-			var dataFmt = new Date(dataIso);
-			console.log(dataFmt.toISOString());
-			document.getElementById("a").value = dataFmt;
-		}
-		function atualizaDadosbene(){
-			/*
-			let beneid = document.getElementById("anamnBeneid").value;
-
-			var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-			if (dataIso != undefined && dataIso != "undefined"){
-				var dataFmt = new Date(dataIso);
-				document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-				document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
-			}*/
-			//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-			//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-		}
-		function atualizaData(){
-			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-			var dataFmt = new Date(dataIso);
-			console.log(dataFmt.toISOString());
-			document.getElementById("a").value = dataFmt;
-		}
-		function formataData(date) {//yyyy-MM-dd
-			var d = new Date(date);
-			if (d.getTimezoneOffset() == 180){
-				d.setHours(d.getHours()+3);
-			}
-			console.log("d:"+d);
-				month = '' + (d.getMonth() + 1);
-				day = '' + d.getDate();
-				year = d.getFullYear();
-
-			if (month.length == 1) {
-				month = '0' + month;
-			}
-				
-			if (day.length == 1) {
-				day = '0' + day;
-			}
-
-			return [year, month, day].join('-');
-		}
-
-		function carregaBody(){
-			//document.getElementById("anamnDatacad").value = new Date();
-			//Rotinas
-			document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
-			document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
-			//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
-			document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
-			document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
-			document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
-			document.getElementById("anamnRespnome").value = document.getElementById("anamnRespnomeEdi").value;
-
-			document.getElementById("anamnQueixapri").value = document.getElementById("anamnQueixapriEdi").value;
-			document.getElementById("anamnDiag").value = document.getElementById("anamnDiagEdi").value;
-			
-			document.getElementById("anamnHouvetratengrav").value = document.getElementById("anamnHouvetratengravEdi").value;
-			//document.getElementById("anamnHouvetratengravdesc").value = document.getElementById("anamnHouvetratengravdescEdi").value;
-			document.getElementById("anamnHouveplanfami").value = document.getElementById("anamnHouveplanfamiEdi").value;
-			//document.getElementById("anamnHouveplanfamidesc").value = document.getElementById("anamnHouveplanfamidescEdi").value;
-			document.getElementById("anamnAmeacatenaborto").value = document.getElementById("anamnAmeacatenabortoEdi").value;
-			//document.getElementById("anamnAmeacatenabortodesc").value = document.getElementById("anamnAmeacatenabortodescEdi").value;
-			document.getElementById("anamnBebeoufumagesta").value = document.getElementById("anamnBebeoufumagestaEdi").value;
-			//document.getElementById("anamnBebeoufumagestadesc").value = document.getElementById("anamnBebeoufumagestadescEdi").value;
-			document.getElementById("anamnTraumafispsiinfec").value = document.getElementById("anamnTraumafispsiinfecEdi").value;
-			//document.getElementById("anamnTraumafispsiinfecdesc").value = document.getElementById("anamnTraumafispsiinfecdescEdi").value;
-			document.getElementById("anamnUsotranquil").value = document.getElementById("anamnUsotranquilEdi").value;
-			//document.getElementById("anamnUsotranquildesc").value = document.getElementById("anamnUsotranquildescEdi").value;
-			document.getElementById("anamnAdocao").value = document.getElementById("anamnAdocaoEdi").value;
-			document.getElementById("anamnObsgesta").value = document.getElementById("anamnObsgestaEdi").value;
-			//Grupo
-			document.getElementById("anamnPartoqual").value = document.getElementById("anamnPartoqualEdi").value;
-			//document.getElementById("anamnPartoqualdesc").value = document.getElementById("anamnPartoqualdescEdi").value;
-			document.getElementById("anamnTempogestacional").value = document.getElementById("anamnTempogestacionalEdi").value;
-			//document.getElementById("anamnanamnTempogestacionaldesc").value = document.getElementById("anamnTempogestacionaldescEdi").value;
-			document.getElementById("anamnAnorexiaperiparto").value = document.getElementById("anamnAnorexiaperipartoEdi").value;
-			//document.getElementById("anamnAnorexiaperipartodesc").value = document.getElementById("anamnAnorexiaperipartodescEdi").value;
-			document.getElementById("anamnApgar").value = document.getElementById("anamnApgarEdi").value;
-			document.getElementById("anamnApgargrau").value = document.getElementById("anamnApgargrauEdi").value;
-			//document.getElementById("anamnApgardesc").value = document.getElementById("anamnApgardescEdi").value;
-			console.log("anamnChorounascEdi");
-			console.log(document.getElementById("anamnChorounascEdi").value);
-			document.getElementById("anamnChorounasc").value = document.getElementById("anamnChorounascEdi").value;
-			//document.getElementById("anamnChorounascdesc").value = document.getElementById("anamnChorounascdescEdi").value;
-			document.getElementById("anamnIctericia").value = document.getElementById("anamnIctericiaEdi").value;
-			//document.getElementById("anamnIctericiadesc").value = document.getElementById("anamnIctericiadescEdi").value;
-			document.getElementById("anamnFototerapia").value = document.getElementById("anamnFototerapiaEdi").value;
-			//document.getElementById("anamnFototerapiadesc").value = document.getElementById("anamnFototerapiadescEdi").value;
-			document.getElementById("anamnUti").value = document.getElementById("anamnUtiEdi").value;
-			document.getElementById("anamnUtitempo").value = document.getElementById("anamnUtitempoEdi").value;
-			document.getElementById("anamnComplica").value = document.getElementById("anamnComplicaEdi").value;
-			//document.getElementById("anamnComplicadesc").value = document.getElementById("anamnComplicadescEdi").value;
-			document.getElementById("anamnPaipresentenasc").value = document.getElementById("anamnPaipresentenascEdi").value;
-			//document.getElementById("anamnPaipresentenascdesc").value = document.getElementById("anamnPaipresentenascdescEdi").value;
-			document.getElementById("anamnDescrparto").value = document.getElementById("anamnDescrpartoEdi").value;
-			console.log("anamnObsparto");
-			console.log(document.getElementById("anamnObspartoEdi").value);
-			document.getElementById("anamnObsparto").value = document.getElementById("anamnObspartoEdi").value;
-			//Grupo
-			document.getElementById("anamnPessmoracasa").value = document.getElementById("anamnPessmoracasaEdi").value;
-			document.getElementById("anamnIrmaosmoracasa").value = document.getElementById("anamnIrmaosmoracasaEdi").value;
-			document.getElementById("anamnIrmaospartemae").value = document.getElementById("anamnIrmaospartemaeEdi").value;
-			document.getElementById("anamnIrmaospartpai").value = document.getElementById("anamnIrmaospartpaiEdi").value;
-			document.getElementById("anamnMaetrab").value = document.getElementById("anamnMaetrabEdi").value;
-			document.getElementById("anamnMaetrabquemfica").value = document.getElementById("anamnMaetrabquemficaEdi").value;
-			document.getElementById("anamnObsfami").value = document.getElementById("anamnObsfamiEdi").value;
-			document.getElementById("anamnPaisvivemjuntosbem").value = document.getElementById("anamnPaisvivemjuntosbemEdi").value;
-			//document.getElementById("anamnPaisvivemjuntosbemdesc").value = document.getElementById("anamnPaisvivemjuntosbemdescEdi").value;
-			document.getElementById("anamnDiscussoesfreq").value = document.getElementById("anamnDiscussoesfreqEdi").value;
-			//document.getElementById("anamnDiscussoesfreqdesc").value = document.getElementById("anamnDiscussoesfreqdescEdi").value;
-			document.getElementById("anamnComofoisepara").value = document.getElementById("anamnComofoiseparaEdi").value;
-			document.getElementById("anamnReacaocrianca").value = document.getElementById("anamnReacaocriancaEdi").value;
-			document.getElementById("anamnQuemcedefacil").value = document.getElementById("anamnQuemcedefacilEdi").value;
-			//document.getElementById("anamnQuemcedefacildesc").value = document.getElementById("anamnQuemcedefacildescEdi").value;
-			document.getElementById("anamnCriancatratdif").value = document.getElementById("anamnCriancatratdifEdi").value;
-			//document.getElementById("anamnCriancatratdifcomo").value = document.getElementById("anamnCriancatratdifcomoEdi").value;
-			document.getElementById("anamnRelacirmaos").value = document.getElementById("anamnRelacirmaosEdi").value;
-			document.getElementById("anamnAmbientefami").value = document.getElementById("anamnAmbientefamiEdi").value;
-			document.getElementById("anamnObsfamiambiente").value = document.getElementById("anamnObsfamiambienteEdi").value;
-			//Grupo
-			document.getElementById("anamnHaeducarelig").value = document.getElementById("anamnHaeducareligEdi").value;
-			document.getElementById("anamnHaeducareligqual").value = document.getElementById("anamnHaeducareligqualEdi").value;
-			document.getElementById("anamnDevpreccumpr").value = document.getElementById("anamnDevpreccumprEdi").value;
-			//document.getElementById("anamnDevpreccumprdesc").value = document.getElementById("anamnDevpreccumprdescEdi").value;
-			document.getElementById("anamnObsreligiao").value = document.getElementById("anamnObsreligiaoEdi").value;
-			//Grupo
-			document.getElementById("anamnSarampo").value = document.getElementById("anamnSarampoEdi").value;
-			document.getElementById("anamnCatapora").value = document.getElementById("anamnCataporaEdi").value;
-			document.getElementById("anamnCaxumba").value = document.getElementById("anamnCaxumbaEdi").value;
-			document.getElementById("anamnRubeola").value = document.getElementById("anamnRubeolaEdi").value;
-			document.getElementById("anamnCpqueluche").value = document.getElementById("anamnCpquelucheEdi").value;
-			document.getElementById("anamnMeningite").value = document.getElementById("anamnMeningiteEdi").value;
-			document.getElementById("anamnComplicavacina").value = document.getElementById("anamnComplicavacinaEdi").value;
-			//grupo
-			document.getElementById("anamnDengue").value = document.getElementById("anamnDengueEdi").value;
-			document.getElementById("anamnZica").value = document.getElementById("anamnZicaEdi").value;
-			document.getElementById("anamnChikun").value = document.getElementById("anamnChikunEdi").value;
-			document.getElementById("anamnCovid").value = document.getElementById("anamnCovidEdi").value;
-			document.getElementById("anamnTce").value = document.getElementById("anamnTceEdi").value;
-			document.getElementById("anamnObssaude").value = document.getElementById("anamnObssaudeEdi").value;
-			document.getElementById("anamnObssaude2").value = document.getElementById("anamnObssaude2Edi").value;
-			//Grupo
-			document.getElementById("anamnOtite").value = document.getElementById("anamnOtiteEdi").value;
-			document.getElementById("anamnAdenoide").value = document.getElementById("anamnAdenoideEdi").value;
-			document.getElementById("anamnAmigdalites").value = document.getElementById("anamnAmigdalitesEdi").value;
-			document.getElementById("anamnAlergias").value = document.getElementById("anamnAlergiasEdi").value;
-			document.getElementById("anamnAcidentes").value = document.getElementById("anamnAcidentesEdi").value;
-			document.getElementById("anamnConvulsoes").value = document.getElementById("anamnConvulsoesEdi").value;
-			document.getElementById("anamnInternacoes").value = document.getElementById("anamnInternacoesEdi").value;
-			document.getElementById("anamnCirurgia").value = document.getElementById("anamnCirurgiaEdi").value;
-			//grupo
-			document.getElementById("anamnAvaliacaoneuro").value = document.getElementById("anamnAvaliacaoneuroEdi").value;
-			document.getElementById("anamnAvaliacaoneurodesc").value = document.getElementById("anamnAvaliacaoneurodescEdi").value;
-			document.getElementById("anamnAvaliacaopsico").value = document.getElementById("anamnAvaliacaopsicoEdi").value;
-			document.getElementById("anamnAvaliacaopsicodesc").value = document.getElementById("anamnAvaliacaopsicodescEdi").value;
-			//Grupo
-			document.getElementById("anamnExamesrealiza").value = document.getElementById("anamnExamesrealizaEdi").value;
-			document.getElementById("anamnMedicacaoquais").value = document.getElementById("anamnMedicacaoquaisEdi").value;
-			document.getElementById("anamnQuandodiag").value = document.getElementById("anamnQuandodiagEdi").value;
-			document.getElementById("anamnNervoso").value = document.getElementById("anamnNervosoEdi").value;
-			document.getElementById("anamnDeficiente").value = document.getElementById("anamnDeficienteEdi").value;
-			document.getElementById("anamnViciado").value = document.getElementById("anamnViciadoEdi").value;
-			document.getElementById("anamnAtaques").value = document.getElementById("anamnAtaquesEdi").value;
-			document.getElementById("anamnTdah").value = document.getElementById("anamnTdahEdi").value;
-			document.getElementById("anamnNervosodesc").value = document.getElementById("anamnNervosodescEdi").value;
-			document.getElementById("anamnDeficientedesc").value = document.getElementById("anamnDeficientedescEdi").value;
-			document.getElementById("anamnViciadodesc").value = document.getElementById("anamnViciadodescEdi").value;
-			document.getElementById("anamnAtaquesdesc").value = document.getElementById("anamnAtaquesdescEdi").value;
-			document.getElementById("anamnTdahdesc").value = document.getElementById("anamnTdahdescEdi").value;
-			document.getElementById("anamnEsquizofrenia").value = document.getElementById("anamnEsquizofreniaEdi").value;
-			document.getElementById("anamnEsquizofreniadesc").value = document.getElementById("anamnEsquizofreniadescEdi").value;
-			document.getElementById("anamnOutros").value = document.getElementById("anamnOutrosEdi").value;
-			document.getElementById("anamnOutrosdesc").value = document.getElementById("anamnOutrosdescEdi").value;
-			document.getElementById("anamnObssaude2").value = document.getElementById("anamnObssaude2Edi").value;
-			document.getElementById("anamnPripalavrasidade").value = document.getElementById("anamnPripalavrasidadeEdi").value;
-			document.getElementById("anamnLimguagemcompre").value = document.getElementById("anamnLimguagemcompreEdi").value;
-			document.getElementById("anamnInicioufalaparou").value = document.getElementById("anamnInicioufalaparouEdi").value;
-			document.getElementById("anamnInicioufalaparoudesc").value = document.getElementById("anamnInicioufalaparoudescEdi").value;
-			document.getElementById("anamnGdiscluverbalgagueira").value = document.getElementById("anamnGdiscluverbalgagueiraEdi").value;
-			document.getElementById("anamnDislalia").value = document.getElementById("anamnDislaliaEdi").value;
-			document.getElementById("anamnDislaliaqual").value = document.getElementById("anamnDislaliaqualEdi").value;
-			
-			document.getElementById("anamnFalavocal").value = document.getElementById("anamnFalavocalEdi").value;
-			document.getElementById("anamnCompreendeordem").value = document.getElementById("anamnCompreendeordemEdi").value;
-			document.getElementById("anamnCumpreordens").value = document.getElementById("anamnCumpreordensEdi").value;
-			document.getElementById("anamnEcolaliaimediata").value = document.getElementById("anamnEcolaliaimediataEdi").value;
-			document.getElementById("anamnEcolaliatardia").value = document.getElementById("anamnEcolaliatardiaEdi").value;
-			document.getElementById("anamnAponta").value = document.getElementById("anamnApontaEdi").value;
-			document.getElementById("anamnPede").value = document.getElementById("anamnPedeEdi").value;
-			document.getElementById("anamnNomeiadescenas").value = document.getElementById("anamnNomeiadescenasEdi").value;
-			document.getElementById("anamnPergunta").value = document.getElementById("anamnPerguntaEdi").value;
-			document.getElementById("anamnRespondepergunta").value = document.getElementById("anamnRespondeperguntaEdi").value;
-			document.getElementById("anamnSolicitabrincar").value = document.getElementById("anamnSolicitabrincarEdi").value;
-			document.getElementById("anamnSolicitairbanheiro").value = document.getElementById("anamnSolicitairbanheiroEdi").value;
-			document.getElementById("anamnSolicitabeber").value = document.getElementById("anamnSolicitabeberEdi").value;
-			document.getElementById("anamnSolicitacomer").value = document.getElementById("anamnSolicitacomerEdi").value;
-			document.getElementById("anamnRouco").value = document.getElementById("anamnRoucoEdi").value;
-			document.getElementById("anamnRealizasombocainativ").value = document.getElementById("anamnRealizasombocainativEdi").value;
-			document.getElementById("anamnRealizasombocaativ").value = document.getElementById("anamnRealizasombocaativEdi").value;
-			document.getElementById("anamnFrasequantaspalavras").value = document.getElementById("anamnFrasequantaspalavrasEdi").value;
-			document.getElementById("anamnObslibguagem").value = document.getElementById("anamnObslibguagemEdi").value;
-			//Grupo
-			document.getElementById("anamnCuriosidadesex").value = document.getElementById("anamnCuriosidadesexEdi").value;
-			document.getElementById("anamnCuriosidadesexdesc").value = document.getElementById("anamnCuriosidadesexdescEdi").value;
-			document.getElementById("anamnMasturbase").value = document.getElementById("anamnMasturbaseEdi").value;
-			document.getElementById("anamnMasturbasedesc").value = document.getElementById("anamnMasturbasedescEdi").value;
-			document.getElementById("anamnPercebedifsex").value = document.getElementById("anamnPercebedifsexEdi").value;
-			document.getElementById("anamnPercebedifsexdesc").value = document.getElementById("anamnPercebedifsexdescEdi").value;
-			document.getElementById("anamnObssex").value = document.getElementById("anamnObssexEdi").value;
-			
-			document.getElementById("anamnComoreaproibi").value = document.getElementById("anamnComoreaproibiEdi").value;
-			document.getElementById("anamnComoreafrustra").value = document.getElementById("anamnComoreafrustraEdi").value;
-			document.getElementById("anamnComoreacastig").value = document.getElementById("anamnComoreacastigEdi").value;
-			document.getElementById("anamnComoreanovasituacao").value = document.getElementById("anamnComoreanovasituacaoEdi").value;
-			document.getElementById("anamnDefendeseagressaocomo").value = document.getElementById("anamnDefendeseagressaocomoEdi").value;
-			//Grupo
-			document.getElementById("anamnAutolesivo").value = document.getElementById("anamnAutolesivoEdi").value;
-			document.getElementById("anamnAutolesivodesc").value = document.getElementById("anamnAutolesivodescEdi").value;
-			document.getElementById("anamnAgressivo").value = document.getElementById("anamnAgressivoEdi").value;
-			document.getElementById("anamnAgressivodesc").value = document.getElementById("anamnAgressivodescEdi").value;
-			document.getElementById("anamnDependente").value = document.getElementById("anamnDependenteEdi").value;
-			document.getElementById("anamnDependentedesc").value = document.getElementById("anamnDependentedescEdi").value;
-			document.getElementById("anamnCarinho").value = document.getElementById("anamnCarinhoEdi").value;
-			document.getElementById("anamnCarinhodesc").value = document.getElementById("anamnCarinhodescEdi").value;
-			document.getElementById("anamnAutoritario").value = document.getElementById("anamnAutoritarioEdi").value;
-			document.getElementById("anamnAutoritariodesc").value = document.getElementById("anamnAutoritariodescEdi").value;
-			document.getElementById("anamnMalcriado").value = document.getElementById("anamnMalcriadoEdi").value;
-			document.getElementById("anamnMalcriadodesc").value = document.getElementById("anamnMalcriadodescEdi").value;
-			document.getElementById("anamnExibicionista").value = document.getElementById("anamnExibicionistaEdi").value;
-			document.getElementById("anamnExibicionistadesc").value = document.getElementById("anamnExibicionistadescEdi").value;
-			document.getElementById("anamnAnsioso").value = document.getElementById("anamnAnsiosoEdi").value;
-			document.getElementById("anamnAnsiosodesc").value = document.getElementById("anamnAnsiosodescEdi").value;
-			document.getElementById("anamnCalado").value = document.getElementById("anamnCaladoEdi").value;
-			document.getElementById("anamnCaladodesc").value = document.getElementById("anamnCaladodescEdi").value;
-			document.getElementById("anamnFalante").value = document.getElementById("anamnFalanteEdi").value;
-			document.getElementById("anamnFalantedesc").value = document.getElementById("anamnFalantedescEdi").value;
-			document.getElementById("anamnEsteriotipiasquandoocorre").value = document.getElementById("anamnEsteriotipiasquandoocorreEdi").value;
-			document.getElementById("anamnObscomportamento").value = document.getElementById("anamnObscomportamentoEdi").value;
-			//Grupo
-			document.getElementById("anamnChupeta").value = document.getElementById("anamnChupetaEdi").value;
-			document.getElementById("anamnChupetatempo").value = document.getElementById("anamnChupetatempoEdi").value;
-			document.getElementById("anamnDedo").value = document.getElementById("anamnDedoEdi").value;
-			document.getElementById("anamnDedotempo").value = document.getElementById("anamnDedotempoEdi").value;
-			document.getElementById("anamnRoeuouroiunhas").value = document.getElementById("anamnRoeuouroiunhasEdi").value;
-			//Grupo
-			document.getElementById("anamnPuxaorelhascabelo").value = document.getElementById("anamnPuxaorelhascabeloEdi").value;
-			document.getElementById("anamnPuxaorelhascabelotempo").value = document.getElementById("anamnPuxaorelhascabelotempoEdi").value;
-			document.getElementById("anamnMordelabios").value = document.getElementById("anamnMordelabiosEdi").value;
-			document.getElementById("anamnMordelabiostempo").value = document.getElementById("anamnMordelabiostempoEdi").value;
-			document.getElementById("anamnBatepes").value = document.getElementById("anamnBatepesEdi").value;
-			document.getElementById("anamnBatepestempo").value = document.getElementById("anamnBatepestempoEdi").value;
-			document.getElementById("anamnBatecabeca").value = document.getElementById("anamnBatecabecaEdi").value;
-			document.getElementById("anamnBatecabecadesc").value = document.getElementById("anamnBatecabecadescEdi").value;
-			document.getElementById("anamnTemmedos").value = document.getElementById("anamnTemmedosEdi").value;
-			document.getElementById("anamnTemmedosdesc").value = document.getElementById("anamnTemmedosdescEdi").value;
-			document.getElementById("anamnMentejamentiu").value = document.getElementById("anamnMentejamentiuEdi").value;
-			document.getElementById("anamnMentejamentiudesc").value = document.getElementById("anamnMentejamentiudescEdi").value;
-			document.getElementById("anamnAtiraobjetos").value = document.getElementById("anamnAtiraobjetosEdi").value;
-			document.getElementById("anamnAtiraobjetosdesc").value = document.getElementById("anamnAtiraobjetosdescEdi").value;
-			document.getElementById("anamnDesligase").value = document.getElementById("anamnDesligaseEdi").value;
-			document.getElementById("anamnDesligasetempo").value = document.getElementById("anamnDesligasetempoEdi").value;
-			document.getElementById("anamnObjetonuncalarga").value = document.getElementById("anamnObjetonuncalargaEdi").value;
-			document.getElementById("anamnObjetonuncalargaqual").value = document.getElementById("anamnObjetonuncalargaqualEdi").value;
-			document.getElementById("anamnTique").value = document.getElementById("anamnTiqueEdi").value;
-			document.getElementById("anamnTiquedesc").value = document.getElementById("anamnTiquedescEdi").value;
-			document.getElementById("anamnRepeteacao").value = document.getElementById("anamnRepeteacaoEdi").value;
-			document.getElementById("anamnRepeteacaoqual").value = document.getElementById("anamnRepeteacaoqualEdi").value;
-			document.getElementById("anamnObstiques").value = document.getElementById("anamnObstiquesEdi").value;
-			//Grupo
-			document.getElementById("anamnDormecomquem").value = document.getElementById("anamnDormecomquemEdi").value;
-			document.getElementById("anamnVaissozinhocama").value = document.getElementById("anamnVaissozinhocamaEdi").value;
-			//document.getElementById("anamnVaissozinhocamadesc").value = document.getElementById("anamnVaissozinhocamadescEdi").value;
-			//document.getElementById("anamnDromequantotempo").value = document.getElementById("anamnDromequantotempoEdi").value;
-			document.getElementById("anamnVaiparacamapais").value = document.getElementById("anamnVaiparacamapaisEdi").value;
-			//document.getElementById("anamnVaiparacamapaisdesc").value = document.getElementById("anamnVaiparacamapaisdescEdi").value;
-			document.getElementById("anamnChoranoite").value = document.getElementById("anamnChoranoiteEdi").value;
-			document.getElementById("anamnFalanoite").value = document.getElementById("anamnFalanoiteEdi").value;
-			document.getElementById("anamnGritanoite").value = document.getElementById("anamnGritanoiteEdi").value;
-			document.getElementById("anamnRangedenteanoite").value = document.getElementById("anamnRangedenteanoiteEdi").value;
-			document.getElementById("anamnInsonianoite").value = document.getElementById("anamnInsonianoiteEdi").value;
-			document.getElementById("anamnBabanoite").value = document.getElementById("anamnBabanoiteEdi").value;
-			document.getElementById("anamnPesadelo").value = document.getElementById("anamnPesadeloEdi").value;
-			document.getElementById("anamnSudorese").value = document.getElementById("anamnSudoreseEdi").value;
-			document.getElementById("anamnTerrornoturno").value = document.getElementById("anamnTerrornoturnoEdi").value;
-			document.getElementById("anamnRonca").value = document.getElementById("anamnRoncaEdi").value;
-			document.getElementById("anamnRespiraoral").value = document.getElementById("anamnRespiraoralEdi").value;
-			document.getElementById("anamnProximoolhos").value = document.getElementById("anamnProximoolhosEdi").value;
-
-			document.getElementById("anamnChoranoitedesc").value = document.getElementById("anamnChoranoitedescEdi").value;
-			document.getElementById("anamnFalanoitedesc").value = document.getElementById("anamnFalanoitedescEdi").value;
-			document.getElementById("anamnGritanoitedesc").value = document.getElementById("anamnGritanoitedescEdi").value;
-			document.getElementById("anamnRangedenteanoitedesc").value = document.getElementById("anamnRangedenteanoitedescEdi").value;
-			document.getElementById("anamnInsonianoitedesc").value = document.getElementById("anamnInsonianoitedescEdi").value;
-			document.getElementById("anamnBabanoitedesc").value = document.getElementById("anamnBabanoitedescEdi").value;
-			document.getElementById("anamnPesadelodesc").value = document.getElementById("anamnPesadelodescEdi").value;
-			document.getElementById("anamnSudoresedesc").value = document.getElementById("anamnSudoresedescEdi").value;
-			document.getElementById("anamnTerrornoturnodesc").value = document.getElementById("anamnTerrornoturnodescEdi").value;
-			document.getElementById("anamnRoncadesc").value = document.getElementById("anamnRoncadescEdi").value;
-			document.getElementById("anamnRespiraoraldesc").value = document.getElementById("anamnRespiraoraldescEdi").value;
-			document.getElementById("anamnProximoolhosdesc").value = document.getElementById("anamnProximoolhosdescEdi").value;
-			
-			document.getElementById("anamnSono").value = document.getElementById("anamnSonoEdi").value;
-			document.getElementById("anamnSonodesc").value = document.getElementById("anamnSonodescEdi").value;
-			document.getElementById("anamnObssono").value = document.getElementById("anamnObssonoEdi").value;
-			//Grupo
-			document.getElementById("anamnAleitamaterno").value = document.getElementById("anamnAleitamaternoEdi").value;
-			document.getElementById("anamnTempoaleitamaterno").value = document.getElementById("anamnTempoaleitamaternoEdi").value;
-			document.getElementById("anamnBoasuccaoamamenta").value = document.getElementById("anamnBoasuccaoamamentaEdi").value;
-			document.getElementById("anamnBoasuccaoamamentadesc").value = document.getElementById("anamnBoasuccaoamamentadescEdi").value;
-			document.getElementById("anamnTempoomamadeira").value = document.getElementById("anamnTempoomamadeiraEdi").value;
-			document.getElementById("anamnTempoomamadeiradesc").value = document.getElementById("anamnTempoomamadeiradescEdi").value;
-			document.getElementById("anamnDurefeicao").value = document.getElementById("anamnDurefeicaoEdi").value;
-			document.getElementById("anamnDurefeicaodesc").value = document.getElementById("anamnDurefeicaodescEdi").value;
-			document.getElementById("anamnRestricaoalimentar").value = document.getElementById("anamnRestricaoalimentarEdi").value;
-			document.getElementById("anamnAliso").value = document.getElementById("anamnAlisoEdi").value;
-			document.getElementById("anamnAlisodesc").value = document.getElementById("anamnAlisodescEdi").value;
-			document.getElementById("anamnUtilizatalher").value = document.getElementById("anamnUtilizatalherEdi").value;
-			document.getElementById("anamnUtilizatalherdesc").value = document.getElementById("anamnUtilizatalherdescEdi").value;
-			document.getElementById("anamnUsacopo").value = document.getElementById("anamnUsacopoEdi").value;
-			document.getElementById("anamnUsacopodesc").value = document.getElementById("anamnUsacopodescEdi").value;
-			document.getElementById("anamnMastiga").value = document.getElementById("anamnMastigaEdi").value;
-			document.getElementById("anamnMastigadesc").value = document.getElementById("anamnMastigadescEdi").value;
-			document.getElementById("anamnAlimentaseliqui").value = document.getElementById("anamnAlimentaseliquiEdi").value;
-			document.getElementById("anamnAlimentasepasto").value = document.getElementById("anamnAlimentasepastoEdi").value;
-			document.getElementById("anamnAlimentasesolido").value = document.getElementById("anamnAlimentasesolidoEdi").value;
-			document.getElementById("anamnAlimentacom").value = document.getElementById("anamnAlimentacomEdi").value;
-			document.getElementById("anamnDificuldadetipocheiro").value = document.getElementById("anamnDificuldadetipocheiroEdi").value;
-			document.getElementById("anamnDificuldadetipocheiroquais").value = document.getElementById("anamnDificuldadetipocheiroquaisEdi").value;
-			document.getElementById("anamnComportamentorefeicao").value = document.getElementById("anamnComportamentorefeicaoEdi").value;
-			document.getElementById("anamnDegluticaoquadroengasgo").value = document.getElementById("anamnDegluticaoquadroengasgoEdi").value;
-			document.getElementById("anamnDegluticaoquadroengasgodesc").value = document.getElementById("anamnDegluticaoquadroengasgodescEdi").value;
-			document.getElementById("anamnDificuldadetextura").value = document.getElementById("anamnDificuldadetexturaEdi").value;
-			document.getElementById("anamnDificuldadetexturadesc").value = document.getElementById("anamnDificuldadetexturadescEdi").value;
-			document.getElementById("anamnObsalimentacao").value = document.getElementById("anamnObsalimentacaoEdi").value;
-			//grupo
-			document.getElementById("anamnControlefezesdiurna").value = document.getElementById("anamnControlefezesdiurnaEdi").value;
-			document.getElementById("anamnControlefezesnoturna").value = document.getElementById("anamnControlefezesnoturnaEdi").value;
-			document.getElementById("anamnControlefezesdesc").value = document.getElementById("anamnControlefezesdescEdi").value;
-			document.getElementById("anamnControleurinadiurna").value = document.getElementById("anamnControleurinadiurnaEdi").value;
-			document.getElementById("anamnControleurinanoturna").value = document.getElementById("anamnControleurinanoturnaEdi").value;
-			document.getElementById("anamnControleurinadesc").value = document.getElementById("anamnControleurinadescEdi").value;
-			document.getElementById("anamnObsesficteriano").value = document.getElementById("anamnObsesficterianoEdi").value;
-			//grupo
-			document.getElementById("anamnUsovaso").value = document.getElementById("anamnUsovasoEdi").value;
-			document.getElementById("anamnLimpaso").value = document.getElementById("anamnLimpasoEdi").value;
-			document.getElementById("anamnBanhoso").value = document.getElementById("anamnBanhosoEdi").value;
-			document.getElementById("anamnEscovaso").value = document.getElementById("anamnEscovasoEdi").value;
-			document.getElementById("anamnLavamaos").value = document.getElementById("anamnLavamaosEdi").value;
-			document.getElementById("anamnPenteaso").value = document.getElementById("anamnPenteasoEdi").value;
-			document.getElementById("anamnDespesvestese").value = document.getElementById("anamnDespesvesteseEdi").value;
-			document.getElementById("anamnVestese").value = document.getElementById("anamnVesteseEdi").value;
-			document.getElementById("anamnCalcar").value = document.getElementById("anamnCalcarEdi").value;
-			document.getElementById("anamnDeixacortarcabelo").value = document.getElementById("anamnDeixacortarcabeloEdi").value;
-			document.getElementById("anamnAbotoaso").value = document.getElementById("anamnAbotoasoEdi").value;
-			document.getElementById("anamnLacarso").value = document.getElementById("anamnLacarsoEdi").value;
-			document.getElementById("anamnDeixacortarunhas").value = document.getElementById("anamnDeixacortarunhasEdi").value;
-			document.getElementById("anamnObsvestirhigi").value = document.getElementById("anamnObsvestirhigiEdi").value;
-			//Grupo
-			document.getElementById("anamnProblemavisao").value = document.getElementById("anamnProblemavisaoEdi").value;
-			document.getElementById("anamnProblemavisaodesc").value = document.getElementById("anamnProblemavisaodescEdi").value;
-			document.getElementById("anamnOlhaobjetivoatividade").value = document.getElementById("anamnOlhaobjetivoatividadeEdi").value;
-			document.getElementById("anamnOlhaobjetivoatividadedesc").value = document.getElementById("anamnOlhaobjetivoatividadedescEdi").value;
-			document.getElementById("anamnUsaoculos").value = document.getElementById("anamnUsaoculosEdi").value;
-			document.getElementById("anamnUsaoculosmotivo").value = document.getElementById("anamnUsaoculosmotivoEdi").value;
-			document.getElementById("anamnUsaoculosquando").value = document.getElementById("anamnUsaoculosquandoEdi").value;
-			document.getElementById("anamnPrefereambienteescuro").value = document.getElementById("anamnPrefereambienteescuroEdi").value;
-			document.getElementById("anamnImcomodamuitaluzcor").value = document.getElementById("anamnImcomodamuitaluzcorEdi").value;
-			document.getElementById("anamnFazconatatovisual").value = document.getElementById("anamnFazconatatovisualEdi").value;
-			document.getElementById("anamnPermanececontatovisual").value = document.getElementById("anamnPermanececontatovisualEdi").value;
-			document.getElementById("anamnObsvisao").value = document.getElementById("anamnObsvisaoEdi").value;
-			//Grupo
-			document.getElementById("anamnDuvidacapaccitaauditiva").value = document.getElementById("anamnDuvidacapaccitaauditivaEdi").value;
-			document.getElementById("anamnDuvidacapaccitaauditivadesc").value = document.getElementById("anamnDuvidacapaccitaauditivadescEdi").value;
-			document.getElementById("anamnJaexpostoruidoexplosao").value = document.getElementById("anamnJaexpostoruidoexplosaoEdi").value;
-			document.getElementById("anamnJaexpostoruidoexplosaodesc").value = document.getElementById("anamnJaexpostoruidoexplosaodescEdi").value;
-			
-			document.getElementById("anamnVoz").value = document.getElementById("anamnVozEdi").value;
-			document.getElementById("anamnAudiometria").value = document.getElementById("anamnAudiometriaEdi").value;
-			document.getElementById("anamnLocalizasons").value = document.getElementById("anamnLocalizasonsEdi").value;
-			document.getElementById("anamnTampaouvidosruido").value = document.getElementById("anamnTampaouvidosruidoEdi").value;
-			document.getElementById("anamnAproximaruidos").value = document.getElementById("anamnAproximaruidosEdi").value;
-			document.getElementById("anamnAsustafacil").value = document.getElementById("anamnAsustafacilEdi").value;
-			
-			document.getElementById("anamnVozdesc").value = document.getElementById("anamnVozdescEdi").value;
-			document.getElementById("anamnAudiometriadesc").value = document.getElementById("anamnAudiometriadescEdi").value;
-			document.getElementById("anamnLocalizasonsdesc").value = document.getElementById("anamnLocalizasonsdescEdi").value;
-			document.getElementById("anamnTampaouvidosruidodesc").value = document.getElementById("anamnTampaouvidosruidodescEdi").value;
-			document.getElementById("anamnAproximaruidosdesc").value = document.getElementById("anamnAproximaruidosdescEdi").value;
-			document.getElementById("anamnAsustafacildesc").value = document.getElementById("anamnAsustafacildescEdi").value;
-
-			document.getElementById("anamnSeicomodapessoasfalando").value = document.getElementById("anamnSeicomodapessoasfalandoEdi").value;
-			document.getElementById("anamnSeicomodapessoasfalandodesc").value = document.getElementById("anamnSeicomodapessoasfalandodescEdi").value;
-			document.getElementById("anamnEscutachamado").value = document.getElementById("anamnEscutachamadoEdi").value;
-			document.getElementById("anamnEscutachamadodesc").value = document.getElementById("anamnEscutachamadodescEdi").value;
-			document.getElementById("anamnObsaudicao").value = document.getElementById("anamnObsaudicaoEdi").value;
-			//grupo
-			document.getElementById("anamnControlacabeca").value = document.getElementById("anamnControlacabecaEdi").value;
-			document.getElementById("anamnRolou").value = document.getElementById("anamnRolouEdi").value;
-			document.getElementById("anamnEngatinhou").value = document.getElementById("anamnEngatinhouEdi").value;
-			document.getElementById("anamnUsouandaja").value = document.getElementById("anamnUsouandajaEdi").value;
-			document.getElementById("anamnAndou").value = document.getElementById("anamnAndouEdi").value;
-			document.getElementById("anamnAndoudesc").value = document.getElementById("anamnAndoudescEdi").value;
-			document.getElementById("anamnUsaescada").value = document.getElementById("anamnUsaescadaEdi").value;
-			document.getElementById("anamnPulacorre").value = document.getElementById("anamnPulacorreEdi").value;
-			document.getElementById("anamnAndapontadope").value = document.getElementById("anamnAndapontadopeEdi").value;
-			document.getElementById("anamnMedotirarpesdochao").value = document.getElementById("anamnMedotirarpesdochaoEdi").value;
-			document.getElementById("anamnMedotirarpesdochaodesc").value = document.getElementById("anamnMedotirarpesdochaodescEdi").value;
-			document.getElementById("anamnDesastrado").value = document.getElementById("anamnDesastradoEdi").value;
-			document.getElementById("anamnSeescondeembaixoobj").value = document.getElementById("anamnSeescondeembaixoobjEdi").value;
-			document.getElementById("anamnEscalasobeobj").value = document.getElementById("anamnEscalasobeobjEdi").value;
-			document.getElementById("anamnMostramedoexp").value = document.getElementById("anamnMostramedoexpEdi").value;
-			document.getElementById("anamnMostramedoexpdesc").value = document.getElementById("anamnMostramedoexpdescEdi").value;
-			document.getElementById("anamnEvitanovasposicoes").value = document.getElementById("anamnEvitanovasposicoesEdi").value;
-			document.getElementById("anamnEvitanovasposicoesdesc").value = document.getElementById("anamnEvitanovasposicoesdescEdi").value;
-			document.getElementById("anamnReacaoemotivaexessi").value = document.getElementById("anamnReacaoemotivaexessiEdi").value;
-			document.getElementById("anamnReacaoemotivaexessidesc").value = document.getElementById("anamnReacaoemotivaexessidescEdi").value;
-			document.getElementById("anamnMovisecuidado").value = document.getElementById("anamnMovisecuidadoEdi").value;
-			//document.getElementById("anamnMovisecuidadodesc").value = document.getElementById("anamnMovisecuidadodescEdi").value;
-			document.getElementById("anamnTemexpnegativamov").value = document.getElementById("anamnTemexpnegativamovEdi").value;
-			//document.getElementById("anamnTemexpnegativamovdesc").value = document.getElementById("anamnTemexpnegativamovdescEdi").value;
-			document.getElementById("anamnObspsicomotor").value = document.getElementById("anamnObspsicomotorEdi").value;
-			//grupo
-			document.getElementById("anamnRecusapisargrama").value = document.getElementById("anamnRecusapisargramaEdi").value;
-			document.getElementById("anamnRecusapisarmolhado").value = document.getElementById("anamnRecusapisarmolhadoEdi").value;
-			document.getElementById("anamnRecusaareia").value = document.getElementById("anamnRecusaareiaEdi").value;
-			document.getElementById("anamnRecusatinta").value = document.getElementById("anamnRecusatintaEdi").value;
-			document.getElementById("anamnRecusaplastilina").value = document.getElementById("anamnRecusaplastilinaEdi").value;
-			document.getElementById("anamnRecusaamoeba").value = document.getElementById("anamnRecusaamoebaEdi").value;
-			document.getElementById("anamnEvitatoqueleve").value = document.getElementById("anamnEvitatoqueleveEdi").value;
-			document.getElementById("anamnAceitaabreco").value = document.getElementById("anamnAceitaabrecoEdi").value;
-			document.getElementById("anamnAceitaabrecodesc").value = document.getElementById("anamnAceitaabrecodescEdi").value;
-			document.getElementById("anamnTocapessoasobjconsta").value = document.getElementById("anamnTocapessoasobjconstaEdi").value;
-			document.getElementById("anamnBatecaisemnocao").value = document.getElementById("anamnBatecaisemnocaoEdi").value;
-			document.getElementById("anamnSeguraobj").value = document.getElementById("anamnSeguraobjEdi").value;
-			document.getElementById("anamnBuscaatvpuxaremp").value = document.getElementById("anamnBuscaatvpuxarempEdi").value;
-			document.getElementById("anamnMastigaobjroupa").value = document.getElementById("anamnMastigaobjroupaEdi").value;
-			//document.getElementById("anamnTocapessoasobjconstadesc").value = document.getElementById("anamnTocapessoasobjconstadescEdi").value;
-			//document.getElementById("anamnBatecaisemnocaodesc").value = document.getElementById("anamnBatecaisemnocaodescEdi").value;
-			//document.getElementById("anamnSeguraobjdesc").value = document.getElementById("anamnSeguraobjdescEdi").value;
-			//document.getElementById("anamnBuscaatvpuxarempdesc").value = document.getElementById("anamnBuscaatvpuxarempdescEdi").value;
-			//document.getElementById("anamnMastigaobjroupadesc").value = document.getElementById("anamnMastigaobjroupadescEdi").value;
-			document.getElementById("anamnObstatil").value = document.getElementById("anamnObstatilEdi").value;
-			//Grupo
-			document.getElementById("anamnPreferebrincarcom").value = document.getElementById("anamnPreferebrincarcomEdi").value;
-			document.getElementById("anamnPreferebrincaridade").value = document.getElementById("anamnPreferebrincaridadeEdi").value;
-			document.getElementById("anamnPreferebrincarcomdesc").value = document.getElementById("anamnPreferebrincarcomdescEdi").value;
-			
-			document.getElementById("anamnFazamigosfacil").value = document.getElementById("anamnFazamigosfacilEdi").value;
-			document.getElementById("anamnEmprestabrinquedos").value = document.getElementById("anamnEmprestabrinquedosEdi").value;
-			document.getElementById("anamnBrincacooperado").value = document.getElementById("anamnBrincacooperadoEdi").value;
-			document.getElementById("anamnGostamandar").value = document.getElementById("anamnGostamandarEdi").value;
-			document.getElementById("anamnGostasubmeter").value = document.getElementById("anamnGostasubmeterEdi").value;
-
-			document.getElementById("anamnFazamigosfacildesc").value = document.getElementById("anamnFazamigosfacildescEdi").value;
-			document.getElementById("anamnEmprestabrinquedosdesc").value = document.getElementById("anamnEmprestabrinquedosdescEdi").value;
-			document.getElementById("anamnBrincacooperadodesc").value = document.getElementById("anamnBrincacooperadodescEdi").value;
-			document.getElementById("anamnGostamandardesc").value = document.getElementById("anamnGostamandardescEdi").value;
-			document.getElementById("anamnGostasubmeterdesc").value = document.getElementById("anamnGostasubmeterdescEdi").value;
-			
-			
-			document.getElementById("anamnGostamusica").value = document.getElementById("anamnGostamusicaEdi").value;
-			document.getElementById("anamnGostamusicaquais").value = document.getElementById("anamnGostamusicaquaisEdi").value;
-
-			document.getElementById("anamnSocializapares").value = document.getElementById("anamnSocializaparesEdi").value;
-			document.getElementById("anamnBrincaparque").value = document.getElementById("anamnBrincaparqueEdi").value;
-			document.getElementById("anamnBrincarfuncional").value = document.getElementById("anamnBrincarfuncionalEdi").value;
-			document.getElementById("anamnCriabrincadeiras").value = document.getElementById("anamnCriabrincadeirasEdi").value;
-			document.getElementById("anamnRecusaengajardemanda").value = document.getElementById("anamnRecusaengajardemandaEdi").value;
-
-			document.getElementById("anamnSocializaparesdesc").value = document.getElementById("anamnSocializaparesdescEdi").value;
-			document.getElementById("anamnBrincaparquedesc").value = document.getElementById("anamnBrincaparquedescEdi").value;
-			document.getElementById("anamnBrincarfuncionaldesc").value = document.getElementById("anamnBrincarfuncionaldescEdi").value;
-			document.getElementById("anamnCriabrincadeirasdesc").value = document.getElementById("anamnCriabrincadeirasdescEdi").value;
-			document.getElementById("anamnRecusaengajardemandadesc").value = document.getElementById("anamnRecusaengajardemandadescEdi").value;
-			
-			document.getElementById("anamnBrinquedopreferidosquais").value = document.getElementById("anamnBrinquedopreferidosquaisEdi").value;
-			document.getElementById("anamnObssocial").value = document.getElementById("anamnObssocialEdi").value;
-			//Grupo
-			//document.getElementById("anamnEscola").value = document.getElementById("anamnEscolaEdi").value;
-			//document.getElementById("anamnTempo").value = document.getElementById("anamnTempoEdi").value;
-			//document.getElementById("anamnTurno").value = document.getElementById("anamnTurnoEdi").value;
-			//document.getElementById("anamnSerie").value = document.getElementById("anamnSerieEdi").value;
-			//document.getElementById("anamnEscolaanterior").value = document.getElementById("anamnEscolaanteriorEdi").value;
-			document.getElementById("anamnPaisestudamcomcrianca").value = document.getElementById("anamnPaisestudamcomcriancaEdi").value;
-			document.getElementById("anamnLocaladequadoestudo").value = document.getElementById("anamnLocaladequadoestudoEdi").value;
-			document.getElementById("anamnExecutatarefascaseiras").value = document.getElementById("anamnExecutatarefascaseirasEdi").value;
-			document.getElementById("anamnTemautonomiaestuda").value = document.getElementById("anamnTemautonomiaestudaEdi").value;
-			document.getElementById("anamnNecessitaorienta").value = document.getElementById("anamnNecessitaorientaEdi").value;
-			document.getElementById("anamnUsamuitaborracha").value = document.getElementById("anamnUsamuitaborrachaEdi").value;
-			document.getElementById("anamnRendimentoescolarbaixo").value = document.getElementById("anamnRendimentoescolarbaixoEdi").value;
-			document.getElementById("anamnReprovado").value = document.getElementById("anamnReprovadoEdi").value;
-			document.getElementById("anamnPulouserie").value = document.getElementById("anamnPulouserieEdi").value;
-			//document.getElementById("anamnPulouseriedesc").value = document.getElementById("anamnPulouseriedescEdi").value;
-			document.getElementById("anamnIdadealfa").value = document.getElementById("anamnIdadealfaEdi").value;
-			document.getElementById("anamnComofoialfabet").value = document.getElementById("anamnComofoialfabetEdi").value;
-			document.getElementById("anamnDificuldadeescolar").value = document.getElementById("anamnDificuldadeescolarEdi").value;
-			//document.getElementById("anamnDificuldademateriaquais").value = document.getElementById("anamnDificuldademateriaquaisEdi").value;
-			document.getElementById("anamnLer").value = document.getElementById("anamnLerEdi").value;
-			document.getElementById("anamnLerobs").value = document.getElementById("anamnLerobsEdi").value;
-			document.getElementById("anamnEscreve").value = document.getElementById("anamnEscreveEdi").value;
-			document.getElementById("anamnEscreveobs").value = document.getElementById("anamnEscreveobsEdi").value;
-			document.getElementById("anamnMotrici").value = document.getElementById("anamnMotriciEdi").value;
-			document.getElementById("anamnMotriciobs").value = document.getElementById("anamnMotriciobsEdi").value;
-			document.getElementById("anamnContar").value = document.getElementById("anamnContarEdi").value;
-			document.getElementById("anamnContarobs").value = document.getElementById("anamnContarobsEdi").value;
-			document.getElementById("anamnCalcular").value = document.getElementById("anamnCalcularEdi").value;
-			document.getElementById("anamnCalcularobs").value = document.getElementById("anamnCalcularobsEdi").value;
-			document.getElementById("anamnAtencao").value = document.getElementById("anamnAtencaoEdi").value;
-			document.getElementById("anamnAtencaoobs").value = document.getElementById("anamnAtencaoobsEdi").value;
-			document.getElementById("anamnProfparticular").value = document.getElementById("anamnProfparticularEdi").value;
-			//document.getElementById("anamnProfparticularnome").value = document.getElementById("anamnProfparticularnomeEdi").value;
-			document.getElementById("anamnAtiviextra").value = document.getElementById("anamnAtiviextraEdi").value;
-			//document.getElementById("anamnAtiviextrahorario").value = document.getElementById("anamnAtiviextrahorarioEdi").value;
-			document.getElementById("anamnObsescola").value = document.getElementById("anamnObsescolaEdi").value;
-			//Grupo
-			document.getElementById("anamnRotanadiasemanal").value = document.getElementById("anamnRotanadiasemanalEdi").value;
-			document.getElementById("anamnAnotaextra").value = document.getElementById("anamnAnotaextraEdi").value;
-			document.getElementById("anamnDataanamnese").value = document.getElementById("anamnDataanamneseEdi").value;
-			document.getElementById("anamnDatacad").value = document.getElementById("anamnDatacadEdi").value;
-			document.getElementById("anamnDataedi").value = document.getElementById("anamnDataediEdi").value;
-			//document.getElementById("anamnUsuid").value = document.getElementById("anamnUsuidEdi").value;
-			//Grupo
-			document.getElementById("anamnTerapeutaid").value = document.getElementById("anamnTerapeutaidEdi").value;
-
-			document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
-			document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
-			//anamnDataanamnese
-			let dtnsc = new Date(document.getElementById("anamnDataanamneseEdi").value);
-			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-			document.getElementById("anamnDataanamnese").value = fulldate;
-			//anamnBenedatanasc
-			dtnsc = new Date(document.getElementById("anamnBenedatanascEdi").value);
-			mes = (dtnsc.getMonth()+1).toString();
-			dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-			document.getElementById("anamnBenedatanasc").value = fulldate;
-			//anamnBenedatanascEdi
-			dtnsc = new Date(document.getElementById("anamnBenedatanascEdi").value);
-			mes = (dtnsc.getMonth()+1).toString();
-			dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-			document.getElementById("anamnBenedatanasc").value = fulldate;
-
-			let dtnascbene = new Date(document.getElementById("beneDatanascEdi").value);
-			console.log("dtnascbene:"+dtnascbene)
-			mes = (dtnascbene.getMonth()+1).toString();
-			dia = (dtnascbene.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
-			document.getElementById("beneDatanasc").value = fulldate;
-			document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
-		}
-	</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -1152,7 +1128,7 @@
 							<input type="text" id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
 							<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
 							<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
-						{{/each}}
+						{{/each}},
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -1340,7 +1316,7 @@
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()" >
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -1367,7 +1343,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-3">
-																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder="" readonly="true" class="form-control" style="width: 50px;" value="{{anamn.anamn_beneidade}}"/>
+																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" placeholder="" class="form-control" style="width: 150px;" value="{{anamn.anamn_beneidade}}"/>
 																	</div>
 																</div>
 															</div>

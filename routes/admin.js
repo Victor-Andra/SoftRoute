@@ -1511,6 +1511,9 @@ router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona
     resposta.sucesso = "";
     fncBordo.listaBordo(req, res, resposta);
 })
+router.get('/area/bordo/bordosuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
+    fncBordo.bordoSuplis(req, res);
+})
 router.post('/area/bordo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.filtraBordo(req, res);
 })

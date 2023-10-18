@@ -3,36 +3,54 @@
 	<head>
 		<title>RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL</title>
 		<style>
+			/* Estilos gerais para o cabeçalho e o rodapé */
+			#cabecalho {
+				margin: 0; /* Margem inicial zero */
+				text-align: left; /* Alinhamento à esquerda */
+				width: 100%; /* Ocupar toda a largura */
+				object-position: left;
+			}
+			#rodape {
+				margin: 0; /* Margem inicial zero */
+				object-position: left;
+				text-align: left; /* Alinhamento à esquerda */
+				width: 100%; /* Ocupar toda a largura */
+				
+			}
+
+			/* Estilos para o conteúdo da página */
+			#conteudo {
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 100px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+			}
+
+			/* Estilos específicos para a visualização de impressão */
 			@media print {
-               .noprint {
-                  display: none;
-               }
-            }
-			
+				#cabecalho {
+				position: fixed;
+				top: 0;
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				}
+
+				#rodape {
+				position: fixed;
+				bottom: 0;
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				}
+			}
 		</style>
-		<script type="text/javascript">
-			function atualizaDataIni(){
-				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataIni').value = fulldate;
-			}
-			function atualizaDataFin(){
-				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataFim').value = fulldate;
-			}
-		</script>
+		
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
+				<header id="cabecalho">
+					<img src="/images/gallery/cabecalhoRoute_relsem.png" alt="Descrição da imagem">
+				</header>
 				<div class="main-content-inner noprint">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-map"></i>
-							</li>
-							<li class="active">RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL</li>
-						</ul><!-- /.breadcrumb -->
-					</div>
+					
 					
 				</div>
 				<div class="row">
@@ -42,54 +60,33 @@
 						<div class="row">
 							<div class="col-sm-10 col-sm-offset-1">
 								<div class="widget-box transparent">
-									<div style="text-align: center;">
-										<img width="280" height="120" alt="150x150" style="alight: center" src="/images/gallery/logo_route_centro.png">
-									</div>
+									<div id="conteudo" name="conteudo">
+										
 										<div class="row">
 											<div class="col-xs-12">
 												<div style="text-align: left;">
 													<label>NOME:</label>&nbsp;{{bene.bene_nome}}<br>
 													<label>TERAPIA:</label>&nbsp;{{relsem.relsem_terapia}}<br>
-													<label>TERAPEUTA:</label>&nbsp;{{usuario.usuario_nomecompleto}}&nbsp;-&nbsp;{{relsem.relsem_Conselho}}<br>
+													<label>TERAPEUTA:</label>&nbsp;{{relsem.relsem_Terapeutaid}}&nbsp;-&nbsp;{{relsem.relsem_Conselho}}<br>
 												<div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
-												<span>
-													{{relsem.relsem_desc}}
-												</span>
+												
+													<p>
+														{{relsem.relsem_desc}}
+													</p>
+												
 											</div>
 										</div>										
 										
-									
-									<div class="widget-body" >
-										<div class="widget-main padding-24">
-											
-												<div class="row" style="text-align: center;" width="2480px;" height="133" background-img="/images/gallery/rodapeRoute_relsem.png"><!-- Área reservada para Assinaturas -->
-																			
-													<div class="space space-32"></div>
-													<div class="col-xs-4 col-sm-4">
-														<div class="hr"></div>
-														<label>Rua José Paraíso, 207A<br>
-														Boa Viagem - Recife - PE<br>
-														CEP 51.030-390</label>
-													</div>
-													<div class="col-xs-4 col-sm-4">
-														<div class="hr"></div>
-														<i class="ace-icon fa fa-instagram bigger-130 orange"></i><label>&nbsp;route_clinica</label><br>
-														<i class="ace-icon fa fa-globe bigger-130 blue"></i><label>&nbsp;clinicaroute.com.br</label><br>
-													</div>
-													<div class="col-xs-4 col-sm-4">
-														<div class="hr"></div>
-														<i class="ace-icon fa fa-phone bigger-130 red"></i><label>&nbsp;+55 81 9 9414-7557</label><br>
-														<i class="ace-icon fa fa-envelope-o bigger-130 brown"></i><label>&nbsp;routeterapia@gmail.com</label><br>
-													</div>
-													
-												</div><!-- /.Área reservada para Assinaturas -->
-											
-										</div>
 									</div>
+									<footer id="rodape">
+										<div class="row" >
+											<img src="/images/gallery/rodapeRoute_relsem.png">
+										</div><!-- /.Área reservada para Assinaturas -->
+									</footer>
 								</div>
 							</div>
 						</div><!-- PAGE CONTENT ENDS -->
