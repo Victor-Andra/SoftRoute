@@ -3931,7 +3931,6 @@ module.exports = {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 bene.forEach(e => {
                     nomeBene = e.bene_nome
-                    nomeSup = e.bene_supervisor
                     beneConvid = e.bene_convid
                 });
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
@@ -4025,7 +4024,7 @@ module.exports = {
                                         });
                                         Sala.find().then((sala)=>{
                                             //console.log("Listagem Realizada de Terapia")
-                                            benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                            benenomeconv = nomeBene+" / "+nomeConv;
                                             //console.log("benenomeconv:"+benenomeconv)
                                             res.render("agenda/agendaBeneficiarioSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta, agendaSemanais: agendaS})
                                         })
