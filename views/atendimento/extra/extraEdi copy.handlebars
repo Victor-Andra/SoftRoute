@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Laudos</title>
+		<script>
+		
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function carregaBody(){
+				let dtnsc = new Date(document.getElementById("laudoDataEdi").value);
+				let mes = (dtnsc.getMonth()+1).toString();
+				let dia = (dtnsc.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+
+				document.getElementById("laudoBene").value = document.getElementById(document.getElementById("laudoBeneidEdi").value).value;
+				document.getElementById("laudoBene").style.readonly = true;
+				document.getElementById("laudoDiag").value = document.getElementById("laudoDiagEdi").value;
+				document.getElementById("laudoMedico").value = document.getElementById("laudoMedicoEdi").value;
+				document.getElementById("laudoMedicoesp").value = document.getElementById("laudoMedicoespEdi").value;
+				document.getElementById("laudoData").value = fulldate;
+
+
+				let dtnascbene = new Date(document.getElementById("beneDatanascEdi").value);
+				console.log("dtnascbene:"+dtnascbene)
+				mes = (dtnascbene.getMonth()+1).toString();
+				dia = (dtnascbene.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
+				document.getElementById("beneDatanasc").value = fulldate;
+				document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
+			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("laudoBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Laudos
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro e Índice Geral Laudos
+							</small>
+						</h1>
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<!-- /.importante Id de indice-->
+							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+							<input type="text" id="laudoBeneidEdi" name="laudoBeneidEdi" value="{{laudo.laudo_beneid}}"/>
+							<input type="text" id="laudoDiagEdi" name="laudoDiagEdi" value="{{laudo.laudo_diag}}"/>
+							<input type="text" id="laudoMedicoEdi" name="laudoMedicoEdi" value="{{laudo.laudo_medico}}"/>
+							<input type="text" id="laudoMedicoespEdi" name="laudoMedicoespEdi" value="{{laudo.laudo_medicoesp}}"/>
+							<input type="text" id="laudoDataEdi" name="laudoDataEdi" value="{{laudo.laudo_data}}"/>
+							
+							<input type="text" id="beneDatanascEdi" name="beneDatanascEdi" value="{{bene.bene_datanasc}}"/>
+							<input type="text" id="laudoUsuidediEdi" name="laudoUsuidediEdi" value="{{laudo.usuid}}"/>
+							{{#each benes}}
+								<input id="{{_id}}" name="benes" value="{{bene_nome}}"  />
+							{{/each}}
+						</div>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/laudo/atualizar" method="POST">
+								<input id="id" name="id" class="hidden" value="{{laudo._id}}" />
+								<div class="col-xs-12">
+									<div class="col-sm-12" name="ident" id="ident"><!-- Widget Beneficiario-->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="brown ace-icon fa fa-child bigger-110"></i>
+													Beneficiário
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													
+													<div class="row">
+														<div class="col-xs-12 col-sm-4">
+															<label>Beneficiário:</label>
+															<div class="form-group">
+																<div class="col-sm-8">
+																	<input readonly="true" type="text" name="laudoBene" id="laudoBene" style="width: 300px;" />
+																</div>
+															</div>
+														</div>												
+													</div>
+												</div>	
+											</div>	
+										</div>
+									</div>
+									<div class="col-sm-12" name="infobene" id="infobene"><!-- Widget Beneficiario-->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="brown ace-icon fa fa-commenting-o bigger-110"></i>
+													Informações complemetares
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																Os campos aqui são preenchidos automaticamente.
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-5 col-sm-5">
+															<label>Data nascimento:</label>
+															<div class="form-group">
+																<div class="col-sm-5">
+																	<div class="input-group">
+																		<input name="beneDatanasc" id="beneDatanasc" readonly="true"  />
+																	</div>
+																</div>
+															</div>
+														</div>												
+													
+														<div class="col-xs-3 col-sm-3">
+															<label>Idade:</label>
+															<div class="row">
+																<div class="col-sm-3">
+																	<div class="input-group">
+																		<input readonly="true" name="beneIdade" id="beneIdade" type="text" readonly="true" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+													
+												</div>	
+											</div>	
+										</div>
+									</div>
+									<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações do Laudo -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="green ace-icon fa fa-search bigger-110"></i>
+													Informações do laudo
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																O campo do diagnóstico é importantíssimo e será consultado em todos os formulários no sistema,<br>
+																atenção na hora de copiá-lo do laudo original e deve conter os códigos da tabela CID e texto.
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12" >
+															<label>Diagnóstico:</label>
+															<div class="row">
+																<div class="col-xs-12 col-sm-12">
+																	<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" data-placeholder="-"  placeholder="Utilizar o diagnóstico que está escrito no laudo médico." class="form-control"></textarea>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-6 col-sm-6">
+															<label>Médico responsável:</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="laudoMedico" id="laudoMedico"  class="form-control"  />
+																	</div>
+																</div>
+															</div>
+														</div>
+													
+														<div class="col-xs-6 col-sm-6">
+															<label>Especialidade:</label>
+															<div class="row">
+																<div class="col-xs-6 col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="laudoMedicoesp" id="laudoMedicoesp" class="form-control" />
+																	</div>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-4">
+															<label for="id-date-picker-1">Data do laudo:</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="laudoData" id="laudoData" type="date" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+													
+												</div>	
+											</div>	
+										</div>
+									</div>
+									
+									<div class="col=xs=12">
+										<hr>
+									</div>
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

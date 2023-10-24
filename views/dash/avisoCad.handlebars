@@ -1,292 +1,194 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Laudos</title>
-		<script>
-		
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("laudoBeneid").value;
-
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
-				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-			}
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
-
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
-
-				return [year, month, day].join('-');
-			}
-			
-		</script>
+		<title>Extras</title>
+	
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="espace">
+					<div class="breadcrumbs ace-save-state " id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Cadastro de Avisos</li>
+						</ul><!-- /.breadcrumb -->
 					</div>
-					<div class="page-header">
-						<h1>
-							Laudos
-							<small>
-								<i class="ace-icon fa fa-angle-double-right"></i>
-								Cadastro e Índice Geral Laudos
-							</small>
-						</h1>
-						<div id="divCarrega" name="divCarrega" class="hidden">
-							<!-- /.importante Id de indice-->
-							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
-							{{#each benes}}
-								<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-
-							{{/each}}
-						</div>
-					</div><!-- /.page-header -->
-					<div class="row">
+				
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/laudo/add" method="POST">
-								<div class="col-xs-12">
-
-									<div class="col-sm-12" name="ident" id="ident"><!-- Widget Beneficiario-->
+							<form class="form-horizontal" role="form" action="/menu/dash/add" method="POST">
+								<div class="row">
+									<div class="col-sm-6">
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="brown ace-icon fa fa-child bigger-110"></i>
-													Beneficiário
-												</h4>
-												
+												<h4 class="widget-title">Aviso</h4>
+												<div class="hidden">
+													<input id="nextNum" name="nextNum" type="number"  value="{{extra.extra_num}}" />
+												</div>
 												<span class="widget-toolbar">
-
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
-
 													<a href="#" data-action="collapse">
 														<i class="ace-icon fa fa-chevron-up"></i>
 													</a>
-
 												</span>
 											</div>
-
 											<div class="widget-body">
 												<div class="widget-main">
 													
+													<label>Usuário:</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" id="avisoUsuid" name="avisoUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
+														</div>
+													</div>
+										
+															
+													<div class="col-sm-2">
+														<div class="row">
+															<label for="id-date-picker-1">Data Aviso:</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="avisoAvisodata" id="avisoAvisodata" type="date" onchange="javascript:atualizaData()" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>												
+													<div class="col-sm-2">
+														<div class="row">
+															<label> <span class="label label-xs label-danger arrowed-in-right arrowed">Expira?</span></label><!--Ok-->
+														</div>
+														<div class="row">
+															<div class="input-group">
+																<div class="input-group">
+																	<select name="avisoExpira" id="avisoExpira" class="chosen-select"  value="-">
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>													
+													<div class="col-sm-2">
+														<div class="row">
+															<label for="id-date-picker-1">Data Limite:</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="avisoExpiradata" id="avisoExpiradata" type="date" onchange="javascript:atualizaData()" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
 													<div class="row">
-														<div class="col-xs-12 col-sm-4">
-															<label>Beneficiário:</label>
+														<div class="col-sm-6">
+															<label>Tipo Aviso:</label>
 															<div class="form-group">
-																<div class="col-sm-8">
-																	<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()">
+																<div class="col-sm-9">
+																	<select id="avisoTipo" name="avisoTipo" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																		<option value="-">-</option>
+																		<option value="Todos">Todos</option>
+																		<option value="Administrativo">Administrativo</option>
+																		<option value="Supervisores">Supervisores</option>
+																		<option value="Terapeutas">Terapeutas</option>
+																		<option value="Recepcao">Recepção</option>
+																		<option value="Pessoal">Pessoal</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-6">
+															<label>De:</label>
+															<div class="form-group">
+																<div class="col-sm-9">
+																	<select id="avisoUsuidorigem" name="avisoUsuidorigem" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																		<option value="766f69643132333435366964">-</option>
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{#each usuarios}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
 																	</select>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>	
-											</div>	
-										</div>
-									</div>
-									<div class="col-sm-12" name="infobene" id="infobene"><!-- Widget Beneficiario-->
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="brown ace-icon fa fa-commenting-o bigger-110"></i>
-													Informações complemetares
-												</h4>
-												
-												<span class="widget-toolbar">
-
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-
-												</span>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main">
 													<div class="row">
-														<div class="col-xs-12">
-															<div class="alert alert-warning">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																Os campos aqui são preenchidos automaticamente.
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-xs-5 col-sm-5">
-															<label>Data nascimento:</label>
+														<div class="col-sm-6">
+															<label>Para:</label>
 															<div class="form-group">
-																<div class="col-sm-5">
-																	<div class="input-group">
-																		<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
-																	</div>
-																</div>
-															</div>
-														</div>												
-													
-														<div class="col-xs-3 col-sm-3">
-															<label>Idade:</label>
-															<div class="row">
-																<div class="col-sm-3">
-																	<div class="input-group">
-																		<input name="beneIdade" id="beneIdade" type="text" readonly="true" />
-																	</div>
+																<div class="col-sm-9">
+																	<select id="avisoUsuiddestino" name="avisoUsuiddestino" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each usuarios}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
 																</div>
 															</div>
 														</div>
-														
 													</div>
-																												
-												</div>	
-											</div>	
-										</div>
-									</div>
-									<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações do Laudo -->
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="green ace-icon fa fa-search bigger-110"></i>
-													Informações do laudo
-												</h4>
-												
-												<span class="widget-toolbar">
-
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-
-												</span>
+															
+													<label>Grau</label>
+													<div class="form-group">
+														<div class="col-sm-9">
+															<select id="avisoGrau" name="avisoGrau" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																<option id="traco" value="-">-</option>
+																<option id="Baixo" value="Baixo">Baixo</option>
+																<option id="Normal" value="Normal">Normal</option>
+																<option id="Moderado" value="Moderado">Moderado</option>
+																<option id="Alto" value="Alto">Alto</option>
+																<option id="Urgente" value="Urgente">Urgente</option>
+															</select>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-12">
+															<label>Descrição:</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea name="avisoDesc" id="avisoDesc" style="font-size: 12px" class="form-control" ></textarea>
+																</div>
+															</div>	
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="row">
+																<label> <span class="label label-xs label-warning arrowed-in-right arrowed">Lido?</span></label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="avisoVisto" id="avisoVisto" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>	
+													</div>
+												</div>
 											</div>
-
-											<div class="widget-body">
-												<div class="widget-main">
-													<div class="row">
-														<div class="col-xs-12">
-															<div class="alert alert-warning">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																O campo do diagnóstico é importantíssimo e será consultado em todos os formulários no sistema,<br>
-																atenção na hora de copiá-lo do laudo original e deve conter os códigos da tabela CID e texto.
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-xs-12" >
-															<label>Diagnóstico:</label>
-															<div class="row">
-																<div class="col-xs-12">
-																	<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" data-placeholder="-" placeholder="Utilizar o diagnóstico que está escrito no laudo médico." class="form-control"></textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-xs-6 col-sm-6">
-															<label>Médico responsável:</label>
-															<div class="row">
-																<div class="col-xs-6  col-sm-6">
-																	<div class="input-group">
-																		<input type="text" name="laudoMedico" id="laudoMedico" class="form-control"  />
-																	</div>
-																</div>
-															</div>
-														</div>
-													
-														<div class="col-xs-6 col-sm-6">
-															<label>Especialidade:</label>
-															<div class="row">
-																<div class="col-xs-6 col-sm-6">
-																	<div class="input-group">
-																		<input type="text" name="laudoMedicoesp" id="laudoMedicoesp" class="form-control" />
-																	</div>
-																	
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-4">
-															<label for="id-date-picker-1">Data do laudo:</label>
-															<div class="row">
-																<div class="col-sm-4">
-																	<div class="input-group">
-																		<input name="laudoData" id="laudoData" type="date" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														
-													</div>
-													
-												</div>	
-											</div>	
 										</div>
 									</div>
-									
-									<div class="col=xs=12">
-										<hr>
-									</div>
-									<div class="form-actions">
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info" name="acao" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
-									</div>
-								</div>							
+								</div>
 							</form>
 						</div>
-					</div>
-				</div><!-- /.main-container -->
+				</div>
 			</div><!-- /.main-content -->
-		</div>
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+		<!-- Script do editor de texto -->
 	</body>
 </html>

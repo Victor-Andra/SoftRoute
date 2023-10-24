@@ -31,10 +31,9 @@ module.exports = {
         console.log('listando Diários de Aviso')
         Aviso.find().then((aviso) =>{
             console.log("Listagem Realizada dos Diários de Aviso!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        console.log("Listagem Realizada Usuário!")
-            res.render('dash/avisoLis', {avisos: aviso, terapeutas: terapeuta})
+            Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            res.render('dash/avisoLis', {avisos: aviso, Usuarios: usuario})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Aviso")
@@ -43,29 +42,22 @@ module.exports = {
     },
 
     carregaAviso(req,res){
-        Aviso.find().then((aviso) =>{
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        Terapia.find().then((terapia)=>{
-                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                res.render("dash/avisoCad", {avisos: aviso, terapeutas: terapeuta})
-        })})}).catch((err) =>{
+        Aviso.find().then((aviso)=>{
+            Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    res.render("dash/avisoCad", {avisos: aviso, usuarios: usuario })
+        })}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaAvisoEdi(req,res){
-        Aviso.find().then((aviso)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                       
-                                res.render("dash/avisoEdi", {avisos: aviso, terapias: terapia, usuarios: usuario})
-        })})}).catch((err) =>{
+        Aviso.find().then((aviso) =>{
+            Usuario.find().then((usuario)=>{
+                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                res.render("dash/avisoEdi", {avisos: aviso, usuarios: usuario})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -139,13 +131,12 @@ module.exports = {
 
     deletaAviso(req,res){
         Aviso.deleteOne({_id: req.params.id}).then(() =>{
-                Terapia.find().then((terapia)=>{
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
                                
                 req.flash("success_message", "Avisoamento Fisioterapêutico deletado!")
-                res.render('dash/aba/aviso/avisoLis', {avisos: aviso, terapias: terapia, usuarios: usuario})
-            })}).catch((err) =>{
+                res.render('dash/avisoLis', {avisos: aviso, usuarios: usuario})
+            }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
                 res.render('admin/erro')

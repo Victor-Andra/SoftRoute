@@ -7,6 +7,11 @@ let application = require('../routes/admin')
 //funções gerais
 const fncGeral = require("../functions/fncGeral")
 
+//Aviso - Dashboard
+const avisoClass = require("../models/aviso")
+const Aviso = mongoose.model("tb_aviso")
+const fncAviso = require("../functions/fncAviso")
+
 //empresa
 const empresaClass = require("../models/empresa")
 const Empresa = mongoose.model("tb_empresa")
@@ -93,6 +98,11 @@ const tratClass = require("../models/trat")
 const Trat = mongoose.model("tb_trat")
 const fncTrat = require("../functions/fncTrat")
 
+//Extra
+const extraClass = require("../models/extra")
+const Extra = mongoose.model("tb_extra")
+const fncExtra = require("../functions/fncExtra")
+
 //Laudo
 const laudoClass = require("../models/laudo")
 const Laudo = mongoose.model("tb_laudo")
@@ -113,7 +123,7 @@ const mapabllClass = require("../models/mapabll")
 const Mapabll = mongoose.model("tb_mapabll")
 const fncMapabll = require("../functions/fncMapabll")
 
-//Laudo
+//Evolução
 const evolClass = require("../models/evol")
 const Evol = mongoose.model("tb_evol")
 const fncEvol = require("../functions/fncEvol")
@@ -565,7 +575,9 @@ router.get("/dash/dashAdminin", fncGeral.IsAuthenticated, function(req,res){//di
 router.get("/dash/dashEstatis", fncGeral.IsAuthenticated, function(req,res){//direciona Dash.
     fncDash.carregaDashestatis(req, res);
 })
-
+router.get("/dash/cad", fncGeral.IsAuthenticated, function(req,res){//direciona Novo Aviso.
+    fncAviso.carregaAviso(req, res);
+})
 
 
 //Menu Agenda
@@ -1574,7 +1586,35 @@ router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//delet
     fncTrat.deletaTrat(req, res);
 })
 
-
+//Menu Extras ** Area Atendimentos Extras   
+//Carrega Cadastro de Extra 
+router.get('/atendimento/extra/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Extra, com  bene e data.
+    fncExtra.carregaExtra(req,res);
+})
+//Adiciona Registro de Extra
+router.post('/atendimento/extra/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Extra
+    fncExtra.cadastraExtra(req,res);
+})
+//Carrega Extra para Edição
+router.get('/atendimento/extra/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.carregaExtraedi(req,res);
+})
+//Atualiza Extra selecionado editado
+router.post('/atendimento/extra/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.atualizaExtra(req,res);
+})
+//Lista todos os Extras
+router.get('/atendimento/extra/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.listaExtra(req,res);
+})
+//Lista todos os Extras
+router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.filtraExtra(req,res);
+})
+//Deleta Extra Selecionado
+router.get('/atendimento/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Extra
+    fncExtra.deletaExtra(req,res);
+})
 
 //Menu Laudos ** Area Tecnicos   
 //Carrega Cadastro de Laudo 

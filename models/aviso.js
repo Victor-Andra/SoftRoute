@@ -3,42 +3,22 @@ const ObjectId = mongoose.Types.ObjectId
 
 const AvisoSchema = mongoose.Schema({
    
-    aviso_avisodata :{
-        type: Date,
-        required: true
-    },
-    aviso_tipo :{
-        type: String,
-        required: false
-    },
-     aviso_desc :{
-        type: String,
-        required: true
-    },
-    aviso_grau :{
-        type: String,
-        required: false
-    },
-    aviso_concluido:{
-        type: String,
-        required: false
-    },
-    aviso_usuid :{
-        type: ObjectId,
-        required: true
-    },
-    aviso_datacad :{
-        type: Date,
-        required: false
-    },
-    aviso_usuidedi :{
-        type: ObjectId,
-        required: false
-    },
-    aviso_dataedi :{
-        type: Date,
-        required: false
-    }
+    aviso_avisodata :{ type: Date, required: true },
+    aviso_tipo :{  type: String, required: false },
+    aviso_desc :{ type: String, required: true },
+    aviso_grau :{ type: String, required: false },
+    aviso_concluido:{ type: String, required: false },
+    aviso_expira :{ type: String, required: false },
+    aviso_expiradata :{ type: Date, required: false },
+    
+    aviso_usuidorigem :{ type: ObjectId, required: true },
+    aviso_usuiddestino :{ type: ObjectId, required: false },
+    aviso_visto :{ type: String, required: false },
+    
+    aviso_usuid :{ type: ObjectId, required: true },
+    aviso_datacad :{ type: Date, required: false },
+    aviso_usuidedi :{ type: ObjectId, required: false },
+    aviso_dataedi :{ type: Date, required: false }
 })
 
 class Aviso{
@@ -48,6 +28,13 @@ class Aviso{
         aviso_desc,
         aviso_grau,
         aviso_concluido,
+        aviso_expira,
+        aviso_expiradata,
+
+        aviso_usuidorigem,
+        aviso_usuiddestino,
+
+        aviso_visto,
         aviso_usuid,
         aviso_datacad,
         aviso_usuidedi,
@@ -58,6 +45,11 @@ class Aviso{
         this.aviso_desc = aviso_desc,
         this.aviso_grau = aviso_grau,
         this.aviso_concluido = aviso_concluido,
+        this.aviso_expira = aviso_expira,
+        this.aviso_expiradata = aviso_expiradata,
+        this.aviso_usuidorigem = aviso_usuidorigem,
+        this.aviso_usuiddestino = aviso_usuiddestino,
+        this.aviso_visto = aviso_visto,
         this.aviso_usuid = aviso_usuid,
         this.aviso_datacad = aviso_datacad,
         this.aviso_usuidedi = aviso_usuidedi,
@@ -80,8 +72,13 @@ module.exports = {AvisoModel,AvisoSchema,
                 aviso_avisodata : req.body.avisoAvisodata,
                 aviso_tipo : req.body.avisoTipo,
                 aviso_desc : req.body.avisoDesc,
-                aviso_grau : req.body.aviso_Grau,
+                aviso_grau : req.body.avisoGrau,
                 aviso_concluido : req.body.avisoConcluido,
+                aviso_expira : req.body.avisoExpira,
+                aviso_expiradata : req.body.avisoExpiradata,
+                aviso_visto : req.body.avisoVisto,
+                aviso_usuidorigem : req.body.avisoUsuidorigem,
+                aviso_usuiddestino : req.body.avisoUsuiddestino,
                 aviso_usuid : req.body.avisoUsuid,
                 aviso_datacad : req.body.avisoDatacad,
                 aviso_usuidedi : req.body.avisoUsuidedi,
@@ -104,11 +101,16 @@ module.exports = {AvisoModel,AvisoSchema,
         console.log("req.body.avisodata:")
         console.log(req.body.avisodata)
         const NewAviso = new AvisoModel({
-            aviso_avisodata : req.body.avisoAvisodata,
+                aviso_avisodata : req.body.avisoAvisodata,
                 aviso_tipo : req.body.avisoTipo,
                 aviso_desc : req.body.avisoDesc,
                 aviso_grau : req.body.aviso_Grau,
                 aviso_concluido : req.body.avisoConcluido,
+                aviso_expira : req.body.avisoExpira,
+                aviso_expiradata : req.body.avisoExpiradata,
+                aviso_visto : req.body.avisoVisto,
+                aviso_usuidorigem : req.body.avisoUsuidorigem,
+                aviso_usuiddestino : req.body.avisoUsuiddestino,
                 aviso_usuid : req.body.avisoUsuid,
                 aviso_datacad : dataAtual.toISOString(),
                 aviso_usuidedi : req.body.avisoUsuidedi,

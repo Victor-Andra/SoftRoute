@@ -1122,7 +1122,7 @@ module.exports = {
                                         break;
                                     case "SubstitutoFixo":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_valorcre;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;

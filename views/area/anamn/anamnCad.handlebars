@@ -38,9 +38,10 @@
 					var dataIso = document.getElementById(beneid+"_anamnBenedatanasc").value;
 					if (dataIso != undefined && dataIso != "undefined"){
 						var dataFmt = new Date(dataIso);
+						let dataAtual = new Date(); 
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 						console.log("dataFmt:"+dataFmt)
-						document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+						document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataAtual.getUTCMonth() - dataFmt.getMonth()).toString() + " meses.";
 					}
 					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
 					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;

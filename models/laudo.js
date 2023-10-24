@@ -132,9 +132,7 @@ module.exports = {LaudoModel,LaudoSchema,
                 laudo_medicoesp : req.body.laudoMedicoesp,
                 laudo_data : req.body.laudoData,
                 laudo_usuid : idUsu,
-                laudo_datacad : dataAtual,
-                
-                
+                laudo_datacad : dataAtual
                 
         });
         console.log("newLaudo save");
