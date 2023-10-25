@@ -109,6 +109,7 @@
 								<a href="#">Home</a>
 							</li>
 							<li class="active">Extras Cadastro</li>
+							
 						</ul><!-- /.breadcrumb -->
 					</div>
 						<div class="col-xs-12">
@@ -117,7 +118,10 @@
 									<div class="col-xs-12">
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">Tipo, Auditar, Salvar e Exportar</h4>
+												<h4 class="widget-title">
+													<i class="green ace-icon fa fa-check bigger-110"></i>
+													Tipo, Auditar, Salvar e Exportar
+												</h4>
 												
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
@@ -132,22 +136,30 @@
 												<div class="widget-main">
 													<div class="row">
 														<div class="col=xs-12">
-																<div class="col-sm-2" >
-																	<select id="extraTipo" name="extraTipo" class="chosen-select" data-placeholder="Escolha...">
+															<div class="col-sm-2">
+																<label>Origem Atendimento</label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<select id="extraTipo" name="extraTipo" class="chosen-select" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="bene">Beneficiário</option>
 																		<option value="terapeuta">Terapeuta</option>
 																		<option value="ambos">Ambos</option>
 																	</select>
-																</div>
-																<div class="col-sm-2" >
-																	<div class="checkbox">
-																		<label class="block">
-																			<input name="extraAuditado" id="extraAuditado" type="checkbox" class="ace ">
-																			<span class="lbl big">&nbsp; <span class="label label-xs label-danger arrowed-in-right arrowed">Auditado!</span></span>
-																		</label>
 																	</div>
 																</div>
+															</div>
+															<div class="col-sm-2">
+																<label>Categoria</label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<select id="extraAuditado" name="extraAuditado" class="chosen-select" data-placeholder="Escolha...">
+																			<option value="Não">Não</option>
+																			<option value="Sim">Sim</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
 																<div class="col-xs-5" style="text-align: left;" >
 																	<button class="btn btn-info" name="acao" type="submit">
 																		<i class="ace-icon fa fa-check bigger-110"></i>
@@ -164,6 +176,80 @@
 																		Cancelar
 																	</button>
 																</div>
+																<div>
+																	<div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation" class="pull-right">
+																		<ul class="nav ace-nav">
+																			<li class="purble dropdown-modal">
+																				<a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
+																					<i class="ace-icon fa fa-users"></i>
+																					
+																				</a>
+
+																				<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" style="">
+																					<li class="dropdown-header">
+																						<i class="ace-icon fa fa-check"></i>
+																						Auditoria
+																					</li>
+
+																					<li class="dropdown-content ace-scroll" style="position: right;"><div class="scroll-track" style="display: none;"><div class="scroll-bar"></div></div><div class="scroll-content" style="">
+																						<ul class="dropdown-menu dropdown-navbar">
+																							<li>
+																								<a href="#">
+																									<div class="clearfix">
+																										<span class="pull-left">Cadastro</span>
+																										<span class="pull-right">12/10/1972 17:20</span>
+																									</div>
+																									<div class="clearfix">
+																										<span class="pull-right">Wagner</span>
+																									</div>
+																								</a>
+																							</li>
+
+																							<li>
+																								<a href="#">
+																									<div class="clearfix">
+																										<span class="pull-left">Edição</span>
+																										<span class="pull-right">12/10/1972 17:20</span>
+																									</div>
+																									<div class="clearfix">
+																										<span class="pull-right">Wagner</span>
+																									</div>
+																								</a>
+																							</li>
+
+																							<li>
+																								<a href="#">
+																									<div class="clearfix">
+																										<span class="pull-left">Auditado</span>
+																										<span class="pull-right">12/10/1972 17:20</span>
+																									</div>
+																									<div class="clearfix">
+																										<span class="pull-right">Wagner</span>
+																									</div>
+																								</a>
+																							</li>
+
+																							<li>
+																								<a href="#">
+																									<div class="clearfix">
+																										<span class="pull-left">Exportado</span>
+																										<span class="pull-right">12/10/1972 17:20</span>
+																									</div>
+																									<div class="clearfix">
+																										<span class="pull-right">Wagner</span>
+																									</div>
+																								</a>
+																							</li>
+																						</ul>
+																					</div>
+																				</li>
+
+																					
+																				</ul>
+																			</li>
+																		</ul>
+																	</div>
+																</div>
 														</div>
 													</div>
 													<div class="row">
@@ -174,7 +260,7 @@
 																	<i class="ace-icon fa fa-times"></i>
 																</button>
 																	
-																	Campos fundamentais para a inserção correta dentro dos atendimentos, escolher errado o tipo, ou não informar que foi auditado e salvar antes, causará erro no fechamento do beneficiário e terapeuta envolvidos.<br>
+																	Campos fundamentais para a inserção correta dentro dos atendimentos, escolher errado o tipo, e ou não informar que foi auditado e ou não salvar antes de exportar, causará erro no fechamento do beneficiário e terapeuta envolvidos.<br>
 															</div>
 														</div>
 													</div>	
@@ -188,7 +274,10 @@
 									<div class="col-sm-6">
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">Extras</h4>
+												<h4 class="widget-title">
+													<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+													Extras
+												</h4>
 												<div class="hidden">
 													<input id="nextNum" name="nextNum" type="number"  value="{{extra.extra_num}}" />
 												</div>
@@ -282,7 +371,7 @@
 													</div>
 													<div class="form-group">
 															<div class="col-sm-4">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="extraConvid" name="extraConvid" class="chosen-select" data-placeholder="Escolha...">
+																<select tabindex="-1" id="extraConvid" name="extraConvid" class="chosen-select" data-placeholder="Escolha...">
 																		{{#each benes}}
 																			{{#each ../convs}}
 																				{{#ifEqual ../bene_convid _id}}
@@ -307,157 +396,150 @@
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-xs-12 col-sm-3">
-											<div class="widget-box">
-												<div class="widget-header">
-													<h4 class="widget-title">Dados Básicos</h4>
-													<div class="widget-toolbar">
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-													</div>
+									<div class="col-sm-3">
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Dados Básicos</h4>
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
 												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-														
-														Dados necessárias para os atendimentos padrões.<br>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+											<div class="alert alert-warning">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="ace-icon fa fa-times"></i>
+												</button>
+													
+													Dados necessárias para os atendimentos padrões.<br>
+											</div>
+											<label>Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraTerapeutaid" name="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+														<option value="766f69643132333435366964">-</option>
+														{{#each usuarios}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+														{{/each}}
+													</select>
 												</div>
-												<label>Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="extraTerapeutaid" name="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+											</div>											
+											<label>Terapia</label>
+											<div class="hidden" id="TerapiasVal">
+												{{#each terapias}}
+													{{#each ../convcres}}
+														{{#ifEqual convcre_terapiaid ../_id}}
+															<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
+														{{/ifEqual}}
+													{{/each}}
+												{{/each}}
+												{{#each terapias}}
+													{{#each ../convdebs}}
+														{{#ifEqual convdeb_terapiaid ../_id}}
+															<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
+														{{/ifEqual}}
+													{{/each}}
+												{{/each}}
+											</div>
+											<div class="hidden" id="TerapiaFinan">
+												<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
+												<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
+												
+												<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+
+
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraTerapiaid" name="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+															{{#each terapias}}
+															<option value="{{_id}}">{{terapia_nome}}</option>
+															{{/each}}
+													</select>
+												</div>
+											</div>
+											<label class="blue"> Valor da Terapia pelo Plano</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraValorcre" name="extraValorcre" placeholder="0,00"  class="blue" class="form-control" />
+												</div>
+											</div>
+											<label class="red"> Valor da Terapia para o Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraValordeb" name="extraValordeb" placeholder="0,00"  class="red" class="form-control" />
+												</div>
+											</div>
+												</div>
+											</div>
+										</div>
+									</div><!-- /.span -->
+									<div class="col-sm-3">
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Dados de Merge</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+											<div class="alert alert-warning">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="ace-icon fa fa-times"></i>
+												</button>
+												
+												Dados necessárias para os atendimentos
+												administrativos e requer informações adicionais.<br>
+											</div>
+											<label>Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
+															<option value="{{_id}}">{{usuario_nome}}</option>
 															{{/each}}
-														</select>
-													</div>
-												</div>											
-												<label>Terapia</label>
-												<div class="hidden" id="TerapiasVal">
-													{{#each terapias}}
-														{{#each ../convcres}}
-															{{#ifEqual convcre_terapiaid ../_id}}
-																<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
-															{{/ifEqual}}
-														{{/each}}
-													{{/each}}
-													{{#each terapias}}
-														{{#each ../convdebs}}
-															{{#ifEqual convdeb_terapiaid ../_id}}
-																<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
-															{{/ifEqual}}
-														{{/each}}
-													{{/each}}
+													</select>
 												</div>
-												<div class="hidden" id="TerapiaFinan">
-													<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
-													<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
-													
-													<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
-
-
-												</div>
-												<div class="form-group">
+											</div>												
+											<label>Terapia</label>
+											<div class="hidden" id="TerapiaMergeFinan">
+												<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
+												<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
+												<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
+											</div>
+											<div class="form-group">
 													<div class="col-sm-4">
-														<select id="extraTerapiaid" name="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+														<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
 																{{/each}}
 														</select>
 													</div>
-												</div>
-												<label class="blue"> Valor da Terapia pelo Plano</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraValorcre" name="extraValorcre" placeholder="0,00"  class="blue" class="form-control" />
-													</div>
-												</div>
-												<label class="red"> Valor da Terapia para o Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraValordeb" name="extraValordeb" placeholder="0,00"  class="red" class="form-control" />
-													</div>
-												</div>
-													</div>
+											</div>
+											<label class="blue"> Valor da Terapia pelo Plano</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraMergevalorcre" name="extraMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
 												</div>
 											</div>
-										</div><!-- /.span -->
-										<div class="col-xs-12 col-sm-3">
-											<div class="widget-box">
-												<div class="widget-header">
-													<h4 class="widget-title">Dados de Merge</h4>
-													<span class="widget-toolbar">
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-													</span>
-												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-													
-													Dados necessárias para os atendimentos
-													administrativos e requer informações adicionais.<br>
-												</div>
-												<label>Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
-																<option value="766f69643132333435366964">-</option>
-																{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
-																{{/each}}
-														</select>
-													</div>
-												</div>												
-												<label>Terapia</label>
-												<div class="hidden" id="TerapiaMergeFinan">
-													<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
-													<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
-													<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
-												</div>
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
-																	{{#each terapias}}
-																	<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{/each}}
-															</select>
-														</div>
-												</div>
-												<label class="blue"> Valor da Terapia pelo Plano</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraMergevalorcre" name="extraMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
-													</div>
-												</div>
-												<label class="red"> Valor da Terapia para o Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraMergevalordeb" name="extraMergevalordeb" placeholder="0,00" class="red" class="form-control" />
-													</div>
-												</div>
-													</div>
+											<label class="red"> Valor da Terapia para o Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraMergevalordeb" name="extraMergevalordeb" placeholder="0,00" class="red" class="form-control" />
 												</div>
 											</div>
-										</div><!-- /.span -->
-									</div><!-- /.row -->
+												</div>
+											</div>
+										</div>
+									</div><!-- /.span -->
 								</div>
-
-<div class="row">
-									<div class="col-xs-12">
-														
-									</div>
-								</div>
+								<hr>						
 								<div class="row">
 									<div class="col-sm-6">
 										<div class="widget-box">
@@ -581,151 +663,149 @@
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-xs-12 col-sm-3">
-											<div class="widget-box">
-												<div class="widget-header">
-													<h4 class="widget-title">Dados Básicos</h4>
-													<div class="widget-toolbar">
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-													</div>
+									<div class="col-xs-12 col-sm-3">
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Dados Básicos</h4>
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
 												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-														
-														Dados necessárias para os atendimentos
-														padrões.<br>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+											<div class="alert alert-warning">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="ace-icon fa fa-times"></i>
+												</button>
+													
+													Dados necessárias para os atendimentos
+													padrões.<br>
+											</div>
+											<label>Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraTerapeutaid" name="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+														<option value="766f69643132333435366964">-</option>
+														{{#each usuarios}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+														{{/each}}
+													</select>
 												</div>
-												<label>Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="extraTerapeutaid" name="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+											</div>											
+											<label>Terapia</label>
+											<div class="hidden" id="TerapiasVal">
+												{{#each terapias}}
+													{{#each ../convcres}}
+														{{#ifEqual convcre_terapiaid ../_id}}
+															<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
+														{{/ifEqual}}
+													{{/each}}
+												{{/each}}
+												{{#each terapias}}
+													{{#each ../convdebs}}
+														{{#ifEqual convdeb_terapiaid ../_id}}
+															<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
+														{{/ifEqual}}
+													{{/each}}
+												{{/each}}
+											</div>
+											<div class="hidden" id="TerapiaFinan">
+												<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
+												<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
+												
+												<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+
+
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraTerapiaid" name="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+															{{#each terapias}}
+															<option value="{{_id}}">{{terapia_nome}}</option>
+															{{/each}}
+													</select>
+												</div>
+											</div>
+											<label class="blue"> Valor da Terapia pelo Plano</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraValorcre" name="extraValorcre" placeholder="0,00"  class="blue" class="form-control" />
+												</div>
+											</div>
+											<label class="red"> Valor da Terapia para o Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraValordeb" name="extraValordeb" placeholder="0,00"  class="red" class="form-control" />
+												</div>
+											</div>
+												</div>
+											</div>
+										</div>
+									</div><!-- /.span -->
+									<div class="col-xs-12 col-sm-3">
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Dados de Merge</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+											<div class="alert alert-warning">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="ace-icon fa fa-times"></i>
+												</button>
+												
+												Dados necessárias para os atendimentos
+												administrativos.<br>
+											</div>
+											<label>Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
+															<option value="{{_id}}">{{usuario_nome}}</option>
 															{{/each}}
-														</select>
-													</div>
-												</div>											
-												<label>Terapia</label>
-												<div class="hidden" id="TerapiasVal">
-													{{#each terapias}}
-														{{#each ../convcres}}
-															{{#ifEqual convcre_terapiaid ../_id}}
-																<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
-															{{/ifEqual}}
-														{{/each}}
-													{{/each}}
-													{{#each terapias}}
-														{{#each ../convdebs}}
-															{{#ifEqual convdeb_terapiaid ../_id}}
-																<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
-															{{/ifEqual}}
-														{{/each}}
-													{{/each}}
+													</select>
 												</div>
-												<div class="hidden" id="TerapiaFinan">
-													<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
-													<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
-													
-													<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
-
-
-												</div>
-												<div class="form-group">
+											</div>												
+											<label>Terapia</label>
+											<div class="hidden" id="TerapiaMergeFinan">
+												<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
+												<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
+												<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
+											</div>
+											<div class="form-group">
 													<div class="col-sm-4">
-														<select id="extraTerapiaid" name="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+														<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
 																{{/each}}
 														</select>
 													</div>
-												</div>
-												<label class="blue"> Valor da Terapia pelo Plano</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraValorcre" name="extraValorcre" placeholder="0,00"  class="blue" class="form-control" />
-													</div>
-												</div>
-												<label class="red"> Valor da Terapia para o Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraValordeb" name="extraValordeb" placeholder="0,00"  class="red" class="form-control" />
-													</div>
-												</div>
-													</div>
+											</div>
+											<label class="blue"> Valor da Terapia pelo Plano</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraMergevalorcre" name="extraMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
 												</div>
 											</div>
-										</div><!-- /.span -->
-										<div class="col-xs-12 col-sm-3">
-											<div class="widget-box">
-												<div class="widget-header">
-													<h4 class="widget-title">Dados de Merge</h4>
-													<span class="widget-toolbar">
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-													</span>
-												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-													
-													Dados necessárias para os atendimentos
-													administrativos.<br>
-												</div>
-												<label>Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
-																<option value="766f69643132333435366964">-</option>
-																{{#each usuarios}}
-																<option value="{{_id}}">{{usuario_nome}}</option>
-																{{/each}}
-														</select>
-													</div>
-												</div>												
-												<label>Terapia</label>
-												<div class="hidden" id="TerapiaMergeFinan">
-													<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
-													<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
-													<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
-												</div>
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
-																	{{#each terapias}}
-																	<option value="{{_id}}">{{terapia_nome}}</option>
-																	{{/each}}
-															</select>
-														</div>
-												</div>
-												<label class="blue"> Valor da Terapia pelo Plano</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraMergevalorcre" name="extraMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
-													</div>
-												</div>
-												<label class="red"> Valor da Terapia para o Terapeuta</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="extraMergevalordeb" name="extraMergevalordeb" placeholder="0,00" class="red" class="form-control" />
-													</div>
-												</div>
-													</div>
+											<label class="red"> Valor da Terapia para o Terapeuta</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="extraMergevalordeb" name="extraMergevalordeb" placeholder="0,00" class="red" class="form-control" />
 												</div>
 											</div>
-										</div><!-- /.span -->
-									</div><!-- /.row -->
+												</div>
+											</div>
+										</div>
+									</div><!-- /.span -->
 								</div>
 							
 							

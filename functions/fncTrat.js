@@ -95,6 +95,7 @@ module.exports = {
         })
     },
     filtraTrat(req, res, resposta){
+        let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         let tipoPessoa = req.body.tratTipoPessoa;
         let tipoData = req.body.tipoData;
@@ -120,13 +121,17 @@ module.exports = {
         switch (tipoData){
             case "Ano/Mes":
                 dataIni = new Date();
+                console.log("req.body.mesBordo:"+req.body.mesBordo)
                 let mesIni = parseInt(req.body.mesBordo);//UTCMonth = 0-11
                 let anoIni = parseInt(req.body.anoBordo);
                 
                 dataIni.setDate(01);
                 dataIni.setFullYear(anoIni);
+                console.log("dataIni:"+dataIni)
                 dataIni.setUTCMonth(mesIni);
+                console.log("dataIni:"+dataIni)
                 dataIni.setHours(0, 0, 0, 0);
+                console.log("dataIni:"+dataIni)
                 
                 dataFim = new Date();
                 dataFim.setFullYear(anoIni);
@@ -217,23 +222,23 @@ module.exports = {
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_beneid: req.body.tratBeneficiario };
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario };
                 }
                 break;
             case "Terapeuta":
                 if (isAgendaTerapeuta){
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , trat_terapeutaid: req.body.tratTerapeuta };
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: req.body.tratTerapeuta };
                 }
                 break;
             default:
@@ -284,8 +289,12 @@ module.exports = {
             //console.log("Listagem Realizada das Trateses!")
                 Bene.find().then((bene)=>{
                     //console.log("Listagem Realizada bene!")
-                    Usuario.find().then((usuario)=>{
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        Usuario.find().then((usuario)=>{
+                            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         //console.log("Listagem Realizada Usuário!")
+                        /*
                         if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
                             flash.texto = ""
@@ -295,8 +304,11 @@ module.exports = {
                             flash.texto = resposta.texto
                             flash.sucesso = resposta.sucesso
                         }
-            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, perfilAtual, flash})
-        })})}).catch((err) =>{
+                        */
+                        flash.texto = ""
+                        flash.sucesso = "true"
+            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, terapeutas: terapeuta, benes: bene, perfilAtual, flash})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
