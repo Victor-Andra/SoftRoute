@@ -78,17 +78,19 @@ module.exports = {
                 //console.log("Listagem Realizada bene!")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
                     //console.log("Listagem Realizada Usuário!")
-                    if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }
-            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, benes: bene, perfilAtual, flash})
-        })})}).catch((err) =>{
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        if(resposta.sucesso == ""){
+                            console.log(' objeto vazio');
+                            flash.texto = ""
+                            flash.sucesso = ""
+                        } else {
+                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                            flash.texto = resposta.texto
+                            flash.sucesso = resposta.sucesso
+                        }
+                        res.render('area/plano/tratLis', {trats: trat, terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
