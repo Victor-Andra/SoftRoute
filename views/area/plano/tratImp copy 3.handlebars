@@ -264,7 +264,6 @@
 											<br>
 											<br>
 											<br>
-											<tr>
 												<td>{{#each benes}}
 														{{#ifEqual ../trat.trat_beneid _id}}
 															&nbsp;{{bene_nome}}
@@ -272,21 +271,11 @@
 													{{/each}}
 												</td>
 											</tr>
-											
-											{{#compareThis trat.trat_planotipo "Padrão"}}
-												<tr>
-													<td>&nbsp;{{trat.trat_especialidadepad}}</td>
-												</tr>
-												{{else}}
-													<tr>
-														<td>&nbsp;{{trat.trat_especialidadeis}}</td>
-													</tr>
-													<tr>
-														<td>&nbsp;{{trat.trat_especialidadeavd}}</td>
-													</tr>
-											{{/compareThis}}
-											
 											<tr>
+												<td>&nbsp;{{trat.trat_especialidadepad}}</td>
+											</tr>
+											<tr>
+												<!--<td>{{tratDataCadSimpleFormat}}</td>-->
 												<td>
 													<input type="text" id="mesano" name="mesano" style="border: none; font-size: 18px;"></input>
 												</td>
@@ -353,7 +342,6 @@
 													{{/each}}</td>
 												
 											</tr>
-											{{#compareThis trat.trat_planotipo "Padrão"}}
 											<tr>
 												<td>TERAPIA:&nbsp;</td>
 												<td>{{trat.trat_especialidadepad}}</td>
@@ -365,40 +353,10 @@
 															{{usuario_nome}}
 														{{/ifEqual}}
 													{{/each}}</td>
-												<td>&nbsp;-&nbsp;{{trat.trat_regconselhopad}}</td>
-												
+												<td>&nbsp;-&nbsp;</td>
+												<td>{{trat.trat_regconselhopad}}</td>
+
 											</tr>
-											{{else}}
-											<tr>
-												<td>TERAPIA:&nbsp;</td>
-												<td>{{trat.trat_especialidadeis}}</td>
-											</tr>
-											<tr>
-												<td>TERAPEUTA:&nbsp;</td>
-												<td>{{#each usuarios}}
-														{{#ifEqual ../trat.trat_terapeutaidis _id}}
-															{{usuario_nome}}
-														{{/ifEqual}}
-													{{/each}}</td>
-												<td>&nbsp;-&nbsp;{{trat.trat_regconselhois}}</td>
-												
-											</tr>
-											<hr>
-											<tr>
-												<td>TERAPIA:&nbsp;</td>
-												<td>{{trat.trat_especialidadeavd}}</td>
-											</tr>
-											<tr>
-												<td>TERAPEUTA:&nbsp;</td>
-												<td>{{#each usuarios}}
-														{{#ifEqual ../trat.trat_terapeutaidavd _id}}
-															{{usuario_nome}}
-														{{/ifEqual}}
-													{{/each}}</td>
-												<td>&nbsp;-&nbsp;{{trat.trat_regconselhoavd}}</td>
-												<td></td>
-											</tr>
-											{{/compareThis}}
 											
 										</tbody>
 									</table>
@@ -408,7 +366,6 @@
 											<thead>
 												
 											</thead>
-											{{#compareThis trat.trat_planotipo "Padrão"}}
 											<tbody>
 												<tr>
 													<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
@@ -439,54 +396,15 @@
 												</tr>
 												<tr><td><hr></td></tr>
 												<tr>
-													
+													{{#if this.trat_obsapad}}
 													<td><b><span>OBSERVAÇÕES</span></b></td>
-													
+													{{else}}
+													{{/if}}
 												</tr>
 												<tr>
 													<td>{{trat.trat_obspad}}</td>
 												</tr>
 											</tbody>
-											{{else}}
-											<tbody>
-												<tr>
-													<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_historicois}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>OBJETIVOS GERAIS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_objgeralis}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>OBJETIVO ESPECÍFICOS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_objespecificois}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>ESTRATÉGIAS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_estrategiais}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													
-													<td><b><span>OBSERVAÇÕES</span></b></td>
-													
-												</tr>
-												<tr>
-													<td>{{trat.trat_obspad}}</td>
-												</tr>
-											</tbody>
-											{{/compareThis}}
 										</table>										
 											
 								</div>
