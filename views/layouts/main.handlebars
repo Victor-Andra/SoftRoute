@@ -13,15 +13,15 @@
 
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 		<!-- JQUERY UI -->
-  		<!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>-->
-		
+  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+		<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> sugerido pelo chatGPT-->
 		<!-- page tabelas plugin scripts -->
 
 
 		<!--[if IE]>
 				<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
 		<![endif]-->
-
+		<script type="text/javascript" charset="utf8" src="/assets/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" src="/js/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
 		<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
 		<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
@@ -45,7 +45,7 @@
 		<script type="text/javascript" src="/js/ace-extra.min.js"></script>
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css" />
 		<!-- page specific plugin styles -->
 		<!-- text fonts -->
 		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
@@ -251,7 +251,15 @@
         if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
     <script type="text/javascript"  src="/js/bootstrap.min.js"></script>
-    <!-- page specific plugin scripts -->
+    <!-- page specific plugin scripts Tables-->
+		<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.print.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript" src="/js/dataTables.select.min.js"></script>
     <!--[if lte IE 8]>
         <script src="/js/excanvas.min.js"></script>
     <![endif]-->

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head id="cabecalho" name="cabecalho">
+		<title>Relatório Semestral</title>
+		<style>
+			/* Estilos gerais para o cabeçalho e o rodapé */
+			#cabecalho {
+				margin: 100; /* Margem inicial zero */
+				text-align: left; /* Alinhamento à esquerda */
+				width: 100%; /* Ocupar toda a largura */
+				object-position: left;
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+			}
+			#rodape {
+				margin: 0; /* Margem inicial zero */
+				object-position: left;
+				text-align: left; /* Alinhamento à esquerda */
+				width: 100%; /* Ocupar toda a largura */
+
+				
+			}
+
+			/* Estilos para o conteúdo da página */
+			#conteudo {
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 100px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				text-align: justify; /* Alinhamento à esquerda */
+				font-family: calibri;
+				font-size: 11px;
+				display: flex;
+            	flex-direction: column;
+			}
+
+			/* Estilos específicos para a visualização de impressão */
+			@media print {
+				#cabecalho {
+				position: fixed;
+				top: 0;
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				}
+
+				#rodape {
+				position: fixed;
+				bottom: 0;
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
+				padding-bottom: 150px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				}
+			}
+		</style>
+		<script type="text/javascript">
+			
+			function defineplanopadrao(){
+				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+			}
+			function mudaPlano() {
+				let tipodoc = document.getElementById("tratPlanotipoEdi").value;
+				console.log(tipodoc)
+				if (tipodoc == "Padrão") {
+					document.getElementById('is').style.display = 'none';
+					document.getElementById('padrao').style.display = 'block';
+					document.getElementById('terato').style.display = 'none';
+					document.getElementById('tera').style.display = 'block';
+					
+				} else if (tipodoc == "Ocupacional") {
+					document.getElementById('is').style.display = 'block';
+					document.getElementById('padrao').style.display = 'none';
+					document.getElementById('terato').style.display = 'block';
+					document.getElementById('tera').style.display = 'none';
+					
+				} else {
+				document.getElementById('is').style.display = 'none';
+				document.getElementById('padrao').style.display = 'none';
+				document.getElementById('terato').style.display = 'none';
+
+				}
+				document.getElementById('tratPlanotipo').ReadOnly
+   			}
+			function atualizaTerapeutaId(){
+				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
+			}
+			
+			
+			function carregaBody(){
+				let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
+				let mes = (dtnsc.getMonth()+1).toString();
+				let dia = (dtnsc.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+						
+				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+				document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
+				document.getElementById("tratTratdata").value = fulldate;
+				
+				
+				//document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
+				document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
+				document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
+				document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
+				document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
+				document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
+				document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
+				document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
+				document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
+				document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
+				document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
+				document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
+				document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
+				document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
+				document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
+				document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
+				document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
+				document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
+				document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
+				document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
+				console.log("ta chegando aqui?");
+				let usuarioAtual = document.getElementById("usuarioAtual").value;
+				let perfilAtual = document.getElementById("perfilAtual").value;
+				if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual || perfilAtual == "644743aa78166939169f8486" || perfilAtual == "644742e378166939169f82a1" || perfilAtual == "62421857a12aa557219a0fc1"){
+					document.getElementById("acaoSalvar").style.display = '';
+				} else {
+					document.getElementById("acaoSalvar").style.display = 'none';
+				}
+				this.atualizaDadosbene();
+			}
+		
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("tratBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+		</script>
+	</head>
+	<body Onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container" class="page-break-before">
+			<div class="main-content">
+				<div class="main-content-inner noprint">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Plano de Tratamento</li>
+						</ul><!-- /.breadcrumb -->
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<input id="tratId" name="tratId" value="{{trat._id}}" />
+							<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
+							<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
+							<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+							<input id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
+							<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
+							<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
+							<!--<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>-->
+							<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
+							<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
+							<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
+							<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
+							<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
+							<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
+							<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
+							<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
+							<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
+							<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
+							<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
+							<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
+							<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
+							<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
+							<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
+							<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
+							<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
+							<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
+							<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
+							<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
+							<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row" class="cabecalho">
+					<div class="col-xs-12">
+						<div class="cabecalho">
+							<div class="cabecalho-image">
+								<img src="/images/gallery/cabecalhoRoute.png" >
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div class="row" >
+					<div class="col-xs-12" >
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="space-6"></div>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+										<div class="widget-header widget-header-large">
+											<h1 class="widget-title grey lighter">
+												PLANO DE TRATAMENTO
+											</h1>
+										</div>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<br>
+									<table id="dynamic-table" style="font-size: 20px" >
+										<thead>
+										</thead>
+										<tbody>
+											<br>
+											<br>
+											<br>
+											<br>
+											<br>
+												<td>{{#each benes}}
+														{{#ifEqual ../trat.trat_beneid _id}}
+															{{bene_nome}}
+														{{/ifEqual}}
+													{{/each}}
+												</td>
+											</tr>
+											<tr>
+												<td>{{trat.trat_especialidadepad}}</td>
+											</tr>
+											<tr>
+												<td>{{tratDataCadSimpleFormat}}</td>
+											</tr>
+											<tr rowspan="6">&nbsp;</tr>
+										</tbody>
+									</table>
+									<div class="row" class="rodape">
+										<div class="col-xs-12">
+											<div class="footer">
+												<div class="footer-image">
+													<img src="/images/gallery/rodapeRoute.png" alt="Imagem de Rodapé">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div><!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+					
+				</div><!-- /.row -->
+			</div>
+			
+		</div>
+		
+		<div class="main-container ace-save-state" id="main-container" style="page-break-before: always;">
+			<div class="main-content">
+				<div class="main-content-inner noprint">
+					
+					
+				</div>
+				<div id="conteudo" name="conteudo" class="row" class="page-break-after">
+					<div class="col-xs-12" >
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="row" class="cabecalho">
+							<div class="col-xs-12">
+								<div class="cabecalho">
+									<div class="cabecalho-image">
+										<img src="/images/gallery/cabecalhoRoute.png" >
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<div class="space-6"></div>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+									<table id="dynamic-table" >
+										<thead>
+											
+										</thead>
+										<tbody>
+											<tr rowspan="3">
+												<td></td>
+											</tr>
+											<tr>
+												<td>NOME:&nbsp;</td>
+												<td>{{#each benes}}
+														{{#ifEqual ../trat.trat_beneid _id}}
+															{{bene_nome}}
+														{{/ifEqual}}
+													{{/each}}</td>
+												
+											</tr>
+											<tr>
+												<td>TERAPIA:&nbsp;</td>
+												<td>{{trat.trat_especialidadepad}}</td>
+											</tr>
+											<tr>
+												<td>TERAPEUTA:&nbsp;</td>
+												<td>{{#each usuarios}}
+														{{#ifEqual ../trat.trat_terapeutaidpad _id}}
+															{{usuario_nome}}
+														{{/ifEqual}}
+													{{/each}}</td>
+												<td>&nbsp;-&nbsp;</td>
+												<td>{{trat.trat_regconselhopad}}</td>
+
+											</tr>
+											
+										</tbody>
+									</table>
+									<hr>
+									<div class="row">
+										<table id="dynamic-table" >
+											<thead>
+												
+											</thead>
+											<tbody>
+												<tr rowspan="3">
+													<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_historicopad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>OBJETIVOS GERAIS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_objgeralpad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>OBJETIVO ESPECÍFICOS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_objespecificopad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>ESTRATÉGIAS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_estrategiapad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>OBSERVAÇÕES</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_obspad}}</td>
+												</tr>
+											</tbody>
+										</table>										
+											
+								</div>
+							</div>
+						</div><!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+					
+					</div><!-- /.row -->
+				</div><!-- /.main-content -->
+			</div><!-- /.main-container --><!-- basic scripts -->
+			<div class="row" class="rodape">
+				<div class="col-xs-12">
+					<div class="footer">
+						<div class="footer-image">
+							<img src="/images/gallery/rodapeRoute.png" alt="Imagem de Rodapé">
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</body>
+	
+</html>

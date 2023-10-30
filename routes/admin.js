@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
+const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
 let application = require('../routes/admin')
 
@@ -81,6 +82,9 @@ const fncEvoatend = require("../functions/fncEvoatend")
 const agendaTecClass = require("../models/agenda")
 const AgendaTec = mongoose.model("tb_agenda")
 const fncAgendaTec = require("../functions/fncAgendaTec")
+
+//Busca
+const fncBusca = require("../functions/fncBusca")
 
 //Anamnese
 const anamnClass = require("../models/anamn")
@@ -1484,9 +1488,12 @@ router.get("/area/magenda/LisD", fncGeral.IsAuthenticated, (req,res) =>{//direci
 router.get("/area/magenda/LisS", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Da Semana.
     fncAgendaTec.carregaAgendaTecSem(req, res);
 })
+//Menu Busca ** Area Terapeutas
+router.get('/area/busca', fncGeral.IsAuthenticated, (req,res) =>{//direciona para busca
+    fncBusca.listaBusca(req, res);
+})
 
-
-//Menu Anamnese ** Area Tecnicos   
+//Menu Anamnese ** Area Tecnicos 
 //Lista Todos as anamneses por Data, Beneficiário
 router.get('/area/anamn/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a lista de anamneses
     let resposta = new Resposta();
@@ -1580,6 +1587,10 @@ router.post('/area/plano/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona
 //Atualiza Regitros de Plano de Tratamento 
 router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o Plano de Tratamentos Padrao
     fncTrat.atualizaTrat(req , res);
+})
+//Imprime plano tratamento trat
+router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+    fncTrat.tratImp(req,res);
 })
 //Deleta plano Selecionado
 router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo

@@ -12,6 +12,7 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const laudoClass = require("../models/laudo")
+const fncGeral = require("./fncGeral")
 
 //Tabela Plano de Tratamento 
 const Trat = mongoose.model("tb_trat")
@@ -360,7 +361,27 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
+    tratImp(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        let perfilAtual = req.cookies['lvlUsu'];
+        Trat.findOne({_id : req.params.id}).then((trat)=>{
+            console.log("Listagem Realizada de Planos de Tratamento")
+            let tratDataCadSimpleFormat = fncGeral.getData(trat.trat_datacad)
+            Terapia.find().then((terapia)=>{
+                console.log("Listagem Realizada de terapias")
+                Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    Laudo.find().then((laudo)=>{
+                        Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            console.log("Listagem Realizada de beneficiarios")
+                                res.render("area/plano/tratImp", {trat, laudos: laudo,terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual, perfilAtual, tratDataCadSimpleFormat})
+        })})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.render('admin/erro')
+        })
+    },
    
     cadastraTrat(req,res){
         let resultado

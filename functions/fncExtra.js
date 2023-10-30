@@ -18,11 +18,13 @@ const creditClass = require("../models/credit")
 const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
 const horaageClass = require("../models/horaAge")
+const agendaClass = require("../models/agenda")
 
 //Tabela Plano de Extra 
 const Extra = mongoose.model("tb_extra")
 
 //Tabelas Extrangeiras
+const Agenda = mongoose.model("tb_agenda")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Convcre = mongoose.model("tb_convcre")
@@ -66,26 +68,22 @@ module.exports = {
 
         return t;
     },
+   
     listaExtra(req, res, resposta){
         let flash = new Resposta();
-        //console.log('listando Extraeses')
-            let extra;
-
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+        Agenda.find({ agenda_extra: true }).then((agenda) =>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find().then((usuario)=>{
-                    //console.log("Listagem Realizada Usuário!")
-                    /*if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }*/
-                    res.render('atendimento/extra/extraLis', {extras: extra, usuarios: usuario, benes: bene, flash})
-        })}).catch((err) =>{
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
+                                    Terapia.find().then((terapia)=>{
+                                        Conv.find().then((conv)=>{
+                                            conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                        res.render('atendimento/extra/extraLis', {agendas: agenda, benes: bene, usuarios: usuario, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
