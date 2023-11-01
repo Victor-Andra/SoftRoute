@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Terapeuta</title>
+		<title>Agenda Beneficiário</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -95,7 +95,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Terapeutas</li>
+							<li class="active">Agenda Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -127,22 +127,27 @@
 							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{terapia_nome}}</label>
 						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filSB" method="POST">
+					<form class="form-horizontal" role="form" action="/menu/agenda/filB" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
 								<div style="text-align: center;">
-									<label id="terapeutaFilDiv">Terapeuta:</label>
-									<select id="agendaTerapeutaid" name="agendaTerapeutaid" data-placeholder="Escolha...">
-										{{#each benes}}
-											<option value="{{_id}}">{{bene_apelido}}</option>
-										{{/each}}
-									</select>
-									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
-									<label style="margin-left: 25px;">Data:</label>
-									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-									<input class="hidden" id="dataFinal" name="dataFinal" />
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
+										<label id="beneFilDiv">Beneficiário:</label>
+										<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_apelido}}</option>
+											{{/each}}
+										</select>
+										<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+										<label style="margin-left: 25px;">Data:</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+										<label id="apenasSubFixo">Filtrar pela categoria SubstitutoFixo:</label>
+										<select id="soFixo" name="soFixo" data-placeholder="Escolha...">
+											<option value="false">Não</option>
+											<option value="true">Sim</option>
+										</select>
+										<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+											<i class="ace-icon fa fa-search-plus "></i>
+										</button>
 								</div>
 							<!--
 							<div class="col-xs-16 col-sm-3">	
@@ -177,7 +182,7 @@
 					</form>
 						<div class="tab-content"><!-- .tab-contente -->
 							<div class="row">
-								<div class="col-xs-16 col-sm-12">
+								<div class="col-xs-16 col-sm-9">
 									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
 										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>

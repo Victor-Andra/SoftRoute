@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 		<head id="cabecalho" name="cabecalho">
-		<title>
-			Plano de tratamento - 
-			{{#each benes}}
-				{{#ifEqual ../trat.trat_beneid _id}}
-					&nbsp;{{bene_nome}}
-				{{/ifEqual}}
-			{{/each}}
-			&nbsp; - &nbsp; 
-			{{#compareThis trat.trat_planotipo "Padrão"}}
-				{{trat.trat_especialidadepad}}
-			{{else}}
-				{{trat.trat_especialidadeis}}
-					&nbsp;-&nbsp;{{trat.trat_especialidadeavd}}
-			{{/compareThis}}
-			</title>
+		<title>Plano de tratamento</title>
 		<style>
 			
 			@page {
@@ -515,11 +501,11 @@
 					</div><!-- /.row -->
 					<div class="row" class="rodape">
 						<div class="col-xs-12">
-							
+							<div class="footer">
 								<div class="footer-image">
 									<img src="/images/gallery/rodapeRoute.png" alt="Imagem de Rodapé">
 								</div>
-							
+							</div>
 						</div>
 					</div><!-- /.row -->
 				</div>

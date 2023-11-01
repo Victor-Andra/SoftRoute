@@ -11793,28 +11793,29 @@ module.exports = {
         console.log("ini: "+fncGeral.getDateToIsostring(dataIni));
         console.log("fim: "+fncGeral.getDateToIsostring(dataFim));
         let stringo ;
+        console.log("beneidx:"+beneidx)
         if (beneidx == "-" && req.body.agendaMergeterapeutaid == "-") {
             resultado = "false";
         } else if (beneidx != "-" && teraidx == "-") {
             console.log("falta bene")
-            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
+            busca = { agenda_data: { $gte : new Date(dataIni), $lte: new Date(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
             Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx }).then((agenda)=>{
-                console.log("agenda.kength"+agenda.length);
+                console.log("agenda.length"+agenda.length);
             })
         } else if (beneidx == "-" && teraidx != "-") {
             console.log("falta terapeuta")
             busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
             Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx }).then((agenda)=>{
-                console.log("agenda.kength"+agenda.length);
+                console.log("agenda.length"+agenda.length);
             })
         } else {
             console.log("falta de um bene para um terapeuta")
             busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
             Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx }).then((agenda)=>{
-                console.log("agenda.kength"+agenda.length);
+                console.log("agenda.length"+agenda.length);
             })
         }
-
+        console.log("resultado:"+resultado)
         if (resultado == "true"){
             agendaClass.agendaFaltaDia(req,res,busca);
             if (res.retorno = "true") {

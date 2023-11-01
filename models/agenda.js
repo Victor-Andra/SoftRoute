@@ -305,7 +305,7 @@ module.exports = {AgendaModel,AgendaSchema,
         var retorno;
         let arrayAgendasNovas = [];
         let dataAtual = new Date();
-
+        console.log("req.body.agendaCateg:"+req.body.agendaCateg)
         await AgendaModel.find(busca).then((agenda)=>{
             //console.log("agenda.kength"+agenda.length);
             agenda.forEach(a => {

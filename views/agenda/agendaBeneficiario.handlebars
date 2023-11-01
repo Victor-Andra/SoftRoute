@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Beneficiário</title>
+		<title>Agenda Semanal por Beneficiário</title>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -95,7 +95,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Beneficiário</li>
+							<li class="active">Agenda Semanal por Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -182,9 +182,9 @@
 					</form>
 						<div class="tab-content"><!-- .tab-contente -->
 							<div class="row">
-								<div class="col-xs-16 col-sm-9">
+								<div class="col-xs-16 col-sm-12">
 									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" name="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
 													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
@@ -272,5 +272,36 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [ null, null, null,null, null, null, null, null, null,null, null,null, null, null, null, null],
+			"responsive": true,
+			"lengthMenu": [ 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": false,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	
+
 	</body>
 </html>
