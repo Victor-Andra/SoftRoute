@@ -227,6 +227,7 @@
 														<div class="form-group" >
 															<div class="col-xs-9 col-sm-9">
 																<select class="col-xs-9 col-sm-9" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -257,6 +258,7 @@
 														<div class="form-group">
 															<div class="col-xs-9 col-sm-9">
 																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -271,6 +273,7 @@
 														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
 																	{{/each}}
@@ -305,6 +308,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-5">
 																			<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+																				<option value="766f69643132333435366964">-</option>
 																				{{#each terapeutas}}
 																					<option value="{{_id}}">{{usuario_nome}}</option>
 																				{{/each}}
@@ -315,6 +319,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-4">
 																			<select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+																					<option value="766f69643132333435366964">-</option>
 																					{{#each terapias}}
 																						<option value="{{_id}}">{{terapia_nome}}</option>
 																					{{/each}}
@@ -332,6 +337,7 @@
 														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}

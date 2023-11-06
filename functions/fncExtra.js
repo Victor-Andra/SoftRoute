@@ -69,7 +69,7 @@ module.exports = {
         return t;
     },
    
-    listaExtra(req, res, resposta){
+    listaExtra(req, res, resposta){ //Lista extras Agendados)
         let flash = new Resposta();
         Agenda.find({ agenda_extra: true }).then((agenda) =>{
             Bene.find().then((bene)=>{
@@ -89,38 +89,69 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    carregaExtra(req,res){
-        let atend;
-        Extra.find().then((atend)=>{
-            Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+    filtraExtra(req, res, resposta){
+        let flash = new Resposta();
+        //console.log('listando Extraeses')
+        Agenda.find({agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
+            agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
+            agenda.forEach((c)=>{
+               //console.log("c.datacad"+c.agenda_datacad)
+               let datacad = new Date(c.agenda_data)
+               let mes = (datacad.getMonth()+1).toString();
+               let dia = (datacad.getUTCDate()).toString();
+               if (mes.length == 1){
+                   mes = "0"+mes;
+               }
+               if (dia.length == 1){
+                   dia = "0"+dia;
+               }
+               let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+               c.agenda_data=fulldate;
+                
+
+            })
+
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                //console.log("Listagem Realizada de Beneficiários!")
-                Conv.find({"conv_status":"Ativo"}).then((conv)=>{
-                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Convenios")
-                    Convcre.find().then((convcre) => {
-                        //console.log("Listagem Realizada de Convenios")
-                        Convdeb.find().then((convdeb) => {
-                            //console.log("Listagem Realizada de Convenios")
-                            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                //console.log("Listagem Realizada de Usuário")
-                                Terapia.find().then((terapia)=>{
-                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    //console.log("Listagem Realizada de Convenios")
-                                    Sala.find().then((sala)=>{
-                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                        res.render("atendimento/extra/extraCad", {horaages: horaage, atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala
-                                        })
-        })})})})})})})})}).catch((err) =>{
+                Usuario.find().then((usuario)=>{
+                    //console.log("Listagem Realizada Usuário!")
+                    /*if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }*/
+                    res.render('atendimento/extra/extraLis', {extras: extra, usuarios: usuario, benes: bene, flash})
+        })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
         })
     },
-
-    filtraExtra(req, res, resposta){
+    listaExtractrl(req, res, resposta){ //Lista extras exportados para o controle dos extras, aguardando auditoria e exporta para os atendimentos)
+        let flash = new Resposta();
+        Extra.find().then((extra) =>{
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                Sala.find().then((sala)=>{
+                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
+                                    Terapia.find().then((terapia)=>{
+                                        Conv.find().then((conv)=>{
+                                            conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                        res.render('atendimento/extra/extraLisctrl', {extras: extra, benes: bene, usuarios: usuario, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
+        })})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar!")
+            res.redirect('admin/erro')
+        })
+    },
+    filtraExtractrl(req, res, resposta){
         let flash = new Resposta();
         //console.log('listando Extraeses')
         Extra.find({extra_beneid: req.body.extraBeneid}).then((extra) =>{
@@ -162,7 +193,38 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-   
+    carregaExtra(req,res){
+        let atend;
+        Extra.find().then((atend)=>{
+            Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({"conv_status":"Ativo"}).then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Convenios")
+                    Convcre.find().then((convcre) => {
+                        //console.log("Listagem Realizada de Convenios")
+                        Convdeb.find().then((convdeb) => {
+                            //console.log("Listagem Realizada de Convenios")
+                            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                //console.log("Listagem Realizada de Usuário")
+                                Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                    //console.log("Listagem Realizada de Convenios")
+                                    Sala.find().then((sala)=>{
+                                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                        res.render("atendimento/extra/extraCad", {horaages: horaage, atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala
+                                        })
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+
+    
     carregaExtraedi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         Extra.findById(req.params.id).then((extra) =>{console.log("ID: "+extra._id)
@@ -202,7 +264,7 @@ module.exports = {
                 flash.texto = "Extra cadastrado com sucesso!"
                 flash.sucesso = "true"
                 console.log('verdadeiro')
-                this.listaExtra(req,res,flash)
+                this.listaExtractrl(req,res,flash)
             } else {
                 flash.texto = resultado
                 flash.sucesso = "false"

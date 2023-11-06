@@ -430,12 +430,18 @@
 																	<td>{{bene_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-															{{#each ../usuarios}}
-																{{#ifEqual this._id ../trat_terapeutaidpad}}
-																	<td>{{usuario_nome}}
-																{{/ifEqual}}
-															{{/each}}
+
+															{{#if trat_terapeutaidpad}}
+																{{#each ../usuarios}}
+																	{{#ifEqual this._id ../trat_terapeutaidpad}}
+																		<td>{{usuario_nome}}
+																	{{/ifEqual}}
+																{{/each}}
 															- {{trat_especialidadepad}}</td>
+															{{else}}
+																<td>&nbsp;-</td>
+															{{/if}}
+
 															
 															<td>&nbsp;</td>
 															<td>&nbsp;</td>
@@ -498,7 +504,7 @@
 																{{/each}}
 															- {{trat_especialidadeis}}</td>
 															{{else}}
-																<td>&nbsp;</td>
+																<td>&nbsp;-</td>
 															{{/if}}
 
 															{{#if trat_terapeutaidavd}}
@@ -509,7 +515,7 @@
 																{{/each}}
 															- {{trat_especialidadeavd}}</td>
 															{{else}}
-																<td>&nbsp;</td>
+																<td>&nbsp;-</td>
 															{{/if}}
 															
 															

@@ -1070,8 +1070,6 @@ router.post('/atendimento/atendreltera/relatendteraconss', fncGeral.IsAuthentica
     fncAtend.relAtendteraconsFiltro(req,res)
 })
 
-
-
 //Relatório Emissão NF.
 //Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
 router.get('/atendimento/relatendvalnf', fncGeral.IsAuthenticated,(req,res) =>{
@@ -1621,6 +1619,15 @@ router.get('/atendimento/extra/lis', fncGeral.IsAuthenticated, (req,res) =>{//di
 //Lista todos os Extras
 router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.filtraExtra(req,res);
+})
+
+//Lista todos os Extras Controles
+router.get('/atendimento/extra/lisctrl', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.listaExtractrl(req,res);
+})
+//Lista todos os Extras
+router.post('/atendimento/extra/lisctrlF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.filtraExtractrl(req,res);
 })
 //Deleta Extra Selecionado
 router.get('/atendimento/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Extra

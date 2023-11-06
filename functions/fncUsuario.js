@@ -126,6 +126,7 @@ module.exports = {
     },
     carregaEsqueciMinhasenha(req,res){
         Usuario.find().then((usuario)=>{
+                usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
              res.render("ferramentas/usuario/esqueciMinhaSenha", {usuarios: usuario})
         }).catch((err) =>{
              console.log(err)
@@ -191,6 +192,7 @@ module.exports = {
     },
     carregaResetarchave(req,res){
         Usuario.find().then((usuario)=>{
+            usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
             res.render("ferramentas/usuario/resetarChave", {usuarios: usuario})
         }).catch((err) =>{
             console.log(err)
@@ -362,7 +364,7 @@ module.exports = {
             console.log("res")
         });
         let resultado = "true"
-console.log("resultado:"+resultado)
+        console.log("resultado:"+resultado)
         if (resultado == "true"){
             flash.texto = "Nome alterado com sucesso";
             flash.sucesso = "true";

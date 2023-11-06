@@ -137,13 +137,9 @@
 					<form id="acaoForm" class="form-horizontal" role="form" action="/menu/agenda/filF" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge">
 							<div class="row">
-								<div class="col-xs-12">
-									<div class="col-xs-2">
-										<div class="input-group">
-											
-										</div>
-									</div>
-									<div class="col-xs-4">
+								<div class="col-xs-12" style="text-align: center;" >
+									
+									<div class="col-xs-3">
 										<div class="input-group">
 											<label>Data: </label>
 											<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
@@ -164,10 +160,16 @@
 											<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
 										</div>
 									</div>
-									<div class="col-xs-4">
+									<div class="col-xs-3">
 										<button name="acaoConverte" id="acaoConverte" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:testeConfirmConvert('/menu/agenda/converteDia');">
 											<i class="ace-icon fa fa-fire bigger-110"></i>
 											Converter Semana em Atendimento
+										</button>
+									</div>
+									<div class="col-xs-2">
+										<button name="acaoExtra" id="acaoExtra" type="button" class="btn btn-xs btn-info"  onclick="">
+											<i class="ace-icon fa fa-fire bigger-110"></i>
+											Exportar Extras da Semana
 										</button>
 									</div>
 								</div>

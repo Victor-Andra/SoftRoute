@@ -477,12 +477,12 @@ module.exports = {UsuarioModel,UsuarioSchema,
         })
         //console.log("usuarioResp.usuario_senha == req.body.usuarioRespSenha //"+usuarioResp.usuario_senha +" == "+ req.body.usuarioRespSenha)
         if (usuarioAtual != "-" && usuarioResp != "-" && usuarioResp.usuario_senha == req.body.usuarioRespSenha){
-            if (usuarioAtual.usuario_palavraschaveantigas.length < 8){
-                palavrasAntigas = "["+usuarioAtual.usuario_palavrachave+"]"
-            } else {
+            if (usuarioAtual.usuario_palavraschaveantigas){
                 palavrasAntigas = usuarioAtual.usuario_palavraschaveantigas+",["+usuarioAtual.usuario_palavrachave+"]"
+            } else {
+                palavrasAntigas = "["+usuarioAtual.usuario_palavrachave+"]"
             }
-
+            console.log("palavrasAntigas:"+palavrasAntigas)
             await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
                 {$set: {
                     usuario_palavraschaveantigas : palavrasAntigas,

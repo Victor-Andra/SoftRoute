@@ -4,103 +4,69 @@ const ObjectId = mongoose.Types.ObjectId
 const ExtraSchema = mongoose.Schema({
     extra_tipo :{ type: String, required: false },
     extra_auditado :{ type: String, required: false },
-    extra_org :{
-        type: String,
-        required: true
-    },
-    extra_categoria :{
-        type: String,
-        required: true
-    },
-    extra_beneid :{
-        type: ObjectId,
-        required: false
-    },
-    extra_convid :{
-        type: ObjectId,
-        required: true
-    },
-    extra_usuid :{
-        type: String,
-        required: true
-    },
-    extra_extradata :{
-        type: Date,
-        required: true
-    },
-    extra_extrahora :{
-        type: String,
-        required: false
-    },
-    extra_terapeutaid :{
-        type: ObjectId,
-        required: true
-    },
-    extra_terapiaid :{
-        type: ObjectId,
-        required: true
-    },
-    extra_salaid :{
-        type: ObjectId,
-        required: true
-    },
-    extra_valorcre :{
-        type: String,
-        required: true
-    },
-    extra_valordeb :{
-        type: String,
-        required: true
-    },
-    extra_mergeterapeutaid :{
-        type: ObjectId,
-        required: false
-    },
-    extra_mergeterapiaid :{
-        type: ObjectId,
-        required: false
-    },
-    extra_mergevalorcre :{
-        type: String,
-        required: false
-    },
-    extra_mergevalordeb :{
-        type: String,
-        required: false
-    },
-    extra_evolucao :{
-        type: String,
-        required: false
-    },
-    extra_obs :{
-        type: String,
-        required: false
-    },
-    extra_num :{
-        type: Number,
-        required: true
-    },
-    extra_datacad :{
-        type: Date,
-        required: false
-    },
-    extra_dataedi :{
-        type: Date,
-        required: false
-    }
+    extra_exportado :{ type: String, required: false },
+    
+    extra_org :{type: String, required: false },
+    extra_categoria :{type: String, required: false },
+    extra_beneid :{ type: ObjectId, required: false },
+    extra_convid :{type: ObjectId, required: false },
+    extra_usuid :{type: String, required: false },
+    extra_data :{type: Date, required: false },
+    extra_hora :{type: String, required: false },
+    extra_terapeutaid :{type: ObjectId, required: false },
+    extra_terapiaid :{type: ObjectId, required: false },
+    extra_salaid :{type: ObjectId, required: false },
+    extra_valorcre :{type: String, required: false },
+    extra_valordeb :{type: String, required: false },
+    extra_mergeterapeutaid :{type: ObjectId, required: false },
+    extra_mergeterapiaid :{type: ObjectId, required: false },
+    extra_mergevalorcre :{type: String, required: false },
+    extra_mergevalordeb :{type: String, required: false },
+    extra_evolucao :{type: String, required: false },
+    extra_obs :{type: String, required: false },
+    extra_num :{type: Number, required: false },
+    extra_datacad :{type: Date, required: false },
+    extra_dataedi :{type: Date, required: false },
+
+    extra_orgcop :{type: String, required: false },
+    extra_categoriacop :{type: String, required: false },
+    extra_beneidcop :{ type: ObjectId, required: false },
+    extra_convidcop :{type: ObjectId, required: false },
+    extra_usuidcop :{type: String, required: false },
+    extra_tacop :{type: Date, required: false },
+    extra_horacop :{type: String, required: false },
+    extra_terapeutaidcop :{type: ObjectId, required: false },
+    extra_terapiaidcop :{type: ObjectId, required: false },
+    extra_salaidcop :{type: ObjectId, required: false },
+    extra_valorcrecop :{type: String, required: false },
+    extra_valordebcop :{type: String, required: false },
+    extra_mergeterapeutaidcop :{type: ObjectId, required: false },
+    extra_mergeterapiaidcop :{type: ObjectId, required: false },
+    extra_mergevalorcrecop :{type: String, required: false },
+    extra_mergevalordebcop :{type: String, required: false },
+    extra_evolucaocop :{type: String, required: false },
+    extra_obscop :{type: String, required: false },
+    extra_numcop :{type: Number, required: false },
+    extra_datacadcop :{type: Date, required: false },
+    extra_dataedicop :{type: Date, required: false }
+
+
+
 })
 
 class Extra{
     constructor(
         extra_tipo,
         extra_auditado,
+        extra_exportado,
+        
         extra_org,
         extra_categoria,
         extra_beneid,
         extra_convid,
         extra_usuid,
-        extra_extradata,
-        extra_extrahora,
+        extra_data,
+        extra_hora,
         extra_terapeutaid,
         extra_terapiaid,
         extra_salaid,
@@ -114,17 +80,42 @@ class Extra{
         extra_obs,
         extra_num,
         extra_datacad,
-        extra_dataedi
+        extra_dataedi,
+
+        extra_orgcop,
+        extra_categoriacop,
+        extra_beneidcop,
+        extra_convidcop,
+        extra_usuidcop,
+        extra_datacop,
+        extra_horacop,
+        extra_terapeutaidcop,
+        extra_terapiaidcop,
+        extra_salaidcop,
+        extra_valorcrecop,
+        extra_valordebcop,
+        extra_mergeterapeutaidcop,
+        extra_mergeterapiaidcop,
+        extra_mergevalorcrecop,
+        extra_mergevalordebcop,
+        extra_evolucaocop,
+        extra_obscop,
+        extra_numcop,
+        extra_datacadcop,
+        extra_dataedicop
+
         ){
             this.extra_tipo = extra_tipo,
             this.extra_auditado = extra_auditado,
+            this.extra_exportado = extra_exportado,
+            
             this.extra_org = extra_org,
             this.extra_categoria = extra_categoria,
             this.extra_beneid = extra_beneid,
             this.extra_convid = extra_convid,
             this.extra_usuid = extra_usuid,
-            this.extra_extradata = extra_extradata,
-            this.extra_extrahora = extra_extrahora,
+            this.extra_data = extra_data,
+            this.extra_hora = extra_hora,
             this.extra_terapeutaid = extra_terapeutaid,
             this.extra_terapiaid = extra_terapiaid,
             this.extra_salaid = extra_salaid,
@@ -138,7 +129,30 @@ class Extra{
             this.extra_obs = extra_obs,
             this.extra_num = extra_num,
             this.extra_datacad = extra_datacad,
-            this.extra_dataedi = extra_dataedi      
+            this.extra_dataedi = extra_dataedi,
+
+            this.extra_orgcop = extra_orgcop,
+            this.extra_categoriacop = extra_categoriacop,
+            this.extra_beneidcop = extra_beneidcop,
+            this.extra_convidcop = extra_convidcop,
+            this.extra_usuidcop = extra_usuidcop,
+            this.extra_datacop = extra_datacop,
+            this.extra_horacop = extra_horacop,
+            this.extra_terapeutaidcop = extra_terapeutaidcop,
+            this.extra_terapiaidcop = extra_terapiaidcop,
+            this.extra_salaidcop = extra_salaidcop,
+            this.extra_valorcrecop = extra_valorcrecop,
+            this.extra_valordebcop = extra_valordebcop,
+            this.extra_mergeterapeutaidcop = extra_mergeterapeutaidcop,
+            this.extra_mergeterapiaidcop = extra_mergeterapiaidcop,
+            this.extra_mergevalorcrecop = extra_mergevalorcrecop,
+            this.extra_mergevalordebcop = extra_mergevalordebcop,
+            this.extra_evolucaocop = extra_evolucaocop,
+            this.extra_obscop = extra_obscop,
+            this.extra_numcop = extra_numcop,
+            this.extra_datacadcop = extra_datacadcop,
+            this.extra_dataedicop = extra_dataedicop
+
     }
 }
 
@@ -165,13 +179,15 @@ module.exports = {ExtraModel,ExtraSchema,
             {$set: {
                 extra_tipo : req.body.extraTipo,
                 extra_auditado : req.body.extraAuditado,
+                extra_exportado : req.body.extraExportado,
+                
                 extra_org : req.body.extraOrg,
                 extra_categoria : req.body.extraCategoria,
                 extra_beneid : req.body.extraBeneid,
                 extra_convid : req.body.extraConvid,
                 extra_usuid : req.body.extraUsuid,
-                extra_extradata : req.body.extraExtradata,
-                extra_extrahora : req.body.extraHora,
+                extra_data : req.body.extraData,
+                extra_hora : req.body.extraHora,
                 extra_terapeutaid : req.body.extraTerapeutaid,
                 extra_terapiaid : req.body.extraTerapiaid,
                 extra_salaid : req.body.extraSalaid,
@@ -182,8 +198,26 @@ module.exports = {ExtraModel,ExtraSchema,
                 extra_mergevalorcre : req.body.extraMergevalorcre,
                 extra_mergevalordeb : req.body.extraMergevalordeb,
                 extra_obs : req.body.extraObs,
-                extra_dataedi : dataAtual.toISOString()
+                extra_dataedi : dataAtual.toISOString(),
                 
+                extra_orgcop : req.body.extraOrgcop,
+                extra_categoriacop : req.body.extraCategoriacop,
+                extra_beneidcop : req.body.extraBeneidcop,
+                extra_convidcop: req.body.extraConvidcop,
+                extra_usuidcop : req.body.extraUsuidcop,
+                extra_extradatacop : req.body.extraDatacop,
+                extra_extrahoracop : req.body.extraHoracop,
+                extra_terapeutaidcop : req.body.extraTerapeutaidcop,
+                extra_terapiaidcop : req.body.extraTerapiaidcop,
+                extra_salaidcop : req.body.extraSalaidcop,
+                extra_valorcrecop : req.body.extraValorcrecop,
+                extra_valordebcop : req.body.extraValordebcop,
+                extra_mergeterapeutaidcop : req.body.extraMergeTerapeutaidcop,
+                extra_mergeterapiaidcop : req.body.extraMergeTerapiaidcop,
+                extra_mergevalorcrecop : req.body.extraMergevalorcrecop,
+                extra_mergevalordebcop : req.body.extraMergevalordebcop,
+                extra_obscop : req.body.extraObscop,
+                extra_dataedicop : dataAtual.toISOString()
                 
                 }}
                 ).then((res) =>{
@@ -212,12 +246,14 @@ module.exports = {ExtraModel,ExtraSchema,
         const newExtra = new ExtraModel({
             extra_tipo : req.body.extraTipo,
             extra_auditado : req.body.extraAuditado,
+            extra_exportado : req.body.extraExportado,
+            
             extra_org : req.body.extraOrg,
             extra_categoria : req.body.extraCategoria,
             extra_beneid : req.body.extraBeneid,
             extra_convid : req.body.extraConvid,
             extra_usuid : req.body.extraUsuid,
-            extra_extradata : req.body.extraExtradata,
+            extra_extradata : req.body.extraData,
             extra_extrahora : req.body.extraHora,
             extra_terapeutaid : req.body.extraTerapeutaid,
             extra_terapiaid : req.body.extraTerapiaid,
@@ -230,8 +266,27 @@ module.exports = {ExtraModel,ExtraSchema,
             extra_mergevalordeb : req.body.extraMergevalordeb,
             extra_obs : req.body.extraObs,
             extra_num : req.body.nextNum,
-            extra_datacad : dataAtual.toISOString()
-                
+            extra_datacad : dataAtual.toISOString(),
+            
+            extra_orgcop : req.body.extraOrgcop,
+            extra_categoriacop : req.body.extraCategoriacop,
+            extra_beneidcop : req.body.extraBeneidcop,
+            extra_convidcop: req.body.extraConvidcop,
+            extra_usuidcop : req.body.extraUsuidcop,
+            extra_extradatacop : req.body.extraDatacop,
+            extra_extrahoracop : req.body.extraHoracop,
+            extra_terapeutaidcop : req.body.extraTerapeutaidcop,
+            extra_terapiaidcop : req.body.extraTerapiaidcop,
+            extra_salaidcop : req.body.extraSalaidcop,
+            extra_valorcrecop : req.body.extraValorcrecop,
+            extra_valordebcop : req.body.extraValordebcop,
+            extra_mergeterapeutaidcop : req.body.extraMergeTerapeutaidcop,
+            extra_mergeterapiaidcop : req.body.extraMergeTerapiaidcop,
+            extra_mergevalorcrecop : req.body.extraMergevalorcrecop,
+            extra_mergevalordebcop : req.body.extraMergevalordebcop,
+            extra_obscop : req.body.extraObscop,
+            extra_numcop : req.body.nextNumcop,
+            extra_datacadcop : dataAtual.toISOString()
                 
                 
         });
@@ -250,11 +305,12 @@ module.exports = {ExtraModel,ExtraSchema,
             extra_tipo : req.body.extraTipo,
             extra_auditado : req.body.extraAuditado,
             extra_org : req.body.extraOrg,
+            extra_exportado : req.body.extraExportado,
             extra_categoria : req.body.extraCategoria,
             extra_beneid : req.body.extraBeneid,
             extra_convid : req.body.extraConvid,
             extra_usuid : req.body.extraUsuid,
-            extra_extradata : req.body.extraExtradata,
+            extra_extradata : req.body.extraData,
             extra_extrahora : req.body.extraHora,
             extra_terapeutaid : req.body.extraTerapeutaid,
             extra_terapiaid : req.body.extraTerapiaid,
@@ -267,7 +323,27 @@ module.exports = {ExtraModel,ExtraSchema,
             extra_mergevalordeb : req.body.extraMergevalordeb,
             extra_obs : req.body.extraObs,
             extra_num : req.body.nextNum,
-            extra_datacad : dataAtual.toISOString()
+            extra_datacad : dataAtual.toISOString(),
+
+            extra_orgcop : req.body.extraOrgcop,
+            extra_categoriacop : req.body.extraCategoriacop,
+            extra_beneidcop : req.body.extraBeneidcop,
+            extra_convidcop: req.body.extraConvidcop,
+            extra_usuidcop : req.body.extraUsuidcop,
+            extra_extradatacop : req.body.extraDatacop,
+            extra_extrahoracop : req.body.extraHoracop,
+            extra_terapeutaidcop : req.body.extraTerapeutaidcop,
+            extra_terapiaidcop : req.body.extraTerapiaidcop,
+            extra_salaidcop : req.body.extraSalaidcop,
+            extra_valorcrecop : req.body.extraValorcrecop,
+            extra_valordebcop : req.body.extraValordebcop,
+            extra_mergeterapeutaidcop : req.body.extraMergeTerapeutaidcop,
+            extra_mergeterapiaidcop : req.body.extraMergeTerapiaidcop,
+            extra_mergevalorcrecop : req.body.extraMergevalorcrecop,
+            extra_mergevalordebcop : req.body.extraMergevalordebcop,
+            extra_obscop : req.body.extraObscop,
+            extra_numcop : req.body.nextNumcop,
+            extra_datacadcop : dataAtual.toISOString()
         });
 
         return newExtra;
