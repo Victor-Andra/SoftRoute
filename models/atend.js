@@ -145,6 +145,7 @@ module.exports = {AtendModel,AtendSchema,
         //Pega data atual
         
         //Realiza Atualização
+        console.log("req.body.atendMergeTerapiaid:"+req.body.atendMergeTerapiaid);
         await AtendModel.findByIdAndUpdate(req.body.atendId, 
             {$set: {
                 atend_org : req.body.atendOrg,
@@ -317,6 +318,8 @@ module.exports = {AtendModel,AtendSchema,
         
         console.log("ini: "+ini.toISOString());
         console.log("fim: "+fim.toISOString());
+        //hexadecimal de void123456id
+        var voidId = new mongoose.mongo.ObjectId('766f69643132333435366964');
         //Ta com o nome de agenda pq vem da agenda, mas o id é esse
         let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
         let terapeutaidx = req.body.agendaTerapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
@@ -337,7 +340,12 @@ module.exports = {AtendModel,AtendSchema,
             let novavalordebx = req.body.atendValordeb;
             
             if (categoriaidx != "-"){
-                busca = { atend_atenddata: {$gte : ini.toISOString(), $lte: fim.toISOString()}, atend_terapiaid: terapiaidx, atend_beneid: beneidx, atend_terapeutaid: terapeutaidx };
+                if (categoriaidx == "Glosa"){
+                    console.log("entro aqui")
+                    busca = { atend_atenddata: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, atend_beneid: beneidx , agenda_categoria: categoriaidx };
+                } else {
+                    busca = { atend_atenddata: {$gte : ini.toISOString(), $lte: fim.toISOString()}, atend_terapiaid: terapiaidx, atend_beneid: beneidx, atend_terapeutaid: terapeutaidx };
+                }
             } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
                 busca = { atend_atenddata: {$gte : ini.toISOString(), $lte: fim.toISOString()}, atend_terapiaid: terapiaidx, atend_beneid: beneidx, atend_terapeutaid: terapeutaidx };
             } else if (terapeutaidx != "-" && terapiaidx != "-"){
@@ -353,6 +361,9 @@ module.exports = {AtendModel,AtendSchema,
             if (categoriaidx != "-") {
                 if (categoriaidx == "Padrão") {
                     troca = {'atend_categoria': categoriaidx, 'atend_org': 'Padrão'};
+                } else if (categoriaidx == "Glosa") {
+                    console.log("entro aqui2")
+                    troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo', 'atend_mergeterapeutaid': voidId, 'atend_mergeterapiaid': voidId, 'atend_valordeb': novavalordebx, 'atend_valorcre': novavalorcrex};
                 } else {
                     troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo'};
                 }
@@ -419,7 +430,9 @@ module.exports = {AtendModel,AtendSchema,
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
                 troca = {'atend_valorcre': novavalorcrex};
             }
-
+            AtendModel.find(busca).then((atends)=>{
+                console.log("atendsat:"+atends.length)
+            })
             await AtendModel.updateMany(
                 busca,{$set: troca}
             ).then((res) =>{
