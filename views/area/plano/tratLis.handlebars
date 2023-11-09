@@ -340,7 +340,7 @@
 											<select name="tratTipoPessoa" id="tratTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
-												<option value="Terapeuta">Terapeuta</option>
+												O sistema não quer que funcione <option value="Terapeuta">Terapeuta</option>
 											</select>
 										</div>
 									</div>
@@ -496,29 +496,38 @@
 															
 															<td>&nbsp;</td>
 															
-															{{#if trat_terapeutaidis}}
-																{{#each ../usuarios}}
-																	{{#ifEqual this._id ../trat_terapeutaidis}}
-																		<td>{{usuario_nome}}
-																	{{/ifEqual}}
-																{{/each}}
-															- {{trat_especialidadeis}}</td>
+															
+															{{#ifEqual trat_terapeutaidis '766f69643132333435366964'}}
+															<td>-</td>
 															{{else}}
-																<td>&nbsp;-</td>
-															{{/if}}
+																{{#if trat_terapeutaidis}}
+																	{{#each ../usuarios}}
+																		{{#ifEqual this._id ../trat_terapeutaidis}}
+																			<td>{{usuario_nome}}
+																		{{/ifEqual}}
+																	{{/each}}
+																- {{trat_especialidadeis}}</td>
+																{{else}}
+																	<td>&nbsp;-</td>
+																{{/if}}
+															{{/ifEqual}}
+															
 
-															{{#if trat_terapeutaidavd}}
-																{{#each ../usuarios}}
-																	{{#ifEqual this._id ../trat_terapeutaidavd}}
-																		<td>{{usuario_nome}}
-																	{{/ifEqual}}
-																{{/each}}
-															- {{trat_especialidadeavd}}</td>
+
+															{{#ifEqual trat_terapeutaidavd '766f69643132333435366964'}}
+															<td>-</td>
 															{{else}}
-																<td>&nbsp;-</td>
-															{{/if}}
-															
-															
+																{{#if trat_terapeutaidavd}}
+																	{{#each ../usuarios}}
+																		{{#ifEqual this._id ../trat_terapeutaidavd}}
+																			<td>{{usuario_nome}}
+																		{{/ifEqual}}
+																	{{/each}}
+																- {{trat_especialidadeavd}}</td>
+																{{else}}
+																	<td>&nbsp;-</td>
+																{{/if}}
+															{{/ifEqual}}
 															
 															<td>{{datacad}}</td>
 

@@ -141,6 +141,7 @@ module.exports = {TratModel,TratSchema,
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
+        let usuarioAtual = req.cookies['idUsu'];
         let idUsu;
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{

@@ -26,7 +26,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_extra :{ type: Boolean, required: false},
     agenda_evolucao :{ type: String, require: false },
     agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
-    agenda_selo :{ type: Boolean, require: false }
+    agenda_selo :{ type: Boolean, require: false },
+    agenda_usucad :{ type: String, require: false }
 })
 
 class Agenda{
@@ -55,7 +56,8 @@ class Agenda{
         agenda_extra,
         agenda_evolucao,
         agenda_copia,
-        agenda_selo
+        agenda_selo,
+        agenda_usucad,
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -81,7 +83,8 @@ class Agenda{
         this.agenda_extra = agenda_extra,
         this.agenda_evolucao = agenda_evolucao,
         this.agenda_copia = agenda_copia,
-        this.agenda_selo = agenda_selo
+        this.agenda_selo = agenda_selo,
+        this.agenda_usucad = agenda_usucad
     }
 }
 
@@ -89,6 +92,7 @@ AgendaSchema.loadClass(Agenda)
 const AgendaModel = mongoose.model('tb_agenda', AgendaSchema)
 module.exports = {AgendaModel,AgendaSchema,
     agendaEditar: async (req, res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
@@ -109,6 +113,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
                 agenda_copia : req.body.agendaCopia,
+                agenda_usucad : usuarioAtual,
                 agenda_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -123,6 +128,7 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     },
     agendaAdicionar: async (req,res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let agenda_temp = false;
         let extra = false;
@@ -155,6 +161,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_extra: extra ,
             agenda_selo : false ,
             agenda_copia: false ,
+            agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
         //console.log("newAgenda save");
@@ -167,6 +174,7 @@ module.exports = {AgendaModel,AgendaSchema,
         });
     },
     agendaAdicionarTemp: async (req,res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
         //console.log("agendaTempId:"+agendaTempId)
@@ -195,6 +203,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_selo : false ,
             agenda_copia : false,
+            agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
         //console.log("newAgenda save");
@@ -207,6 +216,7 @@ module.exports = {AgendaModel,AgendaSchema,
         });
     },
     agendaEditarTemp: async (req, res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
@@ -231,8 +241,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_temp : true ,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
                 agenda_copia : req.body.agendaCopia ,
+                agenda_usucad : usuarioAtual,
                 agenda_dataedi : dataAtual
-                
                 }}
         ).then((res) =>{
             //console.log("Salvo")
@@ -302,6 +312,7 @@ module.exports = {AgendaModel,AgendaSchema,
         return resultado;
     }
     ,agendaFaltaDia: async (req, res, busca) => {
+        let usuarioAtual = req.cookies['idUsu'];
         var retorno;
         let arrayAgendasNovas = [];
         let dataAtual = new Date();
@@ -328,6 +339,7 @@ module.exports = {AgendaModel,AgendaSchema,
                         agenda_tempmotivo : a.agenda_tempmotivo ,
                         agenda_selo : false ,
                         agenda_copia : false,
+                        agenda_usucad : usuarioAtual,
                         agenda_datacad : dataAtual
                     });
                     arrayAgendasNovas.push(newAgenda)
@@ -348,6 +360,7 @@ module.exports = {AgendaModel,AgendaSchema,
                         agenda_tempmotivo : a.agenda_tempmotivo ,
                         agenda_selo : false ,
                         agenda_copia : false,
+                        agenda_usucad : usuarioAtual,
                         agenda_datacad : dataAtual
                     });
                     arrayAgendasNovas.push(newAgenda)
@@ -408,6 +421,7 @@ module.exports = {AgendaModel,AgendaSchema,
         });*/
         return retorno;
     },agendaUpdateCampos: async (req,res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         let busca;
         let troca;
@@ -521,33 +535,33 @@ module.exports = {AgendaModel,AgendaSchema,
 
             if (categoriaidx != "-") {
                 if (categoriaidx == "Padrão") {
-                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Padrão'};
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Padrão', 'agenda_datacad': usuarioAtual};
                 } else {
-                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Administrativo'};
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Administrativo', 'agenda_datacad': usuarioAtual};
                 }
             } else if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
-                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo'};
+                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo', 'agenda_datacad': usuarioAtual};
                 console.log("0 TROCA SUBFIX")
             } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio
-                troca = {'agenda_convid': novoconvidx};
+                troca = {'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
                 //console.log("1")
             } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-") {//terapeuta
-                troca = {'agenda_usuid': novoteraidx};
+                troca = {'agenda_usuid': novoteraidx, agenda_datacad: usuarioAtual};
                 //console.log("2")
             } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapia
-                troca = {'agenda_terapiaid': novatpiaidx};
+                troca = {'agenda_terapiaid': novatpiaidx, agenda_datacad: usuarioAtual};
                 //console.log("3")
             } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapeuta e terapia
-                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx};
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, agenda_datacad: usuarioAtual};
                 //console.log("4")
             } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-") {//terapeuta e convenio
-                troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx};
+                troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
                 //console.log("5")
             } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-") {//terapia e convenio
-                troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
+                troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
                 //console.log("6")
             } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-") {//todos
-                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx};
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
                 //console.log("7")
             }
 

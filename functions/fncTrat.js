@@ -225,24 +225,31 @@ module.exports = {
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaidpad: new ObjectId(idUsu) }
                 } else {
                     busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario , trat_terapeutaidpad: new ObjectId(idUsu) }
                 } else {
                     busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_beneid: req.body.tratBeneficiario };
                 }
                 break;
             case "Terapeuta":
+                /*
                 if (isAgendaTerapeuta){
-                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: new ObjectId(idUsu) }
+                    busca = { $or: [{ trat_terapeutaidpad: new ObjectId(idUsu) }, { trat_terapeutaidis: new ObjectId(idUsu) }, { trat_terapeutaidavd: new ObjectId(idUsu) }], $and: [{ trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } }] }
+                    //busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaidpad: new ObjectId(idUsu) }
                 } else {
-                    busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaid: req.body.tratTerapeuta };
+                */
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    busca = { $or: [{ trat_terapeutaidpad: req.body.tratTerapeuta }, { trat_terapeutaidis: req.body.tratTerapeuta }, { trat_terapeutaidavd: req.body.tratTerapeuta }], $and: [{ trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } }] }
+                    //busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaidpad: req.body.tratTerapeuta };
+                /*
                 }
+                */
                 break;
             default:
                 break;
@@ -449,15 +456,29 @@ module.exports = {
 
 
     deletaTrat(req,res){
+        let resposta = new Resposta()
         Trat.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                req.flash("success_message", "Plano de tratamento deletado!")
-                this.listaTrat(req,res);
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao deletar o Plano de tratamento")
                 res.render('admin/erro')
+            }).finally(()=>{
+                if(resultado == true){
+                    //Volta para a debitsubcateg de listagem
+                    console.log("Listagem Realizada!")
+                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.sucesso = "true"
+                    this.listaTrat(req,res,resposta)
+                }else{
+                    //passar classe de erro
+                    console.log("error")
+                    console.log(resultado)
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    this.listaTrat(req,res,resposta)
+                }
             })
         })
     }

@@ -127,6 +127,7 @@
 													<thead>
 														<tr>
 															<th>Data do Atendimento</th>
+															<th>Hora do Atendimento</th>
 															<th>Especialidade</th>
 															<th>Beneficiário</th>
 														</tr>
@@ -135,6 +136,7 @@
 														<tbody>
 															<tr>
 																<td style="width:10%">{{dt}}</td>
+																<td style="width:10%">{{hora}}</td>
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}
 																		<td>{{terapia_nomecid}}</td>

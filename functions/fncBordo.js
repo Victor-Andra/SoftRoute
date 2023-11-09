@@ -364,7 +364,7 @@ module.exports = {
                                             break;
                                         case "Falta Justificada":
                                             terapiaAtend = atend.atend_mergeterapiaid
-                                            terapeutaAtend = atend.atend_merdeterapeutaid;;
+                                            terapeutaAtend = atend.atend_mergeterapeutaid;;
                                             break;
                                         case "Glosa":
                                             terapiaAtend = atend.atend_terapiaid;

@@ -851,11 +851,21 @@ router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//dire
     }
 })
 
-
 router.post('/agenda/converteDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
         fncAgenda.converteAgendaEmAtend(req, res);
+    } else {
+        console.log("Acesso NEGADO!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
+    }
+})
+
+router.post('/agenda/copiaExtraordinario', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+        fncAgenda.copiaExtraordinario(req, res);
     } else {
         console.log("Acesso NEGADO!");
         let lvl = "x";
@@ -1563,7 +1573,7 @@ router.get('/area/bordo/mapabordo', fncGeral.IsAuthenticated, (req,res) =>{//Abr
 router.get('/area/plano/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
     let resposta = new Resposta();
     resposta.texto = "";
-    resposta.sucesso = "";
+    resposta.sucesso = "true";
     fncTrat.listaTrat(req, res, resposta);
 })
 //Filtra Todos Planos de Tratamento

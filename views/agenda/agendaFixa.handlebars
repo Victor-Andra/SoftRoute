@@ -80,8 +80,8 @@
 					document.getElementById("acaoForm").submit();
 				}
 			}
-			function testeConfirmConvert(acao){
-				if(confirm("Tem certeza que quer converter a semana em atendimento?")){
+			function testeConfirmConvert(acao, msg){
+				if(confirm(msg)){
 					if(document.getElementById("dataFil").value == ''){
 						alert("O campo de data é utilizado para determinar a semana e precisa ser preenchido!");
 					} else {
@@ -161,13 +161,13 @@
 										</div>
 									</div>
 									<div class="col-xs-3">
-										<button name="acaoConverte" id="acaoConverte" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:testeConfirmConvert('/menu/agenda/converteDia');">
+										<button name="acaoConverte" id="acaoConverte" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:testeConfirmConvert('/menu/agenda/converteDia', 'Tem certeza que quer converter a semana em atendimento?');">
 											<i class="ace-icon fa fa-fire bigger-110"></i>
 											Converter Semana em Atendimento
 										</button>
 									</div>
 									<div class="col-xs-2">
-										<button name="acaoExtra" id="acaoExtra" type="button" class="btn btn-xs btn-info"  onclick="">
+										<button name="acaoExtra" id="acaoExtra" type="button" class="btn btn-xs btn-info"  onclick="javascript:testeConfirmConvert('/menu/agenda/copiaExtraordinario','Tem certeza que quer converter os agendamentos extraordinarios em extras?');">
 											<i class="ace-icon fa fa-fire bigger-110"></i>
 											Exportar Extras da Semana
 										</button>

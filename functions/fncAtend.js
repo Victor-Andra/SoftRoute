@@ -933,7 +933,7 @@ module.exports = {
                                         break;
                                     case "Falta Justificada":
                                         terapiaAtend = atend.atend_mergeterapiaid
-                                        terapeutaAtend = atend.atend_merdeterapeutaid;;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;;
                                         break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
@@ -1863,7 +1863,7 @@ module.exports = {
         sex.setSeconds(59);
         console.log("seg:"+seg)
         console.log("sex:"+sex)
-        filtroAtend = {atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}}
+        filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}, $or: [{ atend_mergeterapeutaid: req.body.relTeraid },{ atend_terapeutaid: req.body.relTeraid }]}
 
         Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
             Bene.find().then((bene)=>{
@@ -1880,6 +1880,15 @@ module.exports = {
 
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        console.log("at:"+at)
+                        at = at.filter(function(atend) {
+                            return !(atend.atend_categoria == "Substituição" && atend.atend_terapeutaid == req.body.relTeraid)//item !== value
+                        })
+                        console.log("at:"+at)
+                        at = at.filter(function(atend) {
+                            return !(atend.atend_categoria == "SubstitutoFixo" && atend.atend_mergeterapeutaid == req.body.relTeraid)//item !== value
+                        })
+                        console.log("at:"+at)
                         at.sort(function(a, b) {
                             let d1 = new Date(a.atend_atenddata);
                             let d2 = new Date(b.atend_atenddata);
@@ -1900,7 +1909,8 @@ module.exports = {
                             }
                         });
                         at.forEach((atend)=>{
-                            rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                            rab.dt = atend.atend_atenddata;
+                            rab.hora = atend.atend_atendhora
                             categorias = atend.atend_categoria
                             console.log("categorias:"+categorias)
                             switch (categorias){
@@ -1918,7 +1928,7 @@ module.exports = {
                                     break;
                                 case "Falta Justificada":
                                     terapiaAtend = atend.atend_mergeterapiaid
-                                    terapeutaAtend = atend.atend_merdeterapeutaid;;
+                                    terapeutaAtend = atend.atend_mergeterapeutaid;;
                                     break;
                                 case "Glosa":
                                     terapiaAtend = atend.atend_terapiaid;
@@ -1956,8 +1966,8 @@ module.exports = {
                             rab = new RelAtendBene();
                         });
                         rel.sort(function(a, b) {
-                            let d1 = new Date(a.dt).setHours(0, 0, 0, 0);
-                            let d2 = new Date(b.dt).setHours(0, 0, 0, 0);
+                            let d1 = a.dt;
+                            let d2 = b.dt;
 
                             if(d1 == d2){
                                 return true;//a.especialidade > b.especialidade ? 1 : -1;
@@ -1965,6 +1975,9 @@ module.exports = {
                                 return d1 > d2 ? 1 : -1;
                             }
                         }); 
+                        rel.forEach((r)=>{
+                            r.dt = fncGeral.getDataFMT(r.dt);
+                        })
                     res.render("atendimento/atendreltera/relatendteraana", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome})
                 })
             })
@@ -2004,9 +2017,9 @@ module.exports = {
                 res.render("admin/branco");
                 return false;
             }
-            filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex}}
+            filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}}
         } else {
-            filtroAtend = {atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}}
+            filtroAtend = {atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}}
         }
 
         Atend.find(filtroAtend).then((at)=>{
@@ -2061,11 +2074,7 @@ module.exports = {
                                     break;
                                 case "Falta Justificada":
                                     terapiaAtend = atend.atend_mergeterapiaid
-                                    terapeutaAtend = atend.atend_merdeterapeutaid;;
-                                    break;
-                                case "Glosa":
-                                    terapiaAtend = atend.atend_terapiaid;
-                                    terapeutaAtend = atend.atend_terapeutaid;
+                                    terapeutaAtend = atend.atend_mergeterapeutaid;;
                                     break;
                                 case "Padrão":
                                     terapiaAtend = atend.atend_terapiaid;
@@ -2249,7 +2258,7 @@ module.exports = {
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         let terapeuta_nome;
 
-        Atend.find({atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
+        Atend.find({atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}}).then((at)=>{
             console.log("{atend_terapeutaid:"+ req.body.relTeraid+", atend_atenddata: { $gte: "+seg+", $lte:"+ sex+"}}")
             console.log("tamanho:"+at.length);
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
@@ -2261,6 +2270,13 @@ module.exports = {
                     Usuario.findOne({_id: req.body.relTeraid}).then((b)=>{
                         terapeuta_nome = b.usuario_nome;
                         Terapia.find().then((terapia)=>{
+                            at = at.filter(function(atend) {
+                                return !(atend.atend_categoria == "Substituição" && atend.atend_terapeutaid == req.body.relTeraid)//item !== value
+                            })
+                            console.log("at:"+at)
+                            at = at.filter(function(atend) {
+                                return !(atend.atend_categoria == "SubstitutoFixo" && atend.atend_mergeterapeutaid == req.body.relTeraid)//item !== value
+                            })
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                             terapia.forEach((t)=>{
                                 //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
