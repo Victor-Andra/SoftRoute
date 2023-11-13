@@ -124,7 +124,7 @@
 														<label for="id-date-picker-1">Hora Agendamento</label>
 														<div class="form-group">
 															<div class="col-sm-2">
-																<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																	{{#each horaages}}
 																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																	{{/each}}
@@ -133,42 +133,47 @@
 														</div>
 													</div>
 												</div>
-												<div class="row" class="hidden">
-													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Origem Agendamento</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																		<option value="Padrão">Padrão</option>
-																		<option value="Administrativo">Administrativo</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2" class="hidden">
-														<label for="id-date-picker-1">Categoria</label>
-														<div class="form-group">
-															<div class="col-sm-8">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
-																	<option id="Apoio" value="Apoio">Apoio</option>
-																	<option id="Extra" value="Extra">Extra</option>
-																	<option id="Falta" value="Falta">Falta</option>
-																	<option id="Glosa" value="Glosa">Glosa</option>
-																	<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
-																	<option id="Pais" value="Pais">Pais</option>
-																	<option id="Substituto" value="Substituto">Substituto</option>
-																	<option id="Supervisão" value="Supervisão">Supervisão</option>
-																</select>
-															</div>
-														</div>
-													</div>
-												</div>
+												
 												<div class="row">
 													<div class="col-xs-12">
 														<label>Beneficiário</label>
 														<div class="hidden" class="col-sm-5">
+
+															<!--Roberta não quer que vejam isso -->
+															<div class="row"  aria-hidden="true">
+																<div class="col-xs-12 col-sm-6">
+																	<label for="id-date-picker-1">Origem Agendamento</label>
+																	<div class="row">
+																		<div class="col-sm-4">
+																			<div class="input-group">
+																				<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																					<option value="Padrão">Padrão</option>
+																					<option value="Administrativo">Administrativo</option>
+																				</select>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xs-12 col-sm-2"  >
+																	<label for="id-date-picker-1">Categoria</label>
+																	<div class="form-group">
+																		<div class="col-sm-8" >
+																			<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																				<option id="Apoio" value="Apoio">Apoio</option>
+																				<option id="Extra" value="Extra">Extra</option>
+																				<option id="Falta" value="Falta">Falta</option>
+																				<option id="Glosa" value="Glosa">Glosa</option>
+																				<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+																				<option id="Pais" value="Pais">Pais</option>
+																				<option id="Substituto" value="Substituto">Substituto</option>
+																				<option id="Supervisão" value="Supervisão">Supervisão</option>
+																			</select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															
 															{{#each benes}}
 																{{#each ../convs}}
 																	{{#ifEqual ../bene_convid _id}}
@@ -180,7 +185,7 @@
 														</div>
 														<div class="form-group" >
 															<div class="col-sm-5">
-																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -210,7 +215,7 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-4">
-																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
 																	{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -224,7 +229,7 @@
 														<label>Terapia</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
 																	{{/each}}
@@ -238,7 +243,7 @@
 														<label>Salas</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
@@ -252,7 +257,7 @@
 														<label> Observação de agenda</label>
 														<div class="form-group">
 															<div class="col-sm-12">
-																<input type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
+																<input style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
 															</div>
 														</div>
 													</div>

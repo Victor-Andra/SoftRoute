@@ -3860,6 +3860,7 @@ module.exports = {
         let beneConvid;
         let benenomeconv;
         let idsAgendasEx = [];
+        let agendaTempArr = [];
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -3938,6 +3939,18 @@ module.exports = {
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log(agenda)
+                agenda.forEach((as)=>{console.log("as.agenda_temp;"+as.agenda_temp);
+                    if (as.agenda_temp){
+                        agendaTempArr.push(as.agenda_tempId);
+                    }
+                })
+                agendaTempArr.forEach((atr)=>{
+                    agenda = agenda.filter(function(as) {
+                        //console.log(("comparing: "+as._id+" == "+atr + " // " + ((""+as._id+"") == (""+atr+""))))
+                        return ((""+as._id+"") != (""+atr+""))//item !== value
+                    })
+                })
+                
                 agenda.forEach((e)=>{
                     let dat = new Date(e.agenda_data);
                     e.agenda_data_dia = this.getDataFMT(dat);
@@ -4216,18 +4229,19 @@ module.exports = {
     },
     carregaAgendaFilST(req,res){
         let aux = 1;
-        let is = false;
-        let nomeBene;
-        let nomeSup;
-        let nomeConv;
         let segunda;
         let terca;
         let quarta;
         let quinta;
         let sexta;
-        let beneConvid;
-        let benenomeconv;
+        let nomeUsu;
+        let nomeFnc;
+        let nomeEsp;
+        let idEsp;
+        let usunomefnc;
+        let agendaTempArr = [];
         let idsAgendasEx = [];
+        let manter;
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -4237,10 +4251,7 @@ module.exports = {
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        //console.log("req.body.dataFinal:"+req.body.dataFinal);
-        //console.log("sex1:"+sex);
-        //console.log("seg1:"+seg);
-        //console.log("sex1:"+sex);
+
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -4296,108 +4307,154 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        //Pensar em como carregar quando for merge
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid }).then((agenda) =>{
+            //console.log("Listagem Realizada de agendamentos!")
+            console.log("agenda.length:"+agenda.length)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
 
-        Bene.find({_id:req.body.agendaBeneid}).then((bene) =>{
-            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                bene.forEach(e => {
-                    nomeBene = e.bene_nome
-                    nomeSup = e.bene_supervisor
-                    beneConvid = e.bene_convid
-                });
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid}).then((agenda) =>{
-                //console.log("Listagem Realizada de agendamentos!")
-                //console.log(agenda)
-                agenda.forEach((e)=>{
-                    let dat = new Date(e.agenda_data);
-                    e.agenda_data_dia = this.getDataFMT(dat);
-                    let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                    let min = ""+dat.getMinutes();
-                    if (hora.length == 1){hora = "0" + hora + "";}
-                    if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
-                    e.agenda_aux = aux;
-                    aux++;
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        console.log("erro");
+                        break;
+                }
+            })
 
-                    switch (dat.getUTCDay()){
-                        case 0:
-                            e.agenda_data_semana = "dom"
-                            break;
-                        case 1:
-                            e.agenda_data_semana = "seg"
-                            break;
-                        case 2:
-                            e.agenda_data_semana = "ter"
-                            break;
-                        case 3:
-                            e.agenda_data_semana = "qua"
-                            break;
-                        case 4:
-                            e.agenda_data_semana = "qui"
-                            break;
-                        case 5:
-                            e.agenda_data_semana = "sex"
-                            break;
-                        case 6:
-                            e.agenda_data_semana = "sab"
-                            break;
-                        default:
-                            
-                            console.log("erro");
-                            break;
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
                     }
-                    idsAgendasEx.push(mongoose.Types.ObjectId(e._id));
                 })
-                //console.log(agenda)
-                Agenda.find({'_id': { $in: idsAgendasEx}}).then((agendaS)=>{
-                    Bene.find().then((benef)=>{
-                        benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Beneficiários!")
-                        Conv.find({_id: beneConvid}).then((conv)=>{
-                            conv.forEach(e => {
-                                nomeConv = e.conv_nome
-                            });
-                            //console.log("Listagem Realizada de Convenios")
-                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                                terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
-                                //console.log("Listagem Realizada de Usuário")
-                                Terapia.find().then((terapia)=>{
-                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                                    //console.log("Listagem Realizada de Terapia")
-                                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                        //console.log("Listagem Realizada de Horario")
-                                        let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
-                                        let segASex = ["seg","ter","qua","qui","sex"];
-                                        
-                                        segASex.forEach((diaDaSemana)=>{
-                                            haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
-                                            //console.log("Tem "+z+"?"+haddia)
-                                            this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
-                                        })
+                if (manter == "true"){
+                    idsAgendasEx.push(a);
+                }
+            })
 
-                                        agenda.sort(function(a, b) {
-                                            let h1 = a.agenda_hora.substring(0,2);
-                                            let m1 = a.agenda_hora.substring(3,5);
-                                            let h2 = b.agenda_hora.substring(0,2);
-                                            let m2 = b.agenda_hora.substring(3,5);
-                                            if(h1 == h2){
-                                                if(m1 < m2) {
-                                                    return -1;
-                                                } else {
-                                                    return true;
-                                                }
-                                            } else {
-                                                if(h1 < h2) {
-                                                    return -1;
-                                                } else {
-                                                    return true;
-                                                }
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
+                    //console.log("Listagem Realizada de Usuário")
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                        //console.log("Listagem Realizada de Terapia")
+                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                            //console.log("Listagem Realizada de Horario")
+                            let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                            let segASex = ["seg","ter","qua","qui","sex"];
+                            
+                            segASex.forEach((diaDaSemana)=>{
+                                haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                //console.log("Tem "+z+"?"+haddia)
+                                this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                            })
+
+                            agenda.sort(function(a, b) {
+                                let h1 = a.agenda_hora.substring(0,2);
+                                let m1 = a.agenda_hora.substring(3,5);
+                                let h2 = b.agenda_hora.substring(0,2);
+                                let m2 = b.agenda_hora.substring(3,5);
+                                if(h1 == h2){
+                                    if(m1 < m2) {
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                } else {
+                                    if(h1 < h2) {
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            });
+                            Sala.find().then((sala)=>{
+                                Usuario.findOne({_id:req.body.agendaTerapeutaid}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                                    console.log("usuario:"+usuario.usuario_nome);
+                                    nomeUsu = ""+usuario.usuario_nome;
+                                    console.log("nomeUsu:"+nomeUsu);
+                                    //console.log("usuario:"+usuario)
+                                    
+                                    if(typeof usuario.usuario_nome === undefined){
+                                        usunomefnc = usuario.usuario_nomecompleto;
+                                    } else {
+                                        usunomefnc = usuario.usuario_nome;
+                                    }
+                                    if(!(typeof usuario.usuario_graduacao === undefined)){
+                                        idFnc = usuario.usuario_graduacao;
+                                    }
+                                    if(!(typeof usuario.usuario_especializacao === undefined)){
+                                        idEsp = usuario.usuario_especializacao;
+                                    }
+                                    if(!(typeof usuario.usuario_obs === undefined)){
+                                        usuObs = usuario.usuario_obs;
+                                    } else {
+                                        usuObs = " - "
+                                    }
+                                    Especialidade.find().then((especialidade)=>{
+                                
+                                        especialidade.forEach((e)=>{//graduação
+                                            //console.log("Listagem Realizada de Especialidade")
+                                            //console.log("TESTE:"+e._id+"/"+idFnc)
+                                            if(e._id == idFnc){
+                                                nomeFnc = e.especialidade_nome;
                                             }
-                                        });
-                                        Sala.find().then((sala)=>{
-                                            //console.log("Listagem Realizada de Terapia")
-                                            benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
-                                            //console.log("benenomeconv:"+benenomeconv)
-                                            res.render("agenda/agendaBeneficiarioSemanal", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta, agendaSemanais: agendaS})
+                                        })
+                                        Especializacao.find().then((especializacao)=>{//Terapia
+                                            //console.log("Listagem Realizada de Especializacao")
+                                            especializacao.forEach((ez)=>{//especializacao
+                                                //console.log("TESTE:"+ez._id+"/"+idEsp)
+                                                if(ez._id == idEsp){
+                                                    nomeEsp = ez.especializacao_nome;
+                                                }
+                                            })
+                                            if(!(typeof nomeFnc === "undefined")){
+                                                usunomefnc += " / " + nomeFnc
+                                            }
+                                            if(!(typeof nomeEsp === "undefined")){
+                                                usunomefnc += " ("+nomeEsp+")"
+                                            }
+                                            res.render("agenda/agendaTerapeutaSemanal", {salas: sala, horaages: horaage, agendas: idsAgendasEx, benes: benef, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta, usunomefnc})
                                         })
                                     })
                                 })

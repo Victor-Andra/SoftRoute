@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>agendamentos do Dia</title>
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				
+			}
+			function formataData(){
+				let dt = document.getElementById('dataFil').value;
+				let dia = dt.substring(8,10);
+				let mes = dt.substring(5,7);
+				let ano = dt.substring(0,4);
+				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Route</a>
+							</li>
+							<li class="active">Lista de Evoluções</li>
+							<li class="active">Em aberto ou seja não realizou a evolução obrigatória!</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendabertofil" method="POST">
+							<div class="col-xs-12" class="row">
+								<div id="divDataFil" class="col-xs-12 col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+								<div id="divBordoTerapeuta" class="col-xs-12 col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Terapeuta:&nbsp;</label>
+											<select name="tratTerapeuta" id="tratTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+												<option value="766f69643132333435366964">-</option>
+												{{#each usuarios}}
+													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									
+								</div>
+								<hr>
+							</div>
+							<div class="hidden">
+								<input id="idsCopia" name="idsCopia" value="" />
+								<input id="dtCopia" name="dtCopia" value="" />
+								<input id="qtdCopia" name="qtdCopia" value="" />
+								<input id="categoriaCopia" name="categoriaCopia" value="" />
+								<input id="temCopia" name="temCopia" value="false" />
+								<input id="idsDeletar" name="idsDeletar" value="" />
+							</div>
+						</form>
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Hora</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
+													
+												</tr>
+											</thead>
+											<tbody>
+												{{#each agendas}}
+													<tr role="row" class="odd">
+														<td>{{agenda_data_dia}}</td>
+														<td>{{agenda_hora}}</td>
+														{{#each ../terapias}}<!-- Ok -->
+															{{#ifEqual this._id ../agenda_terapiaid}}
+																<td>{{terapia_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														{{#each ../benes}}
+															{{#ifEqual this._id ../agenda_beneid}}
+																<td>{{bene_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														<td>{{agenda_evolucao}}</td>
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>				
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Soft</span>
+							Route
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [ 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": false,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	
+
+	</body>
+
+</html>

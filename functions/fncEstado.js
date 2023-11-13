@@ -34,12 +34,11 @@ module.exports = {
 
 
     carregaEstadoEdi(req,res){
-        Estado.findById(req.params.id).then((estado) =>{
+        Estado.findOne({_id:req.params.id}).then((estado) =>{
             console.log(estado)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/estado/estadoEdi', {estados: estado, estados: estado})
-        })}).catch((err) =>{
+              
+            res.render('ferramentas/estado/estadoEdi', { estado})
+        }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

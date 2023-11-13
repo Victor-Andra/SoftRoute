@@ -2,8 +2,18 @@
 <html lang="pt-br">
 	<head>
 		<title>Estados</title>
+		<script>
+			function carregaBody(){
+				document.getElementById("estadoId").value = document.getElementById("estadoIdEdi").value
+				document.getElementById("estadoNome").value = document.getElementById("estadoNomeEdi").value
+				document.getElementById("estadoCodigo").value = document.getElementById("estadoCodigoEdi").value
+				document.getElementById("estadoUf").value = document.getElementById("estadoUfEdi").value
+				document.getElementById("estadoBandeira").value = document.getElementById("estadoBandeiraEdi").value
+				
+			}
+		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -16,10 +26,20 @@
 							<li class="active">Estado Editar</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<!-- /.importante Id de indice-->
+							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+							<input type="text" id="estadoIdEdi" name="estadoIdEdi" value="{{estado._id}}"/>
+							<input type="text" id="estadoNomeEdi" name="estadoNomeEdi" value="{{estado.estado_nome}}"/>
+							<input type="text" id="estadoCodigoEdi" name="estadoCodigoEdi" value="{{estado.estado_codigo}}"/>
+							<input type="text" id="estadoUfEdi" name="estadoUfEdi" value="{{estado.estado_uf}}"/>
+							<input type="text" id="estadoBandeiraEdi" name="estadoBandeiraEdi" value="{{estado.estado_bandeira}}"/>
+							
+						</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/ferramentas/estado/atualizar" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/estado/atualizar" enctype="multipart/form-data" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -40,14 +60,14 @@
 													<label> Nome da Estado</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="estadoNome" id="estadoNome" class="form-control" value="{{estado_nome}}" />
+															<input type="text" name="estadoNome" id="estadoNome" class="form-control" />
 														</div>
 													</div>
 													<div class="space space-8"></div>
 													<label> Código</label>
 													<div class="form-group">
 														<div class="col-sm-2">
-															<input type="text" name="estadoCodigo" id="estadoCodigo" class="form-control" value="{{estado_cod}}"/>
+															<input type="text" name="estadoCodigo" id="estadoCodigo" class="form-control"/>
 														</div>
 													</div>
 
@@ -55,15 +75,17 @@
 													<label> UF</label>
 													<div class="form-group">
 														<div class="col-sm-2">
-															<input type="text" name="estadoUf" id="estadoUf" class="form-control" value="{{estado_uf}}"/>
+															<input type="text" name="estadoUf" id="estadoUf" class="form-control" />
 														</div>
 													</div>
 
-
+													<!-- Novo campo de upload para a bandeira -->
+													<label for="bandeira">Bandeira:</label>
+													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" required>
 
 
 												<div class="hidden">
-													<input name="estadoId"value="{{_id}}" />
+													<input  id="estadoId" name="estadoId" />
 												</div>
 											
 											

@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const multer = require('multer')
 const mongoose = require("mongoose")
 const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
@@ -62,6 +63,8 @@ const fncTerapia = require("../functions/fncTerapia")
 const estadoClass = require("../models/estado")
 const Estado = mongoose.model("tb_estado")
 const fncEstado = require("../functions/fncEstado")
+
+
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
@@ -649,7 +652,6 @@ router.get("/agenda/lisST/", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 router.post("/agenda/filST", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios Semanal.
     fncAgenda.carregaAgendaFilST(req, res);
 })
-
 
 router.get("/agenda/lisTB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Terapeuta Semanal.
     fncAgenda.carregaAgendaTB(req, res);
@@ -1478,10 +1480,26 @@ router.get('/beneficiario/sessao/listab/:id', fncGeral.IsAuthenticated, (req,res
 fncSessao.listaSessaoTab(req, res); 
 })
 
-//Menu Evolução dos Atendimentos ** Area Tecnicos   
+//Menu Evolução dos Atendimentos ** Atendimento 
 //Lista Todos os Atendimentos por Data Atual e Beneficiário vinculados pela AGENDA do Dia
 router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.listaEvoatend(req, res);
+})
+
+router.get('/area/evoatendabertolis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos sem evolução.
+    fncEvoatend.listaEvoatendaberto(req, res);
+})
+
+router.get('/area/evoatendfechadolis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos com evolução.
+    fncEvoatend.listaEvoatendfechado(req, res);
+})
+
+router.post('/area/evoatendabertofil', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos sem evolução.
+    fncEvoatend.filtraEvoatendaberto(req, res);
+})
+
+router.post('/area/evoatendfechadofil', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos com evolução.
+    fncEvoatend.filtraEvoatendfechado(req, res);
 })
 
 router.post('/area/evoatendfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
@@ -2427,7 +2445,43 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/estado/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Estadoimento
             fncEstado.atualizaEstado(req, res);
         })
-    
+
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+              cb(null, 'public/uploads/');
+            },
+            filename: (req, file, cb) => {
+              cb(null, Date.now() + '-' + file.originalname);
+            },
+          });
+          
+          const upload = multer({ storage: storage });
+          
+          router.post('/upload/:estadoId', upload.single('imagem'), async (req, res) => {
+            const estadoId = req.params.estadoId;
+            const { originalname, path } = req.file;
+          
+            try {
+              // Atualize o documento do estado com as informações da bandeira
+              const estadoAtualizado = await Estado.findByIdAndUpdate(
+                estadoId,
+                {
+                  $set: {
+                    'bandeira.nome': originalname,
+                    'bandeira.path': '/' + path,
+                  },
+                },
+                { new: true }
+              );
+          
+              res.redirect(`/estado/${estadoId}`);
+            } catch (error) {
+              console.error(error);
+              res.render('error');
+            }
+          });
+          
+          module.exports = router;
     
 
 

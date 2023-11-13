@@ -46,15 +46,75 @@
 								if(e.id.indexOf("TerapiaId_") != -1){
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
 									document.getElementById(id).append(val);
-								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								let extra = document.getElementsByName(color+"_extra")
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+								}
+								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
 									document.getElementById(id).append(val);
+									let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								let extra = document.getElementsByName(color+"_extra")
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+								}
 								}
 							}
 						})
@@ -109,145 +169,132 @@
 							<!-- VOID -->
 							{{else}}
 							<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-								<a class="blue" href="/menu/agenda/edi/{{_id}}">
-									<i class="ace-icon fa fa-pencil bigger-130"></i>
-								</a>
-								<a class="red" href="/menu/agenda/del/{{_id}}">
-									<i class="ace-icon fa fa-trash-o bigger-130"></i>
-								</a>
-							</div>
+							<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
 							{{/compareThis}}
-						{{/each}}
-						{{#each terapeutas}}
-							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
+							{{#isTrue agenda_temp}}
+								<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="{{agenda_categoria}}">
+								<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="/menu/agenda/ediTemp/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+									<a class="red" href="/menu/agenda/del/{{_id}}">
+										<i class="ace-icon fa fa-trash-o bigger-130"></i>
+									</a>
+								</div>
+							{{else}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="green" href="/menu/agenda/cadTemp/{{_id}}">
+										<i class="ace-icon fa fa-plus bigger-130"></i>
+									</a>
+								</div>
+							{{/isTrue}}
+							{{#isTrue agenda_extra}}
+								<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="Ordinario">
+								<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="Ordinario">
+							{{else}}
+							{{/isTrue}}
 						{{/each}}
 						{{#each terapias}}
 							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{terapia_nome}}</label>
 						{{/each}}
+						{{#each salas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}</label>
+						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filSB" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" >
-								<div style="text-align: center;">
-									<label id="terapeutaFilDiv">Terapeuta:</label>
-									<select id="agendaTerapeutaid" name="agendaTerapeutaid" data-placeholder="Escolha...">
-										{{#each benes}}
-											<option value="{{_id}}">{{bene_apelido}}</option>
-										{{/each}}
-									</select>
-									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
-									<label style="margin-left: 25px;">Data:</label>
-									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-									<input class="hidden" id="dataFinal" name="dataFinal" />
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
-								</div>
-							<!--
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert-danger">
-									<strong>
-									Agenda
-									</strong>
-									<br>
-									{{#each agendas}}
-										{{#isNull agenda_obs}}
-										{{else}}
-											<label>{{agenda_data_semana}} : {{agenda_hora}} - {{agenda_obs}}</label>
-											<br>
-										{{/isNull}}
+					<form class="form-horizontal" role="form" action="/menu/agenda/filST" method="POST">
+						<div class="breadcrumbs" id="pesquisaAge">
+							<div style="text-align: center;">
+								<label id="terapeutaFilDiv">Terapeuta:</label>
+								<select id="agendaTerapeutaid" name="agendaTerapeutaid" data-placeholder="Escolha...">
+									{{#each terapeutas}}
+										<option value="{{_id}}">{{usuario_nome}}</option>
 									{{/each}}
-									<br>
-								</div>
+								</select>
+								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+								<label style="margin-left: 25px;">Data:</label>
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus "></i>
+								</button>
 							</div>
-							
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert-warning">
-									<strong>
-									Beneficiário
-									</strong>
-									<br>
-									{{bene.bene_obs}}
-									<br>
-								</div>
-							</div>
-							-->
 						</div>
 					</form>
-						<div class="tab-content"><!-- .tab-contente -->
-							<div class="row">
-								<div class="col-xs-16 col-sm-12">
-									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
-												<tr role="row">
-													<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
-														<b>	
-															<form class="form-horizontal" role="form" action="/menu/agenda/copiaDia" method="POST">
-																<input class="hidden" id="data" name="data" value="" />
-																<div>{{benenomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
-															</form>
-														</b> 
-													</th>
-												</tr>
-												<tr role="row">
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
-												</tr>
-												<tr role="row">	
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-													<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												</tr>
-											</thead>
-											{{#each horaages}}
-											<tbody>
-												<tr role="row" class="odd">
-													<td style="width: 50px;">{{horaage_hora}}</td>
-													<td id="horasegTeraId_{{horaage_hora}}"></td>
-													<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasegAcaoId_{{horaage_hora}}"></td>
-													<td id="horaterTeraId_{{horaage_hora}}"></td>
-													<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaterAcaoId_{{horaage_hora}}"></td>
-													<td id="horaquaTeraId_{{horaage_hora}}"></td>
-													<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquaAcaoId_{{horaage_hora}}"></td>
-													<td id="horaquiTeraId_{{horaage_hora}}"></td>
-													<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquiAcaoId_{{horaage_hora}}"></td>
-													<td id="horasexTeraId_{{horaage_hora}}"></td>
-													<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasexAcaoId_{{horaage_hora}}"></td>										
-												</tr>
-											</tbody>
-											{{/each}}
-										</table>
-									</div>
+					<div class="tab-content"><!-- .tab-contente -->
+						<div class="row">
+							<div class="col-xs-16 col-sm-12">
+								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+										<thead>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<b>
+														<form class="form-horizontal" role="form">
+															<input class="hidden" id="data" name="data" value="" />
+															<div>{{usunomefnc}}</div><!-- se for tipo tera colocar nome do tecnico só-->
+														</form>
+													</b>
+												</th>
+											</tr>
+											<tr role="row">
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
+												<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
+												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
+												<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
+												<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
+											</tr>
+											<tr role="row">	
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+												<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+												<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+												<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+												<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+											</tr>
+										</thead>
+										{{#each horaages}}
+										<tbody>
+											<tr role="row" class="odd">
+												<td style="width: 50px;">{{horaage_hora}}</td>
+												<td id="horasegSalaId_{{horaage_hora}}"></td>
+												<td id="horasegTerapiaId_{{horaage_hora}}"></td>
+												<td id="horasegAcaoId_{{horaage_hora}}"></td>
+												<td id="horaterSalaId_{{horaage_hora}}"></td>
+												<td id="horaterTerapiaId_{{horaage_hora}}"></td>
+												<td id="horaterAcaoId_{{horaage_hora}}"></td>
+												<td id="horaquaSalaId_{{horaage_hora}}"></td>
+												<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
+												<td id="horaquaAcaoId_{{horaage_hora}}"></td>
+												<td id="horaquiSalaId_{{horaage_hora}}"></td>
+												<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
+												<td id="horaquiAcaoId_{{horaage_hora}}"></td>
+												<td id="horasexSalaId_{{horaage_hora}}"></td>
+												<td id="horasexTerapiaId_{{horaage_hora}}"></td>
+												<td id="horasexAcaoId_{{horaage_hora}}"></td>										
+											</tr>
+										</tbody>
+										{{/each}}
+									</table>
 								</div>
-								<div class="col-xs-16 col-sm-3">	
-									<div class="alert alert">
-										<br>
-										<br>
-										<br>
+							</div>
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert">
+									<br>
+									<br>
+									<br>
+									</div>
 									</div>
 								</div>
 								<!--
@@ -259,13 +306,22 @@
 										<br>
 										
 										<br>
-									</div>
 								</div>
-								-->
+								</div>
+								<!--
+								<div class="col-xs-16 col-sm-3">	
+									<div class="alert alert-info">
+										<strong>
+										Técnico
+										</strong>
+										<br>
+										
+										<br>
 							</div>
 						</div>
+					</div>
+				</div>
 			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

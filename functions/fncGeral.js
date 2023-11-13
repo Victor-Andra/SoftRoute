@@ -168,5 +168,40 @@ module.exports = {
         }
         
         return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+    },
+    getDiaSemana(dt){
+        let dat = new Date(dt);
+        switch (dat.getUTCDay()){
+            case 0:
+                return "dom"
+            case 1:
+                return "seg"
+            case 2:
+                return "ter"
+            case 3:
+                return "qua"
+            case 4:
+                return "qui"
+            case 5:
+                return "sex"
+            case 6:
+                return "sab"
+            default:
+                return "dom"
+        }
+    },
+    getDataFMT(data){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        
+        return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
     }
 }

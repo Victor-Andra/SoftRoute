@@ -1880,15 +1880,24 @@ module.exports = {
 
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        console.log("at:"+at)
+                        console.log("at.length:"+at.length)
+                        at.forEach((atend)=>{
+                            if(atend.atend_categoria == "Substituição" && atend.atend_terapeutaid == req.body.relTeraid){
+                                console.log("atend: "+atend)
+                            }
+                        })
                         at = at.filter(function(atend) {
                             return !(atend.atend_categoria == "Substituição" && atend.atend_terapeutaid == req.body.relTeraid)//item !== value
                         })
-                        console.log("at:"+at)
+                        console.log("at.length:"+at.length)
                         at = at.filter(function(atend) {
                             return !(atend.atend_categoria == "SubstitutoFixo" && atend.atend_mergeterapeutaid == req.body.relTeraid)//item !== value
                         })
-                        console.log("at:"+at)
+                        console.log("at.length:"+at.length)
+                        at = at.filter(function(atend) {
+                            return !(atend.atend_categoria == "FaltaJustificada")//item !== value
+                        })
+                        console.log("at.length:"+at.length)
                         at.sort(function(a, b) {
                             let d1 = new Date(a.atend_atenddata);
                             let d2 = new Date(b.atend_atenddata);
@@ -1912,7 +1921,7 @@ module.exports = {
                             rab.dt = atend.atend_atenddata;
                             rab.hora = atend.atend_atendhora
                             categorias = atend.atend_categoria
-                            console.log("categorias:"+categorias)
+                            //console.log("categorias:"+categorias)
                             switch (categorias){
                                 case "Apoio":
                                     terapiaAtend = atend.atend_terapiaid;
