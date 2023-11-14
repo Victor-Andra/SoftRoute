@@ -36,6 +36,7 @@ const atendFnc = require("../functions/fncAtend")
 
 module.exports = {
     carregaAtendAdm(req,res){
+        let lvlUsu = req.cookies['lvlUsu'];
         let atend;
         Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
             //validação caso seja o primeiro registro
@@ -61,7 +62,7 @@ module.exports = {
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage})
+                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage, lvlUsu})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

@@ -2,7 +2,7 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>agendamentos do Dia</title>
+		<title>Evoluções do Dia</title>
 		<script type="text/javascript">
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
@@ -53,6 +53,18 @@
 										<input class="hidden" id="dataFinal" name="dataFinal" />
 									</div>
 								</div>
+								<div id="divTipoFil" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												<option value="Terapeuta">Terapeuta</option>
+											</select>
+										</div>
+									</div>
+								</div>
 								<div id="divBordoTerapeuta" class="col-xs-12 col-sm-2">
 									<div class="row">
 										<div class="input-group">
@@ -101,8 +113,10 @@
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Hora</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapeuta</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
 													
 												</tr>
 											</thead>
@@ -116,12 +130,24 @@
 																<td>{{terapia_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
+														{{#each ../usuarios}}<!-- Ok -->
+															{{#ifEqual this._id ../agenda_usuid}}
+																<td>{{usuario_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
 														{{#each ../benes}}
 															{{#ifEqual this._id ../agenda_beneid}}
 																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
+														
 														<td>{{agenda_evolucao}}</td>
+														{{#ifEqual agenda_selo 'false'}}
+																<td>Não</td>
+															{{else}}
+																<td>Sim</td>
+														{{/ifEqual}}
+														
 													</tr>
 												{{/each}}
 											</tbody>
@@ -171,7 +197,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, null, null],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,
