@@ -80,7 +80,7 @@ module.exports = {
         //let agora = seg.toISOString();
         //let depois = sex.toISOString();
         //console.log("Listagem Realizada de Atendimentos!")
-        Evoatend.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta }).then((evoatend)=>{
+        Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idTerapeuta }).then((evoatend)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
@@ -147,7 +147,7 @@ module.exports = {
                                 //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
                             })
                         }
-                        res.render("area/evol/evoatendlis", { evoatends: evoatend, benes: bene, terapeutas: terapeuta, terapias: terapia, carregaFiltro})
+                        res.render("area/evol/evoatendLis", { evoatends: evoatend, benes: bene, terapeutas: terapeuta, terapias: terapia, carregaFiltro})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -321,7 +321,10 @@ module.exports = {
         let flash = new Resposta();
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
             usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-            res.render('area/evol/evoatendabertolis', { usuarios: usuario, flash})
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                res.render('area/evol/evoatendabertolis', { usuarios: usuario, flash})
+            })
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -339,52 +342,136 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
 
-        switch (seg.getUTCDay()){
-            case 0://DOM
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+        let tipoPessoa = req.body.atendTipoPessoa;
+        let tipoData = req.body.tipoData;
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
                 break;
-            case 1://SEG
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 4);
-                break;
-            case 2://TER
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
-                break;
-            case 3://QUA
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
-                break;
-            case 4://QUI
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
                 //console.log("seg:"+seg);
                 //console.log("sex:"+sex);
+                
                 break;
-            case 5://SEX
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 4);
-                break;
-            case 6://SAB
-                seg.setUTCDate(seg.getUTCDate() - 5);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() - 1);
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
                 break;
             default:
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+                
                 break;
         }
-        let agora = seg.toISOString();
-        let depois = sex.toISOString();
-        console.log("PORRA!")
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.tratTerapeuta, agenda_selo: false }).then((agenda) =>{
+
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: false }
+                break;
+            case "Beneficiario":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_beneid: req.body.atendBeneficiario, agenda_selo: false };
+                break;
+            case "Terapeuta":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_terapeutaid: req.body.atendTerapeuta, agenda_selo: false };
+                break;
+            default:
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: false }
+                break;
+        }
+        Agenda.find(busca).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = fncGeral.getDataFMT(e.agenda_data);
@@ -453,7 +540,6 @@ module.exports = {
     },
     filtraEvoatendfechado(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
         let flash = new Resposta();
-        //console.log('listando Extraeses')
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
         seg.setHours(0);
@@ -462,64 +548,147 @@ module.exports = {
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("PORRA!")
-        switch (seg.getUTCDay()){
-            case 0://DOM
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+        let tipoPessoa = req.body.atendTipoPessoa;
+        let tipoData = req.body.tipoData;
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
                 break;
-            case 1://SEG
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 4);
-                break;
-            case 2://TER
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
-                break;
-            case 3://QUA
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
-                break;
-            case 4://QUI
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
                 //console.log("seg:"+seg);
                 //console.log("sex:"+sex);
+                
                 break;
-            case 5://SEX
-                dtFill = {dia: fncGeral.getDiaSemana(seg)};
-                seg.setUTCDate(seg.getUTCDate() - 4);
-                break;
-            case 6://SAB
-                seg.setUTCDate(seg.getUTCDate() - 5);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() - 1);
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
                 break;
             default:
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+                
                 break;
         }
-        let agora = seg.toISOString();
-        let depois = sex.toISOString();
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.tratTerapeuta, agenda_selo: true}).then((agenda) =>{
+
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: true }
+                break;
+            case "Beneficiario":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_beneid: req.body.atendBeneficiario, agenda_selo: true };
+                break;
+            case "Terapeuta":
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_terapeutaid: req.body.atendTerapeuta, agenda_selo: true };
+                break;
+            default:
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: true }
+                break;
+        }
+        
+        Agenda.find(busca).then((agenda) =>{
+            console.log("agenda: "+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
-                e.agenda_data_dia = this.getDataFMT(dat);
+                e.agenda_data_dia = fncGeral.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 e.agenda_hora = hora+":"+min;
                 //console.log("aux:"+aux)
-                e.agenda_aux = aux;
-                aux++;
-                
                 switch (dat.getUTCDay()){
                     case 0:
                         e.agenda_data_semana = "dom"

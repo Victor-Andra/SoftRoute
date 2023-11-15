@@ -3,28 +3,226 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
+		
 		<script type="text/javascript">
-			function atualizaData(){
-				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataIso);
-				document.getElementById("agendaData").value = dataFmt;
-			}
-			function carregaBody(){
-				
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
 			}
 			function formataData(){
-				let dt = document.getElementById('dataFil').value;
-				let dia = dt.substring(8,10);
-				let mes = dt.substring(5,7);
-				let ano = dt.substring(0,4);
-				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divAtendBeneficiario").hidden = false;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+
+				}
+			}
+			function mostraDivCopia(id){
+				document.getElementById("atualId").value = id;
+				//document.getElementById("atendCategoria").value = document.getElementById("atendCategoria"+id).value;
+				document.getElementById("divCopiaAtend").style.display = "";
+				document.getElementById("divFormPesquisa").style.display = "none";
+			}
+			function ocultaDivCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+			}
+			function addCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+				document.getElementById("btnEnviarCopia").style.display = "";
+
+				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
+					let dat = new Date(document.getElementById('dataCopia').value+" "+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+":00.000Z");
+					console.log("dat:"+dat);
+					let mes = (dat.getUTCMonth()+1).toString();
+					console.log("mes:"+mes);
+					let dia = (dat.getUTCDate()).toString();
+					console.log("dia:"+dia);
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' '+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+':00.000Z').toString();
+					console.log("fulldate:"+fulldate);
+					if(document.getElementById("temCopia").value == "false"){
+						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
+						//document.getElementById("categoriaCopia").value = document.getElementById("atendCategoria").value;
+						document.getElementById("dtCopia").value = fulldate;
+						document.getElementById("temCopia").value = "true";
+					} else {
+						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
+						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
+						//document.getElementById("categoriaCopia").value = document.getElementById("categoriaCopia").value+","+document.getElementById("atendCategoria").value;
+					}
+				}
+			}
+			function enviarCopia(){
+				let form = document.getElementById("divFormPesquisa");
+				form.action = "/menu/atendimento/copiaAtends";
+				form.submit();
+			}
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				if(confirmado == true){
+					window.location.href=("/menu/atendimento/del/"+id);
+				}
+			}
+			function deletaTudo(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				let idsSelecionados = "";
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+						if (idsSelecionados == ""){
+							idsSelecionados = id.id;
+						} else {
+							idsSelecionados = idsSelecionados + "," + id.id;
+						}
+					}
+				})
+
+				document.getElementById("idsDeletar").value = idsSelecionados;
+				if (tem){
+					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
+					if(confirmado == true){
+						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+						if(confirmado == true){
+							console.log("idsSelecionados: "+idsSelecionados);
+							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteAll/";
+							document.getElementById("divFormPesquisa").submit();
+							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
+						}
+					}
+				}
+			}
+			function alternarBotao(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+					}
+				})
+				if (tem){
+					document.getElementById("btnDeleteMany").style.display = "";
+				} else {
+					document.getElementById("btnDeleteMany").style.display = "none";
+				}
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -46,20 +244,116 @@
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendfechadofil" method="POST">
 							<div class="col-xs-12" class="row">
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
+								<div class="hidden">
+									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+									<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
+									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+									<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+									<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+									<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+									<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+									<input id="idsChecked" value="" />
+								</div>
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro Data:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mes</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2022">2022</option>
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
 										<input class="hidden" id="dataFinal" name="dataFinal" />
 									</div>
 								</div>
-								<div id="divBordoTerapeuta" class="col-xs-12 col-sm-2">
+								<div id="divTipoFil" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												<option value="Terapeuta">Terapeuta</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendBeneficiario" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Beneficiário:&nbsp;</label>
+											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendTerapeuta" class="col-sm-4">
 									<div class="row">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
-											<select name="tratTerapeuta" id="tratTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
-												<option value="766f69643132333435366964">-</option>
-												{{#each usuarios}}
+											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}
 											</select>
@@ -75,19 +369,19 @@
 								</div>
 								<hr>
 							</div>
-							<div class="hidden">
-								<input id="idsCopia" name="idsCopia" value="" />
-								<input id="dtCopia" name="dtCopia" value="" />
-								<input id="qtdCopia" name="qtdCopia" value="" />
-								<input id="categoriaCopia" name="categoriaCopia" value="" />
-								<input id="temCopia" name="temCopia" value="false" />
-								<input id="idsDeletar" name="idsDeletar" value="" />
-							</div>
+							
 						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										Ao abrir essa lista ela está inicialmente, filtrada pela semana corrente.<br>
+
+									</div>
 									<div class="col-xs-12">
 										<div class="clearfix" >
 											<div class="pull-right tableTools-container">
@@ -103,6 +397,7 @@
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
 													
 												</tr>
 											</thead>

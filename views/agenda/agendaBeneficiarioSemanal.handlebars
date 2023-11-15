@@ -25,17 +25,79 @@
 							//console.log(id)
 							if(valor != "766f69643132333435366964"){
 								if(e.id.indexOf("TerapiaId_") != -1){
+									console.log("CKLOINE: " +valor)
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
 									document.getElementById(id).append(val);
+									let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								let extra = document.getElementsByName(color+"_extra")
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+								}
 								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+								console.log("clone: "+valor)
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
 									document.getElementById(id).append(val);
+									let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								let extra = document.getElementsByName(color+"_extra")
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+								}
 								}
 							}
 						})
@@ -91,21 +153,36 @@
 							{{else}}
 							<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-								<a class="blue" href="/menu/agenda/edi/{{_id}}">
-									<i class="ace-icon fa fa-pencil bigger-130"></i>
-								</a>
-								<a class="red" href="/menu/agenda/del/{{_id}}">
-									<i class="ace-icon fa fa-trash-o bigger-130"></i>
-								</a>
-							</div>
 							{{/compareThis}}
-						{{/each}}
-						{{#each terapeutas}}
-							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
+							{{#isTrue agenda_temp}}
+								<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="{{agenda_categoria}}">
+								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_usuid}}" value="{{agenda_categoria}}">
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="/menu/agenda/ediTemp/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+									<a class="red" href="/menu/agenda/del/{{_id}}">
+										<i class="ace-icon fa fa-trash-o bigger-130"></i>
+									</a>
+								</div>
+							{{else}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="green" href="/menu/agenda/cadTemp/{{_id}}">
+										<i class="ace-icon fa fa-plus bigger-130"></i>
+									</a>
+								</div>
+							{{/isTrue}}
+							{{#isTrue agenda_extra}}
+								<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="Ordinario">
+								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_usuid}}" value="Ordinario">
+							{{else}}
+							{{/isTrue}}
 						{{/each}}
 						{{#each terapias}}
 							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{terapia_nome}}</label>
+						{{/each}}
+						{{#each terapeutas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
 						{{/each}}
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filSB" method="POST">

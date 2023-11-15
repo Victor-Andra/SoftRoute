@@ -3,28 +3,225 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
-		<script type="text/javascript">
-			function atualizaData(){
-				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataIso);
-				document.getElementById("agendaData").value = dataFmt;
-			}
-			function carregaBody(){
-				
+				<script type="text/javascript">
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
 			}
 			function formataData(){
-				let dt = document.getElementById('dataFil').value;
-				let dia = dt.substring(8,10);
-				let mes = dt.substring(5,7);
-				let ano = dt.substring(0,4);
-				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divAtendBeneficiario").hidden = false;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+
+				}
+			}
+			function mostraDivCopia(id){
+				document.getElementById("atualId").value = id;
+				//document.getElementById("atendCategoria").value = document.getElementById("atendCategoria"+id).value;
+				document.getElementById("divCopiaAtend").style.display = "";
+				document.getElementById("divFormPesquisa").style.display = "none";
+			}
+			function ocultaDivCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+			}
+			function addCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+				document.getElementById("btnEnviarCopia").style.display = "";
+
+				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
+					let dat = new Date(document.getElementById('dataCopia').value+" "+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+":00.000Z");
+					console.log("dat:"+dat);
+					let mes = (dat.getUTCMonth()+1).toString();
+					console.log("mes:"+mes);
+					let dia = (dat.getUTCDate()).toString();
+					console.log("dia:"+dia);
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' '+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+':00.000Z').toString();
+					console.log("fulldate:"+fulldate);
+					if(document.getElementById("temCopia").value == "false"){
+						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
+						//document.getElementById("categoriaCopia").value = document.getElementById("atendCategoria").value;
+						document.getElementById("dtCopia").value = fulldate;
+						document.getElementById("temCopia").value = "true";
+					} else {
+						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
+						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
+						//document.getElementById("categoriaCopia").value = document.getElementById("categoriaCopia").value+","+document.getElementById("atendCategoria").value;
+					}
+				}
+			}
+			function enviarCopia(){
+				let form = document.getElementById("divFormPesquisa");
+				form.action = "/menu/atendimento/copiaAtends";
+				form.submit();
+			}
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				if(confirmado == true){
+					window.location.href=("/menu/atendimento/del/"+id);
+				}
+			}
+			function deletaTudo(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				let idsSelecionados = "";
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+						if (idsSelecionados == ""){
+							idsSelecionados = id.id;
+						} else {
+							idsSelecionados = idsSelecionados + "," + id.id;
+						}
+					}
+				})
+
+				document.getElementById("idsDeletar").value = idsSelecionados;
+				if (tem){
+					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
+					if(confirmado == true){
+						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+						if(confirmado == true){
+							console.log("idsSelecionados: "+idsSelecionados);
+							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteAll/";
+							document.getElementById("divFormPesquisa").submit();
+							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
+						}
+					}
+				}
+			}
+			function alternarBotao(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+					}
+				})
+				if (tem){
+					document.getElementById("btnDeleteMany").style.display = "";
+				} else {
+					document.getElementById("btnDeleteMany").style.display = "none";
+				}
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -34,7 +231,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Route</a>
 							</li>
-							<li class="active">Lista de Evoluções</li>
+							<li class="active">Minhas Evoluções</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					
@@ -45,14 +242,98 @@
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendfil" method="POST">
 							<div class="col-xs-12" class="row">
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
+								<div class="hidden">
+									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+									<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+									<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+									<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+									<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+									<input id="idsChecked" value="" />
+								</div>
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro Data:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mes</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2022">2022</option>
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
 										<input class="hidden" id="dataFinal" name="dataFinal" />
 									</div>
 								</div>
-								<div id="divAtendBeneficiario" class="col-xs-12 col-sm-4">
+								<div id="divTipoFil" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendBeneficiario" class="col-sm-4">
 									<div class="row">
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
@@ -64,6 +345,7 @@
 										</div>
 									</div>
 								</div>
+								
 								<div class="row">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
@@ -73,19 +355,20 @@
 								</div>
 								<hr>
 							</div>
-							<div class="hidden">
-								<input id="idsCopia" name="idsCopia" value="" />
-								<input id="dtCopia" name="dtCopia" value="" />
-								<input id="qtdCopia" name="qtdCopia" value="" />
-								<input id="categoriaCopia" name="categoriaCopia" value="" />
-								<input id="temCopia" name="temCopia" value="false" />
-								<input id="idsDeletar" name="idsDeletar" value="" />
-							</div>
+							
 						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
+									<div class="alert alert-warning">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+										Se contiver nessa lista atendimentos sem evolução, favor ir ao menu "Minha agenda", e menu "Da semana", localizar o agendamento e clicar no relógio ao lado do agendamento. <br>
+										Vale salientar que sua falta pontual na evolução, ficará registrada e será reportada ao administrativo.<br>
+
+									</div>
 									<div class="col-xs-12">
 										<div class="clearfix" >
 											<div class="pull-right tableTools-container">
@@ -101,7 +384,7 @@
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
-													
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -121,7 +404,11 @@
 															{{/ifEqual}}
 														{{/each}}
 														<td>{{agenda_evolucao}}</td>
-														
+														{{#ifEqual agenda_selo 'false'}}
+																<td>Não</td>
+															{{else}}
+																<td>Sim</td>
+														{{/ifEqual}}
 													</tr>
 												{{/each}}
 											</tbody>
@@ -161,265 +448,35 @@
 			</a>
 		</div><!-- /.main-container ace-save-state -->
 
-		<!-- basic scripts -->
-
-		<!--[if !IE]> -->
-		<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-		<script src="../../../assets/js/jquery-1.11.3.min.js"></script>
-		<![endif]-->
+		
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
-		<script src="../../../assets/js/bootstrap.min.js"></script>
-
-		<!-- page specific plugin scripts -->
-		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-		<script src="../../../assets/js/jquery.dataTables.bootstrap.min.js"></script>
-		<script src="../../../assets/js/dataTables.buttons.min.js"></script>
-		<script src="../../../assets/js/buttons.flash.min.js"></script>
-		<script src="../../../assets/js/buttons.html5.min.js"></script>
-		<script src="../../../assets/js/buttons.print.min.js"></script>
-		<script src="../../../assets/js/buttons.colVis.min.js"></script>
-		<script src="../../../assets/js/dataTables.select.min.js"></script>
-
-		<!-- ace scripts -->
-		<script src="../../../assets/js/ace-elements.min.js"></script>
-		<script src="../../../assets/js/ace.min.js"></script>
+		
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
-			jQuery(function($) {
-				//initiate dataTables plugin
-				var myTable = 
-				$('#dynamic-table')
-				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-				.DataTable( {
-					bAutoWidth: false,
-					"aoColumns": [null, null, null, null, null, null,{ "bSortable": false }],
-					"aaSorting": [],
-					
-					
-					//"bProcessing": true,
-			        //"bServerSide": true,
-			        //"sAjaxSource": "http://127.0.0.1/table.php"	,
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [ null, null, null,null, null, null, ],
+			"responsive": true,
+			"lengthMenu": [ 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": false,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
 			
-					//,
-					//"sScrollY": "200px",
-					//"bPaginate": false,
-			
-					//"sScrollX": "100%",
-					//"sScrollXInner": "120%",
-					//"bScrollCollapse": true,
-					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
-			
-					//"iDisplayLength": 50
-			
-			
-					select: {
+			select: {
 						style: 'multi'
 					}
-			    } );
-			
-				
-				
-				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-				
-				new $.fn.dataTable.Buttons( myTable, {
-					buttons: [
-					  {
-						"extend": "colvis",
-						"text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
-						"className": "btn btn-white btn-primary btn-bold",
-						columns: ':not(:first):not(:last)'
-					  },
-					  {
-						"extend": "copy",
-						"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
-						"className": "btn btn-white btn-primary btn-bold"
-					  },
-					  {
-						"extend": "csv",
-						"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
-						"className": "btn btn-white btn-primary btn-bold"
-					  },
-					  {
-						"extend": "excel",
-						"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
-						"className": "btn btn-white btn-primary btn-bold"
-					  },
-					  {
-						"extend": "pdf",
-						"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
-						"className": "btn btn-white btn-primary btn-bold"
-					  },
-					  {
-						"extend": "print",
-						"text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
-						"className": "btn btn-white btn-primary btn-bold",
-						autoPrint: false,
-						message: 'This print was produced using the Print button for DataTables'
-					  }		  
-					]
-				} );
-				myTable.buttons().container().appendTo( $('.tableTools-container') );
-				
-				//style the message box
-				var defaultCopyAction = myTable.button(1).action();
-				myTable.button(1).action(function (e, dt, button, config) {
-					defaultCopyAction(e, dt, button, config);
-					$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
-				});
-				
-				
-				var defaultColvisAction = myTable.button(0).action();
-				myTable.button(0).action(function (e, dt, button, config) {
-					
-					defaultColvisAction(e, dt, button, config);
-					
-					
-					if($('.dt-button-collection > .dropdown-menu').length == 0) {
-						$('.dt-button-collection')
-						.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
-						.find('a').attr('href', '#').wrap("<li />")
-					}
-					$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
-				});
-			
-				////
-			
-				setTimeout(function() {
-					$($('.tableTools-container')).find('a.dt-button').each(function() {
-						var div = $(this).find(' > div').first();
-						if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
-						else $(this).tooltip({container: 'body', title: $(this).text()});
-					});
-				}, 500);
-				
-				
-				
-				
-				
-				myTable.on( 'select', function ( e, dt, type, index ) {
-					if ( type === 'row' ) {
-						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
-					}
-				} );
-				myTable.on( 'deselect', function ( e, dt, type, index ) {
-					if ( type === 'row' ) {
-						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
-					}
-				} );
-			
-			
-			
-			
-				/////////////////////////////////
-				//table checkboxes
-				$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-				
-				//select/deselect all rows according to table header checkbox
-				$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
-					var th_checked = this.checked;//checkbox inside "TH" table header
-					
-					$('#dynamic-table').find('tbody > tr').each(function(){
-						var row = this;
-						if(th_checked) myTable.row(row).select();
-						else  myTable.row(row).deselect();
-					});
-				});
-				
-				//select/deselect a row when the checkbox is checked/unchecked
-				$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
-					var row = $(this).closest('tr').get(0);
-					if(this.checked) myTable.row(row).deselect();
-					else myTable.row(row).select();
-				});
-			
-			
-			
-				$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-					e.stopImmediatePropagation();
-					e.stopPropagation();
-					e.preventDefault();
-				});
-				
-				
-				
-				//And for the first simple table, which doesn't have TableTools or dataTables
-				//select/deselect all rows according to table header checkbox
-				var active_class = 'active';
-				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-					var th_checked = this.checked;//checkbox inside "TH" table header
-					
-					$(this).closest('table').find('tbody > tr').each(function(){
-						var row = this;
-						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-					});
-				});
-				
-				//select/deselect a row when the checkbox is checked/unchecked
-				$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
-					var $row = $(this).closest('tr');
-					if($row.is('.detail-row ')) return;
-					if(this.checked) $row.addClass(active_class);
-					else $row.removeClass(active_class);
-				});
-			
-				
-			
-				/********************************/
-				//add tooltip for small view action buttons in dropdown menu
-				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				
-				//tooltip placement on right or left
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('table')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-			
-					var off2 = $source.offset();
-					//var w2 = $source.width();
-			
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
-				
-				
-				
-				
-				/***************/
-				$('.show-details-btn').on('click', function(e) {
-					e.preventDefault();
-					$(this).closest('tr').next().toggleClass('open');
-					$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
-				});
-				/***************/
-				
-				
-				
-				
-				
-				/**
-				//add horizontal scrollbars to a simple table
-				$('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
-				  {
-					horizontal: true,
-					styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
-					size: 2000,
-					mouseWheelLock: true
-				  }
-				).css('padding-top', '12px');
-				*/
-			
-			
-			})
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
 	
 

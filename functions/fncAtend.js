@@ -537,6 +537,7 @@ module.exports = {
                 console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             default:
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
                 break;
         }
 

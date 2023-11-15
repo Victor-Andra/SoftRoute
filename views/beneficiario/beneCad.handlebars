@@ -64,7 +64,7 @@
 											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
 												<li class="active">
 													<a data-toggle="tab" href="#basico" aria-expanded="true">
-														<i class="orange ace-icon fa fa-child bigger-120"></i>
+														<i class="red ace-icon fa fa-child bigger-120"></i>
 														Dados Básicos
 													</a>
 												</li>
@@ -76,7 +76,7 @@
 												</li>
 												<li class="">
 													<a data-toggle="tab" href="#conv" aria-expanded="false">
-														<i class="green ace-icon fa fa-money bigger-120"></i>
+														<i class="green ace-icon fa fa-heartbeat bigger-120"></i>
 														Convênio
 													</a>
 												</li>
@@ -99,8 +99,14 @@
 													</a>
 												</li>
 												<li class="">
+													<a data-toggle="tab" href="#fat" aria-expanded="false">
+														<i class="green ace-icon fa fa-money bigger-120"></i>
+														Faturamento
+													</a>
+												</li>
+												<li class="">
 													<a data-toggle="tab" href="#obs" aria-expanded="false">
-														<i class="brown ace-icon fa fa-comment-o bigger-120"></i>
+														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
 														Observações
 													</a>
 												</li>
@@ -703,6 +709,30 @@
 																<div class="input-group">
 																	<div >
 																		<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 600px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div id="fat" class="tab-pane fade">
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>Ordem Pagamento por</label>
+																<div class="input-group">
+																		<div >
+																			<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="-">-</option>
+																					<option value="CPF">CPF</option>
+																					<option value="CNPJ">CNPJ</option>
+																			</select>
+																		</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" style="width: 200px;"/>
 																	</div>
 																</div>
 															</div>

@@ -78,6 +78,10 @@
 			document.getElementById("beneOutcel").value = document.getElementById("beneOutcelEdi").value;
 			document.getElementById("beneOutcel2").value = document.getElementById("beneOutcel2Edi").value;
 			document.getElementById("beneOutemail").value = document.getElementById("beneOutemailEdi").value;
+
+			document.getElementById("beneOrdempg").value = document.getElementById("beneOrdempgEdi").value;
+			document.getElementById("beneOrdemdoc").value = document.getElementById("beneOrdemdocEdi").value;
+
 			document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
 			document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
 			document.getElementById("benePaiident").value = document.getElementById("benePaiidentEdi").value;
@@ -131,49 +135,55 @@
 										<div class="col-xl-12" style="padding-top: 50px;">
 											<div class="tabbable">
 												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-													<li class="active">
-														<a data-toggle="tab" href="#basico" aria-expanded="true">
-															<i class="orange ace-icon fa fa-child bigger-120"></i>
-															Dados Básicos
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#end" aria-expanded="false">
-															<i class="orange ace-icon fa fa-globe bigger-120"></i>
-															Endereço
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#conv" aria-expanded="false">
-															<i class="green ace-icon fa fa-money bigger-120"></i>
-															Convênio
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#mae" aria-expanded="false">
-															<i class="pink ace-icon fa fa-female bigger-120"></i>
-															Mãe
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#pai" aria-expanded="false">
-															<i class="blue ace-icon fa fa-male bigger-120"></i>
-															Pai
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#out" aria-expanded="false">
-															<i class="brown ace-icon fa fa-gavel bigger-120"></i>
-															Responsável
-														</a>
-													</li>
-													<li class="">
-														<a data-toggle="tab" href="#obs" aria-expanded="false">
-															<i class="brown ace-icon fa fa-comment-o bigger-120"></i>
-															Observação
-														</a>
-													</li>
-												</ul>
+												<li class="active">
+													<a data-toggle="tab" href="#basico" aria-expanded="true">
+														<i class="red ace-icon fa fa-child bigger-120"></i>
+														Dados Básicos
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#end" aria-expanded="false">
+														<i class="orange ace-icon fa fa-globe bigger-120"></i>
+														Endereço
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#conv" aria-expanded="false">
+														<i class="green ace-icon fa fa-heartbeat bigger-120"></i>
+														Convênio
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#mae" aria-expanded="false">
+														<i class="pink ace-icon fa fa-female bigger-120"></i>
+														Mãe
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#pai" aria-expanded="false">
+														<i class="blue ace-icon fa fa-male bigger-120"></i>
+														Pai
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#out" aria-expanded="false">
+														<i class="brown ace-icon fa fa-gavel bigger-120"></i>
+														Responsável
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#fat" aria-expanded="false">
+														<i class="green ace-icon fa fa-money bigger-120"></i>
+														Faturamento
+													</a>
+												</li>
+												<li class="">
+													<a data-toggle="tab" href="#obs" aria-expanded="false">
+														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
+														Observações
+													</a>
+												</li>
+											</ul>
 											</div>
 											
 											<div id="divCarrega" name="divCarrega" class="hidden">
@@ -208,6 +218,10 @@
 												<input id="beneOutcelEdi" name="beneOutcelEdi" value="{{beneEdi.bene_outcel}}"/>
 												<input id="beneOutcel2Edi" name="beneOutcel2Edi" value="{{beneEdi.bene_outcel2}}"/>
 												<input id="beneOutemailEdi" name="beneOutemailEdi" value="{{beneEdi.bene_outemail}}"/>
+												
+												<input id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
+												<input id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
+
 												<input id="benePaiEdi" name="benePaiEdi" value="{{beneEdi.bene_pai}}"/>
 												<input id="benePaiprofEdi" name="benePaiprofEdi" value="{{beneEdi.bene_paiprof}}"/>
 												<input id="benePaiidentEdi" name="benePaiidentEdi" value="{{beneEdi.bene_paiident}}"/>
@@ -840,6 +854,30 @@
 																<div class="input-group">
 																	<div >
 																		<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 600px;"  value="{{bene_outemail}}" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div id="fat" class="tab-pane fade">
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>Ordem Pagamento por</label>
+																<div class="input-group">
+																		<div >
+																			<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha..." value="{{bene_ordempg}}">
+																					<option value="-">-</option>
+																					<option value="CPF">CPF</option>
+																					<option value="CNPJ">CNPJ</option>
+																			</select>
+																		</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" value="{{bene_ordemdoc}}" style="width: 200px;" />
 																	</div>
 																</div>
 															</div>

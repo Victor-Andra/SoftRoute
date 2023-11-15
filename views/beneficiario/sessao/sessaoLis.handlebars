@@ -2,7 +2,7 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de beneficiários</title>
+		<title>Lista de Sessões por Beneficiários</title>
 
 	</head>
 
@@ -27,29 +27,43 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
-							<div class="col-xs-12">
+							<div class="col-xs-12 col-sm-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<div class="row">
-									<div class="col-xs-12">
-											<div class="clearfix" >
-												<div class="pull-right tableTools-container">
+									{{#each benes}}
+									
+										<div class="widget-box collapsed">
+											<div class="widget-header">
+												<h6 class="widget-title">{{bene_nome}}</h6>
 
+												<span class="widget-toolbar">
 
-												</div>
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
 											</div>
-
-											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-											</div>
-											
-											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<div class="widget-body">
+												<div class="widget-main">
+													<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 												
 												<thead>
+
 													<tr role="row">
 
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Beneficiário</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio:     activate to sort column ascending">Convênio</th>
-														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Qt. Sessões:     activate to sort column ascending">Qt. Sessões</th>
-														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Qt. Realizadas:     activate to sort column ascending">Qt. Realizadas</th>
+
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Terapia: activate to sort column ascending">Terapia</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Qt.Liminar:     activate to sort column ascending">Liminar</th>
+														
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Realizado: activate to sort column ascending">Realizado</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Saldo:     activate to sort column ascending">Saldo</th>
+							
+
+							
 														<th>Ação</th>
 
 													</tr>
@@ -57,31 +71,38 @@
 												</thead>
 												
 												<tbody>
-													{{#each benes}}
+													{{#each sessaobenes}}
 														<tr role="row" class="odd">
 
-															<td>{{bene_nome}}</td>
-															
-															{{#each ../convs}}<!-- Ok -->	
-																{{#ifEqual this._id ../bene_convid}}
-																	<td>{{conv_nome}}</td>
+
+															{{#each ../terapias}}<!-- Ok -->
+																{{#ifEqual this._id ../sessao_terapiaid}}
+																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-
-
-															<td>Max</td>
-															<td>Min</td>
-
+															<td>{{sessao_qtterapiaprev}}</td>
+															<td>{{sessao_qtterapiacon}}</td>
+															<td>{{sessao_qtterapiasaldo}}</td>
+															
 															<td>
 																<div class="action-buttons">
-																	<a class="green" href="/menu/beneficiario/sessao/listab/{{_id}}">
-																		<i class="ace-icon fa fa-search-plus bigger-130"></i>
+																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/sessao/edi/{{_id}}">
+																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																</div>
-																<div class="hidden-md hidden-lg">
+
+																	<a class="blue" name="acaolis" id="acaolis" href="/menu/beneficiario/sessao/lis">
+																		<i class="ace-icon fa fa-reply bigger-130"></i>
+																	</a>
+
+																	<a class="red" name="acaoDel" id="acaoDel" href="/menu/beneficiario/sessao/lisdel/{{_id}}">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
+
 																	
 																</div>
-										
+
+																<div class="hidden-md hidden-lg">
+																</div>
 															</td>
 												
 														</tr>
@@ -90,81 +111,26 @@
 
 											</table>
 
+												</div>
+											</div>
+										</div>
 
-										
-										
-										
-									</div>
-								</div>				
+									
+									{{/each}}	
+								<!-- PAGE CONTENT END -->		
 							</div>
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route
-						</span>
+			
 
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-
-		
-						</span>
-					</div>
-				</div>
-			</div>
-
-			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
-				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-			</a>
 		</div><!-- /.main-container ace-save-state -->
 
-		
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<!-- page specific plugin scripts -->
-		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-		
 
 		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-		$(document).ready(function() {
-			$("#dynamic-table").DataTable({
-			"language": { "url": "/js/lang/datatable-pt-br.json" },
-			"aaSorting": [],
-			"aoColumns": [null, null, null, null, { "bSortable": false }],
-			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
-			"lengthChange": true,
-			"autoWidth": false,
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			
-			select: {
-						style: 'multi'
-					}
-			});
-		});
-		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-		</script>
 	
-
 	</body>
 
 </html>

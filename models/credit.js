@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-
+//essa tabela devera ser dropada e inseridos novos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
+//da criação da nf no site da prefeitura de recife.
 const CreditSchema = mongoose.Schema({
     credit_atendnum :{ 
         type: Number, 

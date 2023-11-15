@@ -3,251 +3,71 @@ const ObjectId = mongoose.Types.ObjectId
 
 const BeneSchema = mongoose.Schema({
 
-    bene_nome:{
-        type: String,
-        required: true 
-    },
-    bene_apelido:{
-        type: String,
-        required: true
-    },
-    bene_idade:{
-        type: String, 
-        required: false
-    },
-    bene_datanasc:{
-        type: Date, 
-        required: true 
-    },
-    bene_nacionalidade:{
-        type: String,
-        required: false 
-    },
-    bene_end:{
-        type: String,
-        required: false 
-    },
-    bene_endcompl:{
-        type: String,
-        required: false 
-    },
-    bene_endbairro:{
-        type: String,
-        required: false 
-    },
-    bene_endcidade:{
-        type: String,
-        required: true
-    },
-    bene_enduf:{
-        type: String, 
-        required: false 
-    },
-    bene_endcep:{
-        type: String, 
-        required: false 
-    },
-    bene_ident:{
-        type: String, 
-        required: false 
-    },
-    bene_cpf:{
-        type: String, 
-        required: false 
-    },
-    bene_status:{
-        type: String, 
-        required: false 
-    },
-    bene_convid:{
-        type: ObjectId, 
-        required: true 
-    },
-    bene_out:{
-        type: String, 
-        required: false 
-    },
-    bene_graupar:{
-        type: String, 
-        required: false 
-    },
-    bene_supervisor:{
-        type: String, 
-        required: false 
-    },
-    bene_escola:{
-        type: ObjectId,
-        required: false
-    },
-    bene_escolaobs:{
-        type: String,
-        required: false
-    },
-    bene_outprof:{
-        type: String, 
-        required: false 
-    },
-    bene_outident:{
-        type: String, 
-        required: false 
-    },
-    bene_outcpf:{
-        type: String, 
-        required: false 
-    },
-    bene_outend:{
-        type: String, 
-        required: false 
-    },
-    bene_outendcompl:{
-        type: String, 
-        required: false 
-    },
-    bene_outendbairro:{
-        type: String,
-        required: false 
-    },
-    bene_outendcidade:{
-        type: String,
-        required: false 
-    },
-    bene_outenduf:{
-        type: String, 
-        required: false 
-    },
-    bene_outendcep:{
-        type: String, 
-        required: false 
-    },
-    bene_outcel:{
-        type: String, 
-        required: false 
-    },
-    bene_outcel2:{
-        type: String, 
-        required: false 
-    },
-    bene_outemail:{
-        type: String, 
-        required: false 
-    },
-    bene_pai:{
-        type: String, 
-        required: false 
-    },
-    bene_paiprof:{
-        type: String, 
-        required: false 
-    },
-    bene_paiident:{
-        type: String, 
-        required: false 
-    },
-    bene_paicpf:{
-        type: String, 
-        required: false 
-    },
-    bene_paiend:{
-        type: String, 
-        required: false 
-    },
-    bene_paiendcompl:{
-        type: String, 
-        required: false 
-    },
-    bene_paiendbairro:{
-        type: String, 
-        required: false 
-    },
-    bene_paiendcidade:{
-        type: String, 
-        required: false 
-    },
-    bene_paienduf:{
-        type: String, 
-        required: false 
-    },
-    bene_paiendcep:{
-        type: String, 
-        required: false 
-    },
-    bene_paicel:{
-        type: String, 
-        required: false 
-    },
-    bene_paicel2:{
-        type: String, 
-        required: false 
-    },
-    bene_paiemail:{
-        type: String, 
-        required: false 
-    },
-    bene_mae:{
-        type: String, 
-        required: false 
-    },
-    bene_maeprof:{
-        type: String, 
-        required: false 
-    },
-    bene_maeident:{
-        type: String, 
-        required: false 
-    },
-    bene_maecpf:{
-        type: String, 
-        required: false 
-    },
-    bene_maeend:{
-        type: String, 
-        required: false 
-    },
-    bene_maeendcompl:{
-        type: String, 
-        required: false 
-    },
-    bene_maeendbairro:{
-        type: String, 
-        required: false 
-    },
-    bene_maeendcidade:{
-        type: String, 
-        required: false 
-    },
-    bene_maeenduf:{
-        type: String, 
-        required: false 
-    },
-    bene_maeendcep:{
-        type: String, 
-        required: false 
-    },
-    bene_maecel:{
-        type: String, 
-        required: false 
-    },
-    bene_maecel2:{
-        type: String, 
-        required: false 
-    },
-    bene_maeemail:{
-        type: String, 
-        required: false 
-    },
-    bene_obs:{
-        type: String,
-        required: false
-    },
-    bene_datacad:{
-        type: Date, 
-        required: false 
-        },
-    bene_dataedi:{
-        type: Date, 
-        required: false 
-    }
-    
+    bene_nome:{ type: String,required: true },
+    bene_apelido:{ type: String, required: true },
+    bene_idade:{ type: String, required: false },
+    bene_datanasc:{ type: Date, required: true },
+    bene_nacionalidade:{ type: String, required: false },
+    bene_end:{ type: String, required: false },
+    bene_endcompl:{ type: String, required: false },
+    bene_endbairro:{ type: String, required: false },
+    bene_endcidade:{ type: String, required: true},
+    bene_enduf:{ type: String, required: false },
+    bene_endcep:{ type: String, required: false },
+    bene_ident:{ type: String, required: false },
+    bene_cpf:{ type: String, required: false },
+    bene_status:{ type: String, required: false },
+    bene_convid:{ type: ObjectId, required: true },
+    bene_out:{ type: String, required: false},
+    bene_graupar:{ type: String, required: false  },
+    bene_supervisor:{ type: String, required: false },
+    bene_escola:{ type: ObjectId, required: false},
+    bene_escolaobs:{ type: String, required: false},
+    bene_outprof:{ type: String, required: false },
+    bene_outident:{ type: String, required: false },
+    bene_outcpf:{ type: String, required: false },
+    bene_outend:{ type: String, required: false },
+    bene_outendcompl:{ type: String, required: false },
+    bene_outendbairro:{ type: String, required: false},
+    bene_outendcidade:{ type: String, required: false },
+    bene_outenduf:{ type: String, required: false },
+    bene_outendcep:{ type: String, required: false },
+    bene_outcel:{ type: String, required: false },
+    bene_outcel2:{ type: String, required: false },
+    bene_outemail:{ type: String, required: false },
+
+    bene_ordempg:{ type: String, required: false },
+    bene_ordemdoc:{ type: String, required: false },
+
+    bene_pai:{ type: String, required: false },
+    bene_paiprof:{ type: String, required: false },
+    bene_paiident:{ type: String, required: false },
+    bene_paicpf:{ type: String, required: false },
+    bene_paiend:{ type: String, required: false },
+    bene_paiendcompl:{ type: String, required: false },
+    bene_paiendbairro:{ type: String, required: false},
+    bene_paiendcidade:{ type: String, required: false },
+    bene_paienduf:{ type: String, required: false },
+    bene_paiendcep:{ type: String, required: false},
+    bene_paicel:{ type: String, required: false },
+    bene_paicel2:{ type: String, required: false },
+    bene_paiemail:{ type: String, required: false },
+    bene_mae:{ type: String, required: false },
+    bene_maeprof:{ type: String, required: false },
+    bene_maeident:{ type: String, required: false },
+    bene_maecpf:{ type: String, required: false },
+    bene_maeend:{ type: String, required: false },
+    bene_maeendcompl:{ type: String, required: false },
+    bene_maeendbairro:{ type: String, required: false },
+    bene_maeendcidade:{ type: String, required: false },
+    bene_maeenduf:{ type: String, required: false },
+    bene_maeendcep:{ type: String, required: false },
+    bene_maecel:{ type: String, required: false },
+    bene_maecel2:{ type: String, required: false },
+    bene_maeemail:{ type: String, required: false },
+    bene_obs:{ type: String, required: false},
+    bene_datacad:{ type: Date, required: false },
+    bene_dataedi:{ type: Date, required: false }
     
 })
 
@@ -256,7 +76,7 @@ class Bene{
         bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
         bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out, bene_graupar,
         bene_supervisor, bene_escola, bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, 
-        bene_outendcidade,bene_outenduf, bene_outendcep,	bene_outcel, bene_outcel2, bene_outemail, bene_pai, 
+        bene_outendcidade,bene_outenduf, bene_outendcep,	bene_outcel, bene_outcel2, bene_outemail, bene_ordempg, bene_ordemdoc,bene_pai, 
         bene_paiprof, bene_paiident, bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, 
         bene_paienduf, bene_paiendcep, bene_paicel, bene_paicel2, bene_paiemail, bene_mae, bene_maeprof, bene_maeident, 
         bene_maecpf, bene_maeend, bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, 
@@ -294,6 +114,10 @@ class Bene{
             this.bene_outcel = bene_outcel,
             this.bene_outcel2 = bene_outcel2,
             this.bene_outemail = bene_outemail,
+
+            this.bene_ordempg = bene_ordempg,
+            this.bene_ordemdoc = bene_ordemdoc,
+
             this.bene_pai = bene_pai,
             this.bene_paiprof = bene_paiprof,
             this.bene_paiident = bene_paiident,
@@ -371,6 +195,10 @@ module.exports = {BeneModel,BeneSchema,
                 bene_outcel: req.body.beneOutcel,
                 bene_outcel2: req.body.beneOutcel2,
                 bene_outemail: req.body.beneOutemail,
+
+                bene_ordempg: req.body.beneOrdempg,
+                bene_ordemdoc: req.body.beneOrdemdoc,
+
                 bene_pai: req.body.benePai,
                 bene_paiprof: req.body.benePaiprof,
                 bene_paiident: req.body.benePaiident,
@@ -452,6 +280,10 @@ module.exports = {BeneModel,BeneSchema,
                 bene_outcel: req.body.beneOutcel,
                 bene_outcel2: req.body.beneOutcel2,
                 bene_outemail: req.body.beneOutemail,
+                
+                bene_ordempg: req.body.beneOrdempg,
+                bene_ordemdoc: req.body.beneOrdemdoc,
+
                 bene_pai: req.body.benePai,
                 bene_paiprof: req.body.benePaiprof,
                 bene_paiident: req.body.benePaiident,
