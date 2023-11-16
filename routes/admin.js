@@ -900,11 +900,35 @@ router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{
 })
 
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.carregaEvolucao(req, res);
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncAgenda.carregaEvolucao(req, res, atrazo, resposta);
 })
 
 router.get('/agenda/evolucaoTemp/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
-    fncAgenda.carregaEvolucaoTemp(req, res);
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
+})
+
+router.get('/agenda/evolucaoA/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = true;
+    fncAgenda.carregaEvolucao(req, res, atrazo, resposta);
+})
+
+router.get('/agenda/evolucaoTempA/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = true;
+    fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
 })
 
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda

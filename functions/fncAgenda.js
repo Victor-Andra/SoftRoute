@@ -9598,7 +9598,7 @@ module.exports = {
             //console.log(err1)
         }
     },
-    carregaEvolucao(req, res, resposta){
+    carregaEvolucao(req, res, atrazo, resposta){
         let selo;
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -9639,13 +9639,13 @@ module.exports = {
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
+                                    res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo})
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
     },
-    carregaEvolucaoTemp(req, res){//CarregaEdiçãoAgenda
+    carregaEvolucaoTemp(req, res, atrazo, resposta){//CarregaEdiçãoAgenda
         let isAgendaTerapeuta = false;
         let selo = false;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -9687,7 +9687,7 @@ module.exports = {
                                 terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
+        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo})
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

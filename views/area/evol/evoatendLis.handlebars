@@ -219,6 +219,18 @@
 					document.getElementById("btnDeleteMany").style.display = "none";
 				}
 			}
+			function evolucaoEmDia(id){
+				window.location.href=("/menu/agenda/evolucao/"+id);
+			}
+			function evolucaoSemanalEmDia(id){
+				window.location.href=("/menu/agenda/evolucaoTemp/"+id);
+			}
+			function evolucaoComAtraso(id){
+				window.location.href=("/menu/agenda/evolucaoA/"+id);
+			}
+			function evolucaoSemanalComAtraso(id){
+				window.location.href=("/menu/agenda/evolucaoTempA/"+id);
+			}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -388,7 +400,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each evoatends}}
+												{{#each agendas}}
 
 													<tr role="row" class="odd">
 														<td>{{agenda_data_dia}}</td>
@@ -404,11 +416,35 @@
 															{{/ifEqual}}
 														{{/each}}
 														<td>{{agenda_evolucao}}</td>
-														{{#ifEqual agenda_selo 'false'}}
-																<td>Não</td>
-															{{else}}
+														{{#compareThis agenda_selo 'true'}}
 																<td>Sim</td>
-														{{/ifEqual}}
+															{{else}}
+																<td>Não
+																	{{#dataInferior agenda_data_dia}}
+																		{{#isTrue agenda_temp}}
+																			<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
+																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																			</a>
+																		{{else}}
+																			<a class="red" name="acaoEvolucaoComAtraso" id="acaoEvolucaoComAtraso" onclick="javascript:evolucaoComAtraso('{{_id}}');">
+																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																			</a>
+																		{{/isTrue}}
+																	{{else}}
+																		{{#dataIgual agenda_data_dia}}
+																			{{#isTrue agenda_temp}}
+																				<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+																					<i class="ace-icon fa fa-pencil bigger-130"></i>
+																				</a>
+																			{{else}}
+																				<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEmDia('{{_id}}');">
+																					<i class="ace-icon fa fa-pencil bigger-130"></i>
+																				</a>
+																			{{/isTrue}}
+																		{{/dataIgual}}
+																	{{/dataInferior}}
+																</td>
+														{{/compareThis}}
 													</tr>
 												{{/each}}
 											</tbody>

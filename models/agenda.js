@@ -27,6 +27,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_evolucao :{ type: String, require: false },
     agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
     agenda_selo :{ type: Boolean, require: false },
+    agenda_atrazo :{ type: Boolean, require: false },
     agenda_usucad :{ type: String, require: false }
 })
 
@@ -275,6 +276,7 @@ module.exports = {AgendaModel,AgendaSchema,
         var resultado;
         let selo;
         let selamento;
+        let atrazo = req.body.agendaAtrazo;
         await AgendaModel.find({_id: req.body.id}).then((a)=>{
             selo = a.agendaSelo;
             //console.log("req.body.agendaId:"+req.body.id)
@@ -294,6 +296,7 @@ module.exports = {AgendaModel,AgendaSchema,
             await AgendaModel.findByIdAndUpdate(req.body.id, 
                 {$set: {
                     agenda_evolucao : req.body.agendaEvolucao ,
+                    agenda_atrazo : atrazo,
                     agenda_selo : selamento
                 }}
             ).then((res) =>{

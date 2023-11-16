@@ -65,10 +65,14 @@ const cookieParser = require('cookie-parser');
                 },
                 compareThis: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
                     //console.log("/"+v1.toString()+"="+v2.toString()+"/")
-                    if (v1.toString() === v2) {
-                        return options.fn(this);
-                    } else {
+                    if (v1 == undefined){
                         return options.inverse(this);
+                    } else {
+                        if (v1.toString() === v2) {
+                            return options.fn(this);
+                        } else {
+                            return options.inverse(this);
+                        }
                     }
                 },
                 compareString: function (v1, v2, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
@@ -94,7 +98,65 @@ const cookieParser = require('cookie-parser');
                     } else {
                         return options.inverse(this);
                     }
-                }
+                },
+                dataInferior: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
+                    console.log("/"+v1)///2023-11-14
+                    function retornaData(data) {
+                        if (data.includes("-")){
+                            split = data.split('-');
+                            console.log("SHIT")
+                            console.log(split[1])
+                            console.log(split[2])
+                            console.log(split[0])
+                            console.log(new Date(split[1] + "/" + split[2] + "/" + split[0]))
+                            return new Date(split[1] + "/" + split[2] + "/" + split[0]);
+                        } else if (data.includes("/")){
+                            console.log("CRAP")
+                            split = data.split('/');
+                            return new Date(split[1] + "/" + split[0] + "/" + split[2]);
+                        } else {
+                            console.log("FUCK")
+                            if (!data) {
+                                return data;
+                            }
+                        }
+                    }
+                
+                    var dataAtual = new Date();
+                    console.log("/"+retornaData(v1).getDate()+" = "+dataAtual.getDate())
+                    if (retornaData(v1).getDate() < dataAtual.getDate()) {
+                        console.log("TRUE")
+                        return options.fn(this);
+                    } else {
+                        console.log("/false")
+                        return options.inverse(this);
+                    }
+                },
+                dataIgual: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
+                    console.log("/"+v1)///2023-11-14
+                    function retornaData(data) {
+                        if (data.includes("-")){
+                            split = data.split('-');
+                            return new Date(split[1] + "/" + split[2] + "/" + split[0]);
+                        } else if (data.includes("/")){
+                            split = data.split('/');
+                            return new Date(split[1] + "/" + split[0] + "/" + split[2]);
+                        } else {
+                            if (!data) {
+                                return data;
+                            }
+                        }
+                    }
+                
+                    var dataAtual = new Date();
+                    if (retornaData(v1).getDate() == dataAtual.getDate()) {
+                        console.log("TRUE")
+                        return options.fn(this);
+                    } else {
+                        console.log("/false")
+                        return options.inverse(this);
+                    }
+                },
             }
         }));
         app.set('view engine', 'handlebars');
