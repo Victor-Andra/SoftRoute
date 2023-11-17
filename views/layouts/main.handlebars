@@ -89,6 +89,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -101,6 +102,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -113,6 +115,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -125,6 +128,7 @@
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -137,6 +141,7 @@
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -149,6 +154,20 @@
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "65578389a0b58a5faefac584"){//Home, aqueles que são Terapeutas e AT simultaneos
+					//console.log("2: "+(biscoito== "65578389a0b58a5faefac584")+"biscoito == 65578389a0b58a5faefac584")
+					document.getElementById("naveHo").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
@@ -162,6 +181,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
@@ -174,6 +194,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
@@ -186,6 +207,7 @@
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveCoordenador").remove();
 					document.getElementById("naveSupervisor").remove();
 					//console.log("naveTerapeuta");
@@ -211,6 +233,9 @@
 		</div>
 		<div name="navbarPrincipalSelect" id="naveAT" style="display: none;">
 		{{>_navbarAT}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveHo" style="display: none;"><!--Para aqueles que são Terapeuta e AT simultaneo-->
+		{{>_navbarHo}}
 		</div>
 		<div name="navbarPrincipalSelect" id="naveCoordenador" style="display: none;">
 		{{>_navbarC}}

@@ -359,14 +359,27 @@ module.exports = {AtendModel,AtendSchema,
             }
 
             if (categoriaidx != "-") {
-                if (categoriaidx == "Padrão") {
-                    troca = {'atend_categoria': categoriaidx, 'atend_org': 'Padrão'};
-                } else if (categoriaidx == "Glosa") {
-                    console.log("entro aqui2")
-                    troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo', 'atend_mergeterapeutaid': voidId, 'atend_mergeterapiaid': voidId, 'atend_valordeb': novavalordebx, 'atend_valorcre': novavalorcrex};
+                if (novavalorcrex != "-" && novavalordebx != "-"){
+                    if (categoriaidx == "Padrão") {
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Padrão', 'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
+                    } else if (categoriaidx == "Glosa") {
+                        console.log("entro aqui2")
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo', 'atend_mergeterapeutaid': voidId, 'atend_mergeterapiaid': voidId, 'atend_mergevalorcre': novavalorcrex, 'atend_mergevalordeb': novavalordebx};
+                    } else {
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo', 'atend_mergevalorcre': novavalorcrex, 'atend_mergevalordeb': novavalordebx};
+                    }
                 } else {
-                    troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo'};
+                    if (categoriaidx == "Padrão") {
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Padrão'};
+                    } else if (categoriaidx == "Glosa") {
+                        console.log("entro aqui2")
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo', 'atend_mergeterapeutaid': voidId, 'atend_mergeterapiaid': voidId, 'atend_valordeb': novavalordebx, 'atend_valorcre': novavalorcrex};
+                    } else {
+                        troca = {'atend_categoria': categoriaidx, 'atend_org': 'Administrativo'};
+                    }
                 }
+            } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
+                troca = {'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
             } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
                 troca = {'atend_mergeterapeutaid': novomergeteraidx, 'atend_mergeterapiaid': novamergetpiaidx, 'atend_mergevalorcre': novavalorcrex, 'atend_valordeb': novavalordebx, 'atend_categoria': 'SubstitutoFixo', 'atend_org': 'Administrativo', 'atend_mergevalordeb': novavalordebx, 'atend_valorcre': novavalorcrex};
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-"){//convenio
