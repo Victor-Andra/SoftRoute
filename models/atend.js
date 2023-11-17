@@ -78,6 +78,10 @@ const AtendSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    atend_rel :{
+        type: String,
+        required: false
+    },
     atend_datacad :{
         type: Date,
         required: false
@@ -109,6 +113,7 @@ class Atend{
         atend_evolucao,
         atend_obs,
         atend_num,
+        atend_rel,
         atend_datacad,
         atend_dataedi
         ){
@@ -131,6 +136,7 @@ class Atend{
         this.atend_evolucao = atend_evolucao,
         this.atend_obs = atend_obs,
         this.atend_num = atend_num,
+        this.atend_rel = atend_rel,
         this.atend_datacad = atend_datacad,
         this.atend_dataedi = atend_dataedi       
     }

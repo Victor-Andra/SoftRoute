@@ -12,6 +12,7 @@ const ExtraSchema = mongoose.Schema({
     extra_convid :{type: ObjectId, required: false },
     extra_usuid :{type: String, required: false },
     extra_data :{type: Date, required: false },
+    extra_data_dia :{type: String, required: false },
     extra_hora :{type: String, required: false },
     extra_terapeutaid :{type: ObjectId, required: false },
     extra_terapiaid :{type: ObjectId, required: false },
@@ -49,9 +50,6 @@ const ExtraSchema = mongoose.Schema({
     extra_numcop :{type: Number, required: false },
     extra_datacadcop :{type: Date, required: false },
     extra_dataedicop :{type: Date, required: false }
-
-
-
 })
 
 class Extra{
@@ -66,6 +64,7 @@ class Extra{
         extra_convid,
         extra_usuid,
         extra_data,
+        extra_data_dia,
         extra_hora,
         extra_terapeutaid,
         extra_terapiaid,

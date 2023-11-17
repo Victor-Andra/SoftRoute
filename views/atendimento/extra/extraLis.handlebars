@@ -242,8 +242,8 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="" method="POST">
-														<div class="col-xs-12" class="row">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
+							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
@@ -275,7 +275,8 @@
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
 											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
-												<option value="2023">2023</option>
+												<option value="2022">2022</option>
+												<option selected value="2023">2023</option>
 												<option value="2024">2024</option>
 												<option value="2025">2025</option>
 											</select>
@@ -394,7 +395,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each agendas}}
+												{{#each extras}}
 														<tr role="row" class="odd">
 															<td class="center">
 																<label class="pos-rel">
@@ -403,51 +404,51 @@
 																</label>
 															</td>
 															
-															<td><b>{{agenda_data}}</b></td>
+															<td><b>{{extra_data_dia}}</b></td>
 															
-															<td>{{agenda_hora}}</td>
+															<td>{{extra_hora}}</td>
 					
 
 															{{#each ../benes}}
-																{{#ifEqual this._id ../agenda_beneid}}
+																{{#ifEqual this._id ../extra_beneid}}
 																	<td>{{bene_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
 
 															{{#each ../convs}}<!-- Ok -->	
-																{{#ifEqual this._id ../agenda_convid}}
+																{{#ifEqual this._id ../extra_convid}}
 																	<td>{{conv_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-															<td>{{agenda_org}}</td>
-															<td>{{agenda_categoria}}</td>
+															<td>{{extra_org}}</td>
+															<td>{{extra_categoria}}</td>
 															{{#each ../terapias}}<!-- Ok -->
-																{{#ifEqual this._id ../agenda_terapiaid}}
+																{{#ifEqual this._id ../extra_terapiaid}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
 															<!--
 															{{#each ../usuarios}}
-																{{#ifEqual this._id ../agenda_usuid}}
+																{{#ifEqual this._id ../extra_usuid}}
 																	<td>{{usuario_nome}}</td> 	
 																{{/ifEqual}}
 															{{/each}}
 															-->
 
 															{{#each ../salas}}
-																{{#ifEqual this._id ../agenda_salaid}}
+																{{#ifEqual this._id ../extra_salaid}}
 																	<td>{{sala_nome}}</td> <!-- Nome Usuário que é Terapeuta -->	
 																{{/ifEqual}}
 															{{/each}}
 														
-															<td>{{agenda_extra}}</td>
+															<td>{{extra_extra}}</td>
 															
 															<td>
 																<div class="action-buttons">
-																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/edi/{{_id}}">
+																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/extra/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																	<a class="red" name="acaoDel" id="acaoDel" href="/menu/agenda/del/{{_id}}">
+																	<a class="red" name="acaoDel" id="acaoDel" href="/menu/extra/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
 																</div>

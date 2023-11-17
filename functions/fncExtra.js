@@ -71,18 +71,82 @@ module.exports = {
    
     listaExtra(req, res, resposta){ //Lista extras Agendados)
         let flash = new Resposta();
-        Agenda.find({ agenda_extra: true }).then((agenda) =>{
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
+        console.log("START CONVERT");
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let dataIni = seg.toISOString();
+        let dataFim = sex.toISOString();
+        Extra.find({ extra_data: { $gte: dataIni, $lte: dataFim} }).then((extra) =>{
+            extra.forEach((a)=>{
+                data = a.extra_data;
+                hor = data.getUTCHours();
+                min = data.getMinutes();
+
+                if((""+min).length == 1){
+                    min = "0"+min;
+                }
+
+                if((""+hor).length == 1){
+                    hor = "0"+hor;
+                }
+
+                hora = hor+":"+min;
+                a.extra_hora = hora;
+                a.extra_data_dia = fncGeral.getDataFMT(data);
+            })
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                Sala.find().then((sala)=>{
-                                    sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
-                                    Terapia.find().then((terapia)=>{
-                                        Conv.find().then((conv)=>{
-                                            conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                        res.render('atendimento/extra/extraLis', {agendas: agenda, benes: bene, usuarios: usuario, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                        Sala.find().then((sala)=>{
+                            sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
+                            Terapia.find().then((terapia)=>{
+                                Conv.find().then((conv)=>{
+                                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                    res.render('atendimento/extra/extraLis', {extras: extra, benes: bene, terapeutas: terapeuta, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -91,41 +155,197 @@ module.exports = {
     },
     filtraExtra(req, res, resposta){
         let flash = new Resposta();
-        //console.log('listando Extraeses')
-        Agenda.find({agenda_beneid: req.body.agendaBeneid}).then((agenda) =>{
-            agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-            agenda.forEach((c)=>{
-               //console.log("c.datacad"+c.agenda_datacad)
-               let datacad = new Date(c.agenda_data)
-               let mes = (datacad.getMonth()+1).toString();
-               let dia = (datacad.getUTCDate()).toString();
-               if (mes.length == 1){
-                   mes = "0"+mes;
-               }
-               if (dia.length == 1){
-                   dia = "0"+dia;
-               }
-               let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-               c.agenda_data=fulldate;
+        let tipoPessoa = req.body.atendTipoPessoa;
+        let tipoData = req.body.tipoData;
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
                 
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
 
+                break;
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                
+                break;
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            default:
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+                break;
+        }
+
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { extra_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+            case "Terapeuta":
+                busca = { extra_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, extra_terapeutaid: req.body.atendTerapeuta }
+                break;
+            case "Beneficiario":
+                busca = { extra_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, extra_beneid: req.body.atendBeneficiario };
+                break;
+            default:
+                busca = { extra_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+        }
+        Extra.find(busca).then((extra) =>{
+            extra.forEach((a)=>{
+                data = a.extra_data;
+                hor = data.getUTCHours();
+                min = data.getMinutes();
+
+                if((""+min).length == 1){
+                    min = "0"+min;
+                }
+
+                if((""+hor).length == 1){
+                    hor = "0"+hor;
+                }
+
+                hora = hor+":"+min;
+                a.extra_hora = hora;
+                a.extra_data_dia = fncGeral.getDataFMT(data);
             })
 
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                Usuario.find().then((usuario)=>{
-                    //console.log("Listagem Realizada Usuário!")
-                    /*if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }*/
-                    res.render('atendimento/extra/extraLis', {extras: extra, usuarios: usuario, benes: bene, flash})
-        })})}).catch((err) =>{
+                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                        Sala.find().then((sala)=>{
+                            sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
+                            Terapia.find().then((terapia)=>{
+                                Conv.find().then((conv)=>{
+                                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                    //console.log("Listagem Realizada Usuário!")
+                                    /*if(resposta.sucesso == ""){
+                                        console.log(' objeto vazio');
+                                        flash.texto = ""
+                                        flash.sucesso = ""
+                                    } else {
+                                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                                        flash.texto = resposta.texto
+                                        flash.sucesso = resposta.sucesso
+                                    }*/
+                                    flash.texto = "Lista Realizada!";
+                                    flash.sucesso = "true";
+                                    res.render('atendimento/extra/extraLis', {extras: extra, benes: bene, terapeutas: terapeuta, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')

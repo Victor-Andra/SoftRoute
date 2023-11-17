@@ -76,7 +76,7 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 compareString: function (v1, v2, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (v1 === v2) {
                         return options.fn(this);
                     } else {
@@ -100,7 +100,7 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 dataInferior: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    console.log("/"+v1)///2023-11-14
+                    //console.log("/"+v1)///2023-11-14
                     function retornaData(data) {
                         if (data.includes("-")){
                             split = data.split('-');
@@ -123,17 +123,17 @@ const cookieParser = require('cookie-parser');
                     }
                 
                     var dataAtual = new Date();
-                    console.log("/"+retornaData(v1).getDate()+" = "+dataAtual.getDate())
+                    //console.log("/"+retornaData(v1).getDate()+" = "+dataAtual.getDate())
                     if (retornaData(v1).getDate() < dataAtual.getDate()) {
                         console.log("TRUE")
                         return options.fn(this);
                     } else {
-                        console.log("/false")
+                        //console.log("/false")
                         return options.inverse(this);
                     }
                 },
                 dataIgual: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    console.log("/"+v1)///2023-11-14
+                    //console.log("/"+v1)///2023-11-14
                     function retornaData(data) {
                         if (data.includes("-")){
                             split = data.split('-');
@@ -153,7 +153,7 @@ const cookieParser = require('cookie-parser');
                         console.log("TRUE")
                         return options.fn(this);
                     } else {
-                        console.log("/false")
+                        //console.log("/false")
                         return options.inverse(this);
                     }
                 },

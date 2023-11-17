@@ -28,6 +28,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
     agenda_selo :{ type: Boolean, require: false },
     agenda_atrazo :{ type: Boolean, require: false },
+    agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
     agenda_usucad :{ type: String, require: false }
 })
 
@@ -58,6 +59,7 @@ class Agenda{
         agenda_evolucao,
         agenda_copia,
         agenda_selo,
+        agenda_rel,
         agenda_usucad,
         ){
         this.agenda_data = agenda_data,
@@ -85,6 +87,7 @@ class Agenda{
         this.agenda_evolucao = agenda_evolucao,
         this.agenda_copia = agenda_copia,
         this.agenda_selo = agenda_selo,
+        this.agenda_rel = agenda_rel,
         this.agenda_usucad = agenda_usucad
     }
 }

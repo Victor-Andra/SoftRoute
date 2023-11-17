@@ -1510,11 +1510,11 @@ router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direcio
     fncEvoatend.listaEvoatend(req, res);
 })
 
-router.get('/area/evoatendabertolis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos sem evolução.
+router.get('/area/evoatendabertoLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos sem evolução.
     fncEvoatend.listaEvoatendaberto(req, res);
 })
 
-router.get('/area/evoatendfechadolis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos com evolução.
+router.get('/area/evoatendfechadoLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos com evolução.
     fncEvoatend.listaEvoatendfechado(req, res);
 })
 
@@ -1666,7 +1666,10 @@ router.post('/atendimento/extra/atualizar', fncGeral.IsAuthenticated, (req,res) 
 })
 //Lista todos os Extras
 router.get('/atendimento/extra/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
-    fncExtra.listaExtra(req,res);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncExtra.listaExtra(req,res,resposta);
 })
 //Lista todos os Extras
 router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
@@ -1682,7 +1685,7 @@ router.post('/atendimento/extra/lisctrlF', fncGeral.IsAuthenticated, (req,res) =
     fncExtra.filtraExtractrl(req,res);
 })
 //Deleta Extra Selecionado
-router.get('/atendimento/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Extra
+router.get('/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Extra
     fncExtra.deletaExtra(req,res);
 })
 

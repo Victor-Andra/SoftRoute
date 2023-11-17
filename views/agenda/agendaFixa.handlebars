@@ -40,6 +40,8 @@
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									document.getElementById(id).append(val);
+									let br = document.getElementById("quebraLinhas").cloneNode(true)
+									document.getElementById(id).append(br);
 								}
 						})
 								
@@ -53,12 +55,13 @@
 								let val = document.getElementById(valor).cloneNode(true);
 								val.id = val.id+"x";
 								document.getElementById(id).append(val);
+								let br = document.getElementById("quebraLinhas").cloneNode(true)
+								document.getElementById(id).append(br);
 						})
 					
 						dia_sala_tipo = dia_sala + "_Acao"
 						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
 							let id = "hora"+e.id;//td para receber o append
-
 								let val = e.cloneNode(true);
 								val.id = val.id+"x";
 								document.getElementById(id).append(val);
@@ -113,6 +116,7 @@
 					<div class="hidden" id="divCarrega" name="divCarrega">
 						<input id="766f69643132333435366964" value="&nbsp;" />
 						<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
+						<br id="quebraLinhas">
 						{{#each agendas}}
 							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Bene" value="{{agenda_beneid}}" />
 							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Tera" value="{{agenda_usuid}}" />

@@ -5972,11 +5972,10 @@ module.exports = {
             }
         })
         let isSemanal = "false";
-        let agendaTemp =  [];
-        let idsDel = [];
+        let agendaTempArr =  [];
+        let idsAgendasEx = [];
         let idTerapeuta = req.cookies['idUsu'];
         let aux = 1;
-        let is = false;
         let dtFill;
         let segunda;
         let terca;
@@ -6054,11 +6053,8 @@ module.exports = {
         Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
+            console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
-                if (e.agenda_temp == true){
-                    agendaTemp.push(e.agenda_tempId);
-                }
-                
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -6097,22 +6093,24 @@ module.exports = {
                         break;
                 }
             })
-            //T1 Trecho para remover agenda fixa quando ha temp.
-            agenda.forEach((ag)=>{
-                agendaTemp.forEach((id)=>{
-                    console.log("ag._id == id:  "+ag._id+" == "+id)
-                    if ((""+ag._id+"") == (""+id+"")){
-                        console.log("1");
-                        idsDel.push(ag._id);
+
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
                     }
                 })
+                if (manter == "true"){
+                    idsAgendasEx.push(a);
+                }
             })
-            console.log("agendalengthafter: "+agenda.length)
-            idsDel.forEach((d)=>{
-                agenda = agenda.filter((item) => item._id !== d);
-            })
-            console.log("agendalengthbefore: "+agenda.length)
-            //T1 Fim
            
             //console.log(agenda)
             Bene.find().then((bene)=>{
@@ -6372,7 +6370,7 @@ module.exports = {
         let quarta;
         let quinta;
         let sexta;
-        let idsSubs = [];
+        let agendaTempArr = [];
         let isSemanal = "true";
         let seg = fncGeral.getDateFromString(dataFinal, "ini");
         let sex = fncGeral.getDateFromString(dataFinal, "fim");
@@ -6441,6 +6439,7 @@ module.exports = {
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
+            console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -6479,17 +6478,24 @@ module.exports = {
                         console.log("erro");
                         break;
                 }
-                if(e.agenda_temp){
-                    idsAgendasEx.push(e.agenda_tempId.toString());
+            })
+
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
                 }
             })
-            console.log("agenda.length: "+agenda.length);
-            idsAgendasEx.forEach((i)=>{
-                agenda = agenda.filter(a => a.id != i);
-                //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
-                
-                let newAgenda = agenda.filter(a => a.id != i);
-                console.log("newAgenda.length: "+newAgenda.length);
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
+                    }
+                })
+                if (manter == "true"){
+                    idsAgendasEx.push(a);
+                }
             })
             //console.log(agenda)
             Bene.find().then((bene)=>{
@@ -11444,6 +11450,10 @@ module.exports = {
 
                                             break;
                                     }
+                                    
+                                    if (a.atend_rel != undefined && a.atend_rel != "undefined"){
+                                        newAtend.atend_rel = a.atend_rel
+                                    }
                                 } else {
                                     data = a.agenda_data;
                                     hor = data.getUTCHours();
@@ -11614,7 +11624,10 @@ module.exports = {
                                         debit_datacad : dataAtual
                                     })
                                     }
-                                    
+
+                                    if (a.atend_rel != undefined && a.atend_rel != "undefined"){
+                                        newAtend.atend_rel = a.atend_rel
+                                    }
                                 }
                                 //console.log("newAtend:"+newAtend)
                                 nextNum = nextNum ++;
@@ -11656,16 +11669,12 @@ module.exports = {
         let seg = new Date(req.body.dataFil);
         let sex = new Date(req.body.dataFil);
         let agendaSub;
-        let newAtend;
-        let newCre;
-        let newDeb;
-        let convCreCpfCnpj;
+        let newExtra;
         let convcreTes;
         let convdebTes;
         let nextNum;
         let teraContrato;
         let roberta;
-        let atend;
         let agendacreTes;
         let agendadebTes;
         let hora;
@@ -11734,8 +11743,8 @@ module.exports = {
                     })
                 })
                 //console.log(convdeb)
-                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agendaFixa)=>{
-                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, agenda_extra: false}).then((agendaSemanal)=>{
+                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: true}).then((agendaFixa)=>{
+                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, agenda_extra: true}).then((agendaSemanal)=>{
                     //-------------------------
                     //console.log(agenda)
                     
@@ -11774,7 +11783,7 @@ module.exports = {
                                     }
 
                                     hora = hor+":"+min;
-
+                                    console.log("agendaSub.agenda_categoria: "+agendaSub.agenda_categoria)
                                     switch (agendaSub.agenda_categoria){
                                         case "Apoio"://ANALISE
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
@@ -11807,13 +11816,13 @@ module.exports = {
                                                 }
                                             })
 
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Apoio",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
                                                 extra_convid : a.agenda_convid,//
                                                 extra_usuid : "Usuario Atual",
-                                                extra_data: a.agenda_data,//
+                                                extra_data : a.agenda_data,//
                                                 extra_hora : hora,//
                                                 extra_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
                                                 extra_terapiaid : a.agenda_terapiaid,//Musica
@@ -11862,7 +11871,7 @@ module.exports = {
                                                 }
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Extra",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -11898,7 +11907,7 @@ module.exports = {
                                                 }
                                             })
                                             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Falta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 extra_beneid : a.agenda_beneid,//Faltou sem aviso prévio
@@ -11955,7 +11964,7 @@ module.exports = {
                                                 }
                                             })
 
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Falta Justificada",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 extra_beneid : a.agenda_beneid,//Faltou e outro foi alocado
@@ -12005,7 +12014,7 @@ module.exports = {
                                                 }
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Glosa",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -12054,7 +12063,7 @@ module.exports = {
                                                 }
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Pais",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -12109,7 +12118,7 @@ module.exports = {
                                                 }
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Substituição",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -12169,7 +12178,7 @@ module.exports = {
                                             //console.log("convdebval:"+convdebval)
                                             //console.log("convcreval:"+convcreval)
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -12225,7 +12234,7 @@ module.exports = {
                                                 }
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Supervisão",//Para quando o convenio não paga o que deve
                                                 extra_beneid : a.agenda_beneid,//
@@ -12255,7 +12264,7 @@ module.exports = {
                                                 roberta = usu;
                                             })
             
-                                            newAtend = new Extra({
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Roberta Disponivel",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 extra_beneid : a.agenda_beneid,//
@@ -12316,8 +12325,8 @@ module.exports = {
                                                     convdebval = "0,00";
                                                 }
                                             })
-            
-                                            newAtend = new Extra({
+                                            
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 extra_beneid : agendaSub.agenda_beneid,//
@@ -12373,8 +12382,8 @@ module.exports = {
                                                     convdebval = "0,00";
                                                 }
                                             })
-            
-                                            newAtend = new Extra({
+                                            
+                                            newExtra = new Extra({
                                                 extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 extra_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                 extra_beneid : a.agenda_beneid,//
@@ -12398,6 +12407,7 @@ module.exports = {
                                             break;
                                     }
                                 } else {
+                                    
                                     data = a.agenda_data;
                                     hor = data.getUTCHours();
                                     min = data.getMinutes();
@@ -12442,26 +12452,26 @@ module.exports = {
                                                 convdebval = "0,00";
                                             }
                                         })
-        
-                                        newAtend = new Extra({
-                                            atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                            atend_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
-                                            atend_beneid : a.agenda_beneid,//
-                                            atend_convid : a.agenda_convid,//
-                                            atend_usuid : "Usuario Atual",
-                                            atend_atenddata : a.agenda_data,//
-                                            atend_atendhora : hora,//
-                                            atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
-                                            atend_terapiaid : a.agenda_terapiaid,//Musica
-                                            atend_salaid : a.agenda_salaid,//
-                                            atend_valorcre : convcreval,//Convenio não paga
-                                            atend_valordeb : convdebval,//Paga ao musico
-                                            atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
-                                            atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
-                                            atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                            atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
-                                            atend_num : nextNum,
-                                            atend_datacad : dataAtual.toISOString()
+                                        
+                                        newExtra = new Extra({
+                                            extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                            extra_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
+                                            extra_beneid : a.agenda_beneid,//
+                                            extra_convid : a.agenda_convid,//
+                                            extra_usuid : "Usuario Atual",
+                                            extra_data : a.agenda_data,//
+                                            extra_hora : hora,//
+                                            extra_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                            extra_terapiaid : a.agenda_terapiaid,//Musica
+                                            extra_salaid : a.agenda_salaid,//
+                                            extra_valorcre : convcreval,//Convenio não paga
+                                            extra_valordeb : convdebval,//Paga ao musico
+                                            extra_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
+                                            extra_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
+                                            extra_mergevalorcre : convcreval,//Recebe pela terapia ABA
+                                            extra_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                            extra_num : nextNum,
+                                            extra_datacad : dataAtual.toISOString()
                                         });
 
                                         newCre = "";
@@ -12497,34 +12507,34 @@ module.exports = {
                                         }
                                     })
     
-                                    newAtend = new Extra({
-                                        atend_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                        atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                        atend_beneid : a.agenda_beneid,//
-                                        atend_convid : a.agenda_convid,//
-                                        atend_usuid : "Usuario Atual",
-                                        atend_atenddata : a.agenda_data,//
-                                        atend_atendhora : hora,//
-                                        atend_terapeutaid : a.agenda_usuid,//
-                                        atend_terapiaid : a.agenda_terapiaid,//
-                                        atend_salaid : a.agenda_salaid,//
-                                        atend_valorcre : convcreval,//
-                                        atend_valordeb : convdebval,//
-                                        atend_num : nextNum,
-                                        atend_datacad : dataAtual.toISOString()
+                                    newExtra = new Extra({
+                                        extra_org : "Padrão",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                        extra_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                        extra_beneid : a.agenda_beneid,//
+                                        extra_convid : a.agenda_convid,//
+                                        extra_usuid : "Usuario Atual",
+                                        extra_data : a.agenda_data,//
+                                        extra_hora : hora,//
+                                        extra_terapeutaid : a.agenda_usuid,//
+                                        extra_terapiaid : a.agenda_terapiaid,//
+                                        extra_salaid : a.agenda_salaid,//
+                                        extra_valorcre : convcreval,//
+                                        extra_valordeb : convdebval,//
+                                        extra_num : nextNum,
+                                        extra_datacad : dataAtual.toISOString()
                                     });
 
                                     
                                     }
                                 }
-                                //console.log("newAtend save");
-                                this.geraExtra(newAtend);
+                                //console.log("newExtra save");
+                                this.geraExtra(newExtra);
                             }
-                            })
                         })
                     })
-                //})
                 })
+            //})
+            })
             console.log("END CONVERT");
         }).catch((err)=>{
             console.log(err)

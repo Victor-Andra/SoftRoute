@@ -2009,8 +2009,8 @@ module.exports = {
                                     terapeutaAtend = atend.atend_terapeutaid;
                                     break;
                                 case "SubstitutoFixo":
-                                    terapiaAtend = atend.atend_mergeterapiaid;
-                                    terapeutaAtend = atend.atend_mergeterapeutaid;
+                                    terapiaAtend = atend.atend_terapiaid;
+                                    terapeutaAtend = atend.atend_terapeutaid;
                                     break;
                                 default:
                                     terapiaAtend = atend.atend_terapiaid;
@@ -2387,6 +2387,9 @@ module.exports = {
                                             terapiaAtend = atend.atend_terapiaid;
                                             debVal = atend.atend_valordeb;
                                             break;
+                                        case "SubstitutoFixo":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            debVal = atend.atend_valordeb;
                                         default:
                                             terapiaAtend = atend.atend_terapiaid;
                                             debVal = atend.atend_valordeb;

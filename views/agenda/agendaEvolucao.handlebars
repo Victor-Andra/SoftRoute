@@ -110,7 +110,7 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
-													<div id="divEvolucao" style="display: none;"  >
+													<div id="divEvolucao">
 														<div class="col-sm-6">													
 															<label> Evolução</label>
 															<div class="form-group">
@@ -119,14 +119,14 @@
 																</div>
 															</div>
 															<label class="pos-rel">
-																	{{#isTrue selo}}
-																	<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
-																	<b>Evolução Finalizada!</b>
-																	{{else}}
-																	<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
-																	Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
-																	{{/isTrue}}
-																</label>
+																{{#isTrue selo}}
+																<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+																<b>Evolução Finalizada!</b>
+																{{else}}
+																<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+																Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+																{{/isTrue}}
+															</label>
 														</div>
 													</div>
 												</div>
