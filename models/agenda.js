@@ -24,6 +24,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_tempId :{ type: ObjectId, required: false },
     agenda_tempmotivo :{ type: String, required: false },
     agenda_extra :{ type: Boolean, required: false},
+    agenda_cobrarextra :{ type: Boolean, required: false},
     agenda_evolucao :{ type: String, require: false },
     agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
     agenda_selo :{ type: Boolean, require: false },
@@ -56,6 +57,7 @@ class Agenda{
         agenda_tempId,
         agenda_tempmotivo,
         agenda_extra,
+        agenda_cobrarextra,
         agenda_evolucao,
         agenda_copia,
         agenda_selo,
@@ -84,6 +86,7 @@ class Agenda{
         this.agenda_tempId = agenda_tempId,
         this.agenda_tempmotivo = agenda_tempmotivo,
         this.agenda_extra = agenda_extra,
+        this.agenda_cobrarextra = agenda_cobrarextra,
         this.agenda_evolucao = agenda_evolucao,
         this.agenda_copia = agenda_copia,
         this.agenda_selo = agenda_selo,
@@ -163,6 +166,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_obs : req.body.agendaObs ,
             agenda_temp : false ,
             agenda_extra: extra ,
+            agenda_cobrarextra : req.body.agendaCobrarextra  ,
             agenda_selo : false ,
             agenda_copia: false ,
             agenda_usucad : usuarioAtual,
@@ -557,7 +561,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 //console.log("1")
             } else if (teraidx == "-" && tpiaidx != "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
-                //console.log("2")
+                console.log("2")
             } else if (teraidx != "-" && tpiaidx == "-" && convidx == "-"){
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
                 //console.log("3")

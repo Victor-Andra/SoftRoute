@@ -389,7 +389,8 @@
 													<!-- <th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th> -->
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Extra</th>
-													
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrar</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Foi cobrado?</th>
 													<th tabindex="7">Ação</th>
 												</tr>
 											</thead>
@@ -441,7 +442,12 @@
 															{{/each}}
 														
 															<td>{{agenda_extra}}</td>
-															
+															<td>{{agenda_cobrarextra}}</td>
+															{{#ifEqual this.extra_exportado "true"}}
+																<td><span class="label label-sm label-warning arrowed">{{extra_exportado}}</span></td>
+																{{else}}
+																<td>{{extra_exportado}}</td>
+															{{/ifEqual}}
 															<td>
 																<div class="action-buttons">
 																	<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/edi/{{_id}}">
@@ -495,7 +501,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null,null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,
