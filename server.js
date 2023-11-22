@@ -64,7 +64,7 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 compareThis: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
-                    //console.log("/"+v1.toString()+"="+v2.toString()+"/")
+                    console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){
                         return options.inverse(this);
                     } else {

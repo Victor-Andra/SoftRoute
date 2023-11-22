@@ -5,7 +5,7 @@ const AnamnSchema = mongoose.Schema({
     anamn_id:{ type: ObjectId, required: false },
     anamn_data: { type: String, required: false }, //Ok
     anamn_hora: { type: String, required: false }, //Ok
-    anamn_beneid: { type: ObjectId, required: false }, //Ok
+    anamn_beneid: { type: ObjectId, required: true }, //Ok
     anamn_benenome: { type: String, required: false }, //Ok
     anamn_beneapelido: { type: String, required: false }, //Ok
     anamn_benedatanasc: { type: String, required: false }, //Ok

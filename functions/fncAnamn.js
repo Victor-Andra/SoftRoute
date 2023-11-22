@@ -177,7 +177,8 @@ module.exports = {
             //console.log("anamn:");
             //console.log(anamn);
             //console.log("Listagem Realizada das Anamneses!")
-                Bene.findById(req.params.id).then((bene) =>{
+                Bene.find().then((bene) =>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")

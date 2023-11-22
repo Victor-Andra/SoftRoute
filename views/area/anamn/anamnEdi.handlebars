@@ -50,7 +50,6 @@
 				function carregaBody(){
 					//document.getElementById("anamnDatacad").value = new Date();
 					//Rotinas
-					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 					document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
 					//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
 					document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
@@ -570,6 +569,9 @@
 					console.log(fulldate)
 					document.getElementById("anamnBenedatanasc").value = fulldate;
 					document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
+					if (document.getElementById("anamnBenenomeEdi").value != ""){
+						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
+					}
 				}
 			</script>
 	</head>
@@ -625,7 +627,6 @@
 						<input id="anamnDatacad" name="anamnDatacad" />
 
 						<!-- Dados carregados -->
-						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
 						<input id="anamnBeneidEdi" name="anamnBeneidEdi" value="{{anamn.anamn_beneid}}"/>
 						
 						<input id="anamnBenedatanascEdi" name="anamnBenedatanascEdi" value="{{anamn.anamn_benedatanasc}}"/>
@@ -1128,7 +1129,8 @@
 							<input type="text" id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
 							<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
 							<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
-						{{/each}},
+						{{/each}}
+						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -1301,18 +1303,6 @@
 													<br>
 												</div>
 												<div class="col-xs-6">
-													<div class="row">
-														<div class="col-xs-12 col-sm-6">
-															<label > Nome </label><!--Bene id e nome do beneficiário-->
-															<div class="row ">
-																<div class="input-group" >
-																	<div class="col-sm-4">
-																		<input type="text" name="anamnBenenome" id="anamnBenenome" placeholder="" class="form-control" style="width: 500px;" />
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">

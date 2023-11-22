@@ -61,6 +61,7 @@ class Agenda{
         agenda_evolucao,
         agenda_copia,
         agenda_selo,
+        agenda_atrazo,
         agenda_rel,
         agenda_usucad,
         ){
@@ -90,6 +91,7 @@ class Agenda{
         this.agenda_evolucao = agenda_evolucao,
         this.agenda_copia = agenda_copia,
         this.agenda_selo = agenda_selo,
+        this.agenda_atrazo = agenda_atrazo,
         this.agenda_rel = agenda_rel,
         this.agenda_usucad = agenda_usucad
     }

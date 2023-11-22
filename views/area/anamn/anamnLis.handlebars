@@ -90,8 +90,16 @@
 																<input type="checkbox" class="ace" />
 																<span class="lbl"></span>
 															</label>
-														</td>
-														<td>{{anamn_benenome}}</td>
+														</td><td>
+														{{#compareThis anamn_benenome ""}}
+															{{#each ../benes}}<!-- Ok -->
+																{{#ifEqual this._id ../anamn_beneid}}
+																	{{bene_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														{{else}}
+															{{anamn_benenome}}
+														{{/compareThis}}</td>
 														<td>{{anamn_benedatanasc}}</td>
 														{{#each ../usuarios}}<!-- Ok -->
 															{{#ifEqual this._id ../anamn_terapeutaid}}
