@@ -9614,9 +9614,11 @@ module.exports = {
                 isAgendaTerapeuta = true;
             }
         })
-        console.log("isAgendaTerapeuta:"+isAgendaTerapeuta);
         let flash = new Resposta()
-        let resultado;
+        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
+            flash.sucesso = resposta.sucesso;
+            flash.texto = resposta.texto;
+        }
         let id = req.params.id;
         if (id == '' || id == undefined || id == 'undefined' || id == null){
             id = req.body.id
@@ -9645,7 +9647,7 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo})
+                                    res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo,flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -9661,7 +9663,10 @@ module.exports = {
                 isAgendaTerapeuta = true;
             }
         })
-
+        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
+            flash.sucesso = resposta.sucesso;
+            flash.texto = resposta.texto;
+        }
         let id;
         if(req.params.id){
             id = req.params.id;
@@ -9693,7 +9698,7 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo})
+        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -9702,6 +9707,7 @@ module.exports = {
     atualizaEvolucao(req, res){//EditaAgenda
         let flash = new Resposta()
         let resultado;
+        let atrazo = req.body.agendaAtrazo;
         try{
             agendaClass.evolucao(req,res).then((res)=>{
                 //console.log("Atualização Realizada!")
@@ -9721,9 +9727,9 @@ module.exports = {
                     flash.sucesso = "true"
                     //Volta para a agenda de listagem
                     if (req.body.agendaTemp == "true"){
-                        this.carregaEvolucaoTemp(req,res);
+                        this.carregaEvolucaoTemp(req,res,atrazo,flash);
                     } else {
-                        this.carregaEvolucao(req,res);
+                        this.carregaEvolucao(req,res,atrazo,flash);
                     }
                     //this.carregaAgendaCadastro(req,res,flash);//como tava antes
                 }else{

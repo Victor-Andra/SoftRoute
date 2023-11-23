@@ -74,6 +74,36 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
@@ -102,6 +132,28 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
+												<div id="divEvolucao" style="display: none;" class="row" >
+													<div class="col-xs-12 col-sm-12">													
+														<label> Evolução</label>
+														<div class="form-group">
+															<div class="col-xs-12 col-sm-12">
+																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">													
+														<label class="pos-rel">
+															{{#isTrue selo}}
+															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+															<b>Evolução Finalizada!</b>
+															{{else}}
+															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+															{{/isTrue}}
+														</label>
+													</div>
+												</div>
+												<hr>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<label for="id-date-picker-1">Data Agendamento</label>
@@ -258,28 +310,6 @@
 														</div>
 													</div>
 												</div>
-												
-												<div id="divEvolucao" style="display: none;" class="row" >
-													<div class="col-xs-12 col-sm-12">													
-														<label> Evolução</label>
-														<div class="form-group">
-															<div class="col-xs-12 col-sm-12">
-																<textarea {{#isTrue selo}} readonly="true" {{/isTrue}} style="width: 400px;" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-6">													
-														<label class="pos-rel">
-															{{#isTrue selo}}
-															<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
-															<b>Evolução Finalizada!</b>
-															{{else}}
-															<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
-															Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
-															{{/isTrue}}
-														</label>
-													</div>
-												</div>
 											</div>
 										</div>
 									</div>
@@ -298,9 +328,13 @@
 										<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
 										<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
 										<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
-										<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda.agenda_tempmotivo}}" />-->
 										<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
 										<input id="agendaAtrazo" name="agendaAtrazo" value="{{atrazo}}" />
+										<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda.agenda_tempmotivo}}" />-->
+										<!--Filtros tela anterior-->
+										{{#each filtros}}
+											<input id="{{nome}}" name="{{nome}}" value="{{valor}}" /> 
+										{{/each}}
 									</div>
 									<div class="space-4"></div>							
 									<div class="space-4"></div>

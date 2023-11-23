@@ -1,6 +1,15 @@
 const { RespostaModel } = require("../models/resposta");
 
-module.exports = {
+class Filtros{
+    constructor(
+        nome,
+        valor
+        ){
+        this.nome = nome,
+        this.valor = valor
+    }
+}
+module.exports = {Filtros,
     //Adiciona 0 A datas do sistema.
     adicionaZero(numero){
         if (numero <= 9) 

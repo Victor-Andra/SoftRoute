@@ -392,11 +392,12 @@
 											<thead>
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Hora</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="70px;">Hora</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="70x;">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -416,35 +417,46 @@
 															{{/ifEqual}}
 														{{/each}}
 														<td>{{agenda_evolucao}}</td>
-														{{#compareThis agenda_selo 'true'}}
-																<td>Sim</td>
-															{{else}}
-																<td>Não
+														<td>
+															{{#compareThis agenda_selo 'true'}}
+																Sim<td>-</td>
+																{{else}}
+																Não
+																<td>
 																	{{#dataInferior agenda_data_dia}}
 																		{{#isTrue agenda_temp}}
-																			<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
-																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																			</a>
+																			<div class="action-buttons">
+																				<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
+																					<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																				</a>
+																			</div>
 																		{{else}}
+																		<div class="action-buttons">
 																			<a class="red" name="acaoEvolucaoComAtraso" id="acaoEvolucaoComAtraso" onclick="javascript:evolucaoComAtraso('{{_id}}');">
 																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
 																			</a>
+																		</div>
 																		{{/isTrue}}
 																	{{else}}
 																		{{#dataIgual agenda_data_dia}}
 																			{{#isTrue agenda_temp}}
+																			<div class="action-buttons">
 																				<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
 																					<i class="ace-icon fa fa-pencil bigger-130"></i>
 																				</a>
+																			</div>
 																			{{else}}
+																			<div class="action-buttons">
 																				<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEmDia('{{_id}}');">
 																					<i class="ace-icon fa fa-pencil bigger-130"></i>
 																				</a>
+																			</div>
 																			{{/isTrue}}
 																		{{/dataIgual}}
 																	{{/dataInferior}}
 																</td>
-														{{/compareThis}}
+															{{/compareThis}}
+														</td>
 													</tr>
 												{{/each}}
 											</tbody>
@@ -496,7 +508,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [ null, null, null,null, null, null, ],
+			"aoColumns": [ null, null, null,null, null, null, null,],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

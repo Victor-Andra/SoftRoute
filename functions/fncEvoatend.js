@@ -187,6 +187,7 @@ module.exports = {
         })
     },
     filtraEvoatend(req, res){
+        let filtros = new fncGeral.Filtros();
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -397,7 +398,7 @@ module.exports = {
                 Bene.find({bene_status:"Ativo"}).then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agenda, terapias: terapia,usuarios: usuario, benes: bene, flash})
+                            res.render("area/evol/evoatendLis", {agendas: agenda, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
