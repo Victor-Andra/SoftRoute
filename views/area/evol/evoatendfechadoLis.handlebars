@@ -288,7 +288,6 @@
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
 											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
-												<option value="2022">2022</option>
 												<option value="2023">2023</option>
 												<option value="2024">2024</option>
 												<option value="2025">2025</option>
@@ -389,16 +388,17 @@
 										</div>
 										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 										</div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info" style="font-size: 11px;">
 											<thead>
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Hora</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapeuta</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Concluída</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Ação</th>
 													
 												</tr>
 											</thead>
@@ -428,6 +428,7 @@
 														</td>
 														<td>{{agenda_evolucao}}</td>
 														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
+														<td></td>
 													</tr>
 												{{/each}}
 											</tbody>
@@ -479,7 +480,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

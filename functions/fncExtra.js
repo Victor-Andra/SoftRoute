@@ -444,7 +444,6 @@ module.exports = {
         })
     },
 
-    
     carregaExtraedi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         Extra.findById(req.params.id).then((extra) =>{console.log("ID: "+extra._id)

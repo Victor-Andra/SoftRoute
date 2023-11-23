@@ -55,7 +55,7 @@ const Resposta = mongoose.model("tb_resposta")
 module.exports = {
     listaEvoatend(req, res){
         let flash = new Resposta();
-        let isAgendaTerapeuta = false;
+        let agendaTempArr = [];
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -64,10 +64,8 @@ module.exports = {
             }
         })
         let idTerapeuta = req.cookies['idUsu'];
-        let carregaFiltro = "false";
         let idsAgendasEx = [];
         let aux = 1;
-        let agendaTemp =  [];
         let seg = new Date();
         seg.setHours(0);
         seg.setMinutes(0);
@@ -125,7 +123,9 @@ module.exports = {
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 e.agenda_hora = hora+":"+min;
-                //console.log("aux:"+aux)
+                e.agenda_aux = aux;
+                aux++;
+
                 switch (dat.getUTCDay()){
                     case 0:
                         e.agenda_data_semana = "dom"
@@ -154,13 +154,32 @@ module.exports = {
                         break;
                 }
             })
+
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
+                    }
+                })
+                console.log("manter: "+manter)
+                if (manter == "true"){
+                    idsAgendasEx.push(a);
+                }
+            })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Bene.find({bene_status:"Ativo"}).then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agenda, terapias: terapia,usuarios: usuario, benes: bene, flash})
+                            res.render("area/evol/evoatendLis", {agendas: idsAgendasEx, terapias: terapia,usuarios: usuario, benes: bene, flash})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -450,9 +469,9 @@ module.exports = {
         let flash = new Resposta();
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                res.render('area/evol/evoatendabertoLis', { terapeutas: usuario, flash})
+            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                res.render('area/evol/evoatendabertoLis', { terapeutas: usuario, benes: bene, flash})
             })
         }).catch((err) =>{
             console.log(err)
@@ -661,8 +680,10 @@ module.exports = {
         //console.log('listando Extraeses')
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            res.render('area/evol/evoatendfechadoLis', {terapeutas: usuario, flash})
-        }).catch((err) =>{
+                Bene.find().then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            res.render('area/evol/evoatendfechadoLis', {terapeutas: usuario, benes: bene, flash})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')

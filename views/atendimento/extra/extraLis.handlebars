@@ -380,18 +380,19 @@
 														</label>
 													</th>
 													
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênico</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênico</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<!-- <th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th> -->
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Extra</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrar</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Extra</th>
 													
-													<th tabindex="7">Ação</th>
+													<th tabindex="10">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -422,25 +423,23 @@
 															{{/each}}
 															<td>{{extra_org}}</td>
 															<td>{{extra_categoria}}</td>
+															
 															{{#each ../terapias}}<!-- Ok -->
 																{{#ifEqual this._id ../extra_terapiaid}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-															<!--
-															{{#each ../usuarios}}
-																{{#ifEqual this._id ../extra_usuid}}
-																	<td>{{usuario_nome}}</td> 	
-																{{/ifEqual}}
-															{{/each}}
-															-->
+															
+															
+															<td>{{usuario_nome}}</td> 	
+															
 
 															{{#each ../salas}}
 																{{#ifEqual this._id ../extra_salaid}}
 																	<td>{{sala_nome}}</td> <!-- Nome Usuário que é Terapeuta -->	
 																{{/ifEqual}}
 															{{/each}}
-														
+															<td>{{extra_cobrarextra}}</td>
 															<td>{{extra_extra}}</td>
 															
 															<td>
@@ -496,7 +495,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,
