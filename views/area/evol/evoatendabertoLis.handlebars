@@ -393,10 +393,10 @@
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Hora</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapeuta</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapia</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Beneficiário</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" width="300px;">Terapeuta</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
 													
 												</tr>
@@ -408,7 +408,7 @@
 														<td>{{agenda_hora}}</td>
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../agenda_terapiaid}}
-																<td>{{terapia_nome}}</td>
+																<td>{{terapia_nomecid}}</td>
 															{{/ifEqual}}
 														{{/each}}
 														{{#each ../usuarios}}<!-- Ok -->
@@ -421,14 +421,15 @@
 																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														
+														<td>
+															{{#each ../terapeutas}}
+																{{#ifEqual this._id ../agenda_usuid}}
+																	{{usuario_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
 														<td>{{agenda_evolucao}}</td>
-														{{#ifEqual agenda_selo 'false'}}
-																<td>Não</td>
-															{{else}}
-																<td>Sim</td>
-														{{/ifEqual}}
-														
+														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
 													</tr>
 												{{/each}}
 											</tbody>

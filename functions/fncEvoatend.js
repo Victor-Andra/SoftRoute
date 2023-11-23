@@ -449,10 +449,10 @@ module.exports = {
     listaEvoatendaberto(req, res, resposta){ //Lista evoluções Agendadas em aberto ou seja evolução não realizada
         let flash = new Resposta();
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-            usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                res.render('area/evol/evoatendabertoLis', { usuarios: usuario, flash})
+                res.render('area/evol/evoatendabertoLis', { terapeutas: usuario, flash})
             })
         }).catch((err) =>{
             console.log(err)
@@ -642,14 +642,14 @@ module.exports = {
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                         Sala.find().then((sala)=>{
                             sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendabertoLis', {agendas: agenda, benes: bene, usuarios: usuario, salas: sala, terapias: terapia, convs: conv, flash})
+                                    res.render('area/evol/evoatendabertoLis', {agendas: agenda, benes: bene, terapeutas: usuario, salas: sala, terapias: terapia, convs: conv, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -660,7 +660,8 @@ module.exports = {
         let flash = new Resposta();
         //console.log('listando Extraeses')
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
-            res.render('area/evol/evoatendfechadoLis', {usuarios: usuario, flash})
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            res.render('area/evol/evoatendfechadoLis', {terapeutas: usuario, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -810,6 +811,7 @@ module.exports = {
         Agenda.find(busca).then((agenda) =>{
             console.log("agenda: "+agenda.length)
             agenda.forEach((e)=>{
+                console.log("agendaselo:"+e.agenda_selo)
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = fncGeral.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
@@ -850,13 +852,14 @@ module.exports = {
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                         Sala.find().then((sala)=>{
                             sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendfechadoLis', {agendas: agenda,usuarios: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, flash})
+                                    res.render('area/evol/evoatendfechadoLis', {agendas: agenda,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")

@@ -32,7 +32,7 @@ module.exports = {
         Aviso.find().then((aviso) =>{
             console.log("Listagem Realizada dos Diários de Aviso!")
             Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
             res.render('dash/avisoLis', {avisos: aviso, Usuarios: usuario})
         })}).catch((err) =>{
             console.log(err)
@@ -55,7 +55,7 @@ module.exports = {
     carregaAvisoEdi(req,res){
         Aviso.find().then((aviso) =>{
             Usuario.find().then((usuario)=>{
-                usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                                 res.render("dash/avisoEdi", {avisos: aviso, usuarios: usuario})
         })}).catch((err) =>{
             console.log(err)

@@ -245,7 +245,7 @@ module.exports = {
     },
     carregaCadastrarchave(req,res){
         Usuario.find().then((usuario)=>{
-            usuario.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o Usuário por nome 
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o Usuário por nome 
             res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
         }).catch((err) =>{
             console.log(err)
