@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Impostos</title>
+		<script>
+		
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("impostoBeneid").value;
+
+				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+			
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Impostos
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Cadastro e Índice Geral dos Impostos
+							</small>
+						</h1>
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<!-- /.importante Id de indice-->
+							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+							
+						</div>
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/financeiro/imposto/add" method="POST">
+								<div class="col-xs-12">
+
+								
+									<div class="col-sm-12" name="infoad" id="infoad"><!-- Informações do Imposto -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="red ace-icon fa fa-paw bigger-110"></i>
+													Informações dos impostos
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																Aqui você cadastra os impostos que vão ser imputados para os planos e beneficiários para emissão das Notas Fiscais
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12" >
+															<label>Nome do Imposto:</label>
+															<div class="row">
+																<div class="col-xs-12">
+																	<input name="impostoNome" id="impostoNome" style="font-size: 12px"  class="form-control" />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-6 col-sm-6">
+															<label>Tipo Imposto::</label>
+															<div class="row">
+																<div class="col-sm-9">
+																	<select id="impostoEsfera" name="impostoEsfera" class="chosen-select" >
+																		<option value="-">-</option>
+																		<option value="Federal">Federal</option>
+																		<option value="Estadual">Estadual</option>
+																		<option value="Municipal">Municipal</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-6 col-sm-6">
+															<label>Alíquota Padrão:</label>
+															<div class="row">
+																<div class="col-xs-6  col-sm-6">
+																	<div class="input-group">
+																		<input type="text" name="impostoAlqpad" id="impostoAlqpad" class="form-control"  />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+													<div class="col-xs-6 col-sm-6">
+															<label>Status:</label>
+															<div class="row">
+																<div class="col-sm-9">
+																	<select id="impostoStatus" name="impostoStatus" class="chosen-select" >
+																		<option value="true">Ativo</option>
+																		<option value="false">Inativo</option>
+																		
+																	</select>
+																</div>
+															</div>
+														</div>
+													
+													
+													
+														<div class="col-sm-4">
+															<label for="id-date-picker-1">Data do imposto:</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="impostoDatacad" id="impostoDatacad" type="date" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+													
+												</div>	
+											</div>	
+										</div>
+									</div>
+									
+									<div class="col=xs=12">
+										<hr>
+									</div>
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

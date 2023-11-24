@@ -3,78 +3,27 @@ const ObjectId = mongoose.Types.ObjectId
 //essa tabela devera ser dropada e inseridos novos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
 //da criação da nf no site da prefeitura de recife.
 const CreditSchema = mongoose.Schema({
-    credit_atendnum :{ 
-        type: Number, 
-        required: false 
-    },
-    credit_categoria :{ 
-        type: String, 
-        required: false 
-    },
-    credit_terapiaid :{ //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
-        type: ObjectId, 
-        required: false 
-    },
-    credit_terapeutaid :{ //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
-        type: ObjectId, 
-        required: false 
-    },
-    credit_convid :{ //Chave estrangeira que vem da tabela Conv (Não é Obrigatório)
-        type: ObjectId, 
-        required: false 
-    },
-    credit_nome :{ 
-        type: String, 
-        required: false 
-    },
-    credit_cpfcnpj :{ 
-        type: String, 
-        required: false 
-    },
-    credit_dataevento :{ 
-        type: Date, 
-        required: false 
-    },
-    credit_datavenci :{ 
-        type: Date, 
-        required: false 
-    },
-    credit_datapg :{ 
-        type: Date, 
-        required: false 
-    },
-    credit_valorprev :{ 
-        type: String, 
-        required: false 
-    },
-    credit_juros :{ 
-        type: String, 
-        required: false 
-    },
-    credit_multa :{ 
-        type: String, 
-        required: false 
-    },
-    credit_adianta :{ 
-        type: String, 
-        required: false 
-    },
-    credit_valorpg :{ 
-        type: String, 
-        required: false 
-    },
-    credit_pg :{ 
-        type: String, 
-        required: false 
-    },
-    credit_datacad :{ 
-        type: String, 
-        required: false 
-    },
-    credit_dataedi :{ 
-        type: String, 
-        required: false 
-    }
+    credit_atendnum :{ type: Number, required: false },
+    credit_categoria :{ type: String, required: false },
+    //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
+    credit_terapiaid :{ type: ObjectId, required: false },
+    //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
+    credit_terapeutaid :{ type: ObjectId, required: false },
+    //Chave estrangeira que vem da tabela Conv (Não é Obrigatório)
+    credit_convid :{ type: ObjectId, required: false },
+    credit_nome :{ type: String, required: false },
+    credit_cpfcnpj :{ type: String, required: false },
+    credit_dataevento :{ type: Date, required: false },
+    credit_datavenci :{ type: Date, required: false },
+    credit_datapg :{ type: Date, required: false },
+    credit_valorprev :{ type: String, required: false },
+    credit_juros :{ type: String, required: false },
+    credit_multa :{ type: String, required: false },
+    credit_adianta :{ type: String, required: false },
+    credit_valorpg :{ type: String, required: false },
+    credit_pg :{ type: String, required: false },
+    credit_datacad :{ type: String, required: false },
+    credit_dataedi :{ type: String, required: false }
     
     
 })

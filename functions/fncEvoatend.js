@@ -614,7 +614,7 @@ module.exports = {
                 busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_beneid: req.body.atendBeneficiario, agenda_selo: false };
                 break;
             case "Terapeuta":
-                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_terapeutaid: req.body.atendTerapeuta, agenda_selo: false };
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: req.body.atendTerapeuta, agenda_selo: false };
                 break;
             default:
                 busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: false }
@@ -823,7 +823,7 @@ module.exports = {
                 busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_beneid: req.body.atendBeneficiario, agenda_selo: true };
                 break;
             case "Terapeuta":
-                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_terapeutaid: req.body.atendTerapeuta, agenda_selo: true };
+                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: req.body.atendTerapeuta, agenda_selo: true };
                 break;
             default:
                 busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_selo: true }

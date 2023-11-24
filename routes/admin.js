@@ -281,6 +281,11 @@ const correnteClass = require("../models/corrente")
 const Corrente = mongoose.model("tb_corrente")
 const fncCorrente = require("../functions/fncCorrente")
 
+//Imposto
+const ImpostoClass = require("../models/imposto")
+const Imposto = mongoose.model("tb_imposto")
+const fncImposto = require("../functions/fncImposto")
+
 //RESPOSTA
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
@@ -1710,7 +1715,7 @@ router.post('/area/laudo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//di
 router.get('/area/laudo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncLaudo.listaLaudo(req,res);
 })
-//Lista todos os Laudos
+//Filtro da Lista dos Laudos
 router.post('/area/laudo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Laudo, com bene e data.
     fncLaudo.filtraLaudo(req,res);
 })
@@ -2171,6 +2176,36 @@ router.get('/convenio/conv/relatendconvval', fncGeral.IsAuthenticated, (req,res)
 
 
 //Menu Financeiro
+
+//Menu Impostos **   
+//Carrega Cadastro de Impostos 
+router.get('/financeiro/imposto/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
+    fncImposto.carregaImposto(req,res);
+})
+//Adiciona Registro de Imposto
+router.post('/financeiro/imposto/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Laudo
+    fncImposto.cadastraImposto(req,res);
+})
+//Carrega Imposto para Edição
+router.get('/financeiro/imposto/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Imposto.
+    fncImposto.carregaImpostoedi(req,res);
+})
+//Atualiza Imposto selecionado editado
+router.post('/financeiro/imposto/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de LaImpostoudo.
+    fncImposto.atualizaImposto(req,res);
+})
+//Lista todos os Imposto
+router.get('/financeiro/imposto/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Imposto.
+    fncImposto.listaImposto(req,res);
+})
+//Filtro da Lista dos Imposto
+router.post('/financeiro/imposto/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Imposto
+    fncImposto.filtraImposto(req,res);
+})
+//Deleta Imposto Selecionado
+router.get('/financeiro/imposto/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Imposto
+    fncImposto.deletaImposto(req,res);
+})
 //Menu Conrrente, conta
     
 router.get('/financeiro/corrente/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista toda os registros da conta corrente

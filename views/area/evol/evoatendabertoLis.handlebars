@@ -303,8 +303,8 @@
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Ação</th>
@@ -326,11 +326,6 @@
 																<td>{{usuario_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#each ../benes}}
-															{{#ifEqual this._id ../agenda_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
 														<td>
 															{{#each ../terapeutas}}
 																{{#ifEqual this._id ../agenda_usuid}}
@@ -338,6 +333,11 @@
 																{{/ifEqual}}
 															{{/each}}
 														</td>
+														{{#each ../benes}}
+															{{#ifEqual this._id ../agenda_beneid}}
+																<td>{{bene_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
 														<td>{{agenda_evolucao}}</td>
 														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
 														<td></td>
