@@ -4,6 +4,9 @@
 		<meta charset="utf-8">
 		<title>Evoluções do Dia</title>
 			<script type="text/javascript">
+			function evolucaoEditar(id){
+				window.location.href=("/menu/agenda/evolucaosup/"+id);
+			}
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
@@ -340,7 +343,13 @@
 														{{/each}}
 														<td>{{agenda_evolucao}}</td>
 														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
-														<td></td>
+														<td>
+															<div class="action-buttons">
+																<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEditar('{{_id}}');">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+															</div>
+														</td>
 													</tr>
 												{{/each}}
 											</tbody>

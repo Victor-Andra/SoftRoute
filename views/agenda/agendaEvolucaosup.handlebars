@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Agendamentos</title>
+		<script type="text/javascript">
+			function selectConv(){
+				var v1 = document.getElementById(document.getElementById("agendaBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("agendaConvid").value = v1;
+			}
+			function atualizaConvId(){
+				let convId = document.getElementById("agendaConvid").value;
+				console.log(convId)
+			}
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
+				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
+				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
+				document.getElementById("agendaConvid").value = document.getElementById("agendaConvidEdi").value;
+				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
+				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
+				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
+				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
+				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
+				document.getElementById("agendaEvolucao").value = document.getElementById("agendaEvolucaoEdi").value;
+				atualizaData();
+				if (document.getElementById("agendaSelamento").value == 'false'){
+					document.getElementById("agendaSelo").checked = false;
+					document.getElementById("agendaSelo").style = '';
+				}
+				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
+					document.getElementById("divEvolucao").style = '';
+				}
+			}
+			function alteraMigrado(){
+				let chck = document.getElementById("agendaMigrado");
+				if(chck.checked){
+					chck.value="true";
+					console.log(chck.value);
+				} else {
+					chck.value="false";
+					console.log(chck.value);
+				}
+			}
+			function controlaCategoria(){
+				let origem = document.getElementById("agendaOrg").value;
+				if(origem == "Padrão"){
+					document.getElementById("agendaCateg").value = "Padrão";
+					document.getElementById("Padrão").style.display = "";
+					document.getElementById("Falta").style.display = "none";
+					document.getElementById("Apoio").style.display = "none";
+					document.getElementById("Supervisão").style.display = "none";
+					document.getElementById("Pais").style.display = "none";
+					document.getElementById("Substituto").style.display = "none";
+					document.getElementById("Glosa").style.display = "none";
+					document.getElementById("Extra").style.display = "none";
+				} else {
+					document.getElementById("agendaCateg").value = "Apoio";
+					document.getElementById("Padrão").style.display = "none";
+					document.getElementById("Falta").style.display = "";
+					document.getElementById("Apoio").style.display = "";
+					document.getElementById("Supervisão").style.display = "";
+					document.getElementById("Pais").style.display = "";
+					document.getElementById("Substituto").style.display = "";
+					document.getElementById("Glosa").style.display = "";
+					document.getElementById("Extra").style.display = "";
+				}
+			}
+			function selamento(){
+				document.getElementById("agendaSelamento").value = document.getElementById("agendaSelo").checked;
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Evolução do atendimento pelos supervisores.</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/agenda/evolucao" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Evolução e atendimento</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div id="divEvolucao">
+														<div class="col-sm-6">													
+															<label> Evolução</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea rows="4" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+																</div>
+															</div>
+															<label class="pos-rel">
+																{{#isTrue selo}}
+																<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+																<b>Evolução Finalizada!</b>
+																{{else}}
+																<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+																Evolução Finalizada? <b>OBS: Após marcar este campo não será mais possível editar a evolução.</b>
+																{{/isTrue}}
+															</label>
+														</div>
+													</div>
+												</div>
+												<hr>
+												<div class="form-actions">
+													<div class="col-md-offset-3 col-md-9" style="align-items: center;">
+														<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+															<i class="ace-icon fa fa-check bigger-110"></i>
+															Salvar
+														</button>
+														&nbsp; &nbsp; &nbsp;
+														<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+															<i class="ace-icon fa fa-undo bigger-110"></i>
+															Voltar
+														</button>
+													</div>
+												</div>
+												<hr>
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													Informações do agendamento.<br>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Data Agendamento</label>
+														<div class="row">
+															<div class="col-sm-2">
+																<div class="input-group">
+																	<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Hora Agendamento</label>
+														<div class="form-group">
+															<div class="col-sm-2">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																	{{#each horaages}}
+																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<label>Beneficiário</label>
+														<div class="hidden" class="col-sm-5">
+
+															<!--Roberta não quer que vejam isso -->
+															<div class="row"  aria-hidden="true">
+																<div class="col-xs-12 col-sm-6">
+																	<label for="id-date-picker-1">Origem Agendamento</label>
+																	<div class="row">
+																		<div class="col-sm-4">
+																			<div class="input-group">
+																				<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																					<option value="Padrão">Padrão</option>
+																					<option value="Administrativo">Administrativo</option>
+																				</select>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xs-12 col-sm-2"  >
+																	<label for="id-date-picker-1">Categoria</label>
+																	<div class="form-group">
+																		<div class="col-sm-8" >
+																			<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																				<option id="Apoio" value="Apoio">Apoio</option>
+																				<option id="Extra" value="Extra">Extra</option>
+																				<option id="Falta" value="Falta">Falta</option>
+																				<option id="Glosa" value="Glosa">Glosa</option>
+																				<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+																				<option id="Pais" value="Pais">Pais</option>
+																				<option id="Substituto" value="Substituto">Substituto</option>
+																				<option id="Supervisão" value="Supervisão">Supervisão</option>
+																			</select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<input value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
+															<input value="X" id="X" name="refAgendaConv" />
+														</div>
+														<div class="form-group" >
+															<div class="col-sm-5">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2" class="hidden">
+														<label>Convênio</label>
+														<div class="form-group"  >
+															<div class="col-sm-6" style="width: 500px;">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each benes}}
+																		{{#each ../convs}}
+																			{{#ifEqual ../bene_convid _id}}
+																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																			{{/ifEqual}}
+																		{{/each}}
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-6">
+														<label>Terapeuta</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>												
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-6">													
+														<label>Terapia</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-6">													
+														<label>Salas</label>
+														<div class="form-group">
+															<div class="col-sm-4" style="width: 300px;">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	{{#each salas}}
+																		<option value="{{_id}}">{{sala_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">													
+														<label> Observação de agenda</label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<input style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" type="text" id="agendaObs" name="agendaObs" placeholder="" class="form-control" />
+															</div>
+														</div>
+													</div>
+														<!--
+														<label class="pos-rel">
+															<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
+															Realizado? 
+														</label>
+														-->
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="hidden">
+									<input id="agendaEvolucaoEdi" name="agendaEvolucaoEdi" value="{{agenda.agenda_evolucao}}" />
+									<input id="agendaSelamento" name="agendaSelamento" value="{{selo}}" />
+									<input id="isAgendaTerapeuta" name="isAgendaTerapeuta" value="{{isAgendaTerapeuta}}" />
+									<input id="id" name="id" value="{{agenda._id}}" />
+									<input id="agendaTemp" name="agendaTemp" value="{{agenda.agenda_temp}}" />
+									<input id="agendaData" name="agendaData" />
+									<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
+									<input id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />
+									<input id="agendaCategEdi" name="agendaCategEdi" value="{{agenda.agenda_categoria}}" />
+									<input id="agendaOrgEdi" name="agendaOrgEdi" value="{{agenda.agenda_org}}" />
+									<input id="agendaBeneidEdi" name="agendaBeneidEdi" value="{{agenda.agenda_beneid}}" />
+									<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
+									<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
+									<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
+									<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+									<input id="agendaAtrazo" name="agendaAtrazo" value="{{atrazo}}" />
+								</div>
+								
+								<hr>
+								
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>

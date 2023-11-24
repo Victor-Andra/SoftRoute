@@ -9653,6 +9653,55 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    carregaEvolucaosup(req, res, atrazo, resposta){
+        let selo;
+        let isAgendaTerapeuta = false;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+            }
+        })
+        let flash = new Resposta()
+        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
+            flash.sucesso = resposta.sucesso;
+            flash.texto = resposta.texto;
+        }
+        let id = req.params.id;
+        if (id == '' || id == undefined || id == 'undefined' || id == null){
+            id = req.body.id
+        }
+        Agenda.findById(id).then((agenda) =>{
+            selo = agenda.agenda_selo;
+            let dat = new Date(agenda.agenda_data);
+            let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+            let min = ""+dat.getMinutes();
+            if (hora.length == 1){hora = "0" + hora + "";}
+            if (min.length == 1){min = "0" + min + "";}
+            agenda.agenda_hora = hora+":"+min;
+            agenda.agenda_data_dia = this.getDataFMT(dat);
+            Bene.find().then((bene) =>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                //console.log("Listagem Beneficiário!")
+                Conv.find().then((conv)=>{
+                    //console.log("Listagem Convenios!")
+                    Sala.find().then((sala)=>{ 
+                        sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
+                        //console.log("Listagem salas!")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            //console.log("Listagem terapia!")
+                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{ 
+                                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
+                                //console.log("Listagem terapeutas!")
+                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                    res.render('agenda/agendaEvolucaosup', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo,flash})
+        })})})})})})}).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
+        })
+    },
     carregaEvolucaoTemp(req, res, atrazo, resposta){//CarregaEdiçãoAgenda
         let isAgendaTerapeuta = false;
         let selo = false;

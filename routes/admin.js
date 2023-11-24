@@ -935,6 +935,13 @@ router.get('/agenda/evolucaoTempA/:id', fncGeral.IsAuthenticated, (req,res) =>{/
     let atrazo = true;
     fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
 })
+router.get('/agenda/evolucaosup/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncAgenda.carregaEvolucaosup(req, res, atrazo, resposta);
+})
 
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaEvolucao(req, res);
