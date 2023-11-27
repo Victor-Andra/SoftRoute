@@ -245,6 +245,11 @@ const convdebClass = require("../models/convDeb")
 const Convdeb = mongoose.model("tb_convdeb")
 const fncConvdeb = require("../functions/fncConvdeb")
 
+//convimp, Impostos ligados ao convênio
+const convimpClass = require("../models/convImp")
+const Convimp = mongoose.model("tb_convimp")
+const fncConvimp = require("../functions/fncConvimp")
+
 //Atend, Atendimento Padrão 
 const atendClass = require("../models/atend")
 const Atend = mongoose.model("tb_atend")
@@ -2179,6 +2184,32 @@ router.get('/convenio/conv/relatendconvval', fncGeral.IsAuthenticated, (req,res)
 
     router.post('/convenio/convdeb/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da convdeb
         fncConvdeb.editarConvdev(req,res);
+    })
+
+    //Menu Convenio/Convimp 
+    //Impostos pertencentes aos convênios
+    router.get('/convenio/convimp/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas convimp
+        fncConvimp.listaConvimp(req,res);
+    })
+
+    router.get('/convenio/convimp/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Convdeb, com Ufs e Convênios.
+        fncConvimp.carregaConvimp(req,res);
+    })
+
+    router.post('/convenio/convimp/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona convimp
+        fncConvimp.cadastraConvimp(req,res);
+    })
+
+    router.get('/convenio/convimp/del/:id', (req,res) =>{//deleta convimp
+        fncConvimp.deletaConvimp(req,res);
+    })
+
+    router.get('/convenio/convimp/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de convimp
+        fncConvimp.carregaConvimpEdi(req,res);
+    })
+
+    router.post('/convenio/convimp/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da convimp
+        fncConvimp.editarConvimp(req,res);
     })
 
 

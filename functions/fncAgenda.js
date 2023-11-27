@@ -6002,7 +6002,8 @@ module.exports = {
         diaSemana.setHours(0);
 
         diaSemana.setDate(diaSemana.getDate()+1);
-
+        console.log("fncGeral.getDateToIsostring(seg): "+seg.getDay())
+        console.log("fncGeral.getDateToIsostring(seg)UTC: "+seg.getUTCDay())
         switch (seg.getUTCDay()){
             case 0://DOM
                 hoje = "dom";
@@ -6037,17 +6038,15 @@ module.exports = {
                 diaSemana.setUTCDate(diaSemana.getUTCDate() - 6);
                 break;
         }
-        console.log("SEG:"+seg);
-
+        let diaDeHoje = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
-        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-5));
-        console.log("segunda:"+segunda)
-        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        segunda = this.getDataDiaMes(diaDeHoje);
+        terca = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
+        quarta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
+        quinta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
+        sexta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
         Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista de Impostos dos Convênios</title>
+
+		
+
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+								<a href="#">Lista de Impostos dos Convênios</a>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+											<div class="clearfix" >
+												<div class="pull-right tableTools-container">
+
+
+												</div>
+											</div>
+
+											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline">
+											</div>
+											
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable " role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
+													<tr role="row">
+														<th class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+														</th>
+
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Imposto</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Alíquota</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
+				
+														<th>Ação</th>
+
+													</tr>
+													
+												</thead>
+												
+												<tbody>
+													{{#each convimps}}
+														<tr role="row" class="odd">
+
+															<th class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</th>
+
+														{{#each ../convs}}<!-- Ok -->	
+															{{#ifEqual this._id ../convimp_convid}}
+																<td>{{conv_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+
+														
+														{{#each ../impostos}}
+															{{#ifEqual this._id ../convimp_impid}}
+																<td>{{imposto_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														<td>{{convimp_impalq}}</td>
+														<td>{{convimp_dataedi}}</td>
+												
+														<td>
+															<div class="action-buttons">
+
+																<a class="green" href="/menu/convenio/convimp/edi/{{_id}}">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+
+																<a class="red" href="/menu/convenio/convimp/del/{{_id}}">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+															</div>
+
+														</td>
+													{{/each}}
+													<div></div>
+												</tbody>
+	
+											</table>
+
+										
+										
+										
+									</div>
+								</div>				
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="orange bolder">Soft</span>
+							Route
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+		
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	
+	
+	</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Impostos de Convênios Edição</title>
+		<script type="text/javascript">
+			function carregaBody(){
+				let data = document.getElementById("dataEdi").value;
+
+				let ano = data.substring(0,4);
+				let mes = data.substring(5,7);
+				let dia = data.toString().substring(8,10);
+				/*
+				let prs = parseInt(mes,10);
+				prs=prs-1;
+				//console.log("prs:"+prs)
+				let mesformat;
+				if(prs<=9){
+					mesformat = "0"+prs+""
+				} else {
+					mesformat = ""+prs+""
+				}
+				
+				let dt = new Date(ano,mesformat,dia,0,0,0,0)
+				dt.setUTCHours(0);
+				dt.setMinutes(0);
+				dt.setSeconds(0);
+				
+				*/
+				let fulldate=(ano+"-"+mes+"-"+dia).toString();
+				document.getElementById("convimpDataedi").value = fulldate;
+				document.getElementById("convimpConvid").value = document.getElementById("convimpConvidEdi").value;
+				document.getElementById("convimpImpid").value = document.getElementById("convimpImpidEdi").value;
+				document.getElementById("convimpImpnome").value = document.getElementById("convimpImpnomeEdi").value;
+				document.getElementById("convimpImpalq").value = document.getElementById("convimpImpalqEdi").value;
+				
+				atualizaData();
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("convcreData").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("convcreDataFinal").value = datafmt.toISOString();
+			}
+		</script>
+	</head>
+
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Impostos de Convênios Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/convenio/convimp/atualizar" method="POST">
+
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Impostos de Convênios</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												<input name="convcreId" id="convcreId" class="hidden" value="{{convcre._id}}"/>
+												<label> Convênio </label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each convs}}
+															<option value="{{_id}}">{{conv_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Imposto</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="convimpConvid" id="convimpConvid" class="chosen-select" data-placeholder="Escolha...">
+															{{#each impostos}}
+															<option value="{{_id}}">{{imposto_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+
+												<label>Nome do Imposto</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input type="text" id="convimpImpnome" name="convimpImpnome" placeholder=""   />
+													</div>
+												</div>
+
+												<label>Alíquota do Imposto</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input type="text" id="convimpImpalq" name="convimpImpalq" placeholder=""   />
+													</div>
+												</div>
+
+												<label for="id-date-picker-1">Data</label>
+												<div class="row">
+													<div class="col-sm-3">
+														<div class="input-group">
+															<input name="convimpData" id="convimpData" type="date" onchange="javascript:atualizaData()" />
+															<input name="convcreDataFinal" id="convcreDataFinal" class="hidden" />
+														</div>
+													</div>
+												</div>
+
+
+												<div class="hidden" id="divCarrega">
+													
+													<input id="convimpConvidEdi" nome="convimpConvidEdi" value="{{convimp.convimp_convid}}" />
+													<input id="convimpImpidEdi" nome="convimpImpidEdi" value="{{convimp.convimp_impid}}" />
+													<input id="convimpImpnomeEdi" nome="convimpImpnomeEdi" value="{{convimp.convimp_impnome}}" />
+													<input id="convimpImpalqEdi" nome="convimpImpalqEdi" value="{{convimp.convimp_impalq}}" />
+													<input id="dataEdi" nome="dataEdi"  value="{{convimp.convimp_dataedi}}" />
+												</div>
+
+
+											</div>
+										</div>
+									</div>
+								</div>
+							
+								<div class="space-6"></div>
+
+									<div class="form-actions">
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  href="/menu/convenio/convimp/lis">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>
