@@ -299,7 +299,6 @@ module.exports = {AgendaModel,AgendaSchema,
         if (req.body.agendaSelamento == "true"){
             selamento = true;
             let hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
 
             dataSelamento = fncGeral.getDateToIsostring(hoje);
         } else {

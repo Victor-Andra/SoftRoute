@@ -17,7 +17,7 @@ const cookieParser = require('cookie-parser');
 
 //Configurações
     //Sessão
-        app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 3600000}}));
+        app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 18000000}}));
 
         app.use(passport.initialize())
         app.use(passport.session())
@@ -149,10 +149,21 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 data24h: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    //console.log("/"+v1)//2023-11-14
-                    let datav1 = new Date(v1);
+                    console.log("/"+v1)//2023-11-14
+                    let datav1;
+                    if (v1 == undefined || v1 == "undefined"){
+                        return options.inverse(this);
+                    } else {
+                        datav1 = new Date(v1);
+                    }
+                    console.log(" datav1? "+ datav1)
                     datav1.setDate(datav1.getDate()+1);
-                    if (datav1 < new Date()) {
+                    console.log(" datav1? "+ datav1)
+                    let hoje = new Date();
+                    console.log(new Date())
+                    console.log("hoje: "+hoje)
+                    console.log("comparação (datav1 < hoje) = ["+datav1+" < "+hoje+"] = "+(datav1 < hoje))
+                    if (datav1 > hoje) {
                         return options.fn(this);
                     } else {
                         return options.inverse(this);

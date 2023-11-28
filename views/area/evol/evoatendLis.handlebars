@@ -420,15 +420,18 @@
 														<td>
 															{{#compareThis agenda_selo 'true'}}
 																Sim
-																{{#data24h agenda_data_dia}}
-																	<div class="action-buttons">
-																		<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
-																			<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																		</a>
-																	</div>
+																{{#data24h agenda_dataSelo}}
+																	<td>
+																		<div class="action-buttons">
+																			<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
+																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																			</a>
+																		</div>
+																	</td>
 																{{else}}
 																	<td>-</td>
-																{{/dataInferior}}
+																{{/data24h}}
+															{{else}}
 																Não
 																<td>
 																	{{#dataInferior agenda_data_dia}}

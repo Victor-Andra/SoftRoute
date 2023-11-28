@@ -455,8 +455,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         console.log(ativo)
         if (ativo == "Ativo"){
             if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {//Adm e Finan
-                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (24*3600000))/*, httpOnly: true */});//comentado, paleativo
-                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (24*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
+                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 4 Horas
+                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 4 Horas
             } else {
                 res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo
                 res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
