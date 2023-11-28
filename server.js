@@ -148,6 +148,16 @@ const cookieParser = require('cookie-parser');
                         return options.inverse(this);
                     }
                 },
+                data24h: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
+                    //console.log("/"+v1)//2023-11-14
+                    let datav1 = new Date(v1);
+                    datav1.setDate(datav1.getDate()+1);
+                    if (datav1 < new Date()) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                },
             }
         }));
         app.set('view engine', 'handlebars');

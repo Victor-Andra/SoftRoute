@@ -31,7 +31,7 @@ module.exports = {
         console.log('listando Diários de Folreg')
         Folreg.find().then((folreg) =>{
             console.log("Listagem Realizada dos Diários de Folreg!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada bene!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -46,7 +46,7 @@ module.exports = {
     },
 
     carregaFolreg(req,res){
-        Bene.find().then((bene)=>{
+        Bene.find({bene_status:"Ativo"}).then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
             Conv.find().then((conv)=>{
@@ -73,7 +73,7 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/aba/folreg/folregEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
@@ -155,7 +155,7 @@ module.exports = {
                     console.log("Listagem Realizada de terapias")
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Folregamento Fisioterapêutico deletado!")
                 res.render('area/aba/folreg/folregLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})

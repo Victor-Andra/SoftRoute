@@ -419,8 +419,16 @@
 														<td>{{agenda_evolucao}}</td>
 														<td>
 															{{#compareThis agenda_selo 'true'}}
-																Sim<td>-</td>
+																Sim
+																{{#data24h agenda_data_dia}}
+																	<div class="action-buttons">
+																		<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
+																			<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																		</a>
+																	</div>
 																{{else}}
+																	<td>-</td>
+																{{/dataInferior}}
 																Não
 																<td>
 																	{{#dataInferior agenda_data_dia}}

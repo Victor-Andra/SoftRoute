@@ -1523,7 +1523,7 @@ fncSessao.listaSessaoTab(req, res);
 
 //Menu Evolução dos Atendimentos ** Atendimento 
 //Lista Todos os Atendimentos por Data Atual e Beneficiário vinculados pela AGENDA do Dia
-router.get('/area/evoatendlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+router.get('/area/evoatendLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.listaEvoatend(req, res);
 })
 

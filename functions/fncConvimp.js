@@ -9,11 +9,13 @@ const Convimp = mongoose.model("tb_convimp")
 const beneClass = require("../models/bene")
 const usuarioClass = require("../models/usuario")
 const convClass = require("../models/conv")
+const impostoClass = require("../models/imposto")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
 const Usuario = mongoose.model("tb_usuario")
 const Conv = mongoose.model("tb_conv")
+const Imposto = mongoose.model("tb_imposto")
 
 
 module.exports = {
@@ -42,7 +44,7 @@ module.exports = {
                 Imposto.find().then((imposto)=>{
                     imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .        
                     console.log("Listagem Realizada de impostos")
-                            res.render("convenio/convimp/convImpCad", {convs: conv})
+                            res.render("convenio/convimp/convImpCad", {convs: conv, impostos: imposto})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

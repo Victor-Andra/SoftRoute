@@ -31,7 +31,7 @@ module.exports = {
         console.log('listando Diários de Abllsr')
         Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada Usuário!")
@@ -48,7 +48,7 @@ module.exports = {
         console.log('listando Diários de Abllsr')
         Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Beneficiarios por nome 
                     console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -67,7 +67,7 @@ module.exports = {
         console.log('listando Diários de Abllsr')
         Abllsr.findOne().then((abllsr) =>{
             console.log("Listagem Realizada dos Diários de Abllsr!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Beneficiarios por nome 
                     console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas

@@ -36,7 +36,7 @@ module.exports = {
     },
 
     carregaCorrente(req,res){
-        Bene.find().then((bene)=>{
+        Bene.find({bene_status:"Ativo"}).then((bene)=>{
             console.log("Listagem Realizada de Ufs")
                 Conv.find().then((conv)=>{
                     console.log("Listagem Realizada de Convenios")

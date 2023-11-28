@@ -52,7 +52,7 @@ module.exports = {
 
     deletaBene(req, res){
         Bene.deleteOne({_id: req.params.id}).then(() =>{
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 req.flash("success_message", "Bene deletada!")
                 res.render('beneficiario/beneLis', {benes: bene})
             }).catch((err) =>{
@@ -109,7 +109,7 @@ module.exports = {
     listaBene(req, res){
         let convs = new Array();
         console.log('listando benes')
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
                 console.log("b.datanasc"+b.bene_datanasc)
@@ -159,7 +159,7 @@ module.exports = {
     listaResp(req, res){
         let convs = new Array();
         console.log('listando Resp')
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             
             bene.forEach((b)=>{
                 console.log("b.datanasc"+b.bene_datanasc)

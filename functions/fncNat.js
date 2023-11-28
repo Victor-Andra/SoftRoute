@@ -31,7 +31,7 @@ module.exports = {
         console.log('listando Diários de Nat')
         Nat.find().then((nat) =>{
             console.log("Listagem Realizada dos Diários de Nat!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     console.log("Listagem Realizada bene!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -48,7 +48,7 @@ module.exports = {
 
 
     carregaNat(req,res){
-        Bene.find().then((bene)=>{
+        Bene.find({bene_status:"Ativo"}).then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -72,7 +72,7 @@ module.exports = {
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
-                    Bene.find().then((bene)=>{
+                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
                                 res.render("area/aba/nat/natEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
@@ -155,7 +155,7 @@ module.exports = {
                     console.log("Listagem Realizada de terapias")
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Natamento Fisioterapêutico deletado!")
                 res.render('area/aba/nat/natLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})

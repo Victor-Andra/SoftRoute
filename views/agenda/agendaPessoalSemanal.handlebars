@@ -10,6 +10,26 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
+				let dtHoje = new Date();
+				let dataDaSemana;
+				switch (dat.getUTCDay()){
+					case 0:
+						dataDaSemana = "dom"
+					case 1:
+						dataDaSemana = "seg"
+					case 2:
+						dataDaSemana = "ter"
+					case 3:
+						dataDaSemana = "qua"
+					case 4:
+						dataDaSemana = "qui"
+					case 5:
+						dataDaSemana = "sex"
+					case 6:
+						dataDaSemana = "sab"
+					default:
+						dataDaSemana = "dom"
+				}
 				let dias = ["seg","ter","qua","qui","sex"];
 				try{
 					dias.forEach((dia)=>{
@@ -24,8 +44,6 @@
 							if(valor != "766f69643132333435366964"){
 								let val;
 								if(e.id.indexOf("BeneId_") != -1){
-										console.log("PINTADA")
-
 									val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									document.getElementsByName(tempId).forEach((ti)=>{
@@ -35,8 +53,15 @@
 									console.log(val);
 									document.getElementById(id).append(val);
 								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
-										console.log("PINTADO")
-
+									val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementsByName(tempId).forEach((ti)=>{
+										pintaAgenda(val, ti.value);
+									})
+									//console.log("val")
+									//console.log(val)
+									document.getElementById(id).append(val);
+								} else if(e.id.indexOf("AcaoId_") != -1 && dia == dataDaSemana){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
 									val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									document.getElementsByName(tempId).forEach((ti)=>{

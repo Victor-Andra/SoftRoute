@@ -31,7 +31,7 @@ module.exports = {
     carregaSonda(req,res){
         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                        res.render("area/aba/sonda/sondaCad", {terapeutas: terapeuta, benes: bene})
         })}).catch((err) =>{
@@ -117,7 +117,7 @@ module.exports = {
         Sonda.findById(req.params.id).then((sonda) =>{console.log("ID: "+sonda._id)
             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             res.render('area/aba/sonda/sondaEdi', {sonda, terapeutas: terapeuta, benes: bene})
         })})}).catch((err) =>{
@@ -176,7 +176,7 @@ module.exports = {
             //console.log("sonda:");
             //console.log(sonda);
             //console.log("Listagem Realizada das Sondaeses!")
-                Bene.find().then((bene)=>{
+                Bene.find({bene_status:"Ativo"}).then((bene)=>{
                     //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")

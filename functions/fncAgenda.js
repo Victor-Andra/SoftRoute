@@ -253,7 +253,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -333,7 +333,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        Bene.findOne().then((b) =>{
+        Bene.findOne({bene_status:"Ativo"}).then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
@@ -377,7 +377,7 @@ module.exports = {
             })
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -827,7 +827,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        Bene.findOne().then((b) =>{
+        Bene.findOne({bene_status:"Ativo"}).then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
@@ -890,7 +890,7 @@ module.exports = {
             });
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -1420,7 +1420,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({}).then((conv)=>{
@@ -1632,7 +1632,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -2134,7 +2134,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.findOne().then((b) =>{
+        Bene.findOne({bene_status:"Ativo"}).then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2507,7 +2507,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.findOne().then((b) =>{
+        Bene.findOne({bene_status:"Ativo"}).then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2551,7 +2551,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             Bene.find({_id: b._id}).then((bene)=>{
                 bene.forEach(e => {
@@ -3087,7 +3087,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             Bene.find({_id: req.body.agendaBeneid}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -3617,7 +3617,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -3741,7 +3741,7 @@ module.exports = {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Bene.findOne().then((b) =>{
+        Bene.findOne({bene_status:"Ativo"}).then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -3785,7 +3785,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             Bene.find({_id: b._id}).then((bene)=>{
                 bene.forEach(e => {
@@ -3992,7 +3992,7 @@ module.exports = {
                     }
                 })
 
-                Bene.find().then((benef)=>{
+                Bene.find({bene_status:"Ativo"}).then((benef)=>{
                     benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -4170,7 +4170,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({_id: beneConvid}).then((conv)=>{
@@ -4364,7 +4364,7 @@ module.exports = {
                 }
             })
 
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -4541,7 +4541,7 @@ module.exports = {
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }}).then((agenda) =>{
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
@@ -4698,7 +4698,7 @@ module.exports = {
                 })
                 //console.log(agenda)
                 Agenda.find({'_id': { $in: idsAgendasEx}}).then((agendaS)=>{
-                    Bene.find().then((benef)=>{
+                    Bene.find({bene_status:"Ativo"}).then((benef)=>{
                         benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
                         Conv.find({_id: beneConvid}).then((conv)=>{
@@ -4883,7 +4883,7 @@ module.exports = {
             })
             //console.log(idsAgendasEx)
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -5042,7 +5042,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -5558,7 +5558,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -5984,7 +5984,7 @@ module.exports = {
         let sexta;
         let hoje;
         let seg = new Date();
-        seg.setSeconds(0); 
+        seg.setSeconds(0);
         seg.setMinutes(0);
         seg.setHours(0);
 
@@ -5993,17 +5993,11 @@ module.exports = {
         sex.setMinutes(59);
         sex.setHours(23);
 
-        console.log("ISO: "+fncGeral.getDateToIsostring(seg));
-        console.log("ISO: "+fncGeral.getDateToIsostring(sex));
-
-        let diaSemana = new Date();
+        let diaSemana = new Date();//segunda
         diaSemana.setSeconds(0);
         diaSemana.setMinutes(0);
         diaSemana.setHours(0);
 
-        diaSemana.setDate(diaSemana.getDate()+1);
-        console.log("fncGeral.getDateToIsostring(seg): "+seg.getDay())
-        console.log("fncGeral.getDateToIsostring(seg)UTC: "+seg.getUTCDay())
         switch (seg.getUTCDay()){
             case 0://DOM
                 hoje = "dom";
@@ -6011,7 +6005,7 @@ module.exports = {
                 break;
             case 1://SEG
                 hoje = "seg";
-                diaSemana.setUTCDate(diaSemana.getUTCDate() + 4);
+                diaSemana.setUTCDate(diaSemana.getUTCDate());
                 break;
             case 2://TER
                 hoje = "ter";
@@ -6038,11 +6032,11 @@ module.exports = {
                 diaSemana.setUTCDate(diaSemana.getUTCDate() - 6);
                 break;
         }
-        let diaDeHoje = seg;
+        let diaDeHoje = diaSemana;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         
-        segunda = this.getDataDiaMes(diaDeHoje);
+        segunda = this.getDataDiaMes(diaDeHoje - 5);
         terca = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         quarta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         quinta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
@@ -6087,7 +6081,6 @@ module.exports = {
                         e.agenda_data_semana = "sab"
                         break;
                     default:
-                        
                         console.log("erro");
                         break;
                 }
@@ -6112,7 +6105,7 @@ module.exports = {
             })
            
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -6297,7 +6290,6 @@ module.exports = {
                         e.agenda_data_semana = "sab"
                         break;
                     default:
-                        
                         console.log("erro");
                         break;
                 }
@@ -6310,7 +6302,7 @@ module.exports = {
                 agenda = agenda.filter(comparaIds);
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -6497,7 +6489,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -6675,7 +6667,7 @@ module.exports = {
                 //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -6837,7 +6829,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -7359,7 +7351,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -7875,7 +7867,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -8390,7 +8382,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -8895,7 +8887,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -9034,7 +9026,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -9153,7 +9145,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -9290,7 +9282,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -9348,7 +9340,7 @@ module.exports = {
     carregaCadFaltas(req,res,resposta){//Carrega o cadastro de faltas pontuais
         let flash = new Resposta()
         let resultado;
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
@@ -9373,7 +9365,7 @@ module.exports = {
         })
     },
     carregaSubterapia(req,res){//Carrega as Substituição de Categoria lançada errada
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
@@ -9400,7 +9392,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9474,7 +9466,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9631,7 +9623,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9680,7 +9672,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9711,6 +9703,7 @@ module.exports = {
                 isAgendaTerapeuta = true;
             }
         })
+        let flash = new Resposta()
         if (resposta.sucesso == "true" || resposta.sucesso == "false"){
             flash.sucesso = resposta.sucesso;
             flash.texto = resposta.texto;
@@ -9731,7 +9724,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9816,7 +9809,7 @@ module.exports = {
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
             agenda.agenda_data_dia = this.getDataFMT(dat);
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Beneficiário!")
                 Conv.find().then((conv)=>{
@@ -9846,7 +9839,7 @@ module.exports = {
         let agenda = {"data":agenda_data_dia,"hora":agenda_hora}
         //console.log(agenda.data)
         //console.log(agenda.hora)
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
@@ -9870,7 +9863,7 @@ module.exports = {
     carregaAgendaCadE(req, res){
         Agenda.find({_id: req.params.id}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            Bene.find().then((bene)=>{
+            Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -9893,7 +9886,7 @@ module.exports = {
     },
     carregaAgendaCadastro(req,res,resposta){
         let flash = new Resposta()
-        Bene.find().then((bene) =>{
+        Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //console.log("Listagem Beneficiário!")
             Conv.find().then((conv)=>{
@@ -10061,7 +10054,7 @@ module.exports = {
                 }
             })
             //console.log(agenda)
-            Bene.find().then((benef)=>{
+            Bene.find({bene_status:"Ativo"}).then((benef)=>{
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({}).then((conv)=>{
