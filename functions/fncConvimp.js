@@ -2,7 +2,7 @@
 const mongoose = require("mongoose")
 
 //Créditos de planos de saúde e particular
-const convimpClass = require("../models/convCre")
+const convimpClass = require("../models/convImp")
 const Convimp = mongoose.model("tb_convimp")
 
 //Classes Extrangeiras

@@ -14,17 +14,21 @@ const ConvimpSchema = mongoose.Schema({
 
 class Convimp{
     constructor(
-        convimp_convid,convimp_impid,convimp_impnome ,convimp_impalq ,convimp_data,
-        convimp_datacad, convimp_dataedi
+        convimp_convid,
+        convimp_impid,
+        convimp_impnome,
+        convimp_impalq,
+        convimp_data,
+        convimp_datacad,
+        convimp_dataedi
         ){
-            this.convimp_convid = convimp_convid, //vem da tabela Convenio
-            this.convimp_impid = convimp_impid, //Vem da Tabela Impostos
-            this.convimp_impnome = convimp_impnome, //Facilitar identificação do Imposto pelo nome
-            this.convimp_impalq = convimp_impalq, 
-            this.convimp_data = convimp_data,
-            this.convimp_datacad = convimp_datacad,
-            this.convimp_dataedi = convimp_dataedi
-          
+        this.convimp_convid = convimp_convid, //vem da tabela Convenio
+        this.convimp_impid = convimp_impid, //Vem da Tabela Impostos
+        this.convimp_impnome = convimp_impnome, //Facilitar identificação do Imposto pelo nome
+        this.convimp_impalq = convimp_impalq, 
+        this.convimp_data = convimp_data,
+        this.convimp_datacad = convimp_datacad,
+        this.convimp_dataedi = convimp_dataedi
     }
 }
 
@@ -59,7 +63,7 @@ module.exports = {ConvimpModel,ConvimpSchema,
         })
         return resultado;
     },
-    convimpAdicionar: async (req,res) => {
+    convimpAdicionar: async (req, res) => {
         let dataAtual = new Date();
         let convimpExiste =  await ConvimpModel.findOne({
             convimp_convid : req.body.convimpConvid ,

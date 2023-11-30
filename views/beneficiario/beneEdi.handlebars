@@ -132,7 +132,12 @@
 			document.getElementById("beneEscolaoutro2func").value = document.getElementById("beneEscolaoutro2funcEdi").value;
 			document.getElementById("beneEscolaoutro2tel").value = document.getElementById("beneEscolaoutro2telEdi").value;
 			
-			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
+			document.getElementById("beneEscolaoutro3").value = document.getElementById("beneEscolaoutro3Edi").value;
+			document.getElementById("beneEscolaoutro3func").value = document.getElementById("beneEscolaoutro3funcEdi").value;
+			document.getElementById("beneEscolaoutro3tel").value = document.getElementById("beneEscolaoutro3telEdi").value;
+			
+			document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
+			document.getElementById("beneEscolaobs2").value = document.getElementById("beneEscolaobs2Edi").value;
 		}
 	</script>
 	</head>
@@ -217,13 +222,22 @@
 			<input id="beneEscolaserieEdi" name="beneEscolaserieEdi" value="{{beneEdi.bene_escolaserie}}"/>
 			<input id="beneEscolacoordEdi" name="beneEscolacoordEdi" value="{{beneEdi.bene_escolacoord}}"/>
 			<input id="beneEscolacoordtelEdi" name="beneEscolacoordtelEdi" value="{{beneEdi.bene_escolacoordtel}}"/>
+			
 			<input id="beneEscolaoutro1Edi" name="beneEscolaoutro1Edi" value="{{beneEdi.bene_escolaoutro1}}"/>
 			<input id="beneEscolaoutro1funcEdi" name="beneEscolaoutro1funcEdi" value="{{beneEdi.bene_escolaoutro1func}}"/>
 			<input id="beneEscolaoutro1telEdi" name="beneEscolaoutro1telEdi" value="{{beneEdi.bene_escolaoutro1tel}}"/>
+			
 			<input id="beneEscolaoutro2Edi" name="beneEscolaoutro2Edi" value="{{beneEdi.bene_escolaoutro2}}"/>
 			<input id="beneEscolaoutro2funcEdi" name="beneEscolaoutro2funcEdi" value="{{beneEdi.bene_escolaoutro2func}}"/>
 			<input id="beneEscolaoutro2telEdi" name="beneEscolaoutro2telEdi" value="{{beneEdi.bene_escolaoutro2tel}}"/>
-			<input id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
+			
+			<input id="beneEscolaoutro3Edi" name="beneEscolaoutro3Edi" value="{{beneEdi.bene_escolaoutro3}}"/>
+			<input id="beneEscolaoutro3funcEdi" name="beneEscolaoutro3funcEdi" value="{{beneEdi.bene_escolaoutro3func}}"/>
+			<input id="beneEscolaoutro3telEdi" name="beneEscolaoutro3telEdi" value="{{beneEdi.bene_escolaoutro3tel}}"/>
+			
+			<input id="beneEscolaturnoEdi" name="beneEscolaturnoEdi" value="{{beneEdi.bene_escolaturno}}"/>
+			
+			<input id="beneEscolaobs2Edi" name="beneEscolaobs2Edi" value="{{beneEdi.bene_escolaobs2}}"/>
 		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -516,7 +530,7 @@
 														</div>
 														<div class="row">
 															<div class="col-xs-12 col-sm-4">
-																<label>WhatsApp (99) 9999-9999 </label>
+																<label>WhatsApp</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="green ace-icon fa fa-whatsapp"></i>
@@ -526,7 +540,7 @@
 															</div>
 						
 															<div class="col-xs-12 col-sm-4">
-																<label>Celular (99) 9 9999-9999 </label>
+																<label>Celular </label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="ace-icon fa fa-phone"></i>
@@ -581,7 +595,7 @@
 														
 													<div class="row">
 														<div class="col-xs-12 col-sm-4">
-															<label>WhatsApp (99) 9999-9999 </label>
+															<label>WhatsApp </label>
 															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="green ace-icon fa fa-whatsapp"></i>
@@ -590,7 +604,7 @@
 															</div> 
 														</div>
 														<div class="col-xs-12 col-sm-4">
-																<label>Celular (99) 9 9999-9999 </label>
+																<label>Celular </label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="ace-icon fa fa-phone"></i>
@@ -732,7 +746,7 @@
 														</div>
 														<div class="row">
 															<div class="col-xs-12 col-sm-3">
-																<label>WhatsApp <small class="text-warning">(99) 9999-9999</small>
+																<label>WhatsApp <small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
@@ -742,7 +756,7 @@
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
-																<label>Celular <small class="text-warning"> (99) 9 9999-9999</small>
+																<label>Celular <small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
@@ -886,6 +900,12 @@
 																	<input type="text" name="beneEscolaserie" id="beneEscolaserie" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>Turno </label>
+																<div class="input-group">
+																	<input type="text" name="beneEscolaturno" id="beneEscolaturno" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
 														</div>
 														<hr>
 														<div class="row">
@@ -910,7 +930,7 @@
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-9 col-sm-6">
+															<div class="col-xs-3 col-sm-3">
 																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
@@ -918,7 +938,7 @@
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-9 col-sm-3">
+															<div class="col-xs-3 col-sm-3">
 																<label> Função </label>
 																<div class="input-group">
 																	<div >
@@ -926,20 +946,20 @@
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-3">
+															<div class="col-xs-3 col-sm-3">
 																<label>WhatsApp
-																	<small class="text-warning">(99) 9999-9999</small>
+																	<small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" />
+																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-9 col-sm-6">
+															<div class="col-xs-3 col-sm-3">
 																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
@@ -947,7 +967,7 @@
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-9 col-sm-3">
+															<div class="col-xs-3 col-sm-3">
 																<label> Função </label>
 																<div class="input-group">
 																	<div >
@@ -955,15 +975,44 @@
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-3">
+															<div class="col-xs-3 col-sm-3">
 																<label>WhatsApp
-																	<small class="text-warning">(99) 9999-9999</small>
+																	<small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text"  />
+																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text" style="width: 200px;" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-3 col-sm-3">
+																<label > Outro responsável </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro3"  id="beneEscolaoutro3" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-3 col-sm-3">
+																<label> Função </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro3func" id="beneEscolaoutro3func" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-3 col-sm-3">
+																<label>WhatsApp
+																	<small class="text-warning"></small>
+																</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<input name="beneEscolaoutro3tel" id="beneEscolaoutro3tel"  class="document-control input-mask-phone" type="text" style="width: 200px;" />
 																</div>
 															</div>
 														</div>
@@ -972,7 +1021,7 @@
 																<label> Observação </label>
 																<div class="input-group">
 																	<div >
-																		<textarea type="text" name="beneEscolaobs" id="beneEscolaobs" placeholder="" class="form-control" style="width: 350px;"></textarea>
+																		<textarea type="text" name="beneEscolaobs2" id="beneEscolaobs2" placeholder="" class="form-control" style="width: 350px;"></textarea>
 																	</div>
 																</div>
 															</div>

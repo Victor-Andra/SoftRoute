@@ -88,8 +88,8 @@
 																<td>{{imposto_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														<td>{{convimp_impalq}}</td>
-														<td>{{convimp_dataedi}}</td>
+														<td>{{convimp_impalq}}%</td>
+														<td>{{convimp_datacad}}</td>
 												
 														<td>
 															<div class="action-buttons">
@@ -162,7 +162,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [10, 25, 50, 100, 200],
 			"lengthChange": true,

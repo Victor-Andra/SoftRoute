@@ -85,7 +85,14 @@ const BeneSchema = mongoose.Schema({
     bene_escolaoutro2:{ type: String, required: false},
     bene_escolaoutro2func:{ type: String, required: false},
     bene_escolaoutro2tel:{ type: String, required: false},
-    bene_escolaobs:{ type: String, required: false},
+
+    bene_escolaoutro3:{ type: String, required: false},
+    bene_escolaoutro3func:{ type: String, required: false},
+    bene_escolaoutro3tel:{ type: String, required: false},
+
+    bene_escolaturno:{ type: String, required: false},
+
+    bene_escolaobs2:{ type: String, required: false},
     bene_obs:{ type: String, required: false},
     bene_datacad:{ type: Date, required: false },
     bene_dataedi:{ type: Date, required: false }
@@ -103,7 +110,7 @@ class Bene{
         bene_maecpf, bene_maeend, bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, 
         bene_maecel, bene_maecel2, bene_maeemail, bene_escolanome, bene_escolafone, bene_escolaend, bene_escolacomp, bene_escolabairro, bene_escolacidade, bene_escolauf, 
         bene_escolacep, bene_escolaano, bene_escolaserie, bene_escolacoord, bene_escolacoordtel, bene_escolaoutro1, bene_escolaoutro1func, bene_escolaoutro1tel,
-        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaobs, bene_obs, bene_datacad, bene_dataedi
+        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs2 ,bene_escolaturno, bene_obs, bene_datacad, bene_dataedi
          ){
             this.bene_nome = bene_nome,
             this.bene_apelido = bene_apelido,
@@ -189,7 +196,12 @@ class Bene{
             this.bene_escolaoutro2func = bene_escolaoutro2func,
             this.bene_escolaoutro2tel = bene_escolaoutro2tel,
 
-            this.bene_escolaobs = bene_escolaobs,
+            this.bene_escolaoutro3 = bene_escolaoutro3,
+            this.bene_escolaoutro3func = bene_escolaoutro3func,
+            this.bene_escolaoutro3tel = bene_escolaoutro3tel,
+
+            this.bene_escolaturno = bene_escolaturno,
+            this.bene_escolaobs2 = bene_escolaobs2,
 
             this.bene_obs = bene_obs,
             this.bene_datacad = bene_datacad,
@@ -293,7 +305,12 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro2func: req.body.beneEscolaoutro2func,
                 bene_escolaoutro2tel: req.body.beneEscolaoutro2tel,
 
-                bene_escolaobs: req.body.beneEscolaobs,
+                bene_escolaoutro3: req.body.beneEscolaoutro3,
+                bene_escolaoutro3func: req.body.beneEscolaoutro3func,
+                bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
+
+                bene_escolaturno: req.body.beneEscolaturno,
+                bene_escolaobs2: req.body.beneEscolaobs2,
 
 
                 bene_obs: req.body.beneObs,
@@ -340,7 +357,12 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro2func: req.body.beneEscolaoutro2func,
                 bene_escolaoutro2tel: req.body.beneEscolaoutro2tel,
 
-                bene_escolaobs: req.body.beneEscolaobs,
+                bene_escolaoutro3: req.body.beneEscolaoutro3,
+                bene_escolaoutro3func: req.body.beneEscolaoutro3func,
+                bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
+
+                bene_escolaturno: req.body.beneEscolaturno,
+                bene_escolaobs2: req.body.beneEscolaobs2,
 
                 bene_dataedi: dataAtual
                 }}
@@ -446,8 +468,13 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro2: req.body.beneEscolaoutro2,
                 bene_escolaoutro2func: req.body.beneEscolaoutro2func,
                 bene_escolaoutro2tel: req.body.beneEscolaoutro2tel,
+               
+                bene_escolaoutro3: req.body.beneEscolaoutro3,
+                bene_escolaoutro3func: req.body.beneEscolaoutro3func,
+                bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
 
-                bene_escolaobs: req.body.beneEscolaobs,
+                bene_escolaturno: req.body.beneEscolaturno,
+                bene_escolaobs2: req.body.beneEscolaobs2,
 
 
                 bene_obs: req.body.beneObs,

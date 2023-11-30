@@ -195,7 +195,13 @@
 							{{#isTrue agenda_temp}}
 								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
 								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
+								
 								{{#compareString agenda_categoria "Falta Justificada"}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="">
+										<i class="red ace-icon fa fa-ban bigger-130"></i>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
+								</div>
 								{{else}}
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
@@ -204,7 +210,13 @@
 								</div>
 								{{/compareString}}
 							{{else}}
+								
 								{{#compareString agenda_categoria "Falta Justificada"}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="">
+										<i class="red ace-icon fa fa-ban bigger-130"></i>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
+								</div>
 								{{else}}
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
