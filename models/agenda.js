@@ -641,6 +641,28 @@ module.exports = {AgendaModel,AgendaSchema,
         }
 
         return resultado;
+    },
+    removeEvolucao : async (id, res) => {
+        let resultado;
+        //Pega data atual
+        
+        //Realiza Atualização - Atualização não faz alteração temporaria
+        await AgendaModel.findByIdAndUpdate(id, 
+            {$set: {
+                agenda_evolucao : "",
+                agenda_atrazo : false,
+                agenda_selo : false,
+                agenda_dataSelo : ""
+        }}).then((res) =>{
+            //console.log("Salvo")
+            resultado = "true";
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = undefined;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
     }
     
     /*

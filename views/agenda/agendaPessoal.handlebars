@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Pessoal Semanal</title>
+		<title>Agenda Pessoal do dia</title>
 		<script type="text/javascript">
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
@@ -177,7 +177,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Pessoal Semanal</li>
+							<li class="active">Agenda Pessoal do Dia</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#if error}}
@@ -195,17 +195,23 @@
 							{{#isTrue agenda_temp}}
 								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
 								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
+								{{#compareString agenda_categoria "Falta Justificada"}}
+								{{else}}
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
 										<i class="ace-icon fa fa-pencil bigger-130"></i>
 									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
 								</div>
+								{{/compareString}}
 							{{else}}
+								{{#compareString agenda_categoria "Falta Justificada"}}
+								{{else}}
 								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
 										<i class="ace-icon fa fa-pencil bigger-130"></i>
 									</a>
 								</div>
+								{{/compareString}}
 							{{/isTrue}}
 							{{/compareThis}}
 						{{/each}}

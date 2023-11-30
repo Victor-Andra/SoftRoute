@@ -149,20 +149,15 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 data24h: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    console.log("/"+v1)//2023-11-14
+                    //console.log("/"+v1)//2023-11-14
                     let datav1;
                     if (v1 == undefined || v1 == "undefined"){
                         return options.inverse(this);
                     } else {
                         datav1 = new Date(v1);
                     }
-                    console.log(" datav1? "+ datav1)
                     datav1.setDate(datav1.getDate()+1);
-                    console.log(" datav1? "+ datav1)
                     let hoje = new Date();
-                    console.log(new Date())
-                    console.log("hoje: "+hoje)
-                    console.log("comparação (datav1 < hoje) = ["+datav1+" < "+hoje+"] = "+(datav1 < hoje))
                     if (datav1 > hoje) {
                         return options.fn(this);
                     } else {

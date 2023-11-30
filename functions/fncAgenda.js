@@ -46,6 +46,7 @@ const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
 const atendFnc = require("../functions/fncAtend")
 const fncGeral = require("./fncGeral")
+const fncEvoatend = require("../functions/fncEvoatend")
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
@@ -6035,8 +6036,8 @@ module.exports = {
         let diaDeHoje = diaSemana;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        
-        segunda = this.getDataDiaMes(diaDeHoje - 5);
+
+        segunda = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()-4));
         terca = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         quarta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         quinta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
@@ -6150,7 +6151,8 @@ module.exports = {
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
-    },
+    },//fim carregaAgendaPessoal
+    
     filtraAgendaPessoal(req,res){
         //console.log("cookie: "+req.cookies['idUsu'])//idUsu - lvlUsu
         let isSemanal = "false";
@@ -9691,6 +9693,72 @@ module.exports = {
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
+        })
+    },
+    removeEvolucaoA(req,res,resposta){
+        let resultado;
+        let flash = new Resposta()
+        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
+            flash.sucesso = resposta.sucesso;
+            flash.texto = resposta.texto;
+        }
+        agendaClass.removeEvolucao((req.params.id),res).then((retorno)=>{
+            resultado = retorno;
+        }).catch((err) => {
+            console.log(err)
+            resultado = err;
+        }).finally(() => {
+            if(resultado == "true"){
+                flash.texto = "Removido com sucesso!"
+                flash.sucesso = "true"
+            }else{
+                flash.texto = "Erro ao remover evolução!"
+                flash.sucesso = "false"
+            }
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    res.render('area/evol/evoatendabertoLis', { terapeutas: usuario, benes: bene, flash})
+                })
+            }).catch((err) =>{
+                console.log(err)
+                req.flash("error_message", "houve um erro ao listar!")
+                res.redirect('admin/erro')
+            })
+        })
+    },
+    removeEvolucaoF(req,res,resposta){
+        let resultado;
+        let flash = new Resposta()
+        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
+            flash.sucesso = resposta.sucesso;
+            flash.texto = resposta.texto;
+        }
+        agendaClass.removeEvolucao((req.params.id),res).then((retorno)=>{
+            resultado = retorno;
+        }).catch((err) => {
+            console.log(err)
+            resultado = err;
+        }).finally(() => {
+            if(resultado == "true"){
+                flash.texto = "Removido com sucesso!"
+                flash.sucesso = "true"
+            }else{
+                flash.texto = "Erro ao remover evolução!"
+                flash.sucesso = "false"
+            }
+            //console.log('listando Extraeses')
+            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
+                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                res.render('area/evol/evoatendfechadoLis', {terapeutas: usuario, benes: bene, flash})
+            })}).catch((err) =>{
+                console.log(err)
+                req.flash("error_message", "houve um erro ao listar!")
+                res.redirect('admin/erro')
+            })
         })
     },
     carregaEvolucaoTemp(req, res, atrazo, resposta){//CarregaEdiçãoAgenda

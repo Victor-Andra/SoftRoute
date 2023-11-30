@@ -455,8 +455,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
         console.log(ativo)
         if (ativo == "Ativo"){
             if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {//Adm e Finan
-                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 4 Horas
-                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 4 Horas
+                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 5 Horas
+                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (18000000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora / 18000000 5 Horas
             } else {
                 res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo
                 res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (2*3600000))/*, httpOnly: true */});//comentado, paleativo // 3600000 Hora
@@ -940,12 +940,29 @@ router.get('/agenda/evolucaoTempA/:id', fncGeral.IsAuthenticated, (req,res) =>{/
     let atrazo = true;
     fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
 })
+
 router.get('/agenda/evolucaosup/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     let atrazo = false;
     fncAgenda.carregaEvolucaosup(req, res, atrazo, resposta);
+})
+
+router.get('/agenda/evolucaoRemoverA/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncAgenda.removeEvolucaoA(req, res, atrazo, resposta);
+})
+
+router.get('/agenda/evolucaoRemoverF/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncAgenda.removeEvolucaoF(req, res, atrazo, resposta);
 })
 
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
@@ -1433,12 +1450,28 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
     })
 
     router.post('/beneficiario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
-        fncBene.atualizaBene(req, res);
+        fncBene.atualizaBenesup(req, res);
     })
     
     router.get('/beneficiario/resplis', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
         fncBene.listaResp(req, res);
     })
+
+    // Lista e edição de beneficiários para supervisores e coordenadores pode ver mas limitado  salvar apoenas a sessão escola
+
+    
+    router.get('/beneficiario/lissup', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
+        fncBene.listaBenesup(req, res);        
+    })
+
+    router.get('/beneficiario/edisup/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
+        fncBene.carregaBenesupEdi(req, res); 
+     })
+
+     router.post('/beneficiario/atualizarsup', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
+        fncBene.atualizaBenesup(req, res);
+    })
+
 
 //Evolucao
     router.get('/beneficiario/evolucao/lis', fncGeral.IsAuthenticated, (req,res) =>{

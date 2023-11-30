@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>beneficiário Cadastro</title>
+		<title>Beneficiário Cadastro</title>
 		<script >
 		
 		function copiaValoresMae() {
@@ -49,6 +49,7 @@
 			}
 			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+			document.getElementById("beneNomeinfo").value = document.getElementById("beneNomeEdi").value; //repete o nome do beneficiário no cabeçalho
 			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
 			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
 			
@@ -109,12 +110,121 @@
 			document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
 			document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
 			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
-			document.getElementById("beneEscola").value = document.getElementById("beneEscolaEdi").value;
-			document.getElementById("beneEscolaObs").value = document.getElementById("beneEscolaObsEdi").value;
+			
+			document.getElementById("beneEscolanome").value = document.getElementById("beneEscolanomeEdi").value;
+			document.getElementById("beneEscolafone").value = document.getElementById("beneEscolafoneEdi").value;
+			document.getElementById("beneEscolaend").value = document.getElementById("beneEscolaendEdi").value;
+			document.getElementById("beneEscolacomp").value = document.getElementById("beneEscolacompEdi").value;
+			document.getElementById("beneEscolabairro").value = document.getElementById("beneEscolabairroEdi").value;
+			document.getElementById("beneEscolacidade").value = document.getElementById("beneEscolacidadeEdi").value;
+			document.getElementById("beneEscolauf").value = document.getElementById("beneEscolaufEdi").value;
+			document.getElementById("beneEscolacep").value = document.getElementById("beneEscolacepEdi").value;
+			document.getElementById("beneEscolaano").value = document.getElementById("beneEscolaanoEdi").value;
+			document.getElementById("beneEscolaserie").value = document.getElementById("beneEscolaserieEdi").value;
+			document.getElementById("beneEscolacoord").value = document.getElementById("beneEscolacoordEdi").value;
+			document.getElementById("beneEscolacoordtel").value = document.getElementById("beneEscolacoordtelEdi").value;
+			
+			document.getElementById("beneEscolaoutro1").value = document.getElementById("beneEscolaoutro1Edi").value;
+			document.getElementById("beneEscolaoutro1func").value = document.getElementById("beneEscolaoutro1funcEdi").value;
+			document.getElementById("beneEscolaoutro1tel").value = document.getElementById("beneEscolaoutro1telEdi").value;
+			
+			document.getElementById("beneEscolaoutro2").value = document.getElementById("beneEscolaoutro2Edi").value;
+			document.getElementById("beneEscolaoutro2func").value = document.getElementById("beneEscolaoutro2funcEdi").value;
+			document.getElementById("beneEscolaoutro2tel").value = document.getElementById("beneEscolaoutro2telEdi").value;
+			
+			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
 		}
 	</script>
 	</head>
-	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="beneId" name="beneId" value="{{beneEdi._id}}"/>
+			<input id="beneNomeEdi" name="beneNomeEdi" value="{{beneEdi.bene_nome}}"/>
+			<input id="beneApelidoEdi" name="beneApelidoEdi" value="{{beneEdi.bene_apelido}}"/>
+			<input id="beneIdadeEdi" name="beneIdadeEdi" value="{{beneEdi.bene_idade}}"/>
+			<input id="beneDatanascEdi" name="beneDatanascEdi" value="{{beneEdi.bene_datanasc}}"/>
+			<input id="beneNacionalidadeEdi" name="beneNacionalidadeEdi" value="{{beneEdi.bene_nacionalidade}}"/>
+			<input id="beneEndEdi" name="beneEndEdi" value="{{beneEdi.bene_end}}"/>
+			<input id="beneEndcomplEdi" name="beneEndcomplEdi" value="{{beneEdi.bene_endcompl}}"/>
+			<input id="beneEndbairroEdi" name="beneEndbairroEdi" value="{{beneEdi.bene_endbairro}}"/>
+			<input id="beneEndcidadeEdi" name="beneEndcidadeEdi" value="{{beneEdi.bene_endcidade}}"/>
+			<input id="beneEndufEdi" name="beneEndufEdi" value="{{beneEdi.bene_enduf}}"/>
+			<input id="beneEndcepEdi" name="beneEndcepEdi" value="{{beneEdi.bene_endcep}}"/>
+			<input id="beneIdentEdi" name="beneIdentEdi" value="{{beneEdi.bene_ident}}"/>
+			<input id="beneCpfEdi" name="beneCpfEdi" value="{{beneEdi.bene_cpf}}"/>
+			<input id="beneStatusEdi" name="beneStatusEdi" value="{{beneEdi.bene_status}}"/>
+			<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
+			<input id="beneOutEdi" name="beneOutEdi" value="{{beneEdi.bene_out}}"/>
+			<input id="beneGrauparEdi" name="beneGrauparEdi" value="{{beneEdi.bene_graupar}}"/>
+			<input id="beneSupervisorEdi" name="beneSupervisorEdi" value="{{beneEdi.bene_supervisor}}"/>
+			<input id="beneOutprofEdi" name="beneOutprofEdi" value="{{beneEdi.bene_outprof}}"/>
+			<input id="beneOutidentEdi" name="beneOutidentEdi" value="{{beneEdi.bene_outident}}"/>
+			<input id="beneOutcpfEdi" name="beneOutcpfEdi" value="{{beneEdi.bene_outcpf}}"/>
+			<input id="beneOutendEdi" name="beneOutendEdi" value="{{beneEdi.bene_outend}}"/>
+			<input id="beneOutendcomplEdi" name="beneOutendcomplEdi" value="{{beneEdi.bene_outendcompl}}"/>
+			<input id="beneOutendbairroEdi" name="beneOutendbairroEdi" value="{{beneEdi.bene_outendbairro}}"/>
+			<input id="beneOutendcidadeEdi" name="beneOutendcidadeEdi" value="{{beneEdi.bene_outendcidade}}"/>
+			<input id="beneOutendufEdi" name="beneOutendufEdi" value="{{beneEdi.bene_outenduf}}"/>
+			<input id="beneOutendcepEdi" name="beneOutendcepEdi" value="{{beneEdi.bene_outendcep}}"/>
+			<input id="beneOutcelEdi" name="beneOutcelEdi" value="{{beneEdi.bene_outcel}}"/>
+			<input id="beneOutcel2Edi" name="beneOutcel2Edi" value="{{beneEdi.bene_outcel2}}"/>
+			<input id="beneOutemailEdi" name="beneOutemailEdi" value="{{beneEdi.bene_outemail}}"/>
+			
+			<input id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
+			<input id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
+
+			<input id="benePaiEdi" name="benePaiEdi" value="{{beneEdi.bene_pai}}"/>
+			<input id="benePaiprofEdi" name="benePaiprofEdi" value="{{beneEdi.bene_paiprof}}"/>
+			<input id="benePaiidentEdi" name="benePaiidentEdi" value="{{beneEdi.bene_paiident}}"/>
+			<input id="benePaicpfEdi" name="benePaicpfEdi" value="{{beneEdi.bene_paicpf}}"/>
+			<!--
+			<input id="benePaiendEdi" name="benePaiendEdi" value="{{beneEdi.bene_paiend}}"/>
+			<input id="benePaiendcomplEdi" name="benePaiendcomplEdi" value="{{beneEdi.bene_paiendcompl}}"/>
+			<input id="benePaiendbairroEdi" name="benePaiendbairroEdi" value="{{beneEdi.bene_paiendbairro}}"/>
+			<input id="benePaiendcidadeEdi" name="benePaiendcidadeEdi" value="{{beneEdi.bene_paiendcidade}}"/>
+			<input id="benePaiendufEdi" name="benePaiendufEdi" value="{{beneEdi.bene_paienduf}}"/>
+			<input id="benePaiendcepEdi" name="benePaiendcepEdi" value="{{beneEdi.bene_paiendcep}}"/>
+			-->
+			<input id="benePaicelEdi" name="benePaicelEdi" value="{{beneEdi.bene_paicel}}"/>
+			<input id="benePaicel2Edi" name="benePaicel2Edi" value="{{beneEdi.bene_paicel2}}"/>
+			<input id="benePaiemailEdi" name="benePaiemailEdi" value="{{beneEdi.bene_paiemail}}"/>
+			<input id="beneMaeEdi" name="beneMaeEdi" value="{{beneEdi.bene_mae}}"/>
+			<input id="beneMaeprofEdi" name="beneMaeprofEdi" value="{{beneEdi.bene_maeprof}}"/>
+			<input id="beneMaeidentEdi" name="beneMaeidentEdi" value="{{beneEdi.bene_maeident}}"/>
+			<input id="beneMaecpfEdi" name="beneMaecpfEdi" value="{{beneEdi.bene_maecpf}}"/>
+			<!--
+			<input id="beneMaeendEdi" name="beneMaeendEdi" value="{{beneEdi.bene_maeend}}"/>
+			<input id="beneMaeendcomplEdi" name="beneMaeendcomplEdi" value="{{beneEdi.bene_maeendcompl}}"/>
+			<input id="beneMaeendbairroEdi" name="beneMaeendbairroEdi" value="{{beneEdi.bene_maeendbairro}}"/>
+			<input id="beneMaeendcidadeEdi" name="beneMaeendcidadeEdi" value="{{beneEdi.bene_maeendcidade}}"/>
+			<input id="beneMaeendufEdi" name="beneMaeendufEdi" value="{{beneEdi.bene_maeenduf}}"/>
+			<input id="beneMaeendcepEdi" name="beneMaeendcepEdi" value="{{beneEdi.bene_maeendcep}}"/>
+			-->
+			<input id="beneMaecelEdi" name="beneMaecelEdi" value="{{beneEdi.bene_maecel}}"/>
+			<input id="beneMaecel2Edi" name="beneMaecel2Edi" value="{{beneEdi.bene_maecel2}}"/>
+			<input id="beneMaeemailEdi" name="beneMaeemailEdi" value="{{beneEdi.bene_maeemail}}"/>
+			<input id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
+
+			<input id="beneEscolanomeEdi" name="beneEscolanomeEdi" value="{{beneEdi.bene_escolanome}}"/>
+			<input id="beneEscolafoneEdi" name="beneEscolafoneEdi" value="{{beneEdi.bene_escolafone}}"/>
+			<input id="beneEscolaendEdi" name="beneEscolaendEdi" value="{{beneEdi.bene_escolaend}}"/>
+			<input id="beneEscolacompEdi" name="beneEscolacompEdi" value="{{beneEdi.bene_escolacomp}}"/>
+			<input id="beneEscolabairroEdi" name="beneEscolabairroEdi" value="{{beneEdi.bene_escolabairro}}"/>
+			<input id="beneEscolacidadeEdi" name="beneEscolacidadeEdi" value="{{beneEdi.bene_escolacidade}}"/>
+			<input id="beneEscolaufEdi" name="beneEscolaufEdi" value="{{beneEdi.bene_escolauf}}"/>
+			<input id="beneEscolacepEdi" name="beneEscolacepEdi" value="{{beneEdi.bene_escolacep}}"/>
+			<input id="beneEscolaanoEdi" name="beneEscolaanoEdi" value="{{beneEdi.bene_escolaano}}"/>
+			<input id="beneEscolaserieEdi" name="beneEscolaserieEdi" value="{{beneEdi.bene_escolaserie}}"/>
+			<input id="beneEscolacoordEdi" name="beneEscolacoordEdi" value="{{beneEdi.bene_escolacoord}}"/>
+			<input id="beneEscolacoordtelEdi" name="beneEscolacoordtelEdi" value="{{beneEdi.bene_escolacoordtel}}"/>
+			<input id="beneEscolaoutro1Edi" name="beneEscolaoutro1Edi" value="{{beneEdi.bene_escolaoutro1}}"/>
+			<input id="beneEscolaoutro1funcEdi" name="beneEscolaoutro1funcEdi" value="{{beneEdi.bene_escolaoutro1func}}"/>
+			<input id="beneEscolaoutro1telEdi" name="beneEscolaoutro1telEdi" value="{{beneEdi.bene_escolaoutro1tel}}"/>
+			<input id="beneEscolaoutro2Edi" name="beneEscolaoutro2Edi" value="{{beneEdi.bene_escolaoutro2}}"/>
+			<input id="beneEscolaoutro2funcEdi" name="beneEscolaoutro2funcEdi" value="{{beneEdi.bene_escolaoutro2func}}"/>
+			<input id="beneEscolaoutro2telEdi" name="beneEscolaoutro2telEdi" value="{{beneEdi.bene_escolaoutro2tel}}"/>
+			<input id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
+		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -124,18 +234,30 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">beneficiários Cadastro</li>
+							<li class="active">Beneficiários Editar
+							</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/beneficiario/atualizar" method="POST">
 								<document class="document-horizontal" role="document" >
-										<div class="col-xl-12" style="padding-top: 50px;">
-											<div class="tabbable">
-												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-												<li class="active">
+									<br>
+									<input id="id" name="id" class="hidden" value="{{beneEdi._id}}" />
+									<div class="col-xs-12">
+										<div class="alert alert-warning" style="font-style: initial;">
+											
+											<strong>
+												<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="beneNomeinfo"  id="beneNomeinfo" placeholder="" class="form-control"  >
+											</strong>
+
+										</div>
+									</div>
+									<div class="col-xl-12">
+										<div class="tabbable">
+											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+												<li class="active" >
 													<a data-toggle="tab" href="#basico" aria-expanded="true">
 														<i class="red ace-icon fa fa-child bigger-120"></i>
 														Dados Básicos
@@ -172,11 +294,18 @@
 													</a>
 												</li>
 												<li class="">
+													<a data-toggle="tab" href="#esc" aria-expanded="false">
+														<i class="orange ace-icon fa fa-graduation-cap bigger-120"></i>
+														Escola
+													</a>
+												</li>
+												<li class="">
 													<a data-toggle="tab" href="#fat" aria-expanded="false">
 														<i class="green ace-icon fa fa-money bigger-120"></i>
 														Faturamento
 													</a>
 												</li>
+												
 												<li class="">
 													<a data-toggle="tab" href="#obs" aria-expanded="false">
 														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
@@ -184,87 +313,15 @@
 													</a>
 												</li>
 											</ul>
-											</div>
-											
-											<div id="divCarrega" name="divCarrega" class="hidden">
-												<input id="beneId" name="beneId" value="{{beneEdi._id}}"/>
-												<input id="beneNomeEdi" name="beneNomeEdi" value="{{beneEdi.bene_nome}}"/>
-												<input id="beneApelidoEdi" name="beneApelidoEdi" value="{{beneEdi.bene_apelido}}"/>
-												<input id="beneIdadeEdi" name="beneIdadeEdi" value="{{beneEdi.bene_idade}}"/>
-												<input id="beneDatanascEdi" name="beneDatanascEdi" value="{{beneEdi.bene_datanasc}}"/>
-												<input id="beneNacionalidadeEdi" name="beneNacionalidadeEdi" value="{{beneEdi.bene_nacionalidade}}"/>
-												<input id="beneEndEdi" name="beneEndEdi" value="{{beneEdi.bene_end}}"/>
-												<input id="beneEndcomplEdi" name="beneEndcomplEdi" value="{{beneEdi.bene_endcompl}}"/>
-												<input id="beneEndbairroEdi" name="beneEndbairroEdi" value="{{beneEdi.bene_endbairro}}"/>
-												<input id="beneEndcidadeEdi" name="beneEndcidadeEdi" value="{{beneEdi.bene_endcidade}}"/>
-												<input id="beneEndufEdi" name="beneEndufEdi" value="{{beneEdi.bene_enduf}}"/>
-												<input id="beneEndcepEdi" name="beneEndcepEdi" value="{{beneEdi.bene_endcep}}"/>
-												<input id="beneIdentEdi" name="beneIdentEdi" value="{{beneEdi.bene_ident}}"/>
-												<input id="beneCpfEdi" name="beneCpfEdi" value="{{beneEdi.bene_cpf}}"/>
-												<input id="beneStatusEdi" name="beneStatusEdi" value="{{beneEdi.bene_status}}"/>
-												<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
-												<input id="beneOutEdi" name="beneOutEdi" value="{{beneEdi.bene_out}}"/>
-												<input id="beneGrauparEdi" name="beneGrauparEdi" value="{{beneEdi.bene_graupar}}"/>
-												<input id="beneSupervisorEdi" name="beneSupervisorEdi" value="{{beneEdi.bene_supervisor}}"/>
-												<input id="beneOutprofEdi" name="beneOutprofEdi" value="{{beneEdi.bene_outprof}}"/>
-												<input id="beneOutidentEdi" name="beneOutidentEdi" value="{{beneEdi.bene_outident}}"/>
-												<input id="beneOutcpfEdi" name="beneOutcpfEdi" value="{{beneEdi.bene_outcpf}}"/>
-												<input id="beneOutendEdi" name="beneOutendEdi" value="{{beneEdi.bene_outend}}"/>
-												<input id="beneOutendcomplEdi" name="beneOutendcomplEdi" value="{{beneEdi.bene_outendcompl}}"/>
-												<input id="beneOutendbairroEdi" name="beneOutendbairroEdi" value="{{beneEdi.bene_outendbairro}}"/>
-												<input id="beneOutendcidadeEdi" name="beneOutendcidadeEdi" value="{{beneEdi.bene_outendcidade}}"/>
-												<input id="beneOutendufEdi" name="beneOutendufEdi" value="{{beneEdi.bene_outenduf}}"/>
-												<input id="beneOutendcepEdi" name="beneOutendcepEdi" value="{{beneEdi.bene_outendcep}}"/>
-												<input id="beneOutcelEdi" name="beneOutcelEdi" value="{{beneEdi.bene_outcel}}"/>
-												<input id="beneOutcel2Edi" name="beneOutcel2Edi" value="{{beneEdi.bene_outcel2}}"/>
-												<input id="beneOutemailEdi" name="beneOutemailEdi" value="{{beneEdi.bene_outemail}}"/>
-												
-												<input id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
-												<input id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
-
-												<input id="benePaiEdi" name="benePaiEdi" value="{{beneEdi.bene_pai}}"/>
-												<input id="benePaiprofEdi" name="benePaiprofEdi" value="{{beneEdi.bene_paiprof}}"/>
-												<input id="benePaiidentEdi" name="benePaiidentEdi" value="{{beneEdi.bene_paiident}}"/>
-												<input id="benePaicpfEdi" name="benePaicpfEdi" value="{{beneEdi.bene_paicpf}}"/>
-												<!--
-												<input id="benePaiendEdi" name="benePaiendEdi" value="{{beneEdi.bene_paiend}}"/>
-												<input id="benePaiendcomplEdi" name="benePaiendcomplEdi" value="{{beneEdi.bene_paiendcompl}}"/>
-												<input id="benePaiendbairroEdi" name="benePaiendbairroEdi" value="{{beneEdi.bene_paiendbairro}}"/>
-												<input id="benePaiendcidadeEdi" name="benePaiendcidadeEdi" value="{{beneEdi.bene_paiendcidade}}"/>
-												<input id="benePaiendufEdi" name="benePaiendufEdi" value="{{beneEdi.bene_paienduf}}"/>
-												<input id="benePaiendcepEdi" name="benePaiendcepEdi" value="{{beneEdi.bene_paiendcep}}"/>
-												-->
-												<input id="benePaicelEdi" name="benePaicelEdi" value="{{beneEdi.bene_paicel}}"/>
-												<input id="benePaicel2Edi" name="benePaicel2Edi" value="{{beneEdi.bene_paicel2}}"/>
-												<input id="benePaiemailEdi" name="benePaiemailEdi" value="{{beneEdi.bene_paiemail}}"/>
-												<input id="beneMaeEdi" name="beneMaeEdi" value="{{beneEdi.bene_mae}}"/>
-												<input id="beneMaeprofEdi" name="beneMaeprofEdi" value="{{beneEdi.bene_maeprof}}"/>
-												<input id="beneMaeidentEdi" name="beneMaeidentEdi" value="{{beneEdi.bene_maeident}}"/>
-												<input id="beneMaecpfEdi" name="beneMaecpfEdi" value="{{beneEdi.bene_maecpf}}"/>
-												<!--
-												<input id="beneMaeendEdi" name="beneMaeendEdi" value="{{beneEdi.bene_maeend}}"/>
-												<input id="beneMaeendcomplEdi" name="beneMaeendcomplEdi" value="{{beneEdi.bene_maeendcompl}}"/>
-												<input id="beneMaeendbairroEdi" name="beneMaeendbairroEdi" value="{{beneEdi.bene_maeendbairro}}"/>
-												<input id="beneMaeendcidadeEdi" name="beneMaeendcidadeEdi" value="{{beneEdi.bene_maeendcidade}}"/>
-												<input id="beneMaeendufEdi" name="beneMaeendufEdi" value="{{beneEdi.bene_maeenduf}}"/>
-												<input id="beneMaeendcepEdi" name="beneMaeendcepEdi" value="{{beneEdi.bene_maeendcep}}"/>
-												-->
-												<input id="beneMaecelEdi" name="beneMaecelEdi" value="{{beneEdi.bene_maecel}}"/>
-												<input id="beneMaecel2Edi" name="beneMaecel2Edi" value="{{beneEdi.bene_maecel2}}"/>
-												<input id="beneMaeemailEdi" name="beneMaeemailEdi" value="{{beneEdi.bene_maeemail}}"/>
-												<input id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
-												<input id="beneEscolaEdi" name="beneEscolaEdi" value="{{beneEdi.bene_escola}}"/>
-												<input id="beneEscolaObsEdi" name="beneEscolaObsEdi" value="{{beneEdi.bene_escolaobs}}"/>
-											</div>
-												<div class="tab-content">
+											<div class="tab-content">
 												<div id="basico" class="tab-pane fade active in">
 													<div class="row">
 														<div class="col-xs-12 col-sm-4">
 															<label > Nome </label>
 															<div class="row ">
 																<div class="input-group" >
-																	<div class="col-sm-4">
-																		<input  type="text" name="beneNome" id="beneNome"  class="form-control" style="width: 400px;" value="{{bene_nome}}"/>
+																	<div class="col-xs-4">
+																		<input type="text" name="beneNome" id="beneNome" placeholder="" class="form-control" style="width: 350px;" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
 																	</div>
 																</div>
 															</div>
@@ -273,20 +330,20 @@
 															<label > Apelido </label>
 															<div class="row">
 																<div class="input-group" >
-																	<div class="col-sm-3">
-																		<input  type="text" name="beneApelido" id="beneApelido" class="form-control" style="width: 300px;" value="{{bene_apelido}}" />
+																	<div class="col-xs-4">
+																		<input  type="text" name="beneApelido" id="beneApelido" placeholder="" style="width: 350px;" class="form-control" />
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>	
 													<div class="row">
-														<div class="col-xs-12 col-sm-2">
+														<div class="col-xs-12 col-sm-4">
 															<label> Idade</label>
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-1">
-																		<input type="text" name="beneIdade" id="beneIdade" placeholder="" class="form-control" style="width: 50px;" value="{{bene_idade}}"/>
+																	<div class="col-sm-4">
+																		<input type="text" name="beneIdade" id="beneIdade" placeholder="" class="form-control" style="width: 50px;" />
 																	</div>
 																</div>
 															</div>
@@ -296,7 +353,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="beneDatanasc" name="beneDatanasc" type="date" value="{{bene_datanasc}}">
+																		<input id="beneDatanasc" name="beneDatanasc" type="date">
 																	</div>
 																</div>
 															</div>
@@ -306,62 +363,42 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 300px;" value="{{bene_nacionalidade}}"/>
+																		<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-xs-10 col-sm-5">
+														<div class="col-xs-10 col-sm-4">
 
 															<label> Identidade </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneIdent" id="beneIdent" placeholder="" class="form-control" style="width: 200px;" value="{{bene_ident}}"/>
+																	<input type="text" name="beneIdent" id="beneIdent" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-10 col-sm-5">
+														<div class="col-xs-10 col-sm-4">
 															<label> CPF </label>
 															<div class="input-group">
 																<div>
-																	<input class="cpf" type="text" name="beneCpf" id="beneCpf" placeholder="" class="form-control" style="width: 200px;"  value="{{bene_cpf}}"/>
+																	<input class="cpf" type="text" name="beneCpf" id="beneCpf" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
 													</div>
-													<!--
-													<label> Supervisor/a </label>
-													<div class="input-group">
-														<div>
-															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 500px;"  value="{{bene_supervisor}}"/>
-														</div>
-													</div>
-													-->
+													
 													<label>Status</label>
 													<div class="input-group">
 														<div >
-															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha..." >
+															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
 																	<option value="Ativo">Ativo</option>
 																	<option value="Inativo">Inativo</option>
 															</select>
 														</div>
 													</div>
-													<label> Escola </label>
-													<div>
-														<select name="beneEscola" id="beneEscola" class="chosen-select" data-placeholder="Escolha...">
-														{{#each escolas}}
-															<option value="{{_id}}">{{escola_nome}}</option>
-														{{/each}}
-														</select>
-													</div>
-													<label> Observação escola </label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 500px;" value="{{bene_obs}}"></textarea>
-														</div>
-													</div>
+																										
 												</div>
 												<div id="end" class="tab-pane fade">
 													<div class="row">
@@ -369,7 +406,7 @@
 															<label > Endereço </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 450px;"  value="{{bene_end}}"/>
+																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -377,7 +414,7 @@
 															<label> Complemento </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 200px;" value="{{bene_endcompl}}"/>
+																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
@@ -387,7 +424,7 @@
 															<label> Bairro </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 400px;" value="{{bene_endbairro}}"/>
+																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -395,7 +432,7 @@
 															<label> Cidade </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 200px;" value="{{bene_endcidade}}"/>
+																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>	
 														</div>
@@ -405,7 +442,7 @@
 															<label>UF</label>
 															<div class="input-group">
 																	<div >
-																		<select name="beneEnduf" id="beneEnduf" class="chosen-select" data-placeholder="Escolha..." value="{{bene_enduf}}">
+																		<select name="beneEnduf" id="beneEnduf" class="chosen-select" data-placeholder="Escolha...">
 																				{{#each estados}}
 																				<option value="{{_id}}">{{estado_uf}}</option>
 																				{{else}}
@@ -418,7 +455,7 @@
 															<label> CEP </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" class="cep" name="beneEndcep" id="beneEndcep" placeholder="00000-000" class="form-control" style="width: 100px;"  value="{{bene_endcep}}"/>
+																	<input type="text" class="cep" name="beneEndcep" id="beneEndcep" placeholder="00000-000" class="form-control" style="width: 100px;"/>
 																</div>
 															</div>
 														</div>
@@ -429,7 +466,7 @@
 													<label>Convênio</label>
 													<div class="input-group">
 															<div >
-																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;" value="{{bene_convid}}">
+																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 350px;">
 																		{{#each convs}}
 																			<option value="{{_id}}">{{conv_nome}}</option>
 																		{{else}}
@@ -442,19 +479,19 @@
 												</div>
 												<div id="mae" class="tab-pane fade">
 														<div class="row">
-															<div class="col-xs-12 col-sm-8">
+															<div class="col-xs-12 col-sm-6">
 																<label > Nome da mãe </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 400px;"  value="{{bene_mae}}"/>
+																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-4">
+															<div class="col-xs-12 col-sm-6">
 																<label> Profissão </label>
 																<div class="input-group">
 																<div >
-																		<input type="text" name="beneMaeprof" id="beneMaeprof" placeholder="" class="form-control" style="width: 150px;" value="{{bene_maeprof}}"/>
+																		<input type="text" name="beneMaeprof" id="beneMaeprof" placeholder="" class="form-control" style="width: 150px;"/>
 																	</div>
 																</div>
 															</div>
@@ -464,7 +501,7 @@
 																<label> RG </label>
 																<div class="input-group">
 																<div>
-																		<input type="text" name="beneMaeident"  id="beneMaeident" placeholder="" class="form-control" style="width: 200px;"  value="{{bene_maeident}}"/>
+																		<input type="text" name="beneMaeident"  id="beneMaeident" placeholder="" class="form-control" style="width: 200px;"/>
 																	</div>
 																</div>
 															</div>
@@ -472,238 +509,104 @@
 																<label> CPF </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneMaecpf" id="beneMaecpf" placeholder="" class="form-control" style="width: 200px;" value="{{bene_maecpf}}"/>
+																		<input type="text" name="beneMaecpf" id="beneMaecpf" placeholder="" class="form-control" style="width: 200px;"/>
 																	</div>
 																</div>
 															</div>
 														</div>
-														<!--
 														<div class="row">
-															<div class="col-xs-12 col-sm-8">
-																<label > Endereço </label>
+															<div class="col-xs-12 col-sm-4">
+																<label>WhatsApp (99) 9999-9999 </label>
 																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMaeend" id="beneMaeend" placeholder="" class="form-control" style="width: 400px;"/>
-																	</div>
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;"  />
+																</div> 
+															</div>
+						
+															<div class="col-xs-12 col-sm-4">
+																<label>Celular (99) 9 9999-9999 </label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="ace-icon fa fa-phone"></i>
+																	</span>
+																	<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-4">
-																<label> Complemento </label>
+																<label > E-Mail </label>
 																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMaeendcompl" id="beneMaeendcompl" placeholder="" class="form-control" style="width: 150px;"/>
-																	</div>
+																	<span class="input-group-addon">
+																		<i class="red ace-icon fa fa-envelope"></i>
+																	</span>
+																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;"/>
+																	
 																</div>
 															</div>
 														</div>
-						
-
-						
-														<div class="row">
-															<div class="col-xs-12 col-sm-6">
-																<label> Bairro </label>
-																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMaeendbairro"  id="beneMaeendbairro" placeholder="" class="form-control" style="width: 200px;"/>
-																	</div>
-																</div>
-															</div>
-							
-															<div class="col-xs-12 col-sm-4">
-																<label> Cidade </label>
-																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMaeendcidade" id="beneMaeendcidade" placeholder="" class="form-control" style="width: 200px;"/>
-																	</div>
-																</div>
-															</div>
-														</div>
-
-														<div class="row">
-															<div class="col-xs-11 col-sm-2">
-																<label>UF</label>
-																<div class="input-group">
-																		<div >
-																			<select name="beneMaeenduf" id="beneMaeenduf" class="chosen-select" data-placeholder="Escolha...">
-																					{{#each estados}}
-																					<option value="{{_id}}">{{estado_uf}}</option>
-																					{{else}}
-																					{{/each}}
-																			</select>
-																		</div>
-																</div>
-															</div>
-
-
-															<div class="col-xs-11 col-sm-3">
-																<label> CEP </label>
-																<div class="input-group">
-																	<div >
-																		<input type="Text" name="beneMaeendcep" id="beneMaeendcep"  placeholder="" class="form-control" style="width: 100px;"/>
-																	</div>
-																</div>
-															</div>
--->
-															<div class="col-xs-11 col-sm-3">
-																<div>
-																	<label>WhatsApp
-																	<!--	<small class="text-warning">(99) 9999-9999</small>-->
-																	</label>
-													
-																	<div class="input-group">
-																		<span class="input-group-addon">
-																			<i class="ace-icon fa fa-phone"></i>
-																		</span>
-													
-																		<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;" value="{{bene_maecel}}" />
-																	</div> 
-																</div>
-															</div>
-						
-															<div class="col-xs-11 col-sm-3">
-																<div>
-																	<label>Celular
-																	<!--	<small class="text-warning"> (99) 9999-9999</small>-->
-																	</label>
-													
-																	<div class="input-group">
-																		<span class="input-group-addon">
-																			<i class="ace-icon fa fa-phone"></i>
-																		</span>
-													
-																		<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" value="{{bene_maecel2}}"/>
-																	</div>
-																</div>
-															</div>
-															<label > E-Mail </label>
-															<div class="input-group">
-																<div >
-																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 500px;" value="{{bene_maeemail}}"/>
-																</div>
-															</div>
-														
 												
 												</div>
 												<div id="pai" class="tab-pane fade">
 													<div class="row">
-														<div class="col-xs-12 col-sm-8">
+														<div class="col-xs-12 col-sm-4">
 															<label > Nome do pai </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 400px;"  value="{{bene_pai}}"/>
+																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-4">
 															<label> Profissão </label>
 															<div class="input-group">
-																<input type="text" name="benePaiprof" id="benePaiprof" placeholder="" class="form-control" style="width: 200px;" value="{{bene_paiprof}}"/>
+																<input type="text" name="benePaiprof" id="benePaiprof" placeholder="" class="form-control" style="width: 200px;"/>
 															</div>
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-xs-12 col-sm-6">
+														<div class="col-xs-12 col-sm-4">
 															<label> RG </label>
 															<div class="input-group">
-																<input type="text" name="benePaiident"  id="benePaiident" placeholder="" class="form-control" style="width: 200px;" value="{{bene_paiident}}"/>
+																<input type="text" name="benePaiident"  id="benePaiident" placeholder="" class="form-control" style="width: 200px;"/>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-6">
+														<div class="col-xs-12 col-sm-4">
 															<label> CPF </label>
 															<div class="input-group">
-																<input type="text" name="benePaicpf" id="benePaicpf" placeholder="" class="form-control" style="width: 200px;"  value="{{bene_paicpf}}"/>
+																<input type="text" name="benePaicpf" id="benePaicpf" placeholder="" class="form-control" style="width: 200px;"/>
 															</div>
 														</div>
 													</div>
-														<!--
-															<div class="row">
-																<div class="col-xs-12 col-sm-8">
-																	<label > Endereço </label>
-																	<div class="input-group">
-																		<div >
-																			<input type="text" name="benePaiend" id="benePaiend" placeholder="" class="form-control" style="width: 400px;"/>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xs-12 col-sm-4">
-																	<label> Complemento </label>
-																	<div class="input-group">
-																		<div >
-																			<input type="text" name="benePaiendcompl" id="benePaiendcompl" placeholder="" class="form-control" style="width: 150px;"/>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xs-12 col-sm-6">
-																	<label> Bairro </label>
-																	<div class="input-group">
-																		<div >
-																			<input type="text" name="benePaiendbairro"  id="benePaiendbairro" placeholder="" class="form-control" style="width: 200px;"/>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xs-12 col-sm-4">
-																	<label> Cidade </label>
-																	<div class="input-group">
-																		<div >
-																			<input type="text" name="benePaiendcidade" id="benePaiendcidade" placeholder="" class="form-control" style="width: 200px;"/>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xs-12 col-sm-2">
-																	<label>UF</label>
-																	<div class="input-group">
-																			<div >
-																				<select name="benePaienduf" id="benePaienduf" class="chosen-select" data-placeholder="Escolha...">
-																						{{#each estados}}
-																						<option value="{{_id}}">{{estado_uf}}</option>
-																						{{else}}
-																						{{/each}}
-																				</select>
-																			</div>
-																	</div>
-																</div>
-																<div class="col-xs-12 col-sm-3">
-																	<label> CEP </label>
-																	<div class="input-group">
-																		<div >
-																			<input type="Text" name="benePaiendcep" id="benePaiendcep"  placeholder="" class="form-control" style="width: 100px;"/>
-																		</div>
-																	</div>
-																</div>
-														-->
+														
 													<div class="row">
-														<div class="col-xs-12 col-sm-3">
-															<label>WhatsApp
-															</label>
+														<div class="col-xs-12 col-sm-4">
+															<label>WhatsApp (99) 9999-9999 </label>
 															<div class="input-group">
 																<span class="input-group-addon">
-																	<i class="ace-icon fa fa-phone"></i>
+																	<i class="green ace-icon fa fa-whatsapp"></i>
 																</span>
-																<input name="benePaicel" id="benePaicel"   class="document-control input-mask-phone" type="text" style="width: 100px;" value="{{bene_paicel}}"/>
+																<input name="benePaicel" id="benePaicel"   class="document-control input-mask-phone" type="text" style="width: 100px;" />
 															</div> 
 														</div>
-														<div class="col-xs-12 col-sm-3">
-																<label>Celular
-																</label>
+														<div class="col-xs-12 col-sm-4">
+																<label>Celular (99) 9 9999-9999 </label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="ace-icon fa fa-phone"></i>
 																	</span>
-																	<input name="benePaicel2" id="benePaicel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" value="{{bene_paicel2}}"/>
+																	<input name="benePaicel2" id="benePaicel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
 																</div>
 														</div>
-														<div class=""col-xs-12 col-sm-3"">
-															<label>E-Mail
-															</label>
+														<div class="col-xs-12 col-sm-4">
+															<label>E-Mail </label>
 															<div class="input-group">
-																<div>
-																	<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 500px;"  value="{{bene_paiemail}}"/>
-																</div>
+																<span class="input-group-addon">
+																	<i class="red ace-icon fa fa-envelope"></i>
+																</span>
+																<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 350px;"/>
 															</div>
+															
 														</div>
 													</div>
 												</div>
@@ -719,31 +622,34 @@
 													<div class="col-md-offset-3 col-md-9">
 														<button class="btn btn-pink"  type="button" name="AcaoCopiaMae" id="AcaoCopiaMae"  onclick="javascript:copiaValoresMae()">
 															<i class="ace-icon fa fa-female bigger-110"></i>
-															Copia da Mãe
+															Copia da mãe
 														</button>
 															&nbsp; &nbsp; &nbsp;
 														<button class="btn btn-primary"  type="button" name="AcaoCopiaPai" id="AcaoCopiaPai"  onclick="javascript:copiaValoresPai()">
 															<i class="ace-icon fa fa-male bigger-110"></i>
-															Copia do Pai
+															Copia do pai
 														</button>
+														
 													</div>
+													
 														<div class="row">
+															<hr>
 															<div class="col-xs-12 col-sm-6">
 																<label > Nome </label>
 																<div class="input-group">
-																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 500px;" value="{{bene_out}}"/>
+																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
-																<label> Grau de Parentesco</label>
+																<label> Grau de parentesco</label>
 																<div class="input-group">
-																		<input type="text" name="beneGraupar" id="beneGraupar" placeholder="" class="form-control" style="width: 250px;"  value="{{bene_graupar}}"/>
+																		<input type="text" name="beneGraupar" id="beneGraupar" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
 																<div class="col-xs-12 col-sm-3">
 																	<label> Profissão </label>
 																	<div class="input-group">
-																		<input type="text" name="beneOutprof" id="beneOutprof" placeholder="" class="form-control" style="width: 250px;"  value="{{bene_outprof}}"/>
+																		<input type="text" name="beneOutprof" id="beneOutprof" placeholder="" class="form-control" style="width: 250px;"/>
 																	</div>
 																</div>
 														</div>
@@ -752,7 +658,7 @@
 																<label> Identidade </label>
 																<div class="input-group">
 																	<div >
-																			<input type="text" name="beneOutident" id="beneOutident" placeholder="" class="form-control" style="width: 300px;" value="{{bene_outident}}"/>
+																			<input type="text" name="beneOutident" id="beneOutident" placeholder="" class="form-control" style="width: 300px;"/>
 																	</div>
 																</div>
 															</div>
@@ -760,7 +666,7 @@
 																<label> CPF </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutcpf" id="beneOutcpf" placeholder="" class="form-control" style="width: 300px;" value="{{bene_outcpf}}"/>
+																		<input type="text" name="beneOutcpf" id="beneOutcpf" placeholder="" class="form-control" style="width: 300px;"/>
 																	</div>
 																</div>
 															</div>
@@ -770,7 +676,7 @@
 																<label > Endereço </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 450px;" value="{{bene_outend}}"/>
+																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -778,7 +684,7 @@
 																<label> Complemento </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutendcompl" id="beneOutendcompl" placeholder="" class="form-control" style="width: 200px;" value="{{bene_outendcompl}}"/>
+																		<input type="text" name="beneOutendcompl" id="beneOutendcompl" placeholder="" class="form-control" style="width: 200px;"/>
 																	</div>
 																</div>
 															</div>
@@ -788,7 +694,7 @@
 																<label> Bairro </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutendbairro" id="beneOutendbairro" placeholder="" class="form-control" style="width: 400px;" value="{{bene_outbairro}}"/>
+																		<input type="text" name="beneOutendbairro" id="beneOutendbairro" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -796,7 +702,7 @@
 																<label> Cidade </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutendcidade" id="beneOutendcidade" placeholder="" class="form-control" style="width: 200px;" value="{{bene_outendcidade}}"/>
+																		<input type="text" name="beneOutendcidade" id="beneOutendcidade" placeholder="" class="form-control" style="width: 200px;"/>
 																	</div>
 																</div>	
 															</div>
@@ -819,104 +725,321 @@
 																<label> CEP </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" class="cep" name="beneOutendcep" id="beneOutendcep" placeholder="00000-000" class="form-control" style="width: 100px;" value="{{bene_outendcep}}"/>
+																		<input type="text" class="cep" name="beneOutendcep" id="beneOutendcep" placeholder="00000-000" class="form-control" style="width: 100px;"/>
 																	</div>
 																</div>
 															</div>
 														</div>
 														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>WhatsApp <small class="text-warning">(99) 9999-9999</small>
+																</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<input name="beneOutcel" id="beneOutcel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>Celular <small class="text-warning"> (99) 9 9999-9999</small>
+																</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-phone"></i>
+																	</span>
+																	<input name="beneOutcel2" id="beneOutcel2"  class="document-control input-mask-phone" type="text" id="Celular" />
+																</div>
+															</div>
+														
+															<div class="col-xs-12 col-sm-6">
+																<label > E-Mail </label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="red ace-icon fa fa-envelope"></i>
+																	</span>
+																	<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 350px;"/>
+																</div>
+															</div>
+														</div>
+												</div>
+												<div id="esc" class="tab-pane fade">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														
+														Dados complementares da escola.
+														<br>
+													</div>
+													
+														<div class="row">
+															<div class="col-xs-12 col-sm-6">
+																<label>Nome escola</label>
+																<div class="input-group">
+																		<input type="text" name="beneEscolanome" id="beneEscolanome" placeholder="" class="form-control" style="width: 350px;"/>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>Telefone</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																		<input type="text" name="beneEscolafone" id="beneEscolafone" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
+														</div>
+														<hr>
+														<div class="widget-box">
+															<div class="widget-header">
+																<h4 class="widget-title">
+																	<i class="brown ace-icon fa fa-map-o bigger-110"></i>
+																	Endereço
+																</h4>
+																
+																<span class="widget-toolbar">
+
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+
+																</span>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	
+																	<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label > Endereço </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaend"  id="beneEscolaend" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Complemento </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolacomp" id="beneEscolacomp" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label> Bairro </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolabairro" id="beneEscolabairro" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Cidade </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolacidade" id="beneEscolacidade" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>	
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>UF</label>
+																<div class="input-group">
+																		<div >
+																			<select name="beneEscolauf" id="beneEscolauf" class="chosen-select" data-placeholder="Escolha...">
+																					{{#each estados}}
+																					<option value="{{_id}}">{{estado_uf}}</option>
+																					{{else}}
+																					{{/each}}
+																			</select>
+																		</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> CEP </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" class="cep" name="beneEscolacep" id="beneEscolacep" placeholder="00000-000" class="form-control" style="width: 100px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+																																
+																</div>	
+															</div>	
+														</div>
+														<hr>
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>Ano letivo</label>
+																<div class="input-group">
+																		<input type="text" name="beneEscolaano" id="beneEscolaano" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>Série </label>
+																<div class="input-group">
+																	<input type="text" name="beneEscolaserie" id="beneEscolaserie" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
+														</div>
+														<hr>
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label> Coordenador </label>
+																<div class="input-group">
+																	<div >
+																			<input type="text" name="beneEscolacoord" id="beneEscolacoord" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> WhatsApp: </label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<div >
+																		<input type="text" name="beneEscolacoordtel" id="beneEscolacoordtel" placeholder="" class="form-control" style="width: 300px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label > Outro responsável </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro1"  id="beneEscolaoutro1" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Função </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro1func" id="beneEscolaoutro1func" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>
+															</div>
 															<div class="col-xs-12 col-sm-3">
 																<label>WhatsApp
 																	<small class="text-warning">(99) 9999-9999</small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneOutcel" id="beneOutcel"  class="document-control input-mask-phone" type="text" id="Whatsapp" value="{{bene_outcel}}"/>
+																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label > Outro responsável </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro2"  id="beneEscolaoutro2" placeholder="" class="form-control" style="width: 350px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Função </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro2func" id="beneEscolaoutro2func" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
-																<label>Celular
-																	<small class="text-warning"> (99) 9999-9999</small>
+																<label>WhatsApp
+																	<small class="text-warning">(99) 9999-9999</small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneOutcel2" id="beneOutcel2"  class="document-control input-mask-phone" type="text" id="Celular"  value="{{bene_outcel2}}" />
+																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text"  />
 																</div>
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-12 col-sm-6">
-																<label > E-Mail </label>
+															<div class="col-xs-12 col-sm-12">
+																<label> Observação </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 600px;"  value="{{bene_outemail}}" />
+																		<textarea type="text" name="beneEscolaobs" id="beneEscolaobs" placeholder="" class="form-control" style="width: 350px;"></textarea>
 																	</div>
 																</div>
 															</div>
+															
 														</div>
-													</div>
-													<div id="fat" class="tab-pane fade">
-														<div class="row">
-															<div class="col-xs-12 col-sm-3">
-																<label>Ordem Pagamento por</label>
-																<div class="input-group">
-																		<div >
-																			<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha..." value="{{bene_ordempg}}">
-																					<option value="-">-</option>
-																					<option value="CPF">CPF</option>
-																					<option value="CNPJ">CNPJ</option>
-																			</select>
-																		</div>
-																</div>
-															</div>
-															<div class="col-xs-12 col-sm-3">
-																<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
-																<div class="input-group">
+														
+												</div>												
+												<div id="fat" class="tab-pane fade">
+													<div class="row">
+														<div class="col-xs-12 col-sm-3">
+															<label>Ordem Pagamento por</label>
+															<div class="input-group">
 																	<div >
-																		<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" value="{{bene_ordemdoc}}" style="width: 200px;" />
+																		<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
+																				<option value="CPF">CPF</option>
+																				<option value="CNPJ">CNPJ</option>
+																		</select>
 																	</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
+															<div class="input-group">
+																<div >
+																	<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
 													</div>
-													<div id="obs" class="tab-pane fade">
-														<label> Observação </label>
-														<div class="input-group">
-															<div>
-																<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 500px;" ></textarea>
-															</div>
+												</div>
+												<div id="obs" class="tab-pane fade">
+													<label> Observação </label>
+													<div class="input-group">
+														<div>
+															<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 350px;"></textarea>
 														</div>
 													</div>
+												</div>
 											</div>
-										
 										</div>
-									<br>
-									<div class="space-6" style="height: 70px;"></div>
-									<div class="form-actions">
+									</div>
+									<hr>
+									
 										<div class="col-xs-12" style="text-align: center;" >
 											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
 											</button>
+
 											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar"  href="/menu/beneficiario/lis">
+											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
 												<i class="ace-icon fa fa-undo bigger-110"></i>
 												Voltar
 											</button>
 										</div>
-									</div>
+									
+									
+									
+									
 								</document>
-								
 							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+						</div>
+					</div>
 				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
+			</div>
+		</div>
+
 	</body>
 </html>

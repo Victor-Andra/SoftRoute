@@ -8,6 +8,12 @@
 			function evolucaoEditar(id){
 				window.location.href=("/menu/agenda/evolucaosup/"+id);
 			}
+			function evolucaoRemover(id){
+				window.location.href=("/menu/agenda/evolucaoRemoverF/"+id);
+			}
+			function retornar(){
+				history.back();
+			}
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
@@ -240,10 +246,36 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					
-					{{#each error}}
-						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:retornar()">
+									<i class="ace-icon fa fa-arow-left"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
-					{{/each}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendfechadofil" method="POST">
 							<div class="col-xs-12" class="row">
@@ -401,7 +433,7 @@
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Concluída</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Ação</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Ação</th>
 													
 												</tr>
 											</thead>
@@ -436,6 +468,11 @@
 															<div class="action-buttons">
 																<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEditar('{{_id}}');">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+															</div>
+															<div class="action-buttons">
+																<a class="red" name="acaoRemoveEvolucao" id="acaoRemoveEvolucao" onclick="javascript:evolucaoRemover('{{_id}}');">
+																	<i class="ace-icon fa fa-trash bigger-130"></i>
 																</a>
 															</div>
 														</td>

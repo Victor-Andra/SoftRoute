@@ -1,29 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>beneficiário Cadastro</title>
+		<title>Beneficiário Cadastro</title>
+		<script >
 		
-		<script type="text/javascript">
-		function exibenome() {
-			document.getElementById("beneNomeinfo").value = document.getElementById("beneNome").value;
+		function copiaValoresMae() {
+			document.getElementById("beneOut").value = document.getElementById("beneMae").value;
+			document.getElementById("beneGraupar").value = "Mãe";
+			document.getElementById("beneOutprof").value = document.getElementById("beneMaeprof").value;
+			document.getElementById("beneOutident").value = document.getElementById("beneMaeident").value;
+			document.getElementById("beneOutcpf").value = document.getElementById("beneMaecpf").value;
+			document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
+			document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
+			document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
+			document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
+			document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
+			document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
+			document.getElementById("beneOutcel").value = document.getElementById("beneMaecel").value;
+			document.getElementById("beneOutcel2").value = document.getElementById("beneMaecel2").value;
+			document.getElementById("beneOutemail").value = document.getElementById("beneMaeemail").value;
 		}
-			function copiaValoresMae() {
-				document.getElementById("beneOut").value = document.getElementById("beneMae").value;
-				document.getElementById("beneGraupar").value = "Mãe";
-				document.getElementById("beneOutprof").value = document.getElementById("beneMaeprof").value;
-				document.getElementById("beneOutident").value = document.getElementById("beneMaeident").value;
-				document.getElementById("beneOutcpf").value = document.getElementById("beneMaecpf").value;
-				document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
-				document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
-				document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
-				document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
-				document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
-				document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
-				document.getElementById("beneOutcel").value = document.getElementById("beneMaecel").value;
-				document.getElementById("beneOutcel2").value = document.getElementById("beneMaecel2").value;
-				document.getElementById("beneOutemail").value = document.getElementById("beneMaeemail").value;
-			}
-			function copiaValoresPai() {
+		function copiaValoresPai() {
 			document.getElementById("beneOut").value = document.getElementById("benePai").value;
 			document.getElementById("beneGraupar").value = "Pai";
 			document.getElementById("beneOutprof").value = document.getElementById("benePaiprof").value;
@@ -39,29 +36,216 @@
 			document.getElementById("beneOutcel2").value = document.getElementById("benePaicel2").value;
 			document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
 		}
-		</script>
+		function carregaBody(){
+
+			let dtnsc = new Date(document.getElementById("beneDatanascEdi").value);
+			let mes = (dtnsc.getMonth()+1).toString();
+			let dia = (dtnsc.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+			document.getElementById("beneNomeinfo").value = document.getElementById("beneNomeEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
+			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
+			
+			document.getElementById("beneDatanasc").value = fulldate;
+			document.getElementById("beneNacionalidade").value = document.getElementById("beneNacionalidadeEdi").value;
+			document.getElementById("beneEnd").value = document.getElementById("beneEndEdi").value;
+			document.getElementById("beneEndcompl").value = document.getElementById("beneEndcomplEdi").value;
+			document.getElementById("beneEndbairro").value = document.getElementById("beneEndbairroEdi").value;
+			document.getElementById("beneEndcidade").value = document.getElementById("beneEndcidadeEdi").value;
+			document.getElementById("beneEnduf").value = document.getElementById("beneEndufEdi").value;
+			document.getElementById("beneEndcep").value = document.getElementById("beneEndcepEdi").value;
+			document.getElementById("beneIdent").value = document.getElementById("beneIdentEdi").value;
+			document.getElementById("beneCpf").value = document.getElementById("beneCpfEdi").value;
+			document.getElementById("beneStatus").value = document.getElementById("beneStatusEdi").value;
+			document.getElementById("beneConvid").value = document.getElementById("beneConvEdi").value;
+			document.getElementById("beneOut").value = document.getElementById("beneOutEdi").value;
+			document.getElementById("beneGraupar").value = document.getElementById("beneGrauparEdi").value;
+			document.getElementById("beneOutprof").value = document.getElementById("beneOutprofEdi").value;
+			document.getElementById("beneOutident").value = document.getElementById("beneOutidentEdi").value;
+			document.getElementById("beneOutcpf").value = document.getElementById("beneOutcpfEdi").value;
+			document.getElementById("beneOutend").value = document.getElementById("beneOutendEdi").value;
+			document.getElementById("beneOutendcompl").value = document.getElementById("beneOutendcomplEdi").value;
+			document.getElementById("beneOutendbairro").value = document.getElementById("beneOutendbairroEdi").value;
+			document.getElementById("beneOutendcidade").value = document.getElementById("beneOutendcidadeEdi").value;
+			document.getElementById("beneOutenduf").value = document.getElementById("beneOutendufEdi").value;
+			document.getElementById("beneOutendcep").value = document.getElementById("beneOutendcepEdi").value;
+			document.getElementById("beneOutcel").value = document.getElementById("beneOutcelEdi").value;
+			document.getElementById("beneOutcel2").value = document.getElementById("beneOutcel2Edi").value;
+			document.getElementById("beneOutemail").value = document.getElementById("beneOutemailEdi").value;
+
+			document.getElementById("beneOrdempg").value = document.getElementById("beneOrdempgEdi").value;
+			document.getElementById("beneOrdemdoc").value = document.getElementById("beneOrdemdocEdi").value;
+
+			document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
+			document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
+			document.getElementById("benePaiident").value = document.getElementById("benePaiidentEdi").value;
+			document.getElementById("benePaicpf").value = document.getElementById("benePaicpfEdi").value;
+			//document.getElementById("benePaiend").value = document.getElementById("benePaiendEdi").value;
+			//document.getElementById("benePaiendcompl").value = document.getElementById("benePaiendcomplEdi").value;
+			//document.getElementById("benePaiendbairro").value = document.getElementById("benePaiendbairroEdi").value;
+			//document.getElementById("benePaiendcidade").value = document.getElementById("benePaiendcidadeEdi").value;
+			//document.getElementById("benePaienduf").value = document.getElementById("benePaiendufEdi").value;
+			//document.getElementById("benePaiendcep").value = document.getElementById("benePaiendcepEdi").value;
+			document.getElementById("benePaicel").value = document.getElementById("benePaicelEdi").value;
+			document.getElementById("benePaicel2").value = document.getElementById("benePaicel2Edi").value;
+			document.getElementById("benePaiemail").value = document.getElementById("benePaiemailEdi").value;
+			document.getElementById("beneMae").value = document.getElementById("beneMaeEdi").value;
+			document.getElementById("beneMaeprof").value = document.getElementById("beneMaeprofEdi").value;
+			document.getElementById("beneMaeident").value = document.getElementById("beneMaeidentEdi").value;
+			document.getElementById("beneMaecpf").value = document.getElementById("beneMaecpfEdi").value;
+			//document.getElementById("beneMaeend").value = document.getElementById("beneMaeendEdi").value;
+			//document.getElementById("beneMaeendcompl").value = document.getElementById("beneMaeendcomplEdi").value;
+			//document.getElementById("beneMaeendbairro").value = document.getElementById("beneMaeendbairroEdi").value;
+			//document.getElementById("beneMaeendcidade").value = document.getElementById("beneMaeendcidadeEdi").value;
+			//document.getElementById("beneMaeenduf").value = document.getElementById("beneMaeendufEdi").value;
+			//document.getElementById("beneMaeendcep").value = document.getElementById("beneMaeendcepEdi").value;
+			document.getElementById("beneMaecel").value = document.getElementById("beneMaecelEdi").value;
+			document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
+			document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
+			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
+			
+			document.getElementById("beneEscolanome").value = document.getElementById("beneEscolanomeEdi").value;
+			document.getElementById("beneEscolafone").value = document.getElementById("beneEscolafoneEdi").value;
+			document.getElementById("beneEscolaend").value = document.getElementById("beneEscolaendEdi").value;
+			document.getElementById("beneEscolacomp").value = document.getElementById("beneEscolacompEdi").value;
+			document.getElementById("beneEscolabairro").value = document.getElementById("beneEscolabairroEdi").value;
+			document.getElementById("beneEscolacidade").value = document.getElementById("beneEscolacidadeEdi").value;
+			document.getElementById("beneEscolauf").value = document.getElementById("beneEscolaufEdi").value;
+			document.getElementById("beneEscolacep").value = document.getElementById("beneEscolacepEdi").value;
+			document.getElementById("beneEscolaano").value = document.getElementById("beneEscolaanoEdi").value;
+			document.getElementById("beneEscolaserie").value = document.getElementById("beneEscolaserieEdi").value;
+			document.getElementById("beneEscolacoord").value = document.getElementById("beneEscolacoordEdi").value;
+			document.getElementById("beneEscolacoordtel").value = document.getElementById("beneEscolacoordtelEdi").value;
+			
+			document.getElementById("beneEscolaoutro1").value = document.getElementById("beneEscolaoutro1Edi").value;
+			document.getElementById("beneEscolaoutro1func").value = document.getElementById("beneEscolaoutro1funcEdi").value;
+			document.getElementById("beneEscolaoutro1tel").value = document.getElementById("beneEscolaoutro1telEdi").value;
+			
+			document.getElementById("beneEscolaoutro2").value = document.getElementById("beneEscolaoutro2Edi").value;
+			document.getElementById("beneEscolaoutro2func").value = document.getElementById("beneEscolaoutro2funcEdi").value;
+			document.getElementById("beneEscolaoutro2tel").value = document.getElementById("beneEscolaoutro2telEdi").value;
+			
+			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
+		}
+	</script>
 	</head>
-	<body class="no-skin" onload="javascript:controlaNave();ajustaData();">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="beneId" name="beneId" value="{{beneEdi._id}}"/>
+			<input id="beneNomeEdi" name="beneNomeEdi" value="{{beneEdi.bene_nome}}"/>
+			<input id="beneApelidoEdi" name="beneApelidoEdi" value="{{beneEdi.bene_apelido}}"/>
+			<input id="beneIdadeEdi" name="beneIdadeEdi" value="{{beneEdi.bene_idade}}"/>
+			<input id="beneDatanascEdi" name="beneDatanascEdi" value="{{beneEdi.bene_datanasc}}"/>
+			<input id="beneNacionalidadeEdi" name="beneNacionalidadeEdi" value="{{beneEdi.bene_nacionalidade}}"/>
+			<input id="beneEndEdi" name="beneEndEdi" value="{{beneEdi.bene_end}}"/>
+			<input id="beneEndcomplEdi" name="beneEndcomplEdi" value="{{beneEdi.bene_endcompl}}"/>
+			<input id="beneEndbairroEdi" name="beneEndbairroEdi" value="{{beneEdi.bene_endbairro}}"/>
+			<input id="beneEndcidadeEdi" name="beneEndcidadeEdi" value="{{beneEdi.bene_endcidade}}"/>
+			<input id="beneEndufEdi" name="beneEndufEdi" value="{{beneEdi.bene_enduf}}"/>
+			<input id="beneEndcepEdi" name="beneEndcepEdi" value="{{beneEdi.bene_endcep}}"/>
+			<input id="beneIdentEdi" name="beneIdentEdi" value="{{beneEdi.bene_ident}}"/>
+			<input id="beneCpfEdi" name="beneCpfEdi" value="{{beneEdi.bene_cpf}}"/>
+			<input id="beneStatusEdi" name="beneStatusEdi" value="{{beneEdi.bene_status}}"/>
+			<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
+			<input id="beneOutEdi" name="beneOutEdi" value="{{beneEdi.bene_out}}"/>
+			<input id="beneGrauparEdi" name="beneGrauparEdi" value="{{beneEdi.bene_graupar}}"/>
+			<input id="beneSupervisorEdi" name="beneSupervisorEdi" value="{{beneEdi.bene_supervisor}}"/>
+			<input id="beneOutprofEdi" name="beneOutprofEdi" value="{{beneEdi.bene_outprof}}"/>
+			<input id="beneOutidentEdi" name="beneOutidentEdi" value="{{beneEdi.bene_outident}}"/>
+			<input id="beneOutcpfEdi" name="beneOutcpfEdi" value="{{beneEdi.bene_outcpf}}"/>
+			<input id="beneOutendEdi" name="beneOutendEdi" value="{{beneEdi.bene_outend}}"/>
+			<input id="beneOutendcomplEdi" name="beneOutendcomplEdi" value="{{beneEdi.bene_outendcompl}}"/>
+			<input id="beneOutendbairroEdi" name="beneOutendbairroEdi" value="{{beneEdi.bene_outendbairro}}"/>
+			<input id="beneOutendcidadeEdi" name="beneOutendcidadeEdi" value="{{beneEdi.bene_outendcidade}}"/>
+			<input id="beneOutendufEdi" name="beneOutendufEdi" value="{{beneEdi.bene_outenduf}}"/>
+			<input id="beneOutendcepEdi" name="beneOutendcepEdi" value="{{beneEdi.bene_outendcep}}"/>
+			<input id="beneOutcelEdi" name="beneOutcelEdi" value="{{beneEdi.bene_outcel}}"/>
+			<input id="beneOutcel2Edi" name="beneOutcel2Edi" value="{{beneEdi.bene_outcel2}}"/>
+			<input id="beneOutemailEdi" name="beneOutemailEdi" value="{{beneEdi.bene_outemail}}"/>
+			
+			<input id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
+			<input id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
+
+			<input id="benePaiEdi" name="benePaiEdi" value="{{beneEdi.bene_pai}}"/>
+			<input id="benePaiprofEdi" name="benePaiprofEdi" value="{{beneEdi.bene_paiprof}}"/>
+			<input id="benePaiidentEdi" name="benePaiidentEdi" value="{{beneEdi.bene_paiident}}"/>
+			<input id="benePaicpfEdi" name="benePaicpfEdi" value="{{beneEdi.bene_paicpf}}"/>
+			<!--
+			<input id="benePaiendEdi" name="benePaiendEdi" value="{{beneEdi.bene_paiend}}"/>
+			<input id="benePaiendcomplEdi" name="benePaiendcomplEdi" value="{{beneEdi.bene_paiendcompl}}"/>
+			<input id="benePaiendbairroEdi" name="benePaiendbairroEdi" value="{{beneEdi.bene_paiendbairro}}"/>
+			<input id="benePaiendcidadeEdi" name="benePaiendcidadeEdi" value="{{beneEdi.bene_paiendcidade}}"/>
+			<input id="benePaiendufEdi" name="benePaiendufEdi" value="{{beneEdi.bene_paienduf}}"/>
+			<input id="benePaiendcepEdi" name="benePaiendcepEdi" value="{{beneEdi.bene_paiendcep}}"/>
+			-->
+			<input id="benePaicelEdi" name="benePaicelEdi" value="{{beneEdi.bene_paicel}}"/>
+			<input id="benePaicel2Edi" name="benePaicel2Edi" value="{{beneEdi.bene_paicel2}}"/>
+			<input id="benePaiemailEdi" name="benePaiemailEdi" value="{{beneEdi.bene_paiemail}}"/>
+			<input id="beneMaeEdi" name="beneMaeEdi" value="{{beneEdi.bene_mae}}"/>
+			<input id="beneMaeprofEdi" name="beneMaeprofEdi" value="{{beneEdi.bene_maeprof}}"/>
+			<input id="beneMaeidentEdi" name="beneMaeidentEdi" value="{{beneEdi.bene_maeident}}"/>
+			<input id="beneMaecpfEdi" name="beneMaecpfEdi" value="{{beneEdi.bene_maecpf}}"/>
+			<!--
+			<input id="beneMaeendEdi" name="beneMaeendEdi" value="{{beneEdi.bene_maeend}}"/>
+			<input id="beneMaeendcomplEdi" name="beneMaeendcomplEdi" value="{{beneEdi.bene_maeendcompl}}"/>
+			<input id="beneMaeendbairroEdi" name="beneMaeendbairroEdi" value="{{beneEdi.bene_maeendbairro}}"/>
+			<input id="beneMaeendcidadeEdi" name="beneMaeendcidadeEdi" value="{{beneEdi.bene_maeendcidade}}"/>
+			<input id="beneMaeendufEdi" name="beneMaeendufEdi" value="{{beneEdi.bene_maeenduf}}"/>
+			<input id="beneMaeendcepEdi" name="beneMaeendcepEdi" value="{{beneEdi.bene_maeendcep}}"/>
+			-->
+			<input id="beneMaecelEdi" name="beneMaecelEdi" value="{{beneEdi.bene_maecel}}"/>
+			<input id="beneMaecel2Edi" name="beneMaecel2Edi" value="{{beneEdi.bene_maecel2}}"/>
+			<input id="beneMaeemailEdi" name="beneMaeemailEdi" value="{{beneEdi.bene_maeemail}}"/>
+			<input id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
+
+			<input id="beneEscolanomeEdi" name="beneEscolanomeEdi" value="{{beneEdi.bene_escolanome}}"/>
+			<input id="beneEscolafoneEdi" name="beneEscolafoneEdi" value="{{beneEdi.bene_escolafone}}"/>
+			<input id="beneEscolaendEdi" name="beneEscolaendEdi" value="{{beneEdi.bene_escolaend}}"/>
+			<input id="beneEscolacompEdi" name="beneEscolacompEdi" value="{{beneEdi.bene_escolacomp}}"/>
+			<input id="beneEscolabairroEdi" name="beneEscolabairroEdi" value="{{beneEdi.bene_escolabairro}}"/>
+			<input id="beneEscolacidadeEdi" name="beneEscolacidadeEdi" value="{{beneEdi.bene_escolacidade}}"/>
+			<input id="beneEscolaufEdi" name="beneEscolaufEdi" value="{{beneEdi.bene_escolauf}}"/>
+			<input id="beneEscolacepEdi" name="beneEscolacepEdi" value="{{beneEdi.bene_escolacep}}"/>
+			<input id="beneEscolaanoEdi" name="beneEscolaanoEdi" value="{{beneEdi.bene_escolaano}}"/>
+			<input id="beneEscolaserieEdi" name="beneEscolaserieEdi" value="{{beneEdi.bene_escolaserie}}"/>
+			<input id="beneEscolacoordEdi" name="beneEscolacoordEdi" value="{{beneEdi.bene_escolacoord}}"/>
+			<input id="beneEscolacoordtelEdi" name="beneEscolacoordtelEdi" value="{{beneEdi.bene_escolacoordtel}}"/>
+			<input id="beneEscolaoutro1Edi" name="beneEscolaoutro1Edi" value="{{beneEdi.bene_escolaoutro1}}"/>
+			<input id="beneEscolaoutro1funcEdi" name="beneEscolaoutro1funcEdi" value="{{beneEdi.bene_escolaoutro1func}}"/>
+			<input id="beneEscolaoutro1telEdi" name="beneEscolaoutro1telEdi" value="{{beneEdi.bene_escolaoutro1tel}}"/>
+			<input id="beneEscolaoutro2Edi" name="beneEscolaoutro2Edi" value="{{beneEdi.bene_escolaoutro2}}"/>
+			<input id="beneEscolaoutro2funcEdi" name="beneEscolaoutro2funcEdi" value="{{beneEdi.bene_escolaoutro2func}}"/>
+			<input id="beneEscolaoutro2telEdi" name="beneEscolaoutro2telEdi" value="{{beneEdi.bene_escolaoutro2tel}}"/>
+			<input id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
+		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Beneficiários Cadastro
-							</li>
+							<li class="active">Beneficiários Editar - Visão dos Supervisores e Coordenador.</li>
 						</ul><!-- /.breadcrumb -->
+						
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/beneficiario/atualizarsup" method="POST">
 								<document class="document-horizontal" role="document" >
 									<br>
-									<input id="id" name="id" class="hidden" value="{{bene._id}}" />
+									<input id="id" name="id" class="hidden" value="{{beneEdi._id}}" />
 									<div class="col-xs-12">
 										<div class="alert alert-warning" style="font-style: initial;">
 											
@@ -138,7 +322,7 @@
 															<div class="row ">
 																<div class="input-group" >
 																	<div class="col-xs-4">
-																		<input type="text" name="beneNome" id="beneNome" style="width: 360px;" placeholder="" class="form-control" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
+																		<input type="text" name="beneNome" id="beneNome" placeholder="" class="form-control" style="width: 350px;" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
 																	</div>
 																</div>
 															</div>
@@ -148,7 +332,7 @@
 															<div class="row">
 																<div class="input-group" >
 																	<div class="col-xs-4">
-																		<input  type="text" name="beneApelido" id="beneApelido" style="width: 360px;" placeholder="" class="form-control" />
+																		<input  type="text" name="beneApelido" id="beneApelido" placeholder="" style="width: 350px;" class="form-control" />
 																	</div>
 																</div>
 															</div>
@@ -180,7 +364,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 300px;"/>
+																		<input type="text" name="beneNacionalidade" id="beneNacionalidade" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -223,7 +407,7 @@
 															<label > Endereço </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 360px;" />
+																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -231,7 +415,7 @@
 															<label> Complemento </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 360px;" />
+																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
@@ -241,7 +425,7 @@
 															<label> Bairro </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 360px;" />
+																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -249,7 +433,7 @@
 															<label> Cidade </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 360px;" />
+																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>	
 														</div>
@@ -283,7 +467,7 @@
 													<label>Convênio</label>
 													<div class="input-group">
 															<div >
-																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
+																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 350px;">
 																		{{#each convs}}
 																			<option value="{{_id}}">{{conv_nome}}</option>
 																		{{else}}
@@ -300,7 +484,7 @@
 																<label > Nome da mãe </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 360px;" />
+																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -357,7 +541,7 @@
 																	<span class="input-group-addon">
 																		<i class="red ace-icon fa fa-envelope"></i>
 																	</span>
-																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;" />
+																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;"/>
 																	
 																</div>
 															</div>
@@ -370,7 +554,7 @@
 															<label > Nome do pai </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 350px;" />
+																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -421,40 +605,21 @@
 																<span class="input-group-addon">
 																	<i class="red ace-icon fa fa-envelope"></i>
 																</span>
-																<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 350px;" />
+																<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 350px;"/>
 															</div>
 															
 														</div>
 													</div>
 												</div>
 												<div id="out" class="tab-pane fade">
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
-															<i class="ace-icon fa fa-times"></i>
-														</button>
-														<strong>Informação: </strong>
-														Se o responsável for o pai ou a mãe, você pode copiar automaticamente as informações para os campos abaixo.
-														<br>
-													</div>
-													<div class="col-md-offset-3 col-md-9">
-														<button class="btn btn-pink"  type="button" name="AcaoCopiaMae" id="AcaoCopiaMae"  onclick="javascript:copiaValoresMae()">
-															<i class="ace-icon fa fa-female bigger-110"></i>
-															Copia da mãe
-														</button>
-															&nbsp; &nbsp; &nbsp;
-														<button class="btn btn-primary"  type="button" name="AcaoCopiaPai" id="AcaoCopiaPai"  onclick="javascript:copiaValoresPai()">
-															<i class="ace-icon fa fa-male bigger-110"></i>
-															Copia do pai
-														</button>
-														
-													</div>
+													
 													
 														<div class="row">
-															<hr>
+															
 															<div class="col-xs-12 col-sm-6">
 																<label > Nome </label>
 																<div class="input-group">
-																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
@@ -493,7 +658,7 @@
 																<label > Endereço </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -511,7 +676,7 @@
 																<label> Bairro </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutendbairro" id="beneOutendbairro" placeholder="" class="form-control" style="width: 400px;"/>
+																		<input type="text" name="beneOutendbairro" id="beneOutendbairro" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -575,7 +740,7 @@
 																	<span class="input-group-addon">
 																		<i class="red ace-icon fa fa-envelope"></i>
 																	</span>
-																	<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 350px;" />
+																	<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 														</div>
@@ -586,7 +751,9 @@
 															<i class="ace-icon fa fa-times"></i>
 														</button>
 														
-														Dados complementares da escola.
+														Dados complementares da escola.<br>
+														Você pode alterar e salvar apenas os dados pertencentes a esa sessão.<br>
+														Qualwuer alteração feita por você em outras sessões será perdida automaticamente se o fizer.
 														<br>
 													</div>
 													
@@ -594,7 +761,7 @@
 															<div class="col-xs-12 col-sm-6">
 																<label>Nome escola</label>
 																<div class="input-group">
-																		<input type="text" name="beneEscolanome" id="beneEscolanome" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneEscolanome" id="beneEscolanome" placeholder="" class="form-control" style="width: 350px;"/>
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
@@ -631,7 +798,7 @@
 																<label > Endereço </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneEscolaend"  id="beneEscolaend" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneEscolaend"  id="beneEscolaend" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -649,7 +816,7 @@
 																<label> Bairro </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneEscolabairro" id="beneEscolabairro" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneEscolabairro" id="beneEscolabairro" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -692,7 +859,7 @@
 														<hr>
 														<div class="row">
 															<div class="col-xs-12 col-sm-3">
-																<label>Ano Letivo</label>
+																<label>Ano letivo</label>
 																<div class="input-group">
 																		<input type="text" name="beneEscolaano" id="beneEscolaano" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
@@ -710,7 +877,7 @@
 																<label> Coordenador </label>
 																<div class="input-group">
 																	<div >
-																			<input type="text" name="beneEscolacoord" id="beneEscolacoord" placeholder="" class="form-control" style="width: 300px;" />
+																			<input type="text" name="beneEscolacoord" id="beneEscolacoord" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -751,7 +918,7 @@
 																	<span class="input-group-addon">
 																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
+																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" />
 																</div>
 															</div>
 														</div>
@@ -760,7 +927,7 @@
 																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneEscolaoutro2"  id="beneEscolaoutr2" placeholder="" class="form-control" style="width: 350px;" />
+																		<input type="text" name="beneEscolaoutro2"  id="beneEscolaoutro2" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
@@ -780,22 +947,35 @@
 																	<span class="input-group-addon">
 																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
+																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text"  />
 																</div>
 															</div>
+															
 														</div>
 														<div class="row">
 															<div class="col-xs-12 col-sm-12">
 																<label> Observação </label>
 																<div class="input-group">
 																	<div >
-																		<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 350px;" ></textarea>
+																		<textarea type="text" name="beneEscolaobs" id="beneEscolaobs" placeholder="" class="form-control" style="width: 350px;"></textarea>
 																	</div>
 																</div>
 															</div>
 															
 														</div>
-														
+														<hr>
+															<div style="text-align: center;" >
+																<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+																	<i class="ace-icon fa fa-check bigger-110"></i>
+																	Salvar
+																</button>
+
+																&nbsp; &nbsp; &nbsp;
+																<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
+																	<i class="ace-icon fa fa-undo bigger-110"></i>
+																	Voltar
+																</button>
+															</div>
 												</div>												
 												<div id="fat" class="tab-pane fade">
 													<div class="row">
@@ -825,7 +1005,7 @@
 													<label> Observação </label>
 													<div class="input-group">
 														<div>
-															<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+															<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 350px;"></textarea>
 														</div>
 													</div>
 												</div>
@@ -834,18 +1014,7 @@
 									</div>
 									<hr>
 									
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
-
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
+										
 									
 									
 									
@@ -857,4 +1026,6 @@
 				</div>
 			</div>
 		</div>
+
 	</body>
+</html>
