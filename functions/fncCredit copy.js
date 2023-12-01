@@ -429,14 +429,38 @@ module.exports = {
             res.render('admin/erro');
         }
     },
-    listar(req, res){
-        Terapia.findOne().then((terapia) =>{
-            console.log("Listagem Realizada!")
-            res.render('financeiro/receita/creditLis', {terapias: terapia})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Correntes")
-            res.redirect('admin/erro')
+    listar(req,res){
+        let cl = new CreditLis();
+        let listaCredito = [];
+        let dt;
+        Terapia.find().then((terapia)=>{
+            Credit.find().then((credit) =>{
+                credit.forEach(c=>{
+                    cl.credit_convid = c.credit_convid;
+                    cl.credit_terapiaid = c.credit_terapiaid;
+                    cl.credit_datavenci = fncGeral.getData(c.credit_datavenci);
+                    cl.credit_datapg =  fncGeral.getData(c.credit_datapg);
+                    cl.credit_valorprev = c.credit_valorprev;
+                    cl.credit_valorpg = c.credit_valorpg;
+                    if(c.credit_pg){
+                        cl.credit_pg = "Sim";
+                    } else {
+                        cl.credit_pg = "Não";
+                    }
+                    listaCredito.push(cl);
+                    console.log("cl.credit_convid:"+cl.credit_convid)
+                    console.log("c.credit_convid:"+c.credit_convid)
+                    console.log("cl.credit_terapiaid:"+cl.credit_terapiaid)
+                    console.log("c.credit_terapiaid:"+c.credit_terapiaid)
+                    cl = new CreditLis();
+                })
+                console.log("Listagem Realizada!")
+                res.render('financeiro/receita/creditLis', {listaCreditos: listaCredito, terapias: terapia})
+            }).catch((err) =>{
+                console.log(err)
+                req.flash("error_message", "houve um erro ao listar Credits")
+                res.redirect('admin/erro')
+            })
         })
     },
     creditAtendEditar(req,res){

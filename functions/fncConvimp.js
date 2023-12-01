@@ -83,7 +83,7 @@ module.exports = {
             }
         })
     },
-    editaConvimp(req,res){
+    editarConvimp(req,res){
         let resposta;
         convimpClass.convimpEditar(req,res).then((res)=>{
             console.log("Atualização Realizada!")

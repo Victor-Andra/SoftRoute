@@ -18,62 +18,70 @@ const CreditSchema = mongoose.Schema({
     credit_dataadianta :{ type: Date, required: false },
     credit_datavenci :{ type: Date, required: false },
     credit_vlrpg :{ type: String, required: false },
+    credit_vlrdiferenca :{ type: String, required: false },
     credit_vlrtipo :{ type: String, required: false },
     credit_datapg :{ type: Date, required: false },
-
-    credit_pg :{ type: String, required: false },
+    credit_pg :{ type: Boolean, required: false },
+    credit_descr :{ type: String, required: false },
+    credit_usuidcad :{ type: ObjectId, required: false },
     credit_datacad :{ type: String, required: false },
+    credit_usuidedi :{ type: ObjectId, required: false },
     credit_dataedi :{ type: String, required: false },
-    credit_Descr :{ type: String, required: false }
-    
     
 })
 
 class Credit{
     constructor(
-        credit_atendnum,
-        credit_categoria,
-        credit_terapiaid,
-        credit_terapeutaid,
+        credit_nfnum,
+        credit_beneid,
         credit_convid,
-        credit_nome,
+        credit_benenome,
         credit_cpfcnpj,
         credit_dataevento,
+        credit_vlrprev,
+        credit_vlrjuros,
+        credit_vlrmulta,
+        credit_vlradianta,
+        credit_dataadianta,
         credit_datavenci,
+        credit_vlrpg,
+        credit_vlrdiferenca,
+        credit_vlrtipo,
         credit_datapg,
-        credit_valorprev,
-        credit_juros,
-        credit_multa,
-        credit_adianta,
-        credit_valorpg,
         credit_pg,
+        credit_descr,
+        credit_usuidcad,
         credit_datacad,
+        credit_usuidedi,
         credit_dataedi
         
         ){
-            this.credit_atendnum = credit_atendnum,
-            this.credit_categoria = credit_categoria,
-            this.credit_terapiaid = credit_terapiaid,
-            this.credit_terapeutaid = credit_terapeutaid,
+          
+            this.credit_nfnum = credit_nfnum,
+            this.credit_beneid = credit_beneid,
             this.credit_convid = credit_convid,
-            this.credit_nome = credit_nome,
+            this.credit_benenome = credit_benenome,
             this.credit_cpfcnpj = credit_cpfcnpj,
             this.credit_dataevento = credit_dataevento,
+            this.credit_vlrprev = credit_vlrprev,
+            this.credit_vlrjuros = credit_vlrjuros,
+            this.credit_vlrmulta = credit_vlrmulta,
+            this.credit_vlradianta = credit_vlradianta,
+            this.credit_dataadianta = credit_dataadianta,
             this.credit_datavenci = credit_datavenci,
+            this.credit_vlrpg = credit_vlrpg,
+            this.credit_vlrdiferenca = credit_vlrdiferenca,
+            this.credit_vlrtipo = credit_vlrtipo,
             this.credit_datapg = credit_datapg,
-            this.credit_valorprev = credit_valorprev,
-            this.credit_juros = credit_juros,
-            this.credit_multa = credit_multa,
-            this.credit_adianta = credit_adianta,
-            this.credit_valorpg = credit_valorpg,
             this.credit_pg = credit_pg,
+            this.credit_descr = credit_descr,
+            this.credit_usuidcad = credit_usuidcad,
             this.credit_datacad = credit_datacad,
-            this.credit_dataedi = credit_dataedi
+            this.credit_usuidedi = credit_usuidedi,
+            this.credit_dataedi = credit_dataedi 
             
     }
 }
-
-
 
 
 CreditSchema.loadClass(Credit)
@@ -87,21 +95,27 @@ module.exports = {CreditModel,CreditSchema,
         //Realiza Atualização
         await CreditModel.findByIdAndUpdate(req.body.creditId, 
             {$set: {
-                credit_categoria : req.body.creditCategoria ,
-                credit_terapiaid : req.body.creditTerapiaid ,
-                credit_terapeutaid : req.body.creditTerapeutaid ,
+                credit_nfnum : req.body.creditNfnum ,
+                credit_beneid : req.body.creditNfnum ,
                 credit_convid : req.body.creditConvid ,
-                credit_nome : req.body.creditNome ,
+                credit_benenome : req.body.creditBenenome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
                 credit_dataevento : req.body.creditDataevento ,
+                credit_vlrprev : req.body.creditVlrprev ,
+                credit_vlrjuros : req.body.creditVlrjuros ,
+                credit_vlrmulta : req.body.creditVlrmulta ,
+                credit_vlradianta : req.body.creditVlradianta ,
+                credit_dataadianta : req.body.creditDataadianta ,
                 credit_datavenci : req.body.creditDatavenci ,
+                credit_vlrpg : req.body.creditVlrpg ,
+                credit_vlrdiferenca : req.body.creditVlrdiferenca ,
+                credit_vlrtipo : req.body.creditVlrtipo ,
                 credit_datapg : req.body.creditDatapg ,
-                credit_valorprev : req.body.creditValorprev ,
-                credit_juros : req.body.creditJuros ,
-                credit_multa : req.body.creditMulta ,
-                credit_adianta : req.body.creditAdianta ,
-                credit_valorpg : req.body.creditValorpg ,
                 credit_pg : req.body.creditPg ,
+                credit_Descr : req.body.creditDescr ,
+                credit_usuidcad : req.body.creditUsuidcad ,
+                credit_datacad : req.body.creditDatacad ,
+                credit_usuidedi : req.body.creditUsuidedi ,
                 credit_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -116,36 +130,30 @@ module.exports = {CreditModel,CreditSchema,
         return resultado;
     },
     creditAdicionar: async (req,res) => {
-        let creditExiste;
-        if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
-        } else {
-            creditExiste = await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
-        }
         let dataAtual = new Date();
-        if(creditExiste){//se tiver null cai no else
-            return "O nome da credit já existe";
-            //programar alert
-        } else {
             console.log("creditmodel");
             const newCredit = new CreditModel({
-                credit_atendnum : req.body.nextNum ,
-                credit_categoria : req.body.creditCategoria ,
-                credit_terapiaid : req.body.creditTerapiaid ,
-                credit_terapeutaid : req.body.creditTerapeutaid ,
-                //credit_convid : req.body.creditConvid ,
-                credit_nome : req.body.creditNome ,
+                credit_nfnum : req.body.creditNfnum ,
+                credit_beneid : req.body.creditNfnum ,
+                credit_convid : req.body.creditConvid ,
+                credit_benenome : req.body.creditBenenome ,
                 credit_cpfcnpj : req.body.creditCpfcnpj ,
                 credit_dataevento : req.body.creditDataevento ,
+                credit_vlrprev : req.body.creditVlrprev ,
+                credit_vlrjuros : req.body.creditVlrjuros ,
+                credit_vlrmulta : req.body.creditVlrmulta ,
+                credit_vlradianta : req.body.creditVlradianta ,
+                credit_dataadianta : req.body.creditDataadianta ,
                 credit_datavenci : req.body.creditDatavenci ,
+                credit_vlrpg : req.body.creditVlrpg ,
+                credit_vlrdiferenca : req.body.creditVlrdiferenca ,
+                credit_vlrtipo : req.body.creditVlrtipo ,
                 credit_datapg : req.body.creditDatapg ,
-                credit_valorprev : req.body.creditValorprev ,
-                credit_juros : req.body.creditJuros ,
-                credit_multa : req.body.creditMulta ,
-                credit_adianta : req.body.creditAdianta ,
-                credit_valorpg : req.body.creditValorpg ,
                 credit_pg : req.body.creditPg ,
-                credit_datacad : dataAtual
+                credit_Descr : req.body.creditDescr ,
+                credit_usuidcad : dataAtual,
+                credit_datacad : req.body.creditDatacad ,
+                
             });
             console.log("newCredit save");
             await newCredit.save().then(()=>{
@@ -156,5 +164,4 @@ module.exports = {CreditModel,CreditSchema,
                 return err;
             });
         }
-    }
 };

@@ -433,7 +433,7 @@
 															{{else}}
 																Não
 																<td>
-																	{{#dataInferior agenda_data_dia}}
+																	{{#dataInferior agenda_dataSelo}}
 																		{{#isTrue agenda_temp}}
 																			<div class="action-buttons">
 																				<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
@@ -448,7 +448,7 @@
 																		</div>
 																		{{/isTrue}}
 																	{{else}}
-																		{{#dataIgual agenda_data_dia}}
+																		{{#dataIgual agenda_dataSelo}}
 																			{{#isTrue agenda_temp}}
 																			<div class="action-buttons">
 																				<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">

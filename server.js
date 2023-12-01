@@ -101,6 +101,9 @@ const cookieParser = require('cookie-parser');
                 },
                 dataInferior: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
                     //console.log("/"+v1)///2023-11-14
+                    if (v1 == undefined || v1 == "undefined"){
+                        return options.fn(this);
+                    }
                     function retornaData(data) {
                         if (data.includes("-")){
                             split = data.split('-');
@@ -126,6 +129,9 @@ const cookieParser = require('cookie-parser');
                 },
                 dataIgual: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
                     //console.log("/"+v1)///2023-11-14
+                    if (v1 == undefined || v1 == "undefined"){
+                        return options.inverse(this);
+                    }
                     function retornaData(data) {
                         if (data.includes("-")){
                             split = data.split('-');
@@ -150,12 +156,11 @@ const cookieParser = require('cookie-parser');
                 },
                 data24h: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
                     //console.log("/"+v1)//2023-11-14
-                    let datav1;
                     if (v1 == undefined || v1 == "undefined"){
                         return options.inverse(this);
-                    } else {
-                        datav1 = new Date(v1);
                     }
+                    let datav1;
+                    datav1 = new Date(v1);
                     datav1.setDate(datav1.getDate()+1);
                     let hoje = new Date();
                     if (datav1 > hoje) {

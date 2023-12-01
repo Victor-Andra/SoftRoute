@@ -10,7 +10,6 @@
 
 	<body onload="javascript:controlaNave();" class="no-skin">
 
-
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -59,7 +58,12 @@
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Alíquota</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
 				
-														<th>Ação</th>
+														<th tabindex="6">
+														Ação &nbsp;&nbsp;&nbsp;
+														<a class="blue" href="/menu/convenio/convimp/cad">
+															<i class="green ace-icon fa fa-plus bigger-130" title="Inserir novo imposto para convênios" style="text-align: right;"></i>
+														</a>
+														</th>
 
 													</tr>
 													
@@ -94,7 +98,7 @@
 														<td>
 															<div class="action-buttons">
 
-																<a class="green" href="/menu/convenio/convimp/edi/{{_id}}">
+																<a class="blue" href="/menu/convenio/convimp/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
 
@@ -164,7 +168,7 @@
 			"aaSorting": [],
 			"aoColumns": [{ "bSortable": false }, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthMenu": [ 100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,
