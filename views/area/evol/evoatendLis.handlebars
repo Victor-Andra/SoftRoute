@@ -407,7 +407,7 @@
 														<td>{{agenda_hora}}</td>
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../agenda_terapiaid}}
-																<td>{{terapia_nome}}</td>
+																<td>{{terapia_nomecid}}</td>
 															{{/ifEqual}}
 														{{/each}}
 														{{#each ../benes}}
@@ -433,37 +433,37 @@
 															{{else}}
 																Não
 																<td>
-																	{{#dataInferior agenda_dataSelo}}
+																	{{#dataIgual agenda_data_dia}}
 																		{{#isTrue agenda_temp}}
-																			<div class="action-buttons">
-																				<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
-																					<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																				</a>
-																			</div>
+																		<div class="action-buttons">
+																			<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+																				<i class="ace-icon fa fa-pencil bigger-130"></i>
+																			</a>
+																		</div>
 																		{{else}}
 																		<div class="action-buttons">
-																			<a class="red" name="acaoEvolucaoComAtraso" id="acaoEvolucaoComAtraso" onclick="javascript:evolucaoComAtraso('{{_id}}');">
-																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																			<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEmDia('{{_id}}');">
+																				<i class="ace-icon fa fa-pencil bigger-130"></i>
 																			</a>
 																		</div>
 																		{{/isTrue}}
 																	{{else}}
-																		{{#dataIgual agenda_dataSelo}}
+																		{{#dataInferior agenda_data_dia}}
 																			{{#isTrue agenda_temp}}
-																			<div class="action-buttons">
-																				<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
-																					<i class="ace-icon fa fa-pencil bigger-130"></i>
-																				</a>
-																			</div>
+																				<div class="action-buttons">
+																					<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
+																						<i class="ace-icon fa fa-clock-o bigger-130"></i>
+																					</a>
+																				</div>
 																			{{else}}
 																			<div class="action-buttons">
-																				<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEmDia('{{_id}}');">
-																					<i class="ace-icon fa fa-pencil bigger-130"></i>
+																				<a class="red" name="acaoEvolucaoComAtraso" id="acaoEvolucaoComAtraso" onclick="javascript:evolucaoComAtraso('{{_id}}');">
+																					<i class="ace-icon fa fa-clock-o bigger-130"></i>
 																				</a>
 																			</div>
 																			{{/isTrue}}
-																		{{/dataIgual}}
-																	{{/dataInferior}}
+																		{{/dataInferior}}
+																	{{/dataIgual}}
 																</td>
 															{{/compareThis}}
 														</td>

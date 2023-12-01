@@ -100,13 +100,11 @@ const cookieParser = require('cookie-parser');
                     }
                 },
                 dataInferior: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
-                    //console.log("/"+v1)///2023-11-14
-                    if (v1 == undefined || v1 == "undefined"){
-                        return options.fn(this);
-                    }
+                    console.log("/"+v1)///2023-11-14
                     function retornaData(data) {
                         if (data.includes("-")){
                             split = data.split('-');
+                            console.log(split[1] + "/" + split[2] + "/" + split[0])
                             return new Date(split[1] + "/" + split[2] + "/" + split[0]);
                         } else if (data.includes("/")){
                             split = data.split('/');
@@ -119,8 +117,8 @@ const cookieParser = require('cookie-parser');
                     }
                 
                     var dataAtual = new Date();
-                    //console.log("/"+retornaData(v1).getDate()+" = "+dataAtual.getDate())
-                    if (retornaData(v1).getDate() < dataAtual.getDate()) {
+                    console.log("/"+retornaData(v1)+" = "+dataAtual)
+                    if (retornaData(v1) < dataAtual) {
                         return options.fn(this);
                     } else {
                         //console.log("/false")

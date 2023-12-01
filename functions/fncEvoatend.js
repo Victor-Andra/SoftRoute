@@ -169,7 +169,9 @@ module.exports = {
                     }
                 })
                 if (manter == "true"){
-                    idsAgendasEx.push(a);
+                    if (!(a.agenda_categoria == "Falta Justificada")){
+                        idsAgendasEx.push(a);
+                    }
                 }
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
