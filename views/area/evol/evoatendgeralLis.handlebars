@@ -10,30 +10,15 @@
 			}
 			function evolucaoRemover(id){
 				let form = document.getElementById("divFormPesquisa");
-				document.getElementById("idDeletar").value = id;
-				form.action = ("/menu/agenda/evolucaoRemoverGeral");
-				form.submit();
+				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				if(confirmado == true){
+					document.getElementById("idDeletar").value = id;
+					form.action = ("/menu/agenda/evolucaoRemoverGeral");
+					form.submit();
+				}
 			}
 			function retornar(){
 				history.back();
-			}
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-				})
 			}
 			function formataData(){
 				let tipo = document.getElementById("tipoData").value;
@@ -109,7 +94,7 @@
 				}
 			}
 			function carregaBody(){
-				formataData();
+				//formataData();
 				if (document.getElementById("carregaFiltro").value == "true"){
 					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
 					if(document.getElementById("tipoData").value == "Ano/Mes"){
@@ -129,6 +114,7 @@
 					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
 						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
 					}
+
 				}
 				let tipoDataEdi = document.getElementById("tipoDataEdi").value;
 				let tipoPessoaEdi =document.getElementById("tipoPessoaEdi").value;
@@ -176,104 +162,6 @@
 				}
 				trocaFiltroData();
 				trocaFilpessoa();
-			}
-			function mostraDivCopia(id){
-				document.getElementById("atualId").value = id;
-				//document.getElementById("atendCategoria").value = document.getElementById("atendCategoria"+id).value;
-				document.getElementById("divCopiaAtend").style.display = "";
-				document.getElementById("divFormPesquisa").style.display = "none";
-			}
-			function ocultaDivCopia(){
-				document.getElementById("divCopiaAtend").style.display = "none";
-				document.getElementById("divFormPesquisa").style.display = "";
-			}
-			function addCopia(){
-				document.getElementById("divCopiaAtend").style.display = "none";
-				document.getElementById("divFormPesquisa").style.display = "";
-				document.getElementById("btnEnviarCopia").style.display = "";
-
-				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
-					let dat = new Date(document.getElementById('dataCopia').value+" "+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+":00.000Z");
-					console.log("dat:"+dat);
-					let mes = (dat.getUTCMonth()+1).toString();
-					console.log("mes:"+mes);
-					let dia = (dat.getUTCDate()).toString();
-					console.log("dia:"+dia);
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' '+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+':00.000Z').toString();
-					console.log("fulldate:"+fulldate);
-					if(document.getElementById("temCopia").value == "false"){
-						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
-						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
-						//document.getElementById("categoriaCopia").value = document.getElementById("atendCategoria").value;
-						document.getElementById("dtCopia").value = fulldate;
-						document.getElementById("temCopia").value = "true";
-					} else {
-						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
-						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
-						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
-						//document.getElementById("categoriaCopia").value = document.getElementById("categoriaCopia").value+","+document.getElementById("atendCategoria").value;
-					}
-				}
-			}
-			function enviarCopia(){
-				let form = document.getElementById("divFormPesquisa");
-				form.action = "/menu/atendimento/copiaAtends";
-				form.submit();
-			}
-			function confirmeDeletar(id){
-				let confirmado = confirm("Quer mesmo deletar este atendimento?");
-				if(confirmado == true){
-					window.location.href=("/menu/atendimento/del/"+id);
-				}
-			}
-			function deletaTudo(){
-				let tem = false;
-				let chekId = document.getElementsByName("chekId");
-				let idsSelecionados = "";
-				chekId.forEach((id)=>{
-					if (id.checked == true){
-						tem = true;
-						if (idsSelecionados == ""){
-							idsSelecionados = id.id;
-						} else {
-							idsSelecionados = idsSelecionados + "," + id.id;
-						}
-					}
-				})
-
-				document.getElementById("idsDeletar").value = idsSelecionados;
-				if (tem){
-					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
-					if(confirmado == true){
-						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
-						if(confirmado == true){
-							console.log("idsSelecionados: "+idsSelecionados);
-							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteAll/";
-							document.getElementById("divFormPesquisa").submit();
-							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
-						}
-					}
-				}
-			}
-			function alternarBotao(){
-				let tem = false;
-				let chekId = document.getElementsByName("chekId");
-				chekId.forEach((id)=>{
-					if (id.checked == true){
-						tem = true;
-					}
-				})
-				if (tem){
-					document.getElementById("btnDeleteMany").style.display = "";
-				} else {
-					document.getElementById("btnDeleteMany").style.display = "none";
-				}
 			}
 		</script>
 	</head>
