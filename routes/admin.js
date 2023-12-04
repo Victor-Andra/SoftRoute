@@ -981,6 +981,14 @@ router.post('/agenda/evolucaoRemoverF/', fncGeral.IsAuthenticated, (req,res) =>{
     fncEvoatend.removeEvolucaoF(req, res, atrazo, resposta);
 })
 
+router.post('/agenda/evolucaoRemoverGeral/', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo = false;
+    fncEvoatend.removeEvolucaoFinal(req, res, atrazo, resposta);
+})
+
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.atualizaEvolucao(req, res);
 })

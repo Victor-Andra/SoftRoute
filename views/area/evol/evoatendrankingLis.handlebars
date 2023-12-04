@@ -364,8 +364,9 @@
 											<label>Tipo Filtro:&nbsp;</label>
 											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
-												<option value="Beneficiario">Beneficiário</option>
 												<option value="Terapeuta">Terapeuta</option>
+												<option value="Beneficiario">Beneficiário</option>
+												
 											</select>
 										</div>
 									</div>
@@ -426,13 +427,12 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info" style="font-size: 11px;">
 											<thead>
 												<tr role="row">
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
+													
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Concluída</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">QT Atendimentos</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">QT Evoluções</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução %</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Ação</th>
 													
 												</tr>
@@ -440,14 +440,6 @@
 											<tbody>
 												{{#each agendas}}
 													<tr role="row" class="odd">
-														<td>{{agenda_data_dia}}</td>
-														<td>{{agenda_hora}}</td>
-														{{#each ../terapias}}<!-- Ok -->
-															{{#ifEqual this._id ../agenda_terapiaid}}
-																<td>{{terapia_nomecid}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														
 														<td>
 															{{#each ../terapeutas}}
 																{{#ifEqual this._id ../agenda_usuid}}
@@ -463,18 +455,16 @@
 															{{/each}}
 														</td>
 														<td>{{agenda_evolucao}}</td>
-														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
+														<td>{{agenda_evolucao}}</td>
+														<td>{{agenda_evolucao}}</td>
+														
 														<td>
 															<div class="action-buttons">
 																<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEditar('{{_id}}');">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
 															</div>
-															<div class="action-buttons">
-																<a class="red" name="acaoRemoveEvolucao" id="acaoRemoveEvolucao" onclick="javascript:evolucaoRemover('{{_id}}');">
-																	<i class="ace-icon fa fa-trash bigger-130"></i>
-																</a>
-															</div>
+															
 														</td>
 													</tr>
 												{{/each}}

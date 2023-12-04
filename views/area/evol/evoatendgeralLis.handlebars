@@ -9,7 +9,10 @@
 				window.location.href=("/menu/agenda/evolucaosup/"+id);
 			}
 			function evolucaoRemover(id){
-				window.location.href=("/menu/agenda/evolucaoRemoverF/"+id);
+				let form = document.getElementById("divFormPesquisa");
+				document.getElementById("idDeletar").value = id;
+				form.action = ("/menu/agenda/evolucaoRemoverGeral");
+				form.submit();
 			}
 			function retornar(){
 				history.back();
@@ -106,8 +109,6 @@
 				}
 			}
 			function carregaBody(){
-				trocaFiltroData();
-				trocaFilpessoa();
 				formataData();
 				if (document.getElementById("carregaFiltro").value == "true"){
 					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
@@ -128,8 +129,53 @@
 					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
 						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
 					}
-
 				}
+				let tipoDataEdi = document.getElementById("tipoDataEdi").value;
+				let tipoPessoaEdi =document.getElementById("tipoPessoaEdi").value;
+				if (tipoDataEdi == "Ano/Mes"){
+					document.getElementById("tipoData").value = tipoDataEdi;
+					document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value;
+					document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value;
+				} else if (tipoDataEdi == "Semana"){
+					document.getElementById("tipoData").value = tipoDataEdi;
+					let dat = new Date(document.getElementById('dataFinalEdi').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
+					document.getElementById("dataFil").value = fulldate;
+					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
+				} else if (tipoDataEdi == "Dia"){
+					document.getElementById("tipoData").value = tipoDataEdi;
+					let dat = new Date(document.getElementById('dataFinalEdi').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
+					document.getElementById("dataFil").value = fulldate;
+					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
+				}
+				if (tipoPessoaEdi == "Geral"){
+					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+				} else if (tipoPessoaEdi == "Beneficiario"){
+					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value;
+				} else if (tipoPessoaEdi == "Terapeuta"){
+					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value;
+				}
+				trocaFiltroData();
+				trocaFilpessoa();
 			}
 			function mostraDivCopia(id){
 				document.getElementById("atualId").value = id;
@@ -245,7 +291,6 @@
 							<li class="active">Geral</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
 							<p>
@@ -356,6 +401,14 @@
 										<label>Data:&nbsp;</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
 										<input class="hidden" id="dataFinal" name="dataFinal" />
+										<input class="hidden" id="idDeletar" name="idDeletar" />
+										<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
+										<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
+										<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />
+										<input class="hidden" id="dataFinalEdi" name="dataFinalEdi" value="{{filtroTela.dataFinal}}" />
+										<input class="hidden" id="tipoPessoaEdi" name="tipoPessoaEdi" value="{{filtroTela.tipoPessoa}}" />
+										<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
+										<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
