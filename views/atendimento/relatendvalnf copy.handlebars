@@ -26,23 +26,10 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
-				let dt = new Date();
-        
-				let mes = (dt.getUTCMonth()+1).toString();
-				let dia = (dt.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				
-				document.getElementById('contarecDataevento').value =  (dt.getFullYear()+'/'+mes+'/'+dia).toString();
-				document.getElementById('contarecDatacad').value =  (dt.getFullYear()+'/'+mes+'/'+dia).toString();
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
@@ -77,56 +64,51 @@
 							</ul><!-- /.breadcrumb -->
 							<ul>
 								<hr>
-								<div class="col-xs-12" hidden>
-									<input type="text" name="contarecDescr" id="contarecDescr" placeholder="" class="form-control" value=""/>
-									<input type="text" name="contarecDatacad" id="contarecDatacad" placeholder="" class="form-control"/>
-									<input type="text" name="contarecBeneid" id="contarecBeneid" placeholder="" class="form-control" value="{{bene_nomeid}}"/>
-								</div>
 								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info" style="font-size: 11px;" >
 									<thead style="font-size: 11px;">
 										<tr role="row">
-											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">NF</th>
-											<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-											<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >CPF/CNPJ</th>
-
-											<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-											
-											<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Emissão</th>
-											<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Vlr.Prev</th>
-
-											<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Adiantamento</th>
-											<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr. Adianta</th>
-											<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pg.Adiantamento</th>
-
-											<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Vencimento</th>
-							
+										
+											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Evento</th>
+											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Núm.NF.</th>
+											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >CNPJ</th>
+											<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+											<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Vencimento</th>
+											<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;">Valor</th>
+											<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;">Ação</th>
 										</tr>
 									</thead>
 									<tbody style="font-size: 11px;">
-										<tr role="row" class="odd" class="center">
-											<td style="width: 80px;"><b><input type="text" name="contarecNfnum"	id="contarecNfnum" placeholder="0000000" class="form-control" style="border: none;  background:transparent;" value="" /></b></td>
-											<td style="background-color: #f0e6d8;"><input type="text" name="contarecBenenome" id="contarecBenenome" placeholder="" class="form-control" style="border: none; width: 300px; background:transparent;" value="{{bene_nome}}"/></td>
-											<td style="background-color: #f0e6d8;"><input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder="" class="form-control" style="border: none; width: 100px; background:transparent;" value="{{bene_ordemdoc}}"/></td>
+										<tr role="row" class="odd">
+											<td>
+												<input id="credit_dataevento"  name="credit_dataevento" type="date" style="border: none;" value=""/>
+											</td>
+											<td>
+												<b><input id="credit_Numnf"  name="credit_Numnf" type="text" style="border: none; text-align: center;" value=""/></b>
+											</td>	
+											<td>
+												<input id="credit_convid" name="credit_convid" type="text" style="border: none;"  value="{{conv_nome}}"/>
+											</td>
+											<td>
+												<input id="credit_cpfcnpj"  name="credit_cpfcnpj" type="text" style="border: none;" />
+											</td>
 
-											<td style="background-color: #f0e6d8;"><input type="text" name="contarecConvid" id="contarecConvid" class="form-control" style="border: none; background:transparent;" value="{{bene_convid}}"/></td>
-
-											<td style="background-color: #f0e6d8;"><input type="text" name="contarecDataevento" id="contarecDataevento" placeholder="00/00/0000" class="col-sm-4" class="form-control" type="text" style="border: none; width: 100px; background:transparent;" /></td>
-											<td style="background-color: #f0e6d8;"><input type="text" name="contarecVlrprev" id="contarecVlrprev" placeholder="" class="form-control" style="border: none; text-align: right; width: 100px; background:transparent;" value="{{total.total}}"/></td>
-
-											<td><input type="text" name="contarecDataadianta" id="contarecDataadianta" placeholder="00/00/0000" class="col-sm-4" class="form-control" type="text" style="border: none; width: 100px; background:transparent" /></td>
-											<td><input type="text" name="contarecVlradianta" id="contarecVlradianta" placeholder="0,00" class="form-control" style="border: none; text-align: right; width: 100px; background:transparent;" /></td>
-											<td><input type="text" name="contarecDataadiantapg" id="contarecDataadiantapg" placeholder="00/00/0000" class="col-sm-4" class="form-control" type="text" style="border: none; width: 100px; background:transparent;" /></td>
+											<td>
+												<input id="credit_nome"  name="credit_nome" type="text" style="border: none;" value="{{bene_nome}}"/>
+											</td>
 											
-											
-											<td><input type="text" name="contarecDatavenci" id="contarecDatavenci" class="col-sm-4" placeholder="00/00/0000" class="form-control" type="text" style="border: none;  width: 100px; background:transparent;" /></td>
-											
-												<td>
-													<button class="btn btn-danger" name="acaoSalvar" id="acaoSalvar" type="submit">
-														<i class="ace-icon fa fa-save bigger-110"></i>
-														Gerar NF
-													</button>
-												</td>
-											<tr>
+											<td>
+												<input id="credit_datavenci" name="credit_datavenci" type="date" style="border: none;" />
+											</td>				
+											<td>
+												<input id="credit_valorprev" name="credit_valorprev" type="text"  style="border: none; text-align: right;" value="{{total.total}}"/>
+											</td>
+											<td>
+												<button class="btn btn-danger" name="acaoSalvar" id="acaoSalvar" type="submit">
+													<i class="ace-icon fa fa-save bigger-110"></i>
+													Gerar NF
+												</button>
+											</td>
 									</tbody>
 								</table>
 							</ul>

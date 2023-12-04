@@ -645,7 +645,6 @@ module.exports = {AgendaModel,AgendaSchema,
     removeEvolucao : async (id, res) => {
         let resultado;
         //Pega data atual
-        
         //Realiza Atualização - Atualização não faz alteração temporaria
         await AgendaModel.findByIdAndUpdate(id, 
             {$set: {

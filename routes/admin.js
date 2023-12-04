@@ -941,6 +941,22 @@ router.get('/agenda/evolucaoTempA/:id', fncGeral.IsAuthenticated, (req,res) =>{/
     fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
 })
 
+router.get('/agenda/evolucaoCorrecao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo;
+    fncAgenda.carregaEvolucao(req, res, atrazo, resposta);
+})
+
+router.get('/agenda/evolucaoSemanalCorrecao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda diária
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    let atrazo;
+    fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
+})
+
 router.get('/agenda/evolucaosup/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""
@@ -957,12 +973,12 @@ router.get('/agenda/evolucaoRemoverA/:id', fncGeral.IsAuthenticated, (req,res) =
     fncAgenda.removeEvolucaoA(req, res, atrazo, resposta);
 })
 
-router.get('/agenda/evolucaoRemoverF/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+router.post('/agenda/evolucaoRemoverF/', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     let atrazo = false;
-    fncAgenda.removeEvolucaoF(req, res, atrazo, resposta);
+    fncEvoatend.removeEvolucaoF(req, res, atrazo, resposta);
 })
 
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
@@ -1579,6 +1595,24 @@ router.post('/area/evoatendfechadofil', fncGeral.IsAuthenticated, (req,res) =>{/
 router.post('/area/evoatendfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.filtraEvoatend(req, res);
 })
+//Lista Geral Fechado e Aberto com sinalizações coloridas
+router.get('/area/evol/evoatendgeralLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
+    fncEvoatend.listaEvoatendgeral(req, res);
+})
+
+router.post('/area/evol/evoatendgeralFil', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o filtro da Lista de evoluções.
+    fncEvoatend.filtraEvoatendgeral(req, res);
+})
+//Lista de Ranking
+router.get('/area/evol/evoatendrankingLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista Ranking de evoluções
+    fncEvoatend.listaEvoatendranking(req, res);
+})
+
+router.post('/area/evol/evoatendrankingFil', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de Ranking de evoluções.
+    fncEvoatend.filtraEvoatendranking(req, res);
+})
+
+
 
 //Menu Minha Agenda Area Tecnicos
 router.get("/area/magenda/LisD", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Do Dia.

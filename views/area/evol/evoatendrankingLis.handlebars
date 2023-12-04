@@ -3,7 +3,17 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
+		
 		<script type="text/javascript">
+			function evolucaoEditar(id){
+				window.location.href=("/menu/agenda/evolucaosup/"+id);
+			}
+			function evolucaoRemover(id){
+				window.location.href=("/menu/agenda/evolucaoRemoverF/"+id);
+			}
+			function retornar(){
+				history.back();
+			}
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
 				fullDatas.forEach((elementox)=>{
@@ -219,24 +229,6 @@
 					document.getElementById("btnDeleteMany").style.display = "none";
 				}
 			}
-			function evolucaoEmDia(id){
-				window.location.href=("/menu/agenda/evolucao/"+id);
-			}
-			function evolucaoSemanalEmDia(id){
-				window.location.href=("/menu/agenda/evolucaoTemp/"+id);
-			}
-			function evolucaoComAtraso(id){
-				window.location.href=("/menu/agenda/evolucaoA/"+id);
-			}
-			function evolucaoSemanalComAtraso(id){
-				window.location.href=("/menu/agenda/evolucaoTempA/"+id);
-			}
-			function evolucaoSemanalCorrecao(id){
-				window.location.href=("/menu/agenda/evolucaoSemanalCorrecao/"+id);
-			}
-			function evolucaoSemanalCorrecao(id){
-				window.location.href=("/menu/agenda/evolucaoCorrecao/"+id);
-			}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -249,19 +241,47 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Route</a>
 							</li>
-							<li class="active">Minhas Evoluções</li>
+							<li class="active">Lista das Evoluções</li>
+							<li class="active">Geal</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					
-					{{#each error}}
-						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:retornar()">
+									<i class="ace-icon fa fa-arow-left"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
-					{{/each}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendfil" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendrankingfil" method="POST">
 							<div class="col-xs-12" class="row">
 								<div class="hidden">
 									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+									<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
 									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
 									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
 									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
@@ -345,7 +365,7 @@
 											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
-												
+												<option value="Terapeuta">Terapeuta</option>
 											</select>
 										</div>
 									</div>
@@ -362,7 +382,18 @@
 										</div>
 									</div>
 								</div>
-								
+								<div id="divAtendTerapeuta" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Terapeuta:&nbsp;</label>
+											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each terapeutas}}
+													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
 								<div class="row">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
@@ -382,8 +413,7 @@
 										<button type="button" class="close" data-dismiss="alert">
 											<i class="ace-icon fa fa-times"></i>
 										</button>
-										Se houver na lista, atendimento que não foi realizado evolução. Ir ao menu "Minha Agenda" e menu "Da Semana", localizar o agendamento e clicar no relógio ao lado. <br>
-										Vale salientar que sua falta ou atraso na evolução, ficará registrada e será reportada ao administrativo.<br>
+										Ao abrir essa lista ela está inicialmente, filtrada pela semana corrente.<br>
 
 									</div>
 									<div class="col-xs-12">
@@ -393,21 +423,22 @@
 										</div>
 										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 										</div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info" style="font-size: 11px;">
 											<thead>
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="70px;">Hora</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evolução</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Concluída</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="70x;">Ação</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Concluída</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Ação</th>
+													
 												</tr>
 											</thead>
 											<tbody>
 												{{#each agendas}}
-
 													<tr role="row" class="odd">
 														<td>{{agenda_data_dia}}</td>
 														<td>{{agenda_hora}}</td>
@@ -416,77 +447,34 @@
 																<td>{{terapia_nomecid}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#each ../benes}}
-															{{#ifEqual this._id ../agenda_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														<td>{{agenda_evolucao}}</td>
+														
 														<td>
-															{{#compareThis agenda_selo 'true'}}
-																Sim
-																<!-- mover data24h agenda_dataSelo para aqui -->
-																	{{#isTrue agenda_temp}}
-																	<td>
-																		<div class="action-buttons">
-																			<a class="red" name="acaoEvolucaoSemanalCorrecao" id="acaoEvolucaoSemanalCorrecao" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
-																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																			</a>
-																		</div>
-																	</td>
-																	{{else}}
-																	<td>
-																		<div class="action-buttons">
-																			<a class="red" name="acaoEvolucaoCorrecao" id="acaoEvolucaoCorrecao" onclick="javascript:evolucaoEmDia('{{_id}}');">
-																				<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																			</a>
-																		</div>
-																	</td>
-																	{{/isTrue}}
-																	
-																{{#data24h agenda_dataSelo}}
-																<!-- retirei a condição temporariamente para os terapeutas se acostumarem ,sera adicionado uma config para ativar e desativar edições em ate 24h -->
-																{{else}}
-																	<!--
-																	<td>-</td>
-																	-->
-																{{/data24h}}
-															{{else}}
-																Não
-																<td>
-																	{{#dataIgual agenda_data_dia}}
-																		{{#isTrue agenda_temp}}
-																		<div class="action-buttons">
-																			<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																		</div>
-																		{{else}}
-																		<div class="action-buttons">
-																			<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEmDia('{{_id}}');">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																		</div>
-																		{{/isTrue}}
-																	{{else}}
-																		{{#dataInferior agenda_data_dia}}
-																			{{#isTrue agenda_temp}}
-																				<div class="action-buttons">
-																					<a class="red" name="acaoEvolucaoSemanalComAtraso" id="acaoEvolucaoSemanalComAtraso" onclick="javascript:evolucaoSemanalComAtraso('{{_id}}');">
-																						<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																					</a>
-																				</div>
-																			{{else}}
-																			<div class="action-buttons">
-																				<a class="red" name="acaoEvolucaoComAtraso" id="acaoEvolucaoComAtraso" onclick="javascript:evolucaoComAtraso('{{_id}}');">
-																					<i class="ace-icon fa fa-clock-o bigger-130"></i>
-																				</a>
-																			</div>
-																			{{/isTrue}}
-																		{{/dataInferior}}
-																	{{/dataIgual}}
-																</td>
-															{{/compareThis}}
+															{{#each ../terapeutas}}
+																{{#ifEqual this._id ../agenda_usuid}}
+																	{{usuario_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														<td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../agenda_beneid}}
+																	{{bene_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														<td>{{agenda_evolucao}}</td>
+														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
+														<td>
+															<div class="action-buttons">
+																<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEditar('{{_id}}');">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+															</div>
+															<div class="action-buttons">
+																<a class="red" name="acaoRemoveEvolucao" id="acaoRemoveEvolucao" onclick="javascript:evolucaoRemover('{{_id}}');">
+																	<i class="ace-icon fa fa-trash bigger-130"></i>
+																</a>
+															</div>
 														</td>
 													</tr>
 												{{/each}}
@@ -527,10 +515,10 @@
 			</a>
 		</div><!-- /.main-container ace-save-state -->
 
-		
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		
 
 		<!-- inline scripts related to this page -->
@@ -539,7 +527,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [ null, null, null,null, null, null, null,],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

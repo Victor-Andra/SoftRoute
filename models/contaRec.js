@@ -2,121 +2,121 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 //Parte dos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
 //da criação da nf no site da prefeitura de recife.
-const CreditSchema = mongoose.Schema({
-    credit_nfnum :{ type: Number, required: false },
-    credit_beneid :{ type: ObjectId, required: false },
-    credit_convid :{ type: ObjectId, required: false },
-    credit_benenome :{ type: String, required: false },
-    credit_cpfcnpj :{ type: String, required: false },
+const ContaRecSchema = mongoose.Schema({
+    contarec_nfnum :{ type: Number, required: true, unique: true},
+    contarec_beneid :{ type: ObjectId, required: true },
+    contarec_convid :{ type: ObjectId, required: true },
+    contarec_benenome :{ type: String, required: false },
+    contarec_cpfcnpj :{ type: String, required: false },
     
-    credit_dataevento :{ type: Date, required: false },
+    contarec_dataevento :{ type: Date, required: false },
 
-    credit_vlrprev :{ type: String, required: false },
-    credit_vlrjuros :{ type: String, required: false },
-    credit_vlrmulta :{ type: String, required: false },
-    credit_vlradianta :{ type: String, required: false },
-    credit_dataadianta :{ type: Date, required: false },
-    credit_datavenci :{ type: Date, required: false },
-    credit_vlrpg :{ type: String, required: false },
-    credit_vlrdiferenca :{ type: String, required: false },
-    credit_vlrtipo :{ type: String, required: false },
-    credit_datapg :{ type: Date, required: false },
-    credit_pg :{ type: Boolean, required: false },
-    credit_descr :{ type: String, required: false },
-    credit_usuidcad :{ type: ObjectId, required: false },
-    credit_datacad :{ type: String, required: false },
-    credit_usuidedi :{ type: ObjectId, required: false },
-    credit_dataedi :{ type: String, required: false },
+    contarec_vlrprev :{ type: String, required: false },
+    contarec_vlrjuros :{ type: String, required: false },
+    contarec_vlrmulta :{ type: String, required: false },
+    contarec_vlradianta :{ type: String, required: false },
+    contarec_dataadianta :{ type: Date, required: false },
+    contarec_datavenci :{ type: Date, required: false },
+    contarec_vlrpg :{ type: String, required: false },
+    contarec_vlrdiferenca :{ type: String, required: false },
+    contarec_vlrtipo :{ type: String, required: false },
+    contarec_datapg :{ type: Date, required: false },
+    contarec_pg :{ type: Boolean, required: false },
+    contarec_descr :{ type: String, required: false },
+    contarec_usuidcad :{ type: ObjectId, required: false },
+    contarec_datacad :{ type: String, required: false },
+    contarec_usuidedi :{ type: ObjectId, required: false },
+    contarec_dataedi :{ type: String, required: false },
     
 })
 
-class Credit{
+class ContaRec{
     constructor(
-        credit_nfnum,
-        credit_beneid,
-        credit_convid,
-        credit_benenome,
-        credit_cpfcnpj,
-        credit_dataevento,
-        credit_vlrprev,
-        credit_vlrjuros,
-        credit_vlrmulta,
-        credit_vlradianta,
-        credit_dataadianta,
-        credit_datavenci,
-        credit_vlrpg,
-        credit_vlrdiferenca,
-        credit_vlrtipo,
-        credit_datapg,
-        credit_pg,
-        credit_descr,
-        credit_usuidcad,
-        credit_datacad,
-        credit_usuidedi,
-        credit_dataedi
+        contarec_nfnum,
+        contarec_beneid,
+        contarec_convid,
+        contarec_benenome,
+        contarec_cpfcnpj,
+        contarec_dataevento,
+        contarec_vlrprev,
+        contarec_vlrjuros,
+        contarec_vlrmulta,
+        contarec_vlradianta,
+        contarec_dataadianta,
+        contarec_datavenci,
+        contarec_vlrpg,
+        contarec_vlrdiferenca,
+        contarec_vlrtipo,
+        contarec_datapg,
+        contarec_pg,
+        contarec_descr,
+        contarec_usuidcad,
+        contarec_datacad,
+        contarec_usuidedi,
+        contarec_dataedi
         
         ){
           
-            this.credit_nfnum = credit_nfnum,
-            this.credit_beneid = credit_beneid,
-            this.credit_convid = credit_convid,
-            this.credit_benenome = credit_benenome,
-            this.credit_cpfcnpj = credit_cpfcnpj,
-            this.credit_dataevento = credit_dataevento,
-            this.credit_vlrprev = credit_vlrprev,
-            this.credit_vlrjuros = credit_vlrjuros,
-            this.credit_vlrmulta = credit_vlrmulta,
-            this.credit_vlradianta = credit_vlradianta,
-            this.credit_dataadianta = credit_dataadianta,
-            this.credit_datavenci = credit_datavenci,
-            this.credit_vlrpg = credit_vlrpg,
-            this.credit_vlrdiferenca = credit_vlrdiferenca,
-            this.credit_vlrtipo = credit_vlrtipo,
-            this.credit_datapg = credit_datapg,
-            this.credit_pg = credit_pg,
-            this.credit_descr = credit_descr,
-            this.credit_usuidcad = credit_usuidcad,
-            this.credit_datacad = credit_datacad,
-            this.credit_usuidedi = credit_usuidedi,
-            this.credit_dataedi = credit_dataedi 
+            this.contarec_nfnum = contarec_nfnum,
+            this.contarec_beneid = contarec_beneid,
+            this.contarec_convid = contarec_convid,
+            this.contarec_benenome = contarec_benenome,
+            this.contarec_cpfcnpj = contarec_cpfcnpj,
+            this.contarec_dataevento = contarec_dataevento,
+            this.contarec_vlrprev = contarec_vlrprev,
+            this.contarec_vlrjuros = contarec_vlrjuros,
+            this.contarec_vlrmulta = contarec_vlrmulta,
+            this.contarec_vlradianta = contarec_vlradianta,
+            this.contarec_dataadianta = contarec_dataadianta,
+            this.contarec_datavenci = contarec_datavenci,
+            this.contarec_vlrpg = contarec_vlrpg,
+            this.contarec_vlrdiferenca = contarec_vlrdiferenca,
+            this.contarec_vlrtipo = contarec_vlrtipo,
+            this.contarec_datapg = contarec_datapg,
+            this.contarec_pg = contarec_pg,
+            this.contarec_descr = contarec_descr,
+            this.contarec_usuidcad = contarec_usuidcad,
+            this.contarec_datacad = contarec_datacad,
+            this.contarec_usuidedi = contarec_usuidedi,
+            this.contarec_dataedi = contarec_dataedi 
             
     }
 }
 
 
-CreditSchema.loadClass(Credit)
-const CreditModel = mongoose.model('tb_credit', CreditSchema)
-module.exports = {CreditModel,CreditSchema,
-    creditEditar: async (req, res) => {
+ContaRecSchema.loadClass(ContaRec)
+const ContaRecModel = mongoose.model('tb_contarec', ContaRecSchema)
+module.exports = {ContaRecModel,ContaRecSchema,
+    contarecEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
         
         //Realiza Atualização
-        await CreditModel.findByIdAndUpdate(req.body.creditId, 
+        await ContaRecModel.findByIdAndUpdate(req.body.contarecId, 
             {$set: {
-                credit_nfnum : req.body.creditNfnum ,
-                credit_beneid : req.body.creditNfnum ,
-                credit_convid : req.body.creditConvid ,
-                credit_benenome : req.body.creditBenenome ,
-                credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.creditDataevento ,
-                credit_vlrprev : req.body.creditVlrprev ,
-                credit_vlrjuros : req.body.creditVlrjuros ,
-                credit_vlrmulta : req.body.creditVlrmulta ,
-                credit_vlradianta : req.body.creditVlradianta ,
-                credit_dataadianta : req.body.creditDataadianta ,
-                credit_datavenci : req.body.creditDatavenci ,
-                credit_vlrpg : req.body.creditVlrpg ,
-                credit_vlrdiferenca : req.body.creditVlrdiferenca ,
-                credit_vlrtipo : req.body.creditVlrtipo ,
-                credit_datapg : req.body.creditDatapg ,
-                credit_pg : req.body.creditPg ,
-                credit_Descr : req.body.creditDescr ,
-                credit_usuidcad : req.body.creditUsuidcad ,
-                credit_datacad : req.body.creditDatacad ,
-                credit_usuidedi : req.body.creditUsuidedi ,
-                credit_dataedi : dataAtual
+                contarec_nfnum : req.body.contarecNfnum ,
+                contarec_beneid : req.body.contarecNfnum ,
+                contarec_convid : req.body.contarecConvid ,
+                contarec_benenome : req.body.contarecBenenome ,
+                contarec_cpfcnpj : req.body.contarecCpfcnpj ,
+                contarec_dataevento : req.body.contarecDataevento ,
+                contarec_vlrprev : req.body.contarecVlrprev ,
+                contarec_vlrjuros : req.body.contarecVlrjuros ,
+                contarec_vlrmulta : req.body.contarecVlrmulta ,
+                contarec_vlradianta : req.body.contarecVlradianta ,
+                contarec_dataadianta : req.body.contarecDataadianta ,
+                contarec_datavenci : req.body.contarecDatavenci ,
+                contarec_vlrpg : req.body.contarecVlrpg ,
+                contarec_vlrdiferenca : req.body.contarecVlrdiferenca ,
+                contarec_vlrtipo : req.body.contarecVlrtipo ,
+                contarec_datapg : req.body.contarecDatapg ,
+                contarec_pg : req.body.contarecPg ,
+                contarec_Descr : req.body.contarecDescr ,
+                contarec_usuidcad : req.body.contarecUsuidcad ,
+                contarec_datacad : req.body.contarecDatacad ,
+                contarec_usuidedi : req.body.contarecUsuidedi ,
+                contarec_dataedi : dataAtual
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -129,34 +129,34 @@ module.exports = {CreditModel,CreditSchema,
         })
         return resultado;
     },
-    creditAdicionar: async (req,res) => {
+    contarecAdicionar: async (req,res) => {
         let dataAtual = new Date();
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
-                credit_nfnum : req.body.creditNfnum ,
-                credit_beneid : req.body.creditNfnum ,
-                credit_convid : req.body.creditConvid ,
-                credit_benenome : req.body.creditBenenome ,
-                credit_cpfcnpj : req.body.creditCpfcnpj ,
-                credit_dataevento : req.body.creditDataevento ,
-                credit_vlrprev : req.body.creditVlrprev ,
-                credit_vlrjuros : req.body.creditVlrjuros ,
-                credit_vlrmulta : req.body.creditVlrmulta ,
-                credit_vlradianta : req.body.creditVlradianta ,
-                credit_dataadianta : req.body.creditDataadianta ,
-                credit_datavenci : req.body.creditDatavenci ,
-                credit_vlrpg : req.body.creditVlrpg ,
-                credit_vlrdiferenca : req.body.creditVlrdiferenca ,
-                credit_vlrtipo : req.body.creditVlrtipo ,
-                credit_datapg : req.body.creditDatapg ,
-                credit_pg : req.body.creditPg ,
-                credit_Descr : req.body.creditDescr ,
-                credit_usuidcad : dataAtual,
-                credit_datacad : req.body.creditDatacad ,
+            console.log("contarecmodel");
+            const newContaRec = new ContaRecModel({
+                contarec_nfnum : req.body.contarecNfnum ,
+                contarec_beneid : req.body.contarecNfnum ,
+                contarec_convid : req.body.contarecConvid ,
+                contarec_benenome : req.body.contarecBenenome ,
+                contarec_cpfcnpj : req.body.contarecCpfcnpj ,
+                contarec_dataevento : req.body.contarecDataevento ,
+                contarec_vlrprev : req.body.contarecVlrprev ,
+                contarec_vlrjuros : req.body.contarecVlrjuros ,
+                contarec_vlrmulta : req.body.contarecVlrmulta ,
+                contarec_vlradianta : req.body.contarecVlradianta ,
+                contarec_dataadianta : req.body.contarecDataadianta ,
+                contarec_datavenci : req.body.contarecDatavenci ,
+                contarec_vlrpg : req.body.contarecVlrpg ,
+                contarec_vlrdiferenca : req.body.contarecVlrdiferenca ,
+                contarec_vlrtipo : req.body.contarecVlrtipo ,
+                contarec_datapg : req.body.contarecDatapg ,
+                contarec_pg : req.body.contarecPg ,
+                contarec_Descr : req.body.contarecDescr ,
+                contarec_usuidcad : dataAtual,
+                contarec_datacad : req.body.contarecDatacad ,
                 
             });
-            console.log("newCredit save");
-            await newCredit.save().then(()=>{
+            console.log("newContaRec save");
+            await newContaRec.save().then(()=>{
                 console.log("Cadastro realizado!");
                 return true;
             }).catch((err) => {

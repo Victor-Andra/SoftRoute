@@ -2,8 +2,127 @@
 <html lang="pt-br">
 	<head>
 		<title>Receitas</title>
+		<script type="text/javascript">
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divAtendBeneficiario").hidden = false;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+
+				}
+			}
+			</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -13,7 +132,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Receitas</li>
+							<li class="active">Contas a Receber</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -21,16 +140,238 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- Inicio Tabela -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="" method="POST">
+							<div class="col-xs-12" class="row">
+								<div class="hidden">
+									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+									
+									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+									<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+									<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+									<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+									<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+									<input id="idsChecked" value="" />
+								</div>
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro Data:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mes</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+								<div id="divTipoFil" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendBeneficiario" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Beneficiário:&nbsp;</label>
+											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									
+								</div>
+								<hr>
+							</div>
+							
+						</form>
+						
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
+										<table id="tabelaAnual" class="table table-striped table-bordered table-hover" style="font-size: 10px;">
+												<thead><!-- Cabeçalho da tabela -->
+													<tr>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >
+															Janeiro
+														</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Fevereiro</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Março</th>
+														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Abril</th>
+														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Maio</th>
+														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Junho</th>
+														<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Julho</th>
+														<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Agosto</th>
+														<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Setembro</th>
+														<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Outubro</th>
+														<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Novembro</th>
+														<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Dezembro</th>
+														<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Total</b></th>
+													
+													</tr>
+												</thead><!-- Fim Cabeçalho da tabela -->
+												<tbody><!-- Corpo da tabela -->
+														<tr style="text-align: right;">
+															
+															<td><b>Vlr.Prev.</b></td>
+															<td >1.000.254,00</td>
+															<td >1.212.544,74</td>
+															<td >900.985,85</td>
+															<td >1.985.054,74</td>
+															<td >1.842.569,41</td>
+															<td >1.125.458,15</td>
+															<td >1.985.215,01</td>
+															<td >2.452.587,54</td>
+															<td >2.125.545,74</td>
+															<td >1.785.125,07</td>
+															<td >1.874.965,15</td>
+															<td >1.985.215,85</td>
+															<td style="background-color: #d8e8f0;" >17.745.545,00</td>
+													
+														</tr>
+														<tr style="text-align: right;">
+															
+															<td><b>Vlr.Pg.</b></td>
+															<td >1.000.100,00</td>
+															<td >1.212.244,74</td>
+															<td >900.585,85</td>
+															<td >1.885.054,74</td>
+															<td >1.742.569,41</td>
+															<td >1.120.458,15</td>
+															<td >1.970.215,01</td>
+															<td >2.445.587,54</td>
+															<td >2.100.545,74</td>
+															<td >1.771.125,07</td>
+															<td >1.841.965,15</td>
+															<td >1.945.215,85</td>
+															<td style="background-color: #dff0d8;" >16.545.545,00</td>
+													
+														</tr>
+														<tr style="text-align: right;" >
+															
+															<td><b>Vlr.Dif.</b></td>
+															<td >154,00</td>
+															<td >452.415,01</td>
+															<td >100.000,00</td>
+															<td >254.545,74</td>
+															<td >325.254,41</td>
+															<td >120.458,15</td>
+															<td >70.215,01</td>
+															<td >45.587,54</td>
+															<td >50.785,00</td>
+															<td >100.545,74</td>
+															<td >41.965,15</td>
+															<td >45.215,85</td>
+															<td style="text-align: right; background-color: #f0e6d8;" >900.215,85</td>
+													
+														</tr>
+												</tbody>
+											</table>
 										<div>
 											<table id="dynamic-table" class="table table-striped table-bordered table-hover" style="font-size: 10px;">
 												<thead><!-- Cabeçalho da tabela -->
+														<tr style="background-color: #d8e8f0;">
+															<td class="sorting"></td>
+															<td class="sorting"><b>Total</b></td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">50.543,00</td>
+															<td class="sorting">-</td>
+															<td class="sorting">10.000,00</td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">40.000,00</td>
+															<td class="sorting">9.500,00</td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">-</td>
+															<td class="sorting">
+																<div class="action-buttons">
+																	<a class="green" href="">
+																		<i class="ace-icon fa fa-plus bigger-130"></i>
+																	</a>
+																</div>
+															</td>
+													</tr>
 													<tr>
-														<th class="center">
+														<th class="center" rowspan="1">
 															<label class="pos-rel">
 																<input type="checkbox" class="ace" />
 																<span class="lbl"></span>
@@ -54,9 +395,10 @@
 													
 														<th>Ação</th>
 													</tr>
+												
 												</thead><!-- Fim Cabeçalho da tabela -->
 												<tbody><!-- Corpo da tabela -->
-													
+														
 														<tr>
 															<th class="center">
 																<label class="pos-rel">
@@ -90,11 +432,10 @@
 																</div>
 																<div class="hidden-md hidden-lg">
 																	
-																	</div>
 																</div>
+																
 															</td>
 														</tr>
-													
 														<tr>
 															<th class="center">
 																<label class="pos-rel">
@@ -143,8 +484,6 @@
 																	</a>
 																</div>
 																<div class="hidden-md hidden-lg">
-																	
-																	</div>
 																</div>
 															</td>
 														</tr>

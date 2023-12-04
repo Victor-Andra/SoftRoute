@@ -8,7 +8,10 @@
 				window.location.href=("/menu/agenda/evolucaosup/"+id);
 			}
 			function evolucaoRemover(id){
-				window.location.href=("/menu/agenda/evolucaoRemoverA/"+id);
+				let form = document.getElementById("divFormPesquisa");
+				document.getElementById("idDeletar").value = id;
+				form.action = ("/menu/agenda/evolucaoRemoverA");
+				form.submit();
 			}
 			function retornar(){
 				history.back();
@@ -263,6 +266,7 @@
 										<label>Data:&nbsp;</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
 										<input class="hidden" id="dataFinal" name="dataFinal" />
+										<input class="hidden" id="idDeletar" name="idDeletar" />
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
@@ -316,13 +320,7 @@
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
-									<div class="alert alert-warning">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-										Ao abrir essa lista ela está inicialmente, filtrada pela semana corrente.<br>
-
-									</div>
+									
 									<div class="col-xs-12">
 										<div class="clearfix" >
 											<div class="pull-right tableTools-container">
@@ -434,7 +432,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [null, null, null, null,null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

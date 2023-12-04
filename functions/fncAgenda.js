@@ -9728,40 +9728,17 @@ module.exports = {
             })
         })
     },
-    removeEvolucaoF(req,res,resposta){
-        let resultado;
-        let flash = new Resposta()
-        if (resposta.sucesso == "true" || resposta.sucesso == "false"){
-            flash.sucesso = resposta.sucesso;
-            flash.texto = resposta.texto;
-        }
-        agendaClass.removeEvolucao((req.params.id),res).then((retorno)=>{
-            resultado = retorno;
-        }).catch((err) => {
-            console.log(err)
-            resultado = err;
-        }).finally(() => {
-            if(resultado == "true"){
-                flash.texto = "Removido com sucesso!"
-                flash.sucesso = "true"
-            }else{
-                flash.texto = "Erro ao remover evolução!"
-                flash.sucesso = "false"
-            }
-            //console.log('listando Extraeses')
-            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{
-                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                res.render('area/evol/evoatendfechadoLis', {terapeutas: usuario, benes: bene, flash})
-            })}).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar!")
-                res.redirect('admin/erro')
-            })
-        })
-    },
     carregaEvolucaoTemp(req, res, atrazo, resposta){//CarregaEdiçãoAgenda
+        /*
+        if (atrazo == undefined || atrazo == "undefined"){
+            Agenda.findOne({_id: req.params.id}).then((agenda) =>{
+                atrazo = agenda.agenda_atrazo;
+            }).catch((err) =>{
+                console.log(err)
+                res.render('admin/erro')
+            })
+        }
+        */
         let isAgendaTerapeuta = false;
         let selo = false;
         let lvlUsu = req.cookies['lvlUsu'];

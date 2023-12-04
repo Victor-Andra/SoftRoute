@@ -50,59 +50,47 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
+												<div class="hidden" class="col-sm-6">
+													<input type="text" name="contarec_usuidcad" id="contarec_usuidcad" placeholder="" class="form-control" />
+												</div>
+												<div class="hidden" class="col-sm-6">
+													<input type="text" name="contarecDatacad" id="contarecDatacad" placeholder="" class="form-control" />
+												</div>
 
-
-				
-												<label> Atendimento</label>
+  
+												<label> Número NF</label>
 												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="creditAtendid" placeholder="" class="form-control" />
+													<div class="col-sm-2">
+														<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder="" class="form-control" />
 													</div>
 												</div>
 
-												<label>Categoria</label>
+												<label> Beneficiário</label>
 												<div class="form-group">
-													<div class="col-sm-9">
-														<select name="creditCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="Padrão">Padrão</option>
-															<option value="Falta">Falta</option>						
-															<option value="Apoio">Apoio</option>
-															<option value="Supervisão">Supervisão</option>																											<option value="AC">Apoio</option>
-															<option value="Pais">Pais</option>
-															<option value="Substituto">Substituto</option>
-															<option value="Glosa">Glosa</option>
-															<option value="Extra">Extra</option>																	
-														</select>
+													<div class="col-sm-3">
+														<input type="text" name="contarecBeneid" id="contarecBeneid" placeholder="" class="form-control" />
 													</div>
 												</div>
 
-
-												<label> Terapia</label>
+												<label> Tomador</label>
 												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditTerapiaid" placeholder="" class="form-control" />
+													<div class="col-sm-3">
+														<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder="" class="form-control" />
 													</div>
 												</div>
 
-
-												<label> Convenio</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditConvid" placeholder="" class="form-control" />
-													</div>
-												</div>
-
-												<label> Cliente</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditNome" placeholder="" class="form-control" />
-													</div>
-												</div>
+												
 
 												<label> Cpf / Cnpj</label>
 												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditCpfcnpj" placeholder="" class="form-control" />
+													<div class="col-sm-2">
+														<input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label> Convenio</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecConvid" id="contarecConvid" placeholder="" class="form-control" />
 													</div>
 												</div>
 
@@ -112,8 +100,7 @@
 														<span class="input-group-addon">
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
-									
-														<input name="creditDataevento" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
+														<input name="contarecDataevento" id="contarecDataevento" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
 													</div>
 												</div>
 
@@ -124,8 +111,7 @@
 														<span class="input-group-addon">
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
-									
-														<input name="creditDatavenci" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
+														<input name="contarecDatavenci" id="contarecDatavenci" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
 													</div>
 												</div>
 
@@ -137,7 +123,7 @@
 															<i class="ace-icon fa fa-calendar"></i>
 														</span>
 									
-														<input name="creditDatapg" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
+														<input name="contarecDatapg" id="contarecDatapg" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
 													</div>
 												</div>
 
@@ -145,7 +131,7 @@
 												<label> Valor Previsto </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditValorprev" placeholder="" class="form-control" value="0,00"/>
+														<input type="text" name="contarecVlrprev" id="contarecVlrprev" placeholder="" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
@@ -153,7 +139,7 @@
 												<label> Valor Juros </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditJuros" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="contarecVlrjuros" id="contarecVlrjuros" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
@@ -161,15 +147,41 @@
 												<label> Valor Multa </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditMulta" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="contarecVlrmulta" id="contarecVlrmulta" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
+												<div>
+													<label>Adiantamento</label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-calendar"></i>
+														</span>
+														<input name="contarecDataadianta" id="contarecDataadianta" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
+													</div>
+												</div>
 
 												<label> Valor Adiantado </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditAdianta" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="contarecVlradianta" id="contarecVlradianta" placeholder="0,00" class="form-control" value="0,00"/>
+													</div>
+												</div>
+
+												<div>
+													<label>Adiantamento</label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="ace-icon fa fa-calendar"></i>
+														</span>
+														<input name="contarecDataadianta" id="contarecDataadianta" class="col-sm-4" class="form-control" type="text" id="creditDatapg" />
+													</div>
+												</div>
+
+												<label> Valor Diferença </label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
@@ -177,15 +189,21 @@
 												<label> Valor Pago </label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditValorpg" placeholder="0,00" class="form-control" value="0,00"/>
+														<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" class="form-control" value="0,00"/>
 													</div>
 												</div>
 
+												<label> Forma de Pagamento</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="contarecVlrtipo" id="contarecVlrtipo" placeholder="" class="form-control" />
+													</div>
+												</div>
 
 												<label>Pago?</label>
 												<div class="form-group">
 														<div class="col-sm-2">
-															<select name="creditPg" class="chosen-select" data-placeholder="Escolha...">
+															<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
 																<option value="Não">Não</option>
 																<option value="Sim">Sim</option>
 															</select>
@@ -195,7 +213,7 @@
 												<label> Observações </label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<input type="text" line="3" name="creditObs" placeholder="" class="form-control" />
+														<input type="text" name="contarecDescr" id="contarecDescr" line="3"  placeholder="" class="form-control" />
 													</div>
 												</div>
 
