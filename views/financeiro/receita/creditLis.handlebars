@@ -352,15 +352,20 @@
 															<td class="sorting">-</td>
 															<td class="sorting">-</td>
 															<td class="sorting">-</td>
+															<td class="sorting">-</td>
 															<td class="sorting">50.543,00</td>
 															<td class="sorting">-</td>
-															<td class="sorting">10.000,00</td>
 															<td class="sorting">-</td>
 															<td class="sorting">-</td>
 															<td class="sorting">40.000,00</td>
 															<td class="sorting">9.500,00</td>
 															<td class="sorting">-</td>
 															<td class="sorting">-</td>
+															<th class="sorting">150,00</th>
+															<th class="sorting">225,00</th>
+															<th class="sorting">450,00</th>
+															<th class="sorting">750,00</th>
+															<th class="sorting">98,00</th>
 															<td class="sorting">-</td>
 															<td class="sorting">
 																<div class="action-buttons">
@@ -381,17 +386,24 @@
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
 														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >CPF/CNPJ</th>
+														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Atendimento</th>
 														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Emissão</th>
-														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Vlr.Prev</th>
-														<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Adiantamento</th>
-														<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr. Adianta</th>
-														<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pg.Adiantamento</th>
-														<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Vencimento</th>
+														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Vlr.NF</th>
+														<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Emprestimo</th>
+														<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Devolução</th>
+														<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1">Prev.Pg</th>
 														<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr.Pago</th>
 														<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr.Dif</th>
 														<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo PG</th>
 														<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pagamento</th>
-														<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Quitado?</th>
+
+														<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >CSSL</th>
+														<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >IRPF</th>
+														<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >COFINS</th>
+														<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >ISS</th>
+														<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >PIS</th>
+
+														<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Quitado?</th><!-- quadrado e pintar a linha de verde-->
 													
 														<th>Ação</th>
 													</tr>
@@ -410,21 +422,35 @@
 															<td>Arthur Oliveira</td>
 															<td>AMIL</td>
 															<td>040.154.545-58</td>
-															<td>01/12/2023</td>
+															<td>2023/06</td>
+															<td>06/12/2023</td>
 															<td>10.543,00</td>
 															<td>05/12/2023</td>
-															<td>0,00</td>
-															<td>-</td>
-															<td>30/12/2023</td>
-															<td>0,00</td>
-															<td>0,00</td>
+															<td>06/12/2023</td>
+															<td>07/12/2023</td>
+															<td>10.000,00</td>
+															<td>543,00</td>
 															<td>Débito</td>
-															<td>-</td>
-															<td>Não</td>
+															<td>07/12/2023</td>
+
+															<td>100,00</td>
+															<td>150,00</td>
+															<td>300,00</td>
+															<td>500,00</td>
+															<td>65,00</td>
+
+
+
+															<td>Sim</td>
 															<td>
 																<div class="action-buttons">
 																	<a class="green" href="/menu/financeiro/receita/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	</a>
+																	<a class="blue" href="" style="font-size: 9px;" title="
+																	Pagamento em duas vezes"
+																	>
+																		<i class="ace-icon fa fa-tags bigger-130"></i>
 																	</a>
 																	<a class="red" href="/menu/financeiro/receita/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
@@ -443,20 +469,29 @@
 																	<span class="lbl"></span>
 																</label>
 															</th>
-															<td><b>10452</b></td>
-															<td>Alicia Silvestre</td>
+															<td><b>10325</b></td>
+															<td>NAOMI VANESSA DOS SANTOS GALIANO HUAPALLA</td>
 															<td>Bradesco</td>
-															<td>450.175.545-19</td>
-															<td>02/12/2023</td>
-															<td>10.543,00</td>
+															<td>040.154.545-10</td>
+															<td>2023/06</td>
+															<td>09/12/2023</td>
+															<td>5.000,00</td>
+															<td>05/12/2023</td>
 															<td>06/12/2023</td>
-															<td>10.543,00</td>
-															<td>06/12/2023</td>
-															<td>06/12/2023</td>
-															<td>10.000,00</td>
-															<td>543,00</td>
-															<td>Pix</td>
-															<td>06/12/2023</td>
+															<td>07/12/2023</td>
+															<td>4.900,00</td>
+															<td>100,00</td>
+															<td>Crédito</td>
+															<td>09/12/2023</td>
+
+															<td>50,00</td>
+															<td>75,00</td>
+															<td>150,00</td>
+															<td>250,00</td>
+															<td>32,50</td>
+
+
+
 															<td>Sim</td>
 															<td>
 																<div class="action-buttons">
@@ -464,19 +499,8 @@
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
 																	<a class="blue" href="" style="font-size: 9px;" title="
-																	REFERENTE ÁS CONSULTAS MULTIDICIPLINARES DO BENEFICIÁRIO: AARÃO RIBEIRO DO NORTE
-																	DATA DE REFERÊNCIA DOS ATENDIMENTOS: 01-11-2023 até: 30-11-2023
-																	CONSULTAS REALIZADAS NAS DATAS DE REFERÊNCIA.
-																	FONOAUDIOLOGIA : 4 CONSULTAS * R$ 100,00 CADA = R$ 400,00
-																	VALOR TOTAL DAS SESSÕES: 400,00
-																	INFORMAÇÕES FINANCEIRAS
-																	BRADESCO
-																	AGÊNCIA: 3453
-																	CONTA CORRENTE: 50.715-6
-																	ROUTE TERAPIA E APOIO INFANTIL LTDA
-																	CNPJ: 33.346.423/0001-17
-																	CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989
-																	">
+																	Pagamento em duas vezes"
+																	>
 																		<i class="ace-icon fa fa-tags bigger-130"></i>
 																	</a>
 																	<a class="red" href="/menu/financeiro/receita/del/{{_id}}">
@@ -484,7 +508,9 @@
 																	</a>
 																</div>
 																<div class="hidden-md hidden-lg">
+																	
 																</div>
+																
 															</td>
 														</tr>
 												</tbody>

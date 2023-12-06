@@ -1971,36 +1971,41 @@ router.get('/area/aba/nat/natlis', fncGeral.IsAuthenticated, (req,res) =>{//dire
     fncNat.listaNat(req, res);
 })
 
-//Menu ATEC ** Area Tecnicos e ABA 
+//Menu ATEC ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/aba/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAtec.carregaAtec(req, res);
 })
 
 //Lista ATEC por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAtec.listaAtec(req, res);
 })
 
-//Menu ATA ** Area Tecnicos e ABA 
+//Menu ATA ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/aba/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAta.carregaAta(req, res);
 })
 
+//adiciona registro
+router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAta.cadastraAta(req, res);
+})
+
 //Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAta.listaAta(req, res);
 })
 
-//Menu CARS ** Area Tecnicos e ABA 
+//Menu CARS ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/aba/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncCars.carregaCars(req, res);
 })
 
 //Lista CARS por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncCars.listaCars(req, res);
 })
 

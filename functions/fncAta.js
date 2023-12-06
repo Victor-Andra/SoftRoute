@@ -11,11 +11,13 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
-
+const respostaClass = require("../models/resposta")
 //Tabela NAT
 const Ata = mongoose.model("tb_ata")
 
 //Tabelas Extrangeiras
+
+const Resposta = mongoose.model("tb_resposta")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
@@ -37,7 +39,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/ata/ataLis', {Atas: ata, Terapeutas: terapeuta, Benes: bene})
+            res.render('area/escalas/ata/ataLis', {Atas: ata, Terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Ata")
@@ -54,7 +56,7 @@ module.exports = {
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
-                            res.render("area/aba/ata/ataCad", {Benes: bene, Terapeutas: terapeuta})
+                            res.render("area/escalas/ata/ataCad", {Benes: bene, Terapeutas: terapeuta})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -75,7 +77,7 @@ module.exports = {
                     Bene.find({bene_status:"Ativo"}).then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
-                                res.render("area/aba/ata/ataEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                                res.render("area/escalas/ata/ataEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -86,28 +88,26 @@ module.exports = {
     cadastraAta(req,res){
         console.log("chegou")
         let resultado
-        let resposta = new Resposta()
+        let flash = new Resposta();
         
-        ataClass.cadastraAtaFisio(req,res).then((result)=>{
+        ataClass.ataAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
-            console.log(res)
+            console.log(result)
             resultado = true;
         }).catch((err)=>{
             resultado = err
-            console.log("ERRO:"+err)
+            console.log("ERRO:")
         }).finally(()=>{
             if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+                flash.texto = "ATA cadastrada com sucesso!"
+                flash.sucesso = "true"
                 console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaAta(req,res,resposta)
+                this.listaAta(req,res,flash)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
+                flash.texto = resultado
+                flash.sucesso = "false"
                 console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro', flash);
             }
         })
     },
@@ -158,7 +158,7 @@ module.exports = {
                                 Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Ataamento Fisioterapêutico deletado!")
-                res.render('area/aba/ata/ataLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                res.render('area/escalas/ata/ataLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")

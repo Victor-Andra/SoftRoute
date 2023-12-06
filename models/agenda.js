@@ -337,55 +337,73 @@ module.exports = {AgendaModel,AgendaSchema,
         var retorno;
         let arrayAgendasNovas = [];
         let dataAtual = new Date();
+        let agendaSemanal;
         console.log("req.body.agendaCateg:"+req.body.agendaCateg)
         await AgendaModel.find(busca).then((agenda)=>{
             //console.log("agenda.kength"+agenda.length);
             agenda.forEach(a => {
-                if (a.agenda_mergeterapeutaid == undefined){
-                    let newAgenda = new AgendaModel({
-                        agenda_data : a.agenda_data ,
-                        agenda_beneid : a.agenda_beneid ,
-                        agenda_convid : a.agenda_convid ,
-                        agenda_salaid : a.agenda_salaid ,
-                        agenda_terapiaid : a.agenda_terapiaid ,
-                        agenda_usuid : a.agenda_usuid ,
-                        agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
-                        agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
-                        agenda_migrado : false ,
-                        agenda_categoria : req.body.agendaCateg ,
-                        agenda_org : "Administrativo" ,
-                        agenda_obs : a.agenda_obs ,
-                        agenda_temp : true ,
-                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
-                        agenda_tempmotivo : a.agenda_tempmotivo ,
-                        agenda_selo : false ,
-                        agenda_copia : false,
-                        agenda_usucad : usuarioAtual,
-                        agenda_datacad : dataAtual
-                    });
-                    arrayAgendasNovas.push(newAgenda)
+                /*
+                agendaSemanal = "-";
+                AgendaModel.findOne({agenda_tempId: a._id}).then((agendaS)=>{
+                    if (agendaS != undefined && agendaS != "undefined"){
+                        agendaSemanal = agendaS;
+                    }
+                })
+                if (agendaSemanal == "-"){
+                    */
+                    if (a.agenda_mergeterapeutaid == undefined){
+                        let newAgenda = new AgendaModel({
+                            agenda_data : a.agenda_data ,
+                            agenda_beneid : a.agenda_beneid ,
+                            agenda_convid : a.agenda_convid ,
+                            agenda_salaid : a.agenda_salaid ,
+                            agenda_terapiaid : a.agenda_terapiaid ,
+                            agenda_usuid : a.agenda_usuid ,
+                            agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
+                            agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
+                            agenda_migrado : false ,
+                            agenda_categoria : req.body.agendaCateg ,
+                            agenda_org : "Administrativo" ,
+                            agenda_obs : a.agenda_obs ,
+                            agenda_temp : true ,
+                            agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                            agenda_tempmotivo : a.agenda_tempmotivo ,
+                            agenda_selo : false ,
+                            agenda_copia : false,
+                            agenda_usucad : usuarioAtual,
+                            agenda_datacad : dataAtual
+                        });
+                        arrayAgendasNovas.push(newAgenda)
+                    } else {
+                        let newAgenda = new AgendaModel({
+                            agenda_data : a.agenda_data ,
+                            agenda_beneid : a.agenda_beneid ,
+                            agenda_convid : a.agenda_convid ,
+                            agenda_salaid : a.agenda_salaid ,
+                            agenda_terapiaid : a.agenda_terapiaid ,
+                            agenda_usuid : a.agenda_usuid ,
+                            agenda_migrado : false ,
+                            agenda_categoria : req.body.agendaCateg ,
+                            agenda_org : "Administrativo" ,
+                            agenda_obs : a.agenda_obs ,
+                            agenda_temp : true ,
+                            agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                            agenda_tempmotivo : a.agenda_tempmotivo ,
+                            agenda_selo : false ,
+                            agenda_copia : false,
+                            agenda_usucad : usuarioAtual,
+                            agenda_datacad : dataAtual
+                        });
+                        arrayAgendasNovas.push(newAgenda)
+                    }
+                    /*
                 } else {
-                    let newAgenda = new AgendaModel({
-                        agenda_data : a.agenda_data ,
-                        agenda_beneid : a.agenda_beneid ,
-                        agenda_convid : a.agenda_convid ,
-                        agenda_salaid : a.agenda_salaid ,
-                        agenda_terapiaid : a.agenda_terapiaid ,
-                        agenda_usuid : a.agenda_usuid ,
-                        agenda_migrado : false ,
-                        agenda_categoria : req.body.agendaCateg ,
-                        agenda_org : "Administrativo" ,
-                        agenda_obs : a.agenda_obs ,
-                        agenda_temp : true ,
-                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
-                        agenda_tempmotivo : a.agenda_tempmotivo ,
-                        agenda_selo : false ,
-                        agenda_copia : false,
-                        agenda_usucad : usuarioAtual,
-                        agenda_datacad : dataAtual
-                    });
-                    arrayAgendasNovas.push(newAgenda)
+                    agendaSemanal.agenda_categoria = req.body.agendaCateg;
+                    agendaSemanal.agenda_org = "Administrativo";
+                    agendaSemanal.agenda_usucad = usuarioAtual;
+                    agendaSemanal.agenda_dataedi = dataAtual;
                 }
+                */
             });
         })
 

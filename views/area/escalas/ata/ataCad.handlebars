@@ -2,11 +2,175 @@
 <html lang="pt-br">
 	<head>
 		<title>ATA</title>
-		<script type="text/javascript">
-			
-			
 		
-		</script>
+		<script type="text/javascript">
+
+		function contafeitos(cg) {
+			let feitos;
+			if (cg == 1){
+				feitos = 1;
+			} else if (cg >= 2){
+				feitos = 2;
+			} else {
+				feitos = 0;
+			}
+			return feitos;
+		}
+
+        // Função para atualizar as variáveis de contagem
+        function atualizarContagem() {
+			// Variáveis para armazenar a contagem por grupo
+			let cg_i = 0;
+			let cg_ii = 0;
+			let cg_iii = 0;
+			let cg_iv = 0;
+			let cg_v = 0;
+			let cg_vi = 0;
+			let cg_vii = 0;
+			let cg_viii = 0;
+			let cg_ix = 0;
+			let cg_x = 0;
+			let cg_xi = 0;
+			let cg_xii = 0;
+			let cg_xiii = 0;
+			let cg_xiv = 0;
+			let cg_xv = 0;
+			let cg_xvi = 0;
+			let cg_xvii = 0;
+			let cg_xviii = 0;
+			let cg_xix = 0;
+			let cg_xx = 0;
+			let cg_xxi = 0;
+			let cg_xxii = 0;
+			let cg_xxiii = 0;
+			let totalitens = 0;
+
+            cg_i = contarCheckboxesPorGrupo('grupo_i');
+		 	cg_ii = contarCheckboxesPorGrupo('grupo_ii');
+			cg_iii = contarCheckboxesPorGrupo('grupo_iii');
+			cg_iv = contarCheckboxesPorGrupo('grupo_iv');
+			cg_v = contarCheckboxesPorGrupo('grupo_v');
+			cg_vi = contarCheckboxesPorGrupo('grupo_vi');
+			cg_vii = contarCheckboxesPorGrupo('grupo_vii');
+			cg_viii = contarCheckboxesPorGrupo('grupo_viii');
+			cg_ix = contarCheckboxesPorGrupo('grupo_ix');
+			cg_x = contarCheckboxesPorGrupo('grupo_x');
+			cg_xi = contarCheckboxesPorGrupo('grupo_xi');
+			cg_xii = contarCheckboxesPorGrupo('grupo_xii');
+			cg_xiii = contarCheckboxesPorGrupo('grupo_xiii');
+			cg_xiv = contarCheckboxesPorGrupo('grupo_xiv');
+			cg_xv = contarCheckboxesPorGrupo('grupo_xv');
+			cg_xvi = contarCheckboxesPorGrupo('grupo_xvi');
+			cg_xvii = contarCheckboxesPorGrupo('grupo_xvii');
+			cg_xviii = contarCheckboxesPorGrupo('grupo_xviii');
+			cg_xix = contarCheckboxesPorGrupo('grupo_xix');
+			cg_xx = contarCheckboxesPorGrupo('grupo_xx');
+			cg_xxi = contarCheckboxesPorGrupo('grupo_xxi');
+			cg_xxii = contarCheckboxesPorGrupo('grupo_xxii');
+			cg_xxiii = contarCheckboxesPorGrupo('grupo_xxiii');
+            
+			
+			// Exibir no console (substitua isso pelo que desejar fazer com as variáveis)
+            console.log('Contagem Grupo I:', cg_i);
+            console.log('Contagem Grupo II:', cg_ii);
+            console.log('Contagem Grupo III:', cg_iii);
+			console.log('Contagem Grupo Iv:', cg_iv);
+            console.log('Contagem Grupo v:', cg_v);
+			console.log('Contagem Grupo vI:', cg_vi);
+            console.log('Contagem Grupo vII:', cg_vii);
+            console.log('Contagem Grupo vIII:', cg_viii);
+			console.log('Contagem Grupo Ix:', cg_ix);
+            console.log('Contagem Grupo x:', cg_x);
+			console.log('Contagem Grupo xI:', cg_xi);
+            console.log('Contagem Grupo xII:', cg_xii);
+            console.log('Contagem Grupo xIII:', cg_xiii);
+			console.log('Contagem Grupo xIv:', cg_xiv);
+            console.log('Contagem Grupo xv:', cg_xv);
+			console.log('Contagem Grupo xvI:', cg_xvi);
+            console.log('Contagem Grupo xvII:', cg_xvii);
+            console.log('Contagem Grupo xvIII:', cg_xviii);
+			console.log('Contagem Grupo Ix:', cg_xix);
+            console.log('Contagem Grupo xx:', cg_xx);
+			console.log('Contagem Grupo xxI:', cg_xxi);
+            console.log('Contagem Grupo xxII:', cg_xxii);
+            console.log('Contagem Grupo xxIII:', cg_xxiii);			
+
+			console.log('Total:', totalitens);
+
+			//Carrega os resultados
+			document.getElementById("ataTotalitens").value = totalitens;
+			document.getElementById("ataTotalitens_i").value = cg_i;
+			document.getElementById("ataTotalitens_ii").value = cg_ii;
+			document.getElementById("ataTotalitens_iii").value = cg_iii;
+			document.getElementById("ataTotalitens_iv").value = cg_iv;
+			document.getElementById("ataTotalitens_v").value = cg_v;
+			document.getElementById("ataTotalitens_vi").value = cg_vi;
+			document.getElementById("ataTotalitens_vii").value = cg_vii;
+			document.getElementById("ataTotalitens_viii").value = cg_viii;
+			document.getElementById("ataTotalitens_ix").value = cg_ix;
+			document.getElementById("ataTotalitens_x").value = cg_x;
+			document.getElementById("ataTotalitens_xi").value = cg_xi;
+			document.getElementById("ataTotalitens_xii").value = cg_xii;
+			document.getElementById("ataTotalitens_xiii").value = cg_xiii;
+			document.getElementById("ataTotalitens_xiv").value = cg_xiv;
+			document.getElementById("ataTotalitens_xv").value = cg_xv;
+			document.getElementById("ataTotalitens_xvi").value = cg_xvi;
+			document.getElementById("ataTotalitens_xvii").value = cg_xvii;
+			document.getElementById("ataTotalitens_xviii").value = cg_xviii;
+			document.getElementById("ataTotalitens_xix").value = cg_xix;
+			document.getElementById("ataTotalitens_xx").value = cg_xx;
+			document.getElementById("ataTotalitens_xxi").value = cg_xxi;
+			document.getElementById("ataTotalitens_xxii").value = cg_xxii;
+			document.getElementById("ataTotalitens_xxiii").value = cg_xxiii;
+
+			//Carrega o campo Total de Itens
+			totalitens = (cg_i + cg_ii + cg_iii + cg_iv + cg_v + cg_vi + cg_vii + cg_viii + cg_ix + cg_x + cg_xi + cg_xii + cg_xiii + cg_xiv + cg_xv + cg_xvi + cg_xvii + cg_xviii + cg_xix + cg_xx + cg_xxi + cg_xxii + cg_xxiii);
+			document.getElementById("ataTotalitens").value = totalitens;
+																			
+			document.getElementById("ataTotalpontos_i").value = contafeitos(cg_i);
+			document.getElementById("ataTotalpontos_ii").value = contafeitos(cg_ii);
+			document.getElementById("ataTotalpontos_iii").value = contafeitos(cg_iii);
+			document.getElementById("ataTotalpontos_iv").value = contafeitos(cg_iv);
+			document.getElementById("ataTotalpontos_v").value = contafeitos(cg_v);
+			document.getElementById("ataTotalpontos_vi").value = contafeitos(cg_vi);
+			document.getElementById("ataTotalpontos_vii").value = contafeitos(cg_vii);
+			document.getElementById("ataTotalpontos_viii").value = contafeitos(cg_viii);
+			document.getElementById("ataTotalpontos_ix").value = contafeitos(cg_ix);
+			document.getElementById("ataTotalpontos_x").value = contafeitos(cg_x);
+			document.getElementById("ataTotalpontos_xi").value = contafeitos(cg_xi);
+			document.getElementById("ataTotalpontos_xii").value = contafeitos(cg_xii);
+			document.getElementById("ataTotalpontos_xiii").value = contafeitos(cg_xiii);
+			document.getElementById("ataTotalpontos_xiv").value = contafeitos(cg_xiv);
+			document.getElementById("ataTotalpontos_xv").value = contafeitos(cg_xv);
+			document.getElementById("ataTotalpontos_xvi").value = contafeitos(cg_xvi);
+			document.getElementById("ataTotalpontos_xvii").value = contafeitos(cg_xvii);
+			document.getElementById("ataTotalpontos_xviii").value = contafeitos(cg_xviii);
+			document.getElementById("ataTotalpontos_xix").value = contafeitos(cg_xix);
+			document.getElementById("ataTotalpontos_xx").value = contafeitos(cg_xx);
+			document.getElementById("ataTotalpontos_xxi").value = contafeitos(cg_xxi);
+			document.getElementById("ataTotalpontos_xxii").value = contafeitos(cg_xxii);
+			document.getElementById("ataTotalpontos_xxiii").value = contafeitos(cg_xxiii);
+
+			//Carrega o campo Total de Pontos
+			totalpontos = (
+				contafeitos(cg_i) + contafeitos(cg_ii) + contafeitos(cg_iii) + contafeitos(cg_iv) + contafeitos(cg_v) + 
+				contafeitos(cg_vi) + contafeitos(cg_vii) + 	contafeitos(cg_viii) + 	contafeitos(cg_ix) + contafeitos(cg_x) + 
+				contafeitos(cg_xi) + contafeitos(cg_xii) + 	contafeitos(cg_xiii) + 	contafeitos(cg_xiv) + contafeitos(cg_xv) + 
+				contafeitos(cg_xvi) + contafeitos(cg_xvii) + contafeitos(cg_xviii) + contafeitos(cg_xix) + contafeitos(cg_xx) + 
+				contafeitos(cg_xxi) + contafeitos(cg_xxii) + contafeitos(cg_xxiii)
+				);
+			document.getElementById("ataTotalpontos").value = totalpontos;
+        }
+
+        // Função para contar checkboxes por grupo
+        function contarCheckboxesPorGrupo(grupo) {
+            return document.querySelectorAll('input.' + grupo + ':checked').length;
+        }
+
+              
+    	</script>			
+		
+		
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -24,7 +188,7 @@
 								<a href="#">ATA – ESCALA DE AVALIAÇÃO DE TRAÇOS AUTÍSTICOS</a>
 							</li>
 
-							<li class="active"> - ABA</li>
+							<li class="active"> - Escala</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -32,9 +196,9 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/area/aba/ata/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/escalas/ata/add" method="POST">
 
-								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+								<div class="col-xs-12" name="Ident" id="Ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -62,34 +226,12 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ata_beneid" id="ata_beneid" class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
 																</select>
-															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Preenchido por:</label>
-														<div class="row">
-															<div class="col-sm-6">
-																<div class="input-group">
-																	<input name="atapreenchido" id="atapreenchido" type="text"  />
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<hr>
-												<div class="row">
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Parentesco</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="ataparen" id="ataparen" type="text"  />
-																</div>
 															</div>
 														</div>
 													</div>
@@ -98,16 +240,48 @@
 														<div class="row">
 															<div class="col-sm-4">
 																<div class="input-group">
-																	<input name="ataidade" id="ataidade" type="text"  />
+																	<input name="ataBeneidade" id="ataBeneidade" type="text"  />
 																</div>
 															</div>
 														</div>
-													</div>																
+													</div>	
+													
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Preenchido por:</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<select name="ataTerapeutaid" id="ataTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each Terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Parentesco</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="ataParem" id="ataParem" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+																												
 													<div class="col-xs-12 col-sm-4">
 														<label>Técnico Acompanhante</label>
 														<div class="form-group">
 															<div class="col-sm-8">
 																<select name="ataterapeutaid" id="ataterapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -116,7 +290,31 @@
 														</div>
 													</div>																								
 												</div>
-
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Corrigido por:</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<select name="ataCorrecusuid" id="ataCorrecusuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each Terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<label for="id-date-picker-1">Data correção:</label>
+														<div class="row">
+															<div class="col-sm-6">
+																<div class="input-group">
+																	<input name="ataCorrecdata" id="ataCorrecdata" type="date"  />
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>		
 									</div>
@@ -129,13 +327,12 @@
 
 									</div>
 								</div>
-
-								<div class="col-xs-12" name="du" id="du"><!-- Dificuldades na Interação Social -->
+								<div class="col-xs-12" name="IntSoc" id="IntSoc"><!-- Dificuldades na Interação Social -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>I</b> - Dificuldades na Interação Social</h4>
+												<b>I</b> - Dificuldades na interação social</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -171,7 +368,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataDesvio1" id="ataDesvio1" type="checkbox" class="ace">
+																						<input name="ataI01" id="ataI01" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não sorri</span>
 																					</label>
 																				</div>
@@ -182,7 +379,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataDesvio2" id="ataDesvio2" type="checkbox" class="ace">
+																						<input name="ataI02" id="ataI02" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ausência de aproximações espontâneas</span>
 																					</label>
 																				</div>
@@ -193,7 +390,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataDesvio3" id="ataDesvio4" type="checkbox" class="ace">
+																						<input name="ataI03" id="ataI03" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não busca companhia</span>
 																					</label>
 																				</div>
@@ -204,7 +401,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataDesvio4" id="ataDesvio4" type="checkbox" class="ace">
+																						<input name="ataI04" id="ataI04" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Busca constantemente seu cantinho (esconderijo)</span>
 																					</label>
 																				</div>
@@ -215,7 +412,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataDesvio5" id="ataDesvio5" type="checkbox" class="ace">
+																						<input name="ataI05" id="ataI05" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Evita pessoas</span>
 																					</label>
 																				</div>
@@ -226,7 +423,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataDesvio6" id="ataDesvio6" type="checkbox" class="ace">
+																						<input name="ataI06" id="ataI06" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> É incapaz de se manter um intercâmbio social</span>
 																					</label>
 																				</div>
@@ -237,7 +434,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataDesvio7" id="ataDesvio7" type="checkbox" class="ace">
+																						<input name="ataI07" id="ataI07" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Isolamento intenso</span>
 																					</label>
 																				</div>
@@ -257,12 +454,12 @@
 										</div>
 									</div>
 								</div>	
-								<div class="col-xs-12" name="du" id="du"><!-- Manipulação do Ambiente -->
+								<div class="col-xs-12" name="ManAmb" id="ManAmb"><!-- Manipulação do Ambiente -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>II</b> - Manipulação do Ambiente</h4>
+												<b>II</b> - Manipulação do ambiente</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -298,7 +495,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataManipambiente1" id="ataManipambiente1" type="checkbox" class="ace">
+																						<input name="ataIi01" id="ataIi01" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não responde as solicitações</span>
 																					</label>
 																				</div>
@@ -309,7 +506,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataManipambiente2" id="ataManipambiente2" type="checkbox" class="ace">
+																						<input name="ataIi02" id="ataIi02" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Mudança repentina de humor</span>
 																					</label>
 																				</div>
@@ -320,7 +517,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataManipambiente3" id="ataManipambiente3" type="checkbox" class="ace">
+																						<input name="ataIi03" id="ataIi03" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Mantém-se indiferente, sem expressão</span>
 																					</label>
 																				</div>
@@ -331,7 +528,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataManipambiente4" id="ataManipambiente4" type="checkbox" class="ace">
+																						<input name="ataIi04" id="ataIi04" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Risos compulsivos</span>
 																					</label>
 																				</div>
@@ -342,7 +539,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataManipambiente5" id="ataManipambiente5" type="checkbox" class="ace">
+																						<input name="ataIi05" id="ataIi05" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Birra e raiva passageira</span>
 																					</label>
 																				</div>
@@ -353,7 +550,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataManipambiente6" id="ataManipambiente6" type="checkbox" class="ace">
+																						<input name="ataIi06" id="ataIi06" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Excitação motora ou verbal (ir de um lugar a outro, falar sem parar)</span>
 																					</label>
 																				</div>
@@ -372,7 +569,7 @@
 										</div>
 									</div>
 								</div>	
-								<div class="col-xs-12" name="du" id="du"><!-- Utilização das Pessoas ao Seu Redor -->
+								<div class="col-xs-12" name="UtPess" id="UtPess"><!-- Utilização das Pessoas ao Seu Redor -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -413,7 +610,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataUtilpess1" id="ataUtilpess1" type="checkbox" class="ace">
+																						<input name="ataIii01" id="ataIii01" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Utiliza do adulto como um objeto, levando-o até aquilo que deseja.</span>
 																					</label>
 																				</div>
@@ -424,7 +621,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataUtilpess3" id="ataUtilpess3" type="checkbox" class="ace">
+																						<input name="ataIii02" id="ataIii02" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> O adulto lhe serve como apoio para conseguir o que deseja (por ex.: utiliza o adulto como apoio para pegar bolacha)</span>
 																					</label>
 																				</div>
@@ -435,7 +632,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataUtilpess3" id="ataUtilpess3" type="checkbox" class="ace">
+																						<input name="ataIii03" id="ataIii03" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> O adulto é o meio para suprir uma necessidade que não é capaz de realizar só (por ex.: amarrar os sapatos)</span>
 																					</label>
 																				</div>
@@ -446,7 +643,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataUtilpess4" id="ataUtilpess4" type="checkbox" class="ace">
+																						<input name="ataIii04" id="ataIii04" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Se o adulto não responde as suas demandas, atua interferindo na conduta desse adulto.</span>
 																					</label>
 																				</div>
@@ -466,12 +663,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Resistência a Mudanças -->
+								<div class="col-xs-12" name="ResMud" id="ResMud"><!-- Resistência a Mudanças -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>IV</b> - Resistência a Mudanças</h4>
+												<b>IV</b> - Resistência a mudanças</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -507,7 +704,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataResmuda1" id="ataResmuda1" type="checkbox" class="ace">
+																						<input name="ataIv01" id="ataIv01" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Insiste em manter a rotina.</span>
 																					</label>
 																				</div>
@@ -518,7 +715,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataResmuda2" id="ataResmuda2" type="checkbox" class="ace">
+																						<input name="ataIv02" id="ataIv02" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Grande dificuldade em aceitar fatos que alteram sua rotina, tais como mudanças de lugar, de vestuário e na alimentação</span>
 																					</label>
 																				</div>
@@ -529,7 +726,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataResmuda3" id="ataResmuda3" type="checkbox" class="ace">
+																						<input name="ataIv03" id="ataIv03" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Apresenta resistência a mudanças, persistindo na mesma resposta ou atividade</span>
 																					</label>
 																				</div>
@@ -550,12 +747,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Busca por Ordem Rígida -->
+								<div class="col-xs-12" name="BusRi" id="BusRi"><!-- Busca por Ordem Rígida -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>V</b> - Busca por Ordem Rígida</h4>
+												<b>V</b> - Busca por ordem rígida</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -591,7 +788,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataOrdemrig1" id="ataOrdemrig1" type="checkbox" class="ace">
+																						<input name="ataV01" id="ataV01" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ordenação dos objetos de acordo com critérios próprios e pré-estabelecidos.</span>
 																					</label>
 																				</div>
@@ -602,7 +799,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataOrdemrig2" id="ataOrdemrig2" type="checkbox" class="ace">
+																						<input name="ataV02" id="ataV02" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Prende-se a uma ordenação espacial (cada coisa sempre em seu lugar).</span>
 																					</label>
 																				</div>
@@ -613,7 +810,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataOrdemrig3" id="ataOrdemrig3" type="checkbox" class="ace">
+																						<input name="ataV03" id="ataV03" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Prende-se a uma sequência temporal (cada coisa em seu tempo)</span>
 																					</label>
 																				</div>
@@ -624,7 +821,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataOrdemrig4" id="ataOrdemrig4" type="checkbox" class="ace">
+																						<input name="ataV04" id="ataV04" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Prende-se a uma correspondência pessoa-lugar (cada pessoa sempre no lugar determinado).</span>
 																					</label>
 																				</div>
@@ -644,12 +841,12 @@
 										</div>
 									</div>
 								</div>													
-								<div class="col-xs-12" name="du" id="du"><!-- Falta De Contato Visual. Olhar Indefinido -->
+								<div class="col-xs-12" name="FalVisu" id="FalVisu"><!-- Falta De Contato Visual. Olhar Indefinido -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>VI</b> - Falta De Contato Visual. Olhar Indefinido</h4>
+												<b>VI</b> - Falta de contato visual. Olhar indefinido</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -685,7 +882,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataFaltacontvis1" id="ataFaltacontvis1" type="checkbox" class="ace">
+																						<input name="ataVi01" id="ataVi01" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Desvia os olhares diretos, não olhando nos olhos</span>
 																					</label>
 																				</div>
@@ -697,7 +894,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataFaltacontvis2" id="ataFaltacontvis2" type="checkbox" class="ace">
+																						<input name="ataVi02" id="ataVi02" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Volta a cabeça ou o olhar quando é chamado (olhar para fora)</span>
 																					</label>
 																				</div>
@@ -708,7 +905,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataFaltacontvis3" id="ataFaltacontvis3" type="checkbox" class="ace">
+																						<input name="ataVi03" id="ataVi03" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Expressão do olhar vazio e sem vida</span>
 																					</label>
 																				</div>
@@ -719,7 +916,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataFaltacontvis4" id="ataFaltacontvis4" type="checkbox" class="ace">
+																						<input name="ataVi04" id="ataVi04" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Quando segue os estímulos com os olhos, somente o faz de maneira intermitente</span>
 																					</label>
 																				</div>
@@ -730,7 +927,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataFaltacontvis5" id="ataFaltacontvis5" type="checkbox" class="ace">
+																						<input name="ataVi05" id="ataVi05" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Fixa os objetos com um olhar periférico, não central</span>
 																					</label>
 																				</div>
@@ -741,7 +938,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataFaltacontvis6" id="ataFaltacontvis6" type="checkbox" class="ace">
+																						<input name="ataVi06" id="ataVi06" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Dá a sensação de que não olha</span>
 																					</label>
 																				</div>
@@ -761,12 +958,12 @@
 										</div>
 									</div>
 								</div>							
-								<div class="col-xs-12" name="du" id="du"><!-- Mímica Inexpressiva -->
+								<div class="col-xs-12" name="Mimi" id="Mimi"><!-- Mímica Inexpressiva -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>VII</b> - Mímica Inexpressiva</h4>
+												<b>VII</b> - Mímica inexpressiva</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -797,58 +994,152 @@
 																	</thead>
 
 																	<tbody>
-																		<tr><!-- 1AReg -->
+																		<tr><!-- 71AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataMimica" id="ataMimica" type="checkbox" class="ace">
+																						<input name="ataVii01" id="ataVii01" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Se fala, não utiliza a expressão facial, gestual ou vocal com a frequência esperada.</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
 																		
-																		<tr><!-- 31AReg -->
+																		<tr><!-- 72AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataMimica" id="ataMimica" type="checkbox" class="ace">
+																						<input name="ataVii02" id="ataVii02" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não mostra uma reação antecipatória.</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
-																		<tr><!-- 4AReg -->
+																		<tr><!-- 73AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataMimica" id="ataMimica" type="checkbox" class="ace">
-																						<span class="lbl"> Expressão do olhar vazio e sem vida</span>
-																					</label>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 5AReg -->
-																			<td>
-																				<div class="checkbox">
-																					<span class="label label-info arrowed-in-right arrowed">4.</span>
-																					<label>
-																						<input name="ataMimica" id="ataMimica" type="checkbox" class="ace">
+																						<input name="ataVii03" id="ataVii03" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não expressa através da mímica ou olhar aquilo que quer ou o que sente</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
-																		<tr><!-- 6AReg -->
+																		<tr><!-- 74AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">4.</span>
+																					<label>
+																						<input name="ataVii04" id="ataVii04" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Imobilidade facial</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		
+
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12" name="Distsono" id="Distsono"><!-- Distúrbios do sono -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												<b>VIII</b> -Distúrbios do Sono</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<button type="button" class="close" data-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Quando pequeno dorme muitas horas e, quando maior dorme poucas horas, se comparado ao padrão esperado para a idade. Esta conduta pode ser constante, ou não.
+														</div>
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th colspan="1">Descrição</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 81Reg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">1.</span>
+																					<label>
+																						<input name="ataViii01" id="ataViii01" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Não quer ir dormir</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		
+																		<tr><!-- 82AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">2.</span>
+																					<label>
+																						<input name="ataViii02" id="ataViii02" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Levanta-se muito cedo</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 83Reg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">3.</span>
+																					<label>
+																						<input name="ataViii03" id="ataViii03" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Sono irregular (em intervalos)</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 84Reg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">4.</span>
+																					<label>
+																						<input name="ataViii04" id="ataViii04" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Troca o dia pela noite</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 85Reg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataMimica" id="ataMimica" type="checkbox" class="ace">
-																						<span class="lbl"> Imobilidade facial</span>
+																						<input name="ataViii05" id="ataViii05" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Dorme poucas horas</span>
 																					</label>
 																				</div>
 																			</td>
@@ -865,12 +1156,12 @@
 										</div>
 									</div>
 								</div>									
-								<div class="col-xs-12" name="du" id="du"><!-- Alteração na Alimentação -->
+								<div class="col-xs-12" name="AltAli" id="AltAli"><!-- Alteração na Alimentação -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>IX</b> - Alteração na Alimentação</h4>
+												<b>IX</b> - Alteração na alimentação</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -901,35 +1192,35 @@
 																	</thead>
 
 																	<tbody>
-																		<tr><!-- 1AReg -->
+																		<tr><!-- 91AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataAlimen1" id="ataAlimen1" type="checkbox" class="ace">
+																						<input name="ataIx01" id="ataIx01" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Seletividade alimentar rígida (ex.: come o mesmo tipo de alimento sempre).</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
 																		
-																		<tr><!-- 2AReg -->
+																		<tr><!-- 92AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataAlimen2" id="ataAlimen2" type="checkbox" class="ace">
+																						<input name="ataIx02" id="ataIx02" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Come outras coisas além de alimentos (papel, insetos).</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
-																		<tr><!-- 3AReg -->
+																		<tr><!-- 93AReg -->
 																			<td>
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataAlimen3" id="ataAlimen3" type="checkbox" class="ace">
+																						<input name="ataIx03" id="ataIx03" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Quando pequeno não mastigava.</span>
 																					</label>
 																				</div>
@@ -940,7 +1231,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAlimen4" id="ataAlimen4" type="checkbox" class="ace">
+																						<input name="ataIx04" id="ataIx04" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Apresenta uma atividade ruminante.</span>
 																					</label>
 																				</div>
@@ -951,7 +1242,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataAlimen5" id="ataAlimen5" type="checkbox" class="ace">
+																						<input name="ataIx05" id="ataIx05" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Vômitos.</span>
 																					</label>
 																				</div>
@@ -962,7 +1253,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataAlimen6" id="ataAlimen6" type="checkbox" class="ace">
+																						<input name="ataIx06" id="ataIx06" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Come grosseiramente, esparrama a comida ou a atira.</span>
 																					</label>
 																				</div>
@@ -974,7 +1265,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataAlimen7" id="ataAlimen7" type="checkbox" class="ace">
+																						<input name="ataIx07" id="ataIx07" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Rituais (esfarela alimentos antes da ingestão).</span>
 																					</label>
 																				</div>
@@ -985,7 +1276,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">8.</span>
 																					<label>
-																						<input name="ataAlimen8" id="ataAlimen8" type="checkbox" class="ace">
+																						<input name="ataIx08" id="ataIx08" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ausência de paladar (falta de sensibilidade gustativa).</span>
 																					</label>
 																				</div>
@@ -1003,7 +1294,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Dificuldade No Controle Dos Esfíncteres -->
+								<div class="col-xs-12" name="DifEsfc" id="DifEsfc"><!-- Dificuldade No Controle Dos Esfíncteres -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -1044,7 +1335,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataEsfic1" id="ataEsfic1" type="checkbox" class="ace">
+																						<input name="ataX01" id="ataX01" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Medo de sentar-se no vaso sanitário.</span>
 																					</label>
 																				</div>
@@ -1056,7 +1347,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataEsfic2" id="ataEsfic2" type="checkbox" class="ace">
+																						<input name="ataX02" id="ataX02" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Utiliza os esfíncteres para manipular os adultos.</span>
 																					</label>
 																				</div>
@@ -1067,7 +1358,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataEsfic3" id="ataEsfic3" type="checkbox" class="ace">
+																						<input name="ataX03" id="ataX03" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Utiliza os esfíncteres como estimulação corporal, para obtenção de prazer.</span>
 																					</label>
 																				</div>
@@ -1078,7 +1369,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAlimen4" id="ataAlimen4" type="checkbox" class="ace">
+																						<input name="ataX04" id="ataX04" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Tem controle diurno, porém o noturno é tardio ou ausente.</span>
 																					</label>
 																				</div>
@@ -1097,12 +1388,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Exploração Dos Objetos -->
+								<div class="col-xs-12" name="ExpObj" id="ExpObj"><!-- Exploração Dos Objetos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XI</b> - Exploração Dos Objetos (Apalpar, Chupar)</h4>
+												<b>XI</b> - Exploração dos objetos (apalpar, chupar)</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1138,7 +1429,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataAnaobj1" id="ataAnaobj1" type="checkbox" class="ace">
+																						<input name="ataXi01" id="ataXi01" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Morde e engole objetos não alimentares.</span>
 																					</label>
 																				</div>
@@ -1150,7 +1441,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataAnaobj2" id="ataAnaobj2" type="checkbox" class="ace">
+																						<input name="ataXi02" id="ataXi02" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Chupa e coloca as coisas na boca.</span>
 																					</label>
 																				</div>
@@ -1161,7 +1452,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataAnaobj3" id="ataAnaobj3" type="checkbox" class="ace">
+																						<input name="ataXi03" id="ataXi03" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Cheira tudo.</span>
 																					</label>
 																				</div>
@@ -1172,7 +1463,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAnaobj4" id="ataAnaobj4" type="checkbox" class="ace">
+																						<input name="ataXi04" id="ataXi04" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Apalpa tudo. Examina as superfícies com os dedos de uma maneira minuciosa.</span>
 																					</label>
 																				</div>
@@ -1190,12 +1481,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Uso Inapropriado Dos Objetos -->
+								<div class="col-xs-12" name="InaObj" id="InaObj"><!-- Uso Inapropriado Dos Objetos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XII</b> - Uso Inapropriado Dos Objetos</h4>
+												<b>XII</b> - Uso inapropriado dos objetos</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1231,7 +1522,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataBizarraobj1" id="ataBizarraobj1" type="checkbox" class="ace">
+																						<input name="ataXii01" id="ataXii01" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ignora os objetos ou mostra um interesse momentâneo.</span>
 																					</label>
 																				</div>
@@ -1243,7 +1534,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataBizarraobj2" id="ataBizarraobj2" type="checkbox" class="ace">
+																						<input name="ataXii02" id="ataXii02" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Pega, golpeia ou simplesmente os atira no chão.</span>
 																					</label>
 																				</div>
@@ -1254,7 +1545,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataBizarraobj4" id="ataBizarraobj4" type="checkbox" class="ace">
+																						<input name="ataXii03" id="ataXii03" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Conduta atípica com os objetos.</span>
 																					</label>
 																				</div>
@@ -1265,7 +1556,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataBizarraobj3" id="ataBizarraobj3" type="checkbox" class="ace">
+																						<input name="ataXii04" id="ataXii04" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Carrega insistentemente consigo determinado objeto.</span>
 																					</label>
 																				</div>
@@ -1276,7 +1567,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataBizarraobj5" id="ataBizarraobj5" type="checkbox" class="ace">
+																						<input name="ataXii05" id="ataXii05" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Se interessa somente por uma parte do objeto ou do brinquedo.</span>
 																					</label>
 																				</div>
@@ -1287,7 +1578,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataBizarraobj5" id="ataBizarraobj5" type="checkbox" class="ace">
+																						<input name="ataXii06" id="ataXii06" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Coleciona objetos estranhos.</span>
 																					</label>
 																				</div>
@@ -1298,7 +1589,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataBizarraobj7" id="ataBizarraobj7" type="checkbox" class="ace">
+																						<input name="ataXii07" id="ataXii07" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Utiliza os objetos de forma particular e inadequada.</span>
 																					</label>
 																				</div>
@@ -1317,12 +1608,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Falta De Atenção -->
+								<div class="col-xs-12" name="FalAten" id="FalAten"><!-- Falta De Atenção -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XIV</b> - Falta De Atenção</h4>
+												<b>XIII</b> - Falta de atenção</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1358,7 +1649,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataFaltaaten1" id="ataFaltaaten1" type="checkbox" class="ace">
+																						<input name="ataXiii01" id="ataXiii01" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Quando realiza uma atividade, fixa a atenção por curto espaço de tempo ou é incapaz de fixá-la.</span>
 																					</label>
 																				</div>
@@ -1370,7 +1661,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataFaltaaten2" id="ataFaltaaten2" type="checkbox" class="ace">
+																						<input name="ataXiii02" id="ataXiii02" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Age como se fosse surdo.</span>
 																					</label>
 																				</div>
@@ -1382,7 +1673,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataFaltaaten3" id="ataFaltaaten3" type="checkbox" class="ace">
+																						<input name="ataXiii03" id="ataXiii03" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Resposta retardada.</span>
 																					</label>
 																				</div>
@@ -1391,9 +1682,9 @@
 																		<tr><!-- 5AReg -->
 																			<td>
 																				<div class="checkbox">
-																					<span class="label label-info arrowed-in-right arrowed">5.</span>
+																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataFaltaaten5" id="ataFaltaaten5" type="checkbox" class="ace">
+																						<input name="ataXiii04" id="ataXiii04" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Muitas vezes dá a sensação de ausência.</span>
 																					</label>
 																				</div>
@@ -1411,12 +1702,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Ausência De Interesse Pela Aprendizagem -->
+								<div class="col-xs-12" name="AuseInter" id="AuseInter"><!-- Ausência De Interesse Pela Aprendizagem -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XVI</b> - Ausência De Interesse Pela Aprendizagem</h4>
+												<b>XIV</b> - Ausência de interesse pela aprendizagem</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1452,7 +1743,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataAuseint1" id="ataAuseint1" type="checkbox" class="ace">
+																						<input name="ataXiv01" id="ataXiv01" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não quer aprender.</span>
 																					</label>
 																				</div>
@@ -1464,7 +1755,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataAuseint2" id="ataAuseint2" type="checkbox" class="ace">
+																						<input name="ataXiv02" id="ataXiv02" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Cansa-se muito depressa, ainda que de atividade que goste.</span>
 																					</label>
 																				</div>
@@ -1476,7 +1767,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataAuseint3" id="ataAuseint3" type="checkbox" class="ace">
+																						<input name="ataXiv03" id="ataXiv03" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Esquece rapidamente.</span>
 																					</label>
 																				</div>
@@ -1487,7 +1778,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAuseint4" id="ataAuseint4" type="checkbox" class="ace">
+																						<input name="ataXiv04" id="ataXiv04" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Insiste em ser ajudado, ainda que saiba fazer.</span>
 																					</label>
 																				</div>
@@ -1498,7 +1789,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataAuseint5" id="ataAuseint5" type="checkbox" class="ace">
+																						<input name="ataXiv05" id="ataXiv05" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Insiste constantemente em mudar de atividade.</span>
 																					</label>
 																				</div>
@@ -1516,12 +1807,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Falta De Iniciativa -->
+								<div class="col-xs-12" name="FalIni" id="FalIni"><!-- Falta De Iniciativa -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XV</b> -Falta De Iniciativa</h4>
+												<b>XV</b> -Falta de iniciativa</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1557,7 +1848,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataFaltainic1" id="ataFaltainic1" type="checkbox" class="ace">
+																						<input name="ataXv01" id="ataXv01" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> É incapaz de ter iniciativa própria.</span>
 																					</label>
 																				</div>
@@ -1569,7 +1860,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataFaltainic2" id="ataFaltainic2" type="checkbox" class="ace">
+																						<input name="ataXv02" id="ataXv02" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Busca a comodidade.</span>
 																					</label>
 																				</div>
@@ -1581,7 +1872,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataFaltainic3" id="ataFaltainic3" type="checkbox" class="ace">
+																						<input name="ataXv03" id="ataXv03" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Passividade, falta de interesse.</span>
 																					</label>
 																				</div>
@@ -1592,7 +1883,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataFaltainic4" id="ataFaltainic4" type="checkbox" class="ace">
+																						<input name="ataXv04" id="ataXv04" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Lentidão.</span>
 																					</label>
 																				</div>
@@ -1603,7 +1894,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataFaltainic5" id="ataFaltainic5" type="checkbox" class="ace">
+																						<input name="ataXv05" id="ataXv05" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Prefere que outro faça o trabalho para ele.</span>
 																					</label>
 																				</div>
@@ -1621,12 +1912,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Alteração De Linguagem E Comunicação -->
+								<div class="col-xs-12" name="AltLing" id="AltLing"><!-- Alteração De Linguagem E Comunicação -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XVI</b> - Alteração De Linguagem E Comunicação</h4>
+												<b>XVI</b> - Alteração de linguagem e comunicação</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1662,7 +1953,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataAltling1" id="ataAltling1" type="checkbox" class="ace">
+																						<input name="ataXvi01" id="ataXvi01" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Mutismo.</span>
 																					</label>
 																				</div>
@@ -1674,7 +1965,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataAltling2" id="ataAltling2" type="checkbox" class="ace">
+																						<input name="ataXvi02" id="ataXvi02" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Estereotipias vocais.</span>
 																					</label>
 																				</div>
@@ -1686,7 +1977,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataAltling3" id="ataAltling3" type="checkbox" class="ace">
+																						<input name="ataXvi03" id="ataXvi03" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Entonação incorreta.</span>
 																					</label>
 																				</div>
@@ -1697,7 +1988,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAltling4" id="ataAltling4" type="checkbox" class="ace">
+																						<input name="ataXvi04" id="ataXvi04" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ecolalia imediata e/ou retardada.</span>
 																					</label>
 																				</div>
@@ -1708,13 +1999,45 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataAltling5" id="ataAltling5" type="checkbox" class="ace">
+																						<input name="ataXvi05" id="ataXvi05" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Repetição de palavras ou frases que podem (ou não) ter valor comunicativo.</span>
 																					</label>
 																				</div>
 																			</td>
 																		</tr>
-																		
+																		<tr><!-- 6AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">6.</span>
+																					<label>
+																						<input name="ataXvi06" id="ataXvi06" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Emite sons estereotipados quando está agitado e em outras ocasiões, sem nenhuma razão aparente</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 7AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">7.</span>
+																					<label>
+																						<input name="ataXvi07" id="ataXvi07" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Não se comunica por gestos.</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr><!-- 8AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">8.</span>
+																					<label>
+																						<input name="ataXvi08" id="ataXvi08" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> As interações com adulto não são nunca um diálogo.</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
 																	</tbody>
 																</table>
 															</div>
@@ -1726,12 +2049,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Não Manifesta Habilidades E Conhecimentos -->
+								<div class="col-xs-12" name="NaoMani" id="NaoMani"><!-- Não Manifesta Habilidades E Conhecimentos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XVIII</b> - Não Manifesta Habilidades E Conhecimentos.</h4>
+												<b>XVII</b> - Não manifesta habilidades e conhecimentos.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1767,7 +2090,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataNaomanif1" id="ataNaomanif1" type="checkbox" class="ace">
+																						<input name="ataXvii01" id="ataXvii01" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Ainda que saiba fazer uma coisa, não a realiza, se não quiser.</span>
 																					</label>
 																				</div>
@@ -1779,7 +2102,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataNaomanif2" id="ataNaomanif2" type="checkbox" class="ace">
+																						<input name="ataXvii02" id="ataXvii02" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não demonstra o que sabe, até ter uma necessidade primária ou um interesse eminentemente específico.</span>
 																					</label>
 																				</div>
@@ -1791,7 +2114,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataNaomanif3" id="ataNaomanif3" type="checkbox" class="ace">
+																						<input name="ataXvii03" id="ataXvii03" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Aprende coisas, porém somente a demonstra em determinados lugares e com determinadas pessoas.</span>
 																					</label>
 																				</div>
@@ -1803,7 +2126,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataAltling4" id="ataAltling4" type="checkbox" class="ace">
+																						<input name="ataXvii04" id="ataXvii04" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Às vezes, surpreende por suas habilidades inesperadas.</span>
 																					</label>
 																				</div>
@@ -1821,7 +2144,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Reações Inapropriadas Ante A Frustração -->
+								<div class="col-xs-12" name="ReacInap" id="ReacInap"><!-- Reações Inapropriadas Ante A Frustração -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -1862,7 +2185,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataReacdes1" id="ataReacdes1" type="checkbox" class="ace">
+																						<input name="ataXviii01" id="ataXviii01" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Reações de desagrado caso seja esquecida alguma coisa.</span>
 																					</label>
 																				</div>
@@ -1874,7 +2197,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataReacdes2" id="ataReacdes2" type="checkbox" class="ace">
+																						<input name="ataXviii02" id="ataXviii02" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Reações de desagrado caso seja interrompida alguma atividade que goste.</span>
 																					</label>
 																				</div>
@@ -1886,7 +2209,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataReacdes3" id="ataReacdes3" type="checkbox" class="ace">
+																						<input name="ataXviii03" id="ataXviii03" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Desgostoso quando os desejos e as expectativas não se cumprem.</span>
 																					</label>
 																				</div>
@@ -1898,7 +2221,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataReacdes4" id="ataReacdes4" type="checkbox" class="ace">
+																						<input name="ataXviii04" id="ataXviii04" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Reações de birra.</span>
 																					</label>
 																				</div>
@@ -1916,7 +2239,80 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Hiperatividade / Hipoatividade -->
+								<div class="col-xs-12" name="NaoAssume" id="NaoAssume"><!-- Não Assume Responsabilidades -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												<b>XIX</b> - Não assume responsabilidades .</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												
+												</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">												
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<button type="button" class="close" data-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Por princípio, é incapaz de fazer-se responsável, necessitando de ordens sucessivas para realizar algo.
+														</div>
+														<div class="row">
+															<div class="col-xs-12">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th colspan="1">Descrição</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 191AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">1.</span>
+																					<label>
+																						<input name="ataXix01" id="ataXix01" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Não assume nenhuma responsabilidade, por menor que seja.</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		
+																		<tr><!-- 192AReg -->
+																			<td>
+																				<div class="checkbox">
+																					<span class="label label-info arrowed-in-right arrowed">2.</span>
+																					<label>
+																						<input name="ataXix02" id="ataXix02" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();">
+																						<span class="lbl"> Para chegar a fazer alguma coisa, há que se repetir muitas vezes ou elevar o tom de voz.</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+																		
+																		
+																		
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12" name="HiperHipo" id="HiperHipo"><!-- Hiperatividade / Hipoatividade -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -1957,7 +2353,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataHiperhipo1" id="ataHiperhipo1" type="checkbox" class="ace">
+																						<input name="ataXx01" id="ataXx01" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> A criança está constantemente em movimento.</span>
 																					</label>
 																				</div>
@@ -1969,7 +2365,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataHiperhipo2" id="ataHiperhipo2" type="checkbox" class="ace">
+																						<input name="ataXx02" id="ataXx02" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Mesmo estimulada, não se move.</span>
 																					</label>
 																				</div>
@@ -1980,7 +2376,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataHiperhipo3" id="ataHiperhipo3" type="checkbox" class="ace">
+																						<input name="ataXx03" id="ataXx03" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Barulhento, dá a sensação de que é obrigado a fazer ruído / barulho.</span>
 																					</label>
 																				</div>
@@ -1991,7 +2387,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataHiperhipo4" id="ataHiperhipo4" type="checkbox" class="ace">
+																						<input name="ataXx04" id="ataXx04" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Vai de um lugar a outro, sem parar.</span>
 																					</label>
 																				</div>
@@ -2002,7 +2398,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataHiperhipo4" id="ataHiperhipo4" type="checkbox" class="ace">
+																						<input name="ataXx05" id="ataXx05" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Fica pulando, saltando no mesmo lugar.</span>
 																					</label>
 																				</div>
@@ -2013,7 +2409,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataHiperhipo4" id="ataHiperhipo4" type="checkbox" class="ace">
+																						<input name="ataXx06" id="ataXx06" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não se move nunca do lugar onde está sentado.</span>
 																					</label>
 																				</div>
@@ -2033,12 +2429,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Movimentos Estereotipados E Repetitivos -->
+								<div class="col-xs-12" name="MovEst" id="MovEst"><!-- Movimentos Estereotipados E Repetitivos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XXI</b> - Movimentos Estereotipados E Repetitivos.</h4>
+												<b>XXI</b> - Movimentos estereotipados e repetitivos.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2074,7 +2470,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataMovest1" id="ataMovest1" type="checkbox" class="ace">
+																						<input name="ataXxi01" id="ataXxi01" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Balanceia-se.</span>
 																					</label>
 																				</div>
@@ -2086,7 +2482,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataMovest2" id="ataMovest2" type="checkbox" class="ace">
+																						<input name="ataXxi02" id="ataXxi02" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Olha e brinca com as mãos e os dedos.</span>
 																					</label>
 																				</div>
@@ -2097,7 +2493,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataMovest3" id="ataMovest3" type="checkbox" class="ace">
+																						<input name="ataXxi03" id="ataXxi03" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Tapa os olhos e as orelhas.</span>
 																					</label>
 																				</div>
@@ -2108,7 +2504,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataMovest4" id="ataMovest4" type="checkbox" class="ace">
+																						<input name="ataXxi04" id="ataXxi04" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Dá pontapés.</span>
 																					</label>
 																				</div>
@@ -2119,7 +2515,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataMovest5" id="ataMovest5" type="checkbox" class="ace">
+																						<input name="ataXxi05" id="ataXxi05" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Faz caretas e movimentos estranhos com a face.</span>
 																					</label>
 																				</div>
@@ -2130,7 +2526,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataMovest6" id="ataMovest6" type="checkbox" class="ace">
+																						<input name="ataXxi06" id="ataXxi06" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Roda objetos ou sobre si mesmo.</span>
 																					</label>
 																				</div>
@@ -2141,7 +2537,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataMovest7" id="ataMovest7" type="checkbox" class="ace">
+																						<input name="ataXxi07" id="ataXxi07" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Caminha na ponta dos pés ou saltando, arrasta os pés, anda fazendo movimentos estranhos.</span>
 																					</label>
 																				</div>
@@ -2152,7 +2548,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">8.</span>
 																					<label>
-																						<input name="ataMovest8" id="ataMovest8" type="checkbox" class="ace">
+																						<input name="ataXxi08" id="ataXxi08" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Torce o corpo, mantém uma postura desequilibrada, pernas dobradas, cabeça recolhida aos pés, extensões violentas do corpo.</span>
 																					</label>
 																				</div>
@@ -2172,12 +2568,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Ignora O Perigo -->
+								<div class="col-xs-12" name="IgPerigo" id="IgPerigo"><!-- Ignora O Perigo -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XXII</b> - Ignora O Perigo.</h4>
+												<b>XXII</b> - Ignora o perigo.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2213,7 +2609,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataIgperi1" id="ataIgperi1" type="checkbox" class="ace">
+																						<input name="ataXxii01" id="ataXxii01" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Não se dá conta do perigo.</span>
 																					</label>
 																				</div>
@@ -2225,7 +2621,7 @@
 																				<div class="checkbox">
 																				<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataIgperi2" id="ataIgperi2" type="checkbox" class="ace">
+																						<input name="ataXxii02" id="ataXxii02" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Sobe em todos os lugares.</span>
 																					</label>
 																				</div>
@@ -2236,7 +2632,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataIgperi3" id="ataIgperi3" type="checkbox" class="ace">
+																						<input name="ataXxii03" id="ataXxii03" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
 																						<span class="lbl"> Parece insensível a dor.</span>
 																					</label>
 																				</div>
@@ -2258,7 +2654,7 @@
 										</div>
 									</div>
 								</div>	
-								<div class="col-xs-12" name="du" id="du"><!-- Aparecimento Antes Dos 36 Meses (Dsm-Iv) -->
+								<div class="col-xs-12" name="Ap36" id="Ap36"><!-- Aparecimento Antes Dos 36 Meses (Dsm-Iv) -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -2289,7 +2685,7 @@
 																<label> Sim ou Não? </label>
 																	<div class="form-group">
 																		<div class="col-sm-6">
-																			<select name="abllsrUsuid" id="abllsrUsuid" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="ataXxiii01" id="ataXxiii01" class="chosen-select" data-placeholder="Escolha...">
 																				
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
@@ -2307,84 +2703,8 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Legendas de Análise ATA -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												Legendas de Análise ATA.</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												
-												</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">												
-												<div class="row">
-													<div class="col-xs-12">
-														
-														<div class="row">
-															<div class="col-sm-4">
-															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-																<thead>
-																	<h5 class="widget-title bigger lighter">
-																		<i class="ace-icon fa fa-table"></i>
-																		Legenda e Pontuação das Escalas!
-																	</h5>
-																	<tr>
-																		<th >Descrição</th>
-																		<th >Pontuação</th>
-																	</tr>
-																</thead>
-
-																<tbody>
-																	<tr><!-- 1Reg -->
-																		
-																		<td>
-																			<span class="badge badge-success">Nenhum item marcado na escala.</span>
-																		</td>
-																		<td>
-																			<span class="badge badge-purple">0 Ponto</span>
-																		</td>
-																	</tr>
-																	<tr><!-- 2Reg -->
-																		
-																		<td>
-																			<span class="badge badge-warning">Um item marcado na escala.</span>
-																		</td>
-																		<td>
-																			<span class="badge badge-purple">1 Ponto</span>
-																		</td>
-																	</tr>
-																	<tr><!-- 3Reg -->
-																		
-																		<td>
-																			<span class="badge badge-danger">Mais de um item marcado na escala.</span>
-																		</td>
-																		<td>
-																			<span class="badge badge-purple">2 Pontos</span>
-																		</td>
-																	</tr>
-																	
-																</tbody>
-															</table>
-															</div>
-														</div>
-
-													</div>
-
-												</div>
-											</div>
-										</div>
-									</div>
-												
-								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Formulário de Análise ATA -->
+								
+								<div class="col-xs-6" name="Pontua" id="Pontua"><!-- Formulário de Análise ATA -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -2404,6 +2724,82 @@
 											<div class="widget-main">												
 												<div class="row">
 													<div class="col-sm-12">
+														<div class="row">
+															<div class="col-sm-4">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<h5 class="widget-title bigger lighter">
+																			<i class="ace-icon fa fa-table"></i>
+																			Legenda e Pontuação das Escalas!
+																		</h5>
+																		<tr>
+																			<th >Descrição</th>
+																			<th >Pontuação</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 1Reg -->
+																			
+																			<td>
+																				<span class="badge badge-success">Nenhum item marcado na escala.</span>
+																			</td>
+																			<td>
+																				<span class="badge badge-purple">0 Ponto</span>
+																			</td>
+																		</tr>
+																		<tr><!-- 2Reg -->
+																			
+																			<td>
+																				<span class="badge badge-warning">Um item marcado na escala.</span>
+																			</td>
+																			<td>
+																				<span class="badge badge-purple">1 Ponto</span>
+																			</td>
+																		</tr>
+																		<tr><!-- 3Reg -->
+																			
+																			<td>
+																				<span class="badge badge-danger">Mais de um item marcado na escala.</span>
+																			</td>
+																			<td>
+																				<span class="badge badge-purple">2 Pontos</span>
+																			</td>
+																		</tr>
+																		
+																	</tbody>
+																</table>
+															</div>
+															<div class="col-sm-1"></div>
+															<div class="col-sm-4">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		Pontuação Total
+																	</h5>
+																	<tr>
+																		<th >Itens</th>
+																		<th >Pontuação</th>
+																	</tr>
+																</thead>
+
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		
+																		<td>
+																			<input name="ataTotalitens" id="ataTotalitens" type="text" style="width:80%" value="0"/>
+																		</td>
+																		<td>
+																			<input name="ataTotalpontos" id="ataTotalpontos" type="text" style="width:80%" value="0"/>
+																		</td>
+																	</tr>
+																
+																	
+																</tbody>
+																</table>
+															</div>
+														</div>
 														<div class="row">
 															<div class="col-sm-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -2427,14 +2823,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot1" id="ataItenstot1" type="text" style="width:80%" />
+																						<input name="ataTotalitens_i" id="ataTotalitens_i" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont1" id="ataItenspont1" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_i" id="ataTotalpontos_i" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2446,14 +2842,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot2" id="ataItenstot2" type="text" style="width:80%"/>
+																						<input name="ataTotalitens_ii" id="ataTotalitens_ii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont2" id="ataItenspont2" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_ii" id="ataTotalpontos_ii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2465,33 +2861,33 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot3" id="ataItenstot3" type="text" style="width:80%" />
+																						<input name="ataTotalitens_iii" id="ataTotalitens_iii" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont3" id="ataItenspont3" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_iii" id="ataTotalpontos_iii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																		</tr>
 																		<tr><!-- 4Reg -->
 																			<td>
-																				<span class="badge badge-pink">I</span>
+																				<span class="badge badge-pink">IV</span>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot4" id="ataItenstot4" type="text" style="width:80%" />
+																						<input name="ataTotalitens_iv" id="ataTotalitens_iv" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont4" id="ataItenspont4" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_iv" id="ataTotalpontos_iv" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2503,14 +2899,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot5" id="ataItenstot5" type="text" style="width:80%" />
+																						<input name="ataTotalitens_v" id="ataTotalitens_v" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont5" id="ataItenspont5" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_v" id="ataTotalpontos_v" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2522,14 +2918,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot6" id="ataItenstot6" type="text" style="width:80%" />
+																						<input name="ataTotalitens_vi" id="ataTotalitens_vi" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont6" id="ataItenspont6" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_vi" id="ataTotalpontos_vi" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2541,14 +2937,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot7" id="ataItenstot7" type="text" style="width:80%" />
+																						<input name="ataTotalitens_vii" id="ataTotalitens_vii" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont7" id="ataItenspont7" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_vii" id="ataTotalpontos_vii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2560,14 +2956,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot8" id="ataItenstot8" type="text" style="width:80%" />
+																						<input name="ataTotalitens_viii" id="ataTotalitens_viii" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont8" id="ataItenspont8" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_viii" id="ataTotalpontos_viii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2579,14 +2975,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot9" id="ataItenstot9" type="text" style="width:80%" />
+																						<input name="ataTotalitens_ix" id="ataTotalitens_ix" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont9" id="ataItenspont9" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_ix" id="ataTotalpontos_ix" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2598,14 +2994,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot10" id="ataItenstot10" type="text" style="width:80%" />
+																						<input name="ataTotalitens_x" id="ataTotalitens_x" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont10" id="ataItenspont10" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_x" id="ataTotalpontos_x" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2617,14 +3013,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot11" id="ataItenstot11" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xi" id="ataTotalitens_xi" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont11" id="ataItenspont11" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xi" id="ataTotalpontos_xi" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2636,14 +3032,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot12" id="ataItenstot12" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xii" id="ataTotalitens_xii" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont12" id="ataItenspont12" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xii" id="ataTotalpontos_xii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2655,14 +3051,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot13" id="ataItenstot13" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xiii" id="ataTotalitens_xiii" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont13" id="ataItenspont13" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xiii" id="ataTotalpontos_xiii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2674,14 +3070,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot14" id="ataItenstot14" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xiv" id="ataTotalitens_xiv" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont14" id="ataItenspont14" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xiv" id="ataTotalpontos_xiv" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2693,14 +3089,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot15" id="ataItenstot15" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xv" id="ataTotalitens_xv" type="text" style="width:80%" value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont15" id="ataItenspont15" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xv" id="ataTotalpontos_xv" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2712,14 +3108,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot16" id="ataItenstot16" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xvi" id="ataTotalitens_xvi" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont16" id="ataItenspont16" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xvi" id="ataTotalpontos_xvi" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2731,14 +3127,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot17" id="ataItenstot17" type="text" style="width:80%"/>
+																						<input name="ataTotalitens_xvii" id="ataTotalitens_xvii" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont17" id="ataItenspont17" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xvii" id="ataTotalpontos_xvii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2750,14 +3146,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot18" id="ataItenstot18" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xviii" id="ataTotalitens_xviii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont18" id="ataItenspont18" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xviii" id="ataTotalpontos_xviii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2769,14 +3165,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot19" id="ataItenstot19" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xix" id="ataTotalitens_xix" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont19" id="ataItenspont19" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xix" id="ataTotalpontos_xix" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2788,14 +3184,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot20" id="ataItenstot20" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xx" id="ataTotalitens_xx" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont20" id="ataItenspont20" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xx" id="ataTotalpontos_xx" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2807,14 +3203,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot21" id="ataItenstot21" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xxi" id="ataTotalitens_xxi" type="text" style="width:80%"  value="0" />
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont21" id="ataItenspont21" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xxi" id="ataTotalpontos_xxi" type="text" style="width:80%"  value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2826,14 +3222,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot22" id="ataItenstot22" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xxii" id="ataTotalitens_xxii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont22" id="ataItenspont22" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xxii" id="ataTotalpontos_xxii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2845,14 +3241,14 @@
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenstot23" id="ataItenstot23" type="text" style="width:80%" />
+																						<input name="ataTotalitens_xxiii" id="ataTotalitens_xxiii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
 																			<td>
 																				<div class="col-sm-3">
 																					<div class="input-group">
-																						<input name="ataItenspont23" id="ataItenspont23" type="text" style="width:80%"/>
+																						<input name="ataTotalpontos_xxiii" id="ataTotalpontos_xxiii" type="text" style="width:80%" value="0"/>
 																					</div>
 																				</div>
 																			</td>
@@ -2861,16 +3257,7 @@
 																		
 																	</tbody>
 																</table>
-																<div class="col-xs-12 col-sm-2">
-																	<label for="id-date-picker-1">Total de Pontos</label>
-																	<div class="row">
-																		<div class="col-sm-4">
-																			<div class="input-group">
-																				<input name="ataPontost" id="ataPontost" type="text" />
-																			</div>
-																		</div>
-																	</div>
-																</div>
+																
 															</div>
 														</div>																						
 													</div>
@@ -2879,7 +3266,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12" name="du" id="du"><!-- Correção -->
+								<div class="col-xs-6" name="Correc" id="Correc"><!-- Correção -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -2901,7 +3288,7 @@
 													<div class="col-xs-12">
 														
 														<div class="row">
-															<div class="col-sm-4">
+															<div class="col-sm-6">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 																	<thead>
 																		<h5 class="widget-title bigger lighter">
@@ -2921,7 +3308,7 @@
 																				<span class="badge badge-danger">21 Pontos ou mais</span>
 																			</td>
 																			<td>
-																				<span>Indivativo de Autismo</span>
+																				<span>Indicativo de  Autismo</span>
 																			</td>
 																		</tr>
 																		<tr><!-- 2Reg -->
@@ -2929,7 +3316,7 @@
 																				<span class="badge badge-warning">15 Pontos ou mais</span>
 																			</td>
 																			<td>
-																				<span>Indivativo de atraso no desenvolvimento</span>
+																				<span>Indicativo de  atraso no desenvolvimento</span>
 																			</td>
 																		</tr>
 																		<tr><!-- 3Reg -->
@@ -2937,7 +3324,7 @@
 																				<span class="badge badge-success">Até 14 Pontos.</span>
 																			</td>
 																			<td>
-																				<span>Indivativo de atraso no desenvolvimento</span>
+																				<span>Indicativo de  atraso no desenvolvimento</span>
 																			</td>
 																		</tr>
 																		
@@ -2948,8 +3335,7 @@
 														<label>Comentários:</label>
 														<div class="form-group">
 															<div class="col-sm-12">
-																<textarea type="text" name="ataObs" id="ataObs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
-																</textarea>
+																<textarea type="text" name="ataCorrec" id="ataCorrec" placeholder="Insira seus comentários aqui!" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
 															</div>
 														</div>
 

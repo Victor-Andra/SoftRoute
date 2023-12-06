@@ -37,7 +37,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/atec/atecLis', {Atecs: atec, Terapeutas: terapeuta, Benes: bene})
+            res.render('area/escalas/atec/atecLis', {Atecs: atec, Terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Atec")
@@ -54,7 +54,7 @@ module.exports = {
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
-                            res.render("area/aba/atec/atecCad", {Benes: bene, Terapeutas: terapeuta})
+                            res.render("area/escalas/atec/atecCad", {Benes: bene, Terapeutas: terapeuta})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -75,7 +75,7 @@ module.exports = {
                     Bene.find({bene_status:"Ativo"}).then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
-                                res.render("area/aba/atec/atecEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                                res.render("area/escalas/atec/atecEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -158,7 +158,7 @@ module.exports = {
                                 Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Atecamento Fisioterapêutico deletado!")
-                res.render('area/aba/atec/atecLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                res.render('area/escalas/atec/atecLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")

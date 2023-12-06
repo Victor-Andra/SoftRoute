@@ -3,18 +3,10 @@
 	<head>
 		<title>Escala CARS</title>
 		<script type="text/javascript">
-			
-			
-		
 		</script>
 	</head>
-
 	<body onload="javascript:controlaNave();" class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -23,12 +15,15 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">CARS – Escala de Avaliação do Tratamento do Autismo</a>
 							</li>
+
+							<li class="active"></li>
 						</ul><!-- /.breadcrumb -->
 					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/area/aba/cars/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/escalas/cars/add" method="POST">
 
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -36,15 +31,15 @@
 											<h4 class="widget-title">
 												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
 												
-												Cabeçalho CARS</h4>
+												Cabeçalho Escala CARS</h4>
 
 											<span class="widget-toolbar">
 
-												<a href="#" data-action="reload">
+												<a href="#" dcars-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
 
-												<a href="#" data-action="collapse">
+												<a href="#" dcars-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
 
@@ -53,7 +48,6 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-											
 												<div class="row">
 													<div class="col-xs-12">
 														<div class="row">
@@ -62,7 +56,6 @@
 																<div class="form-group">
 																	<div class="col-sm-6">
 																		<select name="carsBeneid" id="carsBeneid" class="chosen-select" dcars-placeholder="Escolha..." >
-																			<option value="-">-</option>
 																			{{#each Benes}}
 																				<option value="{{_id}}">{{bene_nome}}</option>
 																			{{/each}}
@@ -135,7 +128,6 @@
 																<div class="form-group">
 																	<div class="col-sm-8">
 																		<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" dcars-placeholder="Escolha..." value="-">
-																			<option value="-">-</option>
 																			{{#each Terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>
 																			{{/each}}
@@ -146,7 +138,7 @@
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
-																<label> Informações iniciais adicionais </label>
+																<label> Informações iniciais adivionais </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
 																		<textarea type="text" name="carsInfoinicars" id="carsInfoinicars" row="3" placeholder="" class="form-control" ></textarea>
@@ -156,202 +148,105 @@
 														</div>
 													</div>
 												</div>
-
 											</div>
 										</div>		
 									</div>
 								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- Pontuação -->
+
+								<div class="col-xs-12" name="du" id="du"><!-- Pontuação -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
-												
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
 												Pontuação</h4>
-
-											<span class="widget-toolbar">
-
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-
-											</span>
+												<span class="widget-toolbar">
+													<a href="#" dcars-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" dcars-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
 										</div>
-
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-														<div class="col-sm-12">
-															<div class="alert alert-warning">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																<strong>Observação! </strong>
-																O cars (Autism Treatment Evaluation Checklist) – Formulário para Avaliação de Tratamento do Autismo é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indica a severidade dos sintomas e a redução progressiva dessa pontuação é um indicador de que as intervenções têm trazido melhoras no quadro. A pontuação do cars varia de 0 a 180, sendo que qualquer valor acima de 0 indica presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
-															</div><br>
-														</div>
-														
-														<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-															<thead>
-																<h5 class="widget-title bigger lighter">
-																	<i class="ace-icon fa fa-table"></i>
-																	Tabela cars
-																</h5>
-																<tr>
-																	<th >
-																		<span class="badge badge-warning">Escala</span>
-																	</th>
-																	<th >
-																		<span class="badge badge-danger">Pontuação</span>
-																	</th>
-																	
-																</tr>
-															</thead>
-															<tbody>
-																<tr><!-- 1Reg -->
-																	<td>
-																		<span>1</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 2Reg -->
-																	<td>
-																		<span>2</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 3Reg -->
-																	<td>
-																		<span>3</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 4Reg -->
-																	<td>
-																		<span>4</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 5Reg -->
-																	<td>
-																		<span>5</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 6Reg -->
-																	<td>
-																		<span>6</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 7Reg -->
-																	<td>
-																		<span>7</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 8Reg -->
-																	<td>
-																		<span>8</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 9Reg -->
-																	<td>
-																		<span>9</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 10Reg -->
-																	<td>
-																		<span>10</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 11Reg -->
-																	<td>
-																		<span>11</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 12Reg -->
-																	<td>
-																		<span>12</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 13Reg -->
-																	<td>
-																		<span>13</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 14Reg -->
-																	<td>
-																		<span>14</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 15Reg -->
-																	<td>
-																		<span>15</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																
-															</tbody>
-														</table>
 														<div class="row">
 															<div class="col-xs-12">
-																<label> Pontuação Total</label>
-																<div class="form-group">
-																	<div class="col-sm-6">
-																		<input type="text" id="carsTotpont" name="carsTotpont" placeholder="0"  class="form-control" />
+																<div class="alert alert-warning">
+																	<button type="button" class="close" dcars-dismiss="alert">
+																		<i class="ace-icon fa fa-times"></i>
+																	</button>
+																	O cars (Autism Treatment Evaluation Checklist – Formulário para Avaliação de Trcarsmentos do Autismo) é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indiva a severidade dos sintomas e a redução progressiva dessa pontuação é um indivador de que as intervenções têm trazido melhoras no quadro. A pontuação do cars varia de 0 a 180, sendo que qualquer valor acima de 0 indiva presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
+																</div>
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<h5 class="widget-title bigger lighter">
+																			<i class="ace-icon fa fa-table"></i>
+																			Tabela cars
+																		</h5>
+																		<tr>
+																			<th >Sub-Escalas</th>
+																			<th >
+																				<span class="badge badge-danger">Avaliação</span>
+																			</th>
+																			
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr><!-- 1Reg -->
+																			<td>
+																				<span>Fala/Linguagem/Comunicação</span>
+																			</td>
+																			<td>	
+																				<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
+																			</td>
+																		</tr>
+																		<tr><!-- 2Reg -->
+																			<td>
+																				<span>Sociabilidade</span>
+																			</td>
+																			<td>	
+																				<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
+																			</td>
+																		</tr>
+																		<tr><!-- 3Reg -->
+																			<td>
+																				<span>Percepção sensorial/Cognitiva</span>
+																			</td>
+																			<td>	
+																				<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
+																			</td>
+																		</tr>
+																		<tr><!-- 4Reg -->
+																			<td>
+																				<span>Saúde/Aspectos físicos/Comportamentais</span>
+																			</td>
+																			<td>	
+																				<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+																<div class="row">
+																	<div class="col-xs-12">
+																		<label> Pontuação Total</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="carsTotpont" name="carsTotpont" placeholder="0"  class="form-control" />
+																			</div>
+																		</div>
 																	</div>
 																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xs-12">
-																<label> Comentários</label>
-																<div class="form-group">
-																	<div class="col-sm-12">
-																		<textarea type="text" name="carsComentcars" id="carsComentcars" row="3" placeholder="" class="form-control" ></textarea>
+																<div class="row">
+																	<div class="col-xs-12">
+																		<label> Comentários</label>
+																		<div class="form-group">
+																			<div class="col-sm-12">
+																				<textarea type="text" name="carsComentcars" id="carsComentcars" row="3" placeholder="" class="form-control" ></textarea>
+																			</div>
+																		</div>
 																	</div>
 																</div>
 															</div>
@@ -359,35 +254,35 @@
 													</div>
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
-								</div>
-								<div class="col-xs-12" name="Questionario" id="Questionario"><!-- Questionario -->
+								</div>	
+								<div class="col-xs-12" name="du" id="du"><!-- Questionários -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+												Questionários</h4>
+												<span class="widget-toolbar">
+													<a href="#" dcars-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" dcars-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
 												
-												Questionario</h4>
-
-											<span class="widget-toolbar">
-
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-
-											</span>
+												</span>
 										</div>
-
 										<div class="widget-body">
-											<div class="widget-main">
+											<div class="widget-main">												
 												<div class="row">
 													<div class="col-xs-12">
-
+														<div class="alert alert-warning">
+															<button type="button" class="close" dcars-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Por favor, marque na coluna que mais representa a frase de acordo com o que percebe no beneficiário:
+														</div>
 														<div class="row">
 															<div class="col-xs-12">
 																<div class="tabbable">
@@ -474,15 +369,7 @@
 																<div class="col-xs-12">
 																	<div class="tabbable tabs-below">
 																		<div class="tab-content">
-																			<div class="col-sm-12">
-																				<div class="alert alert-warning">
-																					<button type="button" class="close" data-dismiss="alert">
-																						<i class="ace-icon fa fa-times"></i>
-																					</button>
-																					<strong>Observação! </strong>
-																					Por favor, marque na coluna que mais representa a frase de acordo com o que percebe no beneficiário:
-																				</div>
-																			</div>
+																			
 																			<div id="1cars" class="tab-pane in active"><!-- Relacionamento Inter-Pessoal -->
 																				<div class="row">
 																					<div class="col-xs-12">
@@ -508,7 +395,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -532,7 +419,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -604,7 +491,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -628,7 +515,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -652,7 +539,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -702,7 +589,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars2" id="cars2" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -726,7 +613,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars2" id="cars2" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -798,7 +685,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars2" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -822,7 +709,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -846,7 +733,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars2" id="cars2" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -896,7 +783,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -920,7 +807,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars3" id="cars3" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -992,7 +879,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars1" id="cars1" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1016,7 +903,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars3" id="cars3" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1040,7 +927,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars3" id="cars3" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1090,7 +977,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars4" id="cars4" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1114,7 +1001,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars4" id="cars4" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1186,7 +1073,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars4" id="cars4" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1210,7 +1097,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars4" id="cars4" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1234,7 +1121,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars4" id="cars4" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1284,7 +1171,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars5" id="cars5" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1310,7 +1197,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars5" id="cars5" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1388,7 +1275,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars5" id="cars5" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1414,7 +1301,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars5" id="cars5" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1440,7 +1327,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars5" id="cars5" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1492,7 +1379,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars6" id="cars6" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1518,7 +1405,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars6" id="cars6" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1596,7 +1483,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars6" id="cars6" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1622,7 +1509,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars6" id="cars6" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1648,7 +1535,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars6" id="cars6" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1700,7 +1587,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars7" id="cars7" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1726,7 +1613,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars7" id="cars7" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1804,7 +1691,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars7" id="cars7" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1830,7 +1717,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars7" id="cars7" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1856,7 +1743,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars7" id="cars7" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1908,7 +1795,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars8" id="cars8" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -1934,7 +1821,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars8" id="cars8" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2012,7 +1899,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars8" id="cars8" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2038,7 +1925,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars8" id="cars8" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2064,7 +1951,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars8" id="cars8" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2116,7 +2003,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars9" id="cars9" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2142,7 +2029,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars9" id="cars9" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2220,7 +2107,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars9" id="cars9" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2246,7 +2133,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars9" id="cars9" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2272,7 +2159,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars9" id="cars9" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2324,7 +2211,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars10" id="cars10" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2350,7 +2237,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars10" id="cars10" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2428,7 +2315,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars10" id="cars10" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2454,7 +2341,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars10" id="cars10" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2480,7 +2367,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars10" id="cars10" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2532,7 +2419,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars11" id="cars11" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2558,7 +2445,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars11" id="cars11" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2636,7 +2523,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars11" id="cars11" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2662,7 +2549,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars11" id="cars11" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2688,7 +2575,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars11" id="cars11" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2740,7 +2627,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars12" id="cars12" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2766,7 +2653,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars12" id="cars12" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2844,7 +2731,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars12" id="cars12" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2870,7 +2757,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars12" id="cars12" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2896,7 +2783,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars12" id="cars12" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2948,7 +2835,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars13" id="cars13" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -2974,7 +2861,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars13" id="cars13" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3052,7 +2939,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars13" id="cars13" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3078,7 +2965,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars13" id="cars13" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3104,7 +2991,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars13" id="cars13" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3156,7 +3043,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars14" id="cars14" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3182,7 +3069,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars14" id="cars14" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3260,7 +3147,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars14" id="cars14" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3286,7 +3173,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars14" id="cars14" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3312,7 +3199,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars14" id="cars14" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3364,7 +3251,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars15" id="cars15" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3390,7 +3277,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars15" id="cars15" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3468,7 +3355,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars15" id="cars15" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3494,7 +3381,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars15" id="cars15" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3520,7 +3407,7 @@
 																											<div class="radio">
 																												<label>
 																													<input name="cars15" id="cars15" type="radio" class="ace">
-																													<span class="lbl">&nbsp;</span>
+																													<span class="lbl">&nbsp</span>
 																												</label>
 																											</div>
 																										</div>
@@ -3550,16 +3437,15 @@
 																		</div>
 																	</div>
 																</div>
-														</div>														
-														
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>		
+										</div>
 									</div>
-								</div>															
-									
-							
+								</div>
+
+								
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
 

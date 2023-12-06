@@ -277,9 +277,9 @@
 						{{/compareString}}
 					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendrankingfil" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evol/evoatendrankingfil" method="POST">
 							<div class="col-xs-12" class="row">
-								<div class="hidden">
+								<div id="divPesquisa" name="divPesquisa" class="hidden">
 									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 									<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
 									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
@@ -438,7 +438,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each agendas}}
+												{{#each usuid}}
 													<tr role="row" class="odd">
 														<td>
 															{{#each ../terapeutas}}
