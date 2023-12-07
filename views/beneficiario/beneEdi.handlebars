@@ -85,7 +85,6 @@
 			document.getElementById("beneOrdemnome").value = document.getElementById("beneOrdemnomeEdi").value;
 			document.getElementById("beneOrdemretem").value = document.getElementById("beneOrdemretemEdi").value;
 
-
 			document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
 			document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
 			document.getElementById("benePaiident").value = document.getElementById("benePaiidentEdi").value;
@@ -112,7 +111,6 @@
 			document.getElementById("beneMaecel").value = document.getElementById("beneMaecelEdi").value;
 			document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
 			document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
-			
 			
 			document.getElementById("beneEscolanome").value = document.getElementById("beneEscolanomeEdi").value;
 			document.getElementById("beneEscolafone").value = document.getElementById("beneEscolafoneEdi").value;
@@ -143,7 +141,7 @@
 			
 			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
 			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
-			document.getElementById("beneObsat").value = document.getElementById("beneObsatEdi").value;
+			
 		}
 	</script>
 	</head>
@@ -248,7 +246,7 @@
 			
 			<input type="text" id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
 			<input type="text" id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
-			<input type="text" id="beneObsatEdi" name="beneObsatEdi" value="{{beneEdi.bene_obsat}}"/>
+			
 		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -1088,16 +1086,11 @@
 													<label> Observação </label>
 													<div class="input-group">
 														<div>
-															<input type="text" name="beneObs" id="beneObs" style="width: 350px; rowspan: 4px;"/>
+															<textarea type="text" name="beneObs" id="beneObs" style="width: 350px; rowspan: 700px;"></textarea>
 														</div>
 													</div>
 												
-													<label> Observação para atendimento</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneObsat" id="beneObsat"  rowspan="4" style="width: 100%;"></textarea>
-														</div>
-													</div>
+													
 												</div>
 											</div>
 										</div>

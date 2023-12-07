@@ -54,7 +54,7 @@ module.exports = {
         Bene.deleteOne({_id: req.params.id}).then(() =>{
             Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 req.flash("success_message", "Bene deletada!")
-                res.render('beneficiario/beneLis', {benes: bene})
+                res.render('beneficiario/beneLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Benes")
@@ -149,9 +149,8 @@ module.exports = {
         })
     },
     listaBene(req, res){
-        let convs = new Array();
-        console.log('listando benes')
-        Bene.find({bene_status:"Ativo"}).then((bene) =>{
+        console.log('listando beneficiários')
+        Bene.find().then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
                 //console.log("b.datanasc"+b.bene_datanasc)
@@ -184,7 +183,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     listaBenesup(req, res){
         let convs = new Array();
         console.log('listando benes')
@@ -221,7 +219,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     listaBeneImp(req, res){
         Bene.findById(req.params.id).then((bene) =>{
             console.log(bene)
