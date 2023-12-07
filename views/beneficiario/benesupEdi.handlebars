@@ -82,6 +82,8 @@
 
 			document.getElementById("beneOrdempg").value = document.getElementById("beneOrdempgEdi").value;
 			document.getElementById("beneOrdemdoc").value = document.getElementById("beneOrdemdocEdi").value;
+			document.getElementById("beneOrdempnome").value = document.getElementById("beneOrdemnomeEdi").value;
+			document.getElementById("beneOrdemretem").value = document.getElementById("beneOrdemretemEdi").value;
 
 			document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
 			document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
@@ -176,8 +178,11 @@
 			<input id="beneOutcel2Edi" name="beneOutcel2Edi" value="{{beneEdi.bene_outcel2}}"/>
 			<input id="beneOutemailEdi" name="beneOutemailEdi" value="{{beneEdi.bene_outemail}}"/>
 			
-			<input id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
-			<input id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
+			<!-- Faturamento -->
+			<input type="text" id="beneOrdempgEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordempg}}"/>
+			<input type="text" id="beneOrdemdocEdi" name="beneOutemailEdi" value="{{beneEdi.bene_ordemdoc}}"/>
+			<input type="text" id="beneOrdemnomeEdi" name="beneOrdemnomeEdi" value="{{beneEdi.bene_ordemnome}}"/>
+			<input type="text" id="beneOrdemretemEdi" name="beneOrdemretemEdi" value="{{beneEdi.bene_ordemretem}}"/>
 
 			<input id="benePaiEdi" name="benePaiEdi" value="{{beneEdi.bene_pai}}"/>
 			<input id="benePaiprofEdi" name="benePaiprofEdi" value="{{beneEdi.bene_paiprof}}"/>
@@ -1033,20 +1038,40 @@
 														<div class="col-xs-12 col-sm-3">
 															<label>Ordem Pagamento por</label>
 															<div class="input-group">
-																	<div >
-																		<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
-																				<option value="-">-</option>
-																				<option value="CPF">CPF</option>
-																				<option value="CNPJ">CNPJ</option>
-																		</select>
-																	</div>
+																<div >
+																	<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		<option value="CPF">CPF</option>
+																		<option value="CNPJ">CNPJ</option>
+																	</select>
+																</div>
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-3">
-															<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
+															<label> Qual CPF ou CNPJ do faturamento? </label>
 															<div class="input-group">
 																<div >
 																	<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" style="width: 200px;"/>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label> Nome do Tomador: </label>
+															<div class="input-group">
+																<div >
+																	<input type="text"  name="beneOrdemnome" id="beneOrdemnome" class="form-control" style="width: 200px;"/>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label>Retenção dos Impostos</label>
+															<div class="input-group">
+																<div >
+																	<select name="beneOrdemretem" id="beneOrdemretem" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																	</select>
 																</div>
 															</div>
 														</div>
@@ -1057,6 +1082,13 @@
 													<div class="input-group">
 														<div>
 															<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 350px;"></textarea>
+														</div>
+													</div>
+												
+													<label> Observação para atendimento</label>
+													<div class="input-group">
+														<div>
+															<textarea type="text" name="beneObsat" id="beneObsat" placeholder="" class="form-control" rowspan="4" style="width: 100%;"></textarea>
 														</div>
 													</div>
 												</div>

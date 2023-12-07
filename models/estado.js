@@ -27,25 +27,18 @@ const EstadoSchema = mongoose.Schema({
     estado_dataedi: {
         type: Date
     }
-    
 })
-class Estado {
-    constructor(
-        estado_nome,
-        estado_codigo,
-        estado_uf,
-        estado_bandeira,
-        estado_datacad,
-        estado_dataedi
-        ) {
-      this.estado_nome = estado_nome;
-      this.estado_codigo = estado_codigo;
-      this.estado_uf = estado_uf;
-      this.estado_bandeira = estado_bandeira; // Corrigido
-      this.estado_datacad = estado_datacad;
-      this.estado_dataedi = estado_dataedi;
+
+class Estado{
+    constructor(estado_nome,estado_codigo,estado_uf,estado_datacad,estado_dataedi){
+        this.estado_nome = estado_nome,
+        this.estado_codigo = estado_codigo,
+        this.estado_uf = estado_uf,
+        this.estado_bandeira = estado_bandeira,
+        this.estado_datacad = estado_datacad,
+        this.estado_dataedi = estado_dataedi
     }
-  }
+}
 
 const multer = require('multer');
 const storage = multer.diskStorage({

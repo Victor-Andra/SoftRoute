@@ -14,6 +14,8 @@ const passport = require("passport");
 require("./config/auth")(passport)
 const cookieParser = require('cookie-parser');
 
+//Multer Upload de arquivos
+const multer = require('multer');
 
 //Configurações
     //Sessão

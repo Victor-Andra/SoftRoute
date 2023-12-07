@@ -8,10 +8,18 @@
 				document.getElementById("estadoNome").value = document.getElementById("estadoNomeEdi").value
 				document.getElementById("estadoCodigo").value = document.getElementById("estadoCodigoEdi").value
 				document.getElementById("estadoUf").value = document.getElementById("estadoUfEdi").value
-				document.getElementById("estadoBandeira").value = document.getElementById("estadoBandeiraEdi").value
-				
+				document.getElementById("estadoBandeira").value = document.getElementById("estadoBandeiraEdi").value.path;
+ 
 			}
-		</script>
+			function validarFormulario() {
+				var estadoBandeiraInput = document.getElementById("estadoBandeira");
+				if (estadoBandeiraInput.files.length === 0) {
+					alert("Selecione uma imagem para a bandeira!");
+					return false; // Impede o envio do formulário
+				}
+				return true; // Permite o envio do formulário
+			}
+				</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -39,7 +47,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/ferramentas/estado/atualizar" enctype="multipart/form-data" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/ferramentas/estado/atualizar" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario();">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -81,7 +89,7 @@
 
 													<!-- Novo campo de upload para a bandeira -->
 													<label for="bandeira">Bandeira:</label>
-													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" required>
+													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" >
 
 
 												<div class="hidden">

@@ -1474,7 +1474,7 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
     })
 
     router.post('/beneficiario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
-        fncBene.atualizaBenesup(req, res);
+        fncBene.atualizaBene(req, res);
     })
     
     router.get('/beneficiario/resplis', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
@@ -2626,42 +2626,7 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
             fncEstado.atualizaEstado(req, res);
         })
 
-        const storage = multer.diskStorage({
-            destination: (req, file, cb) => {
-              cb(null, 'public/uploads/');
-            },
-            filename: (req, file, cb) => {
-              cb(null, Date.now() + '-' + file.originalname);
-            },
-          });
-          
-          const upload = multer({ storage: storage });
-          
-          router.post('/upload/:estadoId', upload.single('imagem'), async (req, res) => {
-            const estadoId = req.params.estadoId;
-            const { originalname, path } = req.file;
-          
-            try {
-              // Atualize o documento do estado com as informações da bandeira
-              const estadoAtualizado = await Estado.findByIdAndUpdate(
-                estadoId,
-                {
-                  $set: {
-                    'bandeira.nome': originalname,
-                    'bandeira.path': '/' + path,
-                  },
-                },
-                { new: true }
-              );
-          
-              res.redirect(`/estado/${estadoId}`);
-            } catch (error) {
-              console.error(error);
-              res.render('error');
-            }
-          });
-          
-          module.exports = router;
+        module.exports = router;
     
 
 

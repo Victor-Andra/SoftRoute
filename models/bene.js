@@ -37,6 +37,8 @@ const BeneSchema = mongoose.Schema({
 
     bene_ordempg:{ type: String, required: false },
     bene_ordemdoc:{ type: String, required: false },
+    bene_ordemnome:{ type: String, required: false },
+    bene_ordemretem:{ type: String, required: false },
 
     bene_pai:{ type: String, required: false },
     bene_paiprof:{ type: String, required: false },
@@ -92,8 +94,9 @@ const BeneSchema = mongoose.Schema({
 
     bene_escolaturno:{ type: String, required: false},
 
-    bene_escolaobs2:{ type: String, required: false},
+    bene_escolaobs:{ type: String, required: false},
     bene_obs:{ type: String, required: false},
+    bene_obsat:{ type: String, required: false },
     bene_datacad:{ type: Date, required: false },
     bene_dataedi:{ type: Date, required: false }
     
@@ -104,13 +107,13 @@ class Bene{
         bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
         bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out, bene_graupar,
         bene_supervisor, bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, 
-        bene_outendcidade, bene_outenduf, bene_outendcep, bene_outcel, bene_outcel2, bene_outemail, bene_ordempg, bene_ordemdoc, bene_pai, 
+        bene_outendcidade, bene_outenduf, bene_outendcep, bene_outcel, bene_outcel2, bene_outemail, bene_ordempg, bene_ordemdoc, bene_ordemnome, bene_ordemretem, bene_pai, 
         bene_paiprof, bene_paiident, bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, 
         bene_paienduf, bene_paiendcep, bene_paicel, bene_paicel2, bene_paiemail, bene_mae, bene_maeprof, bene_maeident, 
         bene_maecpf, bene_maeend, bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, 
         bene_maecel, bene_maecel2, bene_maeemail, bene_escolanome, bene_escolafone, bene_escolaend, bene_escolacomp, bene_escolabairro, bene_escolacidade, bene_escolauf, 
         bene_escolacep, bene_escolaano, bene_escolaserie, bene_escolacoord, bene_escolacoordtel, bene_escolaoutro1, bene_escolaoutro1func, bene_escolaoutro1tel,
-        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs2 ,bene_escolaturno, bene_obs, bene_datacad, bene_dataedi
+        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs ,bene_escolaturno, bene_obs,bene_obsat, bene_datacad, bene_dataedi
          ){
             this.bene_nome = bene_nome,
             this.bene_apelido = bene_apelido,
@@ -130,7 +133,6 @@ class Bene{
             this.bene_out = bene_out,
             this.bene_graupar = bene_graupar,
             this.bene_supervisor = bene_supervisor,
-            this.bene_escola = bene_escola,
             this.bene_outprof = bene_outprof,
             this.bene_outident = bene_outident,
             this.bene_outcpf = bene_outcpf,
@@ -146,6 +148,8 @@ class Bene{
 
             this.bene_ordempg = bene_ordempg,
             this.bene_ordemdoc = bene_ordemdoc,
+            this.bene_ordemnome = bene_ordemnome,
+            this.bene_ordemretem = bene_ordemretem,
 
             this.bene_pai = bene_pai,
             this.bene_paiprof = bene_paiprof,
@@ -201,9 +205,10 @@ class Bene{
             this.bene_escolaoutro3tel = bene_escolaoutro3tel,
 
             this.bene_escolaturno = bene_escolaturno,
-            this.bene_escolaobs2 = bene_escolaobs2,
+            this.bene_escolaobs = bene_escolaobs,
 
             this.bene_obs = bene_obs,
+            this.bene_obsat = bene_obsat,
             this.bene_datacad = bene_datacad,
             this.bene_dataedi = bene_dataedi
             
@@ -220,7 +225,7 @@ module.exports = {BeneModel,BeneSchema,
         //Pega data atual
         
         //Realiza Atualização
-        await BeneModel.findByIdAndUpdate(req.body.beneId, 
+        await BeneModel.findByIdAndUpdate(req.body.id, 
             {$set: {
                 bene_nome: req.body.beneNome,
                 bene_apelido: req.body.beneApelido,               
@@ -313,7 +318,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaobs2: req.body.beneEscolaobs2,
                 bene_obs: req.body.beneObs,
                 bene_dataedi: dataAtual
-                }}
+            }}
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -360,10 +365,11 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
 
                 bene_escolaturno: req.body.beneEscolaturno,
-                bene_escolaobs2: req.body.beneEscolaobs2,
+                bene_escolaobs: req.body.beneEscolaobs,
 
                 //Permitir Bene Obs também ser editado pelos Supervisores
                 bene_obs: req.body.beneObs,
+                bene_obsat: req.body.beneObsat,
                 bene_dataedi: dataAtual
                 }}
         ).then((res) =>{
@@ -420,6 +426,8 @@ module.exports = {BeneModel,BeneSchema,
 
                 bene_ordempg: req.body.beneOrdempg,
                 bene_ordemdoc: req.body.beneOrdemdoc,
+                bene_ordemnome: req.body.beneOrdemnome,
+                bene_ordemretem: req.body.beneOrdemretem,
 
                 bene_pai: req.body.benePai,
                 bene_paiprof: req.body.benePaiprof,
@@ -474,10 +482,10 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
 
                 bene_escolaturno: req.body.beneEscolaturno,
-                bene_escolaobs2: req.body.beneEscolaobs2,
-
+                bene_escolaobs: req.body.beneEscolaobs,
 
                 bene_obs: req.body.beneObs,
+                bene_obsat: req.body.beneObsat,
                 bene_datacad: dataAtual                
             });
             console.log("newBene save");

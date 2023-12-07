@@ -635,6 +635,8 @@ module.exports = {AtaModel,AtaSchema,
     ataAdicionar: async (req,res) => {
         let dataAtual = new Date();
         console.log("atamodel");
+        console.log("req.body.ataI01> "+req.body.ataI01)
+        console.log("atamodel2");
         const NewAta = new AtaModel({
             ata_usuidcad : req.body.ataUsuidcad,
             ata_datacad : dataAtual.toISOString(),
@@ -791,7 +793,7 @@ module.exports = {AtaModel,AtaSchema,
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {
-            console.log(err)
+            console.log("err:"+err)
             return err;
         });
     }

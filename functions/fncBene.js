@@ -154,7 +154,7 @@ module.exports = {
         Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
-                console.log("b.datanasc"+b.bene_datanasc)
+                //console.log("b.datanasc"+b.bene_datanasc)
                 let datanasc = new Date(b.bene_datanasc)
                 let mes = (datanasc.getMonth()+1).toString();
                 let dia = (datanasc.getUTCDate()).toString();
@@ -191,7 +191,7 @@ module.exports = {
         Bene.find({bene_status:"Ativo"}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
-                console.log("b.datanasc"+b.bene_datanasc)
+                //console.log("b.datanasc"+b.bene_datanasc)
                 let datanasc = new Date(b.bene_datanasc)
                 let mes = (datanasc.getMonth()+1).toString();
                 let dia = (datanasc.getUTCDate()).toString();
@@ -241,7 +241,7 @@ module.exports = {
         Bene.find({bene_status:"Ativo"}).then((bene) =>{
             
             bene.forEach((b)=>{
-                console.log("b.datanasc"+b.bene_datanasc)
+                //console.log("b.datanasc"+b.bene_datanasc)
                 let datanasc = new Date(b.bene_datanasc)
                 let mes = (datanasc.getMonth()+1).toString();
                 let dia = (datanasc.getUTCDate()).toString();
