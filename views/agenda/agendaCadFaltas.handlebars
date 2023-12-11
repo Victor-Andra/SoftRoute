@@ -6,6 +6,14 @@
 			function OcultaMsg(){
 				document.getElementById("alertMsgFlash").hidden = true;
 			}
+			function CarregaIdFalta(){
+				let alvo = document.getElementById("agendaAlvoFalta").value;
+				if (alvo == "Terapeuta"){
+					document.getElementById("agendaFaltaId").value = document.getElementById("agendaMergeterapeutaid").value;
+				} else {
+					document.getElementById("agendaFaltaId").value = document.getElementById("agendaBeneid").value;
+				}
+			}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -87,7 +95,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group" >
 															<div class="col-sm-6">
-																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">
 																	<option value="-">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -98,11 +106,35 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha...">
+																<select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">
 																	<option value="-">-</option>
 																	{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div id="divFalta" class="row">
+													<div class="col-xs-12" >
+														<label>Turno</label>
+														<div class="form-group" >
+															<div class="col-sm-6">
+																<select name="agendaTurnoFalta" id="agendaTurnoFalta" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="Ambos">Ambos</option>
+																	<option value="Manhã">Manhã</option>
+																	<option value="Tarde">Tarde</option>
+																</select>
+															</div>
+														</div>
+														<label>Falta do:</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<input id="agendaFaltaId" name="agendaFaltaId" class="hidden" value="-" />
+																<select id="agendaAlvoFalta" name="agendaAlvoFalta" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">
+																	<option value="Beneficiário">Beneficiário</option>
+																	<option value="Terapeuta">Terapeuta</option>
 																</select>
 															</div>
 														</div>

@@ -25,7 +25,7 @@ module.exports = {
         console.log('listando Sessao')
         Sessao.find().then((sessao) =>{
         console.log("Listagem Realizada Sessao!")
-            Bene.find({bene_status:"Ativo"}).then((bene) =>{
+            Bene.find().then((bene) =>{
                 console.log("Listagem Realizada Bene!")
                         Conv.find().then((conv)=>{
                         console.log("Listagem Realizada Convênio!")
@@ -50,7 +50,7 @@ module.exports = {
             console.log('listando Sessao')
             Sessao.find().then((sessao) =>{
             console.log("Listagem Realizada Sessao!")
-                Bene.find({bene_status:"Ativo"}).then((bene) =>{
+                Bene.find().then((bene) =>{
                     console.log("Listagem Realizada Bene!")
                             Conv.find().then((conv)=>{
                             console.log("Listagem Realizada Convênio!")
@@ -123,7 +123,7 @@ module.exports = {
     carregaSessaoEdi(req, res){
         Sessao.find({_id: req.params.id}).then((sessao) =>{
             console.log(sessao)
-                Bene.find({bene_status:"Ativo"}).then((bene) =>{
+                Bene.find().then((bene) =>{
                 console.log("Listagem Realizada Bene!")
                         Conv.find().then((conv)=>{
                         console.log("Listagem Realizada Convênio!")
@@ -145,7 +145,7 @@ module.exports = {
         console.log('listando Sessao')
         Sessao.find().then((sessao) =>{
             console.log("Listagem Realizada Sessão!")
-        Bene.find({bene_status:"Ativo"}).then((bene) =>{
+        Bene.find().then((bene) =>{
             console.log("Listagem Realizada Bene!")
                     Conv.find().then((conv)=>{
                     console.log("Listagem Realizada Convênio!")
@@ -165,7 +165,7 @@ module.exports = {
         console.log('listando Sessao')
         Sessao.find({sessao_beneid: req.params.id}).then((sessao) =>{
             console.log("Listagem Realizada Sessão!")
-        Bene.find({bene_status:"Ativo"}).then((bene) =>{
+        Bene.find().then((bene) =>{
             console.log("Listagem Realizada Bene!")
                     Conv.find().then((conv)=>{
                     console.log("Listagem Realizada Convênio!")

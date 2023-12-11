@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Receitas</title>
+		<title>contas a receber</title>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -19,7 +19,7 @@
 								<a href="#">Home</a>
 							</li>
 
-							<li class="active">Receitas Cadastro</li>
+							<li class="active">Contas à receber - Edição</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -50,161 +50,226 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-
-
-				
-												<label> Atendimento</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="creditAtendid" placeholder="" class="form-control" value="{{credit_atendid}}"/>
-													</div>
-												</div>
-
-												<label>Categoria</label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<select name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
-															<option value="{{credit_categoria}}">{{credit_categoria}}</option>
-															<option value="Padrão">Padrão</option>
-															<option value="Falta">Falta</option>						
-															<option value="Apoio">Apoio</option>
-															<option value="Supervisão">Supervisão</option>																											<option value="AC">Apoio</option>
-															<option value="Pais">Pais</option>
-															<option value="Substituto">Substituto</option>
-															<option value="Glosa">Glosa</option>
-															<option value="Extra">Extra</option>																	
-														</select>
-													</div>
-												</div>
-
-
-												<label> Terapia</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditTerapiaid" placeholder="" class="form-control" value="{{credit_terapiaid}}"/>
-													</div>
-												</div>
-
-
-												<label> Convenio</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditConvid" placeholder="" class="form-control" value="{{credit_convid}}" />
-													</div>
-												</div>
-
-												<label> Cliente</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditNome" placeholder="" class="form-control" value="{{credit_nome}}"/>
-													</div>
-												</div>
-
-												<label> Cpf / Cnpj</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="creditCpfcnpj" placeholder="" class="form-control" value="{{credit_cpfcnpj}}"/>
-													</div>
-												</div>
-
-												<div>
-													<label>Data Evento</label>
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="creditDataevento" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_dataevento}}"/>
-													</div>
-												</div>
-
-				
-												<div>
-													<label>Data Vencimento</label>
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="creditDatavenci" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_datavenci}}" />
-													</div>
-												</div>
-
-											
-												<div>
-													<label>Data Pagamento</label>							
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-calendar"></i>
-														</span>
-									
-														<input name="creditDatapg" class="col-sm-4" class="form-control" type="text" id="creditDatapg" value="{{credit_datapg}}"/>
-													</div>
-												</div>
-
-				
-												<label> Valor Previsto </label>
+												
+												<!-- Registro de Operadores -->
+												<label> Usuário Cadastro</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditValorprev" placeholder="" class="form-control" value="{{credit_valorprev}}"/>
+														<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-												<label> Valor Juros </label>
+												<label> Data Cadastro</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditJuros" placeholder="0,00" class="form-control" value="{{credit_juros}}"/>
+														<input type="date" name="contarecDatacad" id="contarecDatacad" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-												<label> Valor Multa </label>
+												<label> Usuário Editou</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditMulta" placeholder="0,00" class="form-control" value="{{credit_multa}}"/>
+														<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-												<label> Valor Adiantado </label>
+												<label> Data Edição</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditAdianta" placeholder="0,00" class="form-control" value="{{credit_adianta}}"/>
+														<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-												<label> Valor Pago </label>
+												<!-- Identificador da NF -->
+												<label> Número da Nota Fiscal</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="creditValorpg" placeholder="0,00" class="form-control" value="{{credit_valorpg}}"/>
+														<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder="" class="form-control" />
 													</div>
 												</div>
-
-
-												<label>Pago?</label>
+												
 												<div class="form-group">
-														<div class="col-sm-2">
-															<select name="creditPg" class="chosen-select" data-placeholder="Escolha..." value="{{credit_pg}}">
-																<option value="{{credit_pg}}">{{credit_pg}}</option>
-																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>						
+														<div class="col-sm-8">
+															<select name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
 															</select>
 														</div>
 												</div>
-
-												<label> Observações </label>
+												
 												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="fornecObs" placeholder="" class="form-control" value="{{credit_obs}}"/>
+													<div class="col-sm-4">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Nome Do Beneficiário</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder="" class="form-control" />
 													</div>
 												</div>
 
-												<div class="hidden">
-													<input name="creditId" value="{{_id}}" />
+												<label>Nome do Tomador do Serviço perante a prefeitura</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecTomador" id="contarecTomador" placeholder="" class="form-control" />
+													</div>
 												</div>
-
+												<label>CPF/CNPJ do Tomador</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Retenção</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecRetencao" id="contarecRetencao" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<!-- Informações da NF-->
+												<label>Ano/Mês Referência</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="contarecDataevento" name="benecontarecDataeventoDatanasc" type="date">
+															</div>
+														</div>
+													</div>
+												</div>
+												<label>Valor da Nota Fiscal</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Ano/Mês Referência</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<label for="id-date-picker-1">Data Empréstimo</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="contarecDataemprest" name="contarecDataemprest" type="date">
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="contarecDataadevol" name="contarecDataadevol" type="date">
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<label for="id-date-picker-1">Data Previsão de Pagamento</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="contarecDataprev" name="contarecDataprev" type="date">
+															</div>
+														</div>
+													</div>
+												</div>
+												<label>Valor Pago</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Valor Diferença</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Forma de Pagamento</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecFormapg" id="contarecFormapg" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<label for="id-date-picker-1">Data Previsão de Pagamento</label>
+													<div class="row">
+														<div class="input-group">
+															<div class="col-sm-4">
+																<input id="contarecDatapg" name="contarecDatapg" type="date">
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- Informações da NF-->
+												<label>Valor PIS</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrpis" id="contarecVlrpis" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Valor CSSL</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrcssl" id="contarecVlrcssl" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Valor COFINS</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrcofins" id="contarecVlrcofins" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Valor IRPF</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlrirpf" id="contarecVlrirpf" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Valor ISS</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecVlriss" id="contarecVlriss" placeholder="" class="form-control" />
+													</div>
+												</div>
+												
+												<!-- Observações-->
+												<label>Pago?</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="contarecPg" id="contarecPg" placeholder="" class="form-control" />
+													</div>
+												</div>
+												<label>Descrição da Nota fiscal</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<textarea type="text" name="contarecDescr" id="contarecDescr" placeholder="" class="form-control"></textarea>
+													</div>
+												</div>
+												<label>Observações gerais sobre pagamentos etc</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<textarea type="text" name="contarecObs" id="contarecObs" placeholder="" class="form-control"></textarea>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>

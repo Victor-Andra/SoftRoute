@@ -32,6 +32,8 @@ const AgendaSchema = mongoose.Schema({
     agenda_dataSelo :{ type: String, require: false },
     agenda_atrazo :{ type: Boolean, require: false },
     agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
+    agenda_turnoFalta :{ type: String, require: false },
+    agenda_faltaId :{ type: ObjectId, require: false },
     agenda_usucad :{ type: String, require: false }
 })
 
@@ -66,6 +68,8 @@ class Agenda{
         agenda_dataSelo,
         agenda_atrazo,
         agenda_rel,
+        agenda_turnoFalta,
+        agenda_faltaId,
         agenda_usucad,
         ){
         this.agenda_data = agenda_data,
@@ -78,7 +82,7 @@ class Agenda{
         this.agenda_terapiaid = agenda_terapiaid,
         this.agenda_usuid = agenda_usuid,
         this.agenda_mergeterapeutaid = agenda_mergeterapeutaid,
-        this.agenda_mergeterapiaid = mergeterapiaid,
+        this.agenda_mergeterapiaid = agenda_mergeterapiaid,
         this.agenda_migrado = agenda_migrado,
         this.agenda_datacad = agenda_datacad,
         this.agenda_dataedi = agenda_dataedi,
@@ -97,6 +101,8 @@ class Agenda{
         this.agenda_dataSelo = agenda_dataSelo,
         this.agenda_atrazo = agenda_atrazo,
         this.agenda_rel = agenda_rel,
+        this.agenda_turnoFalta = agenda_turnoFalta,
+        this.agenda_faltaId = agenda_faltaId,
         this.agenda_usucad = agenda_usucad
     }
 }
@@ -217,6 +223,8 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_tempmotivo : req.body.agendaTempMotivo ,
             agenda_selo : false ,
             agenda_copia : false,
+            agenda_turnoFalta : req.body.agendaTurnoFalta,
+            agenda_faltaId : req.body.agendaFaltaId,
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
@@ -332,7 +340,7 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     }
-    ,agendaFaltaDia: async (req, res, busca) => {
+    , agendaFaltaDia: async (req, res, busca) => {
         let usuarioAtual = req.cookies['idUsu'];
         var retorno;
         let arrayAgendasNovas = [];

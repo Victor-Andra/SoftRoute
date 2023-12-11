@@ -46,7 +46,7 @@ module.exports = {
 
 
     carregaAnafuncomp(req,res){
-        Bene.find({bene_status:"Ativo"}).then((bene)=>{
+        Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -69,7 +69,7 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/aba/anafuncomp/anafuncompEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
@@ -151,7 +151,7 @@ module.exports = {
                     console.log("Listagem Realizada de terapias")
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Anafuncompamento Fisioterapêutico deletado!")
                 res.render('area/aba/anafuncomp/anafuncompLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})

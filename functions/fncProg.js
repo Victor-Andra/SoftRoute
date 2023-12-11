@@ -49,7 +49,7 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/aba/prog/progCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
@@ -66,7 +66,7 @@ module.exports = {
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                                 res.render("area/aba/prog/progEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
@@ -148,7 +148,7 @@ module.exports = {
                     console.log("Listagem Realizada de terapias")
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
-                                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
                 req.flash("success_message", "Progamento Fisioterapêutico deletado!")
                 res.render('area/aba/prog/progLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})

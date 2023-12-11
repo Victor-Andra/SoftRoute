@@ -24,7 +24,7 @@ module.exports = {
         Escola.find().then((escola)=>{
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
-                    Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
                     console.log("Listagem Realizada de beneficiarios")
                         if(resposta.sucesso == ""){
                             console.log(' objeto vazio');
@@ -46,7 +46,7 @@ module.exports = {
     carregaEscola(req,res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de escolas!")
-                Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
                     console.log("Listagem Realizada de beneficiarios")
                         res.render("beneficiario/escola/escolaCad", {estados: estado, benes: bene})
         })}).catch((err) =>{
@@ -62,7 +62,7 @@ module.exports = {
             console.log(escola)
                 Estado.find().then((estado)=>{
                     console.log("Listagem Realizada de Estados")
-                        Bene.find({bene_status:"Ativo"}).sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
             res.render('beneficiario/escola/escolaEdi', {escola, estados: estado, benes: bene})
         })})}).catch((err) =>{

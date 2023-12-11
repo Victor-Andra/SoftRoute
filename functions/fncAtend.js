@@ -10,6 +10,7 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const convecreClass = require("../models/convCre")
 const convdebClass = require("../models/convDeb")
+const convimpClass = require("../models/convImp")//Modelo dos Impostos por convênio
 const tabilClass = require("../models/tabil")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
@@ -22,6 +23,7 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Convcre = mongoose.model("tb_convcre")
 const Convdeb = mongoose.model("tb_convdeb")
+const Convimp = mongoose.model("tb_convimp")//Tabela dos Impostos vinvulados ao convênio, a quantidade de impostos e alíquotas variam para cada convênio.
 const Credit = mongoose.model("tb_credit")
 const Debit = mongoose.model("tb_debit")
 const Tabil = mongoose.model("tb_tabil")
@@ -308,7 +310,7 @@ module.exports = {
         }
     },
     carregaAtendEdi(req, res){
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
@@ -373,7 +375,7 @@ module.exports = {
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
             //console.log("Listagem Realizada de Atendimentos!")
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -580,7 +582,7 @@ module.exports = {
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
             //console.log("Listagem Realizada de Atendimentos!")
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
@@ -837,7 +839,7 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
         
-        Bene.find({bene_status:"Ativo"}).then((bene)=>{
+        Bene.find().then((bene)=>{
             Bene.findOne().then((b)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Terapia.find().then((terapia)=>{
@@ -880,7 +882,7 @@ module.exports = {
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                    Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         bene.some((b)=>{
                             if((""+b._id) === (""+req.body.relBeneid)){
@@ -993,7 +995,7 @@ module.exports = {
         Bene.findOne().then((bene)=>{
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                    Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene})
         })})}).catch((err) =>{
@@ -1031,7 +1033,7 @@ module.exports = {
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                     bene_nome = b.bene_nome;
@@ -1221,7 +1223,7 @@ module.exports = {
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
             Convcre.find().then((cre)=>{
-                Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                         bene_nome = b.bene_nome;
@@ -1377,7 +1379,7 @@ module.exports = {
             })
         })
     },
-    relAtendimentoValNf(req,res){    //relatório emissão de NF
+    relAtendimentoValNf(req,res){//relatório emissão de NF
         let seg = new Date();
         let sex = new Date();
         seg.setHours(0);
@@ -1390,7 +1392,7 @@ module.exports = {
         Bene.findOne().then((bene)=>{
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                    Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/relatendvalnf", {terapias: terapia, benes: bene})
         })})}).catch((err) =>{
@@ -1416,7 +1418,7 @@ module.exports = {
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
         let convid;
-
+        
         //console.log("SEG:"+seg);
         //console.log("SEX:"+sex);
 
@@ -1425,13 +1427,23 @@ module.exports = {
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         let bene_nome;
+        let bene_retem;
+        let bene_doc;
+        let bene_tomador;
+        let conv_nome;
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                     bene_nome = b.bene_nome;
+                    bene_retem = b.bene_ordemretem,
+                    bene_doc = b.bene_ordemdoc,
+                    bene_tomador = b.bene_ordemnome,
+                    conv_nome =b.conv_nome,
+                    bene_convid = b.bene_convid;
                     convid = b.bene_convid;
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
@@ -1577,13 +1589,222 @@ module.exports = {
                             //console.log("r.valor: " + r.valor)
                         })
                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
-
+                        Conv.findOne({_id: bene_convid}).then((conv)=>{
+                            console.log("conv:"+conv)
+                            conv_nome = conv.conv_nome;
+                                Convimp.find({convimp_convid: bene_convid}).then((convimp)=>{
+                                    console.log("convimp:"+convimp)
+                                    //calculo dos impostos sobre o valor total da NF
+                                    
                         //res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome})
-                        res.render("atendimento/relatendvalnf", {terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome/*, retornoStrings: retornoString*/})
+                        res.render("atendimento/relatendvalnf", {terapias: terapia, convimps: convimp, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome, bene_retem, bene_doc, bene_tomador, conv_nome/*, retornoStrings: retornoString*/})
                     })
                 })
             })
         })
+         })//conv
+        })//convimp
+    },
+    backup_relAtendimentoValNfFiltro(req,res){
+        let a = new RelAtend();//objeto para fazer push em relatendimento
+        let val;//objeto para formatar valor do cre
+        let existe = 0;//verifica se existe a terapia no rel
+        let valTot = 0;//calcular valor total
+        let sessaoTot = 0;//calcular total de sessoes
+        let aux;//auxiliar
+        let rel = [];//relatorio
+        let total;//objeto valor total cre
+        let teraID;
+        let qtdIds;
+        let creVal;
+        let categorias;
+        let terapiaAtend;
+        let creValFinal;
+        let atends;
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        let convid;
+
+        //console.log("SEG:"+seg);
+        //console.log("SEX:"+sex);
+
+        //let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}//procurar por atend com conv
+        let atendIds = [];
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        let bene_nome;
+        let bene_retem;
+        let bene_doc;
+        let bene_tomador;
+        let conv_nome;
+
+        Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
+            console.log("at:length: "+at.length);
+
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
+                    bene_nome = b.bene_nome;
+                    bene_retem = b.bene_ordemretem,
+                    bene_doc = b.bene_ordemdoc,
+                    bene_tomador = b.bene_ordemnome,
+                    conv_nome =b.conv_nome,
+                    bene_convid = b.bene_convid;
+                    convid = b.bene_convid;
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
+                        terapia.forEach((t)=>{
+                            //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
+                            qtdIds = 0;
+                            creValFinal = 0;
+                            atends = [];
+                            at.forEach((ats)=>{
+                                categorias = ats.atend_categoria
+                                    //console.log("categorias: "+categorias);
+                                switch (categorias){
+                                    case "Apoio":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Extra":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Falta":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Falta Justificada":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
+                                    case "Glosa":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Padrão":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Pais":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    case "Substituição":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
+                                    case "SubstitutoFixo":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
+                                    case "Supervisão":
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                    default:
+                                        terapiaAtend = ats.atend_terapiaid;
+                                        break;
+                                }
+                                if((""+terapiaAtend) === (""+t._id)){
+                                    atends.push(ats);
+                                }
+                            })
+                            
+                            atends.forEach((atend)=>{
+                                categorias = atend.atend_categoria
+                                switch (categorias){
+                                    case "Apoio":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Extra":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Falta":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Glosa":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Padrão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Pais":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    case "Substituição":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "SubstitutoFixo":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Supervisão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                    default:
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
+                                        break;
+                                }
+
+                                if ((""+t._id) === (""+terapiaAtend)){
+                                    qtdIds++;
+                                    creValFinal = creVal;
+                                    //console.log("TERAPIA OK")
+                                }
+                            })
+
+                            if(qtdIds != 0){
+                                a.sessoes = qtdIds;
+                                a.nomecid = t._id;
+                                a.valor = creVal;
+                                /*
+                                if (creVal == "0,00" || creVal == "undefined"){
+                                    console.log("VAI TOMA NO CU")
+                                    cre.forEach((c)=>{
+                                        if (c.convcre_convid === convid && c.convcre_terapiaid == t._id){
+                                            a.valor = c.convcre_valor;
+                                            console.log("a.valor: "+a.valor)
+                                        }
+                                    });
+                                } else {
+                                    a.valor = creVal;
+                                }
+                                */
+
+                                //console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - creVal: "+creVal)
+                            }
+                            
+                            if(qtdIds != 0){
+                                rel.push(a);
+                                a = new RelAtend();
+                            }
+                        })
+                        rel.forEach((r)=>{
+                            val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
+                            val = this.mascaraValores(val);
+                            r.total = val;
+
+                            valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
+                            sessaoTot += r.sessoes;
+                            //console.log("r.sessoes: " + r.sessoes)
+                            //console.log("r.nomecid: " + r.nomecid)
+                            //console.log("r.valor: " + r.valor)
+                        })
+                        total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+                        Conv.findOne({_id: bene_convid}).then((conv)=>{
+                            conv_nome = conv.conv_nome;
+                        
+                        //res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome})
+                        res.render("atendimento/relatendvalnf", {terapias: terapia, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome, bene_retem, bene_doc, bene_tomador, conv_nome/*, retornoStrings: retornoString*/})
+                    })
+                })
+            })
+        })
+         })//conv
     },
     copiarAtends(req,res){
         let arrayAtends =[];
@@ -1736,7 +1957,7 @@ module.exports = {
         sex.setSeconds(59);
         
         Conv.findOne().then((conv)=>{
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 Terapia.find().then((terapia)=>{
                     Conv.find().then((conv)=>{
                         res.render("atendimento/atendreltera/relatendterapiacons", {benes: bene, terapias: terapia, convs: conv})
@@ -1878,7 +2099,7 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
         
-        Bene.find({bene_status:"Ativo"}).then((bene)=>{
+        Bene.find().then((bene)=>{
             Terapia.find().then((terapia)=>{
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
@@ -1915,7 +2136,7 @@ module.exports = {
         filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}, $or: [{ atend_mergeterapeutaid: req.body.relTeraid },{ atend_terapeutaid: req.body.relTeraid }]}
 
         Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
@@ -2092,7 +2313,7 @@ module.exports = {
                 })
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                    Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         at.sort(function(a, b) {
                             let d1 = new Date(a.atend_atenddata);
@@ -2280,7 +2501,7 @@ module.exports = {
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
-                    Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                    Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, terapeutas: terapeuta, benes: bene})
         })})})}).catch((err) =>{
@@ -2323,7 +2544,7 @@ module.exports = {
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 //Credit.find({credit_atendnum: {$in: atendIds}}).then((cre)=>{
                 //console.log("cre.length: "+cre.length)
-                Bene.find({bene_status:"Ativo"}).then((bene)=>{
+                Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Usuario.findOne({_id: req.body.relTeraid}).then((b)=>{
                         terapeuta_nome = b.usuario_nome;

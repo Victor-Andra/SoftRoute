@@ -1173,23 +1173,16 @@ router.get('/atendimento/relatendvalnf', fncGeral.IsAuthenticated,(req,res) =>{
 router.post('/atendimento/relatendvalnfs', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendimentoValNfFiltro(req,res)
 })
-
 //Menu Financeiro / AtendAdm
-//Menu AtendAdm   
-
+//Menu AtendAdm
 
 router.get("/atendimento/atendadm/lis", fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtendAdm.listarAtendAdm(req,res);
 })
 
-
-
-
-
 router.get('/atendimento/atendadm/cad', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
     fncAtendAdm.carregaAtendAdm(req,res);
 })
-
 
 router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
     //let potinho = Object.assign(new PoteBiscoito, req.cookies);

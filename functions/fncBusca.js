@@ -42,7 +42,7 @@ module.exports = {
                 Trat.find().then((trat) =>{
                     Relsem.find().then((relsem) =>{
                          //console.log('listando primárias')
-                            Bene.find({bene_status:"Ativo"}).then((bene) =>{
+                            Bene.find().then((bene) =>{
                                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                                 Usuario.find().then((usuario) =>{
                                     Terapia.find().then((terapia) =>{

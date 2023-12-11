@@ -321,10 +321,10 @@ class Ata{
     //I
     this.ata_i01 = ata_i01,
     this.ata_i02 = ata_i02,
-    this.ata_i03 = ata_i02,
+    this.ata_i03 = ata_i03,
     this.ata_i04 = ata_i04,
     this.ata_i05 = ata_i05,
-    this.ata_i05 = ata_i05,
+    this.ata_i06 = ata_i06,
     this.ata_i07 = ata_i07,
     //II
     this.ata_ii01 = ata_ii01,
@@ -332,7 +332,7 @@ class Ata{
     this.ata_ii03 = ata_ii03,
     this.ata_ii04 = ata_ii04,
     this.ata_ii05 = ata_ii05,
-    this.ata_ii05 = ata_ii05,
+    this.ata_ii06 = ata_ii06,
     //III
     this.ata_iii01 = ata_iii01,
     this.ata_iii02 = ata_iii02,

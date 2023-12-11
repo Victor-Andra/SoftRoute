@@ -72,7 +72,7 @@ module.exports = {
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
             console.log("Listagem Realizada de Atendimentos!")
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find().then((conv)=>{
                     console.log("Listagem Realizada de Convenios")
