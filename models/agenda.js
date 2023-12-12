@@ -224,7 +224,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_selo : false ,
             agenda_copia : false,
             agenda_turnoFalta : req.body.agendaTurnoFalta,
-            agenda_faltaId : req.body.agendaFaltaId,
+            //agenda_faltaId : req.body.agendaFaltaId,
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
