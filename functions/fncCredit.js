@@ -392,6 +392,14 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    carregaCadastrar(req,res){
+        Credit.findById(req.params.id).then((credit) =>{
+            res.render('financeiro/receita/creditcad', credit)
+        }).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
+        })
+    },
     atualizar(req,res){
         let resposta;
         try{

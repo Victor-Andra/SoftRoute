@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const fncGeral = require("../functions/fncGeral")
 
 const BeneSchema = mongoose.Schema({
 
@@ -226,8 +227,8 @@ module.exports = {BeneModel,BeneSchema,
         //Realiza Atualização
         await BeneModel.findByIdAndUpdate(req.body.id, 
             {$set: {
-                bene_nome: req.body.beneNome,
-                bene_apelido: req.body.beneApelido,               
+                bene_nome: fncGeral.capitalizarNome(req.body.beneNome),
+                bene_apelido: fncGeral.capitalizarNome(req.body.beneApelido),
                 bene_idade: req.body.beneIdade,
                 bene_datanasc: (req.body.beneDatanasc+"T00:00:00.000Z"),
                 bene_nacionalidade: req.body.beneNacionalidade,

@@ -212,5 +212,24 @@ module.exports = {Filtros,
         }
         
         return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
-    }
+    },
+    capitalizarNome(nome) {
+        // Lista de preposições a serem excluídas
+        const preposicoesExcluir = ["da", "de", "dos", "das"];
+      
+        // Divida o nome em palavras
+        const palavras = nome.toLowerCase().split(" ");
+      
+        // Capitalize a primeira letra de cada palavra, excluindo as preposições
+        const resultado = palavras.map((palavra, index) => {
+          if (index === 0 || !preposicoesExcluir.includes(palavra)) {
+            return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+          } else {
+            return palavra;
+          }
+        });
+      
+        // Junte as palavras de volta em uma string
+        return resultado.join(" ");
+      }
 }

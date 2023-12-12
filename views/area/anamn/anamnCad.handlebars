@@ -18,9 +18,9 @@
 						d.setHours(d.getHours()+3);
 					}
 					console.log("d:"+d);
-						month = '' + (d.getMonth() + 1);
-						day = '' + d.getDate();
-						year = d.getFullYear();
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
 
 					if (month.length == 1) {
 						month = '0' + month;
@@ -40,11 +40,24 @@
 						var dataFmt = new Date(dataIso);
 						let dataAtual = new Date(); 
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-						console.log("dataFmt:"+dataFmt)
-						document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataAtual.getUTCMonth() - dataFmt.getMonth()).toString() + " meses.";
+						console.log("dataFmt:"+dataFmt);
+						console.log("calculaIdade(dataFmt): "+calculaIdade(dataFmt));
+						document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
 					}
 					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
 					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;
+				}
+				function calculaIdade(dataFmt){
+					let dataAtual = new Date();
+					let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+					let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+					console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+					console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+					let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+					if (dias < 0){
+						mes = mes-1;
+					}
+					return (ano + " anos e " + mes + " meses.");
 				}
 			</script>
 	</head>
@@ -60,7 +73,7 @@
 								Anamnese
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Cadastro Geral da Amamnese
+									Cadastro Geral da anamnese
 								</small>
 							</h1>
 							<div id="divCarrega" name="divCarrega" class="hidden">

@@ -15,16 +15,36 @@
 				function atualizaDadosbene(){
 					
 					let beneid = document.getElementById("anamnBeneid").value;
+					let pai_beneid = ""+document.getElementById(beneid+"_beneMaeEdi").value;
+					let mae_beneid = document.getElementById(beneid+"_benePaiEdi").value;
 
 					var dataIso = document.getElementById(beneid+"_beneDatanascEdi").value;
 					if (dataIso != undefined && dataIso != "undefined"){
 						var dataFmt = new Date(dataIso);
 						console.log("dataFmt:"+dataFmt)
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-						//document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+						document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
 					}
-					//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-					//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+
+					if (pai_beneid != undefined && pai_beneid != "undefined" && pai_beneid != null){
+						document.getElementById("anamnPainome").value = pai_beneid;
+					}
+
+					if (mae_beneid != undefined && mae_beneid != "undefined" && mae_beneid != null){
+						document.getElementById("anamnMaenome").value = mae_beneid;
+					}
+				}
+				function calculaIdade(dataFmt){
+					let dataAtual = new Date();
+					let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+					let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+					console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+					console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+					let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+					if (dias < 0){
+						mes = mes-1;
+					}
+					return (ano + " anos e " + mes + " meses.");
 				}
 				function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
@@ -587,7 +607,7 @@
 								Anamnese
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Visualização e edição da amamnese
+									Visualização e edição da anamnese
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
@@ -1126,9 +1146,9 @@
 						<input id="anamnDataanamneseEdi" name="anamnDataanamneseEdi" value="{{anamn.anamn_dataanamnese}}"/>
 						<input id="anamnTerapeutaidEdi" name="anamnTerapeutaidEdi" value="{{anamn.anamn_terapeutaid}}"/>
 						{{#each benes}}
-							<input type="text" id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
-							<input type="text" id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
-							<input type="text" id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
+							<input id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
+							<input id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
+							<input id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
 						{{/each}}
 						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
 					</div>

@@ -66,7 +66,7 @@ const multer = require('multer');
                     }
                 },
                 compareThis: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
-                    //console.log("/"+v1+"="+v2+"/")
+                    console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){
                         return options.inverse(this);
                     } else {
@@ -83,6 +83,18 @@ const multer = require('multer');
                         return options.fn(this);
                     } else {
                         return options.inverse(this);
+                    }
+                },
+                compareUndefined: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
+                    console.log("/"+v1+"="+v2+"/")
+                    if (v1 == undefined){
+                        return options.fn(this);
+                    } else {
+                        if (v1.toString() === v2) {
+                            return options.fn(this);
+                        } else {
+                            return options.inverse(this);
+                        }
                     }
                 },
                 isTrue: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
