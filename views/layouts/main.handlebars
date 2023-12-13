@@ -85,6 +85,7 @@
 					document.getElementById("naveRoot").style.display = '';
 					naveAtual = "naveRoot";
 					document.getElementById("naveSocios").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
@@ -98,6 +99,7 @@
 					//console.log("2: "+(biscoito== "62421857a12aa557219a0fc1")+"biscoito == 62421857a12aa557219a0fc1")
 					document.getElementById("naveSocios").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
@@ -111,6 +113,7 @@
 					//console.log("2: "+(biscoito== "624218f5a12aa557219a0fd0")+"biscoito == 624218f5a12aa557219a0fd0")
 					document.getElementById("naveAdministradorEFinanceiro").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
@@ -124,6 +127,7 @@
 					//console.log("2: "+(biscoito== "62421903a12aa557219a0fd3")+"biscoito == 62421903a12aa557219a0fd3")
 					document.getElementById("naveTerapeuta").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveRecepcionista").remove();
@@ -137,6 +141,7 @@
 					//console.log("2: "+(biscoito== "6242190fa12aa557219a0fd6")+"biscoito == 6242190fa12aa557219a0fd6")
 					document.getElementById("naveRecepcionista").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
@@ -150,6 +155,7 @@
 					//console.log("2: "+(biscoito== "6242191fa12aa557219a0fd9")+"biscoito == 6242191fa12aa557219a0fd9")
 					document.getElementById("naveAT").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
@@ -162,6 +168,21 @@
 				} else if (biscoito == "65578389a0b58a5faefac584"){//Home, aqueles que são Terapeutas e AT simultaneos
 					//console.log("2: "+(biscoito== "65578389a0b58a5faefac584")+"biscoito == 65578389a0b58a5faefac584")
 					document.getElementById("naveHo").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "6578ab5248bfdf9fe1b2c8d8"){//Híbrido, aqueles que são Terapeutas e Administrativos
+					//console.log("2: "+(biscoito== "65578389a0b58a5faefac584")+"biscoito == 65578389a0b58a5faefac584")
+					document.getElementById("naveHib").style.display = '';
+					document.getElementById("naveHo").remove();
 					document.getElementById("naveRoot").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
@@ -176,6 +197,7 @@
 					//console.log("2: "+(biscoito== "644742e378166939169f82a1")+"biscoito == 644742e378166939169f82a1")
 					document.getElementById("naveCoordenador").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
@@ -189,6 +211,7 @@
 					//console.log("2: "+(biscoito== "644743aa78166939169f8486")+"biscoito == 644743aa78166939169f8486")
 					document.getElementById("naveSupervisor").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
@@ -202,6 +225,7 @@
 					//console.log("3: "+(biscoito== "undefined")+"biscoito == undefined")
 					document.getElementById("naveVazia").style.display = '';
 					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveTerapeuta").remove();
@@ -236,6 +260,9 @@
 		</div>
 		<div name="navbarPrincipalSelect" id="naveHo" style="display: none;"><!--Para aqueles que são Terapeuta e AT simultaneo-->
 		{{>_navbarHo}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveHib" style="display: none;"><!--Para aqueles que são Terapeuta Administrativos simultaneo-->
+		{{>_navbarHib}}
 		</div>
 		<div name="navbarPrincipalSelect" id="naveCoordenador" style="display: none;">
 		{{>_navbarC}}

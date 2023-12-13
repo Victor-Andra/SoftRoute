@@ -82,6 +82,10 @@ const AtendSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    atend_numnf :{
+        type: String,
+        required: false
+    },
     atend_datacad :{
         type: Date,
         required: false
@@ -113,6 +117,7 @@ class Atend{
         atend_evolucao,
         atend_obs,
         atend_num,
+        atend_numnf,
         atend_rel,
         atend_datacad,
         atend_dataedi
@@ -136,6 +141,7 @@ class Atend{
         this.atend_evolucao = atend_evolucao,
         this.atend_obs = atend_obs,
         this.atend_num = atend_num,
+        this.atend_numnf = atend_numnf,
         this.atend_rel = atend_rel,
         this.atend_datacad = atend_datacad,
         this.atend_dataedi = atend_dataedi       
@@ -208,6 +214,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_mergevalordeb : req.body.atendMergevalordeb,
             atend_obs : req.body.atendObs,
             atend_num : req.body.nextNum,
+            atend_numnf : req.body.atendNumnf,
             atend_datacad : dataAtual.toISOString()
             
         });
@@ -240,6 +247,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_mergevalordeb : req.body.atendMergevalordeb,
             atend_obs : req.body.atendObs,
             atend_num : req.body.nextNum,
+            atend_numnf : req.body.atendNumnf,
             atend_datacad : dataAtual.toISOString()
         });
 

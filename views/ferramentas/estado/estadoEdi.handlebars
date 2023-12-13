@@ -1,126 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<title>Estados</title>
-		<script>
-			function carregaBody(){
-				document.getElementById("estadoId").value = document.getElementById("estadoIdEdi").value
-				document.getElementById("estadoNome").value = document.getElementById("estadoNomeEdi").value
-				document.getElementById("estadoCodigo").value = document.getElementById("estadoCodigoEdi").value
-				document.getElementById("estadoUf").value = document.getElementById("estadoUfEdi").value
-				document.getElementById("estadoBandeira").value = document.getElementById("estadoBandeiraEdi").value.path;
- 
-			}
-			function validarFormulario() {
-				var estadoBandeiraInput = document.getElementById("estadoBandeira");
-				if (estadoBandeiraInput.files.length === 0) {
-					alert("Selecione uma imagem para a bandeira!");
-					return false; // Impede o envio do formulário
-				}
-				return true; // Permite o envio do formulário
-			}
-				</script>
-	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-		<div class="main-container ace-save-state" id="main-container">
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Estado Editar</a>
-							</li>
-							<li class="active">Estado Editar</li>
-						</ul><!-- /.breadcrumb -->
-					</div>
-						<div id="divCarrega" name="divCarrega" class="hidden">
-							<!-- /.importante Id de indice-->
-							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
-							<input type="text" id="estadoIdEdi" name="estadoIdEdi" value="{{estado._id}}"/>
-							<input type="text" id="estadoNomeEdi" name="estadoNomeEdi" value="{{estado.estado_nome}}"/>
-							<input type="text" id="estadoCodigoEdi" name="estadoCodigoEdi" value="{{estado.estado_codigo}}"/>
-							<input type="text" id="estadoUfEdi" name="estadoUfEdi" value="{{estado.estado_uf}}"/>
-							<input type="text" id="estadoBandeiraEdi" name="estadoBandeiraEdi" value="{{estado.estado_bandeira}}"/>
-							
-						</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/estado/atualizar" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario();">
-								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Estados</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">
-											
-									
-													<label> Nome da Estado</label>
-													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" name="estadoNome" id="estadoNome" class="form-control" />
-														</div>
-													</div>
-													<div class="space space-8"></div>
-													<label> Código</label>
-													<div class="form-group">
-														<div class="col-sm-2">
-															<input type="text" name="estadoCodigo" id="estadoCodigo" class="form-control"/>
-														</div>
-													</div>
+<head>
+  <title>Estados</title>
+  <script>
+    function carregarImagem() {
+      var input = document.getElementById('estadoBandeira');
+      var previewDiv = document.getElementById('previewBandeira');
+      var previewImage = document.getElementById('previewImage');
 
-													<div class="space space-8"></div>
-													<label> UF</label>
-													<div class="form-group">
-														<div class="col-sm-2">
-															<input type="text" name="estadoUf" id="estadoUf" class="form-control" />
-														</div>
-													</div>
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-													<!-- Novo campo de upload para a bandeira -->
-													<label for="bandeira">Bandeira:</label>
-													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" >
+        reader.onload = function (e) {
+          previewImage.src = e.target.result;
+          previewDiv.classList.remove('hidden');
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function carregaBody() {
+		document.getElementById("estadoId").value = document.getElementById("estadoIdEdi").value;
+		document.getElementById("estadoNome").value = document.getElementById("estadoNomeEdi").value;
+		document.getElementById("estadoCodigo").value = document.getElementById("estadoCodigoEdi").value;
+		document.getElementById("estadoUf").value = document.getElementById("estadoUfEdi").value;
+		var estadoBandeiraPath = document.getElementById("estadoBandeiraEdi").value;
+		document.getElementById("estadoBandeira").value = estadoBandeiraPath;
+		carregarImagem(estadoBandeiraPath); // Chama a função para carregar a imagem ao carregar o corpo
+}
+
+function carregarImagem(path) {
+  var previewDiv = document.getElementById('previewBandeira');
+  var previewImage = document.getElementById('previewImage');
+
+  if (path) {
+    previewImage.src = path;
+    previewDiv.classList.remove('hidden');
+  }
+}
 
 
-												<div class="hidden">
-													<input  id="estadoId" name="estadoId" />
-												</div>
-											
-											
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="space-4"></div>
-								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
-										<button class="btn btn-info"  name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/ferramentas/estado/lis">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
-								</div>
-							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
-	</body>
+    function validarFormulario() {
+      var estadoBandeiraInput = document.getElementById("estadoBandeira");
+      if (estadoBandeiraInput.files.length === 0) {
+        alert("Selecione uma imagem para a bandeira!");
+        return false; // Impede o envio do formulário
+      }
+      return true; // Permite o envio do formulário
+    }
+  </script>
+</head>
+<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+  <div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="#">Estado Editar</a>
+            </li>
+            <li class="active">Estado Editar</li>
+          </ul><!-- /.breadcrumb -->
+        </div>
+        <div id="divCarrega" name="divCarrega" class="hidden">
+          <input type="text" id="estadoIdEdi" name="estadoIdEdi" value="{{estado._id}}"/>
+          <input type="text" id="estadoNomeEdi" name="estadoNomeEdi" value="{{estado.estado_nome}}"/>
+          <input type="text" id="estadoCodigoEdi" name="estadoCodigoEdi" value="{{estado.estado_codigo}}"/>
+          <input type="text" id="estadoUfEdi" name="estadoUfEdi" value="{{estado.estado_uf}}"/>
+          <input type="text" id="estadoBandeiraEdi" name="estadoBandeiraEdi" value="{{estado.estado_bandeira}}"/>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <form class="form-horizontal" role="form" action="/menu/ferramentas/estado/atualizar" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario();">
+              <div class="col-sm-12"><!-- Widget Dados Básicos -->
+                <div class="widget-box">
+                  <div class="widget-header">
+                    <h4 class="widget-title">Estados</h4>
+                    <span class="widget-toolbar">
+                      <a href="#" data-action="reload">
+                        <i class="ace-icon fa fa-refresh"></i>
+                      </a>
+                      <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                      </a>
+                    </span>
+                  </div>
+                  <div class="widget-body">
+                    <div class="widget-main">
+                      <label> Nome da Estado</label>
+                      <div class="form-group">
+                        <div class="col-sm-6">
+                          <input type="text" name="estadoNome" id="estadoNome" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="space space-8"></div>
+                      <label> Código</label>
+                      <div class="form-group">
+                        <div class="col-sm-2">
+                          <input type="text" name="estadoCodigo" id="estadoCodigo" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="space space-8"></div>
+                      <label> UF</label>
+                      <div class="form-group">
+                        <div class="col-sm-2">
+                          <input type="text" name="estadoUf" id="estadoUf" class="form-control" />
+                        </div>
+                      </div>
+                      <!-- Novo campo de upload para a bandeira -->
+                      <label for="bandeira">Bandeira:</label>
+                      <input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" onchange="carregarImagem()">
+                      <!-- Div para mostrar a imagem -->
+                      <div id="previewBandeira" class="hidden">
+                        <img id="previewImage" src="#" alt="Bandeira Preview" style="max-width: 100%; max-height: 200px;">
+                      </div>
+                      <div class="hidden">
+                        <input id="estadoId" name="estadoId" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="space-4"></div>
+              <div class="form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                  <button class="btn btn-info"  name="acao" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Salvar
+                  </button>
+                  &nbsp; &nbsp; &nbsp;
+                  <button class="btn btn-warning"  href="/menu/ferramentas/estado/lis">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Voltar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div>
+    </div><!-- /.main-content -->
+  </div><!-- /.main-container -->
+  <!-- basic scripts -->
+</body>
 </html>

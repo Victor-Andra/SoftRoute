@@ -359,7 +359,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 })
                 if (agendaSemanal == "-"){
                     */
-                    if (a.agenda_mergeterapeutaid == undefined){
+                    if (a.agenda_mergeterapeutaid != undefined){
                         let newAgenda = new AgendaModel({
                             agenda_data : a.agenda_data ,
                             agenda_beneid : a.agenda_beneid ,
@@ -378,6 +378,7 @@ module.exports = {AgendaModel,AgendaSchema,
                             agenda_tempmotivo : a.agenda_tempmotivo ,
                             agenda_selo : false ,
                             agenda_copia : false,
+                            agenda
                             agenda_usucad : usuarioAtual,
                             agenda_datacad : dataAtual
                         });
