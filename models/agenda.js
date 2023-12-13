@@ -378,7 +378,6 @@ module.exports = {AgendaModel,AgendaSchema,
                             agenda_tempmotivo : a.agenda_tempmotivo ,
                             agenda_selo : false ,
                             agenda_copia : false,
-                            agenda
                             agenda_usucad : usuarioAtual,
                             agenda_datacad : dataAtual
                         });
