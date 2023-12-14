@@ -505,7 +505,7 @@ module.exports = {
             console.log("Listagem Realizada de Beneficiários!")
             Conv.find({"conv_status":"Ativo"}).then((conv)=>{
                 console.log("Listagem Realizada de Convenios")
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
                     Terapia.find().then((terapia)=>{
                         console.log("Listagem Realizada de Convenios")

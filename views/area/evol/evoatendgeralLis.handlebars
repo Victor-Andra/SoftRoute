@@ -6,11 +6,14 @@
 		
 		<script type="text/javascript">
 			function evolucaoEditar(id){
-				window.location.href=("/menu/agenda/evolucaosup/"+id);
+				document.getElementById("idEdi").value = id;
+				let form = document.getElementById("divFormPesquisa");
+				form.action = ("/menu/agenda/evolucaosup");
+				form.submit();
 			}
 			function evolucaoRemover(id){
 				let form = document.getElementById("divFormPesquisa");
-				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				let confirmado = confirm("Quer mesmo deletar esta evolução?");
 				if(confirmado == true){
 					document.getElementById("idDeletar").value = id;
 					form.action = ("/menu/agenda/evolucaoRemoverGeral");
@@ -297,6 +300,7 @@
 										<input class="hidden" id="tipoPessoaEdi" name="tipoPessoaEdi" value="{{filtroTela.tipoPessoa}}" />
 										<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
 										<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
+										<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">

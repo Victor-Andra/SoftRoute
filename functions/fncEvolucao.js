@@ -24,6 +24,8 @@ const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 
 module.exports = {
+    /*
+    //Não é utilizado mais, as evoluções pertencem a agenda
     atualizaEvolucao(req, res){
         let resposta;
         try{
@@ -57,8 +59,8 @@ module.exports = {
         } catch(err1){
             console.log(err1)
         }
-
     },
+    */
     carregaEvolucaoEdi(req, res){
         Atend.findById(req.params.id).then((atend) =>{
             res.render('beneficiario/evolucao/evolucaoEdi', atend)

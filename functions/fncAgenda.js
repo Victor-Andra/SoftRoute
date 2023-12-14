@@ -49,6 +49,26 @@ const fncGeral = require("./fncGeral")
 const fncEvoatend = require("../functions/fncEvoatend")
 const ObjectId = require('mongodb').ObjectId;
 
+class FiltroAtend{
+    constructor(
+        tipoData,
+        dataFinal,
+        anoAtend,
+        mesAtend,
+        tipoPessoa,
+        atendTerapeuta,
+        atendBeneficiario
+        ){
+        this.tipoData = tipoData,
+        this.dataFinal = dataFinal,
+        this.anoAtend = anoAtend,
+        this.mesAtend = mesAtend,
+        this.tipoPessoa = tipoPessoa,
+        this.atendTerapeuta = atendTerapeuta,
+        this.atendBeneficiario = atendBeneficiario
+    }
+}
+
 module.exports = {
     getData(data){
         let dt = new Date(data);
@@ -9647,6 +9667,14 @@ module.exports = {
         })
     },
     carregaEvolucaosup(req, res, atrazo, resposta){
+        filtroTela = new FiltroAtend();
+        filtroTela.tipoData = req.body.tipoData;
+        filtroTela.dataFinal = req.body.dataFinal;
+        filtroTela.anoAtend = req.body.anoAtend;
+        filtroTela.mesAtend = req.body.mesAtend;
+        filtroTela.tipoPessoa = req.body.atendTipoPessoa;
+        filtroTela.atendTerapeuta = req.body.atendTerapeuta;
+        filtroTela.atendBeneficiario = req.body.atendBeneficiario;
         let selo;
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -9661,7 +9689,7 @@ module.exports = {
             flash.sucesso = resposta.sucesso;
             flash.texto = resposta.texto;
         }
-        let id = req.params.id;
+        let id = req.body.idEdi;
         if (id == '' || id == undefined || id == 'undefined' || id == null){
             id = req.body.id
         }
@@ -9689,7 +9717,7 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    res.render('agenda/agendaEvolucaosup', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo,flash})
+                                    res.render('agenda/agendaEvolucaosup', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo,flash,filtroTela})
         })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -9715,7 +9743,7 @@ module.exports = {
                 flash.texto = "Erro ao remover evolução!"
                 flash.sucesso = "false"
             }
-            Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
@@ -9789,45 +9817,6 @@ module.exports = {
             console.log(err)
             res.render('admin/erro')
         })
-    },
-    atualizaEvolucao(req, res){//EditaAgenda
-        let flash = new Resposta()
-        let resultado;
-        let atrazo = req.body.agendaAtrazo;
-        try{
-            agendaClass.evolucao(req,res).then((res)=>{
-                //console.log("Atualização Realizada!")
-                //console.log("res")
-                console.log("res:"+res)
-                resultado = res;
-                console.log("resultado:"+resultado)
-            }).catch((err) =>{
-                console.log("error")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                //console.log("Finally")
-                if(resultado == true){
-                    flash.texto = "Cadastrado com sucesso!"
-                    flash.sucesso = "true"
-                    //Volta para a agenda de listagem
-                    if (req.body.agendaTemp == "true"){
-                        this.carregaEvolucaoTemp(req,res,atrazo,flash);
-                    } else {
-                        this.carregaEvolucao(req,res,atrazo,flash);
-                    }
-                    //this.carregaAgendaCadastro(req,res,flash);//como tava antes
-                }else{
-                    //console.log("Erro ao editar agenda!")
-                    flash.texto = "Erro ao editar agenda!"
-                    flash.sucesso = "false"
-                    this.carregaAgendaCadastro(req,res,flash);
-                }
-            })
-        } catch(err1){
-            //console.log(err1)
-        }
     },
     carregaAgendaEdi(req, res, resposta){//CarregaEdiçãoAgenda
         let isAgendaTerapeuta = false;

@@ -28,53 +28,53 @@ const bene = require("../models/bene")
 const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    carregaAnamn(req, res){
-        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-            console.log("Listagem Realizada de Usuário")
-                Bene.find({bene_status: "Ativo"}).then((bene)=>{
-                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    console.log("Listagem Realizada de beneficiarios")
-                        res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})
-        })}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
-            res.redirect('admin/erro')
+carregaAnamn(req, res){
+    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+        console.log("Listagem Realizada de Usuário")
+            Bene.find({bene_status: "Ativo"}).then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                console.log("Listagem Realizada de beneficiarios")
+                    res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})
+    })}).catch((err) =>{
+        console.log(err)
+        req.flash("error_message", "houve um erro ao listar escolas")
+        res.redirect('admin/erro')
+    })
+},
+    
+    cadastraAnamn(req,res){
+        console.log("chegou")
+        let resultado
+        let resposta = new Resposta()
+        
+        anamnClass.anamnAdicionar(req,res).then((result)=>{
+            console.log("Cadastro Realizado!!!")
+            //console.log(res)
+            resultado = true;
+        }).catch((err)=>{
+            console.log("ERRO:");
+            console.log(err);
+            resultado = err
+        }).finally(()=>{
+            if (resultado == true){
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.listaAnamn(req,res,resposta)
+            } else {
+                resposta.texto = resultado
+                resposta.sucesso = "false"
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', resposta);
+            }
         })
     },
-    
-        cadastraAnamn(req,res){
-            console.log("chegou")
-            let resultado
-            let resposta = new Resposta()
-            
-            anamnClass.anamnAdicionar(req,res).then((result)=>{
-                console.log("Cadastro Realizado!!!")
-                //console.log(res)
-                resultado = true;
-            }).catch((err)=>{
-                console.log("ERRO:");
-                console.log(err);
-                resultado = err
-            }).finally(()=>{
-                if (resultado == true){
-                    resposta.texto = "Cadastrado com sucesso!"
-                    resposta.sucesso = "true"
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    this.listaAnamn(req,res,resposta)
-                } else {
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    console.log('falso')
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    res.render('admin/erro', resposta);
-                }
-            })
-        },
 
     deletaAnamn(req,res){
         Anamn.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")
                 req.flash("success_message", "Anamnese deletada!")
                 this.listaAnamn(req,res);
@@ -117,7 +117,7 @@ module.exports = {
         Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
         Bene.find().sort({bene_nome: 1}).then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b", "usuario_status":"Ativo"}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                      res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
@@ -131,6 +131,7 @@ module.exports = {
         let flash = new Resposta();
         //console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
+            //anamn.sort((a,b) => ((a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //anamn.sort((a,b) => (a.anamn_benenome > b.anamn_benenome) ? 1 : ((b.anamn_benenome > a.anamn_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista anamnese 
             anamn.sort((a,b) => (((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : ((((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             anamn.forEach((b)=>{

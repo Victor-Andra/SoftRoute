@@ -957,7 +957,7 @@ router.get('/agenda/evolucaoSemanalCorrecao/:id', fncGeral.IsAuthenticated, (req
     fncAgenda.carregaEvolucaoTemp(req, res, atrazo, resposta);
 })
 
-router.get('/agenda/evolucaosup/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+router.post('/agenda/evolucaosup/', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
@@ -990,7 +990,7 @@ router.post('/agenda/evolucaoRemoverGeral/', fncGeral.IsAuthenticated, (req,res)
 })
 
 router.post('/agenda/evolucao', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.atualizaEvolucao(req, res);
+    fncEvoatend.atualizaEvolucao(req, res);
 })
 
 //Cadastro Pontual de Faltas

@@ -243,8 +243,6 @@
 																	</div>
 																</div>
 															</div>
-
-															
 															{{#each benes}}
 																{{#each ../convs}}
 																	{{#ifEqual ../bene_convid _id}}
@@ -362,6 +360,13 @@
 									<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
 									<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
 									<input id="agendaAtrazo" name="agendaAtrazo" value="{{atrazo}}" />
+									<input id="tipoData" name="tipoData" value="{{filtroTela.tipoData}}" />
+									<input id="anoAtend" name="anoAtend" value="{{filtroTela.anoAtend}}" />
+									<input id="mesAtend" name="mesAtend" value="{{filtroTela.mesAtend}}" />
+									<input id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
+									<input id="atendTipoPessoa" name="atendTipoPessoa" value="{{filtroTela.tipoPessoa}}" />
+									<input id="atendBeneficiario" name="atendBeneficiario" value="{{filtroTela.atendBeneficiario}}" />
+									<input id="atendTerapeuta" name="atendTerapeuta" value="{{filtroTela.atendTerapeuta}}" />
 								</div>
 								
 								<hr>
