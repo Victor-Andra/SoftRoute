@@ -75,6 +75,10 @@
 			function selamento(){
 				document.getElementById("agendaSelamento").value = document.getElementById("agendaSelo").checked;
 			}
+			function voltarTelaAnterior() {
+				// Força a recarga da página anterior
+				window.location.replace(document.referrer);
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
@@ -169,7 +173,7 @@
 															Salvar
 														</button>
 														&nbsp; &nbsp; &nbsp;
-														<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+														<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" onclick="voltarTelaAnterior();">
 															<i class="ace-icon fa fa-undo bigger-110"></i>
 															Voltar
 														</button>

@@ -1703,15 +1703,15 @@ module.exports = {FiltroEvoatend,
                     flash.texto = "Cadastrado com sucesso!"
                     flash.sucesso = "true"
                     //Volta para a agenda de listagem
-                    /*
+                    
                     //Substituido por filtraEvoatendgeral, caso queira voltar a evolução descomentar ou alterar.
                     if (req.body.agendaTemp == "true"){
-                        this.carregaEvolucaoTemp(req,res,atrazo,flash);
+                        fncAgenda.carregaEvolucaoTemp(req,res,atrazo,flash);
                     } else {
-                        this.carregaEvolucao(req,res,atrazo,flash);
+                        fncAgenda.carregaEvolucao(req,res,atrazo,flash);
                     }
-                    */
-                    this.filtraEvoatendgeral(req,res,flash)
+                    
+                    //this.filtraEvoatendgeral(req,res,flash)//comentado porque terapeutas usam essa função
                     //this.carregaAgendaCadastro(req,res,flash);//como tava antes de tudo
                 }else{
                     //console.log("Erro ao editar agenda!")
