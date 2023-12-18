@@ -231,5 +231,38 @@ module.exports = {Filtros,
       
         // Junte as palavras de volta em uma string
         return resultado.join(" ");
-      }
+      },
+      getDateHoursToIsostring(dt,hr){
+        let horas = hr
+        let isoString = [];
+
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getDate()).toString();
+        let ano = (dt.getFullYear()).toString();
+
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+
+        let hora = (dt.getHours()).toString();
+        let mins = (dt.getMinutes()).toString();
+        let segs = (dt.getSeconds()).toString();
+
+        if (hora.length == 1){
+            hora = "0"+hora;
+        }
+        if (mins.length == 1){
+            mins = "0"+mins;
+        }
+        if (segs.length == 1){
+            segs = "0"+segs;
+        }
+        hr.forEach(horario => {
+            isoString.push(ano.toString()+"-"+mes.toString()+"-"+dia.toString()+"T"+horario+":"+segs+".000Z")
+        });
+        return isoString;
+    }
 }

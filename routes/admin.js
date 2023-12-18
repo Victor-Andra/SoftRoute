@@ -277,6 +277,13 @@ const creditClass = require("../models/credit")
 const Credit = mongoose.model("tb_credit")
 const fncCredit = require("../functions/fncCredit")
 
+//Contas a receber (contaRec, contarec)
+//Migração do Credit para o contaRec (contas a Receber)
+const contaRecClass = require("../models/contaRec")
+const ContaRec = mongoose.model("tb_contarec")
+const fncContaRec = require("../functions/fncContaRec")
+
+
 //Tabil, Balanço contábil (parcialmente vinculadas ao Atendimento)
 const tabilClass = require("../models/tabil")
 const Tabil = mongoose.model("tb_tabil")
@@ -403,6 +410,11 @@ router.get("/ferramentas/usuario/carregaResetarchave", fncGeral.IsAuthenticated,
 
 router.post("/ferramentas/usuario/resetarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a resetar chave
     fncUsuario.resetarChave(req, res);
+})
+
+//Lista Aniversariantes Usuários e Terapeutas
+router.get("/area/relaniverUsu", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
+    fncUsuario.relaniverUsu(req, res);
 })
 /*
 router.post('/login', fncGeral.IsAuthenticated, (req,res,next)=>{
@@ -1390,9 +1402,6 @@ router.get('/financeiro/receita/lis', fncGeral.IsAuthenticated, (req,res) =>{//l
     fncCredit.listar(req,res);
 })
 
-router.get('/financeiro/receita/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de credit
-    res.render("financeiro/receita/creditCad")
-})
 
 router.post('/financeiro/receita/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona credit
     fncCredit.adicionar(req,res);
@@ -1408,6 +1417,30 @@ router.get('/financeiro/receita/edi/:id', fncGeral.IsAuthenticated, (req,res) =>
 
 router.post('/financeiro/receita/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Creditimento
     fncCredit.atualizar(req,res);
+})
+
+//Menu Contas à Receber (contRec)
+router.get('/financeiro/receita/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas credits
+    fncContaRec.listar(req,res);
+})
+
+router.get('/financeiro/receita/cad', fncGeral.IsAuthenticated, (req,res) =>{//adiciona credit
+    fncContaRec.carregaCadastro(req,res);
+})
+router.post('/financeiro/receita/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona credit
+    fncContaRec.adicionar(req,res);
+})
+
+router.get('/financeiro/receita/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta credit[]
+    fncContaRec.delete(req,res);
+})
+
+router.get('/financeiro/receita/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de credit
+    fncContaRec.carregaEditar(req,res);
+})
+
+router.post('/financeiro/receita/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Creditimento
+    fncContaRec.atualizar(req,res);
 })
 
 //Financeiro / Débito
@@ -1488,7 +1521,10 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
      router.post('/beneficiario/atualizarsup', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneficiario
         fncBene.atualizaBenesup(req, res);
     })
-
+    //Lista de Aniversáriantes mensal dos beneficiários
+    router.get('/beneficiario/relaniverbene', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
+        fncBene.relaniverBene(req, res);        
+    })
 
 //Evolucao
     router.get('/beneficiario/evolucao/lis', fncGeral.IsAuthenticated, (req,res) =>{

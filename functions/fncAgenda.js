@@ -12825,55 +12825,17 @@ module.exports = {
     },
     agendaFaltaDiaFill(req,res){
         let flash = new Resposta();
-        let resultado = "true";
-        let busca;
-        let dataIni = fncGeral.getDateFromString(req.body.agendaData, "ini");
-        let dataFim = fncGeral.getDateFromString(req.body.agendaData, "fim");
-        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
-        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
-        let tpiaidx = req.body.agendaTeraFindid;//new ObjectId("624130e4f49e4506a6fa4df6");//terapia a ser substituida certo
-        console.log("ini: "+fncGeral.getDateToIsostring(dataIni));
-        console.log("fim: "+fncGeral.getDateToIsostring(dataFim));
-        let stringo ;
-        console.log("beneidx:"+beneidx)
-        if (beneidx == "-" && req.body.agendaMergeterapeutaid == "-") {
-            resultado = "false";
-        } else if (beneidx != "-" && teraidx == "-") {
-            console.log("falta bene")
-            busca = { agenda_data: { $gte : new Date(dataIni), $lte: new Date(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
-            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx }).then((agenda)=>{
-                console.log("agenda.length"+agenda.length);
-            })
-        } else if (beneidx == "-" && teraidx != "-") {
-            console.log("falta terapeuta")
-            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
-            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx }).then((agenda)=>{
-                console.log("agenda.length"+agenda.length);
-            })
-        } else {
-            console.log("falta de um bene para um terapeuta")
-            busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(dataIni), $lte:  fncGeral.getDateToIsostring(dataFim) }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
-            Agenda.find({ agenda_data: { $gte : dataIni.toISOString(), $lte:  dataFim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx }).then((agenda)=>{
-                console.log("agenda.length"+agenda.length);
-            })
-        }
-        console.log("resultado:"+resultado)
-        if (resultado == "true"){
-            agendaClass.agendaFaltaDia(req,res,busca);
-            if (res.retorno = "true") {
-                flash.sucesso = "true"
-                flash.texto = "Cadastro de faltas realizados!"
-                this.carregaCadFaltas(req,res,flash);
-            } else {
-                flash.sucesso = "false"
-                flash.texto = "Erro ao realizar faltas: "+res.retorno
-                this.carregaCadFaltas(req,res,flash);
-            }
+        let resultado = agendaClass.agendaFaltaDia(req,res);
+        if (resultado = "true") {
+            flash.sucesso = "true"
+            flash.texto = "Cadastro de faltas realizados!"
+            this.carregaCadFaltas(req,res,flash);
         } else {
             flash.sucesso = "false"
-            flash.texto = "É necessário selecionar um beneficiário ou um terapeuta para a falta!"
+            flash.texto = "Erro ao realizar faltas: "+res.retorno
             this.carregaCadFaltas(req,res,flash);
         }
+        
     },
     /*
     deletaAgendaAtend(req, res){

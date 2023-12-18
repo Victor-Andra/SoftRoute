@@ -140,6 +140,7 @@
 			document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
 			
 			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
+			document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
 			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
 			
 		}
@@ -245,6 +246,7 @@
 			<input id="beneEscolaturnoEdi" name="beneEscolaturnoEdi" value="{{beneEdi.bene_escolaturno}}"/>
 			
 			<input type="text" id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
+			<input type="text" id="beneObsadmEdi" name="beneObsadmEdi" value="{{beneEdi.bene_obsadm}}"/>
 			<input type="text" id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
 			
 		</div>
@@ -328,11 +330,16 @@
 														Faturamento
 													</a>
 												</li>
-												
+												<li class="">
+													<a data-toggle="tab" href="#obsadm" aria-expanded="false">
+														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
+														Observações administrativas
+													</a>
+												</li>
 												<li class="">
 													<a data-toggle="tab" href="#obs" aria-expanded="false">
-														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
-														Observações
+														<i class="pink ace-icon fa fa-stethoscope bigger-120"></i>
+														Observações terapêuticas
 													</a>
 												</li>
 											</ul>
@@ -1082,15 +1089,23 @@
 														</div>
 													</div>
 												</div>
+												<div id="obsadm" class="tab-pane fade">
+													<label> Observações administrativas</label>
+													<div class="input-group">
+														<div>
+															<textarea type="text" name="beneObsadm" id="beneObsadm" style="width: 350px; rowspan: 700px;"></textarea>
+														</div>
+													</div>
+												
+													
+												</div>
 												<div id="obs" class="tab-pane fade">
-													<label> Observação </label>
+													<label> Observações terapêuticas</label>
 													<div class="input-group">
 														<div>
 															<textarea type="text" name="beneObs" id="beneObs" style="width: 350px; rowspan: 700px;"></textarea>
 														</div>
 													</div>
-												
-													
 												</div>
 											</div>
 										</div>

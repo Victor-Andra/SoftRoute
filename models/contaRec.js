@@ -9,7 +9,7 @@ const ContaRecSchema = mongoose.Schema({
     contarec_usuidedi :{ type: ObjectId, required: false },
     contarec_dataedi :{ type: String, required: false },
     //Identificador da NF
-    contarec_nfnum :{ type: Number, required: true, unique: true},
+    contarec_nfnum :{ type: String, required: true, unique: true},
     contarec_beneid :{ type: ObjectId, required: true },
     contarec_convid :{ type: ObjectId, required: true },
     contarec_benenome :{ type: String, required: false },
@@ -121,6 +121,7 @@ const ContaRecModel = mongoose.model('tb_contarec', ContaRecSchema)
 module.exports = {ContaRecModel, ContaRecSchema,
     contarecEditar: async (req, res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         //Pega data atual
         
@@ -128,9 +129,7 @@ module.exports = {ContaRecModel, ContaRecSchema,
         await ContaRecModel.findByIdAndUpdate(req.body.contarecId, 
             {$set: {
         //Registro de operadores
-        contarec_usuidcad : req.body.contarecUsuidcad,
-        contarec_datacad : req.body.contarecDatacad,
-        contarec_usuidedi : req.body.contarecUsuidedi,
+        contarec_usuidedi : usuarioAtual,
         contarec_dataedi : dataAtual,
         //Identificador da NF
         contarec_nfnum : req.body.contarecNfnum,
@@ -175,13 +174,13 @@ module.exports = {ContaRecModel, ContaRecSchema,
     },
     contarecAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+
             console.log("contarecmodel");
             const newContaRec = new ContaRecModel({
                 //Registro de operadores
-                contarec_usuidcad : req.body.contarecUsuidcad,
-                contarec_datacad : req.body.contarecDatacad,
-                contarec_usuidedi : req.body.contarecUsuidedi,
-                contarec_dataedi : dataAtual,
+                contarec_usuidcad : usuarioAtual,
+                contarec_datacad : dataAtual,
                 //Identificador da NF
                 contarec_nfnum : req.body.contarecNfnum,
                 contarec_beneid : req.body.contarecBeneid,

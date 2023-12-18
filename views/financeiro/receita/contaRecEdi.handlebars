@@ -2,9 +2,167 @@
 <html lang="pt-br">
 	<head>
 		<title>contas a receber</title>
-	</head>
+		<script>
+			function carregaBody(){
+			//Ajusta data cadastro
+			let datac = new Date(document.getElementById("contarecDatacadEdi").value);
+			let mes = (datac.getMonth()+1).toString();
+			let dia = (datac.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datac.getFullYear()+"-"+mes+"-"+dia).toString();
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+			//Ajusta data Edição
+			let datae = new Date(document.getElementById("contarecDataediEdi").value);
+			let mes = (datae.getMonth()+1).toString();
+			let dia = (datae.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datae.getFullYear()+"-"+mes+"-"+dia).toString();
+
+			//Ajusta data Evento
+			let datav = new Date(document.getElementById("contarecDataeventoEdi").value);
+			let mes = (datav.getMonth()+1).toString();
+			let dia = (datav.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datav.getFullYear()+"-"+mes+"-"+dia).toString();
+
+			//Ajusta data Emprestimo
+			let datat = new Date(document.getElementById("contarecDataemprestEdi").value);
+			let mes = (datat.getMonth()+1).toString();
+			let dia = (datat.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datat.getFullYear()+"-"+mes+"-"+dia).toString();
+
+			//Ajusta data Devolução
+			let datad = new Date(document.getElementById("contarecDataadevolEdi").value);
+			let mes = (datad.getMonth()+1).toString();
+			let dia = (datad.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datad.getFullYear()+"-"+mes+"-"+dia).toString();
+
+			//Ajusta data Previsão do Pagamento (Vencimento)
+			let datap = new Date(document.getElementById("contarecDataprevEdi").value);
+			let mes = (datap.getMonth()+1).toString();
+			let dia = (datap.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datap.getFullYear()+"-"+mes+"-"+dia).toString();
+
+			//Ajusta data Pagamento
+			let datag = new Date(document.getElementById("contarecPgEdi").value);
+			let mes = (datag.getMonth()+1).toString();
+			let dia = (datag.getUTCDate()).toString();
+			if (mes.length == 1){
+				mes = "0"+mes;
+			}
+			if (dia.length == 1){
+				dia = "0"+dia;
+			}
+			let fulldate=(datag.getFullYear()+"-"+mes+"-"+dia).toString();
+
+
+
+			document.getElementById("contarecUsuidcad").value = document.getElementById("contarecUsuidcadEdi").value;
+			document.getElementById("contarecDatacad").value = document.getElementById("contarecDatacadEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecUsuidedi").value = document.getElementById("contarecUsuidediEdi").value;
+			document.getElementById("contarecDataedi").value = document.getElementById("contarecDataediEdi").value;
+
+			document.getElementById("contarecNfnum").value = document.getElementById("contarecNfnumEdi").value;
+			document.getElementById("contarecBeneid").value = document.getElementById("contarecBeneidEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecConvid").value = document.getElementById("contarecConvidEdi").value;
+			document.getElementById("contarecBenenome").value = document.getElementById("contarecBenenomeEdi").value;
+			document.getElementById("contarecTomador").value = document.getElementById("contarecTomadorEdi").value;
+			document.getElementById("contarecCpfcnpj").value = document.getElementById("contarecCpfcnpjEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecRetencao").value = document.getElementById("contarecRetencaoEdi").value;
+
+			document.getElementById("contarecAnomesatend").value = document.getElementById("contarecAnomesatendEdi").value;
+			document.getElementById("contarecDataevento").value = document.getElementById("contarecDataeventoEdi").value;
+			document.getElementById("contarecVlrnf").value = document.getElementById("contarecVlrnfiEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecDataemprest").value = document.getElementById("contarecDataemprestEdi").value;
+			document.getElementById("contarecDataadevol").value = document.getElementById("contarecDataadevolEdi").value;
+			document.getElementById("contarecDataprev").value = document.getElementById("contarecDataprevEdi").value;
+			document.getElementById("contarecVlrpg").value = document.getElementById("contarecVlrpgEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecVlrdiferenca").value = document.getElementById("contarecVlrdiferencaEdi").value;
+			document.getElementById("contarecFormapg").value = document.getElementById("contarecFormapgEdi").value;
+			document.getElementById("contarecDatapg").value = document.getElementById("contarecDatapgEdi").value;
+
+			document.getElementById("contarecVlrpis").value = document.getElementById("contarecVlrpisEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecVlrcssl").value = document.getElementById("contarecVlrcsslEdi").value;
+			document.getElementById("contarecVlrcofins").value = document.getElementById("contarecVlrcofinsEdi").value;
+			document.getElementById("contarecVlrirpf").value = document.getElementById("contarecVlrirpfEdi").value;
+			document.getElementById("contarecVlriss").value = document.getElementById("contarecVlrissEdi").value; //repete o nome do beneficiário no cabeçalho
+			document.getElementById("contarecPg").value = document.getElementById("contarecPgEdi").value;
+
+			document.getElementById("contarecDescr").value = document.getElementById("contarecDescrEdi").value;
+			document.getElementById("contarecObs").value = document.getElementById("contarecObsEdi").value;
+			}
+		</script>
+	</head>
+		<!-- Recepção dos dados pelo banco para popular os imputs da view, atrelada a função carregaBody(); -->
+		<div hidden>
+			<input id="contarecUsuidcadEdi" name="contarecUsuidcadEdi" value="{{contaRec.contarec_usuidcad}}"/>
+			<input id="contarecDatacadEdi" name="contarecDatacadEdi" value="{{contaRec.contarec_datacad}}"/>
+			<input id="contarecUsuidediEdi" name="contarecUsuidediEdi" value="{{contaRec.contarec_usuidedi}}"/>
+			<input id="contarecDataediEdi" name="contarecDataediEdi" value="{{contaRec.contarec_dataedi}}"/>
+
+			<input id="contarecNfnumEdi" name="contarecNfnumEdi" value="{{contaRec.contarec_nfnum}}"/>
+			<input id="contarecBeneidEdi" name="contarecBeneidEdi" value="{{contaRec.contarec_beneid}}"/>
+			<input id="contarecConvidEdi" name="contarecConvidEdi" value="{{contaRec.contarec_convid}}"/>
+			<input id="contarecBenenomeEdi" name="contarecBenenomeEdi" value="{{contaRec.contarec_benenome}}"/>
+			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{contaRec.contarec_tomador}}"/>
+			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{contaRec.contarec_cpfcnpj}}"/>
+			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{contaRec.contarec_retencao}}"/>
+			
+			<input id="contarecAnomesatendEdi" name="contarecAnomesatendEdi" value="{{contaRec.contarec_anomesatend}}"/>
+			<input id="contarecDataeventoEdi" name="contarecDataeventoEdi" value="{{contaRec.contarec_dataevento}}"/>
+			<input id="contarecVlrnfiEdi" name="contarecVlrnfEdi" value="{{contaRec.contarec_vlrnf}}"/>
+			<input id="contarecDataemprestEdi" name="contarecDataemprestEdi" value="{{contaRec.contarec_dataemprest}}"/>
+			<input id="contarecDataadevolEdi" name="contarecDataadevolEdi" value="{{contaRec.contarec_dataadevol}}"/>
+			<input id="contarecDataprevEdi" name="contarecDataprevEdi" value="{{contaRec.contarec_dataprev}}"/>
+			<input id="contarecVlrpgEdi" name="contarecVlrpgEdi" value="{{contaRec.contarec_vlrpg}}"/>
+			<input id="contarecVlrdiferencaEdi" name="contarecVlrdiferencaEdi" value="{{contaRec.contarec_vlrdiferenca}}"/>
+			<input id="contarecFormapgEdi" name="contarecFormapgEdi" value="{{contaRec.contarec_formapg}}"/>
+			<input id="contarecDatapgEdi" name="contarecDatapgEdi" value="{{contaRec.contarec_datapg}}"/>
+			<!-- Impostos -->
+			<input id="contarecVlrpisEdi" name="contarecDataadevolEdi" value="{{contaRec.contarec_vlrpis}}"/>
+			<input id="contarecVlrcsslEdi" name="contarecVlrcsslEdi" value="{{contaRec.contarec_vlrcssl}}"/>
+			<input id="contarecVlrcofinsEdi" name="contarecVlrcofinsEdi" value="{{contaRec.contarec_vlrcofins}}"/>
+			<input id="contarecVlrirpfEdi" name="contarecVlrirpfEdi" value="{{contaRec.contarec_vlrirpf}}"/>
+			<input id="contarecVlrissEdi" name="contarecVlrissEdi" value="{{contaRec.contarec_vlriss}}"/>
+			<input id="contarecPgEdi" name="contarecPgEdi" value="{{contaRec.contarec_pg}}"/>
+			<!-- Descrição e Observações -->
+			<input id="contarecDescrEdi" name="contarecDescrEdi" value="{{contaRec.contarec_descr}}"/>
+			<input id="contarecObsEdi" name="contarecObsEdi" value="{{contaRec.contarec_obs}}"/>
+		</div>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 
 		<div class="main-container ace-save-state" id="main-container">
 
@@ -18,7 +176,7 @@
 								<a href="#">Home</a>
 							</li>
 
-							<li class="active">Contas à receber - Cadastro</li>
+							<li class="active">Contas à receber - Edição</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -49,7 +207,7 @@
 
 										<div class="widget-body">
 											<div class="widget-main">
-												
+
 												<!-- Registro de Operadores -->
 												<label> Usuário Cadastro</label>
 												<div class="form-group">
@@ -150,12 +308,7 @@
 														<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="" />
 													</div>
 												</div>
-												<label>Ano/Mês Referência</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder="" />
-													</div>
-												</div>
+												
 												<label for="id-date-picker-1">Data Empréstimo</label>
 												<div class="form-group">
 													<div class="col-sm-4">
@@ -201,7 +354,7 @@
 														<input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder="">
 													</div>
 												</div>
-												<!-- Informações da NF-->
+												<!-- Informações dos Impostos-->
 												<label>Valor PIS</label>
 												<div class="form-group">
 													<div class="col-sm-3">

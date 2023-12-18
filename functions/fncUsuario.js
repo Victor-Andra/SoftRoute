@@ -380,5 +380,59 @@ module.exports = {
             req.flash("error_message", "Houve um erro ao mudar o nome")
             res.render('admin/erro', {flash})
         }
+    },
+
+    relaniverUsu(req, res) {
+        let monthsUsu = {};
+    
+        console.log('Listando Resp');
+    
+        Usuario.find({usuario_status:"Ativo"}).then((usuario) => {
+            usuario.forEach((b) => {
+                let datanasc = new Date(b.usuario_datanasc);
+                let mes = (datanasc.getUTCMonth() + 1).toString(); // Usar getUTCMonth
+                let dia = (datanasc.getUTCDate()).toString(); // Usar getUTCDate
+    
+                if (mes.length === 1) {
+                    mes = "0" + mes;
+                }
+    
+                if (dia.length === 1) {
+                    dia = "0" + dia;
+                }
+    
+                b.mesNascimento = mes;
+                b.diaNascimento = dia;
+    
+                // Cria a estrutura do objeto se o mês ainda não existe
+                if (!monthsUsu[mes]) {
+                    monthsUsu[mes] = [];
+                }
+    
+                monthsUsu[mes].push(b);
+            });
+    
+            // Ordena os meses em ordem crescente
+            const sortedMonths = Object.keys(monthsUsu).sort();
+    
+            // Ordena os dias dentro de cada mês
+            for (let month of sortedMonths) {
+                monthsUsu[month].sort((a, b) => {
+                    return a.diaNascimento.localeCompare(b.diaNascimento);
+                });
+            }
+    
+            // Cria uma lista ordenada dos meses
+            const orderedMonths = sortedMonths.map(month => ({
+                month: month,
+                children: monthsUsu[month]
+            }));
+    
+            res.render('area/relaniverUsu', { orderedMonths });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar Usuarios");
+            res.redirect('admin/erro');
+        });
     }
 }
