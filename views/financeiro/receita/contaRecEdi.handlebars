@@ -162,11 +162,8 @@
 			<input id="contarecDescrEdi" name="contarecDescrEdi" value="{{contaRec.contarec_descr}}"/>
 			<input id="contarecObsEdi" name="contarecObsEdi" value="{{contaRec.contarec_obs}}"/>
 		</div>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-
+	<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -175,80 +172,84 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
-							<li class="active">Contas à receber - Edição</li>
+							<li class="active">Contas à receber - Cadastro</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/financeiro/receita/add" method="POST">
-
-
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Dados</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
-
 										<div class="widget-body">
 											<div class="widget-main">
-
-												<!-- Registro de Operadores -->
-												<label> Usuário Cadastro</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder=""  />
+												<div >
+													<!-- Registro de Operadores -->
+													<label> Usuário Cadastro</label>
+													<div class="form-group">
+														<div class="col-sm-3">
+															<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder="" value="{{usuarioAtual}}" />
+														</div>
 													</div>
-												</div>
-												<label> Data Cadastro</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="date" name="contarecDatacad" id="contarecDatacad" placeholder=""  />
+													<label> Data Cadastro</label>
+													<div class="form-group">
+														<div class="col-sm-3">
+															<input name="contarecDatacad" id="contarecDatacad" placeholder=""  value="{{dataAtual}}"/>
+														</div>
 													</div>
-												</div>
-												<label> Usuário Editou</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder=""  />
+													<label> Usuário Editou</label>
+													<div class="form-group">
+														<div class="col-sm-3">
+															<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder=""  />
+														</div>
 													</div>
-												</div>
-												<label> Data Edição</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" />
+													<label> Data Edição</label>
+													<div class="form-group">
+														<div class="col-sm-3">
+															<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" />
+														</div>
 													</div>
 												</div>
 												<!-- Identificador da NF -->
+												<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<input id="contarecDataevento" name="contarecDataevento" type="date">
+													</div>
+												</div>
+												<label>Ano/Mês Referência</label>
+												<div class="form-group">
+													<div class="col-sm-1">
+														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder=""  />
+													</div>
+												</div>
 												<label> Número da Nota Fiscal</label>
 												<div class="form-group">
 													<div class="col-sm-3">
 														<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder=""  />
 													</div>
 												</div>
-												<label> Baneficiário</label>
-												<div class="form-group">
-														<div class="col-sm-8">
-															<select name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																{{#each benes}}
-																	<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-															</select>
-														</div>
+												<label>Beneficiário</label>
+												<div class="form-group" >
+													<div class="col-xs-9 col-sm-9">
+														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+															<option value="766f69643132333435366964">-</option>
+															{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
 												</div>
 												<label> Convênio</label>
 												<div class="form-group">
@@ -256,6 +257,7 @@
 														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
 															{{#each benes}}
 																{{#each ../convs}}
+																	<option value="766f69643132333435366964">-</option>
 																	{{#ifEqual ../bene_convid _id}}
 																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
 																	{{/ifEqual}}
@@ -270,7 +272,6 @@
 														<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder=""  />
 													</div>
 												</div>
-
 												<label>Nome do Tomador do Serviço perante a prefeitura</label>
 												<div class="form-group">
 													<div class="col-sm-3">
@@ -290,18 +291,8 @@
 													</div>
 												</div>
 												<!-- Informações da NF-->
-												<label>Ano/Mês Referência</label>
-												<div class="form-group">
-													<div class="col-sm-1">
-														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder=""  />
-													</div>
-												</div>
-												<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input id="contarecDataevento" name="benecontarecDataeventoDatanasc" type="date">
-													</div>
-												</div>
+												
+											
 												<label>Valor da Nota Fiscal</label>
 												<div class="form-group">
 													<div class="col-sm-3">
@@ -315,21 +306,19 @@
 														<input id="contarecDataemprest" name="contarecDataemprest" type="date">
 													</div>
 												</div>
-												<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
+												<label for="id-date-picker-1">Data Devolução</label>
 												<div class="form-group">
-													<div class="col-sm-4">
+													<div class="col-sm-3">
 														<input id="contarecDataadevol" name="contarecDataadevol" type="date">
 													</div>
 												</div>
-													
+												
 												<label for="id-date-picker-1">Data Previsão de Pagamento</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<input id="contarecDataprev" name="contarecDataprev" type="date">
 													</div>
 												</div>
-													
-												
 												<label>Valor Pago</label>
 												<div class="form-group">
 													<div class="col-sm-3">
@@ -348,13 +337,13 @@
 														<input type="text" name="contarecFormapg" id="contarecFormapg" placeholder=""  />
 													</div>
 												</div>
-												<label for="id-date-picker-1">Data Previsão de Pagamento</label>
+												<label for="id-date-picker-1">Data de Pagamento</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder="">
 													</div>
 												</div>
-												<!-- Informações dos Impostos-->
+												<!-- Informações da NF-->
 												<label>Valor PIS</label>
 												<div class="form-group">
 													<div class="col-sm-3">
@@ -409,42 +398,22 @@
 										</div>
 									</div>
 								</div>
-	
-							
 								<div class="col-xs-12" style="text-align: center;" >
 									<button class="btn btn-info"  name="acao" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
 										Salvar
 									</button>
-
 									&nbsp; &nbsp; &nbsp;
 									<button class="btn btn-warning"  href="/menu/financeiro/receita/lis">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>
 								</div>
-									
-
 							</form>
-
-
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

@@ -36,7 +36,7 @@
 				if (dataIso != undefined && dataIso != "undefined"){
 					var dataFmt = new Date(dataIso);
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
 				}
 				console.log("benediag: "+(beneid+"_laudoDiagEdi"))
 				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
@@ -49,6 +49,18 @@
 				document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaid").value;
 
 				this.atualizaDadosbene();
+			}
+			function calculaIdade(dataFmt){
+				let dataAtual = new Date();
+				let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+				let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+				console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+				console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+				let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+				if (dias < 0){
+					mes = mes-1;
+				}
+				return (ano + " anos e " + mes + " meses.");
 			}
 		</script>
 	</head>

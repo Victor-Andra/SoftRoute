@@ -4,30 +4,18 @@
 		<title>ATA</title>
 		
 		<script type="text/javascript">
-
 		function contafeitos(cg) {
 			let feitos;
-			if (cg == 1){
+			if (cg == 1) {
 				feitos = 1;
-			} else if (cg >= 2){
+			} else if (cg >= 2) {
 				feitos = 2;
 			} else {
 				feitos = 0;
 			}
 			return feitos;
 		}
-		function registraBoleano(nomecampo, valor){
-			let nomecampo;
-			let valor;
-
-			if (valor == true){
-				nomecampo+temp = true;
-			} else {
-				nomecampo+temp = false;
-			}
-			return nomecampo+temp.value = valor;
-		}
-
+		
         // Função para atualizar as variáveis de contagem
         function atualizarContagem() {
 			// Variáveis para armazenar a contagem por grupo
@@ -161,7 +149,7 @@
 			document.getElementById("ataTotalpontos_xxi").value = contafeitos(cg_xxi);
 			document.getElementById("ataTotalpontos_xxii").value = contafeitos(cg_xxii);
 			document.getElementById("ataTotalpontos_xxiii").value = contafeitos(cg_xxiii);
-
+				
 			//Carrega o campo Total de Pontos
 			totalpontos = (
 				contafeitos(cg_i) + contafeitos(cg_ii) + contafeitos(cg_iii) + contafeitos(cg_iv) + contafeitos(cg_v) + 
@@ -177,15 +165,146 @@
         function contarCheckboxesPorGrupo(grupo) {
             return document.querySelectorAll('input.' + grupo + ':checked').length;
         }
-
-              
+		
     	</script>			
 		
 		
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
-
+	<body onload="javascript:controlaNave(); " class="no-skin">
+		<div class="col-xs-12" >
+				<input type="text" name="ataI01temp" value="" />
+				<input type="text" name="ataI02temp" value="" />
+				<input type="text" name="ataI03temp" value="" />
+				<input type="text" name="ataI04temp" value="" />
+				<input type="text" name="ataI05temp" value="" />
+				<input type="text" name="ataI06temp" value="" />
+				<input type="text" name="ataI07temp" value="" />
+				//II
+				<input type="text" name="ata_II01temp" />
+				<input type="text" name="ata_II02temp" />
+				<input type="text" name="ata_II03temp" />
+				<input type="text" name="ata_II04temp" />
+				<input type="text" name="ata_II05temp" />
+				<input type="text" name="ata_II06temp" />
+				//III
+				<input type="text" name="ata_iii01temp" />
+				<input type="text" name="ata_iii02temp" />
+				<input type="text" name="ata_iii03temp" />
+				<input type="text" name="ata_iii04temp" />
+				//IV
+				<input type="text" name="ata_iv01temp" />
+				<input type="text" name="ata_iv02temp" />
+				<input type="text" name="ata_iv03temp" />
+				//V
+				<input type="text" name="ata_v01temp" />
+				<input type="text" name="ata_v02temp" />
+				<input type="text" name="ata_v03temp" />
+				<input type="text" name="ata_v04temp" />
+				//VI
+				<input type="text" name="ata_vi01temp" />
+				<input type="text" name="ata_vi02temp" />
+				<input type="text" name="ata_vi03temp" />
+				<input type="text" name="ata_vi04temp" />
+				<input type="text" name="ata_vi05temp" />
+				<input type="text" name="ata_vi06temp" />
+				//VII
+				<input type="text" name="ata_vii01temp" />
+				<input type="text" name="ata_vii02temp" />
+				<input type="text" name="ata_vii03temp" />
+				<input type="text" name="ata_vii04temp" />
+				//VIII (disturbios do sono)
+				<input type="text" name="ata_viii01temp" />
+				<input type="text" name="ata_viii02temp" />
+				<input type="text" name="ata_viii03temp" />
+				<input type="text" name="ata_viii04temp" />
+				<input type="text" name="ata_viii05temp" />
+				//IX
+				<input type="text" name="ata_ix01temp" />
+				<input type="text" name="ata_ix02temp" />
+				<input type="text" name="ata_ix03temp" />
+				<input type="text" name="ata_ix04temp" />
+				<input type="text" name="ata_ix05temp" />
+				<input type="text" name="ata_ix06temp" />
+				<input type="text" name="ata_ix07temp" />
+				<input type="text" name="ata_ix08temp" />
+				//X
+				<input type="text" name="ata_x01temp" />
+				<input type="text" name="ata_x02temp" />
+				<input type="text" name="ata_x03temp" />
+				<input type="text" name="ata_x04temp" />
+				//XI
+				<input type="text" name="ata_xi01temp" />
+				<input type="text" name="ata_xi02temp" />
+				<input type="text" name="ata_xi03temp" />
+				<input type="text" name="ata_xi04temp" />
+				//XII
+				<input type="text" name="ata_xii01temp" />
+				<input type="text" name="ata_xii02temp" />
+				<input type="text" name="ata_xii03temp" />
+				<input type="text" name="ata_xii04temp" />
+				<input type="text" name="ata_xii05temp" />
+				<input type="text" name="ata_xii06temp" />
+				<input type="text" name="ata_xii07temp" />
+				//XIII 
+				<input type="text" name="ata_xiii01temp" />
+				<input type="text" name="ata_xiii02temp" />
+				<input type="text" name="ata_xiii03temp" />
+				<input type="text" name="ata_xiii04temp" />
+				//XIV
+				<input type="text" name="ata_xiv01temp" />
+				<input type="text" name="ata_xiv02temp" />
+				<input type="text" name="ata_xiv03temp" />
+				<input type="text" name="ata_xiv04temp" />
+				<input type="text" name="ata_xiv05temp" />
+				//XV 
+				<input type="text" name="ata_xv01temp" />
+				<input type="text" name="ata_xv02temp" />
+				<input type="text" name="ata_xv03temp" />
+				<input type="text" name="ata_xv04temp" />
+				<input type="text" name="ata_xv05temp" />
+				//XVI
+				<input type="text" name="ata_xvi01temp" />
+				<input type="text" name="ata_xvi02temp" />
+				<input type="text" name="ata_xvi03temp" />
+				<input type="text" name="ata_xvi04temp" />
+				<input type="text" name="ata_xvi05temp" />
+				//XVII
+				<input type="text" name="ata_xvii01temp" />
+				<input type="text" name="ata_xvii02temp" />
+				<input type="text" name="ata_xvii03temp" />
+				<input type="text" name="ata_xvii04temp" />
+				//XVIII
+				<input type="text" name="ata_xviii01temp" />
+				<input type="text" name="ata_xviii02temp" />
+				<input type="text" name="ata_xviii03temp" />
+				<input type="text" name="ata_xviii04temp" />
+				//XIX
+				<input type="text" name="ata_xix01temp" />
+				<input type="text" name="ata_xix02temp" />
+				//XX
+				<input type="text" name="ata_xx01temp" />
+				<input type="text" name="ata_xx02temp" />
+				<input type="text" name="ata_xx03temp" />
+				<input type="text" name="ata_xx04temp" />
+				<input type="text" name="ata_xx05temp" />
+				<input type="text" name="ata_xx06temp" />
+				//XXI
+				<input type="text" name="ata_xxi01temp" />
+				<input type="text" name="ata_xxi02temp" />
+				<input type="text" name="ata_xxi03temp" />
+				<input type="text" name="ata_xxi04temp" />
+				<input type="text" name="ata_xxi05temp" />
+				<input type="text" name="ata_xxi06temp" />
+				<input type="text" name="ata_xxi07temp" />
+				<input type="text" name="ata_xxi08temp" />
+				//XXII
+				<input type="text" name="ata_xxii01temp" />
+				<input type="text" name="ata_xxii02temp" />
+				<input type="text" name="ata_xxii03temp" />
+				//XXIII
+				<input type="text" name="ata_xxiii01temp" />
+		</div>
 
 		<div class="main-container ace-save-state" id="main-container">
 
@@ -208,139 +327,7 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/escalas/ata/add" method="POST">
-								<div class="row" hidden>
-									  	<input name="ata_i01temp" />
-										<input name="ata_i02temp" />
-										<input name="ata_i03temp" />
-										<input name="ata_i04temp" />
-										<input name="ata_i05temp" />
-										<input name="ata_i06temp" />
-										<input name="ata_i07temp" />
-										//II
-										<input name="ata_ii01temp" />
-										<input name="ata_ii02temp" />
-										<input name="ata_ii03temp" />
-										<input name="ata_ii04temp" />
-										<input name="ata_ii05temp" />
-										<input name="ata_ii06temp" />
-										//III
-										<input name="ata_iii01temp" />
-										<input name="ata_iii02temp" />
-										<input name="ata_iii03temp" />
-										<input name="ata_iii04temp" />
-										//IV
-										<input name="ata_iv01temp" />
-										<input name="ata_iv02temp" />
-										<input name="ata_iv03temp" />
-										//V
-										<input name="ata_v01temp" />
-										<input name="ata_v02temp" />
-										<input name="ata_v03temp" />
-										<input name="ata_v04temp" />
-										//VI
-										<input name="ata_vi01temp" />
-										<input name="ata_vi02temp" />
-										<input name="ata_vi03temp" />
-										<input name="ata_vi04temp" />
-										<input name="ata_vi05temp" />
-										<input name="ata_vi06temp" />
-										//VII
-										<input name="ata_vii01temp" />
-										<input name="ata_vii02temp" />
-										<input name="ata_vii03temp" />
-										<input name="ata_vii04temp" />
-										//VIII (disturbios do sono)
-										<input name="ata_viii01temp" />
-										<input name="ata_viii02temp" />
-										<input name="ata_viii03temp" />
-										<input name="ata_viii04temp" />
-										<input name="ata_viii05temp" />
-										//IX
-										<input name="ata_ix01temp" />
-										<input name="ata_ix02temp" />
-										<input name="ata_ix03temp" />
-										<input name="ata_ix04temp" />
-										<input name="ata_ix05temp" />
-										<input name="ata_ix06temp" />
-										<input name="ata_ix07temp" />
-										<input name="ata_ix08temp" />
-										//X
-										<input name="ata_x01temp" />
-										<input name="ata_x02temp" />
-										<input name="ata_x03temp" />
-										<input name="ata_x04temp" />
-										//XI
-										<input name="ata_xi01temp" />
-										<input name="ata_xi02temp" />
-										<input name="ata_xi03temp" />
-										<input name="ata_xi04temp" />
-										//XII
-										<input name="ata_xii01temp" />
-										<input name="ata_xii02temp" />
-										<input name="ata_xii03temp" />
-										<input name="ata_xii04temp" />
-										<input name="ata_xii05temp" />
-										<input name="ata_xii06temp" />
-										<input name="ata_xii07temp" />
-										//XIII 
-										<input name="ata_xiii01temp" />
-										<input name="ata_xiii02temp" />
-										<input name="ata_xiii03temp" />
-										<input name="ata_xiii04temp" />
-										//XIV
-										<input name="ata_xiv01temp" />
-										<input name="ata_xiv02temp" />
-										<input name="ata_xiv03temp" />
-										<input name="ata_xiv04temp" />
-										<input name="ata_xiv05temp" />
-										//XV (aparentemente não tem avaliação do grupo 15)
-										<input name="ata_xv01temp" />
-										<input name="ata_xv02temp" />
-										<input name="ata_xv03temp" />
-										<input name="ata_xv04temp" />
-										<input name="ata_xv05temp" />
-										//XVI
-										<input name="ata_xvi01temp" />
-										<input name="ata_xvi02temp" />
-										<input name="ata_xvi03temp" />
-										<input name="ata_xvi04temp" />
-										<input name="ata_xvi05temp" />
-										//XVII
-										<input name="ata_xvii01temp" />
-										<input name="ata_xvii02temp" />
-										<input name="ata_xvii03temp" />
-										<input name="ata_xvii04temp" />
-										//XVIII
-										<input name="ata_xviii01temp" />
-										<input name="ata_xviii02temp" />
-										<input name="ata_xviii03temp" />
-										<input name="ata_xviii04temp" />
-										//XIX
-										<input name="ata_xix01temp" />
-										<input name="ata_xix02temp" />
-										//XX
-										<input name="ata_xx01temp" />
-										<input name="ata_xx02temp" />
-										<input name="ata_xx03temp" />
-										<input name="ata_xx04temp" />
-										<input name="ata_xx05temp" />
-										<input name="ata_xx06temp" />
-										//XXI
-										<input name="ata_xxi01temp" />
-										<input name="ata_xxi02temp" />
-										<input name="ata_xxi03temp" />
-										<input name="ata_xxi04temp" />
-										<input name="ata_xxi05temp" />
-										<input name="ata_xxi06temp" />
-										<input name="ata_xxi07temp" />
-										<input name="ata_xxi08temp" />
-										//XXII
-										<input name="ata_xxii01temp" />
-										<input name="ata_xxii02temp" />
-										<input name="ata_xxii03temp" />
-										//XXIII
-										<input name="ata_xxiii01temp" />
-								</div>
+							
 								<div class="col-xs-12" name="Ident" id="Ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -369,7 +356,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ata_beneid" id="ata_beneid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ata_beneid" id="ata_beneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -383,7 +370,7 @@
 														<div class="row">
 															<div class="col-sm-4">
 																<div class="input-group">
-																	<input name="ataBeneidade" id="ataBeneidade" type="text"  />
+																	<input name="ataBeneidade" id="ataBeneidade" type="text"  onclick="atualizarContagem()"/>
 																</div>
 															</div>
 														</div>
@@ -396,7 +383,7 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<select name="ataTerapeutaid" id="ataTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="ataTerapeutaid" id="ataTerapeutaid" class="chosen-select" data-placeholder="Escolha..."onclick="atualizarContagem()" >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>

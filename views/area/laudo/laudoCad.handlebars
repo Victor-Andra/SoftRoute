@@ -11,7 +11,7 @@
 				if (dataIso != undefined && dataIso != "undefined"){
 					var dataFmt = new Date(dataIso);
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
 				}
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
@@ -42,7 +42,18 @@
 
 				return [year, month, day].join('-');
 			}
-			
+			function calculaIdade(dataFmt){
+				let dataAtual = new Date();
+				let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+				let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+				console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+				console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+				let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+				if (dias < 0){
+					mes = mes-1;
+				}
+				return (ano + " anos e " + mes + " meses.");
+			}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">

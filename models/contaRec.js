@@ -10,8 +10,8 @@ const ContaRecSchema = mongoose.Schema({
     contarec_dataedi :{ type: String, required: false },
     //Identificador da NF
     contarec_nfnum :{ type: String, required: true, unique: true},
-    contarec_beneid :{ type: ObjectId, required: true },
-    contarec_convid :{ type: ObjectId, required: true },
+    contarec_beneid :{ type: ObjectId, required: false },
+    contarec_convid :{ type: ObjectId, required: false },
     contarec_benenome :{ type: String, required: false },
     contarec_tomador :{ type: String, required: false },
     contarec_cpfcnpj :{ type: String, required: false },
@@ -221,3 +221,4 @@ module.exports = {ContaRecModel, ContaRecSchema,
             });
         }
 };
+

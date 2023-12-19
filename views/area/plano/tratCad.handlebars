@@ -43,13 +43,30 @@
 				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
 				if (dataIso != undefined && dataIso != "undefined"){
 					var dataFmt = new Date(dataIso);
+					let dataAtual = new Date();
+					
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
 				}
 				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}
+
+			function calculaIdade(dataFmt){
+				let dataAtual = new Date();
+				let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+				let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+				console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+				console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+				let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+				if (dias < 0){
+					mes = mes-1;
+				}
+				return (ano + " anos e " + mes + " meses.");
+			}
+						
+						
 			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 				var dataFmt = new Date(dataIso);

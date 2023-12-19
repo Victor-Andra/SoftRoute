@@ -364,6 +364,7 @@ module.exports = {AgendaModel,AgendaSchema,
         if (req.body.agendaTurnoFalta == "Manhã"){
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoManha);
         } else if (req.body.agendaTurnoFalta == "Tarde"){
+            console.log("TARDE")
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoTarde);
         } else {
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoCompleto);
@@ -382,6 +383,7 @@ module.exports = {AgendaModel,AgendaSchema,
         }
 
         await AgendaModel.find(busca).then((agenda)=>{
+            console.log("agendalength: "+agenda.length)
             agenda.forEach(a => {
                 arrayIds.push(a._id);
             })
@@ -389,12 +391,14 @@ module.exports = {AgendaModel,AgendaSchema,
                 agendaSemanal.forEach(as => {
                     agendaFinal.push(as);
                 })
-                agendaSemanal.forEach((as)=>{
-                    agenda.forEach(a => {
-                        if ((""+as.agenda_tempId+"") != (""+a._id+"")){
-                            agendaFinal.push(a);
+                agenda.forEach((a)=>{
+                    let add = true;
+                    agendaSemanal.forEach(as => {
+                        if ((""+as.agenda_tempId+"") == (""+a._id+"")){
+                            add = false;
                         }
                     })
+                    agendaFinal.push(a);
                 })
                 console.log("agendaFinal: "+agendaFinal.length)
                 agendaFinal.forEach(a => {
@@ -484,14 +488,8 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log("erro mongo:");
             console.log(err);
         }).finally(()=>{
-            console.log("arrayAgendasNovas: "+arrayAgendasNovas.length)
-            AgendaModel.insertMany(arrayAgendasNovas).then((res) =>{
-                retorno = "true";
-            }).catch((err) =>{
-                retorno = err
-                console.log("erro mongo:");
-                console.log(err);
-            });
+            //console.log("arrayAgendasNovas: "+arrayAgendasNovas.length)
+            
             retorno = "true";
             return retorno;
         })

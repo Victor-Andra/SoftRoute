@@ -396,6 +396,8 @@ module.exports = {AtendModel,AtendSchema,
                 troca = {'atend_terapiaid': novaterapiaidx, 'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
             } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
                 troca = {'atend_mergeterapeutaid': novomergeteraidx, 'atend_mergeterapiaid': novamergetpiaidx, 'atend_mergevalorcre': novavalorcrex, 'atend_valordeb': novavalordebx, 'atend_categoria': 'SubstitutoFixo', 'atend_org': 'Administrativo', 'atend_mergevalordeb': novavalordebx, 'atend_valorcre': novavalorcrex};
+            } else if (novoterapeutaidx == "-" && novaterapiaidx != "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
+                troca = {'atend_terapiaid': novaterapiaidx, 'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx != "-") {//todos
                 troca = {'atend_valorcre': novavalorcrex, 'atend_valordeb': novavalordebx};
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx != "-"){//convenio
@@ -459,9 +461,9 @@ module.exports = {AtendModel,AtendSchema,
             } else if (novoterapeutaidx == "-" && novaterapiaidx == "-" && novoconvidx == "-" && novavalorcrex != "-" && novavalordebx == "-") {//todos
                 troca = {'atend_valorcre': novavalorcrex};
             }
-            AtendModel.find(busca).then((atends)=>{
+            /*AtendModel.find(busca).then((atends)=>{
                 console.log("atendsat:"+atends.length)
-            })
+            })*/
             await AtendModel.updateMany(
                 busca,{$set: troca}
             ).then((res) =>{
