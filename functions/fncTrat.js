@@ -26,6 +26,7 @@ const Laudo = mongoose.model("tb_laudo")
 
 //Funções auxiliares
 const Resposta = mongoose.model("tb_resposta")
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaTrat(req, res, resposta){
