@@ -70,29 +70,29 @@
             
 			
 			// Exibir no console (substitua isso pelo que desejar fazer com as variáveis)
-            console.log('Contagem Grupo I:', cg_i);
-            console.log('Contagem Grupo II:', cg_ii);
-            console.log('Contagem Grupo III:', cg_iii);
-			console.log('Contagem Grupo Iv:', cg_iv);
-            console.log('Contagem Grupo v:', cg_v);
-			console.log('Contagem Grupo vI:', cg_vi);
-            console.log('Contagem Grupo vII:', cg_vii);
-            console.log('Contagem Grupo vIII:', cg_viii);
-			console.log('Contagem Grupo Ix:', cg_ix);
-            console.log('Contagem Grupo x:', cg_x);
-			console.log('Contagem Grupo xI:', cg_xi);
-            console.log('Contagem Grupo xII:', cg_xii);
-            console.log('Contagem Grupo xIII:', cg_xiii);
-			console.log('Contagem Grupo xIv:', cg_xiv);
-            console.log('Contagem Grupo xv:', cg_xv);
-			console.log('Contagem Grupo xvI:', cg_xvi);
-            console.log('Contagem Grupo xvII:', cg_xvii);
-            console.log('Contagem Grupo xvIII:', cg_xviii);
-			console.log('Contagem Grupo Ix:', cg_xix);
-            console.log('Contagem Grupo xx:', cg_xx);
-			console.log('Contagem Grupo xxI:', cg_xxi);
-            console.log('Contagem Grupo xxII:', cg_xxii);
-            console.log('Contagem Grupo xxIII:', cg_xxiii);			
+            //console.log('Contagem Grupo I:', cg_i);
+            //console.log('Contagem Grupo II:', cg_ii);
+            //console.log('Contagem Grupo III:', cg_iii);
+			//console.log('Contagem Grupo Iv:', cg_iv);
+            //console.log('Contagem Grupo v:', cg_v);
+			//console.log('Contagem Grupo vI:', cg_vi);
+            //console.log('Contagem Grupo vII:', cg_vii);
+            //console.log('Contagem Grupo vIII:', cg_viii);
+			//console.log('Contagem Grupo Ix:', cg_ix);
+            //console.log('Contagem Grupo x:', cg_x);
+			//console.log('Contagem Grupo xI:', cg_xi);
+            //console.log('Contagem Grupo xII:', cg_xii);
+            //console.log('Contagem Grupo xIII:', cg_xiii);
+			//console.log('Contagem Grupo xIv:', cg_xiv);
+            //console.log('Contagem Grupo xv:', cg_xv);
+			//console.log('Contagem Grupo xvI:', cg_xvi);
+            //console.log('Contagem Grupo xvII:', cg_xvii);
+            //console.log('Contagem Grupo xvIII:', cg_xviii);
+			//console.log('Contagem Grupo Ix:', cg_xix);
+            //console.log('Contagem Grupo xx:', cg_xx);
+			//console.log('Contagem Grupo xxI:', cg_xxi);
+            //console.log('Contagem Grupo xxII:', cg_xxii);
+            //console.log('Contagem Grupo xxIII:', cg_xxiii);			
 
 			console.log('Total:', totalitens);
 
@@ -166,6 +166,31 @@
             return document.querySelectorAll('input.' + grupo + ':checked').length;
         }
 		
+		function updateTempField(checkbox) {
+			// Obtém o valor do checkbox (true ou false)
+			let valcheck;
+
+			if (checkbox.checked !== undefined) {
+				valcheck = checkbox.checked;
+			} else {
+				// Caso a propriedade "checked" não esteja disponível, tenta obter o estado usando o atributo "value"
+				valcheck = checkbox.value === "true";
+			}
+
+			// Constrói o nome do campo temporário
+			const checkboxTempName = checkbox.name + "temp";
+
+			// Obtém a referência ao campo temporário
+			const tempField = document.getElementsByName(checkboxTempName)[0];
+
+			// Verifica se o campo temporário foi encontrado antes de atribuir o valor
+			if (tempField) {
+				tempField.value = valcheck;
+				console.log('Valor: ' + valcheck);
+			} else {
+				console.error('Campo temporário não encontrado para ' + checkboxTempName);
+			}
+		}
     	</script>			
 		
 		
@@ -173,137 +198,139 @@
 
 	<body onload="javascript:controlaNave(); " class="no-skin">
 		<div class="col-xs-12" >
-				<input type="text" name="ataI01temp" value="" />
-				<input type="text" name="ataI02temp" value="" />
-				<input type="text" name="ataI03temp" value="" />
-				<input type="text" name="ataI04temp" value="" />
-				<input type="text" name="ataI05temp" value="" />
-				<input type="text" name="ataI06temp" value="" />
-				<input type="text" name="ataI07temp" value="" />
-				//II
-				<input type="text" name="ata_II01temp" />
-				<input type="text" name="ata_II02temp" />
-				<input type="text" name="ata_II03temp" />
-				<input type="text" name="ata_II04temp" />
-				<input type="text" name="ata_II05temp" />
-				<input type="text" name="ata_II06temp" />
-				//III
-				<input type="text" name="ata_iii01temp" />
-				<input type="text" name="ata_iii02temp" />
-				<input type="text" name="ata_iii03temp" />
-				<input type="text" name="ata_iii04temp" />
-				//IV
-				<input type="text" name="ata_iv01temp" />
-				<input type="text" name="ata_iv02temp" />
-				<input type="text" name="ata_iv03temp" />
-				//V
-				<input type="text" name="ata_v01temp" />
-				<input type="text" name="ata_v02temp" />
-				<input type="text" name="ata_v03temp" />
-				<input type="text" name="ata_v04temp" />
-				//VI
-				<input type="text" name="ata_vi01temp" />
-				<input type="text" name="ata_vi02temp" />
-				<input type="text" name="ata_vi03temp" />
-				<input type="text" name="ata_vi04temp" />
-				<input type="text" name="ata_vi05temp" />
-				<input type="text" name="ata_vi06temp" />
-				//VII
-				<input type="text" name="ata_vii01temp" />
-				<input type="text" name="ata_vii02temp" />
-				<input type="text" name="ata_vii03temp" />
-				<input type="text" name="ata_vii04temp" />
-				//VIII (disturbios do sono)
-				<input type="text" name="ata_viii01temp" />
-				<input type="text" name="ata_viii02temp" />
-				<input type="text" name="ata_viii03temp" />
-				<input type="text" name="ata_viii04temp" />
-				<input type="text" name="ata_viii05temp" />
-				//IX
-				<input type="text" name="ata_ix01temp" />
-				<input type="text" name="ata_ix02temp" />
-				<input type="text" name="ata_ix03temp" />
-				<input type="text" name="ata_ix04temp" />
-				<input type="text" name="ata_ix05temp" />
-				<input type="text" name="ata_ix06temp" />
-				<input type="text" name="ata_ix07temp" />
-				<input type="text" name="ata_ix08temp" />
-				//X
-				<input type="text" name="ata_x01temp" />
-				<input type="text" name="ata_x02temp" />
-				<input type="text" name="ata_x03temp" />
-				<input type="text" name="ata_x04temp" />
-				//XI
-				<input type="text" name="ata_xi01temp" />
-				<input type="text" name="ata_xi02temp" />
-				<input type="text" name="ata_xi03temp" />
-				<input type="text" name="ata_xi04temp" />
-				//XII
-				<input type="text" name="ata_xii01temp" />
-				<input type="text" name="ata_xii02temp" />
-				<input type="text" name="ata_xii03temp" />
-				<input type="text" name="ata_xii04temp" />
-				<input type="text" name="ata_xii05temp" />
-				<input type="text" name="ata_xii06temp" />
-				<input type="text" name="ata_xii07temp" />
-				//XIII 
-				<input type="text" name="ata_xiii01temp" />
-				<input type="text" name="ata_xiii02temp" />
-				<input type="text" name="ata_xiii03temp" />
-				<input type="text" name="ata_xiii04temp" />
-				//XIV
-				<input type="text" name="ata_xiv01temp" />
-				<input type="text" name="ata_xiv02temp" />
-				<input type="text" name="ata_xiv03temp" />
-				<input type="text" name="ata_xiv04temp" />
-				<input type="text" name="ata_xiv05temp" />
-				//XV 
-				<input type="text" name="ata_xv01temp" />
-				<input type="text" name="ata_xv02temp" />
-				<input type="text" name="ata_xv03temp" />
-				<input type="text" name="ata_xv04temp" />
-				<input type="text" name="ata_xv05temp" />
-				//XVI
-				<input type="text" name="ata_xvi01temp" />
-				<input type="text" name="ata_xvi02temp" />
-				<input type="text" name="ata_xvi03temp" />
-				<input type="text" name="ata_xvi04temp" />
-				<input type="text" name="ata_xvi05temp" />
-				//XVII
-				<input type="text" name="ata_xvii01temp" />
-				<input type="text" name="ata_xvii02temp" />
-				<input type="text" name="ata_xvii03temp" />
-				<input type="text" name="ata_xvii04temp" />
-				//XVIII
-				<input type="text" name="ata_xviii01temp" />
-				<input type="text" name="ata_xviii02temp" />
-				<input type="text" name="ata_xviii03temp" />
-				<input type="text" name="ata_xviii04temp" />
-				//XIX
-				<input type="text" name="ata_xix01temp" />
-				<input type="text" name="ata_xix02temp" />
-				//XX
-				<input type="text" name="ata_xx01temp" />
-				<input type="text" name="ata_xx02temp" />
-				<input type="text" name="ata_xx03temp" />
-				<input type="text" name="ata_xx04temp" />
-				<input type="text" name="ata_xx05temp" />
-				<input type="text" name="ata_xx06temp" />
-				//XXI
-				<input type="text" name="ata_xxi01temp" />
-				<input type="text" name="ata_xxi02temp" />
-				<input type="text" name="ata_xxi03temp" />
-				<input type="text" name="ata_xxi04temp" />
-				<input type="text" name="ata_xxi05temp" />
-				<input type="text" name="ata_xxi06temp" />
-				<input type="text" name="ata_xxi07temp" />
-				<input type="text" name="ata_xxi08temp" />
-				//XXII
-				<input type="text" name="ata_xxii01temp" />
-				<input type="text" name="ata_xxii02temp" />
-				<input type="text" name="ata_xxii03temp" />
-				//XXIII
-				<input type="text" name="ata_xxiii01temp" />
+			<input type="text" id="ataI01temp" name="ataI01temp" value="" />
+			<input type="text" id="ataI02temp" name="ataI02temp" value="" />
+			<input type="text" id="ataI03temp" name="ataI03temp" value="" />
+			<input type="text" id="ataI04temp" name="ataI04temp" value="" />
+			<input type="text" id="ataI05temp" name="ataI05temp" value="" />
+			<input type="text" id="ataI06temp" name="ataI06temp" value="" />
+			<input type="text" id="ataI07temp" name="ataI07temp" value="" />
+			//II //II
+			<input type="text" id="ataIi01temp" name="ataIi01temp" value=""/>
+			<input type="text" id="ataIi02temp" name="ataIi02temp" value=""/>
+			<input type="text" id="ataIi03temp" name="ataIi03temp" value=""/>
+			<input type="text" id="ataIi04temp" name="ataIi04temp" value=""/>
+			<input type="text" id="ataIi05temp" name="ataIi05temp" value=""/>
+			<input type="text" id="ataIi06temp" name="ataIi06temp" value=""/>
+			//III //III
+			<input type="text" id="ataIii01temp" name="ataIii01temp" value=""/>
+			<input type="text" id="ataIii02temp" name="ataIii02temp" value=""/>
+			<input type="text" id="ataIii03temp" name="ataIii03temp" value=""/>
+			<input type="text" id="ataIii04temp" name="ataIii04temp" value=""/>
+			//IV //IV
+			<input type="text" id="ataIv01temp" name="ataIv01temp" value=""/>
+			<input type="text" id="ataIv02temp" name="ataIv02temp" value=""/>
+			<input type="text" id="ataIv03temp" name="ataIv03temp" value=""/>
+			//V //V
+			<input type="text" id="ataV01temp" name="ataV01temp" value=""/>
+			<input type="text" id="ataV02temp" name="ataV02temp" value=""/>
+			<input type="text" id="ataV03temp" name="ataV03temp" value=""/>
+			<input type="text" id="ataV04temp" name="ataV04temp" value=""/>
+			//VI //VI
+			<input type="text" id="ataVi01temp" name="ataVi01temp" value=""/>
+			<input type="text" id="ataVi02temp" name="ataVi02temp" value=""/>
+			<input type="text" id="ataVi03temp" name="ataVi03temp" value=""/>
+			<input type="text" id="ataVi04temp" name="ataVi04temp" value=""/>
+			<input type="text" id="ataVi05temp" name="ataVi05temp" value=""/>
+			<input type="text" id="ataVi06temp" name="ataVi06temp" value=""/>
+			//VII //VII
+			<input type="text" id="ataVii01temp" name="ataVii01temp" value=""/>
+			<input type="text" id="ataVii02temp" name="ataVii02temp" value=""/>
+			<input type="text" id="ataVii03temp" name="ataVii03temp" value=""/>
+			<input type="text" id="ataVii04temp" name="ataVii04temp" value=""/>
+			//VIII (disturbios do sono) 
+			<input type="text" id="ataViii01temp" name="ataViii01temp" value=""/>
+			<input type="text" id="ataViii02temp" name="ataViii02temp" value=""/>
+			<input type="text" id="ataViii03temp" name="ataViii03temp" value=""/>
+			<input type="text" id="ataViii04temp" name="ataViii04temp" value=""/>
+			<input type="text" id="ataViii05temp" name="ataViii05temp" value=""/>
+			//IX //IX
+			<input type="text" id="ataIx01temp" name="ataIx01temp" value=""/>
+			<input type="text" id="ataIx02temp" name="ataIx02temp" value=""/>
+			<input type="text" id="ataIx03temp" name="ataIx03temp" value=""/>
+			<input type="text" id="ataIx04temp" name="ataIx04temp" value=""/>
+			<input type="text" id="ataIx05temp" name="ataIx05temp" value=""/>
+			<input type="text" id="ataIx06temp" name="ataIx06temp" value=""/>
+			<input type="text" id="ataIx07temp" name="ataIx07temp" value=""/>
+			<input type="text" id="ataIx08temp" name="ataIx08temp" value=""/>
+			//X //X
+			<input type="text" id="ataX01temp" name="ataX01temp" value=""/>
+			<input type="text" id="ataX02temp" name="ataX02temp" value=""/>
+			<input type="text" id="ataX03temp" name="ataX03temp" value=""/>
+			<input type="text" id="ataX04temp" name="ataX04temp" value=""/>
+			//XI //XI
+			<input type="text" id="ataXi01temp" name="ataXi01temp" value=""/>
+			<input type="text" id="ataXi02temp" name="ataXi02temp" value=""/>
+			<input type="text" id="ataXi03temp" name="ataXi03temp" value=""/>
+			<input type="text" id="ataXi04temp" name="ataXi04temp" value=""/>
+			//XII //XII
+			<input type="text" id="ataXii01temp" name="ataXii01temp" value=""/>
+			<input type="text" id="ataXii02temp" name="ataXii02temp" value=""/>
+			<input type="text" id="ataXii03temp" name="ataXii03temp" value=""/>
+			<input type="text" id="ataXii04temp" name="ataXii04temp" value=""/>
+			<input type="text" id="ataXii05temp" name="ataXii05temp" value=""/>
+			<input type="text" id="ataXii06temp" name="ataXii06temp" value=""/>
+			<input type="text" id="ataXii07temp" name="ataXii07temp" value=""/>
+			//XIII //XIII
+			<input type="text" id="ataXiii01temp" name="ataXiii01temp" value=""/>
+			<input type="text" id="ataXiii02temp" name="ataXiii02temp" value=""/>
+			<input type="text" id="ataXiii03temp" name="ataXiii03temp" value=""/>
+			<input type="text" id="ataXiii04temp" name="ataXiii04temp" value=""/>
+			//XIV //XIV
+			<input type="text" id="ataXiv01temp" name="ataXiv01temp" value=""/>
+			<input type="text" id="ataXiv02temp" name="ataXiv02temp" value=""/>
+			<input type="text" id="ataXiv03temp" name="ataXiv03temp" value=""/>
+			<input type="text" id="ataXiv04temp" name="ataXiv04temp" value=""/>
+			<input type="text" id="ataXiv05temp" name="ataXiv05temp" value=""/>
+			//XV //XV
+			<input type="text" id="ataXv01temp" name="ataXv01temp" value=""/>
+			<input type="text" id="ataXv02temp" name="ataXv02temp" value=""/>
+			<input type="text" id="ataXv03temp" name="ataXv03temp" value=""/>
+			<input type="text" id="ataXv04temp" name="ataXv04temp" value=""/>
+			<input type="text" id="ataXv05temp" name="ataXv05temp" value=""/>
+			//XVI //XVI
+			<input type="text" id="ataXvi01temp" name="ataXvi01temp" value=""/>
+			<input type="text" id="ataXvi02temp" name="ataXvi02temp" value=""/>
+			<input type="text" id="ataXvi03temp" name="ataXvi03temp" value=""/>
+			<input type="text" id="ataXvi04temp" name="ataXvi04temp" value=""/>
+			<input type="text" id="ataXvi05temp" name="ataXvi05temp" value=""/>
+			//XVII //XVII
+			<input type="text" id="ataXvii01temp" name="ataXvii01temp" value=""/>
+			<input type="text" id="ataXvii02temp" name="ataXvii02temp" value=""/>
+			<input type="text" id="ataXvii03temp" name="ataXvii03temp" value=""/>
+			<input type="text" id="ataXvii04temp" name="ataXvii04temp" value=""/>
+			//XVIII //XVIII
+			<input type="text" id="ataXviii01temp" name="ataXviii01temp" value=""/>
+			<input type="text" id="ataXviii02temp" name="ataXviii02temp" value=""/>
+			<input type="text" id="ataXviii03temp" name="ataXviii03temp" value=""/>
+			<input type="text" id="ataXviii04temp" name="ataXviii04temp" value=""/>
+			//XIX //XIX
+			<input type="text" id="ataXix01temp" name="ataXix01temp" value=""/>
+			<input type="text" id="ataXix02temp" name="ataXix02temp" value=""/>
+			//XX //XX
+			<input type="text" id="ataXx01temp" name="ataXx01temp" value=""/>
+			<input type="text" id="ataXx02temp" name="ataXx02temp" value=""/>
+			<input type="text" id="ataXx03temp" name="ataXx03temp" value=""/>
+			<input type="text" id="ataXx04temp" name="ataXx04temp" value=""/>
+			<input type="text" id="ataXx05temp" name="ataXx05temp" value=""/>
+			<input type="text" id="ataXx06temp" name="ataXx06temp" value=""/>
+			//XXI //XXI
+			<input type="text" id="ataXxi01temp" name="ataXxi01temp" value=""/>
+			<input type="text" id="ataXxi02temp" name="ataXxi02temp" value=""/>
+			<input type="text" id="ataXxi03temp" name="ataXxi03temp" value=""/>
+			<input type="text" id="ataXxi04temp" name="ataXxi04temp" value=""/>
+			<input type="text" id="ataXxi05temp" name="ataXxi05temp" value=""/>
+			<input type="text" id="ataXxi06temp" name="ataXxi06temp" value=""/>
+			<input type="text" id="ataXxi07temp" name="ataXxi07temp" value=""/>
+			<input type="text" id="ataXxi08temp" name="ataXxi08temp" value=""/>
+			//XXII //XXII
+			<input type="text" id="ataXxii01temp" name="ataXxii01temp" value=""/>
+			<input type="text" id="ataXxii02temp" name="ataXxii02temp" value=""/>
+			<input type="text" id="ataXxii03temp" name="ataXxii03temp" value=""/>
+			//XXIII //XXIII
+			<input type="text" id="ataXxiii01temp" name="ataXxiii01temp" value=""/>
+
+
 		</div>
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -356,7 +383,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ata_beneid" id="ata_beneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
+																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -498,7 +525,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataI01" id="ataI01" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI01" id="ataI01" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não sorri</span>
 																					</label>
 																				</div>
@@ -509,7 +536,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataI02" id="ataI02" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI02" id="ataI02" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ausência de aproximações espontâneas</span>
 																					</label>
 																				</div>
@@ -520,7 +547,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataI03" id="ataI03" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI03" id="ataI03" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não busca companhia</span>
 																					</label>
 																				</div>
@@ -531,7 +558,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataI04" id="ataI04" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI04" id="ataI04" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Busca constantemente seu cantinho (esconderijo)</span>
 																					</label>
 																				</div>
@@ -542,7 +569,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataI05" id="ataI05" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI05" id="ataI05" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
 																						<span class="lbl"> Evita pessoas</span>
 																					</label>
 																				</div>
@@ -553,7 +580,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataI06" id="ataI06" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI06" id="ataI06" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
 																						<span class="lbl"> É incapaz de se manter um intercâmbio social</span>
 																					</label>
 																				</div>
@@ -564,7 +591,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataI07" id="ataI07" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();">
+																						<input name="ataI07" id="ataI07" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
 																						<span class="lbl"> Isolamento intenso</span>
 																					</label>
 																				</div>
@@ -625,7 +652,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataIi01" id="ataIi01" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi01" id="ataIi01" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não responde as solicitações</span>
 																					</label>
 																				</div>
@@ -636,7 +663,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataIi02" id="ataIi02" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi02" id="ataIi02" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Mudança repentina de humor</span>
 																					</label>
 																				</div>
@@ -647,7 +674,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataIi03" id="ataIi03" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi03" id="ataIi03" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem(); updateTempField(this);">
 																						<span class="lbl"> Mantém-se indiferente, sem expressão</span>
 																					</label>
 																				</div>
@@ -658,7 +685,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataIi04" id="ataIi04" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi04" id="ataIi04" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Risos compulsivos</span>
 																					</label>
 																				</div>
@@ -669,7 +696,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataIi05" id="ataIi05" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi05" id="ataIi05" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Birra e raiva passageira</span>
 																					</label>
 																				</div>
@@ -680,7 +707,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataIi06" id="ataIi06" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIi06" id="ataIi06" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Excitação motora ou verbal (ir de um lugar a outro, falar sem parar)</span>
 																					</label>
 																				</div>
@@ -740,7 +767,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataIii01" id="ataIii01" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIii01" id="ataIii01" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Utiliza do adulto como um objeto, levando-o até aquilo que deseja.</span>
 																					</label>
 																				</div>
@@ -751,7 +778,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataIii02" id="ataIii02" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIii02" id="ataIii02" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> O adulto lhe serve como apoio para conseguir o que deseja (por ex.: utiliza o adulto como apoio para pegar bolacha)</span>
 																					</label>
 																				</div>
@@ -762,7 +789,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataIii03" id="ataIii03" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIii03" id="ataIii03" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> O adulto é o meio para suprir uma necessidade que não é capaz de realizar só (por ex.: amarrar os sapatos)</span>
 																					</label>
 																				</div>
@@ -773,7 +800,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataIii04" id="ataIii04" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();">
+																						<input name="ataIii04" id="ataIii04" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Se o adulto não responde as suas demandas, atua interferindo na conduta desse adulto.</span>
 																					</label>
 																				</div>
@@ -834,7 +861,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataIv01" id="ataIv01" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
+																						<input name="ataIv01" id="ataIv01" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Insiste em manter a rotina.</span>
 																					</label>
 																				</div>
@@ -845,7 +872,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataIv02" id="ataIv02" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
+																						<input name="ataIv02" id="ataIv02" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Grande dificuldade em aceitar fatos que alteram sua rotina, tais como mudanças de lugar, de vestuário e na alimentação</span>
 																					</label>
 																				</div>
@@ -856,7 +883,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataIv03" id="ataIv03" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();">
+																						<input name="ataIv03" id="ataIv03" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Apresenta resistência a mudanças, persistindo na mesma resposta ou atividade</span>
 																					</label>
 																				</div>
@@ -918,7 +945,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataV01" id="ataV01" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
+																						<input name="ataV01" id="ataV01" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ordenação dos objetos de acordo com critérios próprios e pré-estabelecidos.</span>
 																					</label>
 																				</div>
@@ -929,7 +956,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataV02" id="ataV02" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
+																						<input name="ataV02" id="ataV02" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Prende-se a uma ordenação espacial (cada coisa sempre em seu lugar).</span>
 																					</label>
 																				</div>
@@ -940,7 +967,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataV03" id="ataV03" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
+																						<input name="ataV03" id="ataV03" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Prende-se a uma sequência temporal (cada coisa em seu tempo)</span>
 																					</label>
 																				</div>
@@ -951,7 +978,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataV04" id="ataV04" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();">
+																						<input name="ataV04" id="ataV04" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Prende-se a uma correspondência pessoa-lugar (cada pessoa sempre no lugar determinado).</span>
 																					</label>
 																				</div>
@@ -1012,7 +1039,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataVi01" id="ataVi01" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi01" id="ataVi01" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Desvia os olhares diretos, não olhando nos olhos</span>
 																					</label>
 																				</div>
@@ -1024,7 +1051,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataVi02" id="ataVi02" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi02" id="ataVi02" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Volta a cabeça ou o olhar quando é chamado (olhar para fora)</span>
 																					</label>
 																				</div>
@@ -1035,7 +1062,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataVi03" id="ataVi03" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi03" id="ataVi03" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Expressão do olhar vazio e sem vida</span>
 																					</label>
 																				</div>
@@ -1046,7 +1073,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataVi04" id="ataVi04" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi04" id="ataVi04" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Quando segue os estímulos com os olhos, somente o faz de maneira intermitente</span>
 																					</label>
 																				</div>
@@ -1057,7 +1084,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataVi05" id="ataVi05" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi05" id="ataVi05" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Fixa os objetos com um olhar periférico, não central</span>
 																					</label>
 																				</div>
@@ -1068,7 +1095,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataVi06" id="ataVi06" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();">
+																						<input name="ataVi06" id="ataVi06" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Dá a sensação de que não olha</span>
 																					</label>
 																				</div>
@@ -1129,7 +1156,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataVii01" id="ataVii01" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
+																						<input name="ataVii01" id="ataVii01" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Se fala, não utiliza a expressão facial, gestual ou vocal com a frequência esperada.</span>
 																					</label>
 																				</div>
@@ -1141,7 +1168,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataVii02" id="ataVii02" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
+																						<input name="ataVii02" id="ataVii02" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não mostra uma reação antecipatória.</span>
 																					</label>
 																				</div>
@@ -1152,7 +1179,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataVii03" id="ataVii03" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
+																						<input name="ataVii03" id="ataVii03" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não expressa através da mímica ou olhar aquilo que quer ou o que sente</span>
 																					</label>
 																				</div>
@@ -1163,7 +1190,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataVii04" id="ataVii04" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();">
+																						<input name="ataVii04" id="ataVii04" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Imobilidade facial</span>
 																					</label>
 																				</div>
@@ -1223,7 +1250,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataViii01" id="ataViii01" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<input name="ataViii01" id="ataViii01" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não quer ir dormir</span>
 																					</label>
 																				</div>
@@ -1235,7 +1262,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataViii02" id="ataViii02" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<input name="ataViii02" id="ataViii02" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Levanta-se muito cedo</span>
 																					</label>
 																				</div>
@@ -1246,7 +1273,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataViii03" id="ataViii03" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<input name="ataViii03" id="ataViii03" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Sono irregular (em intervalos)</span>
 																					</label>
 																				</div>
@@ -1257,7 +1284,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataViii04" id="ataViii04" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<input name="ataViii04" id="ataViii04" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Troca o dia pela noite</span>
 																					</label>
 																				</div>
@@ -1268,7 +1295,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataViii05" id="ataViii05" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();">
+																						<input name="ataViii05" id="ataViii05" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Dorme poucas horas</span>
 																					</label>
 																				</div>
@@ -1327,7 +1354,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataIx01" id="ataIx01" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx01" id="ataIx01" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Seletividade alimentar rígida (ex.: come o mesmo tipo de alimento sempre).</span>
 																					</label>
 																				</div>
@@ -1339,7 +1366,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataIx02" id="ataIx02" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx02" id="ataIx02" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Come outras coisas além de alimentos (papel, insetos).</span>
 																					</label>
 																				</div>
@@ -1350,7 +1377,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataIx03" id="ataIx03" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx03" id="ataIx03" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Quando pequeno não mastigava.</span>
 																					</label>
 																				</div>
@@ -1361,7 +1388,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataIx04" id="ataIx04" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx04" id="ataIx04" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Apresenta uma atividade ruminante.</span>
 																					</label>
 																				</div>
@@ -1372,7 +1399,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataIx05" id="ataIx05" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx05" id="ataIx05" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Vômitos.</span>
 																					</label>
 																				</div>
@@ -1383,7 +1410,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataIx06" id="ataIx06" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx06" id="ataIx06" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Come grosseiramente, esparrama a comida ou a atira.</span>
 																					</label>
 																				</div>
@@ -1395,7 +1422,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataIx07" id="ataIx07" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx07" id="ataIx07" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Rituais (esfarela alimentos antes da ingestão).</span>
 																					</label>
 																				</div>
@@ -1406,7 +1433,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">8.</span>
 																					<label>
-																						<input name="ataIx08" id="ataIx08" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();">
+																						<input name="ataIx08" id="ataIx08" type="checkbox" class="ace grupo_ix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ausência de paladar (falta de sensibilidade gustativa).</span>
 																					</label>
 																				</div>
@@ -1465,7 +1492,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataX01" id="ataX01" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
+																						<input name="ataX01" id="ataX01" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Medo de sentar-se no vaso sanitário.</span>
 																					</label>
 																				</div>
@@ -1477,7 +1504,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataX02" id="ataX02" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
+																						<input name="ataX02" id="ataX02" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Utiliza os esfíncteres para manipular os adultos.</span>
 																					</label>
 																				</div>
@@ -1488,7 +1515,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataX03" id="ataX03" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
+																						<input name="ataX03" id="ataX03" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Utiliza os esfíncteres como estimulação corporal, para obtenção de prazer.</span>
 																					</label>
 																				</div>
@@ -1499,7 +1526,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataX04" id="ataX04" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();">
+																						<input name="ataX04" id="ataX04" type="checkbox" class="ace grupo_x" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Tem controle diurno, porém o noturno é tardio ou ausente.</span>
 																					</label>
 																				</div>
@@ -1559,7 +1586,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXi01" id="ataXi01" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXi01" id="ataXi01" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Morde e engole objetos não alimentares.</span>
 																					</label>
 																				</div>
@@ -1571,7 +1598,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXi02" id="ataXi02" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXi02" id="ataXi02" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Chupa e coloca as coisas na boca.</span>
 																					</label>
 																				</div>
@@ -1582,7 +1609,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXi03" id="ataXi03" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXi03" id="ataXi03" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Cheira tudo.</span>
 																					</label>
 																				</div>
@@ -1593,7 +1620,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXi04" id="ataXi04" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXi04" id="ataXi04" type="checkbox" class="ace grupo_xi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Apalpa tudo. Examina as superfícies com os dedos de uma maneira minuciosa.</span>
 																					</label>
 																				</div>
@@ -1652,7 +1679,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXii01" id="ataXii01" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii01" id="ataXii01" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ignora os objetos ou mostra um interesse momentâneo.</span>
 																					</label>
 																				</div>
@@ -1664,7 +1691,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXii02" id="ataXii02" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii02" id="ataXii02" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Pega, golpeia ou simplesmente os atira no chão.</span>
 																					</label>
 																				</div>
@@ -1675,7 +1702,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXii03" id="ataXii03" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii03" id="ataXii03" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Conduta atípica com os objetos.</span>
 																					</label>
 																				</div>
@@ -1686,7 +1713,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXii04" id="ataXii04" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii04" id="ataXii04" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Carrega insistentemente consigo determinado objeto.</span>
 																					</label>
 																				</div>
@@ -1697,7 +1724,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXii05" id="ataXii05" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii05" id="ataXii05" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Se interessa somente por uma parte do objeto ou do brinquedo.</span>
 																					</label>
 																				</div>
@@ -1708,7 +1735,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataXii06" id="ataXii06" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii06" id="ataXii06" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Coleciona objetos estranhos.</span>
 																					</label>
 																				</div>
@@ -1719,7 +1746,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataXii07" id="ataXii07" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXii07" id="ataXii07" type="checkbox" class="ace grupo_xii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Utiliza os objetos de forma particular e inadequada.</span>
 																					</label>
 																				</div>
@@ -1779,7 +1806,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXiii01" id="ataXiii01" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiii01" id="ataXiii01" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Quando realiza uma atividade, fixa a atenção por curto espaço de tempo ou é incapaz de fixá-la.</span>
 																					</label>
 																				</div>
@@ -1791,7 +1818,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXiii02" id="ataXiii02" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiii02" id="ataXiii02" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Age como se fosse surdo.</span>
 																					</label>
 																				</div>
@@ -1803,7 +1830,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXiii03" id="ataXiii03" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiii03" id="ataXiii03" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Resposta retardada.</span>
 																					</label>
 																				</div>
@@ -1814,7 +1841,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXiii04" id="ataXiii04" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiii04" id="ataXiii04" type="checkbox" class="ace grupo_xiii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Muitas vezes dá a sensação de ausência.</span>
 																					</label>
 																				</div>
@@ -1873,7 +1900,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXiv01" id="ataXiv01" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiv01" id="ataXiv01" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não quer aprender.</span>
 																					</label>
 																				</div>
@@ -1885,7 +1912,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXiv02" id="ataXiv02" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiv02" id="ataXiv02" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Cansa-se muito depressa, ainda que de atividade que goste.</span>
 																					</label>
 																				</div>
@@ -1897,7 +1924,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXiv03" id="ataXiv03" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiv03" id="ataXiv03" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Esquece rapidamente.</span>
 																					</label>
 																				</div>
@@ -1908,7 +1935,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXiv04" id="ataXiv04" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiv04" id="ataXiv04" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Insiste em ser ajudado, ainda que saiba fazer.</span>
 																					</label>
 																				</div>
@@ -1919,7 +1946,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXiv05" id="ataXiv05" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXiv05" id="ataXiv05" type="checkbox" class="ace grupo_xiv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Insiste constantemente em mudar de atividade.</span>
 																					</label>
 																				</div>
@@ -1978,7 +2005,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXv01" id="ataXv01" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXv01" id="ataXv01" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> É incapaz de ter iniciativa própria.</span>
 																					</label>
 																				</div>
@@ -1990,7 +2017,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXv02" id="ataXv02" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXv02" id="ataXv02" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Busca a comodidade.</span>
 																					</label>
 																				</div>
@@ -2002,7 +2029,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXv03" id="ataXv03" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXv03" id="ataXv03" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Passividade, falta de interesse.</span>
 																					</label>
 																				</div>
@@ -2013,7 +2040,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXv04" id="ataXv04" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXv04" id="ataXv04" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Lentidão.</span>
 																					</label>
 																				</div>
@@ -2024,7 +2051,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXv05" id="ataXv05" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();">
+																						<input name="ataXv05" id="ataXv05" type="checkbox" class="ace grupo_xv" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Prefere que outro faça o trabalho para ele.</span>
 																					</label>
 																				</div>
@@ -2083,7 +2110,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXvi01" id="ataXvi01" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi01" id="ataXvi01" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Mutismo.</span>
 																					</label>
 																				</div>
@@ -2095,7 +2122,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXvi02" id="ataXvi02" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi02" id="ataXvi02" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Estereotipias vocais.</span>
 																					</label>
 																				</div>
@@ -2107,7 +2134,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXvi03" id="ataXvi03" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi03" id="ataXvi03" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Entonação incorreta.</span>
 																					</label>
 																				</div>
@@ -2118,7 +2145,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXvi04" id="ataXvi04" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi04" id="ataXvi04" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ecolalia imediata e/ou retardada.</span>
 																					</label>
 																				</div>
@@ -2129,7 +2156,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXvi05" id="ataXvi05" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi05" id="ataXvi05" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Repetição de palavras ou frases que podem (ou não) ter valor comunicativo.</span>
 																					</label>
 																				</div>
@@ -2140,7 +2167,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataXvi06" id="ataXvi06" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi06" id="ataXvi06" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Emite sons estereotipados quando está agitado e em outras ocasiões, sem nenhuma razão aparente</span>
 																					</label>
 																				</div>
@@ -2151,7 +2178,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataXvi07" id="ataXvi07" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi07" id="ataXvi07" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não se comunica por gestos.</span>
 																					</label>
 																				</div>
@@ -2162,7 +2189,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">8.</span>
 																					<label>
-																						<input name="ataXvi08" id="ataXvi08" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvi08" id="ataXvi08" type="checkbox" class="ace grupo_xvi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> As interações com adulto não são nunca um diálogo.</span>
 																					</label>
 																				</div>
@@ -2220,7 +2247,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXvii01" id="ataXvii01" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvii01" id="ataXvii01" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Ainda que saiba fazer uma coisa, não a realiza, se não quiser.</span>
 																					</label>
 																				</div>
@@ -2232,7 +2259,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXvii02" id="ataXvii02" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvii02" id="ataXvii02" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não demonstra o que sabe, até ter uma necessidade primária ou um interesse eminentemente específico.</span>
 																					</label>
 																				</div>
@@ -2244,7 +2271,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXvii03" id="ataXvii03" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvii03" id="ataXvii03" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Aprende coisas, porém somente a demonstra em determinados lugares e com determinadas pessoas.</span>
 																					</label>
 																				</div>
@@ -2256,7 +2283,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXvii04" id="ataXvii04" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXvii04" id="ataXvii04" type="checkbox" class="ace grupo_xvii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Às vezes, surpreende por suas habilidades inesperadas.</span>
 																					</label>
 																				</div>
@@ -2315,7 +2342,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXviii01" id="ataXviii01" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXviii01" id="ataXviii01" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Reações de desagrado caso seja esquecida alguma coisa.</span>
 																					</label>
 																				</div>
@@ -2327,7 +2354,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXviii02" id="ataXviii02" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXviii02" id="ataXviii02" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Reações de desagrado caso seja interrompida alguma atividade que goste.</span>
 																					</label>
 																				</div>
@@ -2339,7 +2366,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXviii03" id="ataXviii03" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXviii03" id="ataXviii03" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Desgostoso quando os desejos e as expectativas não se cumprem.</span>
 																					</label>
 																				</div>
@@ -2351,7 +2378,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXviii04" id="ataXviii04" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXviii04" id="ataXviii04" type="checkbox" class="ace grupo_xviii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Reações de birra.</span>
 																					</label>
 																				</div>
@@ -2410,7 +2437,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXix01" id="ataXix01" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();">
+																						<input name="ataXix01" id="ataXix01" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não assume nenhuma responsabilidade, por menor que seja.</span>
 																					</label>
 																				</div>
@@ -2422,7 +2449,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXix02" id="ataXix02" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();">
+																						<input name="ataXix02" id="ataXix02" type="checkbox" class="ace grupo_xix" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Para chegar a fazer alguma coisa, há que se repetir muitas vezes ou elevar o tom de voz.</span>
 																					</label>
 																				</div>
@@ -2483,7 +2510,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXx01" id="ataXx01" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx01" id="ataXx01" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> A criança está constantemente em movimento.</span>
 																					</label>
 																				</div>
@@ -2495,7 +2522,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXx02" id="ataXx02" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx02" id="ataXx02" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Mesmo estimulada, não se move.</span>
 																					</label>
 																				</div>
@@ -2506,7 +2533,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXx03" id="ataXx03" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx03" id="ataXx03" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Barulhento, dá a sensação de que é obrigado a fazer ruído / barulho.</span>
 																					</label>
 																				</div>
@@ -2517,7 +2544,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXx04" id="ataXx04" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx04" id="ataXx04" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Vai de um lugar a outro, sem parar.</span>
 																					</label>
 																				</div>
@@ -2528,7 +2555,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXx05" id="ataXx05" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx05" id="ataXx05" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Fica pulando, saltando no mesmo lugar.</span>
 																					</label>
 																				</div>
@@ -2539,7 +2566,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataXx06" id="ataXx06" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();">
+																						<input name="ataXx06" id="ataXx06" type="checkbox" class="ace grupo_xx" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não se move nunca do lugar onde está sentado.</span>
 																					</label>
 																				</div>
@@ -2600,7 +2627,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXxi01" id="ataXxi01" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi01" id="ataXxi01" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Balanceia-se.</span>
 																					</label>
 																				</div>
@@ -2612,7 +2639,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXxi02" id="ataXxi02" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi02" id="ataXxi02" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Olha e brinca com as mãos e os dedos.</span>
 																					</label>
 																				</div>
@@ -2623,7 +2650,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXxi03" id="ataXxi03" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi03" id="ataXxi03" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Tapa os olhos e as orelhas.</span>
 																					</label>
 																				</div>
@@ -2634,7 +2661,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
-																						<input name="ataXxi04" id="ataXxi04" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi04" id="ataXxi04" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Dá pontapés.</span>
 																					</label>
 																				</div>
@@ -2645,7 +2672,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
-																						<input name="ataXxi05" id="ataXxi05" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi05" id="ataXxi05" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Faz caretas e movimentos estranhos com a face.</span>
 																					</label>
 																				</div>
@@ -2656,7 +2683,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
-																						<input name="ataXxi06" id="ataXxi06" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi06" id="ataXxi06" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Roda objetos ou sobre si mesmo.</span>
 																					</label>
 																				</div>
@@ -2667,7 +2694,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
-																						<input name="ataXxi07" id="ataXxi07" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi07" id="ataXxi07" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Caminha na ponta dos pés ou saltando, arrasta os pés, anda fazendo movimentos estranhos.</span>
 																					</label>
 																				</div>
@@ -2678,7 +2705,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">8.</span>
 																					<label>
-																						<input name="ataXxi08" id="ataXxi08" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxi08" id="ataXxi08" type="checkbox" class="ace grupo_xxi" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Torce o corpo, mantém uma postura desequilibrada, pernas dobradas, cabeça recolhida aos pés, extensões violentas do corpo.</span>
 																					</label>
 																				</div>
@@ -2739,7 +2766,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
-																						<input name="ataXxii01" id="ataXxii01" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxii01" id="ataXxii01" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Não se dá conta do perigo.</span>
 																					</label>
 																				</div>
@@ -2751,7 +2778,7 @@
 																				<div class="checkbox">
 																				<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
-																						<input name="ataXxii02" id="ataXxii02" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxii02" id="ataXxii02" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Sobe em todos os lugares.</span>
 																					</label>
 																				</div>
@@ -2762,7 +2789,7 @@
 																				<div class="checkbox">
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
-																						<input name="ataXxii03" id="ataXxii03" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();">
+																						<input name="ataXxii03" id="ataXxii03" type="checkbox" class="ace grupo_xxii" onchange="javascript:atualizarContagem();updateTempField(this);">
 																						<span class="lbl"> Parece insensível a dor.</span>
 																					</label>
 																				</div>
@@ -2810,22 +2837,17 @@
 															</button>
 															Comportamentos apareceram antes dos 36Meses de vida.
 														</div>
-														<div class="row">
-															<div class="col-xs-12">
-																<label> Sim ou Não? </label>
-																	<div class="form-group">
-																		<div class="col-sm-6">
-																			<select name="ataXxiii01" id="ataXxiii01" class="chosen-select" data-placeholder="Escolha...">
-																				
-																				<option value="-">-</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																				
-																			</select>
-																		</div>
-																	</div>
-															</div>
+														<div class="checkbox">
+															<span class="label label-info arrowed-in-right arrowed">3.</span>
+															<label>
+																<input name="ataXxiii01" id="ataXxiii01" type="checkbox" class="ace grupo_xxiii" onchange="javascript:atualizarContagem();updateTempField(this);">
+																<span class="lbl"> Sim ou Não.</span>
+															</label>
 														</div>
+														<hr>
+														
+													</div>
+														
 													</div>
 
 												</div>

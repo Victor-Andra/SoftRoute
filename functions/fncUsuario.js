@@ -12,6 +12,9 @@ const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
 const especializacaoClass = require("../models/especializacao")
 
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
+
 
 //Tabelas extrangeiras   
 const Estado = mongoose.model("tb_estado")
@@ -20,22 +23,20 @@ const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 
-//Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+
 
 module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
             //console.log(usuario)
-            Perfil.find().then((perfil)=>{
-                Funcao.find().then((funcao) =>{
-                    res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao, perfils: perfil,})
-                })})}).catch((err) =>{
+            Funcao.find().then((funcao) =>{
+                res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
+            })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
+
     },
     carregaUsuario(req,res){
         Usuario.find().then((usuario) =>{
@@ -56,12 +57,12 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
+
     },
     carregaUsuarioEdi(req,res){
+        let base64Image;
         Usuario.findById(req.params.id).then((usuario) =>{
             console.log("Listagem Realizada!")
-            console.log("usuario:")
-            console.log(usuario)
                 Estado.find().then((estado)=>{
                     console.log("Listagem Realizada de Ufs!")
                         Perfil.find().then((perfil)=>{
@@ -72,7 +73,10 @@ module.exports = {
                                             console.log("Listagem Realizada de Ufs!")
                                             Especializacao.find().then((especializacao)=>{
                                                 console.log("Listagem Realizada de Especializacao!")
-            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
+                                                if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
+                                                    base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
+                                                }
+            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao, base64Image})
         })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -115,200 +119,6 @@ module.exports = {
             console.log(err1)
         }
     },
-    carregaMudarsenha(req,res){
-       Usuario.find().then((usuario)=>{
-            res.render("ferramentas/usuario/mudarSenha", {usuarios: usuario})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o mudar senha")
-            res.redirect('admin/erro')
-        })  
-    },
-    carregaEsqueciMinhasenha(req,res){
-        Usuario.find().then((usuario)=>{
-                usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
-             res.render("ferramentas/usuario/esqueciMinhaSenha", {usuarios: usuario})
-        }).catch((err) =>{
-             console.log(err)
-             req.flash("error_message", "houve um erro ao acessar o mudar senha")
-             res.redirect('admin/erro')
-        })  
-    },
-    definirSenha(req,res){
-        let flash = new Resposta();
-        let resposta = false;
-        usuarioClass.usuarioDefinirSenha(req,res).then((retorno)=>{
-            if (retorno == "true"){
-                resposta = true;
-            } else {
-                resposta = retorno;
-            }
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
-            res.redirect('admin/erro')
-        }).finally(()=>{
-            if(resposta== true){
-                //Volta para a agenda de listagem
-                flash.texto = "Senha alterada com sucesso!";
-                flash.sucesso = "true";
-                //console.log('verdadeiro')
-                res.render('admin/branco', {flash});
-            }else{
-                //passar classe de erro
-                flash.texto = "Erro ao alterar senha! "+resposta;
-                flash.sucesso = "false";
-                res.render('admin/branco', {flash});
-            }
-        })
-    },
-    mudarSenha(req,res){
-        let flash = new Resposta();
-        let resposta = false;
-        usuarioClass.usuarioMudarSenha(req,res).then((ok)=>{
-            if (ok == "true"){
-                resposta = true;
-            }
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
-            res.redirect('admin/erro')
-        }).finally(()=>{
-            if(resposta== true){
-                //Volta para a agenda de listagem
-                flash.texto = "Senha alterada com sucesso!"
-                flash.sucesso = "true"
-                //console.log('verdadeiro')
-                res.clearCookie('lvlUsu', { path: '/' })
-                res.clearCookie('idUsu', { path: '/' })
-                res.render('admin/branco', {flash});
-            }else{
-                //passar classe de erro
-                flash.texto = "Erro ao alterar senha!"
-                flash.sucesso = "false"
-                res.render('admin/branco', {flash});
-            }
-        })
-    },
-    carregaResetarchave(req,res){
-        Usuario.find().then((usuario)=>{
-            usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
-            res.render("ferramentas/usuario/resetarChave", {usuarios: usuario})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o resetar chave")
-            res.redirect('admin/erro')
-        })
-    },
-    resetarChave(req,res){
-        let flash = new Resposta();
-        let resposta = false;
-        usuarioClass.usuarioDeletarPalavraChave(req,res).then((ok)=>{
-            if (ok == "true"){
-                resposta = true;
-            }
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o remover chave")
-            res.redirect('admin/erro')
-        }).finally(()=>{
-            if(resposta== true){
-                //Volta para a agenda de listagem
-                flash.texto = "Chave removida com sucesso!"
-                flash.sucesso = "true"
-                //console.log('verdadeiro')
-                res.render('admin/branco', {flash});
-            }else{
-                //passar classe de erro
-                flash.texto = "Chave removida com sucesso!";
-                flash.sucesso = "false"
-                res.render('admin/branco', {flash});
-                //CORRIGIR ERRO BIZONHO QUE TA RETORNANDO FALSE MEMSMO TENDO SALVO. MENSAGEM ERRADA!!!!!!!!!
-                /*
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
-                */
-            }
-        })
-    },
-    carregaCadastrarchave(req,res){
-        Usuario.find().then((usuario)=>{
-            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o Usuário por nome 
-            res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
-            res.redirect('admin/erro')
-        })
-    },
-
-    cadastrarchave(req,res){
-        let flash = new Resposta();
-        let resposta = false;
-        usuarioClass.usuarioCadastrarPalavraChave(req,res).then((ok)=>{
-            if (ok == "true"){
-                resposta = true;
-            }
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
-            res.redirect('admin/erro')
-        }).finally(()=>{
-            if(resposta== true){
-                //Volta para a agenda de listagem
-                flash.texto = "Palavra Chave cadastrada com sucesso!"
-                flash.sucesso = "true"
-                //console.log('verdadeiro')
-                res.render('admin/branco', {flash});
-            }else{
-                //passar classe de erro
-                flash.texto = "Erro ao cadastrar chave!"
-                flash.sucesso = "false"
-                res.render('admin/branco', {flash});
-            }
-        })
-    },
-
-    /*mudarsenha(req,res){
-        let resposta;
-        try{
-            usuarioClass.usuarioEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resposta = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resposta = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resposta){
-                    //Volta para a usuario de listagem
-                    this.listaUsuario(req,res);
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
-                }
-            })
-        } catch(err1){
-            console.log(err1)
-        }
-    },
-    */
     deletaUsuario(req, res){
         Usuario.deleteOne({_id: req.params.id}).then(() =>{
             Usuario.find().then((usuario) =>{
@@ -320,6 +130,158 @@ module.exports = {
                 res.render('admin/erro')
             })
         })
+    },
+    carregaMudarsenha(req,res){
+        Usuario.find().then((usuario)=>{
+             res.render("ferramentas/usuario/mudarSenha", {usuarios: usuario})
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o mudar senha")
+             res.redirect('admin/erro')
+         })  
+    },
+    carregaEsqueciMinhasenha(req,res){
+         Usuario.find().then((usuario)=>{
+                 usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
+              res.render("ferramentas/usuario/esqueciMinhaSenha", {usuarios: usuario})
+         }).catch((err) =>{
+              console.log(err)
+              req.flash("error_message", "houve um erro ao acessar o mudar senha")
+              res.redirect('admin/erro')
+         })  
+    },
+    definirSenha(req,res){
+         let flash = new Resposta();
+         let resposta = false;
+         usuarioClass.usuarioDefinirSenha(req,res).then((retorno)=>{
+             if (retorno == "true"){
+                 resposta = true;
+             } else {
+                 resposta = retorno;
+             }
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
+             res.redirect('admin/erro')
+         }).finally(()=>{
+             if(resposta== true){
+                 //Volta para a agenda de listagem
+                 flash.texto = "Senha alterada com sucesso!";
+                 flash.sucesso = "true";
+                 //console.log('verdadeiro')
+                 res.render('admin/branco', {flash});
+             }else{
+                 //passar classe de erro
+                 flash.texto = "Erro ao alterar senha! "+resposta;
+                 flash.sucesso = "false";
+                 res.render('admin/branco', {flash});
+             }
+         })
+    },
+    mudarSenha(req,res){
+         let flash = new Resposta();
+         let resposta = false;
+         usuarioClass.usuarioMudarSenha(req,res).then((ok)=>{
+             if (ok == "true"){
+                 resposta = true;
+             }
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o Alterar Senha")
+             res.redirect('admin/erro')
+         }).finally(()=>{
+             if(resposta== true){
+                 //Volta para a agenda de listagem
+                 flash.texto = "Senha alterada com sucesso!"
+                 flash.sucesso = "true"
+                 //console.log('verdadeiro')
+                 res.clearCookie('lvlUsu', { path: '/' })
+                 res.clearCookie('idUsu', { path: '/' })
+                 res.render('admin/branco', {flash});
+             }else{
+                 //passar classe de erro
+                 flash.texto = "Erro ao alterar senha!"
+                 flash.sucesso = "false"
+                 res.render('admin/branco', {flash});
+             }
+         })
+    },
+    carregaResetarchave(req,res){
+         Usuario.find().then((usuario)=>{
+             usuario.sort((a,b) => ((a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome .normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena  por nome
+             res.render("ferramentas/usuario/resetarChave", {usuarios: usuario})
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o resetar chave")
+             res.redirect('admin/erro')
+         })
+    },
+    resetarChave(req,res){
+         let flash = new Resposta();
+         let resposta = false;
+         usuarioClass.usuarioDeletarPalavraChave(req,res).then((ok)=>{
+             if (ok == "true"){
+                 resposta = true;
+             }
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o remover chave")
+             res.redirect('admin/erro')
+         }).finally(()=>{
+             if(resposta== true){
+                 //Volta para a agenda de listagem
+                 flash.texto = "Chave removida com sucesso!"
+                 flash.sucesso = "true"
+                 //console.log('verdadeiro')
+                 res.render('admin/branco', {flash});
+             }else{
+                 //passar classe de erro
+                 flash.texto = "Chave removida com sucesso!";
+                 flash.sucesso = "false"
+                 res.render('admin/branco', {flash});
+                 //CORRIGIR ERRO BIZONHO QUE TA RETORNANDO FALSE MEMSMO TENDO SALVO. MENSAGEM ERRADA!!!!!!!!!
+                 /*
+                 ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                 ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooh
+                 */
+             }
+         })
+    },
+    carregaCadastrarchave(req,res){
+         Usuario.find().then((usuario)=>{
+             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o Usuário por nome 
+             res.render("ferramentas/usuario/cadastrarChave", {usuarios: usuario})
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+             res.redirect('admin/erro')
+         })
+    },
+    cadastrarchave(req,res){
+         let flash = new Resposta();
+         let resposta = false;
+         usuarioClass.usuarioCadastrarPalavraChave(req,res).then((ok)=>{
+             if (ok == "true"){
+                 resposta = true;
+             }
+         }).catch((err) =>{
+             console.log(err)
+             req.flash("error_message", "houve um erro ao acessar o Cadastrar chave")
+             res.redirect('admin/erro')
+         }).finally(()=>{
+             if(resposta== true){
+                 //Volta para a agenda de listagem
+                 flash.texto = "Palavra Chave cadastrada com sucesso!"
+                 flash.sucesso = "true"
+                 //console.log('verdadeiro')
+                 res.render('admin/branco', {flash});
+             }else{
+                 //passar classe de erro
+                 flash.texto = "Erro ao cadastrar chave!"
+                 flash.sucesso = "false"
+                 res.render('admin/branco', {flash});
+             }
+         })
     },
     getNivelUsuario(req,res){
         let usuPerfil;
@@ -381,8 +343,7 @@ module.exports = {
             res.render('admin/erro', {flash})
         }
     },
-
-    relaniverUsu(req, res) {
+    relaniverUsu(req, res){
         let monthsUsu = {};
     
         console.log('Listando Resp');
@@ -434,5 +395,45 @@ module.exports = {
             req.flash("error_message", "Houve um erro ao listar Usuarios");
             res.redirect('admin/erro');
         });
+    },
+    carregaCarimboLis(req,res){
+        let base64Image;
+        Usuario.findOne({_id: req.params.id}).then((usuario) =>{
+            if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
+                base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
+            }
+            //console.log(base64Image);
+            res.render("ferramentas/usuario/cadastrarCarimbo", {usuario, base64Image})
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar Carimbo")
+            res.redirect('admin/erro')
+        })
+    },
+    cadastrarCarimbo(req,res){
+        let flash = new Resposta();
+        let resposta = false;
+        usuarioClass.usuarioCadastrarCarimbo(req,res).then((ok)=>{
+            if (ok == "true"){
+                resposta = true;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar o Carimbo e Assinatura")
+            res.redirect('admin/erro')
+        }).finally(()=>{
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Palavra Chave cadastrada com sucesso!"
+                flash.sucesso = "true"
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Erro ao cadastrar chave!"
+                flash.sucesso = "false"
+                res.render('admin/branco', {flash});
+            }
+        })
     }
 }

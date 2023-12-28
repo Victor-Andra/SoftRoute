@@ -34,9 +34,7 @@
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Nome</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Função</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Contrato</th>
-														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Perfil</th>
-														<th style="width: 50px;"><a title="Carimbo e assinatura cadastrada?"><i class="orange ace-icon fa fa-upload bigger-130"></i></a></th>
-														<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Status</th>
+														<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending">Status</th>
 														<th>Ação</th>
 													</tr>
 												</thead><!-- Fim Cabeçalho da tabela -->
@@ -52,31 +50,21 @@
 															{{/each}}
 
 															<td>{{usuario_contrato}}</td>
-															<td>{{usuario_perfilid}}</td>
-															{{#verificarVazioOuIndefinido this.usuario_carimbo }}
-																<td><i class=" red ace-icon fa fa-ban bigger-130"></i></td>
-																{{else}}
-																<td><i class=" green ace-icon fa fa-ticket bigger-130"></i></td>
-															{{/verificarVazioOuIndefinido}}
-															{{#ifEqual this.usuario_status "Inativo"}}
-																<td><span class="label label-sm label-danger">{{usuario_status}}</span></td>
-																{{else}}
-																<td><span class="label label-sm label-success">{{usuario_status}}</span></td>
-															{{/ifEqual}}
+															
+															<td>{{usuario_status}}</td>
+
 															<td>
 																<div class="action-buttons">
-																	<a class="green" title="Editar cadatro do usuário" href="/menu/ferramentas/usuario/edi/{{_id}}">
+																	<a class="green" href="/menu/ferramentas/usuario/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																	<a class="blue" title="Upload do Carimbo e Assinatura" href="/menu/ferramentas/usuario/carregaCarimboLis/{{_id}}">
-																		<i class="ace-icon fa fa-upload bigger-130"></i>
-																	</a>
-																	<!-- 
-																	<a class="red" class="hidden" href="/menu/ferramentas/usuario/del/{{_id}}">
+																	<a class="red" href="/menu/ferramentas/usuario/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
-																	 -->
+																</div>
+																<div class="hidden-md hidden-lg">
 																	
+																	</div>
 																</div>
 															</td>
 														</tr>
@@ -106,9 +94,9 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [null, null, null, null, null, { "bSortable": false }, null,{ "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [50, 100, 150, 200],
+			"lengthMenu": [10, 25, 50, 100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

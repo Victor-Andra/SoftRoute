@@ -2,6 +2,27 @@
 <html lang="pt-br">
 	<head>
 		<title>Beneficiário Cadastro</title>
+		<style>
+        .cellContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .textareaWrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5px; /* Ajuste conforme necessário */
+        }
+
+        textarea {
+            width: 400%;
+            box-sizing: border-box;
+			rows: 12px; /* Número de linhas padrão */
+        }
+		</style>
 		<script >
 		
 		function copiaValoresMae() {
@@ -1090,20 +1111,24 @@
 													</div>
 												</div>
 												<div id="obsadm" class="tab-pane fade">
-													<label> Observações administrativas</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneObsadm" id="beneObsadm" style="width: 350px; rowspan: 700px;"></textarea>
+													
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Observações administrativas</label>
+															<div class="input-group">
+																<textarea type="text" name="beneObsadm" id="beneObsadm" ></textarea>
+															</div>
 														</div>
 													</div>
-												
 													
 												</div>
 												<div id="obs" class="tab-pane fade">
-													<label> Observações terapêuticas</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneObs" id="beneObs" style="width: 350px; rowspan: 700px;"></textarea>
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Observações terapêuticas</label>
+															<div class="input-group">
+																<textarea type="text" name="beneObs" id="beneObs" ></textarea>
+															</div>
 														</div>
 													</div>
 												</div>

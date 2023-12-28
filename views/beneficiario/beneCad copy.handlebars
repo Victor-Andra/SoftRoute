@@ -2,25 +2,50 @@
 <html lang="pt-br">
 	<head>
 		<title>beneficiário Cadastro</title>
+		<style>
+        .cellContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .textareaWrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5px; /* Ajuste conforme necessário */
+        }
+
+        textarea {
+            width: 400%;
+            height: 100%;
+            box-sizing: border-box;
+            resize: none; /* Impede o redimensionamento da textarea */
+			rows: 12; /* Número de linhas padrão */
+        }
+		</style>
 		<script type="text/javascript">
-		
-		function copiaValoresMae() {
-			document.getElementById("beneOut").value = document.getElementById("beneMae").value;
-			document.getElementById("beneGraupar").value = "Mãe";
-			document.getElementById("beneOutprof").value = document.getElementById("beneMaeprof").value;
-			document.getElementById("beneOutident").value = document.getElementById("beneMaeident").value;
-			document.getElementById("beneOutcpf").value = document.getElementById("beneMaecpf").value;
-			document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
-			document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
-			document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
-			document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
-			document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
-			document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
-			document.getElementById("beneOutcel").value = document.getElementById("beneMaecel").value;
-			document.getElementById("beneOutcel2").value = document.getElementById("beneMaecel2").value;
-			document.getElementById("beneOutemail").value = document.getElementById("beneMaeemail").value;
+		function exibenome() {
+			document.getElementById("beneNomeinfo").value = document.getElementById("beneNome").value;
 		}
-		function copiaValoresPai() {
+			function copiaValoresMae() {
+				document.getElementById("beneOut").value = document.getElementById("beneMae").value;
+				document.getElementById("beneGraupar").value = "Mãe";
+				document.getElementById("beneOutprof").value = document.getElementById("beneMaeprof").value;
+				document.getElementById("beneOutident").value = document.getElementById("beneMaeident").value;
+				document.getElementById("beneOutcpf").value = document.getElementById("beneMaecpf").value;
+				document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
+				document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
+				document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
+				document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
+				document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
+				document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
+				document.getElementById("beneOutcel").value = document.getElementById("beneMaecel").value;
+				document.getElementById("beneOutcel2").value = document.getElementById("beneMaecel2").value;
+				document.getElementById("beneOutemail").value = document.getElementById("beneMaeemail").value;
+			}
+			function copiaValoresPai() {
 			document.getElementById("beneOut").value = document.getElementById("benePai").value;
 			document.getElementById("beneGraupar").value = "Pai";
 			document.getElementById("beneOutprof").value = document.getElementById("benePaiprof").value;
@@ -36,10 +61,8 @@
 			document.getElementById("beneOutcel2").value = document.getElementById("benePaicel2").value;
 			document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
 		}
-	</script>
+		</script>
 	</head>
-	
-
 	<body class="no-skin" onload="javascript:controlaNave();ajustaData();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -54,15 +77,25 @@
 							</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<div class="row">
-						<div class="col-xl-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form style="margin-left:30px;" class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
-								<document class="document-horizontal" role="document" >
-									<div class="col-xl-12" style="padding-top: 50px;">
+					<!-- PAGE CONTENT BEGINS -->
+					<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
+						<document class="document-horizontal" role="document" >
+							<br>
+							<input id="id" name="id" class="hidden" value="{{bene._id}}" />
+							<div class="col-xs-12">
+								<div class="alert alert-warning" style="font-style: initial;">
+									
+									<strong>
+										<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="beneNomeinfo"  id="beneNomeinfo" placeholder="" class="form-control"  >
+									</strong>
+
+								</div>
+							</div>
+								<div class="row">
+									<div class="col-xs-12">
 										<div class="tabbable">
 											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-												<li class="active">
+												<li class="active" >
 													<a data-toggle="tab" href="#basico" aria-expanded="true">
 														<i class="red ace-icon fa fa-child bigger-120"></i>
 														Dados Básicos
@@ -100,7 +133,7 @@
 												</li>
 												<li class="">
 													<a data-toggle="tab" href="#esc" aria-expanded="false">
-														<i class="black ace-icon fa fa-graduation-cap bigger-120"></i>
+														<i class="orange ace-icon fa fa-graduation-cap bigger-120"></i>
 														Escola
 													</a>
 												</li>
@@ -110,51 +143,56 @@
 														Faturamento
 													</a>
 												</li>
-												
+												<li class="">
+													<a data-toggle="tab" href="#obsadm" aria-expanded="false">
+														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
+														Observações administrativas
+													</a>
+												</li>
 												<li class="">
 													<a data-toggle="tab" href="#obs" aria-expanded="false">
-														<i class="pink ace-icon fa fa-comment-o bigger-120"></i>
-														Observações
+														<i class="pink ace-icon fa fa-stethoscope bigger-120"></i>
+														Observações terapêuticas
 													</a>
 												</li>
 											</ul>
 											<div class="tab-content">
 												<div id="basico" class="tab-pane fade active in">
 													<div class="row">
-														<div class="col-xs-12">
-															<label > Nome </label>
+														<div class="col-xs-12 col-sm-4">
+															<label > Nome</label>
 															<div class="row ">
 																<div class="input-group" >
-																	<div class="col-xs-12">
-																		<input type="text" name="beneNome" id="beneNome" placeholder="" class="form-control" />
+																	<div class="col-xs-4">
+																		<input type="text" name="beneNome" id="beneNome" style="width: 360px;" placeholder="" class="form-control" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-6">
+														<div class="col-xs-12 col-sm-4">
 															<label > Apelido </label>
 															<div class="row">
 																<div class="input-group" >
-																	<div class="col-xs-6">
-																		<input  type="text" name="beneApelido" id="beneApelido" placeholder="" class="form-control" style="width: 300px;" />
+																	<div class="col-xs-4">
+																		<input  type="text" name="beneApelido" id="beneApelido" style="width: 360px;" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>	
 													<div class="row">
-														<div class="col-xs-12 col-sm-2">
+														<div class="col-xs-12 col-sm-4">
 															<label> Idade</label>
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-1">
+																	<div class="col-sm-4">
 																		<input type="text" name="beneIdade" id="beneIdade" placeholder="" class="form-control" style="width: 50px;" />
 																	</div>
 																</div>
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-4">
-															<label for="id-date-picker-1">Data nascimento</label>
+															<label for="id-date-picker-1">Data de nascimento</label>
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
@@ -175,7 +213,7 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-xs-10 col-sm-5">
+														<div class="col-xs-10 col-sm-4">
 
 															<label> Identidade </label>
 															<div class="input-group">
@@ -184,7 +222,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-10 col-sm-5">
+														<div class="col-xs-10 col-sm-4">
 															<label> CPF </label>
 															<div class="input-group">
 																<div>
@@ -193,14 +231,7 @@
 															</div>
 														</div>
 													</div>
-													<!--  
-													<label> Supervisor/a </label>
-													<div class="input-group">
-														<div>
-															<input type="text" name="beneSupervisor" id="beneSupervisor" placeholder="" class="form-control" style="width: 500px;"/>
-														</div>
-													</div>
-													-->
+													
 													<label>Status</label>
 													<div class="input-group">
 														<div >
@@ -210,15 +241,7 @@
 															</select>
 														</div>
 													</div>
-													<label> Escola </label>
-													<div>
-														<select name="beneEscola" id="beneEscola" class="chosen-select" data-placeholder="Escolha...">
-															{{#each escolas}}
-																<option value="{{_id}}">{{escola_nome}}</option>
-															{{/each}}
-														</select>
-													</div>
-													
+																										
 												</div>
 												<div id="end" class="tab-pane fade">
 													<div class="row">
@@ -226,7 +249,7 @@
 															<label > Endereço </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 450px;"/>
+																	<input type="text" name="beneEnd"  id="beneEnd" placeholder="" class="form-control" style="width: 360px;" />
 																</div>
 															</div>
 														</div>
@@ -234,7 +257,7 @@
 															<label> Complemento </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 200px;"/>
+																	<input type="text" name="beneEndcompl" id="beneEndcompl" placeholder="" class="form-control" style="width: 360px;" />
 																</div>
 															</div>
 														</div>
@@ -244,7 +267,7 @@
 															<label> Bairro </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 400px;"/>
+																	<input type="text" name="beneEndbairro" id="beneEndbairro" placeholder="" class="form-control" style="width: 360px;" />
 																</div>
 															</div>
 														</div>
@@ -252,7 +275,7 @@
 															<label> Cidade </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 200px;"/>
+																	<input type="text" name="beneEndcidade" id="beneEndcidade" placeholder="" class="form-control" style="width: 360px;" />
 																</div>
 															</div>	
 														</div>
@@ -299,15 +322,15 @@
 												</div>
 												<div id="mae" class="tab-pane fade">
 														<div class="row">
-															<div class="col-xs-12 col-sm-8">
+															<div class="col-xs-12 col-sm-6">
 																<label > Nome da mãe </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 400px;"/>
+																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 360px;" />
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-4">
+															<div class="col-xs-12 col-sm-6">
 																<label> Profissão </label>
 																<div class="input-group">
 																<div >
@@ -334,54 +357,46 @@
 																</div>
 															</div>
 														</div>
-														
-															<div class="col-xs-11 col-sm-3">
-																<div>
-																	<label>WhatsApp
-																	<!--	<small class="text-warning">(99) 9999-9999</small>-->
-																	</label>
-													
-																	<div class="input-group">
-																		<span class="input-group-addon">
-																			<i class="ace-icon fa fa-phone"></i>
-																		</span>
-													
-																		<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;"  />
-																	</div> 
-																</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<label>WhatsApp </label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;"  />
+																</div> 
 															</div>
 						
-															<div class="col-xs-11 col-sm-3">
-																<div>
-																	<label>Celular
-																	<!--	<small class="text-warning"> (99) 9999-9999</small>-->
-																	</label>
-													
-																	<div class="input-group">
-																		<span class="input-group-addon">
-																			<i class="ace-icon fa fa-phone"></i>
-																		</span>
-													
-																		<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
-																	</div>
+															<div class="col-xs-12 col-sm-4">
+																<label>Celular</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="ace-icon fa fa-phone"></i>
+																	</span>
+																	<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
 																</div>
 															</div>
-															<label > E-Mail </label>
-															<div class="input-group">
-																<div >
-																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 500px;"/>
+															<div class="col-xs-12 col-sm-4">
+																<label > E-Mail </label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="red ace-icon fa fa-envelope"></i>
+																	</span>
+																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;" />
+																	
 																</div>
 															</div>
-														
+														</div>
 												
 												</div>
 												<div id="pai" class="tab-pane fade">
 													<div class="row">
-														<div class="col-xs-12 col-sm-8">
+														<div class="col-xs-12 col-sm-4">
 															<label > Nome do pai </label>
 															<div class="input-group">
 																<div >
-																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 400px;"/>
+																	<input type="text" name="benePai" id="benePai" placeholder="" class="form-control" style="width: 350px;" />
 																</div>
 															</div>
 														</div>
@@ -393,13 +408,13 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-xs-12 col-sm-6">
+														<div class="col-xs-12 col-sm-4">
 															<label> RG </label>
 															<div class="input-group">
 																<input type="text" name="benePaiident"  id="benePaiident" placeholder="" class="form-control" style="width: 200px;"/>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-6">
+														<div class="col-xs-12 col-sm-4">
 															<label> CPF </label>
 															<div class="input-group">
 																<input type="text" name="benePaicpf" id="benePaicpf" placeholder="" class="form-control" style="width: 200px;"/>
@@ -408,19 +423,17 @@
 													</div>
 														
 													<div class="row">
-														<div class="col-xs-12 col-sm-3">
-															<label>WhatsApp
-															</label>
+														<div class="col-xs-12 col-sm-4">
+															<label>WhatsApp</label>
 															<div class="input-group">
 																<span class="input-group-addon">
-																	<i class="ace-icon fa fa-phone"></i>
+																	<i class="green ace-icon fa fa-whatsapp"></i>
 																</span>
 																<input name="benePaicel" id="benePaicel"   class="document-control input-mask-phone" type="text" style="width: 100px;" />
 															</div> 
 														</div>
-														<div class="col-xs-12 col-sm-3">
-																<label>Celular
-																</label>
+														<div class="col-xs-12 col-sm-4">
+																<label>Celular </label>
 																<div class="input-group">
 																	<span class="input-group-addon">
 																		<i class="ace-icon fa fa-phone"></i>
@@ -428,14 +441,15 @@
 																	<input name="benePaicel2" id="benePaicel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
 																</div>
 														</div>
-														<div class=""col-xs-12 col-sm-3"">
-															<label>E-Mail
-															</label>
+														<div class="col-xs-12 col-sm-4">
+															<label>E-Mail </label>
 															<div class="input-group">
-																<div>
-																	<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 500px;"/>
-																</div>
+																<span class="input-group-addon">
+																	<i class="red ace-icon fa fa-envelope"></i>
+																</span>
+																<input type="text" name="benePaiemail" id="benePaiemail" placeholder="" class="form-control" style="width: 350px;" />
 															</div>
+															
 														</div>
 													</div>
 												</div>
@@ -458,12 +472,15 @@
 															<i class="ace-icon fa fa-male bigger-110"></i>
 															Copia do pai
 														</button>
+														
 													</div>
+													
 														<div class="row">
+															<hr>
 															<div class="col-xs-12 col-sm-6">
 																<label > Nome </label>
 																<div class="input-group">
-																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 500px;"/>
+																		<input type="text" name="beneOut" id="beneOut" placeholder="" class="form-control" style="width: 350px;" />
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
@@ -502,7 +519,7 @@
 																<label > Endereço </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 450px;"/>
+																		<input type="text" name="beneOutend"  id="beneOutend" placeholder="" class="form-control" style="width: 350px;" />
 																	</div>
 																</div>
 															</div>
@@ -558,35 +575,33 @@
 														</div>
 														<div class="row">
 															<div class="col-xs-12 col-sm-3">
-																<label>WhatsApp
-																	<small class="text-warning">(99) 9999-9999</small>
+																<label>WhatsApp <small class="text-warning">(99) 9999-9999</small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
 																	<input name="beneOutcel" id="beneOutcel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
-																<label>Celular
-																	<small class="text-warning"> (99) 9999-9999</small>
+																<label>Celular <small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-phone"></i>
 																	</span>
 																	<input name="beneOutcel2" id="beneOutcel2"  class="document-control input-mask-phone" type="text" id="Celular" />
 																</div>
 															</div>
-														</div>
-														<div class="row">
+														
 															<div class="col-xs-12 col-sm-6">
 																<label > E-Mail </label>
 																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 600px;"/>
-																	</div>
+																	<span class="input-group-addon">
+																		<i class="red ace-icon fa fa-envelope"></i>
+																	</span>
+																	<input type="text" name="beneOutemail" id="beneOutemail" placeholder="" class="form-control" style="width: 350px;" />
 																</div>
 															</div>
 														</div>
@@ -603,19 +618,104 @@
 													
 														<div class="row">
 															<div class="col-xs-12 col-sm-6">
-																<label>Nome Escola</label>
+																<label>Nome escola</label>
 																<div class="input-group">
-																		<input type="text" name="beneEscolanome" id="beneEscolanome" placeholder="" class="form-control" style="width: 500px;"/>
+																		<input type="text" name="beneEscolanome" id="beneEscolanome" placeholder="" class="form-control" style="width: 350px;" />
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
 																<label>Telefone</label>
 																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
 																		<input type="text" name="beneEscolafone" id="beneEscolafone" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
 														</div>
-														
+														<hr>
+														<div class="widget-box">
+															<div class="widget-header">
+																<h4 class="widget-title">
+																	<i class="brown ace-icon fa fa-map-o bigger-110"></i>
+																	Endereço
+																</h4>
+																
+																<span class="widget-toolbar">
+
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+
+																</span>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	
+																	<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label > Endereço </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaend"  id="beneEscolaend" placeholder="" class="form-control" style="width: 340px;" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Complemento </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolacomp" id="beneEscolacomp" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-9 col-sm-6">
+																<label> Bairro </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolabairro" id="beneEscolabairro" placeholder="" class="form-control" style="width: 340px;" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-9 col-sm-3">
+																<label> Cidade </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolacidade" id="beneEscolacidade" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>	
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-3">
+																<label>UF</label>
+																<div class="input-group">
+																		<div >
+																			<select name="beneEscolauf" id="beneEscolauf" class="chosen-select" data-placeholder="Escolha...">
+																					{{#each estados}}
+																					<option value="{{_id}}">{{estado_uf}}</option>
+																					{{else}}
+																					{{/each}}
+																			</select>
+																		</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> CEP </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" class="cep" name="beneEscolacep" id="beneEscolacep" placeholder="00000-000" class="form-control" style="width: 100px;"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+																																
+																</div>	
+															</div>	
+														</div>
+														<hr>
 														<div class="row">
 															<div class="col-xs-12 col-sm-3">
 																<label>Ano Letivo</label>
@@ -629,20 +729,29 @@
 																	<input type="text" name="beneEscolaserie" id="beneEscolaserie" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>Turno </label>
+																<div class="input-group">
+																	<input type="text" name="beneEscolaturno" id="beneEscolaturno" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
 														</div>
-														
+														<hr>
 														<div class="row">
 															<div class="col-xs-12 col-sm-3">
 																<label> Coordenador </label>
 																<div class="input-group">
 																	<div >
-																			<input type="text" name="beneEscolacoord" id="beneEscolacoord" placeholder="" class="form-control" style="width: 300px;"/>
+																			<input type="text" name="beneEscolacoord" id="beneEscolacoord" placeholder="" class="form-control" style="width: 300px;" />
 																	</div>
 																</div>
 															</div>
 															<div class="col-xs-12 col-sm-3">
 																<label> WhatsApp: </label>
 																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
 																	<div >
 																		<input type="text" name="beneEscolacoordtel" id="beneEscolacoordtel" placeholder="" class="form-control" style="width: 300px;"/>
 																	</div>
@@ -650,15 +759,15 @@
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-9 col-sm-6">
+															<div class="col-xs-12 col-sm-3">
 																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneEscolaoutro1"  id="beneEscolaoutro1" placeholder="" class="form-control" style="width: 450px;"/>
+																		<input type="text" name="beneEscolaoutro1"  id="beneEscolaoutro1" placeholder="" class="form-control" style="width: 350px;"/>
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-9 col-sm-3">
+															<div class="col-xs-12 col-sm-3">
 																<label> Função </label>
 																<div class="input-group">
 																	<div >
@@ -668,26 +777,26 @@
 															</div>
 															<div class="col-xs-12 col-sm-3">
 																<label>WhatsApp
-																	<small class="text-warning">(99) 9999-9999</small>
+																	<small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
+																	<input name="beneEscolaoutro1tel" id="beneEscolaoutro1tel"  class="document-control input-mask-phone" type="text" style="width: 200px;" />
 																</div>
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-9 col-sm-6">
+															<div class="col-xs-12 col-sm-3">
 																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
-																		<input type="text" name="beneEscolaoutro2"  id="beneEscolaoutr2" placeholder="" class="form-control" style="width: 450px;"/>
+																		<input type="text" name="beneEscolaoutro2"  id="beneEscolaoutr2" placeholder="" class="form-control" style="width: 350px;" />
 																	</div>
 																</div>
 															</div>
-															<div class="col-xs-9 col-sm-3">
+															<div class="col-xs-12 col-sm-3">
 																<label> Função </label>
 																<div class="input-group">
 																	<div >
@@ -697,22 +806,51 @@
 															</div>
 															<div class="col-xs-12 col-sm-3">
 																<label>WhatsApp
-																	<small class="text-warning">(99) 9999-9999</small>
+																	<small class="text-warning"></small>
 																</label>
 																<div class="input-group">
 																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
+																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
-																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text" id="Whatsapp" />
+																	<input name="beneEscolaoutro2tel" id="beneEscolaoutro2tel"  class="document-control input-mask-phone" type="text"  style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-9 col-sm-6">
-																<label> Observação </label>
+															<div class="col-xs-12 col-sm-3">
+																<label > Outro responsável </label>
 																<div class="input-group">
 																	<div >
-																		<textarea type="text" name="beneEscolaObs" id="beneEscolaObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+																		<input type="text" name="beneEscolaoutro3"  id="beneEscolaoutr3" placeholder="" class="form-control" style="width: 350px;" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label> Função </label>
+																<div class="input-group">
+																	<div >
+																		<input type="text" name="beneEscolaoutro3func" id="beneEscolaoutro3func" placeholder="" class="form-control" style="width: 200px;"/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<label>WhatsApp
+																	<small class="text-warning"></small>
+																</label>
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="green ace-icon fa fa-whatsapp"></i>
+																	</span>
+																	<input name="beneEscolaoutro3tel" id="beneEscolaoutro3tel"  class="document-control input-mask-phone" type="text" style="width: 200px;"/>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-12">
+																<label> Observações </label>
+																<div class="input-group">
+																	<div >
+																		<textarea type="text" name="beneEscolaobs" id="beneEscolaobs" placeholder="" class="form-control"  style="width: 500px;" ></textarea>
 																	</div>
 																</div>
 															</div>
@@ -725,60 +863,87 @@
 														<div class="col-xs-12 col-sm-3">
 															<label>Ordem Pagamento por</label>
 															<div class="input-group">
-																	<div >
-																		<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
-																				<option value="-">-</option>
-																				<option value="CPF">CPF</option>
-																				<option value="CNPJ">CNPJ</option>
-																		</select>
-																	</div>
+																<div >
+																	<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		<option value="CPF">CPF</option>
+																		<option value="CNPJ">CNPJ</option>
+																	</select>
+																</div>
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-3">
-															<label> Qual CPF ou CNPJ será realizado o faturamento? </label>
+															<label> Qual CPF ou CNPJ do faturamento? </label>
 															<div class="input-group">
 																<div >
 																	<input type="text"  name="beneOrdemdoc" id="beneOrdemdoc" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label> Nome do Tomador: </label>
+															<div class="input-group">
+																<div >
+																	<input type="text"  name="beneOrdemnome" id="beneOrdemnome" class="form-control" style="width: 200px;"/>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<label>Retenção dos Impostos</label>
+															<div class="input-group">
+																<div >
+																	<select name="beneOrdemretem" id="beneOrdemretem" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="-">-</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div id="obsadm" class="tab-pane fade">
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Observações terapêuticas</label>
+															<div class="input-group">
+																<textarea type="text" name="beneObsadm" id="beneObsadm" ></textarea>
+															</div>
+														</div>
 													</div>
 												</div>
 												<div id="obs" class="tab-pane fade">
-													<label> Observação </label>
+													<label> Observações terapêuticas</label>
 													<div class="input-group">
 														<div>
-															<textarea type="text" name="beneObs" id="beneObs" placeholder="" class="form-control" style="width: 500px;"></textarea>
+															<textarea type="text" name="beneObs" id="beneObs" ></textarea>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="space-4"></div>							
-									<div class="space-4"></div>
-									<div class="space-6" style="height: 70px;"></div>
-									<div class="form-actions">
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
+								</div>
+							<hr>
+								<div class="col-xs-12" style="text-align: center;" >
+									<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
 
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
-									</div>
-								</document>
-							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
+								</div>
+							
+							
+							
+							
+						</document>
+					</form>
 				</div>
-			</div><!-- /.main-content -->
+			</div>
 		</div>
-		<!-- basic scripts -->
 	</body>
-</html>

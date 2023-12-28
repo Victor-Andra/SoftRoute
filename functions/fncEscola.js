@@ -44,11 +44,11 @@ module.exports = {
     },
 
     carregaEscola(req,res){
-        Estado.find().then((estado)=>{
+        Escola.find().then((escola)=>{
             console.log("Listagem Realizada de escolas!")
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                     console.log("Listagem Realizada de beneficiarios")
-                        res.render("beneficiario/escola/escolaCad", {estados: estado, benes: bene})
+                        res.render("beneficiario/escola/escolaCad", {escolas: escola, benes: bene})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")

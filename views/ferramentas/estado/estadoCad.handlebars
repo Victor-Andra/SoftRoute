@@ -2,6 +2,32 @@
 <html lang="pt-br">
 	<head>
 		<title>Estados</title>
+		<script>
+			function carregarImagem() {
+				var preview = document.getElementById('previewImage');
+				var fileInput = document.getElementById('estadoBandeira');
+
+				if (fileInput.files && fileInput.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						preview.src = e.target.result;
+						document.getElementById('previewBandeira').style.display = 'block'; // Exibe a div
+					};
+
+					reader.readAsDataURL(fileInput.files[0]);
+				}
+			}
+
+			function validarFormulario() {
+				var estadoBandeiraInput = document.getElementById("estadoBandeira");
+				if (estadoBandeiraInput.files.length === 0) {
+					alert("Selecione uma imagem para a bandeira!");
+					return false; // Impede o envio do formulário
+				}
+				return true; // Permite o envio do formulário
+			}
+		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -27,7 +53,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/ferramentas/estado/add" method="POST">
+							<form class="form-horizontal" role="form" enctype="multipart/form-data" action="/menu/ferramentas/estado/add" method="POST">
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
@@ -52,7 +78,7 @@
 													<label> Nome da Estado</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="estadoNome"  id="estadoNome" class="form-control" />
+															<input name="estadoNome"  id="estadoNome" />
 														</div>
 													</div>
 													<div class="space space-8"></div>
@@ -71,10 +97,12 @@
 														</div>
 													</div>
 
-													<!-- Novo campo de upload para a bandeira -->
 													<label for="bandeira">Bandeira:</label>
-													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" required>
-
+													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" onchange="carregarImagem()">
+													<!-- Div para mostrar a imagem -->
+													<div id="previewBandeira" style="display: none;">
+														<img id="previewImage" src="#" alt="Bandeira Preview" style="max-width: 100%; max-height: 200px;">
+													</div>
 													
 												</div>
 											</div>
@@ -99,25 +127,10 @@
 									</div>
 								</div>
 							</form>
-
-							
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

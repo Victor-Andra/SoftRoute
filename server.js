@@ -17,6 +17,25 @@ const cookieParser = require('cookie-parser');
 //Multer Upload de arquivos
 const multer = require('multer');
 
+// Configuração do Multer
+const storage = multer.memoryStorage(); // ou escolha o storage adequado para o seu caso
+const upload = multer({ storage: storage });
+
+// ... outras configurações e middlewares ...
+
+// Exemplo de rota que usa o Multer para upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  // Lógica para manipular o arquivo enviado
+  const fileBuffer = req.file.buffer;
+  // ... faça algo com o arquivo ...
+
+  res.send('Upload concluído com sucesso!');
+});
+
+// ... outras rotas ...
+
+
+
 //Configurações
     //Sessão
         app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 18000000}}));
@@ -75,6 +94,14 @@ const multer = require('multer');
                         } else {
                             return options.inverse(this);
                         }
+                    }
+                },
+                // Função verificar se um campo é indefinido ou vazio ou string vazia.
+                verificarVazioOuIndefinido: function(campo, opcoes) {
+                    if (campo === undefined || campo === null || campo === '') {
+                    return opcoes.fn(this);
+                    } else {
+                    return opcoes.inverse(this);
                     }
                 },
                 compareString: function (v1, v2, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor

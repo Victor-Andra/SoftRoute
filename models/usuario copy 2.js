@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
-//Biblioteca de gestão de Imagens para o banco
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Armazena a imagem na memória como um Buffer
 const upload = multer({ storage: storage });
@@ -34,20 +33,20 @@ const UsuarioSchema = mongoose.Schema({
     usuario_contrato : { type: String, required: false },
     usuario_funcaoid : { type: ObjectId, required: true },
     usuario_perfilid : { type: String, required: false },
-    usuario_status : { type: String, required: false },
-    usuario_senha : {type: String, required: false },
-    usuario_img : { type: Buffer, required: false },// Utiliza Buffer para armazenar dados binários da imagem
-    usuario_filhos :{ type: String, required: false},
-    usuario_filhosqt :{ type: String, required: false},
-    usuario_numconselho :{ type: String, required: false},
-    usuario_escolaridade :{type: String, required: false },
-    usuario_graduacao :{type: String, required: false },
-    usuario_especializacao :{type: String, required: false },
-    usuario_pix :{type: String, required: false },
-    usuario_tipopix :{type: String, required: false },
-    usuario_obs :{type: String, required: false },
-    usuario_datacad: {type: Date, required: false },
-    usuario_dataedi: {type: Date, required: false }
+    usuario_status : {type: String, required: false },
+    usuario_senha : { type: String, required: false },
+    usuario_img : {  type: String, required: false },
+    usuario_filhos :{ type: String, required: false },
+    usuario_filhosqt :{ type: String, required: false },
+    usuario_numconselho :{ type: String, required: false },
+    usuario_escolaridade :{ type: String, required: false },
+    usuario_graduacao :{ type: String, required: false },
+    usuario_especializacao :{ type: String, required: false },
+    usuario_pix :{ type: String, required: false },
+    usuario_tipopix :{ type: String, required: false },
+    usuario_obs :{ type: String, required: false },
+    usuario_datacad: { type: Date, required: false },
+    usuario_dataedi: { type: Date, required: false },
 })
 
 class Usuario{
@@ -71,7 +70,7 @@ class Usuario{
         usuario_email,
         usuario_cel1,
         usuario_cel2,
-        usuario_carimbo,//Imagem Carimbo
+        usuario_carimbo,
         usuario_banco,
         usuario_agencia,
         usuario_conta,
@@ -81,7 +80,7 @@ class Usuario{
         usuario_perfilid,
         usuario_status,
         usuario_senha,
-        usuario_img,//Imagem foto miniatura
+        usuario_img,
         usuario_filhos,
         usuario_filhosqt,
         usuario_numconselho, 
@@ -90,9 +89,8 @@ class Usuario{
         usuario_especializacao,
         usuario_pix,
         usuario_obs,
-        usuario_datacad,
-        usuario_dataedi
-        ){
+        usuario_datacad, usuario_dataedi
+    ){
         this.usuario_login = usuario_login ,
         this.usuario_nome = usuario_nome ,
         this.usuario_nomecompleto = usuario_nomecompleto,
@@ -112,7 +110,8 @@ class Usuario{
         this.usuario_email = usuario_email ,
         this.usuario_cel1 = usuario_cel1 ,
         this.usuario_cel2 = usuario_cel2 ,
-        this.usuario_carimbo = usuario_carimbo,//Imagem Carimbo
+
+        this.usuario_carimbo = usuario_carimbo,
         this.usuario_banco = usuario_banco ,
         this.usuario_agencia = usuario_agencia,
         this.usuario_conta = usuario_conta ,
@@ -123,7 +122,7 @@ class Usuario{
         this.usuario_perfilid = usuario_perfilid ,
         this.usuario_status = usuario_status ,
         this.usuario_senha = usuario_senha ,
-        this.usuario_img = usuario_img ,//Imagem foto miniatura
+        this.usuario_img = usuario_img ,
 
         this.usuario_filhos = usuario_filhos ,
         this.usuario_filhosqt = usuario_filhosqt ,
@@ -149,8 +148,11 @@ module.exports = {
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
-        let nome = req.body.usuarioNome;
 
+        console.log("req.body.usuarioNome: "+req.body.usuarioNome)
+        let nome = ""+req.body.usuarioNome+"";
+
+        
         while((nome.substring(nome.length - 1))==" "){
             nome = nome.substring(0, nome.length - 1)
         }
@@ -162,6 +164,7 @@ module.exports = {
         }
         
         let nomeFinal = palavras.join(" ");
+        console.log("req.body.usuarioId: "+req.body.usuarioId)
 
         //Realiza Atualização
         await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
@@ -185,7 +188,7 @@ module.exports = {
                 usuario_email : req.body.usuarioEmail ,
                 usuario_cel1 : req.body.usuarioCel1 ,
                 usuario_cel2 : req.body.usuarioCel2 ,
-                usuario_carimbo : req.body.usuarioCarimbo,//Imagem Carimbo
+
                 usuario_banco : req.body.usuarioBanco,
                 usuario_agencia : req.body.usuarioAgencia ,
                 usuario_conta : req.body.usuarioConta ,
@@ -220,6 +223,7 @@ module.exports = {
         })
         return resultado;
     },
+
     usuarioAdicionar: async (req,res) => {
         let usuarioExiste =  await UsuarioModel.findOne({usuario_nome: req.body.usuarioNome});//quando não acha fica null
         let dataAtual = new Date();
@@ -248,7 +252,7 @@ module.exports = {
             usuario_email : req.body.usuarioEmail ,
             usuario_cel1 : req.body.usuarioCel1 ,
             usuario_cel2 : req.body.usuarioCel2 ,
-            usuario_carimbo : req.body.usuarioCarimbo,//Imagem Carimbo
+            usuario_carimbo: req.file ? req.file.buffer : undefined,
             usuario_banco : req.body.usuarioBanco,
             usuario_agencia : req.body.usuarioAgencia ,
             usuario_conta : req.body.usuarioConta ,
@@ -281,191 +285,5 @@ module.exports = {
                 return err;
             });
         }
-    },
-    usuarioCadastrarPalavraChave: async (req, res) => {
-        //Realiza Atualização
-        let dataAtual = new Date();
-        await UsuarioModel.findByIdAndUpdate(mongoose.Types.ObjectId(req.cookies['idUsu']), 
-            {$set: {
-                usuario_palavrachavedatacad : dataAtual ,
-                usuario_palavrachave : req.body.usuarioChave
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = "true";
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-        return resultado;
-    },
-    usuarioMudarSenha: async (req, res) => {
-        //Realiza Atualização
-        let dataAtual = new Date();
-        let usuarioAtual = "-";
-        console.log("idusu: "+mongoose.Types.ObjectId(req.cookies['idUsu']))
-        await UsuarioModel.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
-            usuarioAtual = usu;
-        }).catch((err)=>{
-            console.log("ERRO!");
-        })
-        
-        if (usuarioAtual != "-"){
-            if (usuarioAtual.usuario_palavrachave == req.body.usuarioChave){
-                await UsuarioModel.findByIdAndUpdate(mongoose.Types.ObjectId(req.cookies['idUsu']), 
-                    {$set: {
-                        usuario_dataedi : dataAtual ,
-                        usuario_senha : req.body.usuarioSenha
-                        }}
-                ).then((res) =>{
-                    console.log("Salvo")
-                    resultado = "true";
-                }).catch((err) =>{
-                    console.log("erro mongo:")
-                    console.log(err)
-                    resultado = err;
-                    //res.redirect('admin/branco')
-                })
-            } else {
-                resultado = "Erro! A palavra chave está incorreta!";
-            }
-        } else {
-            resultado = "Erro! Usuario não encontrado!";
-        }
-
-        return resultado;
-    },
-    usuarioDefinirSenha: async (req, res) => {
-        //Realiza Atualização
-        let dataAtual = new Date();
-        let usuarioAtual = "-";
-        await UsuarioModel.findOne({usuario_email : req.body.usuarioEmail}).then((usu)=>{
-            usuarioAtual = usu;
-        }).catch((err)=>{
-            console.log("ERRO!");
-        })
-        
-        if (usuarioAtual != "-" && usuarioAtual != "undefined" && usuarioAtual != undefined){
-            if (usuarioAtual.usuario_palavrachave == req.body.usuarioChave){
-                await UsuarioModel.findByIdAndUpdate(usuarioAtual._id, 
-                    {$set: {
-                        usuario_dataedi : dataAtual ,
-                        usuario_senha : req.body.usuarioSenha
-                        }}
-                ).then((res) =>{
-                    console.log("Salvo")
-                    resultado = "true";
-                }).catch((err) =>{
-                    console.log("erro mongo:")
-                    console.log(err)
-                    resultado = err;
-                    //res.redirect('admin/branco')
-                })
-            } else {
-                resultado = "A palavra chave está incorreta!";
-            }
-        } else {
-            resultado = "Email não encontrado!";
-        }
-
-        return resultado;
-    },
-    usuarioDeletarPalavraChave: async (req, res) => {
-        //Realiza Atualização
-        let usuarioAtual = "-";
-        let usuarioResp = "-";
-        let palavrasAntigas;
-
-        await UsuarioModel.findOne({_id : req.body.usuarioId}).then((usu)=>{
-            usuarioAtual = usu;
-        }).catch((err)=>{
-            console.log("ERRO!");
-        })
-
-        await UsuarioModel.findOne({_id : mongoose.Types.ObjectId(req.cookies['idUsu'])}).then((usu)=>{
-            usuarioResp = usu;
-        }).catch((err)=>{
-            console.log("ERRO!");
-        })
-        //console.log("usuarioResp.usuario_senha == req.body.usuarioRespSenha //"+usuarioResp.usuario_senha +" == "+ req.body.usuarioRespSenha)
-        if (usuarioAtual != "-" && usuarioResp != "-" && usuarioResp.usuario_senha == req.body.usuarioRespSenha){
-            if (usuarioAtual.usuario_palavraschaveantigas){
-                palavrasAntigas = usuarioAtual.usuario_palavraschaveantigas+",["+usuarioAtual.usuario_palavrachave+"]"
-            } else {
-                palavrasAntigas = "["+usuarioAtual.usuario_palavrachave+"]"
-            }
-            console.log("palavrasAntigas:"+palavrasAntigas)
-            await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, 
-                {$set: {
-                    usuario_palavraschaveantigas : palavrasAntigas,
-                    usuario_palavrachave : ""
-                    }}
-            ).then((res) =>{
-                console.log("Salvo")
-                resultado = true;
-            }).catch((err) =>{
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-                //res.redirect('admin/branco')
-            })
-        }
-        
-        return resultado;
-    },
-    mudarNome: async (req, res) => {
-        await UsuarioModel.findByIdAndUpdate(req.body.terapeutaId, 
-            {$set: {
-                usuario_nomecompleto : req.body.usuarioNome,
-                usuario_nome : req.body.usuarioApelido
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = "true";
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-    },
-    usuarioCadastrarCarimbo: async (req, res) => {
-        try {
-            let dataAtual = new Date();
-    
-            // Transforme o middleware do Multer em uma Promise
-            const uploadMiddleware = (req, res) => {
-                return new Promise((resolve, reject) => {
-                    upload.single('usuarioCarimbo')(req, res, (err) => {
-                        if (err) reject(err);
-                        else resolve();
-                    });
-                });
-            };
-    
-            // Aguarde o upload do arquivo, se houver
-            await uploadMiddleware(req, res);
-    
-            const updateData = {
-                $set: {
-                    usuario_carimbo : req.body.usuarioCarimbo
-                }
-            };
-    
-            // Verifique se há um arquivo enviado antes de tentar acessar req.file
-            if (req.file) {
-                updateData.$set.usuario_carimbo = req.file.buffer;
-            }
-    
-            await UsuarioModel.findByIdAndUpdate(req.body.usuarioId, updateData);
-    
-            return "true";
-        } catch (error) {
-            console.error(error);
-            return "false";
-        }
     }
-
 };

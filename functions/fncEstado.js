@@ -4,6 +4,10 @@ const mongoose = require("mongoose")
 //estados e unidades federativas    
 const Estado = mongoose.model("tb_estado")
 const estadoClass = require("../models/estado")
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
+
+
 
 
 module.exports = {
@@ -15,11 +19,10 @@ module.exports = {
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Estados")
-            res.redirect('admin/erro')
+            res.render('admin/erro')
         })
 
     },
-
     carregaEstado(req,res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
@@ -27,37 +30,50 @@ module.exports = {
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Estados")
-            res.redirect('admin/erro')
-        })
-
-    },
-
-
-    carregaEstadoEdi(req,res){
-        Estado.findOne({_id:req.params.id}).then((estado) =>{
-            console.log(estado)
-              
-            res.render('ferramentas/estado/estadoEdi', { estado})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
-    },
 
-    cadastraEstado(req,res){
-        let cadastro = estadoClass.estadoAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('ferramentas/estado/estadoCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
+    },
+    carregaEstadoEdi(req, res){
+        let base64Image
+        Estado.findOne({_id: req.params.id}).then((estado) =>{
+            //console.log(estado)
+            if (estado.estado_bandeira != 'undefined' && estado.estado_bandeira != undefined){
+            base64Image = new Buffer.from(estado.estado_bandeira, 'binary').toString('base64');
+            }
+            res.render("ferramentas/estado/estadoEdi", {estado, base64Image})
+        }).catch((err) =>{
+            console.log(err)
+            res.render('admin/erro')
+        })
+
+    },
+    async cadastraEstado(req, res) {
+        console.log("chegou");
+        let resposta = new Resposta();
+    
+        try {
+            const result = await estadoClass.estadoAdicionar(req, res);
+            console.log("Cadastro Realizado!!!");
+    
+            if (result == "true"){}
+            resposta.texto = "Cadastrado com sucesso!";
+            resposta.sucesso = "true";
+            req.flash("success_message", "Cadastro realizado com sucesso!");
+            this.listaEstado(req, res);
+        } catch (err) {
+            console.log("ERRO:");
+            console.log(err);
+    
+            resposta.texto = err;
+            resposta.sucesso = "false";
+            req.flash("error_message", "Houve um erro ao abrir o cadastro!");
+            res.render("admin/erro", resposta);
         }
     },
-
+    
+    
+   
     atualizaEstado(req,res){
         let resposta;
         try{
@@ -71,10 +87,9 @@ module.exports = {
                 resposta = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
+                if(resposta == 'true'){
                     //Volta para a estado de listagem
                     Estado.find().then((estado) =>{
-                        console.log("Listagem Realizada!")
                         res.render('ferramentas/estado/estadoLis', {estados: estado})
                     }).catch((err) =>{
                         console.log("err:")
@@ -98,7 +113,7 @@ module.exports = {
         Estado.deleteOne({_id: req.params.id}).then(() =>{
             Estado.find().then((estado) =>{
                 req.flash("success_message", "Estado deletada!")
-                res.render('ferramentas/estado/estadoLis', {estados: estado})
+                this.listaEstado(req,res)
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Estados")

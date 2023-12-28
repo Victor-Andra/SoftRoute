@@ -403,6 +403,16 @@ router.post("/ferramentas/usuario/cadastraChave", fncGeral.IsAuthenticated, (req
     fncUsuario.cadastrarchave(req, res);
 })
 
+//Cadastrar Carimbo e Assinatura via Listagem (carregando automaticamente o Id)
+router.get("/ferramentas/usuario/carregaCarimboLis/:id", fncGeral.IsAuthenticated, (req,res) =>{//Direciona form de upload de carimbo via lista
+    fncUsuario.carregaCarimboLis(req, res);
+})
+
+//Cadastrar Carimbo e Assinatura
+router.post("/ferramentas/usuario/cadastrarCarimbo", fncGeral.IsAuthenticated, (req,res) =>{//cadatra carimbo via upload
+    fncUsuario.cadastrarCarimbo(req, res);
+})
+
 //Resetar Chave
 router.get("/ferramentas/usuario/carregaResetarchave", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a resetar chave
     fncUsuario.carregaResetarchave(req, res);
@@ -2683,7 +2693,7 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         })
 
         router.post('/ferramentas/usuario/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
-           fncUsuario.atualizaUsuario(req, res); 
+            fncUsuario.atualizaUsuario(req, res); 
         })
 
         router.post('/ferramentas/usuario/carregaResetarchave', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento

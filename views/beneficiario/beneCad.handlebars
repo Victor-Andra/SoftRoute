@@ -2,7 +2,27 @@
 <html lang="pt-br">
 	<head>
 		<title>beneficiário Cadastro</title>
-		
+		<style>
+        .cellContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .textareaWrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5px; /* Ajuste conforme necessário */
+        }
+
+        textarea {
+            width: 400%;
+            box-sizing: border-box;
+			rows: 12px; /* Número de linhas padrão */
+        }
+		</style>
 		<script type="text/javascript">
 		function exibenome() {
 			document.getElementById("beneNomeinfo").value = document.getElementById("beneNome").value;
@@ -55,23 +75,22 @@
 							</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
-								<document class="document-horizontal" role="document" >
-									<br>
-									<input id="id" name="id" class="hidden" value="{{bene._id}}" />
-									<div class="col-xs-12">
-										<div class="alert alert-warning" style="font-style: initial;">
-											
-											<strong>
-												<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="beneNomeinfo"  id="beneNomeinfo" placeholder="" class="form-control"  >
-											</strong>
+					<!-- PAGE CONTENT BEGINS -->
+					<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
+						<document class="document-horizontal" role="document" >
+							<br>
+							<input id="id" name="id" class="hidden" value="{{bene._id}}" />
+							<div class="col-xs-12">
+								<div class="alert alert-warning" style="font-style: initial;">
+									
+									<strong>
+										<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="beneNomeinfo"  id="beneNomeinfo" placeholder="" class="form-control"  >
+									</strong>
 
-										</div>
-									</div>
-									<div class="col-xl-12">
+								</div>
+							</div>
+								<div class="row">
+									<div class="col-xs-12">
 										<div class="tabbable">
 											<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
 												<li class="active" >
@@ -882,46 +901,50 @@
 													</div>
 												</div>
 												<div id="obsadm" class="tab-pane fade">
-													<label> Observações administrativas</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneObsadm" id="beneObsadm" style="width: 350px; rowspan: 700px;"></textarea>
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Observações administrativas</label>
+															<div class="input-group">
+																<textarea type="text" name="beneObsadm" id="beneObsadm" ></textarea>
+															</div>
 														</div>
 													</div>
 												</div>
 												<div id="obs" class="tab-pane fade">
-													<label> Observações terapêuticas</label>
-													<div class="input-group">
-														<div>
-															<textarea type="text" name="beneObs" id="beneObs" style="width: 350px; rowspan: 700px;"></textarea>
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Observações terapêuticas</label>
+															<div class="input-group">
+																<div>
+																	<textarea type="text" name="beneObs" id="beneObs" style="rows:12"></textarea>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<hr>
-									
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
+								</div>
+							<hr>
+								<div class="col-xs-12" style="text-align: center;" >
+									<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
 
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
-									
-									
-									
-									
-								</document>
-							</form>
-						</div>
-					</div>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
+								</div>
+							
+							
+							
+							
+						</document>
+					</form>
 				</div>
 			</div>
 		</div>
