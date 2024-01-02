@@ -45,6 +45,9 @@ const UsuarioSchema = mongoose.Schema({
     usuario_especializacao :{type: String, required: false },
     usuario_pix :{type: String, required: false },
     usuario_tipopix :{type: String, required: false },
+    usuario_palavrachave :{type: String, required: false},
+    usuario_palavrachavedatacad :{type: String, required: false},
+    usuario_palavraschaveantigas :{type: String, required: false},
     usuario_obs :{type: String, required: false },
     usuario_datacad: {type: Date, required: false },
     usuario_dataedi: {type: Date, required: false }
@@ -89,6 +92,9 @@ class Usuario{
         usuario_graduacao,
         usuario_especializacao,
         usuario_pix,
+        usuario_palavrachave, 
+        usuario_palavrachavedatacad, 
+        usuario_palavraschaveantigas,
         usuario_obs,
         usuario_datacad,
         usuario_dataedi
@@ -133,6 +139,9 @@ class Usuario{
         this.usuario_especializacao = usuario_especializacao ,
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
+        this.usuario_palavrachave = usuario_palavrachave ,
+        this.usuario_palavrachavedatacad = usuario_palavrachavedatacad ,
+        this.usuario_palavraschaveantigas = usuario_palavraschaveantigas ,
         this.usuario_obs = usuario_obs ,
         this.usuario_datacad = usuario_datacad ,
         this.usuario_dataedi = usuario_dataedi

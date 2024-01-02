@@ -3,29 +3,37 @@ const ObjectId = mongoose.Types.ObjectId
 //essa tabela devera ser dropada e inseridos novos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
 //da criação da nf no site da prefeitura de recife.
 const CreditSchema = mongoose.Schema({
-    credit_atendnum :{ type: Number, required: false },
-    credit_categoria :{ type: String, required: false },
-    //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
-    credit_terapiaid :{ type: ObjectId, required: false },
-    //Chave estrangeira que vem da tabela Terapia (Não é Obrigatório)
-    credit_terapeutaid :{ type: ObjectId, required: false },
-    //Chave estrangeira que vem da tabela Conv (Não é Obrigatório)
+    credit_dataemissao :{ type: Date, required: false },
+    credit_anomesref :{ type: ObjectId, required: false },
+    credit_numeronota :{ type: ObjectId, required: false },
     credit_convid :{ type: ObjectId, required: false },
-    credit_nome :{ type: String, required: false },
+    credit_beneid :{ type: ObjectId, required: false },
+    credit_benenome :{ type: String, required: false },
     credit_cpfcnpj :{ type: String, required: false },
-    credit_dataevento :{ type: Date, required: false },
-    credit_datavenci :{ type: Date, required: false },
-    credit_datapg :{ type: Date, required: false },
-    credit_valorprev :{ type: String, required: false },
-    credit_juros :{ type: String, required: false },
-    credit_multa :{ type: String, required: false },
-    credit_adianta :{ type: String, required: false },
+    credit_tomadornome :{ type: String, required: false },
+    credit_retencao :{ type: String, required: false },
+    credit_valornota :{ type: String, required: false },
+    credit_dataemprestimo :{ type: Date, required: false },
+    credit_datadevolucao :{ type: Date, required: false },
+    credit_dataprevpagamento :{ type: Date, required: false },
     credit_valorpg :{ type: String, required: false },
-    credit_pg :{ type: String, required: false },
+    credit_valordiferenca :{ type: String, required: false },
+    credit_formapg :{ type: String, required: false },
+    credit_datapg :{ type: Date, required: false },
+    credit_pis :{ type: String, required: false },
+    credit_cssl :{ type: String, required: false },
+    credit_cofins :{ type: String, required: false },
+    credit_irpf :{ type: String, required: false },
+    credit_iss :{ type: String, required: false },
+    credit_valorpis :{ type: String, required: false },
+    credit_valorcssl :{ type: String, required: false },
+    credit_valorcofins :{ type: String, required: false },
+    credit_valorirpf :{ type: String, required: false },
+    credit_valoriss :{ type: String, required: false },
+    credit_descricaonota :{ type: String, required: false },
+    credit_obsgeral :{ type: String, required: false },
     credit_datacad :{ type: String, required: false },
     credit_dataedi :{ type: String, required: false }
-    
-    
 })
 
 class Credit{
@@ -116,11 +124,7 @@ module.exports = {CreditModel,CreditSchema,
     },
     creditAdicionar: async (req,res) => {
         let creditExiste;
-        if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
-        } else {
-            creditExiste = await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
-        }
+        
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";

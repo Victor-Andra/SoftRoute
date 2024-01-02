@@ -96,7 +96,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                         }
                     }
                 },
-                // Função verificar se um campo é indefinido ou vazio ou string vazia.
+                // Função verificar se um campo do tipo string é indefinido ou vazio ou string vazia.
                 verificarVazioOuIndefinido: function(campo, opcoes) {
                     if (campo === undefined || campo === null || campo === '') {
                     return opcoes.fn(this);

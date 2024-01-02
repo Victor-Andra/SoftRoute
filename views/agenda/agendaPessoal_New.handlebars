@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Agenda Pessoal do dia</title>
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				let dias = ["seg","ter","qua","qui","sex"];
+				try{
+					dias.forEach((dia)=>{
+						console.log("dia:"+dia)
+						document.getElementsByName(dia).forEach((e)=>{
+							let id = "hora"+e.id;
+							let valor = e.value;
+							let tempId = e.id+"_"+e.value;
+							//console.log("valor"+valor)
+							//console.log("id:"+id)
+							//console.log("tempId:"+tempId)
+							if(valor != "766f69643132333435366964"){
+								let val;
+								if(e.id.indexOf("BeneId_") != -1){
+									val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementsByName(tempId).forEach((ti)=>{
+										pintaAgenda(val, ti.value);
+									})
+									console.log("val");
+									console.log(val);
+									document.getElementById(id).append(val);
+								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementsByName(tempId).forEach((ti)=>{
+										console.log("TI:"+ti)
+										pintaAgenda(val, ti.value);
+									})
+									//console.log("val")
+									//console.log(val)
+									document.getElementById(id).append(val);
+								}
+							}
+						})
+
+						if (document.getElementById("isSemanal").value == "false"){
+							document.getElementsByName(dia).forEach((e)=>{
+								if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
+									let id = "hora"+e.id;//td para receber o append
+									let el = document.getElementById(e.id);//elemento da acao
+									document.getElementById(id).append(el);
+									//elemento td recebendo acao
+								}
+							})
+						}
+					})
+				} catch(err){
+					console.log(err);
+				}
+				if (document.getElementById("isSemanal").value == "false"){
+					//ajustar, so deleta 1 dia por vez e ainda é esquisito
+					let diaDeHoje = document.getElementById("hoje").value;
+					let tabela = document.getElementsByName("tabela");
+
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						//console.log("id:"+id);
+						//s.indexOf("oo") != -1
+						if(id.indexOf(diaDeHoje) != -1){
+							console.log("id = diaDeHoje");
+							console.log("id:"+id);
+							console.log("diaDeHoje:"+diaDeHoje);
+							cell.display="";
+						} else {
+							document.getElementById(id).remove();
+						}
+					})
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						//console.log("id:"+id);
+						//s.indexOf("oo") != -1
+						if(id.indexOf(diaDeHoje) != -1){
+							console.log("id = diaDeHoje");
+							console.log("id:"+id);
+							console.log("diaDeHoje:"+diaDeHoje);
+							cell.display="";
+						} else {
+							document.getElementById(id).remove();
+						}
+					})
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						//console.log("id:"+id);
+						//s.indexOf("oo") != -1
+						if(id.indexOf(diaDeHoje) != -1){
+							console.log("id = diaDeHoje");
+							console.log("id:"+id);
+							console.log("diaDeHoje:"+diaDeHoje);
+							cell.display="";
+						} else {
+							document.getElementById(id).remove();
+						}
+					})
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						//console.log("id:"+id);
+						//s.indexOf("oo") != -1
+						if(id.indexOf(diaDeHoje) != -1){
+							console.log("id = diaDeHoje");
+							console.log("id:"+id);
+							console.log("diaDeHoje:"+diaDeHoje);
+							cell.display="";
+						} else {
+							document.getElementById(id).remove();
+						}
+					})
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						//console.log("id:"+id);
+						//s.indexOf("oo") != -1
+						if(id.indexOf(diaDeHoje) != -1){
+							console.log("id = diaDeHoje");
+							console.log("id:"+id);
+							console.log("diaDeHoje:"+diaDeHoje);
+							cell.display="";
+						} else {
+							document.getElementById(id).remove();
+						}
+					})
+
+				}
+			}
+			function pintaAgenda(val, motivo){
+				console.log("motivo:"+motivo)
+				switch (motivo) {
+					case "Falta" :
+						val.style.backgroundColor = "yellow";
+						break;
+					case "Falta Justificada":
+						val.style.backgroundColor = "orange";
+						break;
+					case "Substituição":
+						val.style.backgroundColor = "cyan";
+						break;
+					case "Roberta Disponpivel":
+						val.style.backgroundColor = "salmon";
+						break;
+					case "Supervisor":
+						val.style.backgroundColor = "lightpink";
+						break;
+					case "Nenhuma Observação":
+						val.style.backgroundColor = "lightgreen";
+						break;
+					default :
+						break;
+				}
+			}
+			function formataData(){
+				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+
+				<div class="main-content-inner">
+
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Agenda Pessoal do Dia</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#if error}}
+						<div class="alert alert-danger">{{error}}</div>
+					{{else}}
+					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="isSemanal" value="{{isSemanal}}" />
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						{{#each agendas}}
+							{{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+							{{else}}
+							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
+							<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+							<input id="{{agenda_data_semana}}ObsId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{bene_obs}}" />
+							{{#isTrue agenda_temp}}
+								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
+								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
+								<input name="{{agenda_data_semana}}ObsId_{{agenda_hora}}_{{bene_obs}}" value="{{agenda_categoria}}">
+								{{#compareString agenda_categoria "Falta Justificada"}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="">
+										<i class="red ace-icon fa fa-ban bigger-130"></i>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
+								</div>
+								{{else}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
+								</div>
+								{{/compareString}}
+							{{else}}
+								
+								{{#compareString agenda_categoria "Falta Justificada"}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="">
+										<i class="red ace-icon fa fa-ban bigger-130"></i>
+									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
+								</div>
+								{{else}}
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+									<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+								</div>
+								{{/compareString}}
+							{{/isTrue}}
+							{{/compareThis}}
+						{{/each}}
+						{{#each benes}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_obs}}<br/></label>
+						{{/each}}
+						{{#each salas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
+						{{/each}}
+					</div>
+					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalSemanal" method="POST">
+						<div class="breadcrumbs" id="pesquisaAge" >
+							<div style="text-align: center;">
+								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+								<label style="margin-left: 25px;">Data:</label>
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus "></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<div class="tab-content"><!-- .tab-contente -->
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+										<thead>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-danger">
+																<strong>
+																Agenda
+																</strong>
+																<br>
+																{{#each agendas}}
+																	{{#isNull agenda_obs}}
+																	{{else}}
+																		<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
+																		<br>
+																	{{/isNull}}
+																{{/each}}
+																
+																<br>
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-warning">
+																<strong>
+																Terapeuta
+																</strong>
+																<br>
+																{{usu.usuario_obs}}
+																<br>
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											<tr role="row">
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" >{{segunda}}</th>
+												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" >{{terca}}</th>
+												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" >{{quarta}}</th>
+												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" >{{quinta}}</th>
+												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" >{{sexta}}</th>
+											</tr>
+											<tr role="row">	
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thseg4" name="tabela" style="width: 50px;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+												<th id="thseg3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thter4" name="tabela" style="width: 50px;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+												<th id="thter3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqua4" name="tabela" style="width: 50px;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+												<th id="thqua3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqui4" name="tabela" style="width: 50px;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+												<th id="thqui3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thsex4" name="tabela" style="width: 50px;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+												<th id="thsex3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+											</tr>
+										</thead>
+										{{#each horaages}}
+										<tbody>
+											<tr role="row" class="odd">
+												<td style="width: 50px;">{{horaage_hora}}</td>
+												<td name="tabela" id="horasegSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegObsId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterObsId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaObsId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiObsId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexObsId_{{horaage_hora}}"></td>												
+												<td name="tabela" id="horasexAcaoId_{{horaage_hora}}"></td>
+											</tr>
+										</tbody>
+										{{/each}}
+									</table>
+								</div>
+							</div>
+							<div id="ocultaIds" class="hidden">
+								<input id="hoje" name="hoje" value="{{hoje}}" />
+							</div>
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert">
+									<br>
+									<br>
+									<br>
+								</div>
+							</div>
+							<!--
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert-info">
+									<strong>
+									Técnico
+									</strong>
+									<br>
+									
+									<br>
+								</div>
+							</div>
+							-->
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>

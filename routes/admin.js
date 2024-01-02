@@ -517,8 +517,15 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             }
             */
             //res.redirect("/menu/branco");
-            
+            //Verificação se exixte ou não a palavrachave cadastrada ou se está cadastrada a palavra chave padrão 123456789
             let flash = new Resposta();
+            if (usu.usuario_palavrachave == "undefined"){
+                console.log("PORRA")
+            }
+            if (usu.usuario_palavrachave == undefined){
+                console.log("MERDA")
+            }
+            console.log("usu.usuario_palavrachave: "+usu.usuario_palavrachave)
             if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined){
                 flash.sucesso = "almost";
                 flash.texto = "Você ainda não cadastrou sua Palavra Chave, ela é responsável por permitir que você edite sua senha em caso de erro e garante que é você quem está acessando o sistema. Cadastre-a o mais breve possível!";

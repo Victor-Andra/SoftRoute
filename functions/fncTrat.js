@@ -372,18 +372,33 @@ module.exports = {
     tratImp(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
+        let carimboUsuPad; //Carimbo padrão de Roberta
+        let carimboUsuAvd; //Carimbo terapeuta padrão
+        let carimboUsuIs; //Carimbo terapeuta IS
+        let carimboRoute;
         Trat.findOne({_id : req.params.id}).then((trat)=>{
-            console.log("Listagem Realizada de Planos de Tratamento")
             let tratDataCadSimpleFormat = fncGeral.getData(trat.trat_datacad)
             Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
                 Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    usuario.forEach((usu)=>{
+                        if (trat.trat_planotipo == "Padrão" && (""+trat.trat_terapeutaidpad+"") == (""+usu._id+"")){
+                            carimboUsuPad = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                        } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidis+"") == (""+usu._id+"")){
+                            carimboUsuIs = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                        } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidavd+"") == (""+usu._id+"")){
+                            carimboUsuAvd = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                        } else if ('62e008adea444f5b7a02c04f' == usu._id){
+                            carimboRoute = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                        }
+                    })
+                    
                     Laudo.find().then((laudo)=>{
                         Bene.find().then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/plano/tratImp", {trat, laudos: laudo,terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual, perfilAtual, tratDataCadSimpleFormat})
+                            //Busca nos usuários os carimbos dos Terapeutas identificados dentro do Plano de Tratamento incluindo o carimbo da Route
+                            res.render("area/plano/tratImp", {trat, laudos: laudo,terapias: terapia, usuarios: usuario, benes: bene, usuarioAtual, perfilAtual, tratDataCadSimpleFormat, carimboRoute, carimboUsuPad, carimboUsuIs, carimboUsuAvd})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

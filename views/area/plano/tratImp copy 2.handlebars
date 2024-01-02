@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 		<head id="cabecalho" name="cabecalho">
-		<title>Plano de tratamento</title>
+		<title>
+			Plano de tratamento - 
+			{{#each benes}}
+				{{#ifEqual ../trat.trat_beneid _id}}
+					&nbsp;{{bene_nome}}
+				{{/ifEqual}}
+			{{/each}}
+			&nbsp; - &nbsp; 
+			{{#compareThis trat.trat_planotipo "Padrão"}}
+				{{trat.trat_especialidadepad}}
+			{{else}}
+				{{trat.trat_especialidadeis}}
+					&nbsp;-&nbsp;{{trat.trat_especialidadeavd}}
+			{{/compareThis}}
+			</title>
 		<style>
 			
 			@page {
             size: A4;
             margin: 1in;
         }
-			/* Estilos gerais para o cabeçalho e o rodapé */
-			#cabecalho {
-				margin: 0; /* Margem inicial zero */
-				text-align: center; /* Alinhamento à esquerda */
-				object-position: left;
-				width: 100%; /* Ocupar toda a largura */
-				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
-			}
-			#rodape {
-				margin: 0; /* Margem inicial zero */
-				object-position: center;
-				text-align: center; /* Alinhamento à esquerda */
-				width: 100%; /* Ocupar toda a largura */
-				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodape */
-				
-			}
-
+			
 			/* Estilos para o conteúdo da página */
 			#conteudo {
 				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
@@ -43,13 +41,21 @@
 				top: 0;
 				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
 				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				margin: 0; /* Margem inicial zero */
+				text-align: center; /* Alinhamento ao centro */
+				object-position: left;
+				width: 100%; /* Ocupar toda a largura */
+				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
 				}
 
 				#rodape {
-				position: fixed;
+				
 				bottom: 0;
-				padding-top: 150px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
-				padding-bottom: 150px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
+				object-position: center;
+				text-align: center; /* Alinhamento ao centro */
+				
+				margin: 0; /* Margem inicial zero */
+				width: 100%; /* Ocupar toda a largura */
 				}
 				
                .noprint {
@@ -159,6 +165,7 @@
 			function converteMai(input) {
            	 input.value = input.value.toUpperCase();
         	}
+			
 			
 			
 		</script>
@@ -331,173 +338,209 @@
 								</div>
 					</div><!-- /.row -->
 					<div class="row" class="conteudo">
-								<div class="col-sm-10 col-sm-offset-1">
-									<div class="widget-box transparent">
-										<table id="dynamic-table" >
-											<thead>
-												
-											</thead>
-											<tbody>
-												<tr rowspan="3">
-													<td></td>
-												</tr>
-												<tr>
-													<td>NOME:&nbsp;</td>
-													<td>{{#each benes}}
-															{{#ifEqual ../trat.trat_beneid _id}}
-																{{bene_nome}}
-															{{/ifEqual}}
-														{{/each}}</td>
-													
-												</tr>
-												{{#compareThis trat.trat_planotipo "Padrão"}}
-												<tr>
-													<td>TERAPIA:&nbsp;</td>
-													<td>{{trat.trat_especialidadepad}}</td>
-												</tr>
-												<tr>
-													<td>TERAPEUTA:&nbsp;</td>
-													<td>{{#each usuarios}}
-															{{#ifEqual ../trat.trat_terapeutaidpad _id}}
-																{{usuario_nome}}
-															{{/ifEqual}}
-														{{/each}}
-													&nbsp;-&nbsp;{{trat.trat_regconselhopad}}</td>
-													
-												</tr>
-												{{else}}
-												<tr>
-													<td>TERAPIA:&nbsp;</td>
-													<td>{{trat.trat_especialidadeis}}</td>
-												</tr>
-												<tr>
-													<td>TERAPEUTA:&nbsp;</td>
-													<td>{{#each usuarios}}
-															{{#ifEqual ../trat.trat_terapeutaidis _id}}
-																{{usuario_nome}}
-															{{/ifEqual}}
-														{{/each}}
-													&nbsp;-&nbsp;{{trat.trat_regconselhois}}</td>
-													
-												</tr>
-												<hr>
-												<tr>
-													<td>TERAPIA:&nbsp;</td>
-													<td>{{trat.trat_especialidadeavd}}</td>
-												</tr>
-												<tr>
-													<td>TERAPEUTA:&nbsp;</td>
-													<td>{{#each usuarios}}
-															{{#ifEqual ../trat.trat_terapeutaidavd _id}}
-																{{usuario_nome}}
-															{{/ifEqual}}
-														{{/each}}
-													&nbsp;-&nbsp;{{trat.trat_regconselhoavd}}</td>
-													<td></td>
-												</tr>
-												{{/compareThis}}
-												
-											</tbody>
-										</table>
+						<div class="col-sm-10 col-sm-offset-1">
+							<div class="widget-box transparent">
+								<table id="dynamic-table" >
+									<thead>
+										
+									</thead>
+									<tbody>
+										<tr rowspan="3">
+											<td></td>
+										</tr>
+										<tr>
+											<td>NOME:&nbsp;</td>
+											<td>{{#each benes}}
+													{{#ifEqual ../trat.trat_beneid _id}}
+														{{bene_nome}}
+													{{/ifEqual}}
+												{{/each}}</td>
+											
+										</tr>
+										{{#compareThis trat.trat_planotipo "Padrão"}}
+										<tr>
+											<td>TERAPIA:&nbsp;</td>
+											<td>{{trat.trat_especialidadepad}}</td>
+										</tr>
+										<tr>
+											<td>TERAPEUTA:&nbsp;</td>
+											<td>{{#each usuarios}}
+													{{#ifEqual ../trat.trat_terapeutaidpad _id}}
+														{{usuario_nome}}
+													{{/ifEqual}}
+												{{/each}}
+											&nbsp;-&nbsp;{{trat.trat_regconselhopad}}</td>
+											
+										</tr>
+										{{else}}
+										<tr>
+											<td>TERAPIA:&nbsp;</td>
+											<td>{{trat.trat_especialidadeis}}</td>
+										</tr>
+										<tr>
+											<td>TERAPEUTA:&nbsp;</td>
+											<td>{{#each usuarios}}
+													{{#ifEqual ../trat.trat_terapeutaidis _id}}
+														{{usuario_nome}}
+													{{/ifEqual}}
+												{{/each}}
+											&nbsp;-&nbsp;{{trat.trat_regconselhois}}</td>
+											
+										</tr>
 										<hr>
-										<div class="row">
-											<table id="dynamic-table" >
-												<thead>
+										<tr>
+											<td>TERAPIA:&nbsp;</td>
+											<td>{{trat.trat_especialidadeavd}}</td>
+										</tr>
+										<tr>
+											<td>TERAPEUTA:&nbsp;</td>
+											<td>{{#each usuarios}}
+													{{#ifEqual ../trat.trat_terapeutaidavd _id}}
+														{{usuario_nome}}
+													{{/ifEqual}}
+												{{/each}}
+											&nbsp;-&nbsp;{{trat.trat_regconselhoavd}}</td>
+											<td></td>
+										</tr>
+										{{/compareThis}}
+										
+									</tbody>
+								</table>
+								<hr>
+								<div class="row">
+									<table id="dynamic-table" >
+										<thead></thead>
+										<tbody>	
+											{{#compareThis trat.trat_planotipo "Padrão"}}
+												<tr>
+													<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_historicopad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>OBJETIVOS GERAIS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_objgeralpad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>OBJETIVO ESPECÍFICOS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_objespecificopad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
+													<td><b><span>ESTRATÉGIAS</span></b></td>
+												</tr>
+												<tr>
+													<td>{{trat.trat_estrategiapad}}</td>
+												</tr>
+												<tr><td><hr></td></tr>
+												<tr>
 													
-												</thead>
+													<td><b><span>OBSERVAÇÕES</span></b></td>
+													
+												</tr>
+												<tr>
+													<td>{{trat.trat_obspad}}</td>
+												</tr>
+											{{else}}
+											<tr>
+												<td><b><span>DIAGNÓSTICO TERAPÊUTICO OCUPACIONAL</span></b></td>
+											</tr>
+											<tr>
+												<td>{{trat.trat_diagnosticoocup}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											<tr>
+												<td><b><span>METAS À CURTO PRAZO</span></b></td>
+											</tr>
+											<tr>
+												<td>{{trat.trat_metacurtois}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											<tr>
+												<td><b><span>METAS À MÉDIO PRAZO</span></b></td>
+											</tr>
+											<tr>
+												<td>{{trat.trat_metamediois}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											<tr>
+												<td><b><span>METAS À LONGO PRAZO</span></b></td>
+											</tr>
+											<tr>
+												<td>{{trat.trat_metalongois}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											<tr>
 												
-												<tbody>	
-													{{#compareThis trat.trat_planotipo "Padrão"}}
-														<tr>
-															<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
-														</tr>
-														<tr>
-															<td>{{trat.trat_historicopad}}</td>
-														</tr>
-														<tr><td><hr></td></tr>
-														<tr>
-															<td><b><span>OBJETIVOS GERAIS</span></b></td>
-														</tr>
-														<tr>
-															<td>{{trat.trat_objgeralpad}}</td>
-														</tr>
-														<tr><td><hr></td></tr>
-														<tr>
-															<td><b><span>OBJETIVO ESPECÍFICOS</span></b></td>
-														</tr>
-														<tr>
-															<td>{{trat.trat_objespecificopad}}</td>
-														</tr>
-														<tr><td><hr></td></tr>
-														<tr>
-															<td><b><span>ESTRATÉGIAS</span></b></td>
-														</tr>
-														<tr>
-															<td>{{trat.trat_estrategiapad}}</td>
-														</tr>
-														<tr><td><hr></td></tr>
-														<tr>
-															
-															<td><b><span>OBSERVAÇÕES</span></b></td>
-															
-														</tr>
-														<tr>
-															<td>{{trat.trat_obspad}}</td>
-														</tr>
-													{{else}}
-													<tr>
-														<td><b><span>DIAGNÓSTICO TERAPÊUTICO OCUPACIONAL</span></b></td>
-													</tr>
-													<tr>
-														<td>{{trat.trat_diagnosticoocup}}</td>
-													</tr>
-													<tr><td><hr></td></tr>
-													<tr>
-														<td><b><span>METAS À CURTO PRAZO</span></b></td>
-													</tr>
-													<tr>
-														<td>{{trat.trat_metacurtois}}</td>
-													</tr>
-													<tr><td><hr></td></tr>
-													<tr>
-														<td><b><span>METAS À MÉDIO PRAZO</span></b></td>
-													</tr>
-													<tr>
-														<td>{{trat.trat_metamediois}}</td>
-													</tr>
-													<tr><td><hr></td></tr>
-													<tr>
-														<td><b><span>METAS À LONGO PRAZO</span></b></td>
-													</tr>
-													<tr>
-														<td>{{trat.trat_metalongois}}</td>
-													</tr>
-													<tr><td><hr></td></tr>
-													<tr>
-														
-														<td><b><span>ESTRATÉGIAS E OBJETIVOS</span></b></td>
-														
-													</tr>
-													<tr>
-														<td>{{trat.trat_objetivois}}</td>
-													</tr>
-													<tr><td><hr></td></tr>
-													<tr>
-														
-														<td><b><span>OBSERVAÇÕES</span></b></td>
-														
-													</tr>
-													<tr>
-														<td>{{trat.trat_obspad}}</td>
-													</tr>
-													{{/compareThis}}
-												</tbody>
+												<td><b><span>ESTRATÉGIAS E OBJETIVOS</span></b></td>
 												
-											</table>										
+											</tr>
+											<tr>
+												<td>{{trat.trat_objetivois}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											<tr>
 												
-									</div>
+												<td><b><span>OBSERVAÇÕES</span></b></td>
+												
+											</tr>
+											<tr>
+												<td rowspan="1" colspan="2">{{trat.trat_obspad}}</td>
+											</tr>
+											<tr><td><hr></td></tr>
+											{{/compareThis}}
+										</tbody>
+									</table>
+									<table>
+										<thead>
+											<tr>
+												<td class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="3"><label for="carimbo">Carimbos e assinaturas:</label></td>
+											</tr>
+										</thead>
+										<!-- Divs para mostrar as imagens de carimbo e assinaturas -->
+										<tbody>
+											<tr>
+												{{#verificarVazioOuIndefinido this.carimboUsuPad }}
+														{{else}}
+															<td rowspan="1" colspan="3" class="center"><!-- Div imagem carimbo Terapeuta Padrão -->
+																<img id="previewImage1" src="data:image/png;base64, {{carimboUsuPad}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+															</td>
+												{{/verificarVazioOuIndefinido}}
+												{{#verificarVazioOuIndefinido this.carimboUsuIs }}
+														{{else}}
+															<td rowspan="1" colspan="1" class="center"><!-- Div imagem carimbo Terapeuta IS -->
+																<img id="previewImage2" src="data:image/png;base64, {{carimboUsuIs}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+															</td>
+												{{/verificarVazioOuIndefinido}}
+												{{#verificarVazioOuIndefinido this.carimboUsuAvd }}
+														{{else}}
+															<td rowspan="1" colspan="1" class="center"><!-- Div imagem carimbo Terapeuta Avd -->
+																<img id="previewImage3" src="data:image/png;base64, {{carimboUsuAvd}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+															</td>
+												{{/verificarVazioOuIndefinido}}
+											</tr>
+											<tr><!-- Aparecer na Linha abaixo -->
+												<td rowspan="1" colspan="3" class="center"><!-- Div imagem carimbo Route (Roberta) Sempre aparecer -->
+													{{#verificarVazioOuIndefinido this.carimboRoute }}
+														{{else}}
+															<img id="previewImage0" src="data:image/png;base64, {{carimboRoute}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+													{{/verificarVazioOuIndefinido}}
+												</td>
+											</tr>
+										</tbody>
+										<tfoot></tfoot>
+
+									</table>
 								</div>
-							</div><!-- PAGE CONTENT ENDS -->
+						</div>
+						</div><!-- PAGE CONTENT ENDS -->
 					</div><!-- /.row -->
 					<div class="row" class="rodape">
 						<div class="col-xs-12">
@@ -513,4 +556,3 @@
 		</div><!-- /.main-container -->
 	</body>
 </html>
-

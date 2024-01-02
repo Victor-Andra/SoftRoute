@@ -27,7 +27,13 @@ const ContaRecSchema = mongoose.Schema({
     contarec_vlrdiferenca :{ type: String, required: false },
     contarec_formapg :{ type: String, required: false },
     contarec_datapg :{ type: Date, required: false },
-    //Impostos
+    //Alíquota dos Impostos
+    contarec_alqpis :{ type: String, required: false },
+    contarec_alqcssl :{ type: String, required: false },
+    contarec_alqcofins :{ type: String, required: false },
+    contarec_alqirpf :{ type: String, required: false },
+    contarec_alqriss :{ type: String, required: false },
+    //valor Impostos
     contarec_vlrpis :{ type: String, required: false },
     contarec_vlrcssl :{ type: String, required: false },
     contarec_vlrcofins :{ type: String, required: false },
@@ -64,7 +70,13 @@ class ContaRec{
         contarec_vlrdiferenca,
         contarec_formapg,
         contarec_datapg,
-        //Impostos
+        //valor dos Impostos
+        contarec_alqpis,
+        contarec_alqcssl,
+        contarec_alqcofins,
+        contarec_alqirpf,
+        contarec_alqiss,
+        //valor dos Impostos
         contarec_vlrpis,
         contarec_vlrcssl,
         contarec_vlrcofins,
@@ -101,8 +113,13 @@ class ContaRec{
         this.contarec_vlrdiferenca = contarec_vlrdiferenca,
         this.contarec_formapg = contarec_formapg,
         this.contarec_datapg = contarec_datapg,
-        
-        //Impostos
+        //Alíquotas dos Impostos
+        this.contarec_alqpis = contarec_alqpis,
+        this.contarec_alqcssl = contarec_alqcssl,
+        this.contarec_alqcofins = contarec_alqcofins,
+        this.contarec_alqirpf = contarec_alqirpf,
+        this.contarec_alqiss = contarec_alqiss,
+        //Valor dos Impostos
         this.contarec_vlrpis = contarec_vlrpis,
         this.contarec_vlrcssl = contarec_vlrcssl,
         this.contarec_vlrcofins = contarec_vlrcofins,
@@ -150,7 +167,13 @@ module.exports = {ContaRecModel, ContaRecSchema,
         contarec_vlrdiferenca : req.body.contarecVlrdiferenca,
         contarec_formapg : req.body.contarecFormapg,
         contarec_datapg : req.body.contarecDatapg,
-        //Impostos
+        //Alíquota dos Impostos
+        contarec_alqpis : req.body.contarecAlqpis,
+        contarec_alqcssl : req.body.contarecAlqcssl,
+        contarec_alqcofins : req.body.contarecAlqcofins,
+        contarec_alqirpf : req.body.contarecAlqirpf,
+        contarec_alqiss : req.body.contarecAlqiss,
+        //Valor dos Impostos
         contarec_vlrpis : req.body.contarecVlrpis,
         contarec_vlrcssl : req.body.contarecVlrcssl,
         contarec_vlrcofins : req.body.contarecVlrcofins,
@@ -200,6 +223,12 @@ module.exports = {ContaRecModel, ContaRecSchema,
                 contarec_vlrdiferenca : req.body.contarecVlrdiferenca,
                 contarec_formapg : req.body.contarecFormapg,
                 contarec_datapg : req.body.contarecDatapg,
+                //Alíquota dos Impostos
+                contarec_alqpis : req.body.contarecAlqpis,
+                contarec_alqcssl : req.body.contarecAlqcssl,
+                contarec_alqcofins : req.body.contarecAlqcofins,
+                contarec_alqirpf : req.body.contarecAlqirpf,
+                contarec_alqiss : req.body.contarecAlqiss,
                 //Impostos
                 contarec_vlrpis : req.body.contarecVlrpis,
                 contarec_vlrcssl : req.body.contarecVlrcssl,

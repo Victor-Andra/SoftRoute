@@ -216,6 +216,8 @@ module.exports = {
     
     relsemImp(req,res){
         let usuarioAtual = req.cookies['idUsu'];
+        let base64Image0; //Carimbo padrão de Roberta
+        let base64Image1; //Carimbo terapeuta padrão
         Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
@@ -229,8 +231,18 @@ module.exports = {
                                 console.log("Listagem Realizada de beneficiarios")
                                 Escola.find().then((escola) =>{
                                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    res.render("area/relsem/relsemImp", {relsem, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
-        })})})})})})}).catch((err) =>{
+                                        //Busca nos usuários os carimbos dos Terapeutas identificados dentro do Plano de Tratamento incluindo o carimbo da Route
+                                        Usuario.findOne({_id : '62e008adea444f5b7a02c04f'}).then((carRobertaRoute)=>{
+                                            if (carRobertaRoute.usuario_carimbo != 'undefined' && carRobertaRoute.usuario_carimbo != undefined){
+                                                base64Image0 = new Buffer.from(carRobertaRoute.usuario_carimbo, 'binary').toString('base64');
+                                                }
+                                                Usuario.findOne({_id: relsem.relsem_terapeutaid}).then((carTeraPad)=>{
+                                                        if (carTeraPad.usuario_carimbo != 'undefined' && carTeraPad.usuario_carimbo != undefined){
+                                                            base64Image1 = new Buffer.from(carTeraPad.usuario_carimbo, 'binary').toString('base64');
+                                                            }
+                                                        console.log(carTeraPad)
+                                    res.render("area/relsem/relsemImp", {relsem, base64Image0, base64Image1, carTeraPad, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
+        })})})})})})})})}).catch((err) =>{
         
             console.log(err)
             req.flash("error_message", "houve um erro ao abrir a impressão!")
