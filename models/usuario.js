@@ -205,7 +205,7 @@ module.exports = {
                 usuario_perfilid : req.body.usuarioPerfilid ,
                 usuario_status : req.body.usuarioStatus ,
                 usuario_senha : req.body.usuarioSenha ,
-                usuario_img : req.body.usuarioImg ,
+                //usuario_img : req.body.usuarioImg , // não deveria passar arquivos de imagem no editar...
 
                 usuario_filhos : req.body.usuarioFilhos ,
                 usuario_filhosqt : req.body.usuarioFilhosQt ,
