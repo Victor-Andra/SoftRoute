@@ -2,6 +2,13 @@
 <html lang="pt-br">
 	<head>
 		<title>Plano de Tratamentos</title>
+		<style>
+			.expandir-textarea {
+				width: 100%;
+				box-sizing: border-box;
+				resize: none;
+			}
+		</style>
 		<script type="text/javascript">
 			
 			function defineplanopadrao(){
@@ -63,7 +70,7 @@
 				if (dias < 0){
 					mes = mes-1;
 				}
-				return (ano + " anos e " + (""+mes+"").replace("-","") + " meses.");
+				return (ano + " anos e " + mes + " meses.");
 			}
 						
 						
@@ -94,82 +101,6 @@
 				return [year, month, day].join('-');
 			}
 			
-			function mudaPlano() {
-				let tipoDoc = document.getElementById("tratPlanotipo").value;
-				console.log(tipoDoc);
-				
-				if (tipoDoc === "Padrão") {
-					document.getElementById('is').style.display = 'none';
-					document.getElementById('padrao').style.display = 'block';
-					document.getElementById('terato').style.display = 'none';
-					document.getElementById('tera').style.display = 'block';
-				} else if (tipoDoc === "Ocupacional") {
-					document.getElementById('is').style.display = 'block';
-					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('terato').style.display = 'block';
-					document.getElementById('tera').style.display = 'none';
-				} else {
-					document.getElementById('is').style.display = 'none';
-					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('terato').style.display = 'none';
-				}
-				document.getElementById('tratPlanotipo').readOnly = true; // Corrigido 'ReadOnly' para 'readOnly'
-			}
-
-			function validarFormulario() {
-				let tipo = document.getElementById("tratPlanotipo").value;
-
-				if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
-					alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
-					return "false"; // Impede o envio do formulário se algum campo estiver em branco
-				} else {
-					var inputscab = document.getElementsByClassName('cab');
-					for (var i = 0; i < inputscab.length; i++) {
-						if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
-							alert('Por favor, preencha todos os campos obrigatórios.');
-							return "false";
-						}
-					}
-
-					if (tipo === "Padrão") {
-						var inputspad = document.getElementsByClassName('pad');
-
-						for (var i = 0; i < inputspad.length; i++) {
-							if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-')) {
-								alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
-								return "false";
-							}
-						}
-
-						return "true";
-					} else {
-						var inputsocup = document.getElementsByClassName('ocup');
-
-						for (var i = 0; i < inputsocup.length; i++) {
-							if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-')) {
-								alert('Por favor, preencha todos os campos obrigatórios.');
-								return "false";
-							}
-						}
-
-						return "true";
-					}
-				}
-			}
-
-			
-		function submeterFormulario(){
-			let validacao = this.validarFormulario();
-			if (validacao == "true"){
-				let form = document.getElementById("formPlanoadd");
-				form.action = "/menu/area/plano/add";
-				form.submit();
-			}
-		}
-		
-			
-				
-			
 		</script>
 	</head>
 
@@ -191,7 +122,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<!-- PAGE CONTENT BEGINS -->
-						<form id="formPlanoadd" class="form-horizontal" role="form" method="POST">
+						<form id="formPlanoadd" class="form-horizontal" role="form"  method="POST">
 							<div class="col-sm-12" name="plan" id="plan"><!-- Widget plano -->
 								<div class="widget-box">
 									<div class="widget-header">
@@ -316,7 +247,7 @@
 													<div class="form-group">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="beneDatanasc" id="beneDatanasc" type="date"  class="cab" readonly="true"  />
+																<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
 															</div>
 														</div>
 													</div>
@@ -327,7 +258,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group" >
-																<input name="beneIdade" id="beneIdade" type="text"  class="cab" readonly="true" />
+																<input name="beneIdade" id="beneIdade" type="text" readonly="true" />
 															</div>
 														</div>
 													</div>
@@ -634,7 +565,7 @@
 								</div>
 							</div>
 									
-							<div class="col-sm-12" name="is" id="is"><!-- Widget Dados TO IS e TO AVD -->
+							<div class="col-xs-12 col-sm-12" name="is" id="is"><!-- Widget Dados TO IS e TO AVD -->
 								<div class="widget-box">
 									<div class="widget-header">
 										<h4 class="widget-title">
@@ -652,49 +583,42 @@
 									</div>
 									<div class="widget-body">
 										<div class="widget-main">												
-											
-											<label>Diagnóstico terapêutico ocupacional:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="5" ></textarea>
-												</div>
-											</div>	
-
-
-											<label>Metas à curto prazo:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea  name="tratMetacurtois" id="tratMetacurtois" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
-												</div>
-											</div>
-											
-
-
-											<label>Metas à médio prazo:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea name="tratMetamediois" id="tratMetamediois" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
-												</div>
-											</div>
-											
-
-
-											<label>Metas à longo prazo:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea name="tratMetalongois" id="tratMetalongois" class="ocup" style="font-size: 12px" placeholder="-" class="form-control" rows="2" ></textarea>
-												</div>
-											</div>
-											
-
-
-											<label>Estratégias e objetivos:</label>
-											<div class="form-group">
-												<div class="col-sm-12">
-													<textarea  name="tratObjetivois" id="tratObjetivois" class="ocup" style="font-size: 12px" placeholder="-" class="form-control" rows="2"   ></textarea>
-												</div>
-											</div>
-																							
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												<thead></thead>
+												<tbody>
+													<tr>
+														<td><label>Diagnóstico terapêutico ocupacional:</label></td>
+													</tr>
+													<tr>
+														<td><textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup"  class="expandir-textarea ocup" style="font-size: 12px; height: 100%" placeholder="-" class="form-control" rows="5" ></textarea></td>
+													</tr>
+													<tr>
+														<td><label>Metas à curto prazo:</label></td>
+													</tr>
+													<tr>
+														<td><textarea  name="tratMetacurtois" id="tratMetacurtois" class="expandir-textarea ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea></td>
+													</tr>
+													<tr>
+														<td><label>Metas à médio prazo:</label></td>
+													</tr>
+													<tr>
+														<td><textarea name="tratMetamediois" id="tratMetamediois" class="expandir-textarea ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea></td>
+													</tr>
+													<tr>
+														<td><label>Metas à longo prazo:</label></td>
+													</tr>
+													<tr>
+														<td><textarea name="tratMetalongois" id="tratMetalongois" class="expandir-textarea ocup" style="font-size: 12px" placeholder="-" class="form-control" rows="2"></textarea></td>
+													</tr>
+													<tr>
+														<td><label>Estratégias e objetivos:</label></td>
+													</tr>
+													<tr>
+														<td><textarea  name="tratObjetivois" id="tratObjetivois" class="expandir-textarea ocup" style="font-size: 12px" placeholder="-" rows="3" class="form-control" rows="2"></textarea></td>
+													</tr>
+												</tbody>
+												<tfoot></tfoot>
+											</table>
 										
 											<div class="col-xs-12 ">
 												<label class="hidden" for="id-date-picker-1">Id do usuário que digitou no sistema</label>
@@ -731,8 +655,7 @@
 											<label>Observações:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratObspad" id="tratObspad"  style="font-size: 12px" data-placeholder="-" placeholder="" class="form-control" rows="3" ></textarea>
-													
+													<textarea  name="tratObspad" id="tratObspad"  style="font-size: 12px"  class="form-control" rows="3" ></textarea>
 												</div>
 											</div>	
 										</div>
@@ -741,11 +664,9 @@
 							</div>
 						</div>
 						<div class="col-sm-12">
-							<div class="space-4"></div>							
-							<div class="space-4"></div>
-							<div>
+							<div class="form-actions">
 								<div class="col-xs-12" style="text-align: center;" >
-									<button class="btn btn-info" type="button" onclick="javascript:submeterFormulario();">
+									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
 										Salvar
 									</button>
