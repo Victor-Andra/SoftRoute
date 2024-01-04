@@ -195,63 +195,59 @@ module.exports = {ContaRecModel, ContaRecSchema,
         })
         return resultado;
     },
-    contarecAdicionar: async (req, res) => {
-        try {
-            let dataAtual = new Date();
-            let usuarioAtual = req.cookies['idUsu'];
-    
+    contarecAdicionar: async (req,res) => {
+        let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+
             console.log("contarecmodel");
             const newContaRec = new ContaRecModel({
-             //Registro de operadores
-             contarec_usuidcad : usuarioAtual,
-             contarec_datacad : dataAtual,
-             //Identificador da NF
-             contarec_nfnum : req.body.contarecNfnum,
-             contarec_beneid : req.body.contarecBeneid,
-             contarec_convid : req.body.contarecConvid,
-             contarec_benenome : req.body.contarecBenenome,
-             contarec_tomador : req.body.contarecTomador,
-             contarec_cpfcnpj : req.body.contarecCpfcnpj,
-             contarec_retencao : req.body.contarecRetencao,
-             //Informações da NF
-             contarec_anomesatend : req.body.contarecAnomesatend,
-             contarec_dataevento : req.body.contarecDataevento,
-             contarec_vlrnf : req.body.contarecVlrnf,
-             contarec_dataemprest : req.body.contarecDataemprest,
-             contarec_dataadevol : req.body.contarecDataadevol,
-             contarec_dataprev : req.body.contarecDataprev,
-             contarec_vlrpg : req.body.contarecVlrpg,
-             contarec_vlrdiferenca : req.body.contarecVlrdiferenca,
-             contarec_formapg : req.body.contarecFormapg,
-             contarec_datapg : req.body.contarecDatapg,
-             //Alíquota dos Impostos
-             contarec_alqpis : req.body.contarecAlqpis,
-             contarec_alqcssl : req.body.contarecAlqcssl,
-             contarec_alqcofins : req.body.contarecAlqcofins,
-             contarec_alqirpf : req.body.contarecAlqirpf,
-             contarec_alqiss : req.body.contarecAlqiss,
-             //Impostos
-             contarec_vlrpis : req.body.contarecVlrpis,
-             contarec_vlrcssl : req.body.contarecVlrcssl,
-             contarec_vlrcofins : req.body.contarecVlrcofins,
-             contarec_vlrirpf : req.body.contarecVlrirpf,
-             contarec_vlriss : req.body.contarecVlriss,
-             contarec_pg : req.body.contarecPg,
-             //Observações
-             contarec_descr : req.body.contarecDescr,
-             contarec_obs : req.body.contarecObs
-         });
-    
+                //Registro de operadores
+                contarec_usuidcad : usuarioAtual,
+                contarec_datacad : dataAtual,
+                //Identificador da NF
+                contarec_nfnum : req.body.contarecNfnum,
+                contarec_beneid : req.body.contarecBeneid,
+                contarec_convid : req.body.contarecConvid,
+                contarec_benenome : req.body.contarecBenenome,
+                contarec_tomador : req.body.contarecTomador,
+                contarec_cpfcnpj : req.body.contarecCpfcnpj,
+                contarec_retencao : req.body.contarecRetencao,
+                //Informações da NF
+                contarec_anomesatend : req.body.contarecAnomesatend,
+                contarec_dataevento : req.body.contarecDataevento,
+                contarec_vlrnf : req.body.contarecVlrnf,
+                contarec_dataemprest : req.body.contarecDataemprest,
+                contarec_dataadevol : req.body.contarecDataadevol,
+                contarec_dataprev : req.body.contarecDataprev,
+                contarec_vlrpg : req.body.contarecVlrpg,
+                contarec_vlrdiferenca : req.body.contarecVlrdiferenca,
+                contarec_formapg : req.body.contarecFormapg,
+                contarec_datapg : req.body.contarecDatapg,
+                //Alíquota dos Impostos
+                contarec_alqpis : req.body.contarecAlqpis,
+                contarec_alqcssl : req.body.contarecAlqcssl,
+                contarec_alqcofins : req.body.contarecAlqcofins,
+                contarec_alqirpf : req.body.contarecAlqirpf,
+                contarec_alqiss : req.body.contarecAlqiss,
+                //Impostos
+                contarec_vlrpis : req.body.contarecVlrpis,
+                contarec_vlrcssl : req.body.contarecVlrcssl,
+                contarec_vlrcofins : req.body.contarecVlrcofins,
+                contarec_vlrirpf : req.body.contarecVlrirpf,
+                contarec_vlriss : req.body.contarecVlriss,
+                //Observações
+                contarec_pg : req.body.contarecPg,
+                contarec_descr : req.body.contarecDescr,
+                contarec_obs : req.body.contarecObs
+            });
             console.log("newContaRec save");
-            await newContaRec.save();
-    
-            console.log("Cadastro realizado!");
-            return true;
-        } catch (error) {
-            console.error(error);
-            return error;
+            await newContaRec.save().then(()=>{
+                console.log("Cadastro realizado!");
+                return true;
+            }).catch((err) => {
+                console.log(err)
+                return err;
+            });
         }
-    },
-  
 };
 

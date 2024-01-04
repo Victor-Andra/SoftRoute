@@ -1415,26 +1415,8 @@ router.post('/financeiro/despesa/subcategoria/atualizar', fncGeral.IsAuthenticat
 
 //Financeiro / Crédito
 //Menu Crédito   
-router.get('/financeiro/receita/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas credits
-    fncCredit.listar(req,res);
-})
 
 
-router.post('/financeiro/receita/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona credit
-    fncCredit.adicionar(req,res);
-})
-
-router.get('/financeiro/receita/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta credit[]
-    fncCredit.delete(req,res);
-})
-
-router.get('/financeiro/receita/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de credit
-    fncCredit.carregaEditar(req,res);
-})
-
-router.post('/financeiro/receita/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Creditimento
-    fncCredit.atualizar(req,res);
-})
 
 //Menu Contas à Receber (contRec)
 router.get('/financeiro/receita/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas credits

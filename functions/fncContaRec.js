@@ -8,6 +8,7 @@ const contaRecClass = require("../models/contaRec");
 const ContaRec = mongoose.model("tb_contarec")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
+const usuClass = require("../models/usuario")
 //tabelas Extrangeira
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
@@ -61,7 +62,7 @@ module.exports = {
     atualizar(req,res){
         let resposta;
         try{
-            creditClass.creditEditar(req,res).then((res)=>{
+            contaRecClass.contarecEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resposta = res;
@@ -85,29 +86,112 @@ module.exports = {
             console.log(err1)
         }
     },
-    adicionar(req,res){
-        let cadastro = creditClass.creditAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        if(cadastro == true){
-            console.log('verdadeiro')
-            res.render('financeiro/receita/contaRecCad');
-        } else {
-            console.log(cadastro)
+    adicionar: async (req, res) => {
+        try {
+            let cadastro = await contaRecClass.contarecAdicionar(req, res);
+    
+            if (cadastro === true) {
+                console.log('Cadastro realizado!');
+                res.render('financeiro/receita/contaRecCad');
+            } else {
+                console.log(cadastro);
+                res.render('admin/erro');
+            }
+        } catch (error) {
+            console.error(error);
             res.render('admin/erro');
         }
     },
    
     listar(req, res){
-    //Carregar Variáveis para os totais Mês a Mês para as:
-    //VlrNF; VlrPg; VlrDif; VlrImpostos
-    //Final de cada Linha: total Geral das somas dos meses.
-        Terapia.findOne().then((terapia) =>{
+        ContaRec.find().then((conta) =>{
+            conta.forEach((b)=>{
+                //console.log("b.dataevento"+b.dataevento)
+                
+                let dataevento = new Date(b.contarec_dataevento);
+                let mes = (dataevento.getMonth()+1).toString();
+                let dia = (dataevento.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(dataevento.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataevento=fulldate;
+            })
+            conta.forEach((b)=>{
+                //console.log("b.dataemprest"+b.dataemprest)
+                let dataemprest = new Date(b.contarec_dataemprest);
+                let mes = (dataemprest.getMonth()+1).toString();
+                let dia = (dataemprest.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(dataemprest.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataemprest=fulldate;
+            })
+            conta.forEach((b)=>{
+                //console.log("b.datadev"+b.datadev)
+                let datadev = new Date(b.contarec_dataadevol);
+                let mes = (datadev.getMonth()+1).toString();
+                let dia = (datadev.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datadev.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datadev=fulldate;
+            })
+            conta.forEach((b)=>{
+                //console.log("b.dataprev"+b.dataprev)
+                let dataprev = new Date(b.contarec_dataprev);
+                let mes = (dataprev.getMonth()+1).toString();
+                let dia = (dataprev.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(dataprev.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataprev=fulldate;
+            })
+            conta.forEach((b)=>{
+                //console.log("b.datapg"+b.dataevento)
+                let datapg = new Date();
+                if(contarec_datapg){
+                datapg = new Date(b.contarec_pg)
+                let mes = (datapg.getMonth()+1).toString();
+                let dia = (datapg.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datapg.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datapg=fulldate;
+            }else{
+                datapg = "";
+            }
+        })
+            
+
+            Conv.find().then((conv)=>{
+            conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
             console.log("Listagem Realizada!")
-            res.render('financeiro/receita/contaRecLis', {terapias: terapia})
-        }).catch((err) =>{
+            res.render('financeiro/receita/contaRecLis', {contas: conta, convs: conv})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Correntes")
             res.redirect('admin/erro')
         })
-    },
+    }
     
 }
