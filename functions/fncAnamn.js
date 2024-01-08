@@ -131,8 +131,6 @@ carregaAnamn(req, res){
         let flash = new Resposta();
         //console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
-            //anamn.sort((a,b) => ((a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.anamn_benenome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            //anamn.sort((a,b) => (a.anamn_benenome > b.anamn_benenome) ? 1 : ((b.anamn_benenome > a.anamn_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista anamnese 
             anamn.sort((a,b) => (((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : ((((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             anamn.forEach((b)=>{
                 //console.log("b.datacad"+b.anamn_datacad)

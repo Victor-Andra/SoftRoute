@@ -12,6 +12,8 @@ const usuClass = require("../models/usuario")
 //tabelas Extrangeira
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
+const Usuario = mongoose.model("tb_usuario")
+
 //Funções auxiliares
 const fncContaRec = require("./fncContaRec")
 
@@ -53,8 +55,9 @@ module.exports = {
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Conv.find().then((conv)=>{
-                    res.render('financeiro/receita/contaRecCad', {benes: bene, convs: conv, contaRecs: contaRec, usuarioAtual, dataAtual})
-        })})}).catch((err) =>{
+                    Convimp.find().then((convimp)=>{
+                    res.render('financeiro/receita/contaRecCad', {convimps: convimp, benes: bene, convs: conv, contaRecs: contaRec, usuarioAtual, dataAtual})
+        })})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -107,8 +110,9 @@ module.exports = {
         ContaRec.find().then((conta) =>{
             conta.forEach((b)=>{
                 //console.log("b.dataevento"+b.dataevento)
-                
-                let dataevento = new Date(b.contarec_dataevento);
+                let dataevento = new Date();
+                if(b.contarec_dataevento){
+                dataevento = new Date(b.contarec_dataevento);
                 let mes = (dataevento.getMonth()+1).toString();
                 let dia = (dataevento.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -119,10 +123,15 @@ module.exports = {
                 }
                 let fulldate=(dataevento.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.dataevento=fulldate;
+                }else{
+                dataemprest = "";
+                }
             })
             conta.forEach((b)=>{
                 //console.log("b.dataemprest"+b.dataemprest)
-                let dataemprest = new Date(b.contarec_dataemprest);
+                let dataemprest = new Date();
+                if(b.contarec_dataemprest){
+                dataemprest = new Date(b.contarec_dataemprest);
                 let mes = (dataemprest.getMonth()+1).toString();
                 let dia = (dataemprest.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -133,10 +142,16 @@ module.exports = {
                 }
                 let fulldate=(dataemprest.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.dataemprest=fulldate;
+                }else{
+                dataemprest = "";
+                }
             })
             conta.forEach((b)=>{
                 //console.log("b.datadev"+b.datadev)
-                let datadev = new Date(b.contarec_dataadevol);
+                
+                let datadev = new Date();
+                if(b.contarec_dataadevol){
+                datadev = new Date(b.contarec_dataadevol);
                 let mes = (datadev.getMonth()+1).toString();
                 let dia = (datadev.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -147,10 +162,15 @@ module.exports = {
                 }
                 let fulldate=(datadev.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.datadev=fulldate;
+                }else{
+                datadev = "";
+                }
             })
             conta.forEach((b)=>{
                 //console.log("b.dataprev"+b.dataprev)
-                let dataprev = new Date(b.contarec_dataprev);
+                let dataprev = new Date();
+                if(b.contarec_dataprev){
+                dataprev = new Date(b.contarec_dataprev);
                 let mes = (dataprev.getMonth()+1).toString();
                 let dia = (dataprev.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -161,12 +181,15 @@ module.exports = {
                 }
                 let fulldate=(dataprev.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.dataprev=fulldate;
+                }else{
+                dataprev = "";
+                }
             })
             conta.forEach((b)=>{
                 //console.log("b.datapg"+b.dataevento)
                 let datapg = new Date();
-                if(contarec_datapg){
-                datapg = new Date(b.contarec_pg)
+                if(b.contarec_datapg){
+                datapg = new Date(b.contarec_datapg)
                 let mes = (datapg.getMonth()+1).toString();
                 let dia = (datapg.getUTCDate()).toString();
                 if (mes.length == 1){

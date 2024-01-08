@@ -28,48 +28,98 @@
 					console.error('Campo temporário não encontrado para ' + checkboxTempName);
 				}
 			}
-			function calculaImposto(){
+			function calculaImpostoPIS(){
 				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
 				//Checagem do imposto que irá participar da Nf
 				let checkpis  = document.getElementById("checkboxPistemp").value;
-				let checkcssl  = document.getElementById("checkboxCssltemp").value;
-				let checkcofins  = document.getElementById("checkboxCofinstemp").value;
-				let checkirpf  = document.getElementById("checkboxIrpftemp").value;
-				let checkiss  = document.getElementById("checkboxIsstemp").value;
+				
 				//Valores Temporários para os campos dos Impotos
 				//Aliquotas dos impostos
 				let alqpis  = parseFloat(document.getElementById("contarecAlqpis").value.replace("%","").replace(".","").replace(",","."));
-				let alqcssl  = parseFloat(document.getElementById("contarecAlqcssl").value.replace("%","").replace(".","").replace(",","."));
-				let alqcofins  = parseFloat(document.getElementById("contarecAlqcofins").value.replace("%","").replace(".","").replace(",","."));
-				let alqirpf  = parseFloat(document.getElementById("contarecAlqirpf").value.replace("%","").replace(".","").replace(",","."));
-				let alqiss  = parseFloat(document.getElementById("contarecAlqiss").value.replace("%","").replace(".","").replace(",","."));
 				//Checagem e cálculo
 				if (valorNf == null || valorNf < 0.01){console.log("NÃO")}else{console.log("SIM")
 					if (!(checkpis == "false" || alqpis <= 0.001 || alqpis == null || checkpis == "")){
 						document.getElementById("contarecVlrpis").value = (parseFloat((valorNf/100) * alqpis)).toFixed(2)
 					} else {
 						document.getElementById("contarecVlrpis").value = "0,00";
-					};
+					}
+				}
+			}
+			
+			function calculaImpostoCSSL() {
+				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%", "").replace(".", "").replace(",", "."));
+				// Checagem do imposto que irá participar da Nf
+				let checkcssl = document.getElementById("checkboxCssltemp").value;
 
-					if (!(checkcssl == "" || checkcssl == "false" || alqcssl <= 0.001 || alqcssl == null)){
-						//document.getElementById("contarecVlrcssl").value = (parseFloat((valorNf/100) * alqcssl)).toFixed(2)
-						document.getElementById("contarecVlrcssl").value = parseFloat(document.getElementById((parseFloat((valorNf/100) * alqcssl)).toFixed(2)).value.replace("%","").replace(".","").replace(",","."));
+				// Valores Temporários para os campos dos Impostos
+				// Aliquotas dos impostos
+				let alqcssl = parseFloat(document.getElementById("contarecAlqcssl").value.replace("%", "").replace(".", "").replace(",", "."));
+				
+				// Checagem e cálculo
+				if (valorNf == null || valorNf < 0.01) {
+					console.log("NÃO");
+				} else {
+					console.log("SIM");
+					if (!(checkcssl == "" || checkcssl == "false" || alqcssl <= 0.001 || alqcssl == null)) {
+						// Correção no cálculo
+						document.getElementById("contarecVlrcssl").value = parseFloat((valorNf / 100) * alqcssl).toFixed(2);
 					} else {
 						document.getElementById("contarecVlrcssl").value = "0,00";
 					}
-
+				}
+			}
+			
+			function calculaImpostoCOFINS(){
+				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem do imposto que irá participar da Nf
+				
+				let checkcofins  = document.getElementById("checkboxCofinstemp").value;
+				
+				//Valores Temporários para os campos dos Impotos
+				//Aliquotas dos impostos
+				let alqcofins  = parseFloat(document.getElementById("contarecAlqcofins").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem e cálculo
+				if (valorNf == null || valorNf < 0.01){console.log("NÃO")}else{console.log("SIM")
 					if (!(checkcofins == "" || checkcofins == "false" || alqcofins <= 0.001 || alqcofins == null)){
 						document.getElementById("contarecVlrcofins").value = (parseFloat((valorNf/100) * alqcofins)).toFixed(2)
 					} else {
 						document.getElementById("contarecVlrcofins").value = "0,00";
 					}
-
-					if (!(checkirpf == "" || checkirpf == "false" || alqirpf <= 0.001 || alqirpf == null)){
-						document.getElementById("contarecVlrirpf").value = (parseFloat((valorNf/100) * alqirpf)).toFixed(2)
+				}
+			}
+			
+			function calculaImpostoIRPF() {
+				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%", "").replace(".", "").replace(",", "."));
+				// Checagem do imposto que irá participar da Nf
+				let checkirpf = document.getElementById("checkboxIrpftemp").value;
+				
+				// Valores Temporários para os campos dos Impostos
+				// Aliquotas dos impostos
+				let alqirpf = parseFloat(document.getElementById("contarecAlqirpf").value.replace("%", "").replace(".", "").replace(",", "."));
+				
+				// Checagem e cálculo
+				if (valorNf == null || valorNf < 0.01) {
+					console.log("NÃO");
+				} else {
+					console.log("SIM");
+					if (!(checkirpf == "" || checkirpf == "false" || alqirpf <= 0.001 || alqirpf == null)) {
+						// Correção no cálculo
+						document.getElementById("contarecVlrirpf").value = parseFloat((valorNf / 100) * alqirpf).toFixed(2);
 					} else {
 						document.getElementById("contarecVlrirpf").value = "0,00";
 					}
-
+				}
+			}
+			
+			function calculaImpostoISS(){
+				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem do imposto que irá participar da Nf
+				let checkiss  = document.getElementById("checkboxIsstemp").value;
+				//Valores Temporários para os campos dos Impotos
+				//Aliquotas dos impostos
+				let alqiss  = parseFloat(document.getElementById("contarecAlqiss").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem e cálculo
+				if (valorNf == null || valorNf < 0.01){console.log("NÃO")}else{console.log("SIM")
 					if (!(checkiss == "" || checkiss == "false" || alqiss <= 0.001 || alqiss == null)){
 						document.getElementById("contarecVlriss").value = (parseFloat((valorNf/100) * alqiss)).toFixed(2)
 					} else {
@@ -77,14 +127,19 @@
 					}
 				}
 			}
+			
 			function selectConv(){
 				var convid = document.getElementById(document.getElementById("contarecBeneid").value+"_beneconvid").value.toString();
 				var nomeid = document.getElementById(document.getElementById("contarecBeneid").value+"_benenomeid").value.toString();
+				var nometoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemnome").value.toString();
+				var cpfcnpjtoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemdoc").value.toString();
+				var reten = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemretem").value.toString();
+
 				document.getElementById("contarecConvid").value = convid;
 				document.getElementById("contarecBenenome").value = nomeid;
-				//document.getElementById("contarecTomador").value = document.getElementById("contarecTomadorEdi").value;
-				//document.getElementById("contarecCpfcnpj").value = document.getElementById("contarecCpfcnpjEdi").value; //repete o nome do beneficiário no cabeçalho
-				//document.getElementById("contarecRetencao").value = document.getElementById("contarecRetencaoEdi").value;
+				document.getElementById("contarecTomador").value = nometoma;
+				document.getElementById("contarecCpfcnpj").value = cpfcnpjtoma; //repete o nome do beneficiário no cabeçalho
+				document.getElementById("contarecRetencao").value = reten;
 			}
 			function atualizaConvId(){
 				let convId = document.getElementById("contarecConvid").value;
@@ -300,39 +355,39 @@
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImposto();"/>
+																			<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImpostoPIS();"/>
 																			<span class="lbl"></span>
 																			<input type="text" class="hidden" id="checkboxPistemp" name="checkboxPistemp" value="false" />
 																		</label>
 																	</td>
 																	<td>PIS</td>
-																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,065%" onchange="calculaImposto();"/></td>
+																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImpostoPIS();"/></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImposto();" />
+																			<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImpostoCSSL();" />
 																			<span class="lbl"></span>
 																			<input type="text" class="hidden" id="checkboxCssltemp" name="checkboxCssltemp" value="false" />
 																		</label>
 																	</td>
 																	<td>CSSL</td>
-																	<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImposto();"/></td>
+																	<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImpostoCSSL();"/></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrcssl" id="contarecVlrcssl" style="text-align: right; width:100px;" value="0,00" /></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImposto();" />
+																			<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImpostoCOFINS();" />
 																			<span class="lbl"></span>
 																			<input type="text" class="hidden" id="checkboxCofinstemp" name="checkboxCofinstemp" value="false" />
 																		</label>
 																	</td>
 																	<td>COFINS</td>
-																	<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImposto();" /></td>
+																	<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImpostoCOFINS();" /></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
@@ -345,20 +400,20 @@
 																		</label>
 																	</td>
 																	<td>IRPF</td>
-																	<td><input type="text" name="contarecAlqirpf" id="contarecAlqirpf" style="text-align: right; width:80px;"  value="1,5%" onchange="calculaImposto();" /></td>
+																	<td><input type="text" name="contarecAlqirpf" id="contarecAlqirpf" style="text-align: right; width:80px;"  value="1,5%" onchange="calculaImpostoIRPF();" /></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrirpf" id="contarecVlrirpf" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImposto();" />
+																			<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImpostoISS();" />
 																			<span class="lbl"></span>
 																			<input type="text" class="hidden" id="checkboxIsstemp" name="checkboxIsstemp" value="false" />
 																		</label>
 																	</td>
 																	<td>ISS</td>
-																	<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImposto();" /></td>
+																	<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImpostoISS();" /></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlriss" id="contarecVlriss" style="text-align: right; width:100px" value="0,00"/></td>
 																</tr>
@@ -372,8 +427,8 @@
 												<div class="form-group">
 													<div class="col-sm-3">
 														<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
-															<option value="nao">Não</option>
-															<option value="sim">Sim</option>
+															<option value="Não">Não</option>
+															<option value="Sim">Sim</option>
 														</select>
 													</div>
 												</div>

@@ -47,6 +47,7 @@
 					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
 					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;
 				}
+				
 				function calculaIdade(dataFmt){
 					let dataAtual = new Date();
 					let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
@@ -59,6 +60,7 @@
 					}
 					return (ano + " anos e " + mes + " meses.");
 				}
+				
 			</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">

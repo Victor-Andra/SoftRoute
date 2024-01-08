@@ -2,88 +2,124 @@
 <html lang="pt-br">
 	<head>
 		<title>contas a receber</title>
-		<script>
-			function carregaBody(){
+		<script type="text/javascript">
+		 	// biblioteca Inputmask
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.9/jquery.inputmask.min.js"></script>
 			
-			document.getElementById("contarecUsuidcad").value = document.getElementById("contarecUsuidcadEdi").value;
-			document.getElementById("contarecDatacad").value = document.getElementById("contarecDatacadEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecUsuidedi").value = document.getElementById("contarecUsuidediEdi").value;
-			document.getElementById("contarecDataedi").value = document.getElementById("contarecDataediEdi").value;
+			function atualizaCheckbox(checkbox) {
+				// Obtém o valor do checkbox (true ou false)
+				let valcheck;
 
-			document.getElementById("contarecNfnum").value = document.getElementById("contarecNfnumEdi").value;
-			document.getElementById("contarecBeneid").value = document.getElementById("contarecBeneidEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecConvid").value = document.getElementById("contarecConvidEdi").value;
-			document.getElementById("contarecBenenome").value = document.getElementById("contarecBenenomeEdi").value;
-			document.getElementById("contarecTomador").value = document.getElementById("contarecTomadorEdi").value;
-			document.getElementById("contarecCpfcnpj").value = document.getElementById("contarecCpfcnpjEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecRetencao").value = document.getElementById("contarecRetencaoEdi").value;
+				if (checkbox.checked !== undefined) {
+					valcheck = checkbox.checked;
+				} else {
+					// Caso a propriedade "checked" não esteja disponível, tenta obter o estado usando o atributo "value"
+					valcheck = checkbox.value === "true";
+				}
 
-			document.getElementById("contarecAnomesatend").value = document.getElementById("contarecAnomesatendEdi").value;
-			document.getElementById("contarecDataevento").value = document.getElementById("contarecDataeventoEdi").value;
-			document.getElementById("contarecVlrnf").value = document.getElementById("contarecVlrnfiEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecDataemprest").value = document.getElementById("contarecDataemprestEdi").value;
-			document.getElementById("contarecDataadevol").value = document.getElementById("contarecDataadevolEdi").value;
-			document.getElementById("contarecDataprev").value = document.getElementById("contarecDataprevEdi").value;
-			document.getElementById("contarecVlrpg").value = document.getElementById("contarecVlrpgEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecVlrdiferenca").value = document.getElementById("contarecVlrdiferencaEdi").value;
-			document.getElementById("contarecFormapg").value = document.getElementById("contarecFormapgEdi").value;
-			document.getElementById("contarecDatapg").value = document.getElementById("contarecDatapgEdi").value;
+				// Constrói o nome do campo temporário
+				const checkboxTempName = checkbox.name + "temp";
 
-			document.getElementById("contarecVlrpis").value = document.getElementById("contarecVlrpisEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecVlrcssl").value = document.getElementById("contarecVlrcsslEdi").value;
-			document.getElementById("contarecVlrcofins").value = document.getElementById("contarecVlrcofinsEdi").value;
-			document.getElementById("contarecVlrirpf").value = document.getElementById("contarecVlrirpfEdi").value;
-			document.getElementById("contarecVlriss").value = document.getElementById("contarecVlrissEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("contarecPg").value = document.getElementById("contarecPgEdi").value;
+				// Obtém a referência ao campo temporário
+				const tempField = document.getElementsByName(checkboxTempName)[0];
 
-			document.getElementById("contarecDescr").value = document.getElementById("contarecDescrEdi").value;
-			document.getElementById("contarecObs").value = document.getElementById("contarecObsEdi").value;
+				// Verifica se o campo temporário foi encontrado antes de atribuir o valor
+				if (tempField) {
+					tempField.value = valcheck;
+					console.log('Valor: ' + valcheck);
+				} else {
+					console.error('Campo temporário não encontrado para ' + checkboxTempName);
+				}
+			}
+			function mascaraValores(){
+
+			}
+			function calculaImposto(){
+				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem do imposto que irá participar da Nf
+				let checkpis  = document.getElementById("checkboxPistemp").value;
+				let checkcssl  = document.getElementById("checkboxCssltemp").value;
+				let checkcofins  = document.getElementById("checkboxCofinstemp").value;
+				let checkirpf  = document.getElementById("checkboxIrpftemp").value;
+				let checkiss  = document.getElementById("checkboxIsstemp").value;
+				//Valores Temporários para os campos dos Impotos
+				//Aliquotas dos impostos
+				let alqpis  = parseFloat(document.getElementById("contarecAlqpis").value.replace("%","").replace(".","").replace(",","."));
+				let alqcssl  = parseFloat(document.getElementById("contarecAlqcssl").value.replace("%","").replace(".","").replace(",","."));
+				let alqcofins  = parseFloat(document.getElementById("contarecAlqcofins").value.replace("%","").replace(".","").replace(",","."));
+				let alqirpf  = parseFloat(document.getElementById("contarecAlqirpf").value.replace("%","").replace(".","").replace(",","."));
+				let alqiss  = parseFloat(document.getElementById("contarecAlqiss").value.replace("%","").replace(".","").replace(",","."));
+				//Checagem e cálculo
+				if (valorNf == null || valorNf < 0.01){console.log("NÃO")}else{console.log("SIM")
+					
+					if (!(checkpis == "false" || alqpis <= 0.001 || alqpis == null || checkpis == "")){
+						document.getElementById("contarecVlrpis").value = (parseFloat((valorNf/100) * alqpis)).toFixed(2)
+					} else {
+						document.getElementById("contarecVlrpis").value = "0,00";
+					};
+
+					if (!(checkcssl == "false" || alqcssl <= 0.001 || alqcssl == null || checkcssl == "")){
+						document.getElementById("contarecVlrcssl").value = (parseFloat((valorNf/100) * alqcssl)).toFixed(2)
+					} else {
+						document.getElementById("contarecVlrcssl").value = "0,00";
+					};
+
+					if (!(checkcofins == "false" || alqcofins <= 0.001 || alqcofins == null || checkcofins == "")){
+						document.getElementById("contarecVlrcofins").value = (parseFloat((valorNf/100) * alqcofins)).toFixed(2)
+					} else {
+						document.getElementById("contarecVlrcofins").value = "0,00";
+					};
+
+					if (!(checkirpf == "false" || alqirpf <= 0.001 || alqirpf == null || checkirpf == "" )){
+						document.getElementById("contarecVlrirpf").value = (parseFloat((valorNf/100) * alqirpf)).toFixed(2)
+					} else {
+						document.getElementById("contarecVlrirpf").value = "0,00";
+					};
+
+					if (!(checkiss == "false" || alqiss <= 0.001 || alqiss == null || checkiss == "")){
+						document.getElementById("contarecVlriss").value = (parseFloat((valorNf/100) * alqiss)).toFixed(2)
+					} else {
+						document.getElementById("contarecVlriss").value = "0,00";
+					}
+				}
+			}
+			
+			function selectConv(){
+				var convid = document.getElementById(document.getElementById("contarecBeneid").value+"_beneconvid").value.toString();
+				var nomeid = document.getElementById(document.getElementById("contarecBeneid").value+"_benenomeid").value.toString();
+				var nometoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemnome").value.toString();
+				var cpfcnpjtoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemdoc").value.toString();
+				var reten = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemretem").value.toString();
+
+				document.getElementById("contarecConvid").value = convid;
+				document.getElementById("contarecBenenome").value = nomeid;
+				document.getElementById("contarecTomador").value = nometoma;
+				document.getElementById("contarecCpfcnpj").value = cpfcnpjtoma; //repete o nome do beneficiário no cabeçalho
+				document.getElementById("contarecRetencao").value = reten;
+			}
+			function atualizaConvId(){
+				let convId = document.getElementById("contarecConvid").value;
+				console.log(convId)
 			}
 		</script>
 	</head>
-		<!-- Recepção dos dados pelo banco para popular os imputs da view, atrelada a função carregaBody(); -->
-		<div hidden>
-			<input id="contarecUsuidcadEdi" name="contarecUsuidcadEdi" value="{{contaRec.contarec_usuidcad}}"/>
-			<input id="contarecDatacadEdi" name="contarecDatacadEdi" value="{{contaRec.contarec_datacad}}"/>
-			<input id="contarecUsuidediEdi" name="contarecUsuidediEdi" value="{{contaRec.contarec_usuidedi}}"/>
-			<input id="contarecDataediEdi" name="contarecDataediEdi" value="{{contaRec.contarec_dataedi}}"/>
-
-			<input id="contarecNfnumEdi" name="contarecNfnumEdi" value="{{contaRec.contarec_nfnum}}"/>
-			<input id="contarecBeneidEdi" name="contarecBeneidEdi" value="{{contaRec.contarec_beneid}}"/>
-			<input id="contarecConvidEdi" name="contarecConvidEdi" value="{{contaRec.contarec_convid}}"/>
-			<input id="contarecBenenomeEdi" name="contarecBenenomeEdi" value="{{contaRec.contarec_benenome}}"/>
-			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{contaRec.contarec_tomador}}"/>
-			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{contaRec.contarec_cpfcnpj}}"/>
-			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{contaRec.contarec_retencao}}"/>
+	<div id="divCarrega" class="hidden" class="col-sm-5">
+		{{#each benes}}
+			{{#each ../convs}}
+				{{#ifEqual ../bene_convid _id}}
+					<input value="{{../bene_convid}}" id="{{../_id}}_beneconvid" name="refAgendaConvid" />
+				{{/ifEqual}}
+			{{/each}}
 			
-			<input id="contarecAnomesatendEdi" name="contarecAnomesatendEdi" value="{{contaRec.contarec_anomesatend}}"/>
-			<input id="contarecDataeventoEdi" name="contarecDataeventoEdi" value="{{contaRec.contarec_dataevento}}"/>
-			<input id="contarecVlrnfiEdi" name="contarecVlrnfEdi" value="{{contaRec.contarec_vlrnf}}"/>
-			<input id="contarecDataemprestEdi" name="contarecDataemprestEdi" value="{{contaRec.contarec_dataemprest}}"/>
-			<input id="contarecDataadevolEdi" name="contarecDataadevolEdi" value="{{contaRec.contarec_dataadevol}}"/>
-			<input id="contarecDataprevEdi" name="contarecDataprevEdi" value="{{contaRec.contarec_dataprev}}"/>
-			<input id="contarecVlrpgEdi" name="contarecVlrpgEdi" value="{{contaRec.contarec_vlrpg}}"/>
-			<input id="contarecVlrdiferencaEdi" name="contarecVlrdiferencaEdi" value="{{contaRec.contarec_vlrdiferenca}}"/>
-			<input id="contarecFormapgEdi" name="contarecFormapgEdi" value="{{contaRec.contarec_formapg}}"/>
-			<input id="contarecDatapgEdi" name="contarecDatapgEdi" value="{{contaRec.contarec_datapg}}"/>
-			<!--Alíquota dos Impostos -->
-			<input id="contarecAlqpisEdi" name="contarecDataadevolEdi" value="{{contaRec.contarec_vlrpis}}"/>
-			<input id="contarecAlqcsslEdi" name="contarecVlrcsslEdi" value="{{contaRec.contarec_vlrcssl}}"/>
-			<input id="contarecAlqcofinsEdi" name="contarecVlrcofinsEdi" value="{{contaRec.contarec_vlrcofins}}"/>
-			<input id="contarecAlqirpfEdi" name="contarecVlrirpfEdi" value="{{contaRec.contarec_vlrirpf}}"/>
-			<input id="contarecAlqissEdi" name="contarecVlrissEdi" value="{{contaRec.contarec_vlriss}}"/>
-			<!-- Impostos -->
-			<input id="contarecVlrpisEdi" name="contarecDataadevolEdi" value="{{contaRec.contarec_vlrpis}}"/>
-			<input id="contarecVlrcsslEdi" name="contarecVlrcsslEdi" value="{{contaRec.contarec_vlrcssl}}"/>
-			<input id="contarecVlrcofinsEdi" name="contarecVlrcofinsEdi" value="{{contaRec.contarec_vlrcofins}}"/>
-			<input id="contarecVlrirpfEdi" name="contarecVlrirpfEdi" value="{{contaRec.contarec_vlrirpf}}"/>
-			<input id="contarecVlrissEdi" name="contarecVlrissEdi" value="{{contaRec.contarec_vlriss}}"/>
-			<input id="contarecPgEdi" name="contarecPgEdi" value="{{contaRec.contarec_pg}}"/>
-			<!-- Descrição e Observações -->
-			<input id="contarecDescrEdi" name="contarecDescrEdi" value="{{contaRec.contarec_descr}}"/>
-			<input id="contarecObsEdi" name="contarecObsEdi" value="{{contaRec.contarec_obs}}"/>
-		</div>
-	<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
+			<input id="{{_id}}_benenomeid" name="contarecBenenomeEdi" value="{{bene_nome}}"/>
+			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{bene_ordemnome}}"/>
+			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{bene_ordemdoc}}"/>
+			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{bene_ordemretem}}"/>
+
+		{{/each}}
+	</div>
+	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -99,9 +135,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/financeiro/receita/atualizar" method="POST">
-								
-																<div class="col-sm-12"><!-- Widget Dados Básicos -->
+							<form class="form-horizontal" role="form" action="/menu/financeiro/receita/add" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Dados</h4>
@@ -283,7 +318,7 @@
 																		</label>
 																	</td>
 																	<td>PIS</td>
-																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,065%" onchange="calculaImposto();"/></td>
+																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImposto();"/></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
@@ -376,7 +411,7 @@
 										Salvar
 									</button>
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn btn-warning"  href="/menu/financeiro/receita/lis">
+									<button class="btn btn-warning"  onclick="/menu/financeiro/receita/lis">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>

@@ -51,7 +51,9 @@
 															<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Apelido: activate to sort column ascending">Apelido</th>
 															<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Data Nascimento:     activate to sort column ascending">Data Nascimento</th>
 															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="COnvênio: activate to sort column ascending">Convênio</th>
+															<th style="width: 50px;"><a title="Foto cadastrada?"><i class="orange ace-icon fa fa-upload bigger-130"></i></a></th>
 															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Status:     activate to sort column ascending">Status</th>
+															
 															<th>Ação</th>
 														</tr>
 													</thead>
@@ -73,6 +75,7 @@
 																		<td>{{conv_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
+																<td><i class=" red ace-icon fa fa-ban bigger-130"></i></td>
 																{{#ifEqual this.bene_status "Inativo"}}
 																	<td><span class="label label-sm label-danger">{{bene_status}}</span></td>
 																	{{else}}
@@ -85,6 +88,9 @@
 																		</a>
 																		<a class="green" href="/menu/beneficiario/edi/{{_id}}">
 																			<i class="ace-icon fa fa-pencil bigger-130"></i>
+																		</a>
+																		<a class="blue" title="Upload do Carimbo e Assinatura" "href=/menu/beneficiario/carregaFoto/{{_id}}">
+																		<i class="ace-icon fa fa-upload bigger-130"></i>
 																		</a>
 																		<a class="red" href="/menu/beneficiario/del/{{_id}}">
 																			<i class="ace-icon fa fa-trash-o bigger-130"></i>
@@ -124,7 +130,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [200, 500],
 			"lengthChange": true,

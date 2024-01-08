@@ -437,7 +437,11 @@
 														</th>
 														<td><b>{{contarec_nfnum}}</b></td>
 														<td>{{contarec_benenome}}</td>
-														<td>{{contarec_convid}}</td>
+														{{#each ../convs}}<!-- Ok -->	
+																{{#ifEqual this._id ../contarec_convid}}
+																	<td>{{conv_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
 														<td>{{contarec_cpfcnpj}}</td>
 														<td>{{contarec_anomesatend}}</td>
 														<td>{{dataevento}}</td>

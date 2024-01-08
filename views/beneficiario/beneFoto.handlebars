@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Cadastrar foto do beneficiário </title>
+		<script type="text/javascript">
+			function carregarImagem() {
+				var preview = document.getElementById('previewImage');
+				var fileInput = document.getElementById('usuarioCarimbo');
+
+				if (fileInput.files && fileInput.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						preview.src = e.target.result;
+						document.getElementById('previewFoto').style.display = 'block'; // Exibe a div
+					};
+
+					reader.readAsDataURL(fileInput.files[0]);
+				}
+			}
+
+			function validarFormulario() {
+				var usuarioCarimboInput = document.getElementById("usuarioCarimbo");
+				if (usuarioCarimboInput.files.length === 0) {
+					alert("Selecione uma imagem para o carimbo!");
+					return false; // Impede o envio do formulário
+				}
+				return true; // Permite o envio do formulário
+			}
+			
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();carregarImagem()" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Cadastrar Carimbo e Assinatura</a>
+							</li>
+
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/bene/cadastrarFoto" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario();">
+								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-key bigger-110"></i>
+												
+												Cadastrar Foto do Beneficiário</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Importante!</strong><br>
+                                                    A foto deve ser menor ou igual à 4Mb <br>
+													Formato PNG.<br>
+													Com fundo branco de preferência.<br>
+													Servirá de identificação no sistema.<br>
+													
+
+												</div>
+												<div class="alert alert-danger">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>{{bene.bene_nomecompleto}}</strong><br>
+												</div>
+												
+												<div class="row">
+													<div class="col-xs-12 col-sm-6">
+														<label for="carimbo">Foto:</label>
+														<input type="file" id="benefotoFoto" name="benefotoFoto" accept="image/*" onchange="carregarImagem()">
+														<!-- Div para mostrar a imagem -->
+														<div id="previewFoto">
+															<img id="previewImage" src="data:image/png;base64, {{base64Image}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+														</div>
+													</div><!-- /.span -->
+												</div>
+												<div class="hidden">
+													<input id="beneId" name="beneId" value="{{bene._id}}" />
+												</div>
+											</div>
+										</div>		
+									</div>
+								</div>
+			
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" onclick="javascript:submitForm();">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Cancelar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+</html>
