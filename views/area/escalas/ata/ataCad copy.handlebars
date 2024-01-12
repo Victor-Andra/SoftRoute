@@ -166,14 +166,9 @@
 				return document.querySelectorAll('input.' + grupo + ':checked').length;
 			}
 			// Função para contar radio buttons por grupo
-			function contarRadioButtonsPorGrupo(grupo) {
-				const grupoRadios = document.getElementsByName(grupo);
-				for (const radio of grupoRadios) {
-					if (radio.checked) {
-						return 1;
-					}
-				}
-				return 0;
+			function contarRadioButtonsPorGrupo() {
+				const grupoRadios = document.querySelectorAll('input[name="' + grupo + '"]:checked');
+				return grupoRadios.length > 0 ? 1 : 0;
 			}
 
 			function updateTempField(checkbox) {
@@ -2863,7 +2858,7 @@
 																</td>
 																<td>
 																	<label>
-																		<input name="ataXxiii01" id="ataXxiii01_sim" type="radio" class="ace grupo_xxii" class="ace" onchange="javascript:atualizarContagem();inputTrue();">
+																		<input name="ataXxiii01" id="ataXxiii01_sim" type="radio" class="ace" onchange="javascript:atualizarContagem();inputTrue();">
 																		<span class="lbl"> Sim</span>
 																	</label>
 																</td>
@@ -2875,7 +2870,7 @@
 																</td>
 																<td>
 																	<label>
-																		<input name="ataXxiii01" id="ataXxiii01_nao" type="radio" class="ace grupo_xxii" class="ace" onchange="javascript:atualizarContagem();inputFalse();">
+																		<input name="ataXxiii01" id="ataXxiii01_nao" type="radio" class="ace" onchange="javascript:inputFalse();">
 																		<span class="lbl"> Não</span>
 																	</label>
 																</td>

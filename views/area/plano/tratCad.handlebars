@@ -132,53 +132,48 @@
 				}
 				document.getElementById('tratPlanotipo').readOnly = true; // Corrigido 'ReadOnly' para 'readOnly'
 			}
-
+		
 		function validarFormulario() {
-			let tipo = document.getElementById("tratPlanotipo").value;
+				let tipo = document.getElementById("tratPlanotipo").value;
 
-			if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
-				alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
-				return false;
-			} else {
-				var inputscab = document.getElementsByClassName('cab');
-				for (var i = 0; i < inputscab.length; i++) {
-					if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
-						alert('Por favor, preencha todos os campos obrigatórios.');
-						inputscab[i].style.border = '2px solid red'; // Destaca o campo em vermelho
-						return false;
-					} else {
-						inputscab[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
-					}
-				}
-
-				if (tipo === "Padrão") {
-					var inputspad = document.getElementsByClassName('pad');
-					for (var i = 0; i < inputspad.length; i++) {
-						if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
-							alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
-							inputspad[i].style.border = '2px solid red'; // Destaca o campo em vermelho
-							return false;
-						} else {
-							inputspad[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
-						}
-					}
+				if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
+					alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
+					return "false"; // Impede o envio do formulário se algum campo estiver em branco
 				} else {
-					var inputsocup = document.getElementsByClassName('ocup');
-					for (var i = 0; i < inputsocup.length; i++) {
-						if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
+					var inputscab = document.getElementsByClassName('cab');
+					for (var i = 0; i < inputscab.length; i++) {
+						if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
 							alert('Por favor, preencha todos os campos obrigatórios.');
-							inputsocup[i].style.border = '2px solid red'; // Destaca o campo em vermelho
-							return false;
-						} else {
-							inputsocup[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
+							return "false";
 						}
 					}
+
+					if (tipo === "Padrão") {
+						var inputspad = document.getElementsByClassName('pad');
+
+						for (var i = 0; i < inputspad.length; i++) {
+							if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
+								alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
+								return "false";
+							}
+						}
+
+						return "true";
+					} else {
+						var inputsocup = document.getElementsByClassName('ocup');
+
+						for (var i = 0; i < inputsocup.length; i++) {
+							if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
+								alert('Por favor, preencha todos os campos obrigatórios.');
+								return "false";
+							}
+						}
+
+						return "true";
+					}
 				}
-
-				return true;
 			}
-		}
-
+		
 		function submeterFormulario(){
 			let validacao = this.validarFormulario();
 			if (validacao == "true"){

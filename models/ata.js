@@ -145,7 +145,6 @@ const AtaSchema = mongoose.Schema({
     ata_xxii03:{ type: String, required: false },
     //XXIII
     ata_xxiii01:{ type: String, required: false },
-    ata_xxiii01Descr:{ type: String, required: false },
     //Total
     ata_totalitens:{ type: Number, required: false },
     ata_totalpontos:{ type: Number, required: false },
@@ -299,7 +298,6 @@ class Ata{
     ata_xxii03,
     //XXIII
     ata_xxiii01,
-    ata_xxiii01Descr,
     //Total
     ata_totalitens,
     ata_totalpontos,
@@ -452,7 +450,6 @@ class Ata{
     this.ata_xxii03 = ata_xxii03,
     //XXIII
     this.ata_xxiii01 = ata_xxiii01,
-    this.ata_xxiii01Descr = ata_xxiii01Descr,
     //Total
     this.ata_totalitens = ata_totalitens,
     this.ata_totalpontos = ata_totalpontos,
@@ -616,7 +613,6 @@ module.exports = {AtaModel,AtaSchema,
                 ata_xxii03 : req.body.ataXxii03temp,
                 //XXIII
                 ata_xxiii01 : req.body.ataXxiii01temp,
-                ata_xxiii01Descr : req.body.ataXxiii01Descr,
 
                 //Total
                 ata_totalitens : req.body.ataTotalitens,
@@ -784,7 +780,6 @@ module.exports = {AtaModel,AtaSchema,
             ata_xxii03 : req.body.ataXxii03temp,
             //XXIII
             ata_xxiii01 : req.body.ataXxiii01temp,
-            ata_xxiii01Descr : req.body.ataXxiii01Descr,
             //Total
             ata_totalitens : req.body.ataTotalitens,
             ata_totalpontos : req.body.ataTotalpontos,
