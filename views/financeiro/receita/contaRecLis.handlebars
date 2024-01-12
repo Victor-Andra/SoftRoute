@@ -386,7 +386,7 @@
 														<td>-</td>
 														<td>
 															<div class="action-buttons">
-																<a class="green" href="">
+																<a class="green" href="/menu/financeiro/receita/cad">
 																	<i class="ace-icon fa fa-plus bigger-130"></i>
 																</a>
 															</div>
@@ -415,7 +415,7 @@
 													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pagamento</th>
 
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >CSSL</th>
-													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;">IRPF</th>
+													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;">IRPJ</th>
 													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;">COFINS</th>
 													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;">ISS</th>
 													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;">PIS</th>
@@ -452,15 +452,21 @@
 														<td style="text-align: right;">{{contarec_vlrpg}}</td>
 														<td style="text-align: right;">{{contarec_vlrdiferenca}}</td>
 														<td>{{contarec_formapg}}</td>
+														
 														<td>{{datapg}}</td>
 
-														<td style="text-align: right; color: crimson;">{{contarec_alqpis}}</td>
+														<td style="text-align: right; color: crimson;">{{contarec_vlrpis}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrcssl}}</td>
-														<td style="text-align: right; color: crimson;">{{ontarec_vlrcofins}}</td>
+														<td style="text-align: right; color: crimson;">{{contarec_vlrcofins}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrirpf}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlriss}}</td>
 
-														<td>{{contarec_pg}}</td>
+														
+														{{#ifEqual this.contarec_pg "Não"}}
+																	<td><span class="label label-sm label-danger">Não</span></td>
+																	{{else}}
+																	<td><span class="label label-sm label-success">Sim</span></td>
+																{{/ifEqual}}
 														<td>
 															<div class="action-buttons">
 																<a class="green" href="/menu/financeiro/receita/edi/{{_id}}">

@@ -11,7 +11,7 @@ const estadoClass = require("../models/estado")
 const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
 const especializacaoClass = require("../models/especializacao")
-
+const metodoClass = require("../models/metodo")
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
 
@@ -22,7 +22,7 @@ const Perfil = mongoose.model("tb_perfil")
 const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
-
+const Metodo = mongoose.model("tb_metodo")
 
 
 module.exports = {
@@ -40,19 +40,14 @@ module.exports = {
     },
     carregaUsuario(req,res){
         Usuario.find().then((usuario) =>{
-            console.log("Listagem Realizada!")
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Ufs!")
-                        Perfil.find().then((perfil)=>{
-                            console.log("Listagem Realizada de Ufs!")
-                                Funcao.find().then((funcao)=>{
-                                    console.log("Listagem Realizada de Ufs!")
-                                        Especialidade.find().then((especialidade)=>{
-                                            console.log("Listagem Realizada de Especialidade!")
-                                                Especializacao.find().then((especializacao)=>{
-                                                    console.log("Listagem Realizada de Especializacao!")
-            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao})
-        })})})})})}).catch((err) =>{
+            Estado.find().then((estado)=>{
+                    Perfil.find().then((perfil)=>{
+                        Funcao.find().then((funcao)=>{
+                            Especialidade.find().then((especialidade)=>{
+                                Especializacao.find().then((especializacao)=>{
+                                    Metodo.find().then((metodo)=>{
+            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
@@ -62,22 +57,17 @@ module.exports = {
     carregaUsuarioEdi(req,res){
         let base64Image;
         Usuario.findById(req.params.id).then((usuario) =>{
-            console.log("Listagem Realizada!")
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Ufs!")
-                        Perfil.find().then((perfil)=>{
-                            console.log("Listagem Realizada de Ufs!")
-                                Funcao.find().then((funcao)=>{
-                                    console.log("Listagem Realizada de Ufs!")
-                                        Especialidade.find().then((especialidade)=>{//Graduação
-                                            console.log("Listagem Realizada de Ufs!")
-                                            Especializacao.find().then((especializacao)=>{
-                                                console.log("Listagem Realizada de Especializacao!")
-                                                if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
-                                                    base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
-                                                }
-            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, funcaos: funcao, base64Image})
-        })})})})})}).catch((err) =>{
+            Estado.find().then((estado)=>{
+                Perfil.find().then((perfil)=>{
+                    Funcao.find().then((funcao)=>{
+                        Especialidade.find().then((especialidade)=>{//Graduação
+                            Especializacao.find().then((especializacao)=>{
+                                Metodo.find().then((metodo)=>{
+                                    if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
+                                        base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
+                                    }
+            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao, base64Image})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

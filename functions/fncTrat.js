@@ -245,7 +245,6 @@ module.exports = {
                     //busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaidpad: new ObjectId(idUsu) }
                 } else {
                 */
-                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
                     busca = { $or: [{ trat_terapeutaidpad: req.body.tratTerapeuta }, { trat_terapeutaidis: req.body.tratTerapeuta }, { trat_terapeutaidavd: req.body.tratTerapeuta }], $and: [{ trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } }] }
                     //busca = { trat_tratdata: { $gte :new Date(dataIni), $lte:  new Date(dataFim) } , trat_terapeutaidpad: req.body.tratTerapeuta };
                 /*

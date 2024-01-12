@@ -29,6 +29,11 @@ const especializacaoClass = require("../models/especializacao")
 const Especializacao = mongoose.model("tb_especializacao")
 const fncEspecializacao = require("../functions/fncEspecializacao")
 
+//Método, Metodo, metodo
+const metodoClass = require("../models/metodo")
+const Metodo = mongoose.model("tb_metodo")
+const fncMetodo = require("../functions/fncMetodo")
+
 //escola
 const escolaClass = require("../models/escola")
 const Escola = mongoose.model("tb_escola")
@@ -75,6 +80,13 @@ const fncUsuario = require("../functions/fncUsuario")
 const beneClass = require("../models/bene")
 const Bene = mongoose.model("tb_bene")
 const fncBene = require("../functions/fncBene")
+
+//Fotos dos beneficiarios
+//As fotos dos beneficiários ficam em tabela e função a parte para não pesar listagens e outras fuções do sistema
+//Só em rarissimas esceções ele é chamado para exibir a foto, no formulário do Dossiê
+const benefotoClass = require("../models/benefoto")
+const Benefoto = mongoose.model("tb_benefoto")
+const fncBenefoto = require("../functions/fncBenefoto")
 
 //Evolução Atendimento
 const evoatendClass = require("../models/evoatend")
@@ -1506,6 +1518,13 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
         fncBene.listaResp(req, res);
     })
 
+   router.get('/beneficiario/foto/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
+       fncBenefoto.carregaFotoLis(req, res); 
+    })
+
+    router.post('/beneficiario/cadastrarfoto', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
+        fncBenefoto.cadastrarFoto(req, res); 
+     })
     // Lista e edição de beneficiários para supervisores e coordenadores pode ver mas limitado  salvar apoenas a sessão escola
 
     
@@ -2496,9 +2515,37 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         fncEspecializacao.atualizaEspecializacao(req, res);
     })
 
+    //Método, Metodo
+    router.get('/ferramentas/metodo/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Métodos
+        let resposta = new Resposta()
+        resposta.texto = ""
+        resposta.sucesso = ""
+        fncMetodo.listaMetodo(req, res, resposta);
+    })
+
+    router.get('/ferramentas/metodo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de metodo
+        fncMetodo.carregaMetodo(req, res);
+    })
+
+    router.post('/ferramentas/metodo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+        fncMetodo.cadastraMetodo(req, res);
+    })
+
+    router.get('/ferramentas/metodo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+        fncMetodo.deletaMetodo(req, res);
+    })
+
+    router.get('/ferramentas/metodo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+        fncMetodo.carregaMetodoEdi(req, res);
+    })
+
+    router.post('/ferramentas/metodo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro do Metodo
+        fncMetodo.atualizaMetodo(req, res);
+    })
+
 //Menu Ferramentas
     //Terapia
-        router.get('/ferramentas/terapia/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas terapias
+        router.get('/ferramentas/terapia/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todos as Terapias
             fncTerapia.listaTerapia(req, res);
             
         })

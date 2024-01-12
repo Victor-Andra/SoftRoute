@@ -33,6 +33,8 @@
 					if (mae_beneid != undefined && mae_beneid != "undefined" && mae_beneid != null){
 						document.getElementById("anamnMaenome").value = mae_beneid;
 					}
+					document.getElementById("anamnBenenomeinfo").value = document.getElementById(beneid+"_beneNome").value;
+					document.getElementById("anamnBenenome").value = document.getElementById(beneid+"_beneNome").value;
 				}
 				function calculaIdade(dataFmt){
 					let dataAtual = new Date();
@@ -550,6 +552,8 @@
 
 					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
 					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
+					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;					
+					document.getElementById("anamnBenenomeinfo").value = document.getElementById("anamnBenenomeEdi").value;
 					//anamnDataanamnese
 					let beneid = document.getElementById("anamnBeneid").value;
 					let dtnsc = new Date(document.getElementById("anamnDataanamneseEdi").value);
@@ -591,6 +595,7 @@
 					document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
 					if (document.getElementById("anamnBenenomeEdi").value != ""){
 						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
+						
 					}
 				}
 			</script>
@@ -648,7 +653,7 @@
 
 						<!-- Dados carregados -->
 						<input id="anamnBeneidEdi" name="anamnBeneidEdi" value="{{anamn.anamn_beneid}}"/>
-						
+						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.bene_nome}}"/>
 						<input id="anamnBenedatanascEdi" name="anamnBenedatanascEdi" value="{{anamn.anamn_benedatanasc}}"/>
 						<input id="anamnBeneidadeEdi" name="anamnBeneidadeEdi" value="{{anamn.anamn_beneidade}}"/>
 						<input id="anamnPainomeEdi" name="anamnPainomeEdi" value="{{anamn.anamn_painome}}"/>
@@ -1149,9 +1154,21 @@
 							<input id="{{_id}}_beneDatanascEdi" name="{{_id}}_beneDatanascEdi" value="{{bene_datanasc}}"/>
 							<input id="{{_id}}_benePaiEdi" name="{{_id}}_benePaiEdi" value="{{bene_pai}}"/>
 							<input id="{{_id}}_beneMaeEdi" name="{{_id}}_beneMaeEdi" value="{{bene_mae}}"/>
+							<input id="{{_id}}_beneNome" name="{{_id}}_beneNome" value="{{bene_nome}}"/>
+							
+							
 						{{/each}}
-						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
+						
 					</div>
+					<div class="col-xs-12">
+								<div class="alert alert-warning" style="font-style: initial;">
+									
+									<strong>
+										<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="anamnBenenomeinfo"  id="anamnBenenomeinfo" placeholder="" class="form-control"  >
+									</strong>
+
+								</div>
+							</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/anamn/atualizar" method="POST">
@@ -1334,7 +1351,11 @@
 															</select>
 														</div>
 													</div>
-													
+													<div class="form-group" >
+														<div class="col-sm-6">
+															<input id="anamnBenenome" name="anamnBenenome" type="text" />
+														</div>
+													</div>
 																										
 													<div class="row">
 														
@@ -4361,7 +4382,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon"><!--Ok-->
-															<input type="text" name="anamnTempoomamadeiradesc" id="anamnTempoomamadeiradesc" placeholder="Observalções adicionais sobre alimentação via mamadeira." style="width: 800px;"  value="{{anamn.anamn_tempoomamadeiradesc}}">
+															<input type="text" name="anamnTempoomamadeiradesc" id="anamnTempoomamadeiradesc" placeholder="Observações adicionais sobre alimentação via mamadeira." style="width: 800px;"  value="{{anamn.anamn_tempoomamadeiradesc}}">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>

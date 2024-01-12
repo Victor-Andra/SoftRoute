@@ -46,6 +46,8 @@
 					}
 					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
 					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;
+					document.getElementById("anamnBenenome").value = document.getElementById(beneid+"_beneNome").value;
+					document.getElementById("anamnBenenomeinfo").value = document.getElementById(beneid+"_beneNome").value;
 				}
 				
 				function calculaIdade(dataFmt){
@@ -61,6 +63,7 @@
 					return (ano + " anos e " + mes + " meses.");
 				}
 				
+				
 			</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -75,7 +78,7 @@
 								Anamnese
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Cadastro Geral da anamnese
+									Cadastro Anamnese
 								</small>
 							</h1>
 							<div id="divCarrega" name="divCarrega" class="hidden">
@@ -85,6 +88,7 @@
 									<input type="text" id="{{_id}}_anamnBenedatanasc" name="{{_id}}_anamnBenedatanasc" value="{{bene_datanasc}}"/>
 									<input type="text" id="{{_id}}_benePai" name="{{_id}}_benePai" value="{{bene_pai}}"/>
 									<input type="text" id="{{_id}}_beneMae" name="{{_id}}_beneMae" value="{{bene_mae}}"/>
+									<input type="text" id="{{_id}}_beneNome" name="{{_id}}_beneNome" value="{{bene_nome}}"/>
 								{{/each}}
 							</div>
 						</div><!-- /.page-header -->
@@ -118,6 +122,15 @@
 								{{else}}
 								{{/compareString}}
 							{{/compareString}}
+							<div class="col-xs-12">
+								<div class="alert alert-warning" style="font-style: initial;">
+									
+									<strong>
+										<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="anamnBenenomeinfo"  id="anamnBenenomeinfo" placeholder="" class="form-control"  >
+									</strong>
+
+								</div>
+							</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/anamn/add" method="POST">
@@ -300,6 +313,11 @@
 															</select>
 														</div>
 													</div>
+													<div class="form-group" hidden>
+														<div class="col-sm-6">
+															<input id="anamnBenenome" name="anamnBenenome" type="text" />
+														</div>
+													</div>
 													<div class="alert alert-warning">
 														<button type="button" class="close" data-dismiss="alert">
 															<i class="ace-icon fa fa-times"></i>
@@ -316,7 +334,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" readonly="true">
+																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" readonly="true"/>
 																	</div>
 																</div>
 															</div>
@@ -3330,7 +3348,7 @@
 													</div>
 													<div class="col-xs-9">
 														<span class="input-icon"><!--Ok-->
-															<input type="text" name="anamnTempoomamadeiradesc" id="anamnTempoomamadeiradesc" placeholder="Observalções adicionais sobre alimentação via mamadeira." style="width: 800px;">
+															<input type="text" name="anamnTempoomamadeiradesc" id="anamnTempoomamadeiradesc" placeholder="Observações adicionais sobre alimentação via mamadeira." style="width: 800px;">
 															<i class="ace-icon fa fa-info-circle pink"></i>
 														</span>
 													</div>

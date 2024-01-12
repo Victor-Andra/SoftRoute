@@ -40,9 +40,20 @@ const UsuarioSchema = mongoose.Schema({
     usuario_filhos :{ type: String, required: false},
     usuario_filhosqt :{ type: String, required: false},
     usuario_numconselho :{ type: String, required: false},
-    usuario_escolaridade :{type: String, required: false },
+    usuario_escolaridade :{type: String, required: false }, //Primário, secundário, superior etc
+    
     usuario_graduacao :{type: String, required: false },
     usuario_especializacao :{type: String, required: false },
+    usuario_metodo :{type: String, required: false },
+    
+    usuario_graduacao1 :{type: String, required: false },
+    usuario_especializacao1 :{type: String, required: false },
+    usuario_metodo1 :{type: String, required: false },
+
+    usuario_graduacao2 :{type: String, required: false },
+    usuario_especializacao2 :{type: String, required: false },
+    usuario_metodo2 :{type: String, required: false },
+
     usuario_pix :{type: String, required: false },
     usuario_tipopix :{type: String, required: false },
     usuario_palavrachave :{type: String, required: false},
@@ -89,8 +100,17 @@ class Usuario{
         usuario_filhosqt,
         usuario_numconselho, 
         usuario_escolaridade,
+        
         usuario_graduacao,
         usuario_especializacao,
+        usuario_metodo,
+        usuario_graduacao1,
+        usuario_especializacao1,
+        usuario_metodo1,
+        usuario_graduacao2,
+        usuario_especializacao2,
+        usuario_metodo2,
+
         usuario_pix,
         usuario_palavrachave, 
         usuario_palavrachavedatacad, 
@@ -137,6 +157,14 @@ class Usuario{
         this.usuario_escolaridade = usuario_escolaridade ,
         this.usuario_graduacao = usuario_graduacao ,
         this.usuario_especializacao = usuario_especializacao ,
+        this.usuario_metodo = usuario_metodo ,
+        this.usuario_graduacao1 = usuario_graduacao ,
+        this.usuario_especializacao1 = usuario_especializacao ,
+        this.usuario_metodo1 = usuario_metodo ,
+        this.usuario_graduacao2 = usuario_graduacao ,
+        this.usuario_especializacao2 = usuario_especializacao ,
+        this.usuario_metodo2 = usuario_metodo ,
+
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
         this.usuario_palavrachave = usuario_palavrachave ,
@@ -211,8 +239,19 @@ module.exports = {
                 usuario_filhosqt : req.body.usuarioFilhosQt ,
                 usuario_numconselho : req.body.usuarioNumConselho ,
                 usuario_escolaridade : req.body.usuarioEscolaridade ,
+
                 usuario_graduacao : req.body.usuarioGraduacao ,
                 usuario_especializacao : req.body.usuarioEspecializacao ,
+                usuario_metodo : req.body.usuarioMetodo ,
+
+                usuario_graduacao1 : req.body.usuarioGraduacao1 ,
+                usuario_especializacao1 : req.body.usuarioEspecializacao1 ,
+                usuario_metodo1 : req.body.usuarioMetodo1 ,
+                
+                usuario_graduacao2 : req.body.usuarioGraduacao2 ,
+                usuario_especializacao2 : req.body.usuarioEspecializacao2 ,
+                usuario_metodo2 : req.body.usuarioMetodo2 ,
+
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
                 usuario_obs : req.body.usuarioObs,
@@ -274,8 +313,19 @@ module.exports = {
             usuario_filhosqt : req.body.usuarioFilhosQt ,
             usuario_numconselho : req.body.usuarioNumConselho ,
             usuario_escolaridade : req.body.usuarioEscolaridade ,
+            
             usuario_graduacao : req.body.usuarioGraduacao ,
             usuario_especializacao : req.body.usuarioEspecializacao ,
+            usuario_metodo : req.body.usuarioMetodo ,
+
+            usuario_graduacao1 : req.body.usuarioGraduacao1 ,
+            usuario_especializacao1 : req.body.usuarioEspecializacao1 ,
+            usuario_metodo1 : req.body.usuarioMetodo1 ,
+            
+            usuario_graduacao2 : req.body.usuarioGraduacao2 ,
+            usuario_especializacao2 : req.body.usuarioEspecializacao2 ,
+            usuario_metodo2 : req.body.usuarioMetodo2 ,
+
             usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
             usuario_obs : req.body.usuarioObs,

@@ -2,6 +2,23 @@
 <html lang="pt-br">
 	<head>
 		<title>Plano de Tratamentos</title>
+		<style>
+		.ocup {
+			width: 100%;
+			box-sizing: border-box;
+			font-size: 12px;
+		}
+		.cab {
+			width: 100%;
+			box-sizing: border-box;
+			font-size: 12px;
+		}
+		.pad {
+			width: 100%;
+			box-sizing: border-box;
+			font-size: 12px;
+		}
+		</style>
 		<script type="text/javascript">
 			
 			function defineplanopadrao(){
@@ -116,48 +133,52 @@
 				document.getElementById('tratPlanotipo').readOnly = true; // Corrigido 'ReadOnly' para 'readOnly'
 			}
 
-			function validarFormulario() {
-				let tipo = document.getElementById("tratPlanotipo").value;
+		function validarFormulario() {
+			let tipo = document.getElementById("tratPlanotipo").value;
 
-				if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
-					alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
-					return "false"; // Impede o envio do formulário se algum campo estiver em branco
-				} else {
-					var inputscab = document.getElementsByClassName('cab');
-					for (var i = 0; i < inputscab.length; i++) {
-						if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
-							alert('Por favor, preencha todos os campos obrigatórios.');
-							return "false";
-						}
-					}
-
-					if (tipo === "Padrão") {
-						var inputspad = document.getElementsByClassName('pad');
-
-						for (var i = 0; i < inputspad.length; i++) {
-							if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-')) {
-								alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
-								return "false";
-							}
-						}
-
-						return "true";
+			if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
+				alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
+				return false;
+			} else {
+				var inputscab = document.getElementsByClassName('cab');
+				for (var i = 0; i < inputscab.length; i++) {
+					if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
+						alert('Por favor, preencha todos os campos obrigatórios.');
+						inputscab[i].style.border = '2px solid red'; // Destaca o campo em vermelho
+						return false;
 					} else {
-						var inputsocup = document.getElementsByClassName('ocup');
-
-						for (var i = 0; i < inputsocup.length; i++) {
-							if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-')) {
-								alert('Por favor, preencha todos os campos obrigatórios.');
-								return "false";
-							}
-						}
-
-						return "true";
+						inputscab[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
 					}
 				}
-			}
 
-			
+				if (tipo === "Padrão") {
+					var inputspad = document.getElementsByClassName('pad');
+					for (var i = 0; i < inputspad.length; i++) {
+						if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
+							alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
+							inputspad[i].style.border = '2px solid red'; // Destaca o campo em vermelho
+							return false;
+						} else {
+							inputspad[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
+						}
+					}
+				} else {
+					var inputsocup = document.getElementsByClassName('ocup');
+					for (var i = 0; i < inputsocup.length; i++) {
+						if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
+							alert('Por favor, preencha todos os campos obrigatórios.');
+							inputsocup[i].style.border = '2px solid red'; // Destaca o campo em vermelho
+							return false;
+						} else {
+							inputsocup[i].style.border = ''; // Remove a borda vermelha se o campo estiver preenchido
+						}
+					}
+				}
+
+				return true;
+			}
+		}
+
 		function submeterFormulario(){
 			let validacao = this.validarFormulario();
 			if (validacao == "true"){
@@ -311,17 +332,18 @@
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-xs-4 col-sm-4">
+												<div class="col-xs-5 col-sm-5">
 													<label>Data nascimento:</label>
 													<div class="form-group">
-														<div class="col-sm-4">
+														<div class="col-sm-5">
 															<div class="input-group">
 																<input name="beneDatanasc" id="beneDatanasc" type="date"  class="cab" readonly="true"  />
 															</div>
 														</div>
 													</div>
 												</div>												
-											
+											</div>
+											<div class="row">
 												<div class="col-xs-4 col-sm-4">
 													<label>Idade:</label>
 													<div class="row">
@@ -374,11 +396,12 @@
 
 									<div class="widget-body">
 										<div class="widget-main">
+											
 											<div class="row">
-												<div class="col-sm-6">
+												<div class="col-xs-12 col-sm-4">
 													<label>Especialidade:</label>
 													<div class="form-group">
-														<div class="col-sm-6">
+														<div class="col-sm-8">
 															<select name="tratEspecialidadepad" id="tratEspecialidadepad" class="chosen-select" class="pad" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																<option value="Fisioterapia">Fisioterapia</option>
@@ -400,7 +423,7 @@
 													</div>	
 												</div>
 												
-
+											</div>
 											<div class="row">
 												<div class="col-xs-12 col-sm-4">
 													<label>Terapeuta:</label>
@@ -416,9 +439,7 @@
 													</div>
 												</div>												
 											</div>
-
-												
-
+											<div class="row">
 												<div class="col-sm-3">
 													<label>Registro do conselho:</label>
 													<div class="form-group">
@@ -540,7 +561,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" class="ocup" data-placeholder="-" >
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" data-placeholder="-" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -656,7 +677,7 @@
 											<label>Diagnóstico terapêutico ocupacional:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="5" ></textarea>
+													<textarea  name="tratDiagnosticoocup" id="tratDiagnosticoocup" class="ocup"  data-placeholder="-" placeholder="-" class="form-control" rows="3" ></textarea>
 												</div>
 											</div>	
 
@@ -664,7 +685,7 @@
 											<label>Metas à curto prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratMetacurtois" id="tratMetacurtois" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
+													<textarea  name="tratMetacurtois" id="tratMetacurtois" class="ocup"  placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -673,7 +694,7 @@
 											<label>Metas à médio prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea name="tratMetamediois" id="tratMetamediois" class="ocup" style="font-size: 12px"  placeholder="-" class="form-control" rows="2" ></textarea>
+													<textarea name="tratMetamediois" id="tratMetamediois" class="ocup"  placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -682,7 +703,7 @@
 											<label>Metas à longo prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea name="tratMetalongois" id="tratMetalongois" class="ocup" style="font-size: 12px" placeholder="-" class="form-control" rows="2" ></textarea>
+													<textarea name="tratMetalongois" id="tratMetalongois" class="ocup" placeholder="-" class="form-control" rows="2" ></textarea>
 												</div>
 											</div>
 											
@@ -691,7 +712,7 @@
 											<label>Estratégias e objetivos:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea  name="tratObjetivois" id="tratObjetivois" class="ocup" style="font-size: 12px" placeholder="-" class="form-control" rows="2"   ></textarea>
+													<textarea  name="tratObjetivois" id="tratObjetivois" class="ocup" placeholder="-" class="form-control" rows="2"   ></textarea>
 												</div>
 											</div>
 																							
@@ -701,7 +722,7 @@
 												<div class="row">
 													<div class="col-xs-4">
 														<div class="input-group">
-															<input class="hidden" name="tratUsuidcad" id="tratUsuidcad" type="text" style="font-size: 12px" placeholder="-" class="form-control" />
+															<input class="hidden" name="tratUsuidcad" id="tratUsuidcad" type="text" placeholder="-" class="form-control" />
 															
 														</div>
 													</div>
@@ -725,16 +746,16 @@
 							
 							<div class="col-sm-12" name="obs" id="obs"><!-- Widget Dados TO IS e TO AVD -->
 								<div class="widget-box">
-									
 									<div class="widget-body">
 										<div class="widget-main">												
+											
 											<label>Observações:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
 													<textarea  name="tratObspad" id="tratObspad"  style="font-size: 12px" data-placeholder="-" placeholder="" class="form-control" rows="3" ></textarea>
-													
 												</div>
 											</div>	
+										
 										</div>
 									</div>
 								</div>

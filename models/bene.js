@@ -317,7 +317,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaoutro3tel: req.body.beneEscolaoutro3tel,
 
                 bene_escolaturno: req.body.beneEscolaturno,
-                bene_escolaobs2: req.body.beneEscolaobs2,
+                bene_escolaobs: req.body.beneEscolaobs,
                 bene_obsadm: req.body.beneObsadm,
                 bene_obs: req.body.beneObs,
                 bene_dataedi: dataAtual
@@ -369,7 +369,6 @@ module.exports = {BeneModel,BeneSchema,
 
                 bene_escolaturno: req.body.beneEscolaturno,
                 bene_escolaobs: req.body.beneEscolaobs,
-                bene_obsadm: req.body.beneObsadm,
 
                 //Permitir Bene Obs também ser editado pelos Supervisores
                 bene_obs: req.body.beneObs,

@@ -111,28 +111,6 @@
 				}
 			}
 			
-			function calculaImpostoIRPJ() {
-				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%", "").replace(".", "").replace(",", "."));
-				// Checagem do imposto que irá participar da Nf
-				let checkirpf = document.getElementById("checkboxIrpjtemp").value;
-				
-				// Valores Temporários para os campos dos Impostos
-				// Aliquotas dos impostos
-				let alqirpj = parseFloat(document.getElementById("contarecAlqirpj").value.replace("%", "").replace(".", "").replace(",", "."));
-				
-				// Checagem e cálculo
-				if (valorNf == null || valorNf < 0.01) {
-					console.log("NÃO");
-				} else {
-					console.log("SIM");
-					if (!(checkirpj == "" || checkirpj == "false" || alqirpj <= 0.001 || alqirpj == null)) {
-						// Correção no cálculo
-						document.getElementById("contarecVlrirpj").value = parseFloat((valorNf / 100) * alqirpj).toFixed(2);
-					} else {
-						document.getElementById("contarecVlrirpj").value = "0,00";
-					}
-				}
-			}
 			function calculaImpostoISS(){
 				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
 				//Checagem do imposto que irá participar da Nf
@@ -150,7 +128,7 @@
 				}
 			}
 			
-			function selectBeneDados(){
+			function selectConv(){
 				var convid = document.getElementById(document.getElementById("contarecBeneid").value + "_beneconvid").value.toString();
     				console.log("Convid:", convid);
 				var nomeid = document.getElementById(document.getElementById("contarecBeneid").value+"_benenomeid").value.toString();
@@ -171,7 +149,21 @@
 			
 		</script>
 	</head>
-	
+	<div id="divCarrega" class="hidden" class="col-sm-5">
+		{{#each benes}}
+			{{#each ../convs}}
+				{{#ifEqual ../bene_convid _id}}
+					<input value="{{../bene_convid}}" id="{{../_id}}_beneconvid" name="refAgendaConvid" />
+				{{/ifEqual}}
+			{{/each}}
+			
+			<input id="{{_id}}_benenomeid" name="contarecBenenomeEdi" value="{{bene_nome}}"/>
+			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{bene_ordemnome}}"/>
+			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{bene_ordemdoc}}"/>
+			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{bene_ordemretem}}"/>
+
+		{{/each}}
+	</div>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -184,16 +176,6 @@
 							</li>
 							<li class="active">Contas à receber - Cadastro</li>
 						</ul><!-- /.breadcrumb -->
-					</div>
-					<div id="divCarrega" name="divCarrega" class="hidden">
-						<!-- /.importante Id de indice-->
-						<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
-						{{#each benes}}
-							<input type="text" id="{{bene_beneid}}_beneConvidEdi" name="{{laudo_beneid}}_beneConvidEdi" value="{{bene_convid}}"/>
-						{{/each}}
-						{{#each convImps}}
-							
-						{{/each}}
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -263,7 +245,7 @@
 												<label>Beneficiário</label>
 												<div class="form-group" >
 													<div class="col-xs-9 col-sm-9">
-														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectBeneDados();">
+														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -407,19 +389,6 @@
 																	<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
 																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIrpj" id="checkboxIrpj" class="ace" onchange="atualizaCheckbox(checkboxIrpj);calculaImposto();" />
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxIrpjtemp" name="checkboxIrpjtemp" value="false" />
-																		</label>
-																	</td>
-																	<td>IRPJ</td>
-																	<td><input type="text" name="contarecAlqirpj" id="contarecAlqirpj" style="text-align: right; width:80px;"  value="1,5%" onchange="calculaImpostoIRPJ();" /></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrirpj" id="contarecVlrirpj" style="text-align: right; width:100px;" value="0,00"/></td>
-																</tr>
-																<tr hidden>
 																	<td class="center">
 																		<label class="pos-rel">
 																			<input type="checkbox" name="checkboxIrpf" id="checkboxIrpf" class="ace" onchange="atualizaCheckbox(checkboxIrpf);calculaImposto();" />

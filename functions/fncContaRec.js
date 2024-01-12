@@ -9,10 +9,13 @@ const ContaRec = mongoose.model("tb_contarec")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuClass = require("../models/usuario")
+const convImpClass = require("../models/convImp")
+
 //tabelas Extrangeira
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
+const ConvImp = mongoose.model("tb_convimp")
 
 //Funções auxiliares
 const fncContaRec = require("./fncContaRec")
@@ -55,7 +58,7 @@ module.exports = {
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Conv.find().then((conv)=>{
-                    Convimp.find().then((convimp)=>{
+                    ConvImp.find().then((convimp)=>{
                     res.render('financeiro/receita/contaRecCad', {convimps: convimp, benes: bene, convs: conv, contaRecs: contaRec, usuarioAtual, dataAtual})
         })})})}).catch((err) =>{
             console.log(err)

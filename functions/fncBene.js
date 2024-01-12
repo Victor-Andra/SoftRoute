@@ -268,6 +268,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+
     relaniverBene(req, res) {
         let monthsChildren = {};
     

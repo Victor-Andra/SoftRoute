@@ -122,157 +122,96 @@
 												<div class="tab-content">
 
 													<div id="basico" class="tab-pane fade active in">
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<label > Nome </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<input type="text" id="usuarioNome" name="usuarioNome" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<label > Nome completo</label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+
+															<div class="col-xs-12 col-sm-4">
+																<label for="id-date-picker-1">Data de nascimento</label>
+																<div class="row ">
+																	<div class="input-group">
+																		<div class="col-sm-4">
+																			<input id="usuarioDatanasc" name="usuarioDatanasc" type="date">
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-4">
+																<label> CPF </label>
+																<div class="form-group">
+																	<div class="col-sm-3">
+																		<input type="text" name="usuarioCpf" id="usuarioCpf" placeholder="" class="form-control" style="width: 200px;" />
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+																<label> Identidade </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioIdent"  id="usuarioIdent" placeholder="" class="form-control" />
+																	</div>
+																</div>
+															</div><!-- /.span -->
 														
-															<label > Nome </label>
-															<div class="form-group">
-																<div class="col-sm-12">
-																	<input type="text" id="usuarioNome" name="usuarioNome" placeholder="" class="form-control" />
-																</div>
-															</div>
-							
-															<label > Nome Completo</label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" />
-																</div>
-															</div>
-
-
-																<div class="row">
-
-																	<div class="col-xs-12 col-sm-4">
-																		<div >
-
-																			<div>
-																				<div>
-																					<div>
-																						
-																						<label for="id-date-picker-1">Data Nascimento</label>
-																						<div class="row ">
-																							<div class="input-group">
-																								<div class="col-sm-4">
-																									<input id="usuarioDatanasc" name="usuarioDatanasc" type="date">
-																								</div>
-																							</div>
-																						</div>
-																					
-																					
-																					</div>
-
-
-																				</div>
-																			</div>
-																		</div>
-																	</div><!-- /.span -->
-
-																	<div class="col-xs-12 col-sm-4">
-																		<div >
-																			<div>
-																				<div>
-																					<div>
-																						<label> CPF </label>
-																						<div class="form-group">
-																							<div class="col-sm-3">
-																								<input type="text" name="usuarioCpf" id="usuarioCpf" placeholder="" class="form-control" style="width: 200px;" />
-																							</div>
-																						</div>
-
-																					</div>
-
-																				</div>
-																			</div>
-																		</div>
-																	</div><!-- /.span -->
-
-																	<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
-																		<div >
-																			<div >
-																				<div>
-																					<div>
-																						<label> Identidade </label>
-																						<div class="form-group">
-																							<div class="col-sm-9">
-																								<input type="text" name="usuarioIdent"  id="usuarioIdent" placeholder="" class="form-control" />
-																							</div>
-																						</div>
-																					</div>
-
-																				</div>
-																			</div>
-																		</div>
-																	</div><!-- /.span -->
-																
-																</div>
-
-
-
-
-				
-
-
+														</div>
 														<div class="row">
 															<div class="col-xs-6">
-
-																<div class="space space-8"></div>
-
-																<label > Nome pai </label>
+																<label > Nome do pai </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
 																		<input class="col-sm-8" type="text" name="usuarioNomepai" id="usuarioNomepai" placeholder="" class="form-control" />
 																	</div>
 																</div>									
-															
 															</div>
-															
 															<div class="col-xs-6">													
-																
-																<div class="space space-8"></div>
-																	<label > Nome Mãe </label>
-																	<div class="form-group">
-																		<div class="col-sm-12">
-																			<input class="col-sm-8" type="text" name="usuarioNomemae" id="usuarioNomemae" placeholder="" class="form-control"/>
-																		</div>
+																<label > Nome da mãe </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<input class="col-sm-8" type="text" name="usuarioNomemae" id="usuarioNomemae" placeholder="" class="form-control"/>
 																	</div>
-															
+																</div>
 															</div>
-													
-																										
 														</div>
-
-
-
 														<div class="row">
 															<div class="col-xs-6">
-
-																<div class="space space-8"></div>
 																<label> Nacionalidade</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
 																		<input type="text" name="usuarioNacionalidade" id="usuarioNacionalidade" placeholder="" class="form-control" />
 																	</div>
 																</div>										
-															
 															</div>
-															
 															<div class="col-xs-6">													
-																
-																<div class="space space-8"></div>
 																<label> Naturalidade</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
 																		<input type="text" name="usuarioNaturalidade" id="usuarioNaturalidade" placeholder="" class="form-control"/>
 																	</div>
 																</div>
-															
 															</div>
-													
-																										
 														</div>
-							
-
 														<div class="row">
 															<div class="col-xs-6">
-																<div class="space space-8"></div>
 																<label> Filhos</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
@@ -282,37 +221,26 @@
 																		</select>
 																	</div>
 																</div>										
-															
 															</div>
 															<div class="col-xs-6">													
-																
-																<div class="space space-8"></div>
-																<label> Quantidade de Filhos</label>
+																<label> Quantidade de filhos</label>
 																<div class="form-group">
 																	<div class="col-sm-3">
 																		<input type="text" name="usuarioFilhosQt" id="usuarioFilhosQt" placeholder="" class="form-control" />
 																	</div>
 																</div>
-															
 															</div>
-													
-																										
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
-																<div class="space space-8"></div>
-																<label> Observação Usuario</label>
+																<label>Observação</label>
 																<div class="form-group">
 																	<div class="col-sm-3">
-																		<input style="width: 400px;" type="text" name="usuarioObs" id="usuarioObs" placeholder="" class="form-control" />
+																		<input type="text" name="usuarioObs" id="usuarioObs" style="width: 400px;" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div>
 														</div>
-
-	
-
-
 													</div>
 
 													<div id="escolaridade" class="tab-pane fade">
@@ -320,6 +248,7 @@
 														<div class="form-group">
 															<div class="col-sm-4">
 																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" data-placeholder="Escolha...">
+																	<option value="-">-</option>
 																	<option value="Fundamental">Fundamental</option>
 																	<option value="Médio">Médio</option>
 																	<option value="Superior">Superior</option>
@@ -329,48 +258,122 @@
 																</select>
 															</div>
 														</div>
+														<div class="alert alert-warning">
+															<button type="button" class="close" data-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Navas graduações, especiazalizações ou metodos podem ser cadastrados livremente no menu ferramentas.
+														</div>
 														<div class="row">
-															<div class="col-xs-6">
-																<label> Graduação</label>
-																<div class="form-group">
-																	<div class="col-sm-4">
-																		<select name="usuarioGraduacao" id="usuarioGraduacao" class="chosen-select" data-placeholder="Escolha..."><!--  GRADUAÇÃO == ESPECIALIDADE -->
-																			{{#each especialidades}}
-																			<option value="{{_id}}">{{especialidade_nome}}</option>
-																			{{else}}
-																			{{/each}}
-																		</select>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xs-6">													
-																<div class="space space-8"></div>
-																<label> Especialização</label>
-																<div class="form-group">
-																	<div class="col-sm-4">
-																		<select name="usuarioEspecializacao" id="usuarioEspecializacao" class="chosen-select" data-placeholder="Escolha...">
-																			{{#each especializacaos}}
-																			<option value="{{_id}}">{{especializacao_nome}}</option>
-																			{{/each}}
-																		</select>
-																	</div>
-																</div>
+															<div class="col-sm-6">
+																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th>Graduação</td>
+																			<th>Especialização</td>
+																			<th>Método</td>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td>
+																				<select name="usuarioGraduacao" id="usuarioGraduacao" class="chosen-select" data-placeholder="Escolha..."><!--  GRADUAÇÃO == ESPECIALIDADE -->
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especialidades}}
+																					<option value="{{_id}}">{{especialidade_nome}}</option>
+																					{{else}}
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioEspecializacao" id="usuarioEspecializacao" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especializacaos}}
+																					<option value="{{_id}}">{{especializacao_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioMetodo" id="usuarioMetodo" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each metodos}}
+																					<option value="{{_id}}">{{metodo_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				<select name="usuarioGraduacao1" id="usuarioGraduacao1" class="chosen-select" data-placeholder="Escolha..."><!--  GRADUAÇÃO == ESPECIALIDADE -->
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especialidades}}
+																					<option value="{{_id}}">{{especialidade_nome}}</option>
+																					{{else}}
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioEspecializacao1" id="usuarioEspecializacao1" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especializacaos}}
+																					<option value="{{_id}}">{{especializacao_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioMetodo1" id="usuarioMetodo1" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each metodos}}
+																					<option value="{{_id}}">{{metodo_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				<select name="usuarioGraduacao2" id="usuarioGraduacao2" class="chosen-select" data-placeholder="Escolha..."><!--  GRADUAÇÃO == ESPECIALIDADE -->
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especialidades}}
+																					<option value="{{_id}}">{{especialidade_nome}}</option>
+																					{{else}}
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioEspecializacao2" id="usuarioEspecializacao2" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each especializacaos}}
+																					<option value="{{_id}}">{{especializacao_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																			<td>
+																				<select name="usuarioMetodo2" id="usuarioMetodo2" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each metodos}}
+																					<option value="{{_id}}">{{metodo_nome}}</option>
+																					{{/each}}
+																				</select>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
 															</div>
 														</div>
+														
 													</div>
 
 													<div id="end" class="tab-pane fade">
 														
-															<label > Endereço </label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<input type="text" name="usuarioEnd" id="usuarioEnd" placeholder="" class="form-control"/>
-																</div>
+														<label > Endereço </label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<input type="text" name="usuarioEnd" id="usuarioEnd" placeholder="" class="form-control"/>
 															</div>
+														</div>
 
 														<div class="row">
 															<div class="col-xs-6">
-
 																<label> Complemento </label>
 																<div class="form-group">
 																	<div class="col-sm-9">
@@ -381,7 +384,6 @@
 															</div>
 															
 															<div class="col-xs-6">													
-															
 																<label> Bairro </label>
 																<div class="form-group">
 																	<div class="col-sm-9">
@@ -391,98 +393,48 @@
 															
 															</div>
 													
-													
-													
 														</div>
 
 
 														<div class="row" >
 
 															<div class="col-xs-12 col-sm-6">
-																<div >
-
-
-																	<div>
-																		<div>
-																			<div>
-
-																				<label> Cidade </label>
-																				<div class="form-group">
-																					<div class="col-sm-9">
-																						<input type="text" name="usuarioEndcidade" id="usuarioEndcidade" placeholder="" class="form-control" />
-																					</div>
-																				</div>
-
-																			</div>
-
-																		</div>
+																<label> Cidade </label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioEndcidade" id="usuarioEndcidade" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div><!-- /.span -->
 
 															<div class="col-xs-12 col-sm-2">
-																<div >
-																	<div >
-																		<div>
-																			<div>
-																				
-																				<label>UF</label>
-																				<div class="form-group">
-																						<div class="col-sm-4">
-																							<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
-																									{{#each estados}}
-																										<option value="{{_id}}">{{estado_uf}}</option>
-																									{{/each}}
-																							</select>
-																						</div>
-																				</div>
-																			</div>
-
-
-
-
-																		</div>
+																<label>UF</label>
+																<div class="form-group">
+																	<div class="col-sm-4">
+																		<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
+																				{{#each estados}}
+																					<option value="{{_id}}">{{estado_uf}}</option>
+																				{{/each}}
+																		</select>
 																	</div>
 																</div>
 															</div><!-- /.span -->
 														
 															<div class="col-xs-12 col-sm-4">
-																<div >
-																	<div >
-																		<div>
-																			<div>
-																				
-																				<label> CEP </label>
-																				<div class="form-group">
-																					<div class="col-sm-3" style="width: 200px;">
-																						<input type="text" name="usuarioEndcep" id="usuarioEndcep" placeholder="" class="form-control" />
-																					</div>
-																				</div>
-
-																			</div>
-
-																		</div>
+																<label> CEP </label>
+																<div class="form-group">
+																	<div class="col-sm-3" style="width: 200px;">
+																		<input type="text" name="usuarioEndcep" id="usuarioEndcep" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div><!-- /.span -->
-														
 
 														</div>
-
-
-
-
-
 													</div>
 
 													<div id="contato" class="tab-pane fade">
-														
-
 														<div>
-															<label>whatsApp
-																<small class="text-warning">(99) 9999-9999</small>
-															</label>
-											
+															<label>whatsApp</label>
 															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="ace-icon fa fa-phone"></i>
@@ -494,23 +446,17 @@
 						
 											
 														<div>
-															<label>Celular
-																<small class="text-warning"> (99) 9999-9999</small>
-															</label>
-											
+															<label>Celular</label>
 															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="ace-icon fa fa-phone"></i>
 																</span>
-											
 																<input name="usuarioCel2" id="usuarioCel2" class="col-sm-3" type="text" id="Celular" />
 															</div>
 														</div>
 
-
-
 														<div>
-															<label>Email
+															<label>E-mail
 																<small class="text-warning"> </small>
 															</label>
 											
@@ -518,12 +464,9 @@
 																<span class="input-group-addon">
 																	<i class="ace-icon fa fa-envelope-o"></i>
 																</span>
-											
 																<input name="usuarioEmail" id="usuarioEmail" class="col-sm-8"  type="text" id="Celular" />
 															</div>
 														</div>
-
-
 
 													</div>
 
@@ -539,75 +482,35 @@
 														<div class="row">
 
 															<div class="col-xs-12 col-sm-4">
-																<div >
-
-																	<div>
-																		<div>
-																			<div>
-																				
-																				<label > Agência / Dv</label>
-																				<div class="form-group">
-																					<div class="col-sm-9">
-																						<input type="text" name="usuarioAgencia" id="usuarioAgencia" placeholder="" class="form-control" />
-																					</div>
-																				</div>
-																			
-																			</div>
-
-
-																		</div>
+																<label > Agência / Dv</label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioAgencia" id="usuarioAgencia" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div><!-- /.span -->
 
 															<div class="col-xs-12 col-sm-4">
-																<div >
-
-
-																	<div>
-																		<div>
-																			<div>
-																				
-																				<label > Conta / Dv</label>
-																				<div class="form-group">
-																					<div class="col-sm-9">
-																						<input type="text" name="usuarioConta" id="usuarioConta" placeholder="" class="form-control" />
-																					</div>
-																				</div>
-																			
-																			</div>
-
-																		</div>
+																<label > Conta / Dv</label>
+																<div class="form-group">
+																	<div class="col-sm-9">
+																		<input type="text" name="usuarioConta" id="usuarioConta" placeholder="" class="form-control" />
 																	</div>
 																</div>
 															</div><!-- /.span -->
 
 															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
-
-																<div >
-
-
-																	<div>
-																		<div>
-																			<div>
-																				<label for="id-date-picker-1">Tipo</label>
-																				<div class="form-group">
-																						<div class="col-sm-8">
-																							<select name="usuarioContaTipo" id="usuarioContaTipo" class="chosen-select" data-placeholder="Escolha...">
-																									<option value="{{usuario.usuario_contatipo}}">{{usuario.usuario_contatipo}}</option>
-																									<option value="Salário">Salário</option>
-																									<option value="Poupança">Poupança</option>
-																									<option value="Corrente">Corrente</option>																									
-																							</select>
-																						</div>
-																				</div>
-
-																			</div>
-
-																		</div>
+																<label for="id-date-picker-1">Tipo</label>
+																<div class="form-group">
+																	<div class="col-sm-8">
+																		<select name="usuarioContaTipo" id="usuarioContaTipo" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="{{usuario.usuario_contatipo}}">{{usuario.usuario_contatipo}}</option>
+																				<option value="Salário">Salário</option>
+																				<option value="Poupança">Poupança</option>
+																				<option value="Corrente">Corrente</option>																									
+																		</select>
 																	</div>
 																</div>
-
 															</div><!-- /.span -->
 														
 
