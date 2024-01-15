@@ -28,7 +28,7 @@ const Metodo = mongoose.model("tb_metodo")
 module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
-            //console.log(usuario)
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             Funcao.find().then((funcao) =>{
                 res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
             })}).catch((err) =>{

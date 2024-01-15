@@ -2,13 +2,6 @@
 <html lang="pt-br">
 	<head>
 		<title>Usuários</title>
-		<style>
-		.textarea {
-			width: 100%;
-			box-sizing: border-box;
-			font-size: 12px;
-		}
-		</style>
 		<script>
 			function carregarImagem() {
 				var preview = document.getElementById('previewImage');
@@ -35,87 +28,31 @@
 				return true; // Permite o envio do formulário
 			}
 
-			//Graduação multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioGraduacaoOp'
-				var checkboxes = document.getElementsByName('usuarioGraduacaoOp');
+			// Obtém todos os checkboxes com o nome 'usuarioGraduacaoOp'
+			var checkboxes = document.getElementsByName('usuarioGraduacaoOp');
 
-				// Adiciona um evento change a cada checkbox
-				checkboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-					updateUsuarioGraduacao();
-					});
+			// Adiciona um evento change a cada checkbox
+			checkboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+				updateUsuarioGraduacao();
+				});
+			});
+
+			// Função para atualizar o valor do input text com base nas seleções
+			function updateUsuarioGraduacao() {
+				// Obtém todos os checkboxes marcados
+				var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
+				return checkbox.checked;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções
-				function updateUsuarioGraduacao() {
-					// Obtém todos os checkboxes marcados
-					var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
-					return checkbox.checked;
-					});
-
-					// Obtém os valores dos checkboxes marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-					return checkbox.value;
-					});
-
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioGraduacao').value = selectedValues.join(';');
-
-				}
-			
-			//Especialização multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioEspecializacaoOp'
-				var especializacaoCheckboxes = document.getElementsByName('usuarioEspecializacaoOp');
-
-				// Adiciona um evento change a cada checkbox
-				especializacaoCheckboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-						updateUsuarioEspecializacao();
-					});
+				// Obtém os valores dos checkboxes marcados
+				var selectedValues = selectedCheckboxes.map(function(checkbox) {
+				return checkbox.value;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções de especialização
-				function updateUsuarioEspecializacao() {
-					// Obtém todos os checkboxes de especialização marcados
-					var selectedCheckboxes = Array.from(especializacaoCheckboxes).filter(function(checkbox) {
-						return checkbox.checked;
-					});
-
-					// Obtém os valores dos checkboxes de especialização marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-						return checkbox.value;
-					});
-
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioEspecializacao').value = selectedValues.join(';');
-				}
-
-			//Método multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioMetodoOp'
-				var metodoCheckboxes = document.getElementsByName('usuarioMetodoOp');
-
-				// Adiciona um evento change a cada checkbox
-				metodoCheckboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-						updateUsuarioMetodo();
-					});
-				});
-
-				// Função para atualizar o valor do input text com base nas seleções de método
-				function updateUsuarioMetodo() {
-					// Obtém todos os checkboxes de método marcados
-					var selectedCheckboxes = Array.from(metodoCheckboxes).filter(function(checkbox) {
-						return checkbox.checked;
-					});
-
-					// Obtém os valores dos checkboxes de método marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-						return checkbox.value;
-					});
-
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioMetodo').value = selectedValues.join(';');
-				}
+				// Atualiza o valor do input text com os valores separados por ';'
+				document.getElementById('usuarioGraduacao').value = selectedValues.join(';');
+			}
 
 		</script>
 	</head>
@@ -378,7 +315,7 @@
 																				{{#each especializacaos}}
 																				<div class="checkbox">
 																					<label>
-																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" class="ace" type="checkbox"  value="{{_id}}" onchange="javascript:updateUsuarioEspecializacao()">
+																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" class="ace" type="checkbox"  value="{{_id}}">
 																						<span class="lbl">&nbsp;{{especializacao_nome}}</span>
 																					</label>
 																				</div>
@@ -390,7 +327,7 @@
 																				{{#each metodos}}
 																				<div class="checkbox">
 																					<label>
-																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="{{_id}}" onchange="javascript:updateUsuarioMetodo()">
+																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="{{_id}}">
 																						<span class="lbl">&nbsp;{{metodo_nome}}</span>
 																					</label>
 																				</div>
@@ -400,17 +337,12 @@
 																				
 																			</td>
 																		</tr>
-																		<tr hidden>
+																		<tr>
 																			<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{_id}}"></td>
 																			<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text"  value="{{_id}}"></td>
 																			<td><input name="usuarioMetodo" id="usuarioMetodo" type="text"  value="{{_id}}"></td>
 																		</tr>
-																		<tr>
-																			<td colspan="3"><label>Outras informações</label></td>
-																		</tr>
-																		<tr>
-																			<td colspan="3"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
-																		</tr>
+																		
 																	</tbody>
 																</table>
 															</div>
@@ -762,13 +694,13 @@
 							
 														<label>Status</label>
 														<div class="form-group">
-															<div class="col-sm-4">
-																<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha..." >
-																		<option value="{{usuario.usuario_status}}">{{usuario.usuario_status}}</option>
-																		<option value="Ativo">Ativo</option>
-																		<option value="Inativo">Inativo</option>
-																</select>
-															</div>
+																<div class="col-sm-4">
+																	<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha..." >
+																			<option value="{{usuario.usuario_status}}">{{usuario.usuario_status}}</option>
+																			<option value="Ativo">Ativo</option>
+																			<option value="Inativo">Inativo</option>
+																	</select>
+																</div>
 														</div>
 
 														<div class="hidden">

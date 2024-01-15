@@ -657,68 +657,10 @@ module.exports = {AgendaModel,AgendaSchema,
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
         //console.log("beneidx:"+beneidx)
         if (beneidx != "-") {
-            if (categoriaidx != "-") {
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
-            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
-                //console.log("0")
-            } else if (teraidx != "-" && tpiaidx != "-" && convidx == "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx };
-                //console.log("1")
-            } else if (teraidx == "-" && tpiaidx != "-" && convidx == "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
-                console.log("2")
-            } else if (teraidx != "-" && tpiaidx == "-" && convidx == "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
-                //console.log("3")
-            } else if (teraidx == "-" && tpiaidx == "-" && convidx == "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
-                //console.log("4")
-            } else if (teraidx != "-" && tpiaidx != "-" && convidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
-                //console.log("1-"+tpiaidx+"-"+teraidx)
-            } else if (teraidx == "-" && tpiaidx != "-" && convidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx, agenda_convid: convidx };
-                //console.log("2")
-            } else if (teraidx != "-" && tpiaidx == "-" && convidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
-                //console.log("3")
-            } else if (teraidx == "-" && tpiaidx == "-" && convidx != "-"){
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx, agenda_convid: convidx };
-                //console.log("4")
-            }
-
-            if (categoriaidx != "-") {
-                if (categoriaidx == "Padrão") {
-                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Padrão', 'agenda_datacad': usuarioAtual};
-                } else {
-                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Administrativo', 'agenda_datacad': usuarioAtual};
-                }
-            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
-                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo', 'agenda_datacad': usuarioAtual};
-                console.log("0 TROCA SUBFIX")
-            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio
-                troca = {'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
-                //console.log("1")
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-") {//terapeuta
-                troca = {'agenda_usuid': novoteraidx, agenda_datacad: usuarioAtual};
-                //console.log("2")
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapia
-                troca = {'agenda_terapiaid': novatpiaidx, agenda_datacad: usuarioAtual};
-                //console.log("3")
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapeuta e terapia
-                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, agenda_datacad: usuarioAtual};
-                //console.log("4")
-            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-") {//terapeuta e convenio
-                troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
-                //console.log("5")
-            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-") {//terapia e convenio
-                troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
-                //console.log("6")
-            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-") {//todos
-                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_datacad: usuarioAtual};
-                //console.log("7")
-            }
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
+            
+                troca = {'agenda_usuid': novoteraidx};
+                console.log("AQUI Ó")
 
             await AgendaModel.find(busca).then((ag)=>{console.log("ag.lenhgt"+ag.length)})
             await AgendaModel.updateMany(

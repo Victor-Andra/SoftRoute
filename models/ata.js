@@ -12,7 +12,7 @@ const AtaSchema = mongoose.Schema({
     ata_beneid :{ type: ObjectId, required: true },
     ata_beneidade :{ type: String, required: false },
     ata_terapeutaid :{ type: ObjectId, required: false },
-    ata_parem :{ type: ObjectId, required: false },
+    ata_parem :{ type: String, required: false },
     //I
     ata_i01:{ type: String, required: false },
     ata_i02:{ type: String, required: false },
@@ -638,11 +638,9 @@ module.exports = {AtaModel,AtaSchema,
         console.log("atamodel");
         console.log("req.body.ataI01> "+req.body.ataI01temp)
         console.log("atamodel2");
-        const NewAta = new AtaModel({
+        const newAta = new AtaModel({
             ata_usuidcad : req.body.ataUsuidcad,
             ata_datacad : dataAtual.toISOString(),
-            ata_usuidedi : req.body.ataUsuidedi,
-            ata_dataedi : req.body.ata_dataedi,
             //dados Básicos do ATA
             ata_beneid : req.body.ataBeneid,
             ata_beneidade : req.body.ataBeneidade,

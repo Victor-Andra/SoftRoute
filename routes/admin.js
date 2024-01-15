@@ -2040,6 +2040,11 @@ router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req,res) =>{//di
     fncAta.cadastraAta(req, res);
 })
 
+//adiciona registro
+router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+    fncAta.carregaAtaEdi(req, res);
+})
+
 //Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
 router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAta.listaAta(req, res);
