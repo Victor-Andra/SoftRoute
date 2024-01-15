@@ -2049,6 +2049,10 @@ router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req,res) =
 router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
     fncAta.listaAta(req, res);
 })
+//Deleta Ata Selecionado
+router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncAta.deletaAta(req,res);
+})
 
 //Menu CARS ** Area Tecnicos e Escalas 
 //Carrega Cadastro

@@ -29,30 +29,26 @@
 
 			}
 			function mudaPlano() {
-				let tipodoc = document.getElementById("tratPlanotipo").value;
-				console.log(tipodoc)
-				if (tipodoc == "Padrão") {
+				let tipoDoc = document.getElementById("tratPlanotipo").value;
+				console.log(tipoDoc);
+
+				if (tipoDoc === "Padrão") {
 					document.getElementById('is').style.display = 'none';
 					document.getElementById('padrao').style.display = 'block';
 					document.getElementById('terato').style.display = 'none';
 					document.getElementById('tera').style.display = 'block';
-					
-				} else if (tipodoc == "Ocupacional") {
+				} else if (tipoDoc === "Ocupacional") {
 					document.getElementById('is').style.display = 'block';
 					document.getElementById('padrao').style.display = 'none';
 					document.getElementById('terato').style.display = 'block';
 					document.getElementById('tera').style.display = 'none';
-					
-					
 				} else {
-				document.getElementById('is').style.display = 'none';
-				document.getElementById('padrao').style.display = 'none';
-				document.getElementById('terato').style.display = 'none';
-				
-
+					document.getElementById('is').style.display = 'none';
+					document.getElementById('padrao').style.display = 'none';
+					document.getElementById('terato').style.display = 'none';
 				}
-				document.getElementById('tratPlanotipo').ReadOnly
-   			}
+				document.getElementById('tratPlanotipo').readOnly = true; // Corrigido 'ReadOnly' para 'readOnly'
+			}
 			
 			function atualizaDadosbene(){
 				let beneid = document.getElementById("tratBeneid").value;
@@ -111,68 +107,49 @@
 				return [year, month, day].join('-');
 			}
 			
-			function mudaPlano() {
-				let tipoDoc = document.getElementById("tratPlanotipo").value;
-				console.log(tipoDoc);
-				
-				if (tipoDoc === "Padrão") {
-					document.getElementById('is').style.display = 'none';
-					document.getElementById('padrao').style.display = 'block';
-					document.getElementById('terato').style.display = 'none';
-					document.getElementById('tera').style.display = 'block';
-				} else if (tipoDoc === "Ocupacional") {
-					document.getElementById('is').style.display = 'block';
-					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('terato').style.display = 'block';
-					document.getElementById('tera').style.display = 'none';
-				} else {
-					document.getElementById('is').style.display = 'none';
-					document.getElementById('padrao').style.display = 'none';
-					document.getElementById('terato').style.display = 'none';
-				}
-				document.getElementById('tratPlanotipo').readOnly = true; // Corrigido 'ReadOnly' para 'readOnly'
-			}
-		
 		function validarFormulario() {
-				let tipo = document.getElementById("tratPlanotipo").value;
+			let tipo = document.getElementById("tratPlanotipo").value;
 
-				if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
-					alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
-					return "false"; // Impede o envio do formulário se algum campo estiver em branco
-				} else {
-					var inputscab = document.getElementsByClassName('cab');
-					for (var i = 0; i < inputscab.length; i++) {
-						if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
+			if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
+				console.log("null!!!");
+				alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
+				return "false"; // Impede o envio do formulário se algum campo estiver em branco
+			} else {
+				var inputscab = document.getElementsByClassName('cab');
+				for (var i = 0; i < inputscab.length; i++) {
+					if ((inputscab[i].value.trim() === '' || inputscab[i].value.trim() === '-')) {
+						alert('Por favor, preencha todos os campos obrigatórios.');
+						return "false";
+					}
+				}
+
+				if (tipo === "Padrão") {
+					console.log("PAD!!!");
+					var inputspad = document.getElementsByClassName('pad');
+
+					for (var i = 0; i < inputspad.length; i++) {
+						if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
 							alert('Por favor, preencha todos os campos obrigatórios.');
 							return "false";
 						}
 					}
+					return "true";
+				} else {
+					console.log("OCU!!!");
+					var inputsocup = document.getElementsByClassName('ocup');
 
-					if (tipo === "Padrão") {
-						var inputspad = document.getElementsByClassName('pad');
-
-						for (var i = 0; i < inputspad.length; i++) {
-							if ((inputspad[i].value.trim() === '' || inputspad[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
-								alert('Por favor, selecione uma opção para todos os campos obrigatórios.');
-								return "false";
-							}
+					for (var i = 0; i < inputsocup.length; i++) {
+						console.log("inputsocup[i].value.trim(): "+inputsocup[i].value.trim())
+						console.log("RESULTADO: "+(inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputsocup[i].value.trim() === '766f69643132333435366964'))
+						if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputsocup[i].value.trim() === '766f69643132333435366964')) {
+							alert('Por favor, preencha todos os campos obrigatórios.');
+							return false;
 						}
-
-						return "true";
-					} else {
-						var inputsocup = document.getElementsByClassName('ocup');
-
-						for (var i = 0; i < inputsocup.length; i++) {
-							if ((inputsocup[i].value.trim() === '' || inputsocup[i].value.trim() === '-' || inputspad[i].value.trim() === '766f69643132333435366964')) {
-								alert('Por favor, preencha todos os campos obrigatórios.');
-								return "false";
-							}
-						}
-
-						return "true";
 					}
+					return "true";
 				}
 			}
+		}
 		
 		function submeterFormulario(){
 			let validacao = this.validarFormulario();
@@ -571,7 +548,7 @@
 													<label>Registro do conselho:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<input type="text" name="tratRegconselhoavd" id="tratRegconselhoavd" class="ocup" data-placeholder="-" class="form-control" />
+															<input type="text" name="tratRegconselhoavd" id="tratRegconselhoavd" data-placeholder="-" class="form-control" />
 														</div>
 													</div>	
 												</div>

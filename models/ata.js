@@ -13,6 +13,7 @@ const AtaSchema = mongoose.Schema({
     ata_beneidade :{ type: String, required: false },
     ata_terapeutaid :{ type: ObjectId, required: false },
     ata_parem :{ type: String, required: false },
+    ata_acompanhausuid: { type: ObjectId, required: false },
     //I
     ata_i01:{ type: String, required: false },
     ata_i02:{ type: String, required: false },
@@ -166,6 +167,7 @@ class Ata{
     ata_beneidade,
     ata_terapeutaid,
     ata_parem,
+    ata_acompanhausuid,
     //I
     ata_i01,
     ata_i02,
@@ -318,6 +320,7 @@ class Ata{
     this.ata_beneidade = ata_beneidade,
     this.ata_terapeutaid = ata_terapeutaid,
     this.ata_parem = ata_parem,
+    this.ata_acompanhausuid = ata_acompanhausuid,
     //I
     this.ata_i01 = ata_i01,
     this.ata_i02 = ata_i02,
@@ -481,6 +484,7 @@ module.exports = {AtaModel,AtaSchema,
                 ata_beneidade : req.body.ataBeneidade,
                 ata_terapeutaid : req.body.ataTerapeutaid,
                 ata_parem : req.body.ataParem,
+                ata_acompanhausuid : req.body.ataAcompanhausuid,
                 //I
                 ata_i01 : req.body.ataI01temp,
                 ata_i02 : req.body.ataI02temp,
@@ -646,6 +650,7 @@ module.exports = {AtaModel,AtaSchema,
             ata_beneidade : req.body.ataBeneidade,
             ata_terapeutaid : req.body.ataTerapeutaid,
             ata_parem : req.body.ataParem,
+            ata_acompanhausuid : req.body.ataAcompanhausuid,
             //I
             ata_i01 : req.body.ataI01temp,
             ata_i02 : req.body.ataI02temp,

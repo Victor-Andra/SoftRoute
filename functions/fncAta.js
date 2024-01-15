@@ -111,12 +111,12 @@ module.exports = {
         let perfilAtual = req.cookies['lvlUsu'];
         Ata.findOne({_id : req.params.id}).then((ata)=>{
             console.log("Listagem Realizada de Planos de Tratamento")
-            Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                Bene.find().then((bene) =>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     console.log("Listagem Realizada de beneficiarios")
-                    res.render("area/escalas/ata/ataEdi", {ata, usuarios: usuario, benes: bene, usuarioAtual, perfilAtual})
+                    res.render("area/escalas/ata/ataEdi", {ata, Terapeutas: terapeuta, Benes: bene, usuarioAtual, perfilAtual})
             })})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -186,23 +186,25 @@ module.exports = {
         }
     },
 
-
     deletaAta(req,res){
-        Atafisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Ataamento Fisioterapêutico deletado!")
-                res.render('area/escalas/ata/ataLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
-                res.render('admin/erro')
-            })
+        let resposta;
+        let flash = new Resposta()
+        Ata.deleteOne({_id: req.params.id}).then(() =>{
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar as ATAS")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "ATA deletada!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar a ATA";
+                flash.sucesso = "false";
+            }
+            this.listaAta(req,res, resposta)
         })
     }
 
