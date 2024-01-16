@@ -484,7 +484,7 @@ module.exports = {AtaModel,AtaSchema,
         
         //Realiza Atualização
         await AtaModel.findByIdAndUpdate(req.body.ataId, 
-            {$ata: {
+            {$set: {
                 ata_usuidcad : req.body.ataUsuidcad,
                 ata_datacad : req.body.ataDatacad,
                 ata_usuidedi : req.body.ataUsuidedi,

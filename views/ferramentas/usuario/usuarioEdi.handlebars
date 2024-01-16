@@ -25,7 +25,7 @@
 				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
 				document.getElementById("usuarioMetodo").value = document.getElementById("usuMetodo").value;
-				
+				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
 				console.log("termina");
 			}
 			function carregarImagem() {
@@ -481,6 +481,7 @@
 																			<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{_id}}"></td>
 																			<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text"  value="{{_id}}"></td>
 																			<td><input name="usuarioMetodo" id="usuarioMetodo" type="text"  value="{{_id}}"></td>
+																			
 																		</tr>
 																		<tr>
 																			<td colspan="3"><label>Outras informações</label></td>
@@ -716,7 +717,7 @@
 																		<input id="usuGraduacao" name="usuGraduacao" value="{{usuario.usuario_graduacao}}" />
 																		<input id="usuEspecializacao" name="usuEspecializacao" value="{{usuario.usuario_especializacao}}" />
 																		<input id="usuMetodo" name="usuMetodo" value="{{usuario.usuario_metodo}}" />
-																		
+																		<input id="usuEscolaridadeobs" name="usuEscolaridadeobs" value="{{usuario.usuario_escolaridadeobs}}" />
 																		
 
 																	</div>

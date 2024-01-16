@@ -2031,26 +2031,30 @@ router.get('/area/escalas/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{
 
 //Menu ATA ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/escalas/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
     fncAta.carregaAta(req, res);
 })
 
 //adiciona registro
-router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro
     fncAta.cadastraAta(req, res);
 })
 
-//adiciona registro
-router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.post('/area/escalas/ata/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+fncAta.atualizaAta(req, res);
+})
+
+//carrega registro para edição
+router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
     fncAta.carregaAtaEdi(req, res);
 })
 
 //Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para lista
     fncAta.listaAta(req, res);
 })
 //Deleta Ata Selecionado
-router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
     fncAta.deletaAta(req,res);
 })
 

@@ -155,7 +155,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            ataClass.escolaEditar(req,res).then((res)=>{
+            ataClass.ataEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
