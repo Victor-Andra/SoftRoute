@@ -30,7 +30,11 @@
 			function formataData(){
 				let tipo = document.getElementById("tipoData").value;
 				console.log("tipoData:"+tipoData);
-				if(tipo == "Ano/Mes"){
+				if(fill == "Ano"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if(tipo == "Ano/Mes"){
 					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
 					let mes = (dat.getUTCMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
@@ -73,7 +77,11 @@
 			}
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
-				if(fill == "Ano/Mes"){
+				if(fill == "Ano"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = true;
+				} else if(fill == "Ano/Mes"){
 					document.getElementById("divAnoBordo").hidden = false;
 					document.getElementById("divMesBordo").hidden = false;
 					document.getElementById("divDataFil").hidden = true;
@@ -270,6 +278,7 @@
 										<div class="input-group">
 											<label>Tipo Filtro Data:&nbsp;</label>
 											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano">Ano</option>
 												<option value="Ano/Mes">Ano/Mes</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -298,7 +307,7 @@
 											<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
 												<option value="2022">2022</option>
 												<option value="2023">2023</option>
-												<option value="2024">2024</option>
+												<option selected value="2024">2024</option>
 												<option value="2025">2025</option>
 											</select>
 										</div>

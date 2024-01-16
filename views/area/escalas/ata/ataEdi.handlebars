@@ -4,6 +4,7 @@
 		<title>ATA</title>
 		
 		<script type="text/javascript">
+		
 		let radioRes = 0;
 			function contafeitos(cg) {
 				let feitos;
@@ -225,10 +226,11 @@
 			document.getElementById("ataAcompanhausuid").value = document.getElementById("ataAcompanhausuidEdi").value;
 			document.getElementById("ataCorrecusuid").value = document.getElementById("ataCorrecusuidEdi").value;
 			document.getElementById("ataCorrecdata").value = document.getElementById("ataCorrecdataEdi").value;
-
+			document.getElementById("ataCorrec").value = document.getElementById("ataCorrecEdi").value;
+			//Atualiza o radio button
+			checkRadioAoCarregarFormulario();
 			// Lista de sufixos a serem removidos para obter os IDs originais
 			const sufixos = ["temp"];
-
 			// Loop para percorrer os sufixos
 			for (const sufixo of sufixos) {
 				// Seleciona todos os elementos que terminam com o sufixo
@@ -246,7 +248,27 @@
 					}
 				});
 			}
+			//atualiza calculos
+			atualizarContagem();
 			}
+			function checkRadioAoCarregarFormulario() {
+				// Obtém o valor do campo ataXxiii01temp
+				const valorTemp = document.getElementById("ataXxiii01temp").value;
+
+				// Obtém referências aos radio buttons
+				const radioSim = document.getElementById("ataXxiii01_sim");
+				const radioNao = document.getElementById("ataXxiii01_nao");
+
+				// Verifica o valor e marca o radio button correspondente
+				if (valorTemp === "true" ) {
+					radioSim.checked = true;
+					console.log(valorTemp);
+				} else {
+					radioNao.checked = true;
+				}
+			}
+
+			
     	</script>			
 		
 		
@@ -282,6 +304,7 @@
 									<input type="text" id="ataAcompanhausuidEdi" name="ataAcompanhausuidEdi" value="{{ata.ata_acompanhausuid}}" />
 									<input type="text" id="ataCorrecusuidEdi" name="ataCorrecusuidEdi" value="{{ata.ata_correcusuid}}" />
 									<input type="text" id="ataCorrecdataEdi" name="ataCorrecdataEdi" value="{{ata.ata_correcdata}}" />
+									<input type="text" id="ataCorrecEdi" name="ataCorrecEdi" value="{{ata.ata_correc}}" />
 
 									<input type="text" id="ataI01temp" name="ataI01temp" value="{{ata.ata_i01}}" />
 									<input type="text" id="ataI02temp" name="ataI02temp" value="{{ata.ata_i02}}" />
@@ -447,7 +470,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..."  value="{{ata.ata_beneid}}" onclick="atualizarContagem();">
+																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..."  onclick="atualizarContagem();">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -590,7 +613,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
 																						<input name="ataI01" id="ataI01" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Não sorri</span>
+																						<span class="lbl"> Não sorri.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -601,7 +624,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataI02" id="ataI02" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Ausência de aproximações espontâneas</span>
+																						<span class="lbl"> Ausência de aproximações espontâneas.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -612,7 +635,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataI03" id="ataI03" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Não busca companhia</span>
+																						<span class="lbl"> Não busca companhia.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -623,7 +646,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
 																						<input name="ataI04" id="ataI04" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Busca constantemente seu cantinho (esconderijo)</span>
+																						<span class="lbl"> Busca constantemente seu cantinho (esconderijo).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -634,7 +657,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
 																						<input name="ataI05" id="ataI05" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
-																						<span class="lbl"> Evita pessoas</span>
+																						<span class="lbl"> Evita pessoas.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -645,7 +668,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
 																						<input name="ataI06" id="ataI06" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
-																						<span class="lbl"> É incapaz de se manter um intercâmbio social</span>
+																						<span class="lbl"> É incapaz de se manter um intercâmbio social.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -656,7 +679,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">7.</span>
 																					<label>
 																						<input name="ataI07" id="ataI07" type="checkbox" class="ace grupo_i" onchange="javascript:atualizarContagem();updateTempField(this);"/>
-																						<span class="lbl"> Isolamento intenso</span>
+																						<span class="lbl"> Isolamento intenso.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -717,7 +740,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
 																						<input name="ataIi01" id="ataIi01" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Não responde as solicitações</span>
+																						<span class="lbl"> Não responde as solicitações.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -728,7 +751,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataIi02" id="ataIi02" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Mudança repentina de humor</span>
+																						<span class="lbl"> Mudança repentina de humor.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -739,7 +762,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataIi03" id="ataIi03" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem(); updateTempField(this);">
-																						<span class="lbl"> Mantém-se indiferente, sem expressão</span>
+																						<span class="lbl"> Mantém-se indiferente, sem expressão.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -750,7 +773,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
 																						<input name="ataIi04" id="ataIi04" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Risos compulsivos</span>
+																						<span class="lbl"> Risos compulsivos.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -761,7 +784,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
 																						<input name="ataIi05" id="ataIi05" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Birra e raiva passageira</span>
+																						<span class="lbl"> Birra e raiva passageira.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -772,7 +795,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
 																						<input name="ataIi06" id="ataIi06" type="checkbox" class="ace grupo_ii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Excitação motora ou verbal (ir de um lugar a outro, falar sem parar)</span>
+																						<span class="lbl"> Excitação motora ou verbal (ir de um lugar a outro, falar sem parar).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -843,7 +866,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataIii02" id="ataIii02" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> O adulto lhe serve como apoio para conseguir o que deseja (por ex.: utiliza o adulto como apoio para pegar bolacha)</span>
+																						<span class="lbl"> O adulto lhe serve como apoio para conseguir o que deseja (por ex.: utiliza o adulto como apoio para pegar bolacha).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -854,7 +877,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataIii03" id="ataIii03" type="checkbox" class="ace grupo_iii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> O adulto é o meio para suprir uma necessidade que não é capaz de realizar só (por ex.: amarrar os sapatos)</span>
+																						<span class="lbl"> O adulto é o meio para suprir uma necessidade que não é capaz de realizar só (por ex.: amarrar os sapatos).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -908,7 +931,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															A resistência a mudanças pode variar da irritabilidade até franca recusa
+															A resistência a mudanças pode variar da irritabilidade até franca recusa.
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -937,7 +960,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataIv02" id="ataIv02" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Grande dificuldade em aceitar fatos que alteram sua rotina, tais como mudanças de lugar, de vestuário e na alimentação</span>
+																						<span class="lbl"> Grande dificuldade em aceitar fatos que alteram sua rotina, tais como mudanças de lugar, de vestuário e na alimentação.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -948,7 +971,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataIv03" id="ataIv03" type="checkbox" class="ace grupo_iv" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Apresenta resistência a mudanças, persistindo na mesma resposta ou atividade</span>
+																						<span class="lbl"> Apresenta resistência a mudanças, persistindo na mesma resposta ou atividade.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1032,7 +1055,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataV03" id="ataV03" type="checkbox" class="ace grupo_v" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Prende-se a uma sequência temporal (cada coisa em seu tempo)</span>
+																						<span class="lbl"> Prende-se a uma sequência temporal (cada coisa em seu tempo).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1086,7 +1109,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															A falta de contato pode variar desde um olhar estranho até constante evitação dos estímulos visuais
+															A falta de contato pode variar desde um olhar estranho até constante evitação dos estímulos visuais.
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -1104,7 +1127,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
 																						<input name="ataVi01" id="ataVi01" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Desvia os olhares diretos, não olhando nos olhos</span>
+																						<span class="lbl"> Desvia os olhares diretos, não olhando nos olhos.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1116,7 +1139,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataVi02" id="ataVi02" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Volta a cabeça ou o olhar quando é chamado (olhar para fora)</span>
+																						<span class="lbl"> Volta a cabeça ou o olhar quando é chamado (olhar para fora).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1127,7 +1150,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataVi03" id="ataVi03" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Expressão do olhar vazio e sem vida</span>
+																						<span class="lbl"> Expressão do olhar vazio e sem vida.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1138,7 +1161,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
 																						<input name="ataVi04" id="ataVi04" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Quando segue os estímulos com os olhos, somente o faz de maneira intermitente</span>
+																						<span class="lbl"> Quando segue os estímulos com os olhos, somente o faz de maneira intermitente.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1149,7 +1172,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
 																						<input name="ataVi05" id="ataVi05" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Fixa os objetos com um olhar periférico, não central</span>
+																						<span class="lbl"> Fixa os objetos com um olhar periférico, não central.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1160,7 +1183,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">6.</span>
 																					<label>
 																						<input name="ataVi06" id="ataVi06" type="checkbox" class="ace grupo_vi" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Dá a sensação de que não olha</span>
+																						<span class="lbl"> Dá a sensação de que não olha.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1244,7 +1267,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataVii03" id="ataVii03" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Não expressa através da mímica ou olhar aquilo que quer ou o que sente</span>
+																						<span class="lbl"> Não expressa através da mímica ou olhar aquilo que quer ou o que sente.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1255,7 +1278,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
 																						<input name="ataVii04" id="ataVii04" type="checkbox" class="ace grupo_vii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Imobilidade facial</span>
+																						<span class="lbl"> Imobilidade facial.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1315,7 +1338,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">1.</span>
 																					<label>
 																						<input name="ataViii01" id="ataViii01" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Não quer ir dormir</span>
+																						<span class="lbl"> Não quer ir dormir.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1327,7 +1350,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">2.</span>
 																					<label>
 																						<input name="ataViii02" id="ataViii02" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Levanta-se muito cedo</span>
+																						<span class="lbl"> Levanta-se muito cedo.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1338,7 +1361,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">3.</span>
 																					<label>
 																						<input name="ataViii03" id="ataViii03" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Sono irregular (em intervalos)</span>
+																						<span class="lbl"> Sono irregular (em intervalos).</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1349,7 +1372,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">4.</span>
 																					<label>
 																						<input name="ataViii04" id="ataViii04" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Troca o dia pela noite</span>
+																						<span class="lbl"> Troca o dia pela noite.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -1360,7 +1383,7 @@
 																					<span class="label label-info arrowed-in-right arrowed">5.</span>
 																					<label>
 																						<input name="ataViii05" id="ataViii05" type="checkbox" class="ace grupo_viii" onchange="javascript:atualizarContagem();updateTempField(this);">
-																						<span class="lbl"> Dorme poucas horas</span>
+																						<span class="lbl"> Dorme poucas horas.</span>
 																					</label>
 																				</div>
 																			</td>
@@ -2899,7 +2922,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															Comportamentos apareceram antes dos 36Meses de vida.
+															Comportamentos apareceram antes dos 36 meses de vida.
 														</div>
 														<table>
 															<div class="input-group">

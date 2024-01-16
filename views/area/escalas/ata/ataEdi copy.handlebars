@@ -4,6 +4,7 @@
 		<title>ATA</title>
 		
 		<script type="text/javascript">
+		
 		let radioRes = 0;
 			function contafeitos(cg) {
 				let feitos;
@@ -215,12 +216,69 @@
 				document.getElementById("ataXxiii01temp").value = "false";
 				radioRes = 0;
 			}
+
+			function carregaBody(){
+			
+			document.getElementById("ataBeneid").value = document.getElementById("ataBeneidEdi").value;
+			document.getElementById("ataBeneidade").value = document.getElementById("ataBeneidadeEdi").value;
+			document.getElementById("ataTerapeutaid").value = document.getElementById("ataTerapeutaidEdi").value;
+			document.getElementById("ataParem").value = document.getElementById("ataParemEdi").value;
+			document.getElementById("ataAcompanhausuid").value = document.getElementById("ataAcompanhausuidEdi").value;
+			document.getElementById("ataCorrecusuid").value = document.getElementById("ataCorrecusuidEdi").value;
+			document.getElementById("ataCorrecdata").value = document.getElementById("ataCorrecdataEdi").value;
+			document.getElementById("ataCorrec").value = document.getElementById("ataCorrecEdi").value;
+			//Atualiza o radio button
+			checkRadioAoCarregarFormulario();
+			// Lista de sufixos a serem removidos para obter os IDs originais
+			const sufixos = ["temp"];
+			// Loop para percorrer os sufixos
+			for (const sufixo of sufixos) {
+				// Seleciona todos os elementos que terminam com o sufixo
+				const elementosTemp = document.querySelectorAll(`[id$=${sufixo}]`);
+
+				// Preenche os campos correspondentes removendo o sufixo
+				elementosTemp.forEach(elementoTemp => {
+					const idOriginal = elementoTemp.id.replace(sufixo, "");
+					const elementoOriginal = document.getElementById(idOriginal);
+
+					if (elementoOriginal && elementoTemp.value === "true") {
+						elementoOriginal.checked = true; // Marca o checkbox se o valor for "true"
+					} else {
+						elementoOriginal.value = elementoTemp.value; // Preenche outros tipos de elementos
+					}
+
+					// Atualiza os campos temporários
+					updateTempField(elementoOriginal);
+				});
+			}
+
+			//atualiza calculos
+			atualizarContagem();
+			}
+			function checkRadioAoCarregarFormulario() {
+				// Obtém o valor do campo ataXxiii01temp
+				const valorTemp = document.getElementById("ataXxiii01temp").value;
+
+				// Obtém referências aos radio buttons
+				const radioSim = document.getElementById("ataXxiii01_sim");
+				const radioNao = document.getElementById("ataXxiii01_nao");
+
+				// Verifica o valor e marca o radio button correspondente
+				if (valorTemp === "true" ) {
+					radioSim.checked = true;
+					console.log(valorTemp);
+				} else {
+					radioNao.checked = true;
+				}
+			}
+
+			
     	</script>			
 		
 		
 	</head>
 
-	<body onload="javascript:controlaNave(); " class="no-skin">
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -239,142 +297,154 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/area/escalas/ata/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/escalas/ata/edi" method="POST">
+							<input class="hidden" id="ataId" name="ataId" value="{{ata._id}}" />
 								<div class="col-xs-12" >
-									<input type="text" id="ataI01temp" name="ataI01temp" value="" />
-									<input type="text" id="ataI02temp" name="ataI02temp" value="" />
-									<input type="text" id="ataI03temp" name="ataI03temp" value="" />
-									<input type="text" id="ataI04temp" name="ataI04temp" value="" />
-									<input type="text" id="ataI05temp" name="ataI05temp" value="" />
-									<input type="text" id="ataI06temp" name="ataI06temp" value="" />
-									<input type="text" id="ataI07temp" name="ataI07temp" value="" />
+									<!-- Cabec -->
+									<input type="text" id="ataBeneidEdi" name="ataBeneidEdi" value="{{ata.ata_beneid}}" />
+									<input type="text" id="ataBeneidadeEdi" name="ataBeneidadeEdi" value="{{ata.ata_beneidade}}" />
+									<input type="text" id="ataTerapeutaidEdi" name="ataTerapeutaidEdi" value="{{ata.ata_terapeutaid}}" />
+									<input type="text" id="ataParemEdi" name="ataParemEdi" value="{{ata.ata_parem}}" />
+									<input type="text" id="ataAcompanhausuidEdi" name="ataAcompanhausuidEdi" value="{{ata.ata_acompanhausuid}}" />
+									<input type="text" id="ataCorrecusuidEdi" name="ataCorrecusuidEdi" value="{{ata.ata_correcusuid}}" />
+									<input type="text" id="ataCorrecdataEdi" name="ataCorrecdataEdi" value="{{ata.ata_correcdata}}" />
+									<input type="text" id="ataCorrecEdi" name="ataCorrecEdi" value="{{ata.ata_correc}}" />
+
+									<input type="text" id="ataI01temp" name="ataI01temp" value="{{ata.ata_i01}}" />
+									<input type="text" id="ataI02temp" name="ataI02temp" value="{{ata.ata_i02}}" />
+									<input type="text" id="ataI03temp" name="ataI03temp" value="{{ata.ata_i03}}" />
+									<input type="text" id="ataI04temp" name="ataI04temp" value="{{ata.ata_i04}}" />
+									<input type="text" id="ataI05temp" name="ataI05temp" value="{{ata.ata_i05}}" />
+									<input type="text" id="ataI06temp" name="ataI06temp" value="{{ata.ata_i06}}" />
+									<input type="text" id="ataI07temp" name="ataI07temp" value="{{ata.ata_i07}}" />
 									//II //II
-									<input type="text" id="ataIi01temp" name="ataIi01temp" value=""/>
-									<input type="text" id="ataIi02temp" name="ataIi02temp" value=""/>
-									<input type="text" id="ataIi03temp" name="ataIi03temp" value=""/>
-									<input type="text" id="ataIi04temp" name="ataIi04temp" value=""/>
-									<input type="text" id="ataIi05temp" name="ataIi05temp" value=""/>
-									<input type="text" id="ataIi06temp" name="ataIi06temp" value=""/>
+									<input type="text" id="ataIi01temp" name="ataIi01temp" value="{{ata.ata_ii01}}"/>
+									<input type="text" id="ataIi02temp" name="ataIi02temp" value="{{ata.ata_ii02}}"/>
+									<input type="text" id="ataIi03temp" name="ataIi03temp" value="{{ata.ata_ii03}}"/>
+									<input type="text" id="ataIi04temp" name="ataIi04temp" value="{{ata.ata_ii04}}"/>
+									<input type="text" id="ataIi05temp" name="ataIi05temp" value="{{ata.ata_ii05}}"/>
+									<input type="text" id="ataIi06temp" name="ataIi06temp" value="{{ata.ata_ii06}}"/>
 									//III //III
-									<input type="text" id="ataIii01temp" name="ataIii01temp" value=""/>
-									<input type="text" id="ataIii02temp" name="ataIii02temp" value=""/>
-									<input type="text" id="ataIii03temp" name="ataIii03temp" value=""/>
-									<input type="text" id="ataIii04temp" name="ataIii04temp" value=""/>
+									<input type="text" id="ataIii01temp" name="ataIii01temp" value="{{ata.ata_iii01}}"/>
+									<input type="text" id="ataIii02temp" name="ataIii02temp" value="{{ata.ata_iii02}}"/>
+									<input type="text" id="ataIii03temp" name="ataIii03temp" value="{{ata.ata_iii03}}"/>
+									<input type="text" id="ataIii04temp" name="ataIii04temp" value="{{ata.ata_iii04}}"/>
 									//IV //IV
-									<input type="text" id="ataIv01temp" name="ataIv01temp" value=""/>
-									<input type="text" id="ataIv02temp" name="ataIv02temp" value=""/>
-									<input type="text" id="ataIv03temp" name="ataIv03temp" value=""/>
+									<input type="text" id="ataIv01temp" name="ataIv01temp" value="{{ata.ata_iv01}}"/>
+									<input type="text" id="ataIv02temp" name="ataIv02temp" value="{{ata.ata_iv02}}"/>
+									<input type="text" id="ataIv03temp" name="ataIv03temp" value="{{ata.ata_iv03}}"/>
 									//V //V
-									<input type="text" id="ataV01temp" name="ataV01temp" value=""/>
-									<input type="text" id="ataV02temp" name="ataV02temp" value=""/>
-									<input type="text" id="ataV03temp" name="ataV03temp" value=""/>
-									<input type="text" id="ataV04temp" name="ataV04temp" value=""/>
+									<input type="text" id="ataV01temp" name="ataV01temp" value="{{ata.ata_v01}}"/>
+									<input type="text" id="ataV02temp" name="ataV02temp" value="{{ata.ata_v02}}"/>
+									<input type="text" id="ataV03temp" name="ataV03temp" value="{{ata.ata_v03}}"/>
+									<input type="text" id="ataV04temp" name="ataV04temp" value="{{ata.ata_v04}}"/>
 									//VI //VI
-									<input type="text" id="ataVi01temp" name="ataVi01temp" value=""/>
-									<input type="text" id="ataVi02temp" name="ataVi02temp" value=""/>
-									<input type="text" id="ataVi03temp" name="ataVi03temp" value=""/>
-									<input type="text" id="ataVi04temp" name="ataVi04temp" value=""/>
-									<input type="text" id="ataVi05temp" name="ataVi05temp" value=""/>
-									<input type="text" id="ataVi06temp" name="ataVi06temp" value=""/>
+									<input type="text" id="ataVi01temp" name="ataVi01temp" value="{{ata.ata_vi01}}"/>
+									<input type="text" id="ataVi02temp" name="ataVi02temp" value="{{ata.ata_vi02}}"/>
+									<input type="text" id="ataVi03temp" name="ataVi03temp" value="{{ata.ata_vi03}}"/>
+									<input type="text" id="ataVi04temp" name="ataVi04temp" value="{{ata.ata_vi04}}"/>
+									<input type="text" id="ataVi05temp" name="ataVi05temp" value="{{ata.ata_vi05}}"/>
+									<input type="text" id="ataVi06temp" name="ataVi06temp" value="{{ata.ata_vi06}}"/>
 									//VII //VII
-									<input type="text" id="ataVii01temp" name="ataVii01temp" value=""/>
-									<input type="text" id="ataVii02temp" name="ataVii02temp" value=""/>
-									<input type="text" id="ataVii03temp" name="ataVii03temp" value=""/>
-									<input type="text" id="ataVii04temp" name="ataVii04temp" value=""/>
+									<input type="text" id="ataVii01temp" name="ataVii01temp" value="{{ata.ata_vii01}}"/>
+									<input type="text" id="ataVii02temp" name="ataVii02temp" value="{{ata.ata_vii02}}"/>
+									<input type="text" id="ataVii03temp" name="ataVii03temp" value="{{ata.ata_vii03}}"/>
+									<input type="text" id="ataVii04temp" name="ataVii04temp" value="{{ata.ata_vii04}}"/>
 									//VIII (disturbios do sono) 
-									<input type="text" id="ataViii01temp" name="ataViii01temp" value=""/>
-									<input type="text" id="ataViii02temp" name="ataViii02temp" value=""/>
-									<input type="text" id="ataViii03temp" name="ataViii03temp" value=""/>
-									<input type="text" id="ataViii04temp" name="ataViii04temp" value=""/>
-									<input type="text" id="ataViii05temp" name="ataViii05temp" value=""/>
+									<input type="text" id="ataViii01temp" name="ataViii01temp" value="{{ata.ata_viii01}}"/>
+									<input type="text" id="ataViii02temp" name="ataViii02temp" value="{{ata.ata_viii02}}"/>
+									<input type="text" id="ataViii03temp" name="ataViii03temp" value="{{ata.ata_viii03}}"/>
+									<input type="text" id="ataViii04temp" name="ataViii04temp" value="{{ata.ata_viii04}}"/>
+									<input type="text" id="ataViii05temp" name="ataViii05temp" value="{{ata.ata_viii05}}"/>
 									//IX //IX
-									<input type="text" id="ataIx01temp" name="ataIx01temp" value=""/>
-									<input type="text" id="ataIx02temp" name="ataIx02temp" value=""/>
-									<input type="text" id="ataIx03temp" name="ataIx03temp" value=""/>
-									<input type="text" id="ataIx04temp" name="ataIx04temp" value=""/>
-									<input type="text" id="ataIx05temp" name="ataIx05temp" value=""/>
-									<input type="text" id="ataIx06temp" name="ataIx06temp" value=""/>
-									<input type="text" id="ataIx07temp" name="ataIx07temp" value=""/>
-									<input type="text" id="ataIx08temp" name="ataIx08temp" value=""/>
+									<input type="text" id="ataIx01temp" name="ataIx01temp" value="{{ata.ata_ix01}}"/>
+									<input type="text" id="ataIx02temp" name="ataIx02temp" value="{{ata.ata_ix02}}"/>
+									<input type="text" id="ataIx03temp" name="ataIx03temp" value="{{ata.ata_ix03}}"/>
+									<input type="text" id="ataIx04temp" name="ataIx04temp" value="{{ata.ata_ix04}}"/>
+									<input type="text" id="ataIx05temp" name="ataIx05temp" value="{{ata.ata_ix05}}"/>
+									<input type="text" id="ataIx06temp" name="ataIx06temp" value="{{ata.ata_ix06}}"/>
+									<input type="text" id="ataIx07temp" name="ataIx07temp" value="{{ata.ata_ix07}}"/>
+									<input type="text" id="ataIx08temp" name="ataIx08temp" value="{{ata.ata_ix08}}"/>
 									//X //X
-									<input type="text" id="ataX01temp" name="ataX01temp" value=""/>
-									<input type="text" id="ataX02temp" name="ataX02temp" value=""/>
-									<input type="text" id="ataX03temp" name="ataX03temp" value=""/>
-									<input type="text" id="ataX04temp" name="ataX04temp" value=""/>
+									<input type="text" id="ataX01temp" name="ataX01temp" value="{{ata.ata_x01}}"/>
+									<input type="text" id="ataX02temp" name="ataX02temp" value="{{ata.ata_x02}}"/>
+									<input type="text" id="ataX03temp" name="ataX03temp" value="{{ata.ata_x03}}"/>
+									<input type="text" id="ataX04temp" name="ataX04temp" value="{{ata.ata_x04}}"/>
 									//XI //XI
-									<input type="text" id="ataXi01temp" name="ataXi01temp" value=""/>
-									<input type="text" id="ataXi02temp" name="ataXi02temp" value=""/>
-									<input type="text" id="ataXi03temp" name="ataXi03temp" value=""/>
-									<input type="text" id="ataXi04temp" name="ataXi04temp" value=""/>
+									<input type="text" id="ataXi01temp" name="ataXi01temp" value="{{ata.ata_xi01}}"/>
+									<input type="text" id="ataXi02temp" name="ataXi02temp" value="{{ata.ata_xi02}}"/>
+									<input type="text" id="ataXi03temp" name="ataXi03temp" value="{{ata.ata_xi03}}"/>
+									<input type="text" id="ataXi04temp" name="ataXi04temp" value="{{ata.ata_xi04}}"/>
 									//XII //XII
-									<input type="text" id="ataXii01temp" name="ataXii01temp" value=""/>
-									<input type="text" id="ataXii02temp" name="ataXii02temp" value=""/>
-									<input type="text" id="ataXii03temp" name="ataXii03temp" value=""/>
-									<input type="text" id="ataXii04temp" name="ataXii04temp" value=""/>
-									<input type="text" id="ataXii05temp" name="ataXii05temp" value=""/>
-									<input type="text" id="ataXii06temp" name="ataXii06temp" value=""/>
-									<input type="text" id="ataXii07temp" name="ataXii07temp" value=""/>
+									<input type="text" id="ataXii01temp" name="ataXii01temp" value="{{ata.ata_xii01}}"/>
+									<input type="text" id="ataXii02temp" name="ataXii02temp" value="{{ata.ata_xii02}}"/>
+									<input type="text" id="ataXii03temp" name="ataXii03temp" value="{{ata.ata_xii03}}"/>
+									<input type="text" id="ataXii04temp" name="ataXii04temp" value="{{ata.ata_xii04}}"/>
+									<input type="text" id="ataXii05temp" name="ataXii05temp" value="{{ata.ata_xii05}}"/>
+									<input type="text" id="ataXii06temp" name="ataXii06temp" value="{{ata.ata_xii06}}"/>
+									<input type="text" id="ataXii07temp" name="ataXii07temp" value="{{ata.ata_xii07}}"/>
 									//XIII //XIII
-									<input type="text" id="ataXiii01temp" name="ataXiii01temp" value=""/>
-									<input type="text" id="ataXiii02temp" name="ataXiii02temp" value=""/>
-									<input type="text" id="ataXiii03temp" name="ataXiii03temp" value=""/>
-									<input type="text" id="ataXiii04temp" name="ataXiii04temp" value=""/>
+									<input type="text" id="ataXiii01temp" name="ataXiii01temp" value="{{ata.ata_xiii01}}"/>
+									<input type="text" id="ataXiii02temp" name="ataXiii02temp" value="{{ata.ata_xiii02}}"/>
+									<input type="text" id="ataXiii03temp" name="ataXiii03temp" value="{{ata.ata_xiii03}}"/>
+									<input type="text" id="ataXiii04temp" name="ataXiii04temp" value="{{ata.ata_xiii04}}"/>
 									//XIV //XIV
-									<input type="text" id="ataXiv01temp" name="ataXiv01temp" value=""/>
-									<input type="text" id="ataXiv02temp" name="ataXiv02temp" value=""/>
-									<input type="text" id="ataXiv03temp" name="ataXiv03temp" value=""/>
-									<input type="text" id="ataXiv04temp" name="ataXiv04temp" value=""/>
-									<input type="text" id="ataXiv05temp" name="ataXiv05temp" value=""/>
+									<input type="text" id="ataXiv01temp" name="ataXiv01temp" value="{{ata.ata_xiv01}}"/>
+									<input type="text" id="ataXiv02temp" name="ataXiv02temp" value="{{ata.ata_xiv02}}"/>
+									<input type="text" id="ataXiv03temp" name="ataXiv03temp" value="{{ata.ata_xiv03}}"/>
+									<input type="text" id="ataXiv04temp" name="ataXiv04temp" value="{{ata.ata_xiv04}}"/>
+									<input type="text" id="ataXiv05temp" name="ataXiv05temp" value="{{ata.ata_xiv05}}"/>
 									//XV //XV
-									<input type="text" id="ataXv01temp" name="ataXv01temp" value=""/>
-									<input type="text" id="ataXv02temp" name="ataXv02temp" value=""/>
-									<input type="text" id="ataXv03temp" name="ataXv03temp" value=""/>
-									<input type="text" id="ataXv04temp" name="ataXv04temp" value=""/>
-									<input type="text" id="ataXv05temp" name="ataXv05temp" value=""/>
+									<input type="text" id="ataXv01temp" name="ataXv01temp" value="{{ata.ata_xv01}}"/>
+									<input type="text" id="ataXv02temp" name="ataXv02temp" value="{{ata.ata_xv02}}"/>
+									<input type="text" id="ataXv03temp" name="ataXv03temp" value="{{ata.ata_xv03}}"/>
+									<input type="text" id="ataXv04temp" name="ataXv04temp" value="{{ata.ata_xv04}}"/>
+									<input type="text" id="ataXv05temp" name="ataXv05temp" value="{{ata.ata_xv05}}"/>
 									//XVI //XVI
-									<input type="text" id="ataXvi01temp" name="ataXvi01temp" value=""/>
-									<input type="text" id="ataXvi02temp" name="ataXvi02temp" value=""/>
-									<input type="text" id="ataXvi03temp" name="ataXvi03temp" value=""/>
-									<input type="text" id="ataXvi04temp" name="ataXvi04temp" value=""/>
-									<input type="text" id="ataXvi05temp" name="ataXvi05temp" value=""/>
-									<input type="text" id="ataXvi06temp" name="ataXvi06temp" value=""/>
-									<input type="text" id="ataXvi07temp" name="ataXvi07temp" value=""/>
-									<input type="text" id="ataXvi08temp" name="ataXvi08temp" value=""/>
+									<input type="text" id="ataXvi01temp" name="ataXvi01temp" value="{{ata.ata_xvi01}}"/>
+									<input type="text" id="ataXvi02temp" name="ataXvi02temp" value="{{ata.ata_xvi02}}"/>
+									<input type="text" id="ataXvi03temp" name="ataXvi03temp" value="{{ata.ata_xvi03}}"/>
+									<input type="text" id="ataXvi04temp" name="ataXvi04temp" value="{{ata.ata_xvi04}}"/>
+									<input type="text" id="ataXvi05temp" name="ataXvi05temp" value="{{ata.ata_xvi05}}"/>
+									<input type="text" id="ataXvi06temp" name="ataXvi06temp" value="{{ata.ata_xvi06}}"/>
+									<input type="text" id="ataXvi07temp" name="ataXvi07temp" value="{{ata.ata_xvi07}}"/>
+									<input type="text" id="ataXvi08temp" name="ataXvi08temp" value="{{ata.ata_xvi08}}"/>
 									//XVII //XVII
-									<input type="text" id="ataXvii01temp" name="ataXvii01temp" value=""/>
-									<input type="text" id="ataXvii02temp" name="ataXvii02temp" value=""/>
-									<input type="text" id="ataXvii03temp" name="ataXvii03temp" value=""/>
-									<input type="text" id="ataXvii04temp" name="ataXvii04temp" value=""/>
+									<input type="text" id="ataXvii01temp" name="ataXvii01temp" value="{{ata.ata_xvii01}}"/>
+									<input type="text" id="ataXvii02temp" name="ataXvii02temp" value="{{ata.ata_xvii02}}"/>
+									<input type="text" id="ataXvii03temp" name="ataXvii03temp" value="{{ata.ata_xvii03}}"/>
+									<input type="text" id="ataXvii04temp" name="ataXvii04temp" value="{{ata.ata_xvii04}}"/>
 									//XVIII //XVIII
-									<input type="text" id="ataXviii01temp" name="ataXviii01temp" value=""/>
-									<input type="text" id="ataXviii02temp" name="ataXviii02temp" value=""/>
-									<input type="text" id="ataXviii03temp" name="ataXviii03temp" value=""/>
-									<input type="text" id="ataXviii04temp" name="ataXviii04temp" value=""/>
+									<input type="text" id="ataXviii01temp" name="ataXviii01temp" value="{{ata.ata_xviii01}}"/>
+									<input type="text" id="ataXviii02temp" name="ataXviii02temp" value="{{ata.ata_xviii02}}"/>
+									<input type="text" id="ataXviii03temp" name="ataXviii03temp" value="{{ata.ata_xviii03}}"/>
+									<input type="text" id="ataXviii04temp" name="ataXviii04temp" value="{{ata.ata_xviii04}}"/>
 									//XIX //XIX
-									<input type="text" id="ataXix01temp" name="ataXix01temp" value=""/>
-									<input type="text" id="ataXix02temp" name="ataXix02temp" value=""/>
+									<input type="text" id="ataXix01temp" name="ataXix01temp" value="{{ata.ata_xix01}}"/>
+									<input type="text" id="ataXix02temp" name="ataXix02temp" value="{{ata.ata_xix02}}"/>
 									//XX //XX
-									<input type="text" id="ataXx01temp" name="ataXx01temp" value=""/>
-									<input type="text" id="ataXx02temp" name="ataXx02temp" value=""/>
-									<input type="text" id="ataXx03temp" name="ataXx03temp" value=""/>
-									<input type="text" id="ataXx04temp" name="ataXx04temp" value=""/>
-									<input type="text" id="ataXx05temp" name="ataXx05temp" value=""/>
-									<input type="text" id="ataXx06temp" name="ataXx06temp" value=""/>
+									<input type="text" id="ataXx01temp" name="ataXx01temp" value="{{ata.ata_xx01}}"/>
+									<input type="text" id="ataXx02temp" name="ataXx02temp" value="{{ata.ata_xx02}}"/>
+									<input type="text" id="ataXx03temp" name="ataXx03temp" value="{{ata.ata_xx03}}"/>
+									<input type="text" id="ataXx04temp" name="ataXx04temp" value="{{ata.ata_xx04}}"/>
+									<input type="text" id="ataXx05temp" name="ataXx05temp" value="{{ata.ata_xx05}}"/>
+									<input type="text" id="ataXx06temp" name="ataXx06temp" value="{{ata.ata_xx06}}"/>
 									//XXI //XXI
-									<input type="text" id="ataXxi01temp" name="ataXxi01temp" value=""/>
-									<input type="text" id="ataXxi02temp" name="ataXxi02temp" value=""/>
-									<input type="text" id="ataXxi03temp" name="ataXxi03temp" value=""/>
-									<input type="text" id="ataXxi04temp" name="ataXxi04temp" value=""/>
-									<input type="text" id="ataXxi05temp" name="ataXxi05temp" value=""/>
-									<input type="text" id="ataXxi06temp" name="ataXxi06temp" value=""/>
-									<input type="text" id="ataXxi07temp" name="ataXxi07temp" value=""/>
-									<input type="text" id="ataXxi08temp" name="ataXxi08temp" value=""/>
+									<input type="text" id="ataXxi01temp" name="ataXxi01temp" value="{{ata.ata_xxi01}}"/>
+									<input type="text" id="ataXxi02temp" name="ataXxi02temp" value="{{ata.ata_xxi02}}"/>
+									<input type="text" id="ataXxi03temp" name="ataXxi03temp" value="{{ata.ata_xxi03}}"/>
+									<input type="text" id="ataXxi04temp" name="ataXxi04temp" value="{{ata.ata_xxi04}}"/>
+									<input type="text" id="ataXxi05temp" name="ataXxi05temp" value="{{ata.ata_xxi05}}"/>
+									<input type="text" id="ataXxi06temp" name="ataXxi06temp" value="{{ata.ata_xxi06}}"/>
+									<input type="text" id="ataXxi07temp" name="ataXxi07temp" value="{{ata.ata_xxi07}}"/>
+									<input type="text" id="ataXxi08temp" name="ataXxi08temp" value="{{ata.ata_xxi08}}"/>
 									//XXII //XXII
-									<input type="text" id="ataXxii01temp" name="ataXxii01temp" value=""/>
-									<input type="text" id="ataXxii02temp" name="ataXxii02temp" value=""/>
-									<input type="text" id="ataXxii03temp" name="ataXxii03temp" value=""/>
+									<input type="text" id="ataXxii01temp" name="ataXxii01temp" value="{{ata.ata_xxii01}}"/>
+									<input type="text" id="ataXxii02temp" name="ataXxii02temp" value="{{ata.ata_xxii02}}"/>
+									<input type="text" id="ataXxii03temp" name="ataXxii03temp" value="{{ata.ata_xxii03}}"/>
 									//XXIII //XXIII
-									<input type="text" id="ataXxiii01temp" name="ataXxiii01temp" value=""/>
+									<input type="text" id="ataXxiii01temp" name="ataXxiii01temp" value="{{ata.ata_xxiii01}}"/>
+									
 								</div>
 								<div class="col-xs-12" name="Ident" id="Ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
@@ -404,7 +474,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
+																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..."  onclick="atualizarContagem();">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -418,7 +488,7 @@
 														<div class="row">
 															<div class="col-sm-4">
 																<div class="input-group">
-																	<input name="ataBeneidade" id="ataBeneidade" type="text"  onclick="atualizarContagem()"/>
+																	<input name="ataBeneidade" id="ataBeneidade" type="text"  onclick="atualizarContagem();"/>
 																</div>
 															</div>
 														</div>
@@ -431,7 +501,7 @@
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<select name="ataTerapeutaid" id="ataTerapeutaid" class="chosen-select" data-placeholder="Escolha..."onclick="atualizarContagem()" >
+																	<select name="ataTerapeutaid" id="ataTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem();" >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -865,7 +935,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															A resistência a mudanças pode variar da irritabilidade até franca recusa
+															A resistência a mudanças pode variar da irritabilidade até franca recusa.
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -1024,7 +1094,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>VI</b> - Falta de contato visual. Olhar indefinido.</h4>
+												<b>VI</b> - Falta de contato visual. Olhar indefinido</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>

@@ -50,20 +50,17 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    carregaCadastro(req, res) {
+    carregaCadastro(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
-    
-        ContaRec.find().then((contaRec) => {
-            Bene.find().then((bene) => {
-                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Conv.find().then((conv) => {
-                    ConvImp.find().then((convimp) => {
-                        res.render('financeiro/receita/contaRecCad', { convimps: convimp, benes: bene, convs: conv, contaRecs: contaRec, usuarioAtual, dataAtual })
-                    })
-                })
-            })
-        }).catch((err) => {
+        console.log("usuarioAtual:"+usuarioAtual)
+        ContaRec.find().then((contaRec) =>{
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Conv.find().then((conv)=>{
+                    ConvImp.find().then((convimp)=>{
+                    res.render('financeiro/receita/contaRecCad', {convimps: convimp, benes: bene, convs: conv, contaRecs: contaRec, usuarioAtual, dataAtual})
+        })})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

@@ -122,6 +122,20 @@ module.exports = {
         })
 
         switch (tipoData){
+            case "Ano":
+                dataIni = new Date();
+                dataIni.setDate(01);
+                dataIni.setFullYear(parseInt(req.body.anoBordo)-1);
+                dataIni.setUTCMonth(1);
+                dataIni.setHours(0, 0, 0, 0);
+
+                dataFim = new Date();
+                dataFim.setDate(01);
+                dataFim.setFullYear(parseInt(req.body.anoBordo)+1);
+                dataFim.setUTCMonth(1);
+                dataFim.setHours(0, 0, 0, 0);
+
+                break;
             case "Ano/Mes":
                 dataIni = new Date();
                 console.log("req.body.mesBordo:"+req.body.mesBordo)

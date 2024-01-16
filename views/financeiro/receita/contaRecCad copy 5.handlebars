@@ -3,36 +3,6 @@
 	<head>
 		<title>contas a receber</title>
 		<script type="text/javascript">
-		window.onload = function () {
-			function selectBeneDados() {
-				var select = document.getElementById("contarecBeneid");
-				var selectedIndex = select.selectedIndex;
-
-				// Verifica se um beneficiário foi selecionado
-				if (selectedIndex !== -1) {
-					var selectedId = select.options[selectedIndex].value;
-
-					// Procura os dados do beneficiário na lista já carregada
-					var beneficiario = benes.find(bene => bene._id === selectedId);
-
-					if (beneficiario) {
-						console.log(beneficiario)
-						// Preenche os campos com os dados encontrados
-						document.getElementById("contarecBeneid").value = beneficiario._id;
-						document.getElementById("contarecBenenome").value = beneficiario.bene_nome;
-						document.getElementById("contarecTomador").value = beneficiario.bene_ordemnome || "";
-						document.getElementById("contarecCpfcnpj").value = beneficiario.bene_ordemdoc || "";
-						document.getElementById("contarecRetencao").value = beneficiario.bene_ordemretem || "";
-					} else {
-						console.error("Beneficiário não encontrado na lista.");
-					}
-				} else {
-					console.error("Nenhum beneficiário selecionado.");
-				}
-			}
-		}
-
-
 			function atualizaCheckbox(checkbox) {
 				// Obtém o valor do checkbox (true ou false)
 				let valcheck;
@@ -178,6 +148,29 @@
 						document.getElementById("contarecVlriss").value = "0,00";
 					}
 				}
+			}
+			
+			function selectBeneDados() {
+				var convid = document.getElementById(document.getElementById("contarecBeneid").value).value.toString();
+				console.log(convid)
+
+				var nomeid = document.getElementById(document.getElementById("contarecBeneid").value + "_benenomeidEdi").value.toString();
+				console.log("nome:", nomeid);
+
+				var nometoma = document.getElementById(document.getElementById("contarecBeneid").value + "_beneordemnomeEdi").value.toString();
+				console.log("tomador:", nometoma);
+
+				var cpfcnpjtoma = document.getElementById(document.getElementById("contarecBeneid").value + "_beneordemdocEdi").value.toString();
+				console.log("doc:", cpfcnpjtoma);
+
+				var reten = document.getElementById(document.getElementById("contarecBeneid").value + "_beneordemretemEdi").value.toString();
+				console.log("retem sim ou não:", reten);
+
+				document.getElementById("contarecConvid").value = convid;
+				document.getElementById("contarecBenenome").value = nomeid;
+				document.getElementById("contarecTomador").value = nometoma;
+				document.getElementById("contarecCpfcnpj").value = cpfcnpjtoma;
+				document.getElementById("contarecRetencao").value = reten;
 			}
 			
 		</script>

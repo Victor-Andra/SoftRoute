@@ -49,9 +49,22 @@ module.exports = {
     },
     filtraRelsem(req, res, resposta){
         let flash = new Resposta();
+        let dataIni;
+        let dataFim;
         //console.log('listando Relsemeses')
-        Relsem.find({relsem_beneid: req.body.relsemBeneid}).then((relsem) =>{
-            console.log("relsem.length"+relsem.length)
+        dataIni = new Date();
+        dataIni.setDate(01);
+        dataIni.setFullYear(parseInt(anoIni)-1);
+        dataIni.setUTCMonth(1);
+        dataIni.setHours(0, 0, 0, 0);
+
+        dataFim = new Date();
+        dataFim.setDate(01);
+        dataFim.setFullYear(parseInt(anoIni)+1);
+        dataFim.setUTCMonth(1);
+        dataFim.setHours(0, 0, 0, 0);
+
+        Relsem.find({relsem_beneid: req.body.relsemBeneid, relsem_data: { $gte :new Date(dataIni), $lte:  new Date(dataFim) }}).then((relsem) =>{
             relsem.sort((a,b) => (a.relsem_benenome > b.relsem_benenome) ? 1 : ((b.relsem_benenome > a.relsem_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista relsemese 
             relsem.forEach((c)=>{
                //console.log("c.datacad"+c.relsem_datacad)
