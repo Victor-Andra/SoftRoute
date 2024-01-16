@@ -269,7 +269,7 @@ module.exports = {
                         break;
                     default:
                         e.agenda_data_semana = "dom"
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -392,7 +392,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -886,7 +886,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -1436,7 +1436,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -1648,7 +1648,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -2194,7 +2194,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -2343,7 +2343,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         let busca;
-        console.log("req.body.soFixo:"+req.body.soFixo)
+        //console.log("req.body.soFixo:"+req.body.soFixo)
         if (req.body.soFixo == "true"){
             busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, "agenda_categoria": "SubstitutoFixo" };
         } else {
@@ -2389,7 +2389,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -2567,7 +2567,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -3103,7 +3103,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -3633,7 +3633,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -3801,7 +3801,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -3954,7 +3954,7 @@ module.exports = {
             beneConvid = bene.bene_convid
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
-                console.log("agenda.length:"+agenda.length)
+                //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
                     let dat = new Date(e.agenda_data);
                     e.agenda_data_dia = this.getDataFMT(dat);
@@ -3990,7 +3990,7 @@ module.exports = {
                             break;
                         default:
                             
-                            console.log("erro");
+                            //console.log("erro");
                             break;
                     }
                 })
@@ -4186,7 +4186,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -4326,7 +4326,7 @@ module.exports = {
         //Pensar em como carregar quando for merge
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            console.log("agenda.length:"+agenda.length)
+            //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -4362,7 +4362,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -4426,9 +4426,9 @@ module.exports = {
                             });
                             Sala.find().then((sala)=>{
                                 Usuario.findOne({_id:req.body.agendaTerapeutaid}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                                    console.log("usuario:"+usuario.usuario_nome);
+                                    //console.log("usuario:"+usuario.usuario_nome);
                                     nomeUsu = ""+usuario.usuario_nome;
-                                    console.log("nomeUsu:"+nomeUsu);
+                                    //console.log("nomeUsu:"+nomeUsu);
                                     //console.log("usuario:"+usuario)
                                     
                                     if(typeof usuario.usuario_nome === undefined){
@@ -4712,7 +4712,7 @@ module.exports = {
                             break;
                         default:
                             
-                            console.log("erro");
+                            //console.log("erro");
                             break;
                     }
                     idsAgendasEx.push(mongoose.Types.ObjectId(e._id));
@@ -4890,7 +4890,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
 
@@ -5058,7 +5058,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -5574,7 +5574,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -6067,7 +6067,7 @@ module.exports = {
         Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
-            console.log("agenda.length:"+agenda.length)
+            //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -6102,7 +6102,7 @@ module.exports = {
                         e.agenda_data_semana = "sab"
                         break;
                     default:
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -6312,7 +6312,7 @@ module.exports = {
                         e.agenda_data_semana = "sab"
                         break;
                     default:
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -6441,8 +6441,8 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        console.log("agora:"+agora);
-        console.log("depois:"+depois);
+        //console.log("agora:"+agora);
+        //console.log("depois:"+depois);
         segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
         terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
@@ -6452,7 +6452,7 @@ module.exports = {
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
-            console.log("agenda.length:"+agenda.length)
+            //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -6488,7 +6488,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -6631,8 +6631,8 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        console.log("agora:"+agora);
-        console.log("depois:"+depois);
+        //console.log("agora:"+agora);
+        //console.log("depois:"+depois);
         segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
         terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
@@ -6677,7 +6677,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
                 if(e.agenda_temp){
@@ -6846,7 +6846,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -7268,16 +7268,16 @@ module.exports = {
         let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        console.log("seg dtf: "+seg);
-        console.log("sex dtf: "+sex);
+        //console.log("seg dtf: "+seg);
+        //console.log("sex dtf: "+sex);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        console.log("seg aft: "+seg)
-        console.log("sex aft: "+sex)
+        //console.log("seg aft: "+seg)
+        //console.log("sex aft: "+sex)
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -7327,12 +7327,12 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let idxtestecunt = 0;
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).then((agenda2) =>{
-            console.log("agenda2.length => "+agenda2.length)
+            //console.log("agenda2.length => "+agenda2.length)
             
         })
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
-            console.log("agenda.length:"+agenda.length)
+            //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -7368,7 +7368,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -7884,7 +7884,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -8399,7 +8399,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -8904,7 +8904,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -9043,7 +9043,7 @@ module.exports = {
                         break;
                     default:
                         e.agenda_data_semana = "dom"
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -9162,7 +9162,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -9299,7 +9299,7 @@ module.exports = {
                         break;
                     default:
                         e.agenda_data_semana = "dom"
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -9453,10 +9453,10 @@ module.exports = {
             //console.log("resultado")
             //console.log(resultado);
             if (flash.sucesso == "true"){
-                console.log('verdadeiro')
+                //console.log('verdadeiro')
                 res.render('admin/branco', {flash});
             } else {
-                console.log('ERRO')
+                //console.log('ERRO')
                 res.render('admin/erro', {flash});
             }
         })
@@ -9518,7 +9518,7 @@ module.exports = {
                 //console.log(res)
                 resposta = true;
             }).catch((err) =>{
-                console.log("error")
+                //console.log("error")
                 console.log(err)
                 resposta = err;
                 res.render('admin/erro')
@@ -9547,7 +9547,7 @@ module.exports = {
                 agenda.forEach((a)=>{
                     Agenda.deleteOne({_id: a._id}).then(() =>{
                         //this.carregaAgendaF(req,res);
-                        console.log("Deletado:"+req.params.id);
+                        //console.log("Deletado:"+req.params.id);
                         flash.sucesso = "true";
                         flash.texto = "Agenda deletada!";
                         res.render("admin/branco",{flash});
@@ -9564,7 +9564,7 @@ module.exports = {
                         agenda.forEach((a)=>{
                             Agenda.deleteOne({_id: a._id}).then(() =>{
                                 //this.carregaAgendaF(req,res);
-                                console.log("Deletado:"+req.params.id);
+                                //console.log("Deletado:"+req.params.id);
                                 flash.sucesso = "true";
                                 flash.texto = "Agenda deletada!";
                                 res.render("admin/branco",{flash});
@@ -9576,7 +9576,7 @@ module.exports = {
                             })
                         })
                     } else {
-                        console.log("Não achou pelo id")
+                        //console.log("Não achou pelo id")
                         flash.sucesso = "false"
                         flash.texto = "A agenda não foi encontrada!"
                         res.render("admin/branco",{flash});
@@ -9594,7 +9594,7 @@ module.exports = {
                 //console.log("res")
                 resultado = true;
             }).catch((err) =>{
-                console.log("error")
+                //console.log("error")
                 console.log(err)
                 resultado = err;
                 res.render('admin/erro')
@@ -9827,7 +9827,7 @@ module.exports = {
                 isAgendaTerapeuta = true;
             }
         })
-        console.log("isAgendaTerapeuta:"+isAgendaTerapeuta);
+        //console.log("isAgendaTerapeuta:"+isAgendaTerapeuta);
         let flash = new Resposta()
         let resultado;
         let id = req.params.id;
@@ -10083,7 +10083,7 @@ module.exports = {
                         break;
                     default:
                         
-                        console.log("erro");
+                        //console.log("erro");
                         break;
                 }
             })
@@ -10562,7 +10562,7 @@ module.exports = {
         sex.setSeconds(59);
         //console.log("seg:"+seg)
         //console.log("sex:"+sex)
-        console.log("START CONVERT");
+        //console.log("START CONVERT");
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -11733,7 +11733,7 @@ module.exports = {
                 //})
                 })
             })
-            console.log("END CONVERT");
+            //console.log("END CONVERT");
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro')
@@ -11770,7 +11770,7 @@ module.exports = {
         sex.setSeconds(59);
         //console.log("seg:"+seg)
         //console.log("sex:"+sex)
-        console.log("START CONVERT");
+        //console.log("START CONVERT");
         switch (seg.getUTCDay()){
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
@@ -11864,7 +11864,7 @@ module.exports = {
                                     }
 
                                     hora = hor+":"+min;
-                                    console.log("agendaSub.agenda_categoria: "+agendaSub.agenda_categoria)
+                                    //console.log("agendaSub.agenda_categoria: "+agendaSub.agenda_categoria)
                                     switch (agendaSub.agenda_categoria){
                                         case "Apoio"://ANALISE
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
@@ -12616,7 +12616,7 @@ module.exports = {
                 })
             //})
             })
-            console.log("END CONVERT");
+            //console.log("END CONVERT");
         }).catch((err)=>{
             console.log(err)
             res.render('admin/erro')
@@ -12733,10 +12733,10 @@ module.exports = {
         dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
-        console.log("dataIni"+dataIni);
-        console.log("dataFim"+dataFim);
+        //console.log("dataIni"+dataIni);
+        //console.log("dataFim"+dataFim);
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agenda)=>{
-            console.log("agenda:"+agenda.length)
+            //console.log("agenda:"+agenda.length)
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setDate(dataaux.getDate()+7);
@@ -12875,10 +12875,10 @@ module.exports = {
             let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");/})})})
             let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");/})})})
             let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");/})})})
-            console.log("Finish");
+            //console.log("Finish");
         }
         */
-        console.log("Desativado");
+        //console.log("Desativado");
         res.render("admin/branco");
     },
     deletarTodosAtendimentos2(req,res){
@@ -12886,9 +12886,9 @@ module.exports = {
         let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{/*console.log("DELETED!");/})})})
         let deletar2 = Cre.find({credit_atendnum: {$gte: 2}}).then((c)=>{c.forEach(c=>{Cre.deleteOne({_id: c._id}).then(()=>{/*console.log("DELETED!");/})})})
         let deletar3 = Deb.find({debit_atendnum: {$gte: 2}}).then((d)=>{d.forEach(d=>{Deb.deleteOne({_id: d._id}).then(()=>{/*console.log("DELETED!");/})})})
-        console.log("Finish");
+        //console.log("Finish");
         */
-        console.log("Desativado");
+        //console.log("Desativado");
         res.render("admin/branco");
     },
     temDia(haddia,horaage,agenda,semana,aux,diaDaSemana){
@@ -13155,9 +13155,9 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                         }
 
                                         let horaAgenda = hor+":"+min;
-                                        console.log("HORA:"+horaAgenda);
+                                        //console.log("HORA:"+horaAgenda);
                                         hora = horaAgenda;
-                                        console.log("AGENDA1 ERRO:"+a)
+                                        //console.log("AGENDA1 ERRO:"+a)
                                     } else {
                                         data = new Date(agendaSub.agenda_data);
                                         let hora = data.getHours();
@@ -13171,9 +13171,9 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                             min = "0"+min;
                                         }
                                         let horaAgenda = data.getHours()+":"+data.getMinutes();
-                                        console.log("HORA:"+horaAgenda);
+                                        //console.log("HORA:"+horaAgenda);
                                         hora = horaAgenda;
-                                        console.log("AGENDA2 ERRO:"+agendaSub)
+                                        //console.log("AGENDA2 ERRO:"+agendaSub)
                                     }
 
                                     switch (a.agenda_tempmotivo){
@@ -13188,8 +13188,8 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                                                     convcreval = ccre.convcre_valor;
                                                 }
                                             })
-                                            console.log("a:"+a)
-                                            console.log("agendaSub:"+agendaSub)
+                                            //console.log("a:"+a)
+                                            //console.log("agendaSub:"+agendaSub)
                                             newAtend = new Atend({
                                                 atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                 atend_categoria : "Falta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
@@ -13665,18 +13665,18 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
    /*
         let aaa = new Date();
         aaa.setDate(aaa.getDate()-4);
-        console.log("AAA:"+aaa);
+        //console.log("AAA:"+aaa);
         let bbb = new Date();
         bbb.setDate(bbb.getDate()+2);
-        console.log("BBB:"+bbb);
+        //console.log("BBB:"+bbb);
         Agenda.find({agenda_data: { $gte : aaa, $lte:  bbb }}).then((del)=>{
-            console.log("del.length"+del.length);
+            //console.log("del.length"+del.length);
             del.forEach((item)=>{
                 Agenda.findByIdAndDelete(item._id, function (err, docs) {
                     if (err){
                         console.log(err)
                     }else{
-                        console.log("DETETED!");
+                        //console.log("DETETED!");
                     }
                 });
             })

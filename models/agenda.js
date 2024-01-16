@@ -383,7 +383,6 @@ module.exports = {AgendaModel,AgendaSchema,
         }
 
         await AgendaModel.find(busca).then((agenda)=>{
-            console.log("agendalength: "+agenda.length)
             agenda.forEach(a => {
                 arrayIds.push(a._id);
             })
@@ -392,23 +391,24 @@ module.exports = {AgendaModel,AgendaSchema,
                     agendaFinal.push(as);
                 })
                 agenda.forEach((a)=>{
-                    let add = true;
+                    let add = "true";
                     agendaSemanal.forEach(as => {
                         if ((""+as.agenda_tempId+"") == (""+a._id+"")){
-                            add = false;
+                            add = "false";
                         }
                     })
-                    agendaFinal.push(a);
+                    if (add == "true"){
+                        agendaFinal.push(a);
+                    }
                 })
-                console.log("agendaFinal: "+agendaFinal.length)
                 agendaFinal.forEach(a => {
                     if (a.agenda_tempId == undefined || a.agenda_tempId == "undefined"){
-                        agendaS = false;
+                        agendaS = "false";
                     } else {
-                        agendaS = true;
+                        agendaS = "true";
                     }
                     
-                    if (agendaS){
+                    if (agendaS == "true"){
                         arrayAgendasNovas.push(a);
                         AgendaModel.findByIdAndUpdate(a._id, 
                             {$set: {

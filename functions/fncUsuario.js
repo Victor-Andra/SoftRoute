@@ -29,9 +29,16 @@ module.exports = {
     listaUsuario(req,res){
         Usuario.find().then((usuario) =>{
             usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome completo
-            Funcao.find().then((funcao) =>{
+            Perfil.find().then((perfil)=>{
+                Funcao.find().then((funcao) =>{
+                        Especialidade.find().then((especialidade)=>{  //Graduação
+                        especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as especialidades
+                            Especializacao.find().then((especializacao)=>{ //Especialização
+                                especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
+                                Metodo.find().then((metodo)=>{ //Métodos
+                                    metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
                 res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
-            })}).catch((err) =>{
+            })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
@@ -43,9 +50,12 @@ module.exports = {
             Estado.find().then((estado)=>{
                     Perfil.find().then((perfil)=>{
                         Funcao.find().then((funcao)=>{
-                            Especialidade.find().then((especialidade)=>{
-                                Especializacao.find().then((especializacao)=>{
-                                    Metodo.find().then((metodo)=>{
+                            Especialidade.find().then((especialidade)=>{  //Graduação
+                                especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as graduações
+                                    Especializacao.find().then((especializacao)=>{ //Especialização
+                                        especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
+                                        Metodo.find().then((metodo)=>{ //Métodos
+                                            metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
             res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -61,11 +71,14 @@ module.exports = {
                 Perfil.find().then((perfil)=>{
                     Funcao.find().then((funcao)=>{
                         Especialidade.find().then((especialidade)=>{//Graduação
+                            especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena agraduação
                             Especializacao.find().then((especializacao)=>{
+                                especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
                                 Metodo.find().then((metodo)=>{
                                     if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
                                         base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
                                     }
+                                    metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
             res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao, base64Image})
         })})})})})})}).catch((err) =>{
             console.log(err)

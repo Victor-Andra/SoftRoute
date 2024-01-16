@@ -161,207 +161,327 @@
 										</div>		
 									</div>
 								</div>
-								<div class="col-xs-12" name="pontuacao" id="ponntuacao"><!-- Pontuação -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
-												
-												Pontuação</h4>
+								<div class="col-sm-12">
+									<div class="col-xs-6" name="pontuacao" id="pontuacao"><!-- Pontuação -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+													
+													Pontuação</h4>
 
-											<span class="widget-toolbar">
+												<span class="widget-toolbar">
 
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
 
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
 
-											</span>
-										</div>
+												</span>
+											</div>
 
-										<div class="widget-body">
-											<div class="widget-main">
-												<div class="row">
-													<div class="col-xs-12">
-														<div class="col-sm-12">
-															<div class="alert alert-warning">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																<strong>Observação! </strong>
-																O cars (Autism Treatment Evaluation Checklist) – Formulário para Avaliação de Tratamento do Autismo é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indica a severidade dos sintomas e a redução progressiva dessa pontuação é um indicador de que as intervenções têm trazido melhoras no quadro. A pontuação do cars varia de 0 a 180, sendo que qualquer valor acima de 0 indica presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
-															</div><br>
-														</div>
-														
-														<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-															<thead>
-																<h5 class="widget-title bigger lighter">
-																	<i class="ace-icon fa fa-table"></i>
-																	Tabela cars
-																</h5>
-																<tr>
-																	<th >
-																		<span class="badge badge-warning">Escala</span>
-																	</th>
-																	<th >
-																		<span class="badge badge-danger">Pontuação</span>
-																	</th>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="col-sm-12">
+																<div class="alert alert-warning">
+																	<button type="button" class="close" data-dismiss="alert">
+																		<i class="ace-icon fa fa-times"></i>
+																	</button>
+																	<strong>Observação! </strong>
+																	O cars (Autism Treatment Evaluation Checklist) – Formulário para Avaliação de Tratamento do Autismo é um formulário que consiste em 4 subescalas (Fala ∕ Linguagem ∕ Comunicação; sociabilidade, percepção sensorial ∕ cognitiva e saúde ∕ aspectos físicos ∕ comportamentais). A pontuação obtida nessa escala indica a severidade dos sintomas e a redução progressiva dessa pontuação é um indicador de que as intervenções têm trazido melhoras no quadro. A pontuação do cars varia de 0 a 180, sendo que qualquer valor acima de 0 indica presença de sintomas ligados ao TEA. A pontuação ideal é até 30 pontos.
+																</div><br>
+															</div>
+															
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																<thead>
+																	<h5 class="widget-title bigger lighter">
+																		<i class="ace-icon fa fa-table"></i>
+																		Tabela cars
+																	</h5>
+																	<tr>
+																		<th >
+																			<span class="badge badge-warning">Escala</span>
+																		</th>
+																		<th >
+																			<span class="badge badge-danger">Pontuação</span>
+																		</th>
+																		
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr><!-- 1Reg -->
+																		<td>
+																			<span class="badge badge-info">1</span>
+																			<span>Relacionamento Inter-Pessoal</span>
+																		</td>
+																		<td>	
+																			<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 2Reg -->
+																		<td>
+																			<span class="badge badge-info">2</span>
+																			<span>Imitação</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 3Reg -->
+																		<td>
+																			<span class="badge badge-info">3</span>
+																			<span>Resposta Emocional</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 4Reg -->
+																		<td>
+																			<span class="badge badge-info">4</span>
+																			<span>Expressão Corporal</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 5Reg -->
+																		<td>
+																			<span class="badge badge-info">5</span>
+																			<span>Uso de Objetos</span>
+																		</td>
+																		<td>	
+																			<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 6Reg -->
+																		<td>
+																			<span class="badge badge-info">6</span>
+																			<span>Adaptação a mudanças</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 7Reg -->
+																		<td>
+																			<span class="badge badge-info">7</span>
+																			<span>Uso do olhar</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 8Reg -->
+																		<td>
+																			<span class="badge badge-info">8</span>
+																			<span>Uso da audição</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 9Reg -->
+																		<td>
+																			<span class="badge badge-info">9</span>
+																			<span>Uso do paladar, olfato e do tato</span>
+																		</td>
+																		<td>	
+																			<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 10Reg -->
+																		<td>
+																			<span class="badge badge-info">10</span>
+																			<span>Medo e nervosismo</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 11Reg -->
+																		<td>
+																			<span class="badge badge-info">11</span>
+																			<span>Comunicação verbal</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 12Reg -->
+																		<td>
+																			<span class="badge badge-info">12</span>
+																			<span>Comunicação não-verbal</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 13Reg -->
+																		<td>
+																			<span class="badge badge-info">13</span>
+																			<span>Atividade</span>
+																		</td>
+																		<td>	
+																			<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
+																		</td>
+																	</tr>
+																	<tr><!-- 14Reg -->
+																		<td>
+																			<span class="badge badge-info">14</span>
+																			<span>Grau e consistência das respostas da inteligência</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
+																	<tr><!-- 15Reg -->
+																		<td>
+																			<span class="badge badge-info">15</span>
+																			<span>Impressão geral</span>
+																		</td>
+																		<td>	
+																			<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
+																		</td>
+																	</tr>
 																	
-																</tr>
-															</thead>
-															<tbody>
-																<tr><!-- 1Reg -->
-																	<td>
-																		<span>1</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 2Reg -->
-																	<td>
-																		<span>2</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 3Reg -->
-																	<td>
-																		<span>3</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 4Reg -->
-																	<td>
-																		<span>4</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 5Reg -->
-																	<td>
-																		<span>5</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 6Reg -->
-																	<td>
-																		<span>6</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 7Reg -->
-																	<td>
-																		<span>7</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 8Reg -->
-																	<td>
-																		<span>8</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 9Reg -->
-																	<td>
-																		<span>9</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 10Reg -->
-																	<td>
-																		<span>10</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 11Reg -->
-																	<td>
-																		<span>11</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 12Reg -->
-																	<td>
-																		<span>12</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssau1" id="carscarssau1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 13Reg -->
-																	<td>
-																		<span>13</span>
-																	</td>
-																	<td>	
-																		<input name="carscarsfala1" id="carscarsfala1" type="text" style="width:30px">
-																	</td>
-																</tr>
-																<tr><!-- 14Reg -->
-																	<td>
-																		<span>14</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssoc1" id="carscarssoc1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																<tr><!-- 15Reg -->
-																	<td>
-																		<span>15</span>
-																	</td>
-																	<td>	
-																		<input name="carscarssen1" id="carscarssen1" type="text" style="width:30px" >
-																	</td>
-																</tr>
-																
-															</tbody>
-														</table>
-														<div class="row">
-															<div class="col-xs-12">
-																<label> Pontuação Total</label>
-																<div class="form-group">
-																	<div class="col-sm-6">
-																		<input type="text" id="carsTotpont" name="carsTotpont" placeholder="0"  class="form-control" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xs-12">
-																<label> Comentários</label>
-																<div class="form-group">
-																	<div class="col-sm-12">
-																		<textarea type="text" name="carsComentcars" id="carsComentcars" row="3" placeholder="" class="form-control" ></textarea>
-																	</div>
-																</div>
-															</div>
+																</tbody>
+															</table>
+															
 														</div>
 													</div>
 												</div>
+											</div>		
+										</div>
+									</div>
+									<div class="col-xs-6" name="Correc" id="Correc"><!-- Correção -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+													Correção</h4>
+													<span class="widget-toolbar">
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													
+													</span>
 											</div>
-										</div>		
+											<div class="widget-body">
+												<div class="widget-main">												
+													<div class="row">
+														<div class="col-xs-12">
+															
+															<div class="row">
+																<div class="col-sm-6">
+																	<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<h5 class="widget-title bigger lighter">
+																				<i class="ace-icon fa fa-table"></i>
+																				Legenda e Pontuação das Escalas!
+																			</h5>
+																			<tr>
+																				
+																				<th >Pontuação</th>
+																				<th >Indivação</th>
+																			</tr>
+																		</thead>
+
+																		<tbody>
+																			<tr><!-- 1Reg -->
+																				<td>
+																					<span class="badge badge-danger">Acima de 37</span>
+																				</td>
+																				<td>
+																					<span>Autismo grave.</span>
+																				</td>
+																			</tr>
+																			<tr><!-- 2Reg -->
+																				<td>
+																					<span class="badge badge-warning">30 – 36,5</span>
+																				</td>
+																				<td>
+																					<span>Autismo leve-moderado.</span>
+																				</td>
+																			</tr>
+																			<tr><!-- 3Reg -->
+																				<td>
+																					<span class="badge badge-success">15 – 29,5</span>
+																				</td>
+																				<td>
+																					<span>Sem autismo.</span>
+																				</td>
+																			</tr>
+																			
+																		</tbody>
+																	</table>
+																	<table>
+																		<thead></thead>
+																		<tbody>
+																			<tr>
+																				<td><label> Pontuação Total</label></td>
+																			</tr>
+																			<tr>
+																				<td>
+																					<input type="text" id="carsTotpont" name="carsTotpont" placeholder="0"  class="form-control" />
+																				</td>
+																			</tr>
+																			<tr>
+																				<td><label> Comentários</label></td>
+																			</tr>
+																			<tr>
+																				<td>
+																					<textarea type="text" name="carsComentcars" id="carsComentcars" row="3" placeholder="" class="form-control" ></textarea>
+																				</td>
+																			</tr>
+																			<tr>
+																				<td>
+																					<div class="checkbox">
+																						<span class="label label-warning arrowed-in-right ">1.</span>
+																						<label>
+																							<input name="carsConcluido" id="carsConcluido" type="checkbox" >
+																							<span class="lbl"> Concluído.</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+																			<tr>
+																				<td>
+																					<label> Data CARS</label>
+																				</td>
+																			</tr>
+																			<tr>
+																				<td>
+																					<label>
+																						<input name="carsConcluidodata" id="carsConcluidodata" type="date"  >
+																					</label>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																	
+																	
+																</div>
+															</div>
+
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+													
 									</div>
 								</div>
+
 								<div class="col-xs-12" name="Questionario" id="Questionario"><!-- Questionario -->
 									<div class="widget-box">
 										<div class="widget-header">
