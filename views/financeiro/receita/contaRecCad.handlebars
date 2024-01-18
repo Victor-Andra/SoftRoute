@@ -242,6 +242,34 @@
 					}
 				}
 			}
+			// Função para preencher os as Alíquotas Impostos
+			function preencherAlqimpostos() {
+				// Código para preencher os campos, sem alterações
+				
+
+				var convId = document.getElementsByClassName("contarecConvid").value;
+
+				var convImps = document.getElementsByClassName("convimps");
+
+				for (var i = 0; i < convImps.length; i++) {
+					var convimp = convImps[i];
+					var convImpNome = convimp.dataset.convimp_impnome;
+					var valorDesejado = convimp.dataset.valorDesejado;
+
+					if (convImpNome === "IRPJ") {
+						document.getElementById("contarecAlqirpj").value = valorDesejado;
+					} else if (convImpNome === "ISS") {
+						document.getElementById("contarecAlqiss").value = valorDesejado;
+					} else if (convImpNome === "PIS") {
+						document.getElementById("contarecAlqpis").value = valorDesejado;
+					} else if (convImpNome === "CSSL") {
+						document.getElementById("contarecAlqcsll").value = valorDesejado;
+					} else if (convImpNome === "COFINS") {
+						document.getElementById("contarecAlqcofins").value = valorDesejado;
+					}
+				}
+			}
+
 			
 		</script>
 	</head>
@@ -473,7 +501,7 @@
 																	</tr>
 																	<tr>
 																		<td colspan="2" name="linbene">
-																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();">
+																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each benes}}
 																					<option value="{{_id}}">{{bene_nome}}</option>
@@ -488,7 +516,7 @@
 																	</tr>
 																	<tr name="linconv" hidden>
 																		<td colspan="2">
-																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvidSelect" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaDadosconv();">
+																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvidSelect" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaDadosconv();preencherAlqimpostos();">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each convs}}
 																					<option value="{{_id}}">{{conv_nome}}</option>

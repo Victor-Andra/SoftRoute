@@ -18,7 +18,7 @@ const BeneSchema = mongoose.Schema({
     bene_ident:{ type: String, required: false },
     bene_cpf:{ type: String, required: false },
     bene_status:{ type: String, required: false },
-    bene_convid:{ type: ObjectId, required: false },
+    bene_convid:{ type: ObjectId, required: true },
     bene_out:{ type: String, required: false},
     bene_graupar:{ type: String, required: false  },
     bene_supervisor:{ type: String, required: false },
