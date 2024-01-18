@@ -10,12 +10,14 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuClass = require("../models/usuario")
 const convImpClass = require("../models/convImp")
+const impostoClass = require("../models/imposto")
 
 //tabelas Extrangeira
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const ConvImp = mongoose.model("tb_convimp")
+const Imposto = mongoose.model("tb_imposto")
 
 //Funções auxiliares
 const fncContaRec = require("./fncContaRec")
@@ -214,9 +216,10 @@ module.exports = {
 
             Conv.find().then((conv)=>{
             conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+            Imposto.find().then((imposto)=>{
             console.log("Listagem Realizada!")
-            res.render('financeiro/receita/contaRecLis', {contas: conta, convs: conv})
-        })}).catch((err) =>{
+            res.render('financeiro/receita/contaRecLis', {contas: conta, convs: conv, impostos: imposto})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Correntes")
             res.redirect('admin/erro')

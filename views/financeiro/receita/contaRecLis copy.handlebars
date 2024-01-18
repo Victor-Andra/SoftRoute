@@ -390,14 +390,13 @@
 													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr.Dif</th>
 													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo PG</th>
 													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pagamento</th>
-													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >PG?</th>
-													<!-- Impostos-->
+													
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >PIS</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >CSLL</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >COFINS</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >IRPJ</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >ISS</th>
-													
+													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Quitado?</th><!-- quadrado e pintar a linha de verde-->
 												
 													<th>Ação</th>
 												</tr>
@@ -432,18 +431,18 @@
 														
 														<td>{{datapg}}</td>
 														
-														{{#ifEqual this.contarec_pg "Não"}}
-															<td><span class="label label-sm label-danger">Não</span></td>
-															{{else}}
-															<td><span class="label label-sm label-success">Sim</span></td>
-														{{/ifEqual}}
-
 														<td style="text-align: right; color: crimson;">{{contarec_vlrpis}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrcssl}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrcofins}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrirpj}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlriss}}</td>
 
+														
+														{{#ifEqual this.contarec_pg "Não"}}
+																	<td><span class="label label-sm label-danger">Não</span></td>
+																	{{else}}
+																	<td><span class="label label-sm label-success">Sim</span></td>
+																{{/ifEqual}}
 														<td>
 															<div class="action-buttons">
 																<a class="green" href="/menu/financeiro/receita/edi/{{_id}}">
@@ -551,7 +550,7 @@ table.on('draw.dt', function () {
     // Substitua este exemplo com a lógica específica para o seu projeto
 
     // Índices das colunas a serem somadas
-    var colunasSoma = [7, 11, 12, 16, 17, 18, 19, 20];
+    var colunasSoma = [7, 11, 12, 15, 16, 17, 18, 19];
 
     // Inicializar totais
     var totais = Array(colunasSoma.length).fill(0);

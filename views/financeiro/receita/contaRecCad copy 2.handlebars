@@ -3,10 +3,22 @@
 	<head>
 		<title>contas a receber</title>
 		<script type="text/javascript">
-		 	// biblioteca Inputmask
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.9/jquery.inputmask.min.js"></script>
-			
+		
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("contarecBeneid").value;
+				
+				document.getElementById("contarecBenenome").value = document.getElementById(beneid+"_beneNome").value;
+				document.getElementById("contarecTomador").value = document.getElementById(beneid+"_beneOrdemnome").value;
+				document.getElementById("contarecCpfcnpj").value = document.getElementById(beneid+"_beneOrdemdoc").value;
+				document.getElementById("contarecRetencao").value = document.getElementById(beneid+"_beneOrdemretem").value;
+				document.getElementById("contarecConvid").value = document.getElementById(beneid+"_beneConvid").value;
+				
+				let convid = document.getElementById("contarecConvid").value;
+				console.log(convid);
+				document.getElementById("contarecConvnomeTemp").value = document.getElementById(convid+"_beneConvnome").value;
+
+			}
+
 			function atualizaCheckbox(checkbox) {
 				// Obtém o valor do checkbox (true ou false)
 				let valcheck;
@@ -32,93 +44,120 @@
 					console.error('Campo temporário não encontrado para ' + checkboxTempName);
 				}
 			}
-			function mascaraValores(){
+			
 
+			function formatarNumeroBrasileiro(valor) {
+				return parseFloat(valor.replace(',', '.')).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 			}
-			function calculaImposto(){
-				let valorNf = parseFloat(document.getElementById("contarecVlrnf").value.replace("%","").replace(".","").replace(",","."));
-				//Checagem do imposto que irá participar da Nf
-				let checkpis  = document.getElementById("checkboxPistemp").value;
-				let checkcssl  = document.getElementById("checkboxCssltemp").value;
-				let checkcofins  = document.getElementById("checkboxCofinstemp").value;
-				let checkirpf  = document.getElementById("checkboxIrpftemp").value;
-				let checkiss  = document.getElementById("checkboxIsstemp").value;
-				//Valores Temporários para os campos dos Impotos
-				//Aliquotas dos impostos
-				let alqpis  = parseFloat(document.getElementById("contarecAlqpis").value.replace("%","").replace(".","").replace(",","."));
-				let alqcssl  = parseFloat(document.getElementById("contarecAlqcssl").value.replace("%","").replace(".","").replace(",","."));
-				let alqcofins  = parseFloat(document.getElementById("contarecAlqcofins").value.replace("%","").replace(".","").replace(",","."));
-				let alqirpf  = parseFloat(document.getElementById("contarecAlqirpf").value.replace("%","").replace(".","").replace(",","."));
-				let alqiss  = parseFloat(document.getElementById("contarecAlqiss").value.replace("%","").replace(".","").replace(",","."));
-				//Checagem e cálculo
-				if (valorNf == null || valorNf < 0.01){console.log("NÃO")}else{console.log("SIM")
-					
-					if (!(checkpis == "false" || alqpis <= 0.001 || alqpis == null || checkpis == "")){
-						document.getElementById("contarecVlrpis").value = (parseFloat((valorNf/100) * alqpis)).toFixed(2)
-					} else {
-						document.getElementById("contarecVlrpis").value = "0,00";
-					};
 
-					if (!(checkcssl == "false" || alqcssl <= 0.001 || alqcssl == null || checkcssl == "")){
-						document.getElementById("contarecVlrcssl").value = (parseFloat((valorNf/100) * alqcssl)).toFixed(2)
-					} else {
-						document.getElementById("contarecVlrcssl").value = "0,00";
-					};
+			function formatarCampoNumerico(elementId) {
+				let elemento = document.getElementById(elementId);
+				let valor = elemento.value;
 
-					if (!(checkcofins == "false" || alqcofins <= 0.001 || alqcofins == null || checkcofins == "")){
-						document.getElementById("contarecVlrcofins").value = (parseFloat((valorNf/100) * alqcofins)).toFixed(2)
-					} else {
-						document.getElementById("contarecVlrcofins").value = "0,00";
-					};
+				// Remove caracteres não numéricos, exceto ponto e vírgula
+				valor = valor.replace(/[^\d.,]/g, '');
 
-					if (!(checkirpf == "false" || alqirpf <= 0.001 || alqirpf == null || checkirpf == "" )){
-						document.getElementById("contarecVlrirpf").value = (parseFloat((valorNf/100) * alqirpf)).toFixed(2)
-					} else {
-						document.getElementById("contarecVlrirpf").value = "0,00";
-					};
+				// Substitui vírgulas por pontos para garantir a correta conversão para número
+				valor = valor.replace(',', '.');
 
-					if (!(checkiss == "false" || alqiss <= 0.001 || alqiss == null || checkiss == "")){
-						document.getElementById("contarecVlriss").value = (parseFloat((valorNf/100) * alqiss)).toFixed(2)
-					} else {
-						document.getElementById("contarecVlriss").value = "0,00";
-					}
+				// Converte para número
+				let numero = parseFloat(valor);
+
+				// Verifica se é um número válido
+				if (!isNaN(numero)) {
+					// Formata o número no estilo brasileiro
+					let numeroFormatado = formatarNumeroBrasileiro(numero.toFixed(2));
+					elemento.value = numeroFormatado;
+				} else {
+					// Se não for um número válido, limpa o campo
+					elemento.value = '';
+				}
+			}
+
+			function calculaImpostoPIS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkpis = document.getElementById("checkboxPistemp").value;
+				let alqpis = document.getElementById("contarecAlqpis").value.replace('%', '').replace(',', '.');
+				console.log(document.getElementById("contarecVlrnf").value);
+				console.log(valorNf);
+				console.log(alqpis);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkpis === "false" || alqpis <= 0.001 || alqpis === null || checkpis === "")) {
+					let resultado = (valorNf * (alqpis/100)).toFixed(2);
+					document.getElementById("contarecVlrpis").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrpis").value = "0,00";
+				}
+			}
+
+			function calculaImpostoCSSL() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkcssl = document.getElementById("checkboxCssltemp").value;
+				let alqcssl = document.getElementById("contarecAlqcssl").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqcssl);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcssl === "false" || alqcssl <= 0.001 || alqcssl === null || checkcssl === "")) {
+					let resultado = (valorNf * (alqcssl/100)).toFixed(2);
+					document.getElementById("contarecVlrcssl").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrcssl").value = "0,00";
+				}
+			}
+
+			function calculaImpostoCOFINS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkcofins = document.getElementById("checkboxCofinstemp").value;
+				let alqcofins = document.getElementById("contarecAlqcofins").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqcofins);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcofins === "false" || alqcofins <= 0.001 || alqcofins === null || checkcofins === "")) {
+					let resultado = (valorNf * (alqcofins/100)).toFixed(2);
+					document.getElementById("contarecVlrcofins").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrcofins").value = "0,00";
+				}
+			}
+
+			function calculaImpostoISS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkiss = document.getElementById("checkboxIsstemp").value;
+				let alqiss = document.getElementById("contarecAlqiss").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqiss);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkiss === "false" || alqiss <= 0.001 || alqiss === null || checkiss === "")) {
+					let resultado = (valorNf * (alqiss/100)).toFixed(2);
+					document.getElementById("contarecVlriss").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlriss").value = "0,00";
 				}
 			}
 			
-			function selectConv(){
-				var convid = document.getElementById(document.getElementById("contarecBeneid").value+"_beneconvid").value.toString();
-				var nomeid = document.getElementById(document.getElementById("contarecBeneid").value+"_benenomeid").value.toString();
-				var nometoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemnome").value.toString();
-				var cpfcnpjtoma = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemdoc").value.toString();
-				var reten = document.getElementById(document.getElementById("contarecBeneid").value+"_beneordemretem").value.toString();
+			function calculaImpostoIRPJ() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkirpj = document.getElementById("checkboxIrpjtemp").value;
+				let alqirpj = document.getElementById("contarecAlqirpj").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqirpj);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkirpj === "false" || alqirpj <= 0.001 || alqirpj === null || checkirpj === "")) {
+					let resultado = (valorNf * (alqirpj/100)).toFixed(2);
 
-				document.getElementById("contarecConvid").value = convid;
-				document.getElementById("contarecBenenome").value = nomeid;
-				document.getElementById("contarecTomador").value = nometoma;
-				document.getElementById("contarecCpfcnpj").value = cpfcnpjtoma; //repete o nome do beneficiário no cabeçalho
-				document.getElementById("contarecRetencao").value = reten;
+					// Formata o resultado para o formato brasileiro
+					document.getElementById("contarecVlrirpj").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrirpj").value = "0,00";
+				}
 			}
-			function atualizaConvId(){
-				let convId = document.getElementById("contarecConvid").value;
-				console.log(convId)
+
+			function marcacontaRecTipoLote(){
+				document.getElementById("contaRecTipo").value = 'Lote';
 			}
+			function marcacontaRecTipoBene(){
+				document.getElementById("contaRecTipo").value = 'Bene';
+			}
+			
+			
 		</script>
 	</head>
-	<div id="divCarrega" class="hidden" class="col-sm-5">
-		{{#each benes}}
-			{{#each ../convs}}
-				{{#ifEqual ../bene_convid _id}}
-					<input value="{{../bene_convid}}" id="{{../_id}}_beneconvid" name="refAgendaConvid" />
-				{{/ifEqual}}
-			{{/each}}
-			
-			<input id="{{_id}}_benenomeid" name="contarecBenenomeEdi" value="{{bene_nome}}"/>
-			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{bene_ordemnome}}"/>
-			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{bene_ordemdoc}}"/>
-			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{bene_ordemretem}}"/>
-
-		{{/each}}
-	</div>
+	
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -132,279 +171,671 @@
 							<li class="active">Contas à receber - Cadastro</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
+					
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/financeiro/receita/add" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Dados</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">
-												<div >
-													<!-- Registro de Operadores -->
-													<label> Usuário Cadastro</label>
-													<div class="form-group">
-														<div class="col-sm-3">
-															<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder="" value="{{usuarioAtual}}" />
-														</div>
-													</div>
-													<label> Data Cadastro</label>
-													<div class="form-group">
-														<div class="col-sm-3">
-															<input name="contarecDatacad" id="contarecDatacad" placeholder=""  value="{{dataAtual}}"/>
-														</div>
-													</div>
-													<label> Usuário Editou</label>
-													<div class="form-group">
-														<div class="col-sm-3">
-															<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder=""  />
-														</div>
-													</div>
-													<label> Data Edição</label>
-													<div class="form-group">
-														<div class="col-sm-3">
-															<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" />
-														</div>
-													</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="widget-box collapsed">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+														Registro de Operadores
+													</h4>
+													<span class="widget-toolbar">
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</span>
 												</div>
-												<!-- Identificador da NF -->
-												<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input id="contarecDataevento" name="contarecDataevento" type="date">
-													</div>
-												</div>
-												<label>Ano/Mês Referência</label>
-												<div class="form-group">
-													<div class="col-sm-1">
-														<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder=""  />
-													</div>
-												</div>
-												<label> Número da Nota Fiscal</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder=""  />
-													</div>
-												</div>
-												<label>Beneficiário</label>
-												<div class="form-group" >
-													<div class="col-xs-9 col-sm-9">
-														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
-															<option value="766f69643132333435366964">-</option>
+												<div class="widget-body">
+													<div class="widget-main">
+														<!-- Registro de Operadores -->
+														<label> Usuário Cadastro</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder="" value="{{usuarioAtual}}" />
+															</div>
+														</div>
+														<label> Data Cadastro</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input name="contarecDatacad" id="contarecDatacad" placeholder=""  value="{{dataAtual}}"/>
+															</div>
+														</div>
+														<label> Usuário Editou</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder=""  />
+															</div>
+														</div>
+														<label> Data Edição</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" />
+															</div>
+														</div>
+														<label> Tipo NF</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contaRecTipo" id="contaRecTipo" placeholder=""  />
+															</div>
+														</div>
+														<div id="divCarrega" name="divCarrega" hidden>
+															<!-- /.importante Id de indice-->
+															<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 															{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
+																<input type="text" id="{{_id}}_beneNome" name="beneNomeEdi" value="{{bene_nome}}"/>
+																<input type="text" id="{{_id}}_beneOrdemnome" name="beneOrdemnomeEdi" value="{{bene_ordemnome}}"/>
+																<input type="text" id="{{_id}}_beneOrdemdoc" name="beneOrdemdocEdi" value="{{bene_ordemdoc}}"/>
+																<input type="text" id="{{_id}}_beneOrdemretem" name="beneOrdemretemEdi" value="{{bene_ordemretem}}"/>
+																<input type="text" id="{{_id}}_beneConvid" name="beneConvidEdi" value="{{bene_convid}}"/>
 															{{/each}}
-														</select>
-													</div>
-												</div>
-												<label> Convênio</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
-															<option value="766f69643132333435366964">-</option>
 															{{#each convs}}
-																<option value="{{_id}}">{{conv_nome}}</option>
+																<input type="text" id="{{_id}}_beneConvnome" name="{{bene_convid}}_convNomeEdi" value="{{conv_nome}}"/>
 															{{/each}}
-														</select>
+															{{#each convimps}}
+																<input type="text" id="{{_id}}_convId" name="{{conv_beneid}}_convBeneidEdix" value="{{bene_convid}}"/>
+															{{/each}}
+															
+
+														</div>
 													</div>
 												</div>
-												<label> Nome Do Beneficiário</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder=""  />
-													</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+														Indentificação da Nota Fiscal
+													</h4>
+													<span class="widget-toolbar">
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</span>
 												</div>
-												<label>Nome do Tomador do Serviço perante a prefeitura</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecTomador" id="contarecTomador" placeholder="" />
-													</div>
-												</div>
-												<label>CPF/CNPJ do Tomador</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder=""  />
-													</div>
-												</div>
-												<label>Retenção</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecRetencao" id="contarecRetencao" placeholder="" />
-													</div>
-												</div>
-												<!-- Informações da NF-->
-												
-											
-												<label>Valor da Nota Fiscal</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="0,00" style="text-align: right; width:100px;" onchange="calculaImposto();"/>
-													</div>
-												</div>
-												
-												<label for="id-date-picker-1">Data Empréstimo</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input id="contarecDataemprest" name="contarecDataemprest" type="date">
-													</div>
-												</div>
-												<label for="id-date-picker-1">Data Devolução</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input id="contarecDataadevol" name="contarecDataadevol" type="date">
-													</div>
-												</div>
-												
-												<label for="id-date-picker-1">Data Previsão de Pagamento</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input id="contarecDataprev" name="contarecDataprev" type="date">
-													</div>
-												</div>
-												<label>Valor Pago</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" style="text-align: right; width:100px;"/>
-													</div>
-												</div>
-												<label>Valor Diferença</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" style="text-align: right;  width:100px;"/>
-													</div>
-												</div>
-												<label>Forma de Pagamento</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<input type="text" name="contarecFormapg" id="contarecFormapg" placeholder=""  />
-													</div>
-												</div>
-												<label for="id-date-picker-1">Data de Pagamento</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder="">
-													</div>
-												</div>
-												<div class="col-12-sm">
-													
+												<div class="widget-body">
+													<div class="widget-main">
 														<table>
-															<thead>
-																<tr>
-																	<th></th>
-																	<th style="width: 70px;"><span>Imposto</span></th>
-																	<th style="width: 80px; text-align: right;"><span>Alíquota</span></th>
-																	<th></th>
-																	<th style="text-align: right;"><span >Valor</span></th>
-																</tr>
-															</thead>
-															<tbody>
-																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImposto();"/>
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxPistemp" name="checkboxPistemp" value="false" />
+															<tr>
+																<td class="text-center align-middle">
+																	<span class="label label-info arrowed-in-right arrowed">01.</span>
+																</td>
+																<td>
+																	<label>
+																		<span class="lbl">&nbsp;Tipo de NF:</span>
+																	</label>
+																</td>
+																<td class="text-center align-middle">
+																	<div class="radio">
+																		<label>
+																			<input name="contaRecTipo" id="contaRecTipoLote" type="radio" class="ace" onchange="javascript:marcacontaRecTipoLote();">
+																			<span class="lbl">&nbsp;Nota Fiscal em Lote.</span>
 																		</label>
-																	</td>
-																	<td>PIS</td>
-																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImposto();"/></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
-																</tr>
-																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImposto();" />
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxCssltemp" name="checkboxCssltemp" value="false" />
+																	</div>
+																</td>
+																<td  class="text-center align-middle">
+																	<div class="radio">
+																		<label>
+																			<input name="contaRecTipo" id="contaRecTipoBene" type="radio" class="ace" onchange="javascript:marcacontaRecTipoBene();">
+																			<span class="lbl">&nbsp;Nota Fiscal por Beneficiário.</span>
 																		</label>
-																	</td>
-																	<td>CSSL</td>
-																	<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImposto();"/></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrcssl" id="contarecVlrcssl" style="text-align: right; width:100px;" value="0,00" /></td>
-																</tr>
-																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImposto();" />
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxCofinstemp" name="checkboxCofinstemp" value="false" />
-																		</label>
-																	</td>
-																	<td>COFINS</td>
-																	<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImposto();" /></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
-																</tr>
-																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIrpf" id="checkboxIrpf" class="ace" onchange="atualizaCheckbox(checkboxIrpf);calculaImposto();" />
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxIrpftemp" name="checkboxIrpftemp" value="false" />
-																		</label>
-																	</td>
-																	<td>IRPF</td>
-																	<td><input type="text" name="contarecAlqirpf" id="contarecAlqirpf" style="text-align: right; width:80px;"  value="1,5%" onchange="calculaImposto();" /></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrirpf" id="contarecVlrirpf" style="text-align: right; width:100px;" value="0,00"/></td>
-																</tr>
-																<tr>
-																	<td class="center">
-																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImposto();" />
-																			<span class="lbl"></span>
-																			<input type="text" class="hidden" id="checkboxIsstemp" name="checkboxIsstemp" value="false" />
-																		</label>
-																	</td>
-																	<td>ISS</td>
-																	<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImposto();" /></td>
-																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlriss" id="contarecVlriss" style="text-align: right; width:100px" value="0,00"/></td>
-																</tr>
-												
-												</tbody>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	
+																</td>
+															</tr>
 														</table>
+														<br>
+														<!-- Identificador da NF -->
+														<div class="table-responsive">
+															<table id="tabelaEmiss" class="table table-striped table-bordered table-hover"  style="font-size: 10px;">
+																<thead></thead>
+																<tbody>
+																	<tr>
+																		<td><label for="id-date-picker-1">Data Emissão</label></td>
+																		<td><label>Ano/Mês Referência</label></td>
+																		<td><label>Número da Nota Fiscal</label></td>
+																	</tr>
+																	<tr>
+																		<td><input id="contarecDataevento" name="contarecDataevento" type="date"></td>
+																		<td><input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder="2023/12"  /></td>
+																		<td><input type="text" name="contarecNfnum" id="contarecNfnum" placeholder=""  /></td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<label>Beneficiário</label>
+														<div class="form-group" >
+															<div class="col-xs-9 col-sm-9">
+																<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<input type="text" name="contarecConvid" id="contarecConvid" placeholder="" hidden />
+														<label> Convênio</label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<input type="text" name="contarecConvnomeTemp" id="contarecConvnomeTemp" placeholder="" style="width: 20%;" />
+															</div>
+														</div>
+														<label> Convênio</label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvidSelect" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each convs}}
+																		<option value="{{_id}}">{{conv_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<label name="labNomepad" id="labNomepad">Nome do beneficiário ou Lote</label>
+														<label name="labNomebene" id="labNomebene" hidden> Nome do beneficiário</label>
+														<label name="labNomelote" id="labNomelote" hidden> Lote</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder=""  />
+															</div>
+														</div>
+														<label>Tomador do Serviço</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecTomador" id="contarecTomador" placeholder="" />
+															</div>
+														</div>
+														<label>CPF/CNPJ do Tomador</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder=""  />
+															</div>
+														</div>
+														<label>Retenção</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecRetencao" id="contarecRetencao" placeholder="" />
+															</div>
+														</div>
+														<!-- Informações da NF-->
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+														Informações Adicionais da Nota Fiscal
+													</h4>
+													<span class="widget-toolbar">
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<!-- Informações da NF-->
+														<label>Valor da Nota Fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrnf');calculaImposto();"/>
+															</div>
+														</div>
+														
+														<label for="id-date-picker-1">Data Empréstimo</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input id="contarecDataemprest" name="contarecDataemprest" type="date">
+															</div>
+														</div>
+														<label for="id-date-picker-1">Data Devolução</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input id="contarecDataadevol" name="contarecDataadevol" type="date">
+															</div>
+														</div>
+														
+														<label for="id-date-picker-1">Data Previsão de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input id="contarecDataprev" name="contarecDataprev" type="date">
+															</div>
+														</div>
+														<label>Valor Pago</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrpg');"/>
+															</div>
+														</div>
+														<label>Valor Diferença</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" style="text-align: right;  width:100px;" onchange="formatarCampoNumerico('contarecVlrdiferenca');"/>
+															</div>
+														</div>
+														<label>Forma de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecFormapg" id="contarecFormapg" placeholder=""  />
+															</div>
+														</div>
+														<label for="id-date-picker-1">Data de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder="">
+															</div>
+														</div>
+														<div class="col-12-sm">
+															
+																<table>
+																	<thead>
+																		<tr>
+																			<th></th>
+																			<th style="width: 70px;"><span>Imposto</span></th>
+																			<th style="width: 80px; text-align: right;"><span>Alíquota</span></th>
+																			<th></th>
+																			<th style="text-align: right;"><span >Valor</span></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImpostoPIS();"/>
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxPistemp" name="checkboxPistemp" value="false" />
+																				</label>
+																			</td>
+																			<td>PIS</td>
+																			<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImpostoPIS();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImpostoCSSL();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxCssltemp" name="checkboxCssltemp" value="false" />
+																				</label>
+																			</td>
+																			<td>CSSL</td>
+																			<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImpostoCSSL();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrcssl" id="contarecVlrcssl" style="text-align: right; width:100px;" value="0,00" /></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImpostoCOFINS();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxCofinstemp" name="checkboxCofinstemp" value="false" />
+																				</label>
+																			</td>
+																			<td>COFINS</td>
+																			<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImpostoCOFINS();" /></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxIrpj" id="checkboxIrpj" class="ace" onchange="atualizaCheckbox(checkboxIrpj);calculaImpostoIRPJ();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxIrpjtemp" name="checkboxIrpjtemp" value="false" />
+																				</label>
+																			</td>
+																			<td>IRPJ</td>
+																			<td><input type="text" name="contarecAlqirpj" id="contarecAlqirpj" style="text-align: right; width:80px;" value="1,5%" onchange="calculaImpostoIRPJ();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrirpj" id="contarecVlrirpj" style="text-align: right; width:100px;" value="0,00" /></td>
+																		</tr>
+																		
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImpostoISS();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxIsstemp" name="checkboxIsstemp" value="false" />
+																				</label>
+																			</td>
+																			<td>ISS</td>
+																			<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImpostoISS();" /></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlriss" id="contarecVlriss" style="text-align: right; width:100px" value="0,00"/></td>
+																		</tr>
+														
+														</tbody>
+																</table>
+															
+														</div>
+														<!-- Observações-->
+														<label>Pago?</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
+																	<option value="Não">Não</option>
+																	<option value="Sim">Sim</option>
+																</select>
+															</div>
+														</div>
+														<label>Descrição da Nota fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<textarea type="text" name="contarecDescr" id="contarecDescr" placeholder="" ></textarea>
+															</div>
+														</div>
+														<label>Observações gerais sobre pagamentos etc</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<textarea type="text" name="contarecObs" id="contarecObs" placeholder="" ></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+														Dados Básicos
+													</h4>
+													<span class="widget-toolbar">
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div hidden>
+															<!-- Registro de Operadores -->
+															<label> Usuário Cadastro</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="contarecUsuidcad" id="contarecUsuidcad" placeholder="" value="{{usuarioAtual}}" />
+																</div>
+															</div>
+															<label> Data Cadastro</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input name="contarecDatacad" id="contarecDatacad" placeholder=""  value="{{dataAtual}}"/>
+																</div>
+															</div>
+															<label> Usuário Editou</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="contarecUsuidedi" id="contarecUsuidedi" placeholder=""  />
+																</div>
+															</div>
+															<label> Data Edição</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="date" name="contarecDataedi" id="contarecDataedi" placeholder="" />
+																</div>
+															</div>
+														</div>
+														<!-- Identificador da NF -->
+														<label for="id-date-picker-1">Data Emissão da Nota Fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input id="contarecDataevento" name="contarecDataevento" type="date">
+															</div>
+														</div>
+														<label>Ano/Mês Referência</label>
+														<div class="form-group">
+															<div class="col-sm-1">
+																<input type="text" name="contarecAnomesatend" id="contarecAnomesatend" placeholder=""  />
+															</div>
+														</div>
+														<label> Número da Nota Fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder=""  />
+															</div>
+														</div>
+														
+														<label>Beneficiário</label>
+														<div class="form-group" >
+															<div class="col-xs-9 col-sm-9">
+																<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+														<label> Convênio</label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<input type="text" name="contarecConvid" id="contarecConvid" placeholder="" hidden />
+																<input type="text" name="contarecConvnomeTemp" id="contarecConvnomeTemp" placeholder="" style="width: 20%;" />
+																
+															</div>
+														</div>
+														<label> Nome Do Beneficiário</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecBenenome" id="contarecBenenome" placeholder=""  />
+															</div>
+														</div>
+														<label>Nome do Tomador do Serviço perante a prefeitura</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecTomador" id="contarecTomador" placeholder="" />
+															</div>
+														</div>
+														<label>CPF/CNPJ do Tomador</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder=""  />
+															</div>
+														</div>
+														<label>Retenção</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecRetencao" id="contarecRetencao" placeholder="" />
+															</div>
+														</div>
+														<!-- Informações da NF-->
+														
 													
-												</div>
-												<!-- Observações-->
-												<label>Pago?</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
-															<option value="Não">Não</option>
-															<option value="Sim">Sim</option>
-														</select>
-													</div>
-												</div>
-												<label>Descrição da Nota fiscal</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<textarea type="text" name="contarecDescr" id="contarecDescr" placeholder="" ></textarea>
-													</div>
-												</div>
-												<label>Observações gerais sobre pagamentos etc</label>
-												<div class="form-group">
-													<div class="col-sm-3">
-														<textarea type="text" name="contarecObs" id="contarecObs" placeholder="" ></textarea>
+														<label>Valor da Nota Fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrnf');calculaImposto();"/>
+															</div>
+														</div>
+														
+														<label for="id-date-picker-1">Data Empréstimo</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input id="contarecDataemprest" name="contarecDataemprest" type="date">
+															</div>
+														</div>
+														<label for="id-date-picker-1">Data Devolução</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input id="contarecDataadevol" name="contarecDataadevol" type="date">
+															</div>
+														</div>
+														
+														<label for="id-date-picker-1">Data Previsão de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input id="contarecDataprev" name="contarecDataprev" type="date">
+															</div>
+														</div>
+														<label>Valor Pago</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrpg');"/>
+															</div>
+														</div>
+														<label>Valor Diferença</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" style="text-align: right;  width:100px;" onchange="formatarCampoNumerico('contarecVlrdiferenca');"/>
+															</div>
+														</div>
+														<label>Forma de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<input type="text" name="contarecFormapg" id="contarecFormapg" placeholder=""  />
+															</div>
+														</div>
+														<label for="id-date-picker-1">Data de Pagamento</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder="">
+															</div>
+														</div>
+														<div class="col-12-sm">
+															
+																<table>
+																	<thead>
+																		<tr>
+																			<th></th>
+																			<th style="width: 70px;"><span>Imposto</span></th>
+																			<th style="width: 80px; text-align: right;"><span>Alíquota</span></th>
+																			<th></th>
+																			<th style="text-align: right;"><span >Valor</span></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImpostoPIS();"/>
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxPistemp" name="checkboxPistemp" value="false" />
+																				</label>
+																			</td>
+																			<td>PIS</td>
+																			<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImpostoPIS();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImpostoCSSL();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxCssltemp" name="checkboxCssltemp" value="false" />
+																				</label>
+																			</td>
+																			<td>CSSL</td>
+																			<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImpostoCSSL();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrcssl" id="contarecVlrcssl" style="text-align: right; width:100px;" value="0,00" /></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImpostoCOFINS();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxCofinstemp" name="checkboxCofinstemp" value="false" />
+																				</label>
+																			</td>
+																			<td>COFINS</td>
+																			<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImpostoCOFINS();" /></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
+																		</tr>
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxIrpj" id="checkboxIrpj" class="ace" onchange="atualizaCheckbox(checkboxIrpj);calculaImpostoIRPJ();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxIrpjtemp" name="checkboxIrpjtemp" value="false" />
+																				</label>
+																			</td>
+																			<td>IRPJ</td>
+																			<td><input type="text" name="contarecAlqirpj" id="contarecAlqirpj" style="text-align: right; width:80px;" value="1,5%" onchange="calculaImpostoIRPJ();"/></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlrirpj" id="contarecVlrirpj" style="text-align: right; width:100px;" value="0,00" /></td>
+																		</tr>
+																		
+																		<tr>
+																			<td class="center">
+																				<label class="pos-rel">
+																					<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImpostoISS();" />
+																					<span class="lbl"></span>
+																					<input type="text" class="hidden" id="checkboxIsstemp" name="checkboxIsstemp" value="false" />
+																				</label>
+																			</td>
+																			<td>ISS</td>
+																			<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImpostoISS();" /></td>
+																			<td style="width: 20px;"></td>
+																			<td><input type="text" name="contarecVlriss" id="contarecVlriss" style="text-align: right; width:100px" value="0,00"/></td>
+																		</tr>
+														
+														</tbody>
+																</table>
+															
+														</div>
+														<!-- Observações-->
+														<label>Pago?</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
+																	<option value="Não">Não</option>
+																	<option value="Sim">Sim</option>
+																</select>
+															</div>
+														</div>
+														<label>Descrição da Nota fiscal</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<textarea type="text" name="contarecDescr" id="contarecDescr" placeholder="" ></textarea>
+															</div>
+														</div>
+														<label>Observações gerais sobre pagamentos etc</label>
+														<div class="form-group">
+															<div class="col-sm-3">
+																<textarea type="text" name="contarecObs" id="contarecObs" placeholder="" ></textarea>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+
 								<div class="col-xs-12" style="text-align: center;" >
 									<button class="btn btn-info"  name="acao" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>

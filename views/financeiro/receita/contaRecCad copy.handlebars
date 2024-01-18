@@ -3,100 +3,155 @@
 	<head>
 		<title>contas a receber</title>
 		<script type="text/javascript">
+		
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("contarecBeneid").value;
+				
+				document.getElementById("contarecBenenome").value = document.getElementById(beneid+"_beneNome").value;
+				document.getElementById("contarecTomador").value = document.getElementById(beneid+"_beneOrdemnome").value;
+				document.getElementById("contarecCpfcnpj").value = document.getElementById(beneid+"_beneOrdemdoc").value;
+				document.getElementById("contarecRetencao").value = document.getElementById(beneid+"_beneOrdemretem").value;
+				document.getElementById("contarecConvid").value = document.getElementById(beneid+"_beneConvid").value;
+				
+				let convid = document.getElementById("contarecConvid").value;
+				console.log(convid);
+				document.getElementById("contarecConvnomeTemp").value = document.getElementById(convid+"_beneConvnome").value;
+
+			}
+
 			function atualizaCheckbox(checkbox) {
-			// Obtém o valor do checkbox (true ou false)
-			let valcheck;
+				// Obtém o valor do checkbox (true ou false)
+				let valcheck;
 
-			if (checkbox.checked !== undefined) {
-				valcheck = checkbox.checked;
-			} else {
-				// Caso a propriedade "checked" não esteja disponível, tenta obter o estado usando o atributo "value"
-				valcheck = checkbox.value === "true";
-			}
+				if (checkbox.checked !== undefined) {
+					valcheck = checkbox.checked;
+				} else {
+					// Caso a propriedade "checked" não esteja disponível, tenta obter o estado usando o atributo "value"
+					valcheck = checkbox.value === "true";
+				}
 
-			// Constrói o nome do campo temporário
-			const checkboxTempName = checkbox.name + "temp";
+				// Constrói o nome do campo temporário
+				const checkboxTempName = checkbox.name + "temp";
 
-			// Obtém a referência ao campo temporário
-			const tempField = document.getElementsByName(checkboxTempName)[0];
+				// Obtém a referência ao campo temporário
+				const tempField = document.getElementsByName(checkboxTempName)[0];
 
-			// Verifica se o campo temporário foi encontrado antes de atribuir o valor
-			if (tempField) {
-				tempField.value = valcheck;
-				console.log('Valor: ' + valcheck);
-			} else {
-				console.error('Campo temporário não encontrado para ' + checkboxTempName);
-			}
-		}
-			function calculaImposto(){
-				let valorNf = document.getElementById("contarecVlrnf").value;
-				//Checagem do imposto que irá participar da Nf
-				let checkpis  = document.getElementById("checkboxPistemp").value;
-				let checkcssl  = document.getElementById("checkboxCssltemp").value;
-				let checkcofins  = document.getElementById("checkboxCofinstemp").value;
-				let checkirpf  = document.getElementById("checkboxIrpftemp").value;
-				let checkiss  = document.getElementById("checkboxIsstemp").value;
-				console.log("checagens:"+checkpis+":"+checkcssl+":"+checkcofins+":"+checkirpf+":"+checkiss)
-				//Valores Temporários para os campos dos Impotos
-				let vlrpis  = document.getElementById("contarecVlrpis").value;
-				let vlrcssl  = document.getElementById("contarecVlrcssl").value;
-				let vlrcofins  = document.getElementById("contarecVlrcofins").value;
-				let vlrirpf  = document.getElementById("contarecVlrirpf").value;
-				let vlriss  = document.getElementById("contarecVlriss").value;
-				console.log("Valores nos Impostos:"+vlrpis+":"+vlrcssl+":"+vlrcofins+":"+vlrirpf+":"+vlriss)
-				//Aliquotas dos impostos
-				let alqpis  = document.getElementById("contarecAlqpis").value;
-				let alqcssl  = document.getElementById("contarecAlqcssl").value;
-				let alqcofins  = document.getElementById("contarecAlqcofins").value;
-				let alqirpf  = document.getElementById("contarecAlqirpf").value;
-				let alqiss  = document.getElementById("contarecAlqiss").value;
-				console.log("Alíquotas:"+alqpis+":"+alqcssl+":"+alqcofins+":"+alqirpf+":"+alqiss)
-				//Checagem e cálculo
-				console.log("Valores Atualizados:"+vlrpis+":"+vlrcssl+":"+vlrcofins+":"+vlrirpf+":"+vlriss+":"+valorNf)
-				if (valorNf == null || valorNf <= 0,01){}else{
-					if (checkpis == null || checkpis == false || alqpis <= 0,001 || alqpis == null){Vlrpis = valorNf * alqpis}else{Vlrpis = valorNf * alqpis};
-					if (checkcssl == null || checkcssl == false || alqcssl <= 0,001 || alqcssl == null){}else{vlrcssl = valorNf * alqcssl};
-					if (checkcofins == null || checkcofins == false || alqcofins <= 0,001 || alqcofins == null){}else{vlrcofins = valorNf * alqcofins};
-					if (checkirpf == null || checkirpf == false || alqirpf <= 0,001 || alqirpf == null){}else{vlrirpf = valorNf * alqirpf};
-					if (checkiss == null || checkiss == false || alqiss <= 0,001 || alqiss == null){}else{vlriss = valorNf * alqiss};
-							console.log("Valores Atualizados:"+vlrpis+":"+vlrcssl+":"+vlrcofins+":"+vlrirpf+":"+vlriss+":"+valorNf)
-							document.getElementById("contarecVlrpis").value = vlrpis;
-							document.getElementById("contarecVlrcssl").value = vlrcssl;
-							document.getElementById("contarecVlrcofins").value = vlrcofins;
-							document.getElementById("contarecVlrirpf").value = vlrirpf;
-							document.getElementById("contarecVlriss").value = vlriss;
+				// Verifica se o campo temporário foi encontrado antes de atribuir o valor
+				if (tempField) {
+					tempField.value = valcheck;
+					console.log('Valor: ' + valcheck);
+				} else {
+					console.error('Campo temporário não encontrado para ' + checkboxTempName);
 				}
 			}
 			
-			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("contarecBeneid").value).value.toString();
-				console.log("contarecTomadorEdi: "+document.getElementById("contarecTomadorEdi").value)
-				document.getElementById("contarecBenenome").value = document.getElementById("contarecBenenomeEdi").value;
-				document.getElementById("contarecTomador").value = document.getElementById("contarecTomadorEdi").value;
-				document.getElementById("contarecCpfcnpj").value = document.getElementById("contarecCpfcnpjEdi").value; //repete o nome do beneficiário no cabeçalho
-				document.getElementById("contarecRetencao").value = document.getElementById("contarecRetencaoEdi").value;
+
+			function formatarNumeroBrasileiro(valor) {
+				return parseFloat(valor.replace(',', '.')).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 			}
-			function atualizaConvId(){
-				let convId = document.getElementById("contarecConvid").value;
-				console.log(convId)
+
+			function formatarCampoNumerico(elementId) {
+				let elemento = document.getElementById(elementId);
+				let valor = elemento.value;
+
+				// Remove caracteres não numéricos, exceto ponto e vírgula
+				valor = valor.replace(/[^\d.,]/g, '');
+
+				// Substitui vírgulas por pontos para garantir a correta conversão para número
+				valor = valor.replace(',', '.');
+
+				// Converte para número
+				let numero = parseFloat(valor);
+
+				// Verifica se é um número válido
+				if (!isNaN(numero)) {
+					// Formata o número no estilo brasileiro
+					let numeroFormatado = formatarNumeroBrasileiro(numero.toFixed(2));
+					elemento.value = numeroFormatado;
+				} else {
+					// Se não for um número válido, limpa o campo
+					elemento.value = '';
+				}
 			}
+
+			function calculaImpostoPIS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkpis = document.getElementById("checkboxPistemp").value;
+				let alqpis = document.getElementById("contarecAlqpis").value.replace('%', '').replace(',', '.');
+				console.log(document.getElementById("contarecVlrnf").value);
+				console.log(valorNf);
+				console.log(alqpis);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkpis === "false" || alqpis <= 0.001 || alqpis === null || checkpis === "")) {
+					let resultado = (valorNf * (alqpis/100)).toFixed(2);
+					document.getElementById("contarecVlrpis").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrpis").value = "0,00";
+				}
+			}
+
+			function calculaImpostoCSSL() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkcssl = document.getElementById("checkboxCssltemp").value;
+				let alqcssl = document.getElementById("contarecAlqcssl").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqcssl);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcssl === "false" || alqcssl <= 0.001 || alqcssl === null || checkcssl === "")) {
+					let resultado = (valorNf * (alqcssl/100)).toFixed(2);
+					document.getElementById("contarecVlrcssl").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrcssl").value = "0,00";
+				}
+			}
+
+			function calculaImpostoCOFINS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkcofins = document.getElementById("checkboxCofinstemp").value;
+				let alqcofins = document.getElementById("contarecAlqcofins").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqcofins);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcofins === "false" || alqcofins <= 0.001 || alqcofins === null || checkcofins === "")) {
+					let resultado = (valorNf * (alqcofins/100)).toFixed(2);
+					document.getElementById("contarecVlrcofins").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrcofins").value = "0,00";
+				}
+			}
+
+			function calculaImpostoISS() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkiss = document.getElementById("checkboxIsstemp").value;
+				let alqiss = document.getElementById("contarecAlqiss").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqiss);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkiss === "false" || alqiss <= 0.001 || alqiss === null || checkiss === "")) {
+					let resultado = (valorNf * (alqiss/100)).toFixed(2);
+					document.getElementById("contarecVlriss").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlriss").value = "0,00";
+				}
+			}
+			
+			function calculaImpostoIRPJ() {
+				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
+				let checkirpj = document.getElementById("checkboxIrpjtemp").value;
+				let alqirpj = document.getElementById("contarecAlqirpj").value.replace('%', '').replace(',', '.');
+				console.log(valorNf);
+				console.log(alqirpj);
+				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkirpj === "false" || alqirpj <= 0.001 || alqirpj === null || checkirpj === "")) {
+					let resultado = (valorNf * (alqirpj/100)).toFixed(2);
+
+					// Formata o resultado para o formato brasileiro
+					document.getElementById("contarecVlrirpj").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+				} else {
+					document.getElementById("contarecVlrirpj").value = "0,00";
+				}
+			}
+
+			
+			
 		</script>
 	</head>
-	<div id="divCarrega" class="hidden" class="col-sm-5">
-		{{#each benes}}
-			{{#each ../convs}}
-				{{#ifEqual ../bene_convid _id}}
-					<input value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
-				{{/ifEqual}}
-			{{/each}}
-			
-			<input id="contarecBenenomeEdi" name="contarecBenenomeEdi" value="{{bene_nome}}"/>
-			<input id="contarecTomadorEdi" name="contarecTomadorEdi" value="{{bene_ordemnome}}"/>
-			<input id="contarecCpfcnpjEdi" name="contarecCpfcnpjEdi" value="{{bene_ordemdoc}}"/>
-			<input id="contarecRetencaoEdi" name="contarecRetencaoEdi" value="{{bene_ordemretem}}"/>
-
-		{{/each}}
-	</div>
+	
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -109,6 +164,25 @@
 							</li>
 							<li class="active">Contas à receber - Cadastro</li>
 						</ul><!-- /.breadcrumb -->
+					</div>
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<!-- /.importante Id de indice-->
+						<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+						{{#each benes}}
+							<input type="text" id="{{_id}}_beneNome" name="beneNomeEdi" value="{{bene_nome}}"/>
+							<input type="text" id="{{_id}}_beneOrdemnome" name="beneOrdemnomeEdi" value="{{bene_ordemnome}}"/>
+							<input type="text" id="{{_id}}_beneOrdemdoc" name="beneOrdemdocEdi" value="{{bene_ordemdoc}}"/>
+							<input type="text" id="{{_id}}_beneOrdemretem" name="beneOrdemretemEdi" value="{{bene_ordemretem}}"/>
+							<input type="text" id="{{_id}}_beneConvid" name="beneConvidEdi" value="{{bene_convid}}"/>
+						{{/each}}
+						{{#each convs}}
+							<input type="text" id="{{_id}}_beneConvnome" name="{{bene_convid}}_convNomeEdi" value="{{conv_nome}}"/>
+						{{/each}}
+						{{#each convimps}}
+							<input type="text" id="{{_id}}_convId" name="{{conv_beneid}}_convBeneidEdix" value="{{bene_convid}}"/>
+						{{/each}}
+						
+
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -129,7 +203,7 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<div >
+												<div hidden>
 													<!-- Registro de Operadores -->
 													<label> Usuário Cadastro</label>
 													<div class="form-group">
@@ -175,10 +249,11 @@
 														<input type="text" name="contarecNfnum" id="contarecNfnum" placeholder=""  />
 													</div>
 												</div>
+												
 												<label>Beneficiário</label>
 												<div class="form-group" >
 													<div class="col-xs-9 col-sm-9">
-														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();">
 															<option value="766f69643132333435366964">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -188,17 +263,10 @@
 												</div>
 												<label> Convênio</label>
 												<div class="form-group">
-													<div class="col-sm-4">
-														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
-															{{#each benes}}
-																{{#each ../convs}}
-																	<option value="766f69643132333435366964">-</option>
-																	{{#ifEqual ../bene_convid _id}}
-																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
-																	{{/ifEqual}}
-																{{/each}}
-															{{/each}}
-														</select>
+													<div class="col-sm-12">
+														<input type="text" name="contarecConvid" id="contarecConvid" placeholder="" hidden />
+														<input type="text" name="contarecConvnomeTemp" id="contarecConvnomeTemp" placeholder="" style="width: 20%;" />
+														
 													</div>
 												</div>
 												<label> Nome Do Beneficiário</label>
@@ -231,7 +299,7 @@
 												<label>Valor da Nota Fiscal</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="0,00" style="text-align: right; width:100px;" onchange="calculaImposto();"/>
+														<input type="text" name="contarecVlrnf" id="contarecVlrnf" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrnf');calculaImposto();"/>
 													</div>
 												</div>
 												
@@ -257,13 +325,13 @@
 												<label>Valor Pago</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" style="text-align: right; width:100px;"/>
+														<input type="text" name="contarecVlrpg" id="contarecVlrpg" placeholder="0,00" style="text-align: right; width:100px;" onchange="formatarCampoNumerico('contarecVlrpg');"/>
 													</div>
 												</div>
 												<label>Valor Diferença</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" style="text-align: right;  width:100px;"/>
+														<input type="text" name="contarecVlrdiferenca" id="contarecVlrdiferenca" placeholder="0,00" style="text-align: right;  width:100px;" onchange="formatarCampoNumerico('contarecVlrdiferenca');"/>
 													</div>
 												</div>
 												<label>Forma de Pagamento</label>
@@ -294,65 +362,66 @@
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImposto();"/>
+																			<input type="checkbox" name="checkboxPis" name="checkboxPis" class="ace" id="checkboxPis" onchange="atualizaCheckbox(checkboxPis);calculaImpostoPIS();"/>
 																			<span class="lbl"></span>
-																			<input type="text" id="checkboxPistemp" name="checkboxPistemp" value="" />
+																			<input type="text" class="hidden" id="checkboxPistemp" name="checkboxPistemp" value="false" />
 																		</label>
 																	</td>
 																	<td>PIS</td>
-																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,065%" onchange="calculaImposto();"/></td>
+																	<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="0,65%" onchange="calculaImpostoPIS();"/></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImposto();" />
+																			<input type="checkbox" name="checkboxCssl" id="checkboxCssl" class="ace" onchange="atualizaCheckbox(checkboxCssl);calculaImpostoCSSL();" />
 																			<span class="lbl"></span>
-																			<input type="text" id="checkboxCssltemp" name="checkboxCssltemp" value="" />
+																			<input type="text" class="hidden" id="checkboxCssltemp" name="checkboxCssltemp" value="false" />
 																		</label>
 																	</td>
 																	<td>CSSL</td>
-																	<td><input type="text" name="contarecAlqssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImposto();"/></td>
+																	<td><input type="text" name="contarecAlqcssl" id="contarecAlqcssl" style="text-align: right; width:80px;" value="1,0%" onchange="calculaImpostoCSSL();"/></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrcssl" id="contarecVlrcssl" style="text-align: right; width:100px;" value="0,00" /></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImposto();" />
+																			<input type="checkbox" name="checkboxCofins" id="checkboxCofins" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImpostoCOFINS();" />
 																			<span class="lbl"></span>
-																			<input type="text" id="checkboxCofinstemp" name="checkboxCofinstemp" value="" />
+																			<input type="text" class="hidden" id="checkboxCofinstemp" name="checkboxCofinstemp" value="false" />
 																		</label>
 																	</td>
 																	<td>COFINS</td>
-																	<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImposto();" /></td>
+																	<td><input type="text" name="contarecAlqcofins" id="contarecAlqcofins" style="text-align: right; width:80px;"  value="3,0%" onchange="calculaImpostoCOFINS();" /></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlrcofins" id="contarecVlrcofins" style="text-align: right; width:100px;" value="0,00"/></td>
 																</tr>
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIrpf" id="checkboxIrpf" class="ace" onchange="atualizaCheckbox(checkboxIrpf);calculaImposto();" />
+																			<input type="checkbox" name="checkboxIrpj" id="checkboxIrpj" class="ace" onchange="atualizaCheckbox(checkboxIrpj);calculaImpostoIRPJ();" />
 																			<span class="lbl"></span>
-																			<input type="text" id="checkboxIrpftemp" name="checkboxIrpftemp" value="" />
+																			<input type="text" class="hidden" id="checkboxIrpjtemp" name="checkboxIrpjtemp" value="false" />
 																		</label>
 																	</td>
-																	<td>IRPF</td>
-																	<td><input type="text" name="contarecAlqirpf" id="contarecAlqirpf" style="text-align: right; width:80px;"  value="1,5%" onchange="calculaImposto();" /></td>
+																	<td>IRPJ</td>
+																	<td><input type="text" name="contarecAlqirpj" id="contarecAlqirpj" style="text-align: right; width:80px;" value="1,5%" onchange="calculaImpostoIRPJ();"/></td>
 																	<td style="width: 20px;"></td>
-																	<td><input type="text" name="contarecVlrirpf" id="contarecVlrirpf" style="text-align: right; width:100px;" value="0,00"/></td>
+																	<td><input type="text" name="contarecVlrirpj" id="contarecVlrirpj" style="text-align: right; width:100px;" value="0,00" /></td>
 																</tr>
+																
 																<tr>
 																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImposto();" />
+																			<input type="checkbox" name="checkboxIss" id="checkboxIss" class="ace" onchange="atualizaCheckbox(checkboxIss);calculaImpostoISS();" />
 																			<span class="lbl"></span>
-																			<input type="text" id="checkboxIsstemp" name="checkboxIsstemp" value="" />
+																			<input type="text" class="hidden" id="checkboxIsstemp" name="checkboxIsstemp" value="false" />
 																		</label>
 																	</td>
 																	<td>ISS</td>
-																	<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%"onchange="calculaImposto();" /></td>
+																	<td><input type="text" name="contarecAlqiss" id="contarecAlqiss" style="text-align: right; width:80px"  value="5,0%" onchange="calculaImpostoISS();" /></td>
 																	<td style="width: 20px;"></td>
 																	<td><input type="text" name="contarecVlriss" id="contarecVlriss" style="text-align: right; width:100px" value="0,00"/></td>
 																</tr>
@@ -366,8 +435,8 @@
 												<div class="form-group">
 													<div class="col-sm-3">
 														<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
-															<option value="nao">Não</option>
-															<option value="sim">Sim</option>
+															<option value="Não">Não</option>
+															<option value="Sim">Sim</option>
 														</select>
 													</div>
 												</div>
