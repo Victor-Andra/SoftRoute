@@ -9,7 +9,7 @@ const ContaRecSchema = mongoose.Schema({
     contarec_usuidedi :{ type: ObjectId, required: false },
     contarec_dataedi :{ type: String, required: false },
     //Identificador da NF
-    contarec_tipo :{ type: String, required: true},
+    contarec_tipo :{ type: String, required: false},
     contarec_nfnum :{ type: String, required: true},
     contarec_beneid :{ type: ObjectId, required: false },
     contarec_convid :{ type: ObjectId, required: false },

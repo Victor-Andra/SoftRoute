@@ -120,12 +120,8 @@
 		</script>
 	</head>
 
-	<body class="no-skin" onload="javascript:controlaNave();">
-
-
+	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state " id="breadcrumbs">
@@ -137,19 +133,17 @@
 
 							<li class="active">Usuários Editar</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
 
 					<div class="row">
 						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
-							
+							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/add" method="POST">
 								<document class="document-horizontal" role="document" >
-									
-										<div class="col-xl-12" style="padding-top: 50px;">
+									<div class="col-sm-12" style="padding-top: 50px;">
+										<div class="row">
 											<div class="tabbable">
 												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-													
 													<li class="active">
 														<a data-toggle="tab" href="#basico" aria-expanded="true">
 															<i class="blue ace-icon fa fa-child bigger-120"></i>
@@ -362,6 +356,13 @@
 																	<tbody>
 																		<tr>
 																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioGraduacaoOp" id="usuarioGraduacaoOp" type="checkbox" class="ace" value="62e0a08e8a788c70d0f92b92" onchange="javascript:updateUsuarioGraduacao()">
+																						<span class="lbl">&nbsp;Não possui</span>
+																					</label>
+																				</div>
+																				<br>
 																				{{#each especialidades}}
 																				<div class="checkbox">
 																					<label>
@@ -372,9 +373,23 @@
 																				
 																				{{else}}
 																				{{/each}}
-																				
+																				<br>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioGraduacaoOp" id="usuarioGraduacaoOp" type="checkbox" class="ace" value="65a69909c0951c268de5b7f7" onchange="javascript:updateUsuarioGraduacao()">
+																						<span class="lbl">&nbsp;Outros</span>
+																					</label>
+																				</div>
 																			</td>
+																			
 																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" type="checkbox" class="ace" value="62e0a5e2e62111b08881e231" onchange="javascript:updateUsuarioGraduacao()">
+																						<span class="lbl">&nbsp;Não possui</span>
+																					</label>
+																				</div>
+																				<br>
 																				{{#each especializacaos}}
 																				<div class="checkbox">
 																					<label>
@@ -384,9 +399,22 @@
 																				</div>
 																				{{else}}
 																				{{/each}}
-																				
+																				<br>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" type="checkbox" class="ace" value="65a69882c0951c268de5b725" onchange="javascript:updateUsuarioGraduacao()">
+																						<span class="lbl">&nbsp;Outros</span>
+																					</label>
+																				</div>
 																			</td>
 																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="65a68d7ac0951c268de59092" onchange="javascript:updateUsuarioGraduacao()">
+																						<span class="lbl">&nbsp;Não possui</span>
+																					</label>
+																				</div>
+																				<br>
 																				{{#each metodos}}
 																				<div class="checkbox">
 																					<label>
@@ -397,7 +425,13 @@
 																				
 																				{{else}}
 																				{{/each}}
-																				
+																				<br>
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="65a69895c0951c268de5b779" onchange="javascript:updateUsuarioMetodo()">
+																						<span class="lbl">&nbsp;Outros</span>
+																					</label>
+																				</div>
 																			</td>
 																		</tr>
 																		<tr hidden>
@@ -791,10 +825,8 @@
 												</div>
 											</div>
 										</div>
-
-									<div class="space-4"></div>
-									
-
+									</div>
+									<hr>
 									<div class="clearfix document-actions">
 									
 										<div class="col-md-offset-3 col-md-9">
@@ -825,10 +857,6 @@
 
 
 		</div><!-- /.main-container -->
-
-
-
-
 
 		<!-- basic scripts -->
 
