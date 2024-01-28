@@ -526,8 +526,14 @@
 															</td>
 												{{/verificarVazioOuIndefinido}}
 											</tr>
-											<!-- Aparecer na Linha abaixo removido assinatura e carimbo de roberta-->
-											
+											<tr><!-- Aparecer na Linha abaixo -->
+												<td rowspan="1" colspan="3" class="center"><!-- Div imagem carimbo Route (Roberta) Sempre aparecer -->
+													{{#verificarVazioOuIndefinido this.carimboRoute }}
+														{{else}}
+															<img id="previewImage0" src="data:image/png;base64, {{carimboRoute}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+													{{/verificarVazioOuIndefinido}}
+												</td>
+											</tr>
 										</tbody>
 										<tfoot></tfoot>
 

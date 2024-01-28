@@ -11,9 +11,10 @@ const AtaSchema = mongoose.Schema({
     //dados Básicos do ATA
     ata_beneid :{ type: ObjectId, required: true },
     ata_beneidade :{ type: String, required: false },
-    ata_terapeutaid :{ type: ObjectId, required: false },
+    ata_terapeutaid :{ type: String, required: false },//Substituido o object id de terapeuta por string de qualquer familiar, mesmo não cadastrado
     ata_parem :{ type: String, required: false },
     ata_acompanhausuid: { type: ObjectId, required: false },
+    ata_obs: { type: String, required: false },
     //I
     ata_i01:{ type: String, required: false },
     ata_i02:{ type: String, required: false },
@@ -172,6 +173,7 @@ class Ata{
     ata_terapeutaid,
     ata_parem,
     ata_acompanhausuid,
+    ata_obs,
     //I
     ata_i01,
     ata_i02,
@@ -328,6 +330,7 @@ class Ata{
     this.ata_terapeutaid = ata_terapeutaid,
     this.ata_parem = ata_parem,
     this.ata_acompanhausuid = ata_acompanhausuid,
+    this.ata_obs = ata_obs,
     //I
     this.ata_i01 = ata_i01,
     this.ata_i02 = ata_i02,
@@ -495,6 +498,7 @@ module.exports = {AtaModel,AtaSchema,
                 ata_terapeutaid : req.body.ataTerapeutaid,
                 ata_parem : req.body.ataParem,
                 ata_acompanhausuid : req.body.ataAcompanhausuid,
+                ata_obs : req.body.ataObs,
                 //I
                 ata_i01 : req.body.ataI01temp,
                 ata_i02 : req.body.ataI02temp,
@@ -664,6 +668,7 @@ module.exports = {AtaModel,AtaSchema,
             ata_terapeutaid : req.body.ataTerapeutaid,
             ata_parem : req.body.ataParem,
             ata_acompanhausuid : req.body.ataAcompanhausuid,
+            ata_obs : req.body.ataObs,
             //I
             ata_i01 : req.body.ataI01temp,
             ata_i02 : req.body.ataI02temp,

@@ -11,57 +11,47 @@
         }
 		</style>
         <script type="text/javascript">
-		
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("contarecBeneid").value;
-				
-				document.getElementById("contarecBenenome").value = document.getElementById(beneid+"_beneNome").value;
-				document.getElementById("contarecTomador").value = document.getElementById(beneid+"_beneOrdemnome").value;
-				document.getElementById("contarecCpfcnpj").value = document.getElementById(beneid+"_beneOrdemdoc").value;
-				document.getElementById("contarecRetencao").value = document.getElementById(beneid+"_beneOrdemretem").value;
-				document.getElementById("contarecConvid").value = document.getElementById(beneid+"_beneConvid").value;
-				
-				let convid = document.getElementById("contarecConvid").value;
-				console.log(convid);
-				document.getElementById("contarecConvnomeTemp").value = document.getElementById(convid+"_beneConvnome").value;
+			function marcacontaRecTipoLote(){
+				document.getElementById("contarecTipo").value = 'Lote';
+				document.getElementById("contarecBenenome").value = 'Lote';
+				// Esconder componentes com nome "linbene"
+				var linbeneComponents = document.getElementsByName("linbene");
+				for (var i = 0; i < linbeneComponents.length; i++) {
+					linbeneComponents[i].style.display = 'none';
+				}
 
-			}
+				// Limpa os imputs "linbene"
+				document.getElementById("contarecBeneid").value = "766f69643132333435366964";
+				document.getElementById("contarecConvnomeTemp").value = null;
+				document.getElementById("contarecTomador").value = null;
+				document.getElementById("contarecCpfcnpj").value = null;
+				document.getElementById("contarecRetencao").value = null;
+				
 
-			function contaRecTiponf(){
-				let Tipo = document.getElementById("contarecNftipo").value;
-				if (Tipo === "Lote") {
-						
-					} else {
-						
+				// Exibir componentes com nome "linconv"
+				var linconvComponents = document.getElementsByName("linconv");
+				for (var i = 0; i < linconvComponents.length; i++) {
+					linconvComponents[i].style.display = 'block';
 				}
 				
 			}
-			
-			function formatarNumeroBrasileiro(valor) {
-				return parseFloat(valor.replace(',', '.')).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-			}
+			function marcacontaRecTipoBene(){
+				document.getElementById("contarecTipo").value = 'Bene';
+				// Esconder componentes com nome "linconv"
+				var linconvComponents = document.getElementsByName("linconv");
+				for (var i = 0; i < linconvComponents.length; i++) {
+					linconvComponents[i].style.display = 'none';
+				}
 
-			function formatarCampoNumerico(elementId) {
-				let elemento = document.getElementById(elementId);
-				let valor = elemento.value;
+				// Limpa os imputs "linconv"
+				document.getElementById("contarecConvid").value = "766f69643132333435366964";
+				document.getElementById("contarecConvnomeTemp").value = null;
+				
 
-				// Remove caracteres não numéricos, exceto ponto e vírgula
-				valor = valor.replace(/[^\d.,]/g, '');
-
-				// Substitui vírgulas por pontos para garantir a correta conversão para número
-				valor = valor.replace(',', '.');
-
-				// Converte para número
-				let numero = parseFloat(valor);
-
-				// Verifica se é um número válido
-				if (!isNaN(numero)) {
-					// Formata o número no estilo brasileiro
-					let numeroFormatado = formatarNumeroBrasileiro(numero.toFixed(2));
-					elemento.value = numeroFormatado;
-				} else {
-					// Se não for um número válido, limpa o campo
-					elemento.value = '';
+				// Exibir componentes com nome "linbene"
+				var linbeneComponents = document.getElementsByName("linbene");
+				for (var i = 0; i < linbeneComponents.length; i++) {
+					linbeneComponents[i].style.display = 'block';
 				}
 			}
 
@@ -76,79 +66,6 @@
 						valDif = (valNf - valpg).toFixed(2);
 						document.getElementById("contarecVlrdiferenca").value = parseFloat(valDif).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 					}
-				}
-			}
-
-			function calculaImpostoPIS() {
-				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
-				let checkpis = document.getElementById("checkboxPistemp").value;
-				let alqpis = document.getElementById("contarecAlqpis").value.replace('%', '').replace(',', '.');
-				console.log(document.getElementById("contarecVlrnf").value);
-				console.log(valorNf);
-				console.log(alqpis);
-				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkpis === "false" || alqpis <= 0.001 || alqpis === null || checkpis === "")) {
-					let resultado = (valorNf * (alqpis/100)).toFixed(2);
-					document.getElementById("contarecVlrpis").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-				} else {
-					document.getElementById("contarecVlrpis").value = "0,00";
-				}
-			}
-
-			function calculaImpostoCSSL() {
-				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
-				let checkcssl = document.getElementById("checkboxCssltemp").value;
-				let alqcssl = document.getElementById("contarecAlqcssl").value.replace('%', '').replace(',', '.');
-				console.log(valorNf);
-				console.log(alqcssl);
-				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcssl === "false" || alqcssl <= 0.001 || alqcssl === null || checkcssl === "")) {
-					let resultado = (valorNf * (alqcssl/100)).toFixed(2);
-					document.getElementById("contarecVlrcssl").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-				} else {
-					document.getElementById("contarecVlrcssl").value = "0,00";
-				}
-			}
-
-			function calculaImpostoCOFINS() {
-				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
-				let checkcofins = document.getElementById("checkboxCofinstemp").value;
-				let alqcofins = document.getElementById("contarecAlqcofins").value.replace('%', '').replace(',', '.');
-				console.log(valorNf);
-				console.log(alqcofins);
-				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkcofins === "false" || alqcofins <= 0.001 || alqcofins === null || checkcofins === "")) {
-					let resultado = (valorNf * (alqcofins/100)).toFixed(2);
-					document.getElementById("contarecVlrcofins").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-				} else {
-					document.getElementById("contarecVlrcofins").value = "0,00";
-				}
-			}
-
-			function calculaImpostoISS() {
-				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
-				let checkiss = document.getElementById("checkboxIsstemp").value;
-				let alqiss = document.getElementById("contarecAlqiss").value.replace('%', '').replace(',', '.');
-				console.log(valorNf);
-				console.log(alqiss);
-				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkiss === "false" || alqiss <= 0.001 || alqiss === null || checkiss === "")) {
-					let resultado = (valorNf * (alqiss/100)).toFixed(2);
-					document.getElementById("contarecVlriss").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-				} else {
-					document.getElementById("contarecVlriss").value = "0,00";
-				}
-			}
-			
-			function calculaImpostoIRPJ() {
-				let valorNf = document.getElementById("contarecVlrnf").value.replace('.', '').replace(',', '.');
-				let checkirpj = document.getElementById("checkboxIrpjtemp").value;
-				let alqirpj = document.getElementById("contarecAlqirpj").value.replace('%', '').replace(',', '.');
-				console.log(valorNf);
-				console.log(alqirpj);
-				if (!isNaN(valorNf) && valorNf >= 0.01 && !(checkirpj === "false" || alqirpj <= 0.001 || alqirpj === null || checkirpj === "")) {
-					let resultado = (valorNf * (alqirpj/100)).toFixed(2);
-
-					// Formata o resultado para o formato brasileiro
-					document.getElementById("contarecVlrirpj").value = parseFloat(resultado).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-				} else {
-					document.getElementById("contarecVlrirpj").value = "0,00";
 				}
 			}
 			// Função para preencher os as Alíquotas Impostos
@@ -354,18 +271,25 @@
 																</td>
 																<td>
 																	<label>
-																		<span class="lbl">&nbsp;Tipo de NF:&nbsp;&nbsp;</span>
+																		<span class="lbl">&nbsp;Tipo de NF:</span>
 																	</label>
 																</td>
 																<td class="text-center align-middle">
-																	<select class="col-xs-9 col-sm-9" name="contarecNftipo" id="contarecNftipo" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:contaRecTiponf();">
-																		<option value="-">-</option>
-																		<option value="Beneficiário">Beneficiário</option>
-																		<option value="Lote">Lote</option>
-																		
-																	</select>
+																	<div class="radio">
+																		<label>
+																			<input name="contarecTipo" id="contarecTipoLote" type="radio" class="ace" value="Lote" onchange="javascript:marcacontaRecTipoLote();">
+																			<span class="lbl">&nbsp;Nota Fiscal em Lote.</span>
+																		</label>
+																	</div>
 																</td>
-																
+																<td  class="text-center align-middle">
+																	<div class="radio">
+																		<label>
+																			<input name="contarecTipo" id="contarecTipoBene" type="radio" class="ace" value="Bene" onchange="javascript:marcacontaRecTipoBene();">
+																			<span class="lbl">&nbsp;Nota Fiscal por Beneficiário.</span>
+																		</label>
+																	</div>
+																</td>
 															</tr>
 															<tr>
 																<td>
@@ -518,16 +442,7 @@
 																		<td><label>Pago?</label></td>
 																	</tr>
 																	<tr>
-																		<td>
-																			
-																			<select class="col-xs-9 col-sm-9" name="contarecFormapg" id="contarecFormapg" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
-																				<option value="-">-</option>
-																				<option value="Pix">Pix</option>
-																				<option value="Boleto">Boleto</option>
-																				<option value="Transferência">Transferência</option>
-																				
-																			</select>
-																		</td>
+																		<td><input type="text" name="contarecFormapg" id="contarecFormapg" placeholder="Pix, Boleto etc."  /></td>
 																		<td><input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder=""></td>
 																		<td>
 																			<select name="contarecPg" id="contarecPg" class="chosen-select">
@@ -593,13 +508,13 @@
 																	<tr>
 																		<td class="center">
 																			<label class="pos-rel">
-																				<input type="checkbox" name="checkboxPis" id="checkboxPis" class="ace" class="ace" onchange="atualizaCheckbox(checkboxPIS);calculaImpostoPIS();"  />
+																				<input type="checkbox" name="checkboxPis" id="checkboxPis" class="ace" onchange="atualizaCheckbox(checkboxCofins);calculaImpostoPIS();" />
 																				<span class="lbl"></span>
 																				
 																			</label>
 																		</td>
 																		<td>PIS</td>
-																		<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" value="1,5%" onchange="calculaImpostoPIS();"/></td>
+																		<td ><input type="text" name="contarecAlqpis" id="contarecAlqpis" style="text-align: right; width:80px;" onchange="calculaImpostoPIS();"/></td>
 																		
 																		<td><input type="text" name="contarecVlrpis" id="contarecVlrpis" style="text-align: right; width:100px;" value="0,00"/></td>
 																	</tr>

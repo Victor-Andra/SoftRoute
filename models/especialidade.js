@@ -2,21 +2,11 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const EspecialidadeSchema = mongoose.Schema({
-    especialidade_nome: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    especialidade_descricao: {
-        type: String,
-
-    },
-    especialidade_datacad: {
-        type: Date
-    },
-    especialidade_dataedi: {
-        type: Date
-    }
+    especialidade_nome: { type: String, unique: true, required: true },
+    especialidade_descricao: { type: String },
+    especialidade_vis: { type: String },
+    especialidade_datacad: { type: Date },
+    especialidade_dataedi: { type: Date }
     
 })
 
@@ -24,11 +14,13 @@ class Especialidade{
     constructor(
         especialidade_nome,
         especialidade_descricao,
+        especialidade_vis,
         especialidade_datacad,
         especialidade_dataedi
         ){
         this.especialidade_nome = especialidade_nome,
         this.especialidade_descricao = especialidade_descricao,
+        this.especialidade_vis = especialidade_vis,
         this.especialidade_datacad = especialidade_datacad,
         this.especialidade_dataedi = especialidade_dataedi
     }
@@ -48,6 +40,7 @@ module.exports = {EspecialidadeModel,EspecialidadeSchema,
             {$set: {
                 especialidade_nome: req.body.especialidadeNome,
                 especialidade_descricao: req.body.especialidadeDescricao,
+                especialidade_vis: req.body.especialidadeVis,
                 especialidade_edi: dataAtual
                 }}
         ).then((res) =>{
@@ -73,6 +66,7 @@ module.exports = {EspecialidadeModel,EspecialidadeSchema,
             const newEspecialidade = new EspecialidadeModel({
                 especialidade_nome: req.body.especialidadeNome,
                 especialidade_descricao: req.body.especialidadeDescricao,
+                especialidade_vis: req.body.especialidadeVis,
                 especialidade_datacad: dataAtual
             });
             console.log("newEspecialidade save");

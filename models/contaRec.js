@@ -9,7 +9,6 @@ const ContaRecSchema = mongoose.Schema({
     contarec_usuidedi :{ type: ObjectId, required: false },
     contarec_dataedi :{ type: String, required: false },
     //Identificador da NF
-    contarec_tipo :{ type: String, required: false},
     contarec_nfnum :{ type: String, required: true},
     contarec_beneid :{ type: ObjectId, required: false },
     contarec_convid :{ type: ObjectId, required: false },
@@ -55,7 +54,6 @@ class ContaRec{
         contarec_usuidedi,
         contarec_dataedi,
         //Identificador da NF
-        contarec_tipo,
         contarec_nfnum,
         contarec_beneid,
         contarec_convid,
@@ -101,7 +99,6 @@ class ContaRec{
         this.contarec_usuidedi = contarec_usuidedi,
         this.contarec_dataedi = contarec_dataedi,
         //Identificador da NF
-        this.contarec_tipo = contarec_tipo,
         this.contarec_nfnum = contarec_nfnum,
         this.contarec_beneid = contarec_beneid,
         this.contarec_convid = contarec_convid,
@@ -166,7 +163,6 @@ module.exports = {ContaRecModel, ContaRecSchema,
         contarec_cpfcnpj : req.body.contarecCpfcnpj,
         contarec_retencao : req.body.contarecRetencao,
         //Informações da NF
-        contarec_tipo : req.body.contarecTipo,
         contarec_anomesatend : req.body.contarecAnomesatend,
         contarec_dataevento : req.body.contarecDataevento,
         contarec_vlrnf : req.body.contarecVlrnf,
@@ -218,7 +214,6 @@ module.exports = {ContaRecModel, ContaRecSchema,
              contarec_usuidcad : usuarioAtual,
              contarec_datacad : dataAtual,
              //Identificador da NF
-             contarec_tipo : req.body.contarecTipo,
              contarec_nfnum : req.body.contarecNfnum,
              contarec_beneid : req.body.contarecBeneid,
              contarec_convid : req.body.contarecConvid,

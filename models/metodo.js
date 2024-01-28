@@ -4,6 +4,7 @@ const ObjectId = mongoose.Types.ObjectId
 const MetodoSchema = mongoose.Schema({
     metodo_nome: {type: String, unique: true, required: true},
     metodo_descricao: {type: String },
+    metodo_vis: {type: String },
     metodo_datacad: {type: Date},
     metodo_dataedi: {type: Date}
 })
@@ -12,11 +13,13 @@ class Metodo{
     constructor(
         metodo_nome,
         metodo_descricao,
+        metodo_vis,
         metodo_datacad,
         metodo_dataedi
         ){
         this.metodo_nome = metodo_nome,
         this.metodo_descricao = metodo_descricao,
+        this.metodo_vis = metodo_vis,
         this.metodo_datacad = metodo_datacad,
         this.metodo_dataedi = metodo_dataedi
     }
@@ -36,6 +39,7 @@ module.exports = {MetodoModel,MetodoSchema,
             {$set: {
                 metodo_nome: req.body.metodoNome,
                 metodo_descricao: req.body.metodoDescricao,
+                metodo_vis: req.body.metodovis,
                 metodo_edi: dataAtual
                 }}
         ).then((res) =>{
@@ -55,6 +59,7 @@ module.exports = {MetodoModel,MetodoSchema,
             const newMetodo = new MetodoModel({
                 metodo_nome: req.body.metodoNome,
                 metodo_descricao: req.body.metodoDescricao,
+                metodo_vis: req.body.metodovis,
                 metodo_datacad: dataAtual
             });
             console.log("newMetodo save");

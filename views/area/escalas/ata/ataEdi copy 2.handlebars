@@ -234,7 +234,7 @@
 				document.getElementById("ataCorrecusuid").value = document.getElementById("ataCorrecusuidEdi").value;
 				document.getElementById("ataCorrecdata").value = document.getElementById("ataCorrecdataEdi").value;
 				document.getElementById("ataCorrec").value = document.getElementById("ataCorrecEdi").value;
-				document.getElementById("ataObs").value = document.getElementById("ataObsEdi").value;
+
 				// Atualiza o radio button
 				checkRadioAoCarregarFormulario();
 				
@@ -325,7 +325,6 @@
 									<input type="text" id="ataCorrecusuidEdi" name="ataCorrecusuidEdi" value="{{ata.ata_correcusuid}}" />
 									<input type="text" id="ataCorrecdataEdi" name="ataCorrecdataEdi" value="{{ata.ata_correcdata}}" />
 									<input type="text" id="ataCorrecEdi" name="ataCorrecEdi" value="{{ata.ata_correc}}" />
-									<input type="text" id="ataObsEdi" name="ataObsEdi" value="{{ata.ata_obs}}" />
 
 									<input type="text" id="ataI01temp" name="ataI01temp" value="{{ata.ata_i01}}" />
 									<input type="text" id="ataI02temp" name="ataI02temp" value="{{ata.ata_i02}}" />
@@ -514,30 +513,30 @@
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Preenchido por</label>
+														<label for="id-date-picker-1">Preenchido por:</label>
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
-																	<input name="ataTerapeutaid" id="ataTerapeutaid" type="text" style="width:300px;"/>
-																</div>
-															</div>
-														</div>
-													</div>
-												
-													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Parentesco</label>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="ataParem" id="ataParem" type="text" style="width:200px;"  />
+																	<input name="ataTerapeutaid" id="ataTerapeutaid" type="text"/>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-												<div class="row">															
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1">Parentesco</label>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="ataParem" id="ataParem" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+																												
 													<div class="col-xs-12 col-sm-4">
-														<label>Técnico acompanhante</label>
+														<label>Técnico Acompanhante</label>
 														<div class="form-group">
 															<div class="col-sm-8">
 																<select name="ataAcompanhausuid" id="ataAcompanhausuid" class="chosen-select" data-placeholder="Escolha..." >
@@ -548,11 +547,11 @@
 																</select>
 															</div>
 														</div>
-													</div>
-												</div>																							
+													</div>																								
+												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Corrigido por</label>
+														<label for="id-date-picker-1">Corrigido por:</label>
 														<div class="row">
 															<div class="col-sm-6">
 																<select name="ataCorrecusuid" id="ataCorrecusuid" class="chosen-select" data-placeholder="Escolha..." >
@@ -565,7 +564,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Data da correção</label>
+														<label for="id-date-picker-1">Data correção:</label>
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="input-group">
@@ -575,21 +574,8 @@
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label>Observações adicionais</label>
-														<div class="form-group">
-															<div class="col-xs-12 col-sm-6">
-																<textarea type="text" name="ataObs" id="ataObs" placeholder="Insira seus comentários aqui!" style="font-size: 12px;" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
-															</div>
-														</div>
-													</div>
-												</div>
 											</div>
-										</div>
-										
-												
-													
+										</div>		
 									</div>
 									<div class="alert alert-warning">
 										<button type="button" class="close" data-dismiss="alert">
@@ -751,7 +737,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															O problema da manipulação do ambiente pode apresentar-se em nível mais ou menos grave, como por exemplo, não responder as solicitações e manter-se indiferente ao ambiente. O fato mais comum é a manifestação brusca de crises de birra passageira, risos incontroláveis e sem motivo, tudo isto com o fim de conseguir ser o centro da atenção.
+															O problema da manipulação do ambiente pode apresentar-se em nível mais ou menos grave, como por exemplo, não responder as solicitações e manter-se indiferente ao ambiente. O fato mais comum é a manifestação brusca de crises de birra passageira, risos incontroláveis e sem motivo, tudo isto com o fim de conseguir ser o centro da atenção
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -941,7 +927,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>IV</b> - Resistência as mudanças</h4>
+												<b>IV</b> - Resistência a mudanças</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1330,7 +1316,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>VIII</b> - Distúrbios do sono</h4>
+												<b>VIII</b> -Distúrbios do sono</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -1685,7 +1671,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															Analisa os objetos sensorialmente, requisitando mais os outros órgãos dos sentidos em detrimento da visão, porém sem uma finalidade específica.
+															Analisa os objetos sensorialmente, requisitando mais os outros órgãos dos sentidos em detrimento da visão, porém sem uma finalidade específica
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -2085,7 +2071,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XV</b> - Falta de iniciativa</h4>
+												<b>XV</b> -Falta de iniciativa</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2422,7 +2408,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XVIII</b> - Reações inapropriadas ante a frustração</h4>
+												<b>XVIII</b> - Reações Inapropriadas Ante A Frustração.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2517,7 +2503,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XIX</b> - Não assume responsabilidades</h4>
+												<b>XIX</b> - Não assume responsabilidades .</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2590,7 +2576,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XX</b> - Hiperatividade / Hipoatividade</h4>
+												<b>XX</b> - Hiperatividade / Hipoatividade.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2707,7 +2693,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XXI</b> - Movimentos estereotipados e repetitivos</h4>
+												<b>XXI</b> - Movimentos estereotipados e repetitivos.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2726,7 +2712,7 @@
 															<button type="button" class="close" data-dismiss="alert">
 																<i class="ace-icon fa fa-times"></i>
 															</button>
-															Ocorrem em situações de repouso ou atividades, com início repentino.
+															Ocorrem em situações de repouso ou atividades, com início repentino
 														</div>
 														<div class="row">
 															<div class="col-xs-12">
@@ -2846,7 +2832,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XXII</b> - Ignora o perigo</h4>
+												<b>XXII</b> - Ignora o perigo.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -2932,7 +2918,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												<b>XXIII</b> - Aparecimento antes dos 36 meses (DSM-IV)</h4>
+												<b>XXIII</b> - Aparecimento antes dos 36 meses (DSM-IV).</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -3001,7 +2987,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												Formulário Pontuação ATA</h4>
+												Formulário Pontuação ATA.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -3034,7 +3020,7 @@
 																		<tr><!-- 1Reg -->
 																			
 																			<td>
-																				<span class="badge badge-success">Nenhum item marcado na escala</span>
+																				<span class="badge badge-success">Nenhum item marcado na escala.</span>
 																			</td>
 																			<td>
 																				<span class="badge badge-purple">0 Ponto</span>
@@ -3043,7 +3029,7 @@
 																		<tr><!-- 2Reg -->
 																			
 																			<td>
-																				<span class="badge badge-warning">Um item marcado na escala</span>
+																				<span class="badge badge-warning">Um item marcado na escala.</span>
 																			</td>
 																			<td>
 																				<span class="badge badge-purple">1 Ponto</span>
@@ -3052,7 +3038,7 @@
 																		<tr><!-- 3Reg -->
 																			
 																			<td>
-																				<span class="badge badge-danger">Mais de um item marcado na escala</span>
+																				<span class="badge badge-danger">Mais de um item marcado na escala.</span>
 																			</td>
 																			<td>
 																				<span class="badge badge-purple">2 Pontos</span>
@@ -3563,7 +3549,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												Correção</h4>
+												Correção.</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
@@ -3613,7 +3599,7 @@
 																		</tr>
 																		<tr><!-- 3Reg -->
 																			<td>
-																				<span class="badge badge-success">Até 14 Pontos</span>
+																				<span class="badge badge-success">Até 14 Pontos.</span>
 																			</td>
 																			<td>
 																				<span>Indicativo de  atraso no desenvolvimento</span>
@@ -3624,7 +3610,7 @@
 																</table>
 															</div>
 														</div>
-														<label>Comentários</label>
+														<label>Comentários:</label>
 														<div class="form-group">
 															<div class="col-sm-12">
 																<textarea type="text" name="ataCorrec" id="ataCorrec" placeholder="Insira seus comentários aqui!" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>

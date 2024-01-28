@@ -2,21 +2,11 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const EspecializacaoSchema = mongoose.Schema({
-    especializacao_nome: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    especializacao_descricao: {
-        type: String,
-
-    },
-    especializacao_datacad: {
-        type: Date
-    },
-    especializacao_dataedi: {
-        type: Date
-    }
+    especializacao_nome: { type: String, unique: true, required: true },
+    especializacao_descricao: {type: String },
+    especializacao_vis: {type: String },
+    especializacao_datacad: { type: Date },
+    especializacao_dataedi: { type: Date }
     
 })
 
@@ -24,11 +14,13 @@ class Especializacao{
     constructor(
         especializacao_nome,
         especializacao_descricao,
+        especializacao_vis,
         especializacao_datacad,
         especializacao_dataedi
         ){
         this.especializacao_nome = especializacao_nome,
         this.especializacao_descricao = especializacao_descricao,
+        thid.especializacao_vis = especializacao_vis,
         this.especializacao_datacad = especializacao_datacad,
         this.especializacao_dataedi = especializacao_dataedi
     }
@@ -48,6 +40,7 @@ module.exports = {EspecializacaoModel,EspecializacaoSchema,
             {$set: {
                 especializacao_nome: req.body.especializacaoNome,
                 especializacao_descricao: req.body.especializacaoDescricao,
+                especializacao_vis: req.body.especializacaoVis,
                 especializacao_edi: dataAtual
                 }}
         ).then((res) =>{
@@ -67,6 +60,7 @@ module.exports = {EspecializacaoModel,EspecializacaoSchema,
             const newEspecializacao = new EspecializacaoModel({
                 especializacao_nome: req.body.especializacaoNome,
                 especializacao_descricao: req.body.especializacaoDescricao,
+                especializacao_vis: req.body.especializacaoVis,
                 especializacao_datacad: dataAtual
             });
             console.log("newEspecializacao save");
