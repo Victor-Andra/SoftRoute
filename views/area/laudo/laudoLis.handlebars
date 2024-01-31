@@ -6,6 +6,12 @@
 
 		
 		<script>
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar esse Laudo? essa ação é irreversível");
+				if(confirmado == true){
+					window.location.href=("/menu/area/laudo/del/"+id);
+				}
+			}
 			function carregaBody(){
 				let arraydt = document.getElementsByName("datalaudo");
 				let arraydtedi = document.getElementsByName("datalaudoedi");
@@ -149,10 +155,10 @@
 																<a class="green" href="/menu/area/laudo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																<a class="hidden" class="blue" href="">
+																<a class="hidden" class="blue" >
 																	<i class="ace-icon fa fa-print bigger-130"></i>
 																</a>
-																<a class="hidden" class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
 															</div>

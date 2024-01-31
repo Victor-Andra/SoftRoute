@@ -159,7 +159,7 @@
 			document.getElementById("beneEscolaoutro3tel").value = document.getElementById("beneEscolaoutro3telEdi").value;
 			
 			document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
-			
+			document.getElementById("beneEscolaemal").value = document.getElementById("beneEscolaemailEdi").value;
 			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
 			document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
 			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
@@ -265,7 +265,7 @@
 			<input id="beneEscolaoutro3telEdi" name="beneEscolaoutro3telEdi" value="{{beneEdi.bene_escolaoutro3tel}}"/>
 			
 			<input id="beneEscolaturnoEdi" name="beneEscolaturnoEdi" value="{{beneEdi.bene_escolaturno}}"/>
-			
+			<input type="text" id="beneEscolaemailEdi" name="beneEscolaemailEdi" value="{{beneEdi.bene_escolaemail}}"/>
 			<input type="text" id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
 			<input type="text" id="beneObsadmEdi" name="beneObsadmEdi" value="{{beneEdi.bene_obsadm}}"/>
 			<input type="text" id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
@@ -1050,6 +1050,16 @@
 																		<i class="green ace-icon fa fa-whatsapp"></i>
 																	</span>
 																	<input name="beneEscolaoutro3tel" id="beneEscolaoutro3tel"  class="document-control input-mask-phone" type="text" style="width: 200px;" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-12">
+																<label> E-mail </label>
+																<div class="input-group">
+																	<div>
+																		<input type="text"  name="beneEscolaemail" id="beneEscolaemail" class="form-control" style="width: 350px;"/>
+																	</div>
 																</div>
 															</div>
 														</div>

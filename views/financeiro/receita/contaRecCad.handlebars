@@ -14,7 +14,8 @@
 		
 			function atualizaDadosbene(){
 				let beneid = document.getElementById("contarecBeneid").value;
-				
+				document.getElementById("contarecConvid").value = null;
+
 				document.getElementById("contarecBenenome").value = document.getElementById(beneid+"_beneNome").value;
 				document.getElementById("contarecTomador").value = document.getElementById(beneid+"_beneOrdemnome").value;
 				document.getElementById("contarecCpfcnpj").value = document.getElementById(beneid+"_beneOrdemdoc").value;
@@ -22,7 +23,7 @@
 				document.getElementById("contarecConvid").value = document.getElementById(beneid+"_beneConvid").value;
 				
 				let convid = document.getElementById("contarecConvid").value;
-				console.log(convid);
+				
 				document.getElementById("contarecConvnomeTemp").value = document.getElementById(convid+"_beneConvnome").value;
 
 			}
@@ -273,12 +274,7 @@
 																<input type="text" name="contarecTipo" id="contarecTipo" placeholder=""  />
 															</div>
 														</div>
-														<label> Convenio Id referência</label>
-														<div class="form-group">
-															<div class="col-sm-3">
-																<input type="text" name="contarecConvid" id="contarecConvid" placeholder="" />
-															</div>
-														</div>
+														
 														<label> Nome Beneficiário referência</label>
 														<div class="form-group">
 															<div class="col-sm-3">
@@ -358,7 +354,7 @@
 																	</label>
 																</td>
 																<td class="text-center align-middle">
-																	<select class="col-xs-9 col-sm-9" name="contarecNftipo" id="contarecNftipo" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:contaRecTiponf();">
+																	<select class="col-xs-9 col-sm-9" name="contarecNftipo" id="contarecNftipo" class="chosen-select"   onchange="javascript:contaRecTiponf();">
 																		<option value="-">-</option>
 																		<option value="Beneficiário">Beneficiário</option>
 																		<option value="Lote">Lote</option>
@@ -403,7 +399,7 @@
 																	</tr>
 																	<tr>
 																		<td colspan="2" name="linbene">
-																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
+																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select"   onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each benes}}
 																					<option value="{{_id}}">{{bene_nome}}</option>
@@ -416,10 +412,10 @@
 																			<label> Convênio</label>
 																		</td>
 																	</tr>
-																	<tr name="linconv" hidden>
+																	<tr name="linconv" >
 																		<td colspan="2">
-																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvidSelect" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaDadosconv();preencherAlqimpostos();">
-																				<option value="766f69643132333435366964">-</option>
+																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvidSelect" class="chosen-select"  onchange="javascript:atualizaDadosconv();preencherAlqimpostos();">
+																				<option value="">-</option>
 																				{{#each convs}}
 																					<option value="{{_id}}">{{conv_nome}}</option>
 																				{{/each}}
@@ -520,7 +516,7 @@
 																	<tr>
 																		<td>
 																			
-																			<select class="col-xs-9 col-sm-9" name="contarecFormapg" id="contarecFormapg" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
+																			<select class="col-xs-9 col-sm-9" name="contarecFormapg" id="contarecFormapg" class="chosen-select"   onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
 																				<option value="-">-</option>
 																				<option value="Pix">Pix</option>
 																				<option value="Boleto">Boleto</option>
