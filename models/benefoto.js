@@ -1,44 +1,54 @@
-const { data } = require('jquery')
 const mongoose = require('mongoose')
-const usuario = require('./usuario')
 const ObjectId = mongoose.Types.ObjectId
 
-const BenefotoSchema = mongoose.Schema({
-    benefoto_beneId:{ type: ObjectId, required: true },
-    benefoto_foto: { type: Buffer, required: false, },// Utiliza Buffer para armazenar dados binários da imagem
-    benefoto_datacad:{ type: Date, required: false },
-    benefoto_dataedi:{ type: Date, required: false }
+//Biblioteca de gestão de Imagens para o banco
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Armazena a imagem na memória como um Buffer
+const upload = multer({ storage: storage });
+
+const BeneFotoSchema = mongoose.Schema({
+    beneFoto_foto: {type: Buffer, required: false},
+    beneFoto_beneid: { type: String, required: false },
+    beneFoto_obs: { type: String, required: false },
+    beneFoto_datacad: { type: Date },
+    beneFoto_dataedi: { type: Date }
+    
 })
 
-class Benefoto{
+class BeneFoto{
     constructor(
-        benefoto_beneId,
-        benefoto_foto,
-        benefoto_datacad,
-        benefoto_dataedi
-    ){
-        this.benefoto_beneId = benefoto_beneId,
-        this.benefoto_foto = benefoto_foto,
-        this.benefoto_datacad = benefoto_datacad,
-        this.benefoto_dataedi = benefoto_dataedi
+        beneFoto_foto,
+        beneFoto_beneid,
+        beneFoto_obs,
+        beneFoto_datacad,
+        beneFoto_dataedi
+        ){
+        this.beneFoto_foto = beneFoto_foto,
+        this.beneFoto_beneid = beneFoto_beneid,
+        this.beneFoto_obs = beneFoto_obs,
+        this.beneFoto_datacad = beneFoto_datacad,
+        this.beneFoto_dataedi = beneFoto_dataedi
     }
 }
 
-BenefotoSchema.loadClass(Benefoto)
-const BenefotoModel = mongoose.model('tb_benefoto', BenefotoSchema)
-module.exports = {BenefotoModel,BenefotoSchema,
-    benefotoEditar: async (req, res) => {
+
+BeneFotoSchema.loadClass(BeneFoto)
+const BeneFotoModel = mongoose.model('tb_benefoto', BeneFotoSchema)
+module.exports = {BeneFotoModel,BeneFotoSchema,
+    beneFotoEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
         
         //Realiza Atualização
-        await BenefotoModel.findByIdAndUpdate(req.body.id, 
+        await BeneFotoModel.findByIdAndUpdate(req.body.beneFotoId, 
             {$set: {
-                benefoto_beneId: req.body.benefotoBeneId,
-                benefoto_foto: req.body.benefotoFoto,
-                benefoto_dataedi: dataAtual
-            }}
+                beneFoto_foto: req.body.beneFotoFoto,
+                beneFoto_beneid: req.body.beneFotoBeneid,
+                beneFoto_obs: req.body.beneFotoObs,
+                beneFoto_dataedi: dataAtual
+                }}
+                
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -50,27 +60,27 @@ module.exports = {BenefotoModel,BenefotoSchema,
         })
         return resultado;
     },
-    benefotoAdicionar: async (req,res) => {
-        let benefotoExiste =  await BenefotoModel.findOne({benefoto_beneId: req.body.benefotoBeneId});//quando não acha fica null
+
+    beneFotoAdicionar: async (req,res) => {
+        
         let dataAtual = new Date();
         
-        if(benefotoExiste){//se tiver null cai no else
-            return "A foto para o beneficiário já existe";
-        } else {
-            console.log("benemodel");
-            const newBene = new BeneModel({
-                benefoto_beneId: req.body.benefotoBeneId,
-                benefoto_foto: req.body.benefotoFoto,
-                benefoto_datacad: dataAtual                
+        
+            console.log("beneFotomodel");
+            const newBeneFoto = new BeneFotoModel({
+                beneFoto_foto: req.body.beneFotoFoto,
+                beneFoto_beneid: req.body.beneFotoBeneid,
+                beneFoto_obs: req.body.beneFotoObs,
+                beneFoto_datacad: dataAtual
             });
-            console.log("newBene save");
-            await newBene.save().then(()=>{
+            console.log("newBeneFoto save");
+            await newBeneFoto.save().then(()=>{
                 console.log("Cadastro realizado!");
                 return true;
             }).catch((err) => {
                 console.log(err)
                 return err;
             });
-        }
+        
     }
 };

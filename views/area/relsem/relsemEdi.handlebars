@@ -50,18 +50,30 @@
 
 				this.atualizaDadosbene();
 			}
-			function calculaIdade(dataFmt){
-				let dataAtual = new Date();
-				let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
-				let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
-				console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
-				console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
-				let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
-				if (dias < 0){
-					mes = mes-1;
+			function calculaIdade(dataFmt) {
+				// Data atual
+				const hoje = new Date();
+
+				// Data de aniversário
+				const aniversario = new Date(dataFmt);
+
+				// Cálculo da idade
+				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+
+				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
+				if (hoje.getDate() < aniversario.getDate()) {
+					idadeMeses--;
 				}
-				return (ano + " anos e " + mes + " meses.");
-			}
+
+				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
+				if (idadeMeses < 0) {
+					idadeAnos--;
+					idadeMeses += 12;
+				}
+				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
+				
+				}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">

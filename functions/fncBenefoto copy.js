@@ -16,7 +16,6 @@ const Bene = mongoose.model("tb_bene")
 const Usuario = mongoose.model("tb_usuario")
 
 
-
 module.exports = {
     carregaFotoLis(req,res){
         let base64Image;
@@ -33,26 +32,29 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    
     cadastrarFoto(req,res){
-        console.log('Iniciando cadastrarFoto...');
-        let resposta
-        let cadastro = benefotoClass.beneFotoAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
-        cadastro.then((result)=>{
-            resposta = true;
-        }).catch((err)=>{
-            resposta = err
-            console.log("ERRO:"+err)
+        let flash = new Resposta();
+        let resposta = false;
+        benefotoClass.benefotoAdicionar(req,res).then((ok)=>{
+            if (ok == "true"){
+                resposta = true;
+            }
+        }).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao acessar o Cadastrar a foto")
+            res.redirect('admin/erro')
         }).finally(()=>{
-            if (resposta == true){
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                
-            } else {
-                console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro');
+            if(resposta== true){
+                //Volta para a agenda de listagem
+                flash.texto = "Foto cadastrada com sucesso!"
+                flash.sucesso = "true"
+                //console.log('verdadeiro')
+                res.render('admin/branco', {flash});
+            }else{
+                //passar classe de erro
+                flash.texto = "Erro ao cadastrar a foto!"
+                flash.sucesso = "false"
+                res.render('admin/branco', {flash});
             }
         })
     }

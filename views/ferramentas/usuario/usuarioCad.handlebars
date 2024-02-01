@@ -10,6 +10,7 @@
 		}
 		</style>
 		<script>
+			
 			function carregarImagem() {
 				var preview = document.getElementById('previewImage');
 				var fileInput = document.getElementById('usuarioCarimbo');
@@ -331,7 +332,7 @@
 														<label >Escolaridade</label>
 														<div class="form-group">
 															<div class="col-sm-4">
-																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" data-placeholder="Escolha...">
+																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" >
 																	<option value="-">-</option>
 																	<option value="Fundamental">Fundamental</option>
 																	<option value="Médio">Médio</option>
@@ -356,13 +357,7 @@
 																	<tbody>
 																		<tr>
 																			<td>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioGraduacaoOp" id="usuarioGraduacaoOp" type="checkbox" class="ace" value="62e0a08e8a788c70d0f92b92" onchange="javascript:updateUsuarioGraduacao()">
-																						<span class="lbl">&nbsp;Não possui</span>
-																					</label>
-																				</div>
-																				<br>
+																				
 																				{{#each especialidades}}
 																				<div class="checkbox">
 																					<label>
@@ -373,23 +368,11 @@
 																				
 																				{{else}}
 																				{{/each}}
-																				<br>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioGraduacaoOp" id="usuarioGraduacaoOp" type="checkbox" class="ace" value="65a69909c0951c268de5b7f7" onchange="javascript:updateUsuarioGraduacao()">
-																						<span class="lbl">&nbsp;Outros</span>
-																					</label>
-																				</div>
+																				
 																			</td>
 																			
 																			<td>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" type="checkbox" class="ace" value="62e0a5e2e62111b08881e231" onchange="javascript:updateUsuarioGraduacao()">
-																						<span class="lbl">&nbsp;Não possui</span>
-																					</label>
-																				</div>
-																				<br>
+																				
 																				{{#each especializacaos}}
 																				<div class="checkbox">
 																					<label>
@@ -399,22 +382,10 @@
 																				</div>
 																				{{else}}
 																				{{/each}}
-																				<br>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioEspecializacaoOp" id="usuarioEspecializacaoOp" type="checkbox" class="ace" value="65a69882c0951c268de5b725" onchange="javascript:updateUsuarioGraduacao()">
-																						<span class="lbl">&nbsp;Outros</span>
-																					</label>
-																				</div>
+																				
 																			</td>
 																			<td>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="65a68d7ac0951c268de59092" onchange="javascript:updateUsuarioGraduacao()">
-																						<span class="lbl">&nbsp;Não possui</span>
-																					</label>
-																				</div>
-																				<br>
+																				
 																				{{#each metodos}}
 																				<div class="checkbox">
 																					<label>
@@ -425,13 +396,7 @@
 																				
 																				{{else}}
 																				{{/each}}
-																				<br>
-																				<div class="checkbox">
-																					<label>
-																						<input name="usuarioMetodoOp" id="usuarioMetodoOp" type="checkbox" class="ace" value="65a69895c0951c268de5b779" onchange="javascript:updateUsuarioMetodo()">
-																						<span class="lbl">&nbsp;Outros</span>
-																					</label>
-																				</div>
+																				
 																			</td>
 																		</tr>
 																		<tr hidden>

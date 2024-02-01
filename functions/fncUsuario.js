@@ -427,13 +427,13 @@ module.exports = {
         }).finally(()=>{
             if(resposta== true){
                 //Volta para a agenda de listagem
-                flash.texto = "Palavra Chave cadastrada com sucesso!"
+                flash.texto = "Carimbo cadastrado com sucesso!"
                 flash.sucesso = "true"
                 //console.log('verdadeiro')
                 res.render('admin/branco', {flash});
             }else{
                 //passar classe de erro
-                flash.texto = "Erro ao cadastrar chave!"
+                flash.texto = "Erro ao cadastrar carimbo!"
                 flash.sucesso = "false"
                 res.render('admin/branco', {flash});
             }
