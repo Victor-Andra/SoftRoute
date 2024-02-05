@@ -3,7 +3,7 @@
 	<head>
 		<title>Escala CARS</title>
 		<script type="text/javascript">
-		function formatarNumero(valor) {
+			function formatarNumero(valor) {
 				return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 			}
 
@@ -13,48 +13,29 @@
 				var totalQ01 = parseFloat($('input[name="carsQ01"]:checked').val()) || 0;
 				var totalQ02 = parseFloat($('input[name="carsQ02"]:checked').val()) || 0;
 				var totalQ03 = parseFloat($('input[name="carsQ03"]:checked').val()) || 0;
-				var totalQ04 = parseFloat($('input[name="carsQ04"]:checked').val()) || 0;
-				var totalQ05 = parseFloat($('input[name="carsQ05"]:checked').val()) || 0;
-				var totalQ06 = parseFloat($('input[name="carsQ06"]:checked').val()) || 0;
-				var totalQ07 = parseFloat($('input[name="carsQ07"]:checked').val()) || 0;
-				var totalQ08 = parseFloat($('input[name="carsQ08"]:checked').val()) || 0;
-				var totalQ09 = parseFloat($('input[name="carsQ09"]:checked').val()) || 0;
-				var totalQ10 = parseFloat($('input[name="carsQ10"]:checked').val()) || 0;
-				var totalQ11 = parseFloat($('input[name="carsQ11"]:checked').val()) || 0;
-				var totalQ12 = parseFloat($('input[name="carsQ12"]:checked').val()) || 0;
-				var totalQ13 = parseFloat($('input[name="carsQ13"]:checked').val()) || 0;
-				var totalQ14 = parseFloat($('input[name="carsQ14"]:checked').val()) || 0;
-				var totalQ15 = parseFloat($('input[name="carsQ15"]:checked').val()) || 0;
 				// Adicione mais linhas conforme necessário para cada pergunta
 
 				// Calcular o total geral
-				var totalGeral = totalQ01 + totalQ02 + totalQ03 + totalQ04 + totalQ05
-							   + totalQ06 + totalQ07 + totalQ08 + totalQ09 + totalQ10
-							   + totalQ11 + totalQ12 + totalQ13 + totalQ14 + totalQ15; // Adicione mais totais conforme necessário
-				// Atualizar o campo totais viziveis e o total geral
-				
-				document.getElementById("TTcars").value = formatarNumero(totalGeral);
+				var totalGeral = totalQ01 + totalQ02 + totalQ03; // Adicione mais totais conforme necessário
 
 				// Atualizar os campos totais
 				$('#carsTq01').val(formatarNumero(totalQ01));
 				$('#carsTq02').val(formatarNumero(totalQ02));
 				$('#carsTq03').val(formatarNumero(totalQ03));
-				$('#carsTq04').val(formatarNumero(totalQ04));
-				$('#carsTq05').val(formatarNumero(totalQ05));
-				$('#carsTq06').val(formatarNumero(totalQ06));
-				$('#carsTq07').val(formatarNumero(totalQ07));
-				$('#carsTq08').val(formatarNumero(totalQ08));
-				$('#carsTq09').val(formatarNumero(totalQ09));
-				$('#carsTq10').val(formatarNumero(totalQ10));
-				$('#carsTq11').val(formatarNumero(totalQ11));
-				$('#carsTq12').val(formatarNumero(totalQ12));
-				$('#carsTq13').val(formatarNumero(totalQ13));
-				$('#carsTq14').val(formatarNumero(totalQ14));
-				$('#carsTq15').val(formatarNumero(totalQ15));
+				// Atualize os IDs e adicione mais linhas conforme necessário para cada pergunta
+
+				// Atualizar o campo de total geral
+				$('#carsTqGeral').val(formatarNumero(totalGeral));
+
+				
+				// Atualize o campo total
+				document.getElementById("TTcars").value = formatarNumero(valores.reduce((a, b) => a + b, 0));
+
 				
 			}
 			
-		</script>
+			
+			</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -77,7 +58,46 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/escalas/cars/add" method="POST">
-								
+								<div class="col-sm-12">
+									<div class="widget-box collapsed">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+												Registro de Operadores
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<!-- campos totais-->
+												<!-- Registro de Operadores temporarios tipo texto para inserir no banco-->
+												<input name="carsTq01" id="carsTq01" type="text" class="ace" >
+												<input name="carsTq02" id="carsTq02" type="text" class="ace" >
+												<input name="carsTq03" id="carsTq03" type="text" class="ace" >
+												<input name="carsTq04" id="carsTq04" type="text" class="ace" >
+												<input name="carsTq05" id="carsTq05" type="text" class="ace" >
+												<input name="carsTq05" id="carsTq05" type="text" class="ace" >
+												<input name="carsTq07" id="carsTq07" type="text" class="ace" >
+												<input name="carsTq08" id="carsTq08" type="text" class="ace" >
+												<input name="carsTq09" id="carsTq09" type="text" class="ace" >
+												<input name="carsTq10" id="carsTq10" type="text" class="ace" >
+												<input name="carsTq11" id="carsTq11" type="text" class="ace" >
+												<input name="carsTq12" id="carsTq12" type="text" class="ace" >
+												<input name="carsTq13" id="carsTq13" type="text" class="ace" >
+												<input name="carsTq14" id="carsTq14" type="text" class="ace" >
+												<input name="carsTq15" id="carsTq15" type="text" class="ace" >
+												
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="col-xs-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -268,7 +288,7 @@
 																			<span>Relacionamento inter-pessoal</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq01" id="carsTq01" type="text" style="width:50px">
+																			<input name="carsQ01" id="carsQ01" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 2Reg -->
@@ -277,7 +297,7 @@
 																			<span>Imitação</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq02" id="carsTq02" type="text" style="width:50px" >
+																			<input name="carsQ02" id="carsQ02" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 3Reg -->
@@ -286,7 +306,7 @@
 																			<span>Resposta emocional</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq03" id="carsTq03" type="text" style="width:50px" >
+																			<input name="carsQ03" id="carsQ03" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 4Reg -->
@@ -295,7 +315,7 @@
 																			<span>Expressão corporal</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq04" id="carsTq04" type="text" style="width:50px">
+																			<input name="carsQ04" id="carsQ04" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 5Reg -->
@@ -304,7 +324,7 @@
 																			<span>Uso de objetos</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq05" id="carsTq05" type="text" style="width:50px">
+																			<input name="carsQ05" id="carsQ05" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 6Reg -->
@@ -313,7 +333,7 @@
 																			<span>Adaptação a mudanças</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq06" id="carsTq06" type="text" style="width:50px" >
+																			<input name="carsQ06" id="carsQ06" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 7Reg -->
@@ -322,7 +342,7 @@
 																			<span>Uso do olhar</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq07" id="carsTq07" type="text" style="width:50px" >
+																			<input name="carsQ07" id="carsQ07" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 8Reg -->
@@ -331,7 +351,7 @@
 																			<span>Uso da audição</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq08" id="carsTq08" type="text" style="width:50px">
+																			<input name="carsQ08" id="carsQ08" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 9Reg -->
@@ -340,7 +360,7 @@
 																			<span>Uso do paladar, olfato e do tato</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq09" id="carsTq09" type="text" style="width:50px">
+																			<input name="carsQ09" id="carsQ09" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 10Reg -->
@@ -349,7 +369,7 @@
 																			<span>Medo e nervosismo</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq10" id="carsTq10" type="text" style="width:50px" >
+																			<input name="carsQ10" id="carsQ10" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 11Reg -->
@@ -358,7 +378,7 @@
 																			<span>Comunicação verbal</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq11" id="carsTq11" type="text" style="width:50px" >
+																			<input name="carsQ11" id="carsQ11" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 12Reg -->
@@ -367,7 +387,7 @@
 																			<span>Comunicação não-verbal</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq12" id="carsTq12" type="text" style="width:50px">
+																			<input name="carsQ12" id="carsQ12" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 13Reg -->
@@ -376,7 +396,7 @@
 																			<span>Atividade</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq13" id="carsTq13" type="text" style="width:50px">
+																			<input name="carsQ13" id="carsQ13" type="text" style="width:30px">
 																		</td>
 																	</tr>
 																	<tr><!-- 14Reg -->
@@ -385,7 +405,7 @@
 																			<span>Grau e consistência das respostas da inteligência</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq14" id="carsTq14" type="text" style="width:50px" >
+																			<input name="carsQ14" id="carsQ14" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	<tr><!-- 15Reg -->
@@ -394,7 +414,7 @@
 																			<span>Impressão geral</span>
 																		</td>
 																		<td>	
-																			<input name="carsTq15" id="carsTq15" type="text" style="width:50px" >
+																			<input name="carsQ15" id="carsQ15" type="text" style="width:30px" >
 																		</td>
 																	</tr>
 																	
@@ -675,7 +695,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars011" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars11" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -699,7 +719,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars012" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars12" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -723,7 +743,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars013" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars13" type="radio" value="2" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -747,7 +767,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars014" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars14" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -771,7 +791,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars015" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars15" type="radio" value="3" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -795,7 +815,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars016" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars16" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -819,7 +839,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ01" id="cars017" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ01" id="cars17" type="radio" value="4" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -869,7 +889,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars021" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars21" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -893,7 +913,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars022" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars22" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -917,7 +937,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars023" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars23" type="radio" value="2" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -941,7 +961,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars024" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars24" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -965,7 +985,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars025" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars25" type="radio" value="3" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -989,7 +1009,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars026" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars26" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1013,7 +1033,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ02" id="cars027" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ02" id="cars27" type="radio" value="4" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1063,7 +1083,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars031" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars31" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1087,7 +1107,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars032" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars32" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1111,7 +1131,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars033" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars33" type="radio" value="2" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1135,7 +1155,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars034" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars34" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1159,7 +1179,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars035" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars35" type="radio" value="3" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1183,7 +1203,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars036" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars36" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1207,7 +1227,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ03" id="cars037" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ03" id="cars37" type="radio" value="4" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1257,7 +1277,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars041" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars41" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1281,7 +1301,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars042" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars42" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1305,7 +1325,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars043" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars43" type="radio" value="2" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1329,7 +1349,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars044" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars44" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1353,7 +1373,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars045" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars45" type="radio" value="3" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1377,7 +1397,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars046" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars46" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1401,7 +1421,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ04" id="cars047" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ04" id="cars47" type="radio" value="4" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1451,7 +1471,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars051" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars51" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1477,7 +1497,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars052" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars52" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1503,7 +1523,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars053" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars53" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1529,7 +1549,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars054" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars54" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1555,7 +1575,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars055" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars55" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1581,7 +1601,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars056" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars56" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1607,7 +1627,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ05" id="cars057" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ05" id="cars57" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1659,7 +1679,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars061" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars61" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1685,7 +1705,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars062" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars62" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1711,7 +1731,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars063" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars63" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1737,7 +1757,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars064" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars64" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1763,7 +1783,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars065" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars65" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1789,7 +1809,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars066" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars66" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1815,7 +1835,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ06" id="cars067" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ06" id="cars67" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1867,7 +1887,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="cars07" id="cars071" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="cars7" id="cars71" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1893,7 +1913,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars072" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars72" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1919,7 +1939,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars073" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars73" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1945,7 +1965,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars074" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars74" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1971,7 +1991,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars075" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars75" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -1997,7 +2017,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars076" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars76" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2023,7 +2043,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ07" id="cars077" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ07" id="cars77" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2075,7 +2095,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars081" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars81" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2101,7 +2121,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars082" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars82" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2127,7 +2147,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars083" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars83" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2153,7 +2173,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars084" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars84" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2179,7 +2199,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars085" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars85" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2205,7 +2225,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars086" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars86" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2231,7 +2251,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ08" id="cars087" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ08" id="cars87" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2283,7 +2303,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars091" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars91" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2309,7 +2329,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars092" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars92" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2335,7 +2355,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars093" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars93" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2361,7 +2381,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars094" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars94" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2387,7 +2407,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars095" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars95" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2413,7 +2433,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars096" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars96" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2439,7 +2459,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ09" id="cars097" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ09" id="cars97" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2517,7 +2537,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars102" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars102" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2543,7 +2563,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars103" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars103" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2569,7 +2589,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars104" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars104" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2595,7 +2615,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars105" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars105" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2621,7 +2641,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars106" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars106" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2647,7 +2667,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ10" id="cars107" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ10" id="cars107" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2725,7 +2745,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars112" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars112" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2751,7 +2771,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars113" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars113" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2777,7 +2797,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars114" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars114" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2803,7 +2823,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars115" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars115" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2829,7 +2849,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars116" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars116" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2855,7 +2875,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ11" id="cars117" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ11" id="cars117" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2933,7 +2953,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars122" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars122" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2959,7 +2979,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars123" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars123" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -2985,7 +3005,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars124" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars124" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3011,7 +3031,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars125" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars125" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3037,7 +3057,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars126" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars126" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3063,7 +3083,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ12" id="cars127" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ12" id="cars127" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3141,7 +3161,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars132" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ13" id="cars132" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3167,7 +3187,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars133" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ14" id="cars133" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3193,7 +3213,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars134" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ14" id="cars134" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3219,7 +3239,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars135" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ14" id="cars135" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3245,7 +3265,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars136" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ14" id="cars136" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3271,7 +3291,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ13" id="cars137" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ14" id="cars137" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3323,7 +3343,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars141" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ15" id="cars141" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3349,7 +3369,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars142" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ15" id="cars142" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3375,7 +3395,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars143" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ15" id="cars143" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3401,7 +3421,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars144" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ15" id="cars144" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3427,7 +3447,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars145" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="carsQ15" id="cars145" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3453,7 +3473,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars146" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="cars14" id="cars146" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3479,7 +3499,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ14" id="cars147" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="cars14" id="cars147" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3531,7 +3551,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars151" type="radio" value="1" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars151" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3557,7 +3577,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars152" type="radio" value="1.5" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars152" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3583,7 +3603,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars153" type="radio" value="2" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars153" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3609,7 +3629,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars154" type="radio" value="2.5" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars154" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3635,7 +3655,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars155" type="radio" value="3" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars155" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3661,7 +3681,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars156" type="radio" value="3.5" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars156" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>
@@ -3687,7 +3707,7 @@
 																										<div>
 																											<div class="radio">
 																												<label>
-																													<input name="carsQ15" id="cars157" type="radio" value="4" class="ace" onchange="atualizarTotais()">
+																													<input name="cars15" id="cars157" type="radio" value="1" class="ace" onchange="atualizarTotais()">
 																													<span class="lbl">&nbsp;</span>
 																												</label>
 																											</div>

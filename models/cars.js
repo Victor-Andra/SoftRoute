@@ -9,8 +9,8 @@ const CarsSchema = mongoose.Schema({
     cars_beneidade :{ type: String, required: false },
     cars_preechido :{ type: String, required: false },
     cars_parentesco :{ type: String, required: false },
-    cars_carsdata :{ type: Date, required: true },
-    cars_terapeutaid :{ type: ObjectId, required: true },
+    cars_carsdata :{ type: Date, required: false },
+    cars_terapeutaid :{ type: ObjectId, required: false },
     cars_info :{ type: String, required: false },
     //atributos de pontuação
     cars_tq01: { type: String, required: false },

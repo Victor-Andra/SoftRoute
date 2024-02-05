@@ -11,11 +11,13 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const respostaClass = require("../models/resposta")
 
 //Tabela NAT
 const Cars = mongoose.model("tb_cars")
 
 //Tabelas Extrangeiras
+const Resposta = mongoose.model("tb_resposta")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
@@ -86,37 +88,35 @@ module.exports = {
     cadastraCars(req,res){
         console.log("chegou")
         let resultado
-        let resposta = new Resposta()
+        let flash = new Resposta();
         
-        carsClass.cadastraCarsFisio(req,res).then((result)=>{
+        carsClass.carsAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
-            console.log(res)
+            console.log(result)
             resultado = true;
         }).catch((err)=>{
             resultado = err
-            console.log("ERRO:"+err)
+            console.log("ERRO:")
         }).finally(()=>{
             if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+                flash.texto = "ATA cadastrada com sucesso!"
+                flash.sucesso = "true"
                 console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaCars(req,res,resposta)
+                this.listaCars(req,res,flash)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
+                flash.texto = resultado
+                flash.sucesso = "false"
                 console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro', flash);
             }
         })
-    },
+    },   
 
     atualizaCars(req,res){
         let resultado
         let resposta = new Resposta()
         try{
-            carsClass.escolaEditar(req,res).then((res)=>{
+            carsClass.carsEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -157,7 +157,7 @@ module.exports = {
                             console.log("Listagem Realizada de Usuário")
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Carsamento Fisioterapêutico deletado!")
+                req.flash("success_message", "CARS deletado!")
                 res.render('area/escalas/cars/carsLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)

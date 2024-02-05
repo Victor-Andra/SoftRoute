@@ -2060,13 +2060,26 @@ router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{/
 
 //Menu CARS ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/escalas/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o formulário de cadastro
     fncCars.carregaCars(req, res);
+})
+//Cadastrar
+router.post('/area/escalas/cars/add', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro ao banco
+    fncCars.cadastraCars(req, res);
 })
 
 //Lista CARS por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/escalas/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a lista de CARS
     fncCars.listaCars(req, res);
+})
+//carrega registro para edição
+router.get('/area/escalas/cars/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+    fncCars.carregaCarsEdi(req, res);
+})
+
+//Deleta CARS Selecionado
+router.get('/area/escalas/cars/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
+    fncCars.deletaCars(req,res);
 })
 
 //Menu Notasup ** Area Tecnicos e ABA 

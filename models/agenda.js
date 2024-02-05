@@ -660,7 +660,6 @@ module.exports = {AgendaModel,AgendaSchema,
                 busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
             
                 troca = {'agenda_usuid': novoteraidx};
-                console.log("AQUI Ó")
 
             await AgendaModel.find(busca).then((ag)=>{console.log("ag.lenhgt"+ag.length)})
             await AgendaModel.updateMany(
