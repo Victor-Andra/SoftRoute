@@ -30,6 +30,7 @@
 			document.getElementById("bordoOndefoi").value = document.getElementById("bordoOndefoiEdi").value;
 								
 			document.getElementById("bordoEscolaid").value = document.getElementById("bordoEscolaidEdi").value;
+			document.getElementById("bordoEscolanome").value = document.getElementById("bordoEscolanomeEdi").value;
 			document.getElementById("bordoFrequencia").value = document.getElementById("bordofrequenciaEdi").value;
 			
 			document.getElementById("bordoSeguerotina").value = document.getElementById("bordoSeguerotinaEdi").value;
@@ -120,7 +121,7 @@
 						<div id="divCarrega" name="divCarrega" class="hidden">
 							<input id="bordoBeneidEdi" name="bordoBeneidEdi" value="{{bordo.bordo_beneid}}"/>
 							<input id="bordoEscolaidEdi" name="bordoEscolaidEdi" value="{{bordo.bordo_escolaid}}"/>
-							
+							<input id="bordoEscolanomeEdi" name="bordoEscolanomeEdi" value="{{bordo.bordo_escolanome}}"/>
 							<input id="bordoAtendemEdi" name="bordoAtendemEdi" value="{{bordo.bordo_atendem}}"/>
 							<input id="bordoOndefoiEdi" name="bordoOndefoiEdi" value="{{bordo.bordo_ondefoi}}"/>
 
@@ -278,17 +279,33 @@
 														</div>
 													</div>
 												</div>
-												<label> Escola</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select"  >
-															<option value="-">-</option>
-															{{#each escolas}}
-																<option value="{{_id}}">{{escola_nome}}</option>
-															{{/each}}
-														</select>
-													</div>
-												</div>
+												<table>
+													<tr>
+														<td><label> Escola</label></td>
+													</tr>
+													<tr>
+														<td>
+															<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select" disabled>
+																<option value="-">-</option>
+																{{#each escolas}}
+																	<option value="{{_id}}">{{escola_nome}}</option>
+																{{/each}}
+															</select>
+														</td>
+														<td>
+															<select name="bordoEscolanome" id="bordoEscolanome" class="chosen-select">
+																<option value="-">-</option>
+																{{#each colegios}}
+																	{{#each this.colegio}}
+																	<option value="{{this}}">{{this}}</option>
+																	{{/each}}
+																{{/each}}
+															</select>
+														</td>
+													</tr>
+												</table>
+												
+												
 												<div class="row">
 													<div class="col-xs-12 col-sm-4">
 														<label>Data atividade</label><!--Data atividade-->

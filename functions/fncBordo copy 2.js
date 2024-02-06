@@ -265,26 +265,8 @@ module.exports = {
                         },
                         {
                           $project: {
-                            _id: 0,
-                            colegio: 1
-                          }
-                        },
-                        {
-                          $unwind: "$colegio" // Desdobra o array para permitir a ordenação
-                        },
-                        {
-                          $sort: { "colegio": 1 } // Ordena em ordem alfabética ascendente
-                        },
-                        {
-                          $group: {
-                            _id: null,
-                            colegio: { $push: "$colegio" }
-                          }
-                        },
-                        {
-                          $project: {
-                            _id: 0,
-                            colegio: 1
+                            _id: 0,  // Exclui o campo _id do resultado
+                            colegio: 1  // Mantém apenas o campo colegio no resultado
                           }
                         }
                       ]).exec((err, colegio) => {
@@ -293,7 +275,9 @@ module.exports = {
                           return;
                         }
                       
-                        //console.log("Resultado da consulta Bene.aggregate:", colegio);
+                        console.log("Resultado da consulta Bene.aggregate:", colegio);
+                      
+                        // Seu código aqui, 'colegio' agora contém itens únicos
                        
                         res.render("area/bordo/bordoCad", {colegios: colegio, escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
         })})})}).catch((err) =>{
@@ -479,51 +463,8 @@ module.exports = {
                                 console.log("Listagem Realizada de beneficiarios")
                                 Escola.find().then((escola) =>{
                                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    Bene.aggregate([
-                                        {
-                                          $match: {
-                                            "bene_escolanome": { "$ne": null, "$ne": "" }
-                                          }
-                                        },
-                                        {
-                                          $group: {
-                                            _id: "$bene_escolanome",
-                                            colegio: { $addToSet: "$bene_escolanome" }
-                                          }
-                                        },
-                                        {
-                                          $project: {
-                                            _id: 0,
-                                            colegio: 1
-                                          }
-                                        },
-                                        {
-                                          $unwind: "$colegio" // Desdobra o array para permitir a ordenação
-                                        },
-                                        {
-                                          $sort: { "colegio": 1 } // Ordena em ordem alfabética ascendente
-                                        },
-                                        {
-                                          $group: {
-                                            _id: null,
-                                            colegio: { $push: "$colegio" }
-                                          }
-                                        },
-                                        {
-                                          $project: {
-                                            _id: 0,
-                                            colegio: 1
-                                          }
-                                        }
-                                      ]).exec((err, colegio) => {
-                                        if (err) {
-                                          console.error("Erro na consulta Bene.aggregate:", err);
-                                          return;
-                                        }
-                                      
-                                        //console.log("Resultado da consulta Bene.aggregate:", colegio);    
-                                    res.render("area/bordo/bordoEdi", {colegios: colegio, bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, usuarioAtual})
-        })})})})})})}).catch((err) =>{
+                                        res.render("area/bordo/bordoEdi", {bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, usuarioAtual})
+        })})})})})}).catch((err) =>{
         
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

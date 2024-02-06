@@ -113,10 +113,12 @@
 												<label> Escola</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoEscolaid" id="bordoEscolaid" class="chosen-select"  >
-															<option value="766f69643132333435366964">-</option>
-															{{#each escolas}}
-																<option value="{{_id}}">{{escola_nome}}</option>
+														<select name="bordoEscolanome" id="bordoEscolanome" class="chosen-select">
+															<option value="-">-</option>
+															{{#each colegios}}
+																{{#each this.colegio}}
+																<option value="{{this}}">{{this}}</option>
+																{{/each}}
 															{{/each}}
 														</select>
 													</div>

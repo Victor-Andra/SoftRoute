@@ -460,6 +460,15 @@ const AnamnSchema = mongoose.Schema({
     
     anamn_brinquedopreferidosquais: { type: String, required: false }, //Ok
     anamn_obssocial: { type: String, required: false }, //Ok
+    //Sonoro / musical
+    anamn_continst: { type: String, required: false },
+    anamn_musicainf: { type: String, required: false },
+    anamn_prefinstrum: { type: String, required: false },
+    anamn_prefmusica: { type: String, required: false },
+    anamn_ambsonoinf: { type: String, required: false },
+    anamn_prefmusicapais: { type: String, required: false },
+    anamn_musicarechaco: { type: String, required: false },
+    anamn_obsmusica: { type: String, required: false },
     //Escolaridade
     anamn_escola: { type: String, required: false }, //Ok
     anamn_tempo: { type: String, required: false }, //Ok
@@ -969,6 +978,15 @@ class Anamn{
 
     anamn_brinquedopreferidosquais, //Ok
     anamn_obssocial, //Ok
+    //Sonoro / musical
+    anamn_continst,
+    anamn_musicainf,
+    anamn_prefinstrum,
+    anamn_prefmusica,
+    anamn_ambsonoinf,
+    anamn_prefmusicapais,
+    anamn_musicarechaco,
+    anamn_obsmusica,
     //Escolaridade
     anamn_escola, //Ok
     anamn_tempo, //Ok
@@ -1476,6 +1494,15 @@ class Anamn{
 
             this.anamn_brinquedopreferidosquais = anamn_brinquedopreferidosquais,
             this.anamn_obssocial = anamn_obssocial,
+            //Sonoro / musical
+            this.anamn_continst = anamn_continst,
+            this.anamn_musicainf = anamn_musicainf,
+            this.anamn_prefinstrum = anamn_prefinstrum,
+            this.anamn_prefmusica = anamn_prefmusica,
+            this.anamn_ambsonoinf = anamn_ambsonoinf,
+            this.anamn_prefmusicapais = anamn_prefmusicapais,
+            this.anamn_musicarechaco = anamn_musicarechaco,
+            this.anamn_obsmusica = anamn_obsmusica,
             //Escolaridade
             this.anamn_escola = anamn_escola,
             this.anamn_tempo = anamn_tempo,
@@ -2003,6 +2030,15 @@ module.exports = {AnamnModel,AnamnSchema,
 
                 anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
                 anamn_obssocial: req.body.anamnObssocial,
+                //Sonoro / musical
+                anamn_continst: req.body.anamnContinst,
+                anamn_musicainf: req.body.anamnMusicainf,
+                anamn_prefinstrum: req.body.anamnPrefinstrum,
+                anamn_prefmusica: req.body.anamnPrefmusica,
+                anamn_ambsonoinf: req.body.anamnAmbsonoinf,
+                anamn_prefmusicapais: req.body.anamnPrefmusicapais,
+                anamn_musicarechaco: req.body.anamnMusicarechaco,
+                anamn_obsmusica: req.body.anamnObsmusica,
                 //Escolaridade
                 anamn_escola: req.body.anamnEscola,
                 anamn_tempo: req.body.anamnTempo,
@@ -2528,6 +2564,15 @@ module.exports = {AnamnModel,AnamnSchema,
 
             anamn_brinquedopreferidosquais: req.body.anamnBrinquedopreferidosquais,
             anamn_obssocial: req.body.anamnObssocial,
+             //Sonoro / musical
+             anamn_continst: req.body.anamnContinst,
+             anamn_musicainf: req.body.anamnMusicainf,
+             anamn_prefinstrum: req.body.anamnPrefinstrum,
+             anamn_prefmusica: req.body.anamnPrefmusica,
+             anamn_ambsonoinf: req.body.anamnAmbsonoinf,
+             anamn_prefmusicapais: req.body.anamnPrefmusicapais,
+             anamn_musicarechaco: req.body.anamnMusicarechaco,
+             anamn_obsmusica:req.body.anamnObsmusica,
             //Escolaridade
             anamn_escola: req.body.anamnEscola,
             anamn_tempo: req.body.anamnTempo,
