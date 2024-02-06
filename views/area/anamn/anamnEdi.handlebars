@@ -515,7 +515,16 @@
 					
 					document.getElementById("anamnBrinquedopreferidosquais").value = document.getElementById("anamnBrinquedopreferidosquaisEdi").value;
 					document.getElementById("anamnObssocial").value = document.getElementById("anamnObssocialEdi").value;
-					//Grupo
+					//sonoridade
+					document.getElementById("anamnContinst").value = document.getElementById("anamnContinstEdi").value;
+					document.getElementById("anamnMusicainf").value = document.getElementById("anamnMusicainfEdi").value;
+					document.getElementById("anamnPrefinstrum").value = document.getElementById("anamnPrefmusicaEdi").value;
+					document.getElementById("anamnPrefmusica").value = document.getElementById("anamnPrefmusicaEdi").value;
+					document.getElementById("anamnAmbsonoinf").value = document.getElementById("anamnAmbsonoinfEdi").value;
+					document.getElementById("anamnPrefmusicapais").value = document.getElementById("anamnPrefmusicapaisEdi").value;
+					document.getElementById("anamnMusicarechaco").value = document.getElementById("anamnMusicarechacoEdi").value;
+					document.getElementById("anamnObsmusica").value = document.getElementById("anamnObsmusicaEdi").value;
+					//Escolaridade
 					//document.getElementById("anamnEscola").value = document.getElementById("anamnEscolaEdi").value;
 					//document.getElementById("anamnTempo").value = document.getElementById("anamnTempoEdi").value;
 					//document.getElementById("anamnTurno").value = document.getElementById("anamnTurnoEdi").value;
@@ -1118,7 +1127,16 @@
 
 						<input id="anamnBrinquedopreferidosquaisEdi" name="anamnBrinquedopreferidosquaisEdi" value="{{anamn.anamn_brinquedopreferidosquais}}"/>
 						<input id="anamnObssocialEdi" name="anamnObssocialEdi" value="{{anamn.anamn_obssocial}}"/>
-						<!--Grupo-->
+						<!--Sonoro - musical-->
+						<input id="anamnContinstEdi" name="anamnContinstEdi" value="{{anamn.anamn_continst}}"/>
+						<input id="anamnMusicainfEdi" name="anamnMusicainfEdi" value="{{anamn.anamn_musicainf}}"/>
+						<input id="anamnPrefinstrumEdi" name="anamnPrefinstrumEdi" value="{{anamn.anamn_prefinstrum}}"/>
+						<input id="anamnPrefmusicaEdi" name="anamnPrefmusicaEdi" value="{{anamn.anamn_prefmusica}}"/>
+						<input id="anamnAmbsonoinfEdi" name="anamnAmbsonoinfEdi" value="{{anamn.anamn_ambsonoinf}}"/>
+						<input id="anamnPrefmusicapaisEdi" name="anamnPrefmusicapaisEdi" value="{{anamn.anamn_prefmusicapais}}"/>
+						<input id="anamnMusicarechacoEdi" name="anamnMusicarechacoEdi" value="{{anamn.anamn_musicarechaco}}"/>
+						<input id="anamnObsmusicaEdi" name="anamnObsmusicaEdi" value="{{anamn.anamn_obsmusica}}"/>
+						<!--Escolaridade-->
 						<input id="anamnEscolaEdi" name="anamnEscolaEdi" value="{{anamn.anamn_escola}}"/>
 						<input id="anamnTempoEdi" name="anamnTempoEdi" value="{{anamn.anamn_tempo}}"/>
 						<input id="anamnTurnoEdi" name="anamnTurnoEdi" value="{{anamn.anamn_turno}}"/>
@@ -6477,7 +6495,7 @@
 																<td><label>Observações:</label></td>
 															</tr>
 															<tr>
-																<td><textarea type="text" name="anamnObsmusica" id="anamnObsmusica" placeholder="" class="form-control" style="width: 1000px;"></textarea></td>
+																<td><textarea type="text" name="anamnObsmusica" id="anamnObsmusica" placeholder="" class="form-control" style="width: 1000px; font-size:11px;"></textarea></td>
 															</tr>
 														</tbody>
 													</table>
