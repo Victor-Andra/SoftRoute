@@ -216,6 +216,22 @@ app.post('/upload', upload.single('file'), (req, res) => {
                         return options.inverse(this);
                     }
                 },
+                maiorOuigual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
+                    console.log("/"+v1+"="+v2+"/")
+                    if (parseInt(""+v1+"") >= parseInt(""+v2+"")) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                },
+                maiorQue: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
+                    console.log("/"+v1+"="+v2+"/")
+                    if (parseInt(""+v1+"") > parseInt(""+v2+"")) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                },
                 
             }
         }));

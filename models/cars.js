@@ -176,6 +176,7 @@ const CarsModel = mongoose.model('tb_cars', CarsSchema)
 module.exports = {CarsModel,CarsSchema,
     carsEditar: async (req, res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         //Pega data atual
         
@@ -231,7 +232,7 @@ module.exports = {CarsModel,CarsSchema,
                 cars_lixo : req.body.carsLixo,
                 cars_usuidlixo : req.body.carsUsuidlixo,
                 cars_datalixo : req.body.carsDatalixo,
-                cars_usuidedi : req.body.carsUsuidedi,
+                cars_usuidedi : usuarioAtual,
                 cars_dataedi : dataAtual.toISOString()
                 }}
         ).then((res) =>{
@@ -246,10 +247,8 @@ module.exports = {CarsModel,CarsSchema,
     },
     carsAdicionar: async (req,res) => {
         let dataAtual = new Date();
-        console.log("carsmodel");
-        console.log("req.body.carsdata:")
-        console.log(req.body.carsdata)
-        const NewCars = new CarsModel({
+        let usuarioAtual = req.cookies['idUsu'];
+        const newCars = new CarsModel({
             //Atributos básicos
             cars_beneid : req.body.carsBeneid,
             cars_benesexo : req.body.carsBenesexo,
@@ -299,12 +298,12 @@ module.exports = {CarsModel,CarsSchema,
             cars_lixo : req.body.carsLixo,
             cars_usuidlixo : req.body.carsUsuidlixo,
             cars_datalixo : req.body.carsDatalixo,
-            cars_usuidcad : req.body.carsUsuidcad,
+            cars_usuidcad : usuarioAtual,
             cars_datacad : dataAtual.toISOString()
             
         });
-        console.log("newAtend save");
-        await newAtend.save().then(()=>{
+        console.log("newCars save");
+        await newCars.save().then(()=>{
             console.log("Cadastro realizado!");
             return true;
         }).catch((err) => {

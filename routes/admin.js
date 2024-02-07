@@ -2073,8 +2073,12 @@ router.get('/area/escalas/cars/carslis', fncGeral.IsAuthenticated, (req,res) =>{
     fncCars.listaCars(req, res);
 })
 //carrega registro para edição
-router.get('/area/escalas/cars/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+router.get('/area/escalas/cars/carsedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
     fncCars.carregaCarsEdi(req, res);
+})
+
+router.post('/area/escalas/cars/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+    fncCars.atualizaCars(req, res);
 })
 
 //Deleta CARS Selecionado
