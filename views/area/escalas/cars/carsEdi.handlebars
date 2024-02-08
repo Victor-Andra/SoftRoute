@@ -2,6 +2,12 @@
 <html lang="pt-br">
 	<head>
 		<title>Escala CARS</title>
+		<style>
+			/* Adicione o estilo para o textarea aqui */
+			textarea {
+				width: 100% !important;
+			}
+    	</style>
 		<script type="text/javascript">
 			function carregaBody() {
 				let dtcarspre = new Date(document.getElementById("carsCarsdataEdi").value);
@@ -114,30 +120,29 @@
 					console.log("RadioSel:", radioId);
 
 					switch (valorNumero) {
-						case "1,00":
+						case "1,0":
 							if (i == 1) document.getElementById(radioId).checked = true;
 							break;
-						case "1,50":
+						case "1,5":
 							if (i == 2) document.getElementById(radioId).checked = true;
 							break;
-						case "2,00":
+						case "2,0":
 							if (i == 3) document.getElementById(radioId).checked = true;
 							break;
-						case "2,50":
+						case "2,5":
 							if (i == 4) document.getElementById(radioId).checked = true;
 							break;
-						case "3,00":
+						case "3,0":
 							if (i == 5) document.getElementById(radioId).checked = true;
 							break;
-						case "3,50":
+						case "3,5":
 							if (i == 6) document.getElementById(radioId).checked = true;
 							break;
-						case "4,00":
+						case "4,0":
 							if (i == 7) document.getElementById(radioId).checked = true;
 							break;
 						default:
 							// Caso o valor não esteja entre os especificados
-							console.log('Valor inesperado:', valorNumero);
 							break;
 					}
 				}
@@ -173,7 +178,7 @@
 						console.log("totalGeral:"+totalGeral)
 					}
 				});
-console.log("}A");
+				console.log("}A");
 				document.getElementById("carsTqt").value = (""+totalGeral+"").replace(".",",");
 			}
 		</script>
@@ -617,25 +622,32 @@ console.log("}A");
 																			
 																		</tbody>
 																	</table>
+																</div>
+																<div class="col-xs-12">
 																	<table>
-																		<thead></thead>
+																		<thead>
+																			<th>
+																				<td style="width: 100px;"></td>
+																			</th>
+																		</thead>
 																		<tbody>
 																			<tr>
 																				<td><label> Pontuação Total</label></td>
 																			</tr>
 																			<tr>
-																				<td>
-																					<input type="text" id="carsTqt" name="carsTqt" placeholder="0"  class="form-control" />
+																				<td >
+																					<input type="text" id="carsTqt" name="carsTqt" placeholder="0"  class="form-control" style="width: 10%;" />
 																				</td>
 																			</tr>
 																			<tr>
 																				<td><label> Comentários</label></td>
 																			</tr>
 																			<tr>
-																				<td>
-																					<textarea type="text" name="carsComentarios" id="carsComentarios" row="3" placeholder="" class="form-control" ></textarea>
+																				<td style="width: 100%;">
+																					<textarea type="text" name="carsComentarios" id="carsComentarios" rows="4" placeholder="" class="form-control" style="width: 100%"></textarea>
 																				</td>
 																			</tr>
+																			<tr><td>&nbsp;</td></tr>
 																			<tr>
 																				<td>
 																					<div class="checkbox">
@@ -647,6 +659,7 @@ console.log("}A");
 																					</div>
 																				</td>
 																			</tr>
+																			<tr><td>&nbsp;</td></tr>
 																			<tr>
 																				<td>
 																					<label> Data de conclusão do CARS</label>

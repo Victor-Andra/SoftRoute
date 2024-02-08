@@ -179,10 +179,10 @@ module.exports = {CarsModel,CarsSchema,
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         //Pega data atual
-        
+        console.log(req.body.carsId);
         //Realiza Atualização
         await CarsModel.findByIdAndUpdate(req.body.carsId, 
-            {$cars: {
+            {$set: {
                 //Atributos básicos
                 cars_beneid : req.body.carsBeneid,
                 cars_benesexo : req.body.carsBenesexo,

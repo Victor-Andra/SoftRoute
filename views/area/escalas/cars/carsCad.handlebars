@@ -2,9 +2,15 @@
 <html lang="pt-br">
 	<head>
 		<title>Escala CARS</title>
+		<style>
+			/* Adicione o estilo para o textarea aqui */
+			textarea {
+				width: 100% !important;
+			}
+    	</style>
 		<script type="text/javascript">
 		function formatarNumero(valor) {
-				return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+				return valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 			}
 
 			// Função principal para atualizar totais
@@ -460,25 +466,32 @@
 																			
 																		</tbody>
 																	</table>
+																</div>
+															<div class="col-xs-12">
 																	<table>
-																		<thead></thead>
+																		<thead>
+																			<th>
+																				<td style="width: 100px;"></td>
+																			</th>
+																		</thead>
 																		<tbody>
 																			<tr>
 																				<td><label> Pontuação Total</label></td>
 																			</tr>
 																			<tr>
-																				<td>
-																					<input type="text" id="carsTqt" name="carsTqt" placeholder="0"  class="form-control" />
+																				<td >
+																					<input type="text" id="carsTqt" name="carsTqt" placeholder="0"  class="form-control" style="width: 10%;" />
 																				</td>
 																			</tr>
 																			<tr>
 																				<td><label> Comentários</label></td>
 																			</tr>
 																			<tr>
-																				<td>
-																					<textarea type="text" name="carsComentarios" id="carsComentarios" row="3" placeholder="" class="form-control" ></textarea>
+																				<td style="width: 100%;">
+																					<textarea type="text" name="carsComentarios" id="carsComentarios" rows="4" placeholder="" class="form-control" style="width: 100%"></textarea>
 																				</td>
 																			</tr>
+																			<tr><td>&nbsp;</td></tr>
 																			<tr>
 																				<td>
 																					<div class="checkbox">
@@ -490,6 +503,7 @@
 																					</div>
 																				</td>
 																			</tr>
+																			<tr><td>&nbsp;</td></tr>
 																			<tr>
 																				<td>
 																					<label> Data de conclusão do CARS</label>
