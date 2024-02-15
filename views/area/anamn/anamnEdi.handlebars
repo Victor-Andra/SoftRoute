@@ -85,6 +85,7 @@
 					//document.getElementById("anamnDatacad").value = new Date();
 					//Rotinas
 					document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
+					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 					//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
 					document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
 					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
@@ -573,7 +574,7 @@
 
 					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
 					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
-					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;					
+									
 					document.getElementById("anamnBenenomeinfo").value = document.getElementById("anamnBenenomeEdi").value;
 					//anamnDataanamnese
 					let beneid = document.getElementById("anamnBeneid").value;
@@ -674,7 +675,7 @@
 
 						<!-- Dados carregados -->
 						<input id="anamnBeneidEdi" name="anamnBeneidEdi" value="{{anamn.anamn_beneid}}"/>
-						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.bene_nome}}"/>
+						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
 						<input id="anamnBenedatanascEdi" name="anamnBenedatanascEdi" value="{{anamn.anamn_benedatanasc}}"/>
 						<input id="anamnBeneidadeEdi" name="anamnBeneidadeEdi" value="{{anamn.anamn_beneidade}}"/>
 						<input id="anamnPainomeEdi" name="anamnPainomeEdi" value="{{anamn.anamn_painome}}"/>
@@ -1389,7 +1390,7 @@
 													</div>
 													<div class="form-group" >
 														<div class="col-sm-6">
-															<input id="anamnBenenome" name="anamnBenenome" type="text" hidden/>
+															<input id="anamnBenenome" name="anamnBenenome" type="text" />
 														</div>
 													</div>
 																										

@@ -11,11 +11,13 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const respostaClass = require("../models/resposta")
 
-//Tabela NAT
+//Tabela Atec
 const Atec = mongoose.model("tb_atec")
 
 //Tabelas Extrangeiras
+const Resposta = mongoose.model("tb_resposta")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
@@ -26,21 +28,50 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 module.exports = {
-    listaAtec(req, res){
-        let convs = new Array();
-        console.log('listando Diários de Atec')
-        Atec.findOne().then((atec) =>{
-            console.log("Listagem Realizada dos Diários de Atec!")
+    listaAtec(req, res, resposta){
+        let flash = new Resposta();
+        let perfilAtual = req.cookies['lvlUsu'];
+        Atec.find().then((atec) =>{
+
+            atec.forEach((b)=>{
+                let datacad = new Date(b.atec_datacad)
+                let mes = (datacad.getMonth()+1).toString();
+                let dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datacad=fulldate;
+                
+                dataedi = new Date(b.ata_dataedi)
+                mes = (dataedi.getMonth()+1).toString();
+                dia = (dataedi.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                fulldate=(dataedi.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.dataedi=fulldate;
+
+                
+            })
+           
             Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada bene!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-            res.render('area/escalas/atec/atecLis', {Atecs: atec, Terapeutas: terapeuta, Benes: bene})
-        })})}).catch((err) =>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                //console.log("Listagem Realizada bene!")
+                Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
+                    Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        
+                        res.render('area/escalas/atec/atecLis', {atecs: atec, terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
+        })})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Diários de Atec")
+            req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
         })
     },
@@ -66,7 +97,7 @@ module.exports = {
   
     
     carregaAtecEdi(req,res){
-        Conv.find().then((conv)=>{
+        Atec.findOne({_id : req.params.id}).then((atec)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -75,7 +106,7 @@ module.exports = {
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
-                                res.render("area/escalas/atec/atecEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                                res.render("area/escalas/atec/atecEdi", {atec, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -86,28 +117,26 @@ module.exports = {
     cadastraAtec(req,res){
         console.log("chegou")
         let resultado
-        let resposta = new Resposta()
+        let flash = new Resposta();
         
-        atecClass.cadastraAtecFisio(req,res).then((result)=>{
+        atecClass.atecAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
-            console.log(res)
+            console.log(result)
             resultado = true;
         }).catch((err)=>{
             resultado = err
-            console.log("ERRO:"+err)
+            console.log("ERRO:")
         }).finally(()=>{
             if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
+                flash.texto = "ATEC cadastrada com sucesso!"
+                flash.sucesso = "true"
                 console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaAtec(req,res,resposta)
+                this.listaAtec(req,res,flash)
             } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
+                flash.texto = resultado
+                flash.sucesso = "false"
                 console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                res.render('admin/erro', flash);
             }
         })
     },
@@ -116,7 +145,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            atecClass.escolaEditar(req,res).then((res)=>{
+            atecClass.atecEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -149,23 +178,25 @@ module.exports = {
 
 
     deletaAtec(req,res){
-        Atecfisio.deleteOne({_id: req.params.id}).then(() =>{
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Atecamento Fisioterapêutico deletado!")
-                res.render('area/escalas/atec/atecLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
-                res.render('admin/erro')
-            })
+        let resposta;
+        let flash = new Resposta()
+        Atec.deleteOne({_id: req.params.id}).then(() =>{
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar os ATEC's")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "ATEC deletado!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar a ATEC";
+                flash.sucesso = "false";
+            }
+            this.listaAtec(req,res, resposta)
         })
     }
-
 
 }

@@ -12,7 +12,7 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const respostaClass = require("../models/resposta")
-//Tabela NAT
+//Tabela Ata
 const Ata = mongoose.model("tb_ata")
 
 //Tabelas Extrangeiras

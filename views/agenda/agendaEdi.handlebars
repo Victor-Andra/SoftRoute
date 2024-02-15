@@ -88,6 +88,7 @@
 					document.getElementById('widgetboxSubs').style.display = 'none';
 				}
    			}
+			let usuarioAtual = req.cookies['idUsu'];
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
@@ -107,6 +108,7 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/agenda/cadE/atualiza" method="POST">
+								<input style="width: 400px;" type="text" id="agendaUsuedi" name="agendaUsuedi" value="{{usuarioAtual}}" class="form-control" hidden/>
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -324,7 +326,7 @@
 												<!--
 												A div de Evolução só deve aparecer para os Terapeutas na Minha Agenda, pois se trata de Tratamento Sigiloso por Profissão
 												-->
-												<div class="row" class="hidden">
+												<div class="row" hidden>
 													<div id="divEvolucao" style="display: block;">
 														<div class="col-xs-12 col-sm-12">													
 															<label> Evolução</label>

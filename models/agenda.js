@@ -34,7 +34,10 @@ const AgendaSchema = mongoose.Schema({
     agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
     agenda_turnoFalta :{ type: String, require: false },
     agenda_faltaId :{ type: ObjectId, require: false },
+    agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
+    agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false }
+    
 })
 
 class Agenda{
@@ -70,6 +73,8 @@ class Agenda{
         agenda_rel,
         agenda_turnoFalta,
         agenda_faltaId,
+        agenda_usuedi, //Usuário adm que alterou
+        agenda_log, //Log das alterações
         agenda_usucad,
         ){
         this.agenda_data = agenda_data,
@@ -103,6 +108,8 @@ class Agenda{
         this.agenda_rel = agenda_rel,
         this.agenda_turnoFalta = agenda_turnoFalta,
         this.agenda_faltaId = agenda_faltaId,
+        this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
+        this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad
     }
 }
@@ -132,7 +139,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
                 agenda_copia : req.body.agendaCopia,
-                agenda_usucad : usuarioAtual,
+                agenda_usuedi: req.body.agendaUsuedi , //Usuário adm que alterou
+                agenda_log: req.body.agendaLog , //Log das alterações
                 agenda_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -181,6 +189,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_cobrarextra : req.body.agendaCobrarextra  ,
             agenda_selo : false ,
             agenda_copia: false ,
+            agenda_log: req.body.agendaLog , //Log das alterações
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
@@ -225,6 +234,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_copia : false,
             agenda_turnoFalta : req.body.agendaTurnoFalta,
             //agenda_faltaId : req.body.agendaFaltaId,
+            agenda_log: req.body.agendaLog , //Log das alterações
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
         });
@@ -264,6 +274,8 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
                 agenda_copia : req.body.agendaCopia ,
                 agenda_usucad : usuarioAtual,
+                agenda_usuedi: req.body.agendaUsuedi ,
+                agenda_log: req.body.agendaLog , //Log das alterações
                 agenda_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -657,9 +669,69 @@ module.exports = {AgendaModel,AgendaSchema,
         //let novaconvidx = new ObjectId("624dee503339548ba06c4adc");//amil
         //console.log("beneidx:"+beneidx)
         if (beneidx != "-") {
-                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx };
-            
-                troca = {'agenda_usuid': novoteraidx};
+
+            if (categoriaidx != "-") {
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
+            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
+                //console.log("0")
+            } else if (teraidx != "-" && tpiaidx != "-" && convidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx };
+                //console.log("1")
+            } else if (teraidx == "-" && tpiaidx != "-" && convidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx };
+                console.log("2")
+            } else if (teraidx != "-" && tpiaidx == "-" && convidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx };
+                //console.log("3")
+            } else if (teraidx == "-" && tpiaidx == "-" && convidx == "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx };
+                //console.log("4")
+            } else if (teraidx != "-" && tpiaidx != "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("1-"+tpiaidx+"-"+teraidx)
+            } else if (teraidx == "-" && tpiaidx != "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_terapiaid: tpiaidx, agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("2")
+            } else if (teraidx != "-" && tpiaidx == "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_usuid: teraidx , agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("3")
+            } else if (teraidx == "-" && tpiaidx == "-" && convidx != "-"){
+                busca = { agenda_data: { $gte : ini.toISOString(), $lte:  fim.toISOString() }, agenda_temp: false, agenda_extra: false, agenda_beneid: beneidx, agenda_convid: convidx };
+                //console.log("4")
+            }
+
+            if (categoriaidx != "-") {
+                if (categoriaidx == "Padrão") {
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Padrão', 'agenda_usucad': usuarioAtual};
+                } else {
+                    troca = {'agenda_categoria': categoriaidx, 'agenda_org': 'Administrativo', 'agenda_usucad': usuarioAtual};
+                }
+            } else if (novomergeteraidx != "-" && novamergetpiaidx != "-") {//subs fixo
+                troca = {'agenda_mergeterapeutaid': novomergeteraidx, 'agenda_mergeterapiaid': novamergetpiaidx, 'agenda_categoria': 'SubstitutoFixo', 'agenda_org': 'Administrativo', 'agenda_usucad': usuarioAtual};
+                console.log("0 TROCA SUBFIX")
+            } else if (novoteraidx == "-" && novatpiaidx == "-" && novoconvidx != "-") {//convenio
+                troca = {'agenda_convid': novoconvidx, agenda_usucad: usuarioAtual};
+                //console.log("1")
+            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx == "-") {//terapeuta
+                troca = {'agenda_usuid': novoteraidx, agenda_usucad: usuarioAtual};
+                //console.log("2")
+            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapia
+                troca = {'agenda_terapiaid': novatpiaidx, agenda_usucad: usuarioAtual};
+                //console.log("3")
+            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx == "-") {//terapeuta e terapia
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, agenda_usucad: usuarioAtual};
+                //console.log("4")
+            } else if (novoteraidx != "-" && novatpiaidx == "-" && novoconvidx != "-") {//terapeuta e convenio
+                troca = {'agenda_usuid': novoteraidx, 'agenda_convid': novoconvidx, agenda_usucad: usuarioAtual};
+                //console.log("5")
+            } else if (novoteraidx == "-" && novatpiaidx != "-" && novoconvidx != "-") {//terapia e convenio
+                troca = {'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_usucad: usuarioAtual};
+                //console.log("6")
+            } else if (novoteraidx != "-" && novatpiaidx != "-" && novoconvidx != "-") {//todos
+                troca = {'agenda_usuid': novoteraidx, 'agenda_terapiaid': novatpiaidx, 'agenda_convid': novoconvidx, agenda_usucad: usuarioAtual};
+                //console.log("7")
+            }
 
             await AgendaModel.find(busca).then((ag)=>{console.log("ag.lenhgt"+ag.length)})
             await AgendaModel.updateMany(

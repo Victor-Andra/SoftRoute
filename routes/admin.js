@@ -2020,13 +2020,30 @@ router.get('/area/aba/nat/natlis', fncGeral.IsAuthenticated, (req,res) =>{//dire
 
 //Menu ATEC ** Area Tecnicos e Escalas 
 //Carrega Cadastro
-router.get('/area/escalas/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//carrega Cadastro Atec
     fncAtec.carregaAtec(req, res);
+})
+//adiciona registro
+router.post('/area/escalas/atec/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro Atec
+    fncAtec.cadastraAtec(req, res);
+})
+
+router.post('/area/escalas/atec/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no Atec
+    fncAtec.atualizaAtec(req, res);
 })
 
 //Lista ATEC por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/escalas/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico
+router.get('/area/escalas/atec/ateclis', fncGeral.IsAuthenticated, (req,res) =>{//carrega Lista ATEC
     fncAtec.listaAtec(req, res);
+})
+//carrega registro para edição
+router.get('/area/escalas/atec/atecedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+    fncAtec.carregaAtecEdi(req, res);
+})
+
+//Deleta Atec Selecionado
+router.get('/area/escalas/atec/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
+    fncAtec.deletaAtec(req,res);
 })
 
 //Menu ATA ** Area Tecnicos e Escalas 

@@ -13,31 +13,104 @@
 			// Função para atualizar os campos de texto com os valores dos radio inputs
 			function atualizarCampos(questionario, pergunta, valor) {
 				// Construa o ID do campo de texto com base no questionário e na pergunta
-				var campoId = 'atec' + questionario + 'Q' + pergunta;
+				var campoId = 'atec' + questionario + 'Q' + pergunta + 'temp';
 				console.log(campoId);
 				// Encontre o elemento de input de texto com o ID correspondente
 				var campoTexto = document.getElementById(campoId);
-				console.log(campoTexto);
+				console.log(campoTexto.id+"-"+campoTexto.name);
 				// Verifique se o campo de texto foi encontrado
 				if (campoTexto) {
-				// Atualize o valor do campo de texto com o valor do radio input
-				campoTexto.value = valor;
+					// Atualize o valor do campo de texto com o valor do radio input
+					campoTexto.value = valor;
 				}
 				console.log(valor);
 			}
 
-			// Função chamada no evento onchange dos radio inputs
-			function radioOnChange(questionario, pergunta, valor) {
-				// Chame a função para atualizar o campo de texto correspondente
-				atualizarCampos(questionario, pergunta, valor);
+			function carregaBody() {
+				document.getElementById("atecBenesexo").value = document.getElementById("atecBenesexoEdi").value;
+				document.getElementById("atecDatecnasc").value = document.getElementById("atecDatecnascEdi").value;
+				document.getElementById("atecIdade").value = document.getElementById("atecIdadeEdi").value;
+				document.getElementById("atecPreenchido").value = document.getElementById("atecPreenchidoEdi").value;
+				document.getElementById("atecParen").value = document.getElementById("atecParenEdi").value;
+				document.getElementById("atecTeraacompid").value = document.getElementById("atecTeraacompidEdi").value;
+				document.getElementById("atecInfoiniatec").value = document.getElementById("atecInfoiniatecEdi").value;
+				document.getElementById("atecConcluido").value = document.getElementById("atecConcluidoEdi").value;
+				document.getElementById("atecDataatec").value = document.getElementById("atecDataatecEdi").value;
+				document.getElementById("atecBeneid").value = document.getElementById("atecBeneidEdi").value;
+				//Totais e conclusão
+				document.getElementById("atecAtec1Total").value = document.getElementById("atecAtec1TotalEdi").value;
+				document.getElementById("atecAtec2Total").value = document.getElementById("atecAtec2TotalEdi").value;
+				document.getElementById("atecAtec3Total").value = document.getElementById("atecAtec3TotalEdi").value;
+				document.getElementById("atecAtec4Total").value = document.getElementById("atecAtec4TotalEdi").value;
+				document.getElementById("atecTotpont").value = document.getElementById("atecTotpontEdi").value;
+				document.getElementById("atecComentatec").value = document.getElementById("atecComentatecEdi").value;
+
+				// Atualiza o radio button
+				checkBoxAoCarregarFormulario();
+				marcarRadioInputs();
+
+				
+			}
+			
+			function checkBoxAoCarregarFormulario() {
+				// Obtém o valor do campo ataXxiii01temp
+				const valorTemp = document.getElementById("atecConcluidoEdi").value;
+
+				// Obtém referências aos radio buttons
+				const checkboxSim = document.getElementById("atecConcluido");
+				
+
+				// Verifica o valor e marca o radio button correspondente
+				if (valorTemp === "on" ) {
+					checkboxSim.checked = true;
+					
+					console.log(valorTemp);
+				} else {
+					
+					checkboxSim.checked = false;
+				}
 			}
 
-			
+			function marcarRadioInputs() {
+				// Array com os IDs dos campos de texto
+				const pergunta = [
+					"1Q01", "1Q02", "1Q03", "1Q04", "1Q05", "1Q06",
+					"1Q07", "1Q08", "1Q09", "1Q10", "1Q11", "1Q12",
+					"1Q13", "1Q14", "2Q01", "2Q02", "2Q03", "2Q04",
+					"2Q05", "2Q06", "2Q07", "2Q08", "2Q09", "2Q10",
+					"2Q11", "2Q12", "2Q13", "2Q14", "2Q15", "2Q16",
+					"2Q17", "2Q18", "2Q19", "2Q20", "3Q01", "3Q02",
+					"3Q03", "3Q04", "3Q05", "3Q06", "3Q07", "3Q08",
+					"3Q09", "3Q10", "3Q11", "3Q12", "3Q13", "3Q14",
+					"3Q15", "3Q16", "3Q17", "3Q18", "4Q01", "4Q02",
+					"4Q03", "4Q04", "4Q05", "4Q06", "4Q07", "4Q08",
+					"4Q09", "4Q10", "4Q11", "4Q12", "4Q13", "4Q14",
+					"4Q15", "4Q16", "4Q17", "4Q18", "4Q19", "4Q20",
+					"4Q21", "4Q22", "4Q23", "4Q24", "4Q25"
+				];
+
+				// Iterar sobre os campos de texto
+				pergunta.forEach(function (campo) {
+					// Obter o valor do campo de texto
+					let op;
+					const valorCampo = document.getElementById("atec"+campo+"temp").value;
+					if (valorCampo === "1,0" ) {
+						op = "1";
+					} else if (valorCampo === "2,0" ){
+						op = "2";
+					} else {
+						op = "3";
+					}	
+							
+					console.log("atec"+campo+op);
+					document.getElementById("atec"+campo+op).checked = true;
+				});
+			}	
 			</script>
 		
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -56,91 +129,109 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/area/escalas/atec/add" method="POST">
-								<div class="col-xs-12" hidden>
+							<form class="form-horizontal" role="form" action="/menu/area/escalas/atec/atualizar" method="POST">
+							<input class="hidden" id="atecId" name="atecId" value="{{atec._id}}" />
+								<div class="col-xs-12" >
 									<!-- Cabeçalho -->
 										<!-- Não necessário atributos, replicação aqui somente na edição -->
+									<input type="text" id="atecBeneidEdi" name="atecBeneidEdi" value="{{atec.atec_beneid}}" />	
+									<input type="text" id="atecBenesexoEdi" name="atecBenesexoEdi" value="{{atec.atec_benesexo}}" />
+									<input type="text" id="atecDatecnascEdi" name="atecDatecnascEdi" value="{{atec.atec_datecnasc}}" />
+									<input type="text" id="atecIdadeEdi" name="atecIdadeEdi" value="{{atec.atec_idade}}" />
+									<input type="text" id="atecPreenchidoEdi" name="atecPreenchidoEdi" value="{{atec.atec_preenchido}}" />
+									<input type="text" id="atecParenEdi" name="atecParenEdi" value="{{atec.atec_paren}}" />
+									<input type="text" id="atecTeraacompidEdi" name="atecTeraacompidEdi" value="{{atec.atec_teraacompid}}" />
+									<input type="text" id="atecInfoiniatecEdi" name="atecInfoiniatecEdi" value="{{atec.atec_infoiniatec}}" />
+									<input type="text" id="atecConcluidoEdi" name="atecConcluidoEdi" value="{{atec.atec_concluido}}" />
+									<input type="text" id="atecDataatecEdi" name="atecDataatecEdi" value="{{atec.atec_dataatec}}" />
+									<!-- Totais - 1 -->
+									<input type="text" id="atecAtec1TotalEdi" name="atecAtec1TotalEdi" value="{{atec.atec_atec1Total}}" />
+									<input type="text" id="atecAtec2TotalEdi" name="atecAtec2TotalEdi" value="{{atec.atec_atec2Total}}" />
+									<input type="text" id="atecAtec3TotalEdi" name="atecAtec31TotalEdi" value="{{atec.atec_atec3Total}}" />
+									<input type="text" id="atecAtec4TotalEdi" name="atecAtec4TotalEdi" value="{{atec.atec_atec4Total}}" />
+									<input type="text" id="atecTotpontEdi" name="atecTotpontEdi" value="{{atec.atec_totpont}}" />
+									<input type="text" id="atecComentatecEdi" name="atecComentatecEdi" value="{{atec.atec_comentatec}}" />
 									<!-- Questionário I - 1 -->
-									<input type="text" id="atec1Q01" name="atec1Q01" value="" />
-									<input type="text" id="atec1Q02" name="atec1Q02" value="" />
-									<input type="text" id="atec1Q03" name="atec1Q03" value="" />
-									<input type="text" id="atec1Q04" name="atec1Q04" value="" />
-									<input type="text" id="atec1Q05" name="atec1Q05" value="" />
-									<input type="text" id="atec1Q06" name="atec1Q06" value="" />
-									<input type="text" id="atec1Q07" name="atec1Q07" value="" />
-									<input type="text" id="atec1Q08" name="atec1Q08" value="" />
-									<input type="text" id="atec1Q09" name="atec1Q09" value="" />
-									<input type="text" id="atec1Q10" name="atec1Q10" value="" />
-									<input type="text" id="atec1Q11" name="atec1Q11" value="" />
-									<input type="text" id="atec1Q12" name="atec1Q12" value="" />
-									<input type="text" id="atec1Q13" name="atec1Q13" value="" />
-									<input type="text" id="atec1Q14" name="atec1Q14" value="" />
+									<input type="text" id="atec1Q01temp" name="atec1Q01temp" value="{{atec.atec_1q01}}" />
+									<input type="text" id="atec1Q02temp" name="atec1Q02temp" value="{{atec.atec_1q02}}" />
+									<input type="text" id="atec1Q03temp" name="atec1Q03temp" value="{{atec.atec_1q03}}" />
+									<input type="text" id="atec1Q04temp" name="atec1Q04temp" value="{{atec.atec_1q04}}" />
+									<input type="text" id="atec1Q05temp" name="atec1Q05temp" value="{{atec.atec_1q05}}" />
+									<input type="text" id="atec1Q06temp" name="atec1Q06temp" value="{{atec.atec_1q06}}" />
+									<input type="text" id="atec1Q07temp" name="atec1Q07temp" value="{{atec.atec_1q07}}" />
+									<input type="text" id="atec1Q08temp" name="atec1Q08temp" value="{{atec.atec_1q08}}" />
+									<input type="text" id="atec1Q09temp" name="atec1Q09temp" value="{{atec.atec_1q09}}" />
+									<input type="text" id="atec1Q10temp" name="atec1Q10temp" value="{{atec.atec_1q10}}" />
+									<input type="text" id="atec1Q11temp" name="atec1Q11temp" value="{{atec.atec_1q11}}" />
+									<input type="text" id="atec1Q12temp" name="atec1Q12temp" value="{{atec.atec_1q12}}" />
+									<input type="text" id="atec1Q13temp" name="atec1Q13temp" value="{{atec.atec_1q13}}" />
+									<input type="text" id="atec1Q14temp" name="atec1Q14temp" value="{{atec.atec_1q14}}" />
 									<!-- Questionário II - 2 -->
-									<input type="text" id="atec2Q01" name="atec2Q01" value="" />
-									<input type="text" id="atec2Q02" name="atec2Q02" value="" />
-									<input type="text" id="atec2Q03" name="atec2Q03" value="" />
-									<input type="text" id="atec2Q04" name="atec2Q04" value="" />
-									<input type="text" id="atec2Q05" name="atec2Q05" value="" />
-									<input type="text" id="atec2Q06" name="atec2Q06" value="" />
-									<input type="text" id="atec2Q07" name="atec2Q07" value="" />
-									<input type="text" id="atec2Q08" name="atec2Q08" value="" />
-									<input type="text" id="atec2Q09" name="atec2Q09" value="" />
-									<input type="text" id="atec2Q10" name="atec2Q10" value="" />
-									<input type="text" id="atec2Q11" name="atec2Q11" value="" />
-									<input type="text" id="atec2Q12" name="atec2Q12" value="" />
-									<input type="text" id="atec2Q13" name="atec2Q13" value="" />
-									<input type="text" id="atec2Q14" name="atec2Q14" value="" />
-									<input type="text" id="atec2Q15" name="atec2Q15" value="" />
-									<input type="text" id="atec2Q16" name="atec2Q16" value="" />
-									<input type="text" id="atec2Q17" name="atec2Q17" value="" />
-									<input type="text" id="atec2Q18" name="atec2Q18" value="" />
-									<input type="text" id="atec2Q19" name="atec2Q19" value="" />
-									<input type="text" id="atec2Q20" name="atec2Q20" value="" />
+									<input type="text" id="atec2Q01temp" name="atec2Q01temp" value="{{atec.atec_2q01}}" />
+									<input type="text" id="atec2Q02temp" name="atec2Q02temp" value="{{atec.atec_2q02}}" />
+									<input type="text" id="atec2Q03temp" name="atec2Q03temp" value="{{atec.atec_2q03}}" />
+									<input type="text" id="atec2Q04temp" name="atec2Q04temp" value="{{atec.atec_2q04}}" />
+									<input type="text" id="atec2Q05temp" name="atec2Q05temp" value="{{atec.atec_2q05}}" />
+									<input type="text" id="atec2Q06temp" name="atec2Q06temp" value="{{atec.atec_2q06}}" />
+									<input type="text" id="atec2Q07temp" name="atec2Q07temp" value="{{atec.atec_2q07}}" />
+									<input type="text" id="atec2Q08temp" name="atec2Q08temp" value="{{atec.atec_2q08}}" />
+									<input type="text" id="atec2Q09temp" name="atec2Q09temp" value="{{atec.atec_2q09}}" />
+									<input type="text" id="atec2Q10temp" name="atec2Q10temp" value="{{atec.atec_2q10}}" />
+									<input type="text" id="atec2Q11temp" name="atec2Q11temp" value="{{atec.atec_2q11}}" />
+									<input type="text" id="atec2Q12temp" name="atec2Q12temp" value="{{atec.atec_2q12}}" />
+									<input type="text" id="atec2Q13temp" name="atec2Q13temp" value="{{atec.atec_2q13}}" />
+									<input type="text" id="atec2Q14temp" name="atec2Q14temp" value="{{atec.atec_2q14}}" />
+									<input type="text" id="atec2Q15temp" name="atec2Q15temp" value="{{atec.atec_2q15}}" />
+									<input type="text" id="atec2Q16temp" name="atec2Q16temp" value="{{atec.atec_2q16}}" />
+									<input type="text" id="atec2Q17temp" name="atec2Q17temp" value="{{atec.atec_2q17}}" />
+									<input type="text" id="atec2Q18temp" name="atec2Q18temp" value="{{atec.atec_2q18}}" />
+									<input type="text" id="atec2Q19temp" name="atec2Q19temp" value="{{atec.atec_2q19}}" />
+									<input type="text" id="atec2Q20temp" name="atec2Q20temp" value="{{atec.atec_2q20}}" />
 									<!-- Questionário III - 3 -->
-									<input type="text" id="atec3Q01" name="atec3Q01" value="" />
-									<input type="text" id="atec3Q02" name="atec3Q02" value="" />
-									<input type="text" id="atec3Q03" name="atec3Q03" value="" />
-									<input type="text" id="atec3Q04" name="atec3Q04" value="" />
-									<input type="text" id="atec3Q05" name="atec3Q05" value="" />
-									<input type="text" id="atec3Q06" name="atec3Q06" value="" />
-									<input type="text" id="atec3Q07" name="atec3Q07" value="" />
-									<input type="text" id="atec3Q08" name="atec3Q08" value="" />
-									<input type="text" id="atec3Q09" name="atec3Q09" value="" />
-									<input type="text" id="atec3Q10" name="atec3Q10" value="" />
-									<input type="text" id="atec3Q11" name="atec3Q11" value="" />
-									<input type="text" id="atec3Q12" name="atec3Q12" value="" />
-									<input type="text" id="atec3Q13" name="atec3Q13" value="" />
-									<input type="text" id="atec3Q14" name="atec3Q14" value="" />
-									<input type="text" id="atec3Q15" name="atec3Q15" value="" />
-									<input type="text" id="atec3Q16" name="atec3Q16" value="" />
-									<input type="text" id="atec3Q17" name="atec3Q17" value="" />
-									<input type="text" id="atec3Q18" name="atec3Q18" value="" />
+									<input type="text" id="atec3Q01temp" name="atec3Q01temp" value="{{atec.atec_3q01}}" />
+									<input type="text" id="atec3Q02temp" name="atec3Q02temp" value="{{atec.atec_3q02}}" />
+									<input type="text" id="atec3Q03temp" name="atec3Q03temp" value="{{atec.atec_3q03}}" />
+									<input type="text" id="atec3Q04temp" name="atec3Q04temp" value="{{atec.atec_3q04}}" />
+									<input type="text" id="atec3Q05temp" name="atec3Q05temp" value="{{atec.atec_3q05}}" />
+									<input type="text" id="atec3Q06temp" name="atec3Q06temp" value="{{atec.atec_3q06}}" />
+									<input type="text" id="atec3Q07temp" name="atec3Q07temp" value="{{atec.atec_3q07}}" />
+									<input type="text" id="atec3Q08temp" name="atec3Q08temp" value="{{atec.atec_3q08}}" />
+									<input type="text" id="atec3Q09temp" name="atec3Q09temp" value="{{atec.atec_3q09}}" />
+									<input type="text" id="atec3Q10temp" name="atec3Q10temp" value="{{atec.atec_3q10}}" />
+									<input type="text" id="atec3Q11temp" name="atec3Q11temp" value="{{atec.atec_3q11}}" />
+									<input type="text" id="atec3Q12temp" name="atec3Q12temp" value="{{atec.atec_3q12}}" />
+									<input type="text" id="atec3Q13temp" name="atec3Q13temp" value="{{atec.atec_3q13}}" />
+									<input type="text" id="atec3Q14temp" name="atec3Q14temp" value="{{atec.atec_3q14}}" />
+									<input type="text" id="atec3Q15temp" name="atec3Q15temp" value="{{atec.atec_3q15}}" />
+									<input type="text" id="atec3Q16temp" name="atec3Q16temp" value="{{atec.atec_3q16}}" />
+									<input type="text" id="atec3Q17temp" name="atec3Q17temp" value="{{atec.atec_3q17}}" />
+									<input type="text" id="atec3Q18temp" name="atec3Q18temp" value="{{atec.atec_3q18}}" />
 									<!-- Questionário IV - 4 -->
-									<input type="text" id="atec4Q01" name="atec4Q01" value="" />
-									<input type="text" id="atec4Q02" name="atec4Q02" value="" />
-									<input type="text" id="atec4Q03" name="atec4Q03" value="" />
-									<input type="text" id="atec4Q04" name="atec4Q04" value="" />
-									<input type="text" id="atec4Q05" name="atec4Q05" value="" />
-									<input type="text" id="atec4Q06" name="atec4Q06" value="" />
-									<input type="text" id="atec4Q07" name="atec4Q07" value="" />
-									<input type="text" id="atec4Q08" name="atec4Q08" value="" />
-									<input type="text" id="atec4Q09" name="atec4Q09" value="" />
-									<input type="text" id="atec4Q10" name="atec4Q10" value="" />
-									<input type="text" id="atec4Q11" name="atec4Q11" value="" />
-									<input type="text" id="atec4Q12" name="atec4Q12" value="" />
-									<input type="text" id="atec4Q13" name="atec4Q13" value="" />
-									<input type="text" id="atec4Q14" name="atec4Q14" value="" />
-									<input type="text" id="atec4Q15" name="atec4Q15" value="" />
-									<input type="text" id="atec4Q16" name="atec4Q16" value="" />
-									<input type="text" id="atec4Q17" name="atec4Q17" value="" />
-									<input type="text" id="atec4Q18" name="atec4Q18" value="" />
-									<input type="text" id="atec4Q19" name="atec4Q19" value="" />
-									<input type="text" id="atec4Q20" name="atec4Q20" value="" />
-									<input type="text" id="atec4Q21" name="atec4Q21" value="" />
-									<input type="text" id="atec4Q22" name="atec4Q22" value="" />
-									<input type="text" id="atec4Q23" name="atec4Q23" value="" />
-									<input type="text" id="atec4Q24" name="atec4Q24" value="" />
-									<input type="text" id="atec4Q25" name="atec4Q25" value="" />
+									<input type="text" id="atec4Q01temp" name="atec4Q01temp" value="{{atec.atec_4q01}}" />
+									<input type="text" id="atec4Q02temp" name="atec4Q02temp" value="{{atec.atec_4q02}}" />
+									<input type="text" id="atec4Q03temp" name="atec4Q03temp" value="{{atec.atec_4q03}}" />
+									<input type="text" id="atec4Q04temp" name="atec4Q04temp" value="{{atec.atec_4q04}}" />
+									<input type="text" id="atec4Q05temp" name="atec4Q05temp" value="{{atec.atec_4q05}}" />
+									<input type="text" id="atec4Q06temp" name="atec4Q06temp" value="{{atec.atec_4q06}}" />
+									<input type="text" id="atec4Q07temp" name="atec4Q07temp" value="{{atec.atec_4q07}}" />
+									<input type="text" id="atec4Q08temp" name="atec4Q08temp" value="{{atec.atec_4q08}}" />
+									<input type="text" id="atec4Q09temp" name="atec4Q09temp" value="{{atec.atec_4q09}}" />
+									<input type="text" id="atec4Q10temp" name="atec4Q10temp" value="{{atec.atec_4q10}}" />
+									<input type="text" id="atec4Q11temp" name="atec4Q11temp" value="{{atec.atec_4q11}}" />
+									<input type="text" id="atec4Q12temp" name="atec4Q12temp" value="{{atec.atec_4q12}}" />
+									<input type="text" id="atec4Q13temp" name="atec4Q13temp" value="{{atec.atec_4q13}}" />
+									<input type="text" id="atec4Q14temp" name="atec4Q14temp" value="{{atec.atec_4q14}}" />
+									<input type="text" id="atec4Q15temp" name="atec4Q15temp" value="{{atec.atec_4q15}}" />
+									<input type="text" id="atec4Q16temp" name="atec4Q16temp" value="{{atec.atec_4q16}}" />
+									<input type="text" id="atec4Q17temp" name="atec4Q17temp" value="{{atec.atec_4q17}}" />
+									<input type="text" id="atec4Q18temp" name="atec4Q18temp" value="{{atec.atec_4q18}}" />
+									<input type="text" id="atec4Q19temp" name="atec4Q19temp" value="{{atec.atec_4q19}}" />
+									<input type="text" id="atec4Q20temp" name="atec4Q20temp" value="{{atec.atec_4q20}}" />
+									<input type="text" id="atec4Q21temp" name="atec4Q21temp" value="{{atec.atec_4q21}}" />
+									<input type="text" id="atec4Q22temp" name="atec4Q22temp" value="{{atec.atec_4q22}}" />
+									<input type="text" id="atec4Q23temp" name="atec4Q23temp" value="{{atec.atec_4q23}}" />
+									<input type="text" id="atec4Q24temp" name="atec4Q24temp" value="{{atec.atec_4q24}}" />
+									<input type="text" id="atec4Q25temp" name="atec4Q25temp" value="{{atec.atec_4q25}}" />
 
 
 								</div>
@@ -460,7 +551,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q01" id="atec1q011" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '01', this.value)">
+																						<input name="atec1Q01" id="atec1Q011" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -468,7 +559,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q01" id="atec1q012" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '01', this.value)">
+																						<input name="atec1Q01" id="atec1Q012" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -476,7 +567,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q01" id="atec1q013" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '01', this.value)">
+																						<input name="atec1Q01" id="atec1Q013" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -496,7 +587,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q02" id="atec1q021" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '02', this.value)">
+																						<input name="atec1Q02" id="atec1Q021" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -504,7 +595,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q02" id="atec1q022" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '02', this.value)">
+																						<input name="atec1Q02" id="atec1Q022" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -512,7 +603,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q02" id="atec1q023" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '02', this.value)">
+																						<input name="atec1Q02" id="atec1Q023" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -532,7 +623,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q03" id="atec1q031" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '03', this.value)">
+																						<input name="atec1Q03" id="atec1Q031" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -540,7 +631,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q03" id="atec1q032" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '03', this.value)">
+																						<input name="atec1Q03" id="atec1Q032" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -548,7 +639,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q03" id="atec1q033" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '03', this.value)">
+																						<input name="atec1Q03" id="atec1Q033" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -568,7 +659,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q04" id="atec1q041" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '04', this.value)">
+																						<input name="atec1Q04" id="atec1Q041" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -576,7 +667,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q04" id="atec1q042" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '04', this.value)">
+																						<input name="atec1Q04" id="atec1Q042" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -584,7 +675,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q04" id="atec1q043" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '04', this.value)">
+																						<input name="atec1Q04" id="atec1Q043" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -604,7 +695,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q05" id="atec1q051" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '05', this.value)">
+																						<input name="atec1Q05" id="atec1Q051" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -612,7 +703,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q05" id="atec1q052" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '05', this.value)">
+																						<input name="atec1Q05" id="atec1Q052" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -620,7 +711,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q05" id="atec1q053" value="3,0" type="radio" class="ace"  onchange="radioOnChange(1, '05', this.value)">
+																						<input name="atec1Q05" id="atec1Q053" value="3,0" type="radio" class="ace"  onchange="atualizarCampos(1, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -640,7 +731,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q06" id="atec1q061" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '06', this.value)">
+																						<input name="atec1Q06" id="atec1Q061" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -648,7 +739,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q06" id="atec1q062" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '06', this.value)">
+																						<input name="atec1Q06" id="atec1Q062" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -656,7 +747,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q06" id="atec1q063" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '06', this.value)">
+																						<input name="atec1Q06" id="atec1Q063" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -676,7 +767,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q07" id="atec1q071" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '07', this.value)">
+																						<input name="atec1Q07" id="atec1Q071" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -684,7 +775,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q07" id="atec1q072" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '07', this.value)">
+																						<input name="atec1Q07" id="atec1Q072" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -692,7 +783,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q07" id="atec1q073" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '07', this.value)">
+																						<input name="atec1Q07" id="atec1Q073" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -712,7 +803,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q08" id="atec1q081" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '08', this.value)">
+																						<input name="atec1Q08" id="atec1Q081" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -720,7 +811,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q08" id="atec1q082" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '08', this.value)">
+																						<input name="atec1Q08" id="atec1Q082" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -728,7 +819,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q08" id="atec1q083" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '08', this.value)">
+																						<input name="atec1Q08" id="atec1Q083" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -748,7 +839,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q09" id="atec1q091" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '09', this.value)">
+																						<input name="atec1Q09" id="atec1Q091" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -756,7 +847,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q09" id="atec1q092" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '09', this.value)">
+																						<input name="atec1Q09" id="atec1Q092" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -764,7 +855,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q09" id="atec1q093" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '09', this.value)">
+																						<input name="atec1Q09" id="atec1Q093" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -784,7 +875,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q10" id="atec1q101" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '10', this.value)">
+																						<input name="atec1Q10" id="atec1Q101" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -792,7 +883,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q10" id="atec1q102" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '10', this.value)">
+																						<input name="atec1Q10" id="atec1Q102" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -800,7 +891,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q10" id="atec1q103" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '10', this.value)">
+																						<input name="atec1Q10" id="atec1Q103" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -820,7 +911,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q11" id="atec1q111" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '11', this.value)">
+																						<input name="atec1Q11" id="atec1Q111" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -828,7 +919,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q11" id="atec1q112" value="2,0" type="radio" class="ace"  onchange="radioOnChange(1, '11', this.value)">
+																						<input name="atec1Q11" id="atec1Q112" value="2,0" type="radio" class="ace"  onchange="atualizarCampos(1, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -836,7 +927,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q11" id="atec1q113" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '11', this.value)">
+																						<input name="atec1Q11" id="atec1Q113" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -856,7 +947,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q12" id="atec1q121" value="1,0" type="radio" class="ace"onchange="radioOnChange(1, '12', this.value)">
+																						<input name="atec1Q12" id="atec1Q121" value="1,0" type="radio" class="ace"onchange="atualizarCampos(1, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -864,7 +955,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q12" id="atec1q122" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '12', this.value)">
+																						<input name="atec1Q12" id="atec1Q122" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -872,7 +963,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q12" id="atec1q123" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '12', this.value)">
+																						<input name="atec1Q12" id="atec1Q123" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -892,7 +983,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q13" id="atec1q131" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '13', this.value)">
+																						<input name="atec1Q13" id="atec1Q131" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -900,7 +991,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q13" id="atec1q132" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '13', this.value)">
+																						<input name="atec1Q13" id="atec1Q132" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -908,7 +999,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q13" id="atec1q133" value="3,0" type="radio" class="ace"  onchange="radioOnChange(1, '13', this.value)">
+																						<input name="atec1Q13" id="atec1Q133" value="3,0" type="radio" class="ace"  onchange="atualizarCampos(1, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -928,7 +1019,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q14" id="atec1q141" value="1,0" type="radio" class="ace" onchange="radioOnChange(1, '14', this.value)">
+																						<input name="atec1Q14" id="atec1Q141" value="1,0" type="radio" class="ace" onchange="atualizarCampos(1, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -936,7 +1027,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q14" id="atec1q142" value="2,0" type="radio" class="ace" onchange="radioOnChange(1, '14', this.value)">
+																						<input name="atec1Q14" id="atec1Q142" value="2,0" type="radio" class="ace" onchange="atualizarCampos(1, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -944,7 +1035,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec1q14" id="atec1q143" value="3,0" type="radio" class="ace" onchange="radioOnChange(1, '14', this.value)">
+																						<input name="atec1Q14" id="atec1Q143" value="3,0" type="radio" class="ace" onchange="atualizarCampos(1, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1009,7 +1100,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q01" id="atec2q011" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '01', this.value)">
+																						<input name="atec2Q01" id="atec2Q011" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1017,7 +1108,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q01" id="atec2q012" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '01', this.value)">
+																						<input name="atec2Q01" id="atec2Q012" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1025,7 +1116,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q01" id="atec2q013" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '01', this.value)">
+																						<input name="atec2Q01" id="atec2Q013" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1045,7 +1136,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q02" id="atec2q021" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '02', this.value)">
+																						<input name="atec2Q02" id="atec2Q021" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1053,7 +1144,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q02" id="atec2q022" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '02', this.value)">
+																						<input name="atec2Q02" id="atec2Q022" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1061,7 +1152,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q02" id="atec2q023" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '02', this.value)">
+																						<input name="atec2Q02" id="atec2Q023" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1081,7 +1172,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q03" id="atec2q031" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '03', this.value)">
+																						<input name="atec2Q03" id="atec2Q031" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1089,7 +1180,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input  name="atec2q03" id="atec2q032" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '03', this.value)">
+																						<input  name="atec2Q03" id="atec2Q032" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1097,7 +1188,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input  name="atec2q03" id="atec2q033" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '03', this.value)">
+																						<input  name="atec2Q03" id="atec2Q033" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1117,7 +1208,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q04" id="atec2q041" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '04', this.value)">
+																						<input name="atec2Q04" id="atec2Q041" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1125,7 +1216,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q04" id="atec2q042" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '04', this.value)">
+																						<input name="atec2Q04" id="atec2Q042" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1133,7 +1224,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q04" id="atec2q043" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '04', this.value)">
+																						<input name="atec2Q04" id="atec2Q043" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1153,7 +1244,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q05" id="atec2q051" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '05', this.value)">
+																						<input name="atec2Q05" id="atec2Q051" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1161,7 +1252,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q05" id="atec2q052" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '05', this.value)">
+																						<input name="atec2Q05" id="atec2Q052" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1169,7 +1260,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q05" id="atec2q053" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '05', this.value)">
+																						<input name="atec2Q05" id="atec2Q053" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1189,7 +1280,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q06" id="atec2q061" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '06', this.value)">
+																						<input name="atec2Q06" id="atec2Q061" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1197,7 +1288,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q06" id="atec2q062" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '06', this.value)">
+																						<input name="atec2Q06" id="atec2Q062" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1205,7 +1296,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q06" id="atec2q063" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '06', this.value)">
+																						<input name="atec2Q06" id="atec2Q063" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1225,7 +1316,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q07" id="atec2q071" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '07', this.value)">
+																						<input name="atec2Q07" id="atec2Q071" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1233,7 +1324,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q07" id="atec2q072" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '07', this.value)">
+																						<input name="atec2Q07" id="atec2Q072" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1241,7 +1332,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q07" id="atec2q073" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '07', this.value)">
+																						<input name="atec2Q07" id="atec2Q073" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1261,7 +1352,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q08" id="atec2q081" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '08', this.value)">
+																						<input name="atec2Q08" id="atec2Q081" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1269,7 +1360,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q08" id="atec2q082" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '08', this.value)">
+																						<input name="atec2Q08" id="atec2Q082" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1277,7 +1368,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q08" id="atec2q083" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '08', this.value)">
+																						<input name="atec2Q08" id="atec2Q083" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1297,7 +1388,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q09" id="atec2q091" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '09', this.value)">
+																						<input name="atec2Q09" id="atec2Q091" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1305,7 +1396,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q09" id="atec2q092" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '09', this.value)">
+																						<input name="atec2Q09" id="atec2Q092" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1313,7 +1404,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q09" id="atec2q093" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '09', this.value)">
+																						<input name="atec2Q09" id="atec2Q093" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1333,7 +1424,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q10" id="atec2q101" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '10', this.value)">
+																						<input name="atec2Q10" id="atec2Q101" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1341,7 +1432,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q10" id="atec2q102" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '10', this.value)">
+																						<input name="atec2Q10" id="atec2Q102" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1349,7 +1440,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q10" id="atec2q103" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '10', this.value)">
+																						<input name="atec2Q10" id="atec2Q103" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1369,7 +1460,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q11" id="atec2q111" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '11', this.value)">
+																						<input name="atec2Q11" id="atec2Q111" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1377,7 +1468,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q11" id="atec2q112" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '11', this.value)">
+																						<input name="atec2Q11" id="atec2Q112" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1385,7 +1476,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q11" id="atec2q113" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '11', this.value)">
+																						<input name="atec2Q11" id="atec2Q113" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1405,7 +1496,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q12" id="atec2q121" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '12', this.value)">
+																						<input name="atec2Q12" id="atec2Q121" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1413,7 +1504,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q12" id="atec2q122" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '12', this.value)">
+																						<input name="atec2Q12" id="atec2Q122" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1421,7 +1512,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q12" id="atec2q123" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '12', this.value)">
+																						<input name="atec2Q12" id="atec2Q123" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1441,7 +1532,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q13" id="atec2q131" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '13', this.value)">
+																						<input name="atec2Q13" id="atec2Q131" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1449,7 +1540,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input  name="atec2q13" id="atec2q132" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '13', this.value)">
+																						<input  name="atec2Q13" id="atec2Q132" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1457,7 +1548,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input  name="atec2q13" id="atec2q133" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '13', this.value)">
+																						<input  name="atec2Q13" id="atec2Q133" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1477,7 +1568,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q14" id="atec2q141" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '14', this.value)">
+																						<input name="atec2Q14" id="atec2Q141" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1485,7 +1576,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q14" id="atec2q142" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '14', this.value)">
+																						<input name="atec2Q14" id="atec2Q142" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1493,7 +1584,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q14" id="atec2q143" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '14', this.value)">
+																						<input name="atec2Q14" id="atec2Q143" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1513,7 +1604,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q15" id="atec2q151" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '15', this.value)">
+																						<input name="atec2Q15" id="atec2Q151" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1521,7 +1612,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q15" id="atec2q152" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '15', this.value)">
+																						<input name="atec2Q15" id="atec2Q152" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1529,7 +1620,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q15" id="atec2q153" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '15', this.value)">
+																						<input name="atec2Q15" id="atec2Q153" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1549,7 +1640,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q16" id="atec2q161" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '16', this.value)">
+																						<input name="atec2Q16" id="atec2Q161" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1557,7 +1648,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q16" id="atec2q162" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '16', this.value)">
+																						<input name="atec2Q16" id="atec2Q162" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1565,7 +1656,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q16" id="atec2q163" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '16', this.value)">
+																						<input name="atec2Q16" id="atec2Q163" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '016', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1585,7 +1676,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q17" id="atec2q171" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '17', this.value)">
+																						<input name="atec2Q17" id="atec2Q171" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1593,7 +1684,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q17" id="atec2q172" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '17', this.value)">
+																						<input name="atec2Q17" id="atec2Q172" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1601,7 +1692,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q17" id="atec2q173" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '17', this.value)">
+																						<input name="atec2Q17" id="atec2Q173" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1621,7 +1712,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q18" id="atec2q181" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '18', this.value)">
+																						<input name="atec2Q18" id="atec2Q181" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1629,7 +1720,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q18" id="atec2q182" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '18', this.value)">
+																						<input name="atec2Q18" id="atec2Q182" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1637,7 +1728,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q18" id="atec2q183" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '18', this.value)">
+																						<input name="atec2Q18" id="atec2Q183" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1657,7 +1748,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q19" id="atec2q191" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '19', this.value)">
+																						<input name="atec2Q19" id="atec2Q191" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1665,7 +1756,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q19" id="atec2q192" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '19', this.value)">
+																						<input name="atec2Q19" id="atec2Q192" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1673,7 +1764,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q19" id="atec2q193" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '19', this.value)">
+																						<input name="atec2Q19" id="atec2Q193" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1693,7 +1784,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q20" id="atec2q201" value="1,0" type="radio" class="ace" onchange="radioOnChange(2, '20', this.value)">
+																						<input name="atec2Q20" id="atec2Q201" value="1,0" type="radio" class="ace" onchange="atualizarCampos(2, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1701,7 +1792,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q20" id="atec2q202" value="2,0" type="radio" class="ace" onchange="radioOnChange(2, '20', this.value)">
+																						<input name="atec2Q20" id="atec2Q202" value="2,0" type="radio" class="ace" onchange="atualizarCampos(2, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1709,7 +1800,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec2q20" id="atec2q203" value="3,0" type="radio" class="ace" onchange="radioOnChange(2, '20', this.value)">
+																						<input name="atec2Q20" id="atec2Q203" value="3,0" type="radio" class="ace" onchange="atualizarCampos(2, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1774,7 +1865,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q01" id="atec3q011" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '01', this.value)">
+																						<input name="atec3Q01" id="atec3Q011" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1782,7 +1873,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q01" id="atec3q012" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '01', this.value)">
+																						<input name="atec3Q01" id="atec3Q012" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1790,7 +1881,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q01" id="atec3q013" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '01', this.value)">
+																						<input name="atec3Q01" id="atec3Q013" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1810,7 +1901,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q02" id="atec3q021" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '02', this.value)">
+																						<input name="atec3Q02" id="atec3Q021" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1818,7 +1909,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q02" id="atec3q022" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '02', this.value)">
+																						<input name="atec3Q02" id="atec3Q022" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1826,7 +1917,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q02" id="atec3q023" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '02', this.value)">
+																						<input name="atec3Q02" id="atec3Q023" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1846,7 +1937,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q03" id="atec3q031" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '03', this.value)">
+																						<input name="atec3Q03" id="atec3Q031" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1854,7 +1945,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q03" id="atec3q032" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '03', this.value)">
+																						<input name="atec3Q03" id="atec3Q032" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1862,7 +1953,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q03" id="atec3q033" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '03', this.value)">
+																						<input name="atec3Q03" id="atec3Q033" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1882,7 +1973,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q04" id="atec3q041" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '04', this.value)">
+																						<input name="atec3Q04" id="atec3Q041" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1890,7 +1981,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q04" id="atec3q042" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '04', this.value)">
+																						<input name="atec3Q04" id="atec3Q042" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1898,7 +1989,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q04" id="atec3q043" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '04', this.value)">
+																						<input name="atec3Q04" id="atec3Q043" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1918,7 +2009,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q05" id="atec3q051" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '05', this.value)">
+																						<input name="atec3Q05" id="atec3Q051" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1926,7 +2017,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q05" id="atec3q052" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '05', this.value)">
+																						<input name="atec3Q05" id="atec3Q052" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1934,7 +2025,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q05" id="atec3q053" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '05', this.value)">
+																						<input name="atec3Q05" id="atec3Q053" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1954,7 +2045,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q06" id="atec3q061" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '06', this.value)">
+																						<input name="atec3Q06" id="atec3Q061" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1962,7 +2053,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q06" id="atec3q062" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '06', this.value)">
+																						<input name="atec3Q06" id="atec3Q062" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1970,7 +2061,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q06" id="atec3q063" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '06', this.value)">
+																						<input name="atec3Q06" id="atec3Q063" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1990,7 +2081,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q07" id="atec3q071" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '07', this.value)">
+																						<input name="atec3Q07" id="atec3Q071" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -1998,7 +2089,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q07" id="atec3q072" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '07', this.value)">
+																						<input name="atec3Q07" id="atec3Q072" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2006,7 +2097,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q07" id="atec3q073" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '07', this.value)">
+																						<input name="atec3Q07" id="atec3Q073" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2026,7 +2117,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q08" id="atec3q081" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '08', this.value)">
+																						<input name="atec3Q08" id="atec3Q081" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2034,7 +2125,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q08" id="atec3q082" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '08', this.value)">
+																						<input name="atec3Q08" id="atec3Q082" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2042,7 +2133,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q08" id="atec3q083" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '08', this.value)">
+																						<input name="atec3Q08" id="atec3Q083" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2062,7 +2153,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q09" id="atec3q091" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '09', this.value)">
+																						<input name="atec3Q09" id="atec3Q091" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2070,7 +2161,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q09" id="atec3q092" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '09', this.value)">
+																						<input name="atec3Q09" id="atec3Q092" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2078,7 +2169,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q09" id="atec3q093" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '09', this.value)">
+																						<input name="atec3Q09" id="atec3Q093" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2098,7 +2189,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q10" id="atec3q101" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '10', this.value)">
+																						<input name="atec3Q10" id="atec3Q101" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2106,7 +2197,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q10" id="atec3q102" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '10', this.value)">
+																						<input name="atec3Q10" id="atec3Q102" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2114,7 +2205,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q10" id="atec3q103" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '10', this.value)">
+																						<input name="atec3Q10" id="atec3Q103" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2134,7 +2225,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q11" id="atec3q111" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '11', this.value)">
+																						<input name="atec3Q11" id="atec3Q111" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2142,7 +2233,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q11" id="atec3q112" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '11', this.value)">
+																						<input name="atec3Q11" id="atec3Q112" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2150,7 +2241,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q11" id="atec3q113" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '11', this.value)">
+																						<input name="atec3Q11" id="atec3Q113" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2170,7 +2261,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q12" id="atec3q121" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '12', this.value)">
+																						<input name="atec3Q12" id="atec3Q121" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2178,7 +2269,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q12" id="atec3q122" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '12', this.value)">
+																						<input name="atec3Q12" id="atec3Q122" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2186,7 +2277,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q12" id="atec3q123" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '12', this.value)">
+																						<input name="atec3Q12" id="atec3Q123" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2206,7 +2297,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q13" id="atec3q131" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '13', this.value)">
+																						<input name="atec3Q13" id="atec3Q131" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2214,7 +2305,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q13" id="atec3q132" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '13', this.value)">
+																						<input name="atec3Q13" id="atec3Q132" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2222,7 +2313,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q13" id="atec3q133" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '13', this.value)">
+																						<input name="atec3Q13" id="atec3Q133" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2242,7 +2333,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q14" id="atec3q141" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '14', this.value)">
+																						<input name="atec3Q14" id="atec3Q141" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2250,7 +2341,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q14" id="atec3q142" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '14', this.value)">
+																						<input name="atec3Q14" id="atec3Q142" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2258,7 +2349,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q14" id="atec3q143" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '14', this.value)">
+																						<input name="atec3Q14" id="atec3Q143" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2278,7 +2369,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q15" id="atec3q151" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '15', this.value)">
+																						<input name="atec3Q15" id="atec3Q151" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2286,7 +2377,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q15" id="atec3q152" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '15', this.value)">
+																						<input name="atec3Q15" id="atec3Q152" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2294,7 +2385,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q15" id="atec3q153" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '15', this.value)">
+																						<input name="atec3Q15" id="atec3Q153" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2314,7 +2405,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q16" id="atec3q161" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '16', this.value)">
+																						<input name="atec3Q16" id="atec3Q161" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2322,7 +2413,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q16" id="atec3q162" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '16', this.value)">
+																						<input name="atec3Q16" id="atec3Q162" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2330,7 +2421,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q16" id="atec3q163" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '16', this.value)">
+																						<input name="atec3Q16" id="atec3Q163" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2350,7 +2441,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q17" id="atec3q171" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '17', this.value)">
+																						<input name="atec3Q17" id="atec3Q171" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2358,7 +2449,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q17" id="atec3q172" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '17', this.value)">
+																						<input name="atec3Q17" id="atec3Q172" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2366,7 +2457,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q17" id="atec3q173" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '17', this.value)">
+																						<input name="atec3Q17" id="atec3Q173" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2386,7 +2477,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q18" id="atec3q181" value="1,0" type="radio" class="ace" onchange="radioOnChange(3, '18', this.value)">
+																						<input name="atec3Q18" id="atec3Q181" value="1,0" type="radio" class="ace" onchange="atualizarCampos(3, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2394,7 +2485,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q18" id="atec3q182" value="2,0" type="radio" class="ace" onchange="radioOnChange(3, '18', this.value)">
+																						<input name="atec3Q18" id="atec3Q182" value="2,0" type="radio" class="ace" onchange="atualizarCampos(3, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2402,7 +2493,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec3q18" id="atec3q183" value="3,0" type="radio" class="ace" onchange="radioOnChange(3, '18', this.value)">
+																						<input name="atec3Q18" id="atec3Q183" value="3,0" type="radio" class="ace" onchange="atualizarCampos(3, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2468,7 +2559,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q01" id="atec4q011" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '01', this.value)">
+																						<input name="atec4Q01" id="atec4Q011" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2476,7 +2567,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q01" id="atec4q012" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '01', this.value)">
+																						<input name="atec4Q01" id="atec4Q012" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2484,7 +2575,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q01" id="atec4q013" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '01', this.value)">
+																						<input name="atec4Q01" id="atec4Q013" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '01', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2504,7 +2595,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q02" id="atec4q021" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '02', this.value)">
+																						<input name="atec4Q02" id="atec4Q021" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2512,7 +2603,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q02" id="atec4q022" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '02', this.value)">
+																						<input name="atec4Q02" id="atec4Q022" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2520,7 +2611,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q02" id="atec4q023" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '02', this.value)">
+																						<input name="atec4Q02" id="atec4Q023" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '02', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2540,7 +2631,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q03" id="atec4q031" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '03', this.value)">
+																						<input name="atec4Q03" id="atec4Q031" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2548,7 +2639,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q03" id="atec4q032" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '03', this.value)">
+																						<input name="atec4Q03" id="atec4Q032" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2556,7 +2647,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q03" id="atec4q033" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '03', this.value)">
+																						<input name="atec4Q03" id="atec4Q033" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '03', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2576,7 +2667,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q04" id="atec4q041" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '04', this.value)">
+																						<input name="atec4Q04" id="atec4Q041" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2584,7 +2675,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q04" id="atec4q042" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '04', this.value)">
+																						<input name="atec4Q04" id="atec4Q042" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2592,7 +2683,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q04" id="atec4q043" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '04', this.value)">
+																						<input name="atec4Q04" id="atec4Q043" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '04', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2612,7 +2703,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q05" id="atec4q051" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '05', this.value)">
+																						<input name="atec4Q05" id="atec4Q051" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2620,7 +2711,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q05" id="atec4q052" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '05', this.value)">
+																						<input name="atec4Q05" id="atec4Q052" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2628,7 +2719,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q05" id="atec4q053" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '05', this.value)">
+																						<input name="atec4Q05" id="atec4Q053" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '05', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2648,7 +2739,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q06" id="atec4q061" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '06', this.value)">
+																						<input name="atec4Q06" id="atec4Q061" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2656,7 +2747,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q06" id="atec4q062" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '06', this.value)">
+																						<input name="atec4Q06" id="atec4Q062" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2664,7 +2755,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q06" id="atec4q063" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '06', this.value)">
+																						<input name="atec4Q06" id="atec4Q063" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '06', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2684,7 +2775,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q07" id="atec4q071" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '07', this.value)">
+																						<input name="atec4Q07" id="atec4Q071" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2692,7 +2783,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q07" id="atec4q072" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '07', this.value)">
+																						<input name="atec4Q07" id="atec4Q072" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2700,7 +2791,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q07" id="atec4q073" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '07', this.value)">
+																						<input name="atec4Q07" id="atec4Q073" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '07', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2720,7 +2811,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q08" id="atec4q081" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '08', this.value)">
+																						<input name="atec4Q08" id="atec4Q081" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2728,7 +2819,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q01" id="atec4q082" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '08', this.value)">
+																						<input name="atec4Q08" id="atec4Q082" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2736,7 +2827,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q08" id="atec4q083" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '08', this.value)">
+																						<input name="atec4Q08" id="atec4Q083" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '08', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2756,7 +2847,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q09" id="atec4q091" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '09', this.value)">
+																						<input name="atec4Q09" id="atec4Q091" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2764,7 +2855,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q09" id="atec4q092" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '09', this.value)">
+																						<input name="atec4Q09" id="atec4Q092" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2772,7 +2863,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q09" id="atec4q093" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '09', this.value)">
+																						<input name="atec4Q09" id="atec4Q093" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '09', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2792,7 +2883,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q10" id="atec4q101" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '10', this.value)">
+																						<input name="atec4Q10" id="atec4Q101" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2800,7 +2891,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q10" id="atec4q102" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '10', this.value)">
+																						<input name="atec4Q10" id="atec4Q102" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2808,7 +2899,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q10" id="atec4q103" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '10', this.value)">
+																						<input name="atec4Q10" id="atec4Q103" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '10', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2828,7 +2919,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q11" id="atec4q111" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '11', this.value)">
+																						<input name="atec4Q11" id="atec4Q111" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2836,7 +2927,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q11" id="atec4q012" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '11', this.value)">
+																						<input name="atec4Q11" id="atec4Q112" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2844,7 +2935,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q11" id="atec4q113" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '11', this.value)">
+																						<input name="atec4Q11" id="atec4Q113" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '11', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2864,7 +2955,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q12" id="atec4q121" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '12', this.value)">
+																						<input name="atec4Q12" id="atec4Q121" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2872,7 +2963,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q12" id="atec4q122" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '12', this.value)">
+																						<input name="atec4Q12" id="atec4Q122" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2880,7 +2971,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q12" id="atec4q123" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '12', this.value)">
+																						<input name="atec4Q12" id="atec4Q123" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '12', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2900,7 +2991,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q13" id="atec4q131" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '13', this.value)">
+																						<input name="atec4Q13" id="atec4Q131" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2908,7 +2999,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q13" id="atec4q132" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '13', this.value)">
+																						<input name="atec4Q13" id="atec4Q132" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2916,7 +3007,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q13" id="atec4q133" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '13', this.value)">
+																						<input name="atec4Q13" id="atec4Q133" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '13', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2936,7 +3027,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q14" id="atec4q141" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '14', this.value)">
+																						<input name="atec4Q14" id="atec4Q141" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2944,7 +3035,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q14" id="atec4q142" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '14', this.value)">
+																						<input name="atec4Q14" id="atec4Q142" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2952,7 +3043,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q14" id="atec4q143" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '14', this.value)">
+																						<input name="atec4Q14" id="atec4Q143" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '14', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2972,7 +3063,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q15" id="atec4q151" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '15', this.value)">
+																						<input name="atec4Q15" id="atec4Q151" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2980,7 +3071,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q15" id="atec4q152" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '15', this.value)">
+																						<input name="atec4Q15" id="atec4Q152" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -2988,7 +3079,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q15" id="atec4q153" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '15', this.value)">
+																						<input name="atec4Q15" id="atec4Q153" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '15', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3008,7 +3099,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q16" id="atec4q161" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '16', this.value)">
+																						<input name="atec4Q16" id="atec4Q161" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3016,7 +3107,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q16" id="atec4q162" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '16', this.value)">
+																						<input name="atec4Q16" id="atec4Q162" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3024,7 +3115,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q16" id="atec4q163" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '16', this.value)">
+																						<input name="atec4Q16" id="atec4Q163" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '16', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3044,7 +3135,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q17" id="atec4q171" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '17', this.value)">
+																						<input name="atec4Q17" id="atec4Q171" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3052,7 +3143,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q17" id="atec4q172" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '17', this.value)">
+																						<input name="atec4Q17" id="atec4Q172" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3060,7 +3151,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q17" id="atec4q173" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '17', this.value)">
+																						<input name="atec4Q17" id="atec4Q173" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '17', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3080,7 +3171,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q18" id="atec4q181" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '18', this.value)">
+																						<input name="atec4Q18" id="atec4Q181" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3088,7 +3179,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q18" id="atec4q182" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '18', this.value)">
+																						<input name="atec4Q18" id="atec4Q182" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3096,7 +3187,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q18" id="atec4q183" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '18', this.value)">
+																						<input name="atec4Q18" id="atec4Q183" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '18', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3116,7 +3207,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q19" id="atec4q191" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '19', this.value)">
+																						<input name="atec4Q19" id="atec4Q191" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3124,7 +3215,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q19" id="atec4q192" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '19', this.value)">
+																						<input name="atec4Q19" id="atec4Q192" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3132,7 +3223,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q19" id="atec4q193" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '19', this.value)">
+																						<input name="atec4Q19" id="atec4Q193" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '19', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3152,7 +3243,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q20" id="atec4q201" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '20', this.value)">
+																						<input name="atec4Q20" id="atec4Q201" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3160,7 +3251,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q20" id="atec4q202" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '20', this.value)">
+																						<input name="atec4Q20" id="atec4Q202" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3168,7 +3259,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q20" id="atec4q203" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '20', this.value)">
+																						<input name="atec4Q20" id="atec4Q203" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '20', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3188,7 +3279,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q21" id="atec4q211" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '21', this.value)">
+																						<input name="atec4Q21" id="atec4Q211" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '21', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3196,7 +3287,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q21" id="atec4q212" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '21', this.value)">
+																						<input name="atec4Q21" id="atec4Q212" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '21', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3204,7 +3295,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q21" id="atec4q213" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '21', this.value)">
+																						<input name="atec4Q21" id="atec4Q213" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '21', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3224,7 +3315,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q22" id="atec4q221" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '22', this.value)">
+																						<input name="atec4Q22" id="atec4Q221" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '22', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3232,7 +3323,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q22" id="atec4q222" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '22', this.value)">
+																						<input name="atec4Q22" id="atec4Q222" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '22', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3240,7 +3331,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q22" id="atec4q223" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '22', this.value)">
+																						<input name="atec4Q22" id="atec4Q223" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '22', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3260,7 +3351,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q23" id="atec4q231" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '23', this.value)">
+																						<input name="atec4Q23" id="atec4Q231" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '23', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3268,7 +3359,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q23" id="atec4q232" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '23', this.value)">
+																						<input name="atec4Q23" id="atec4Q232" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '23', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3276,7 +3367,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q23" id="atec4q233" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '23', this.value)">
+																						<input name="atec4Q23" id="atec4Q233" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '23', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3296,7 +3387,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q24" id="atec4q241" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '24', this.value)">
+																						<input name="atec4Q24" id="atec4Q241" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '24', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3304,7 +3395,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q24" id="atec4q242" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '24', this.value)">
+																						<input name="atec4Q24" id="atec4Q242" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '24', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3312,7 +3403,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q24" id="atec4q243" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '24', this.value)">
+																						<input name="atec4Q24" id="atec4Q243" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '24', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3332,7 +3423,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q25" id="atec4q251" value="1,0" type="radio" class="ace" onchange="radioOnChange(4, '25', this.value)">
+																						<input name="atec4Q25" id="atec4Q251" value="1,0" type="radio" class="ace" onchange="atualizarCampos(4, '25', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3340,7 +3431,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q25" id="atec4q252" value="2,0" type="radio" class="ace" onchange="radioOnChange(4, '25', this.value)">
+																						<input name="atec4Q25" id="atec4Q252" value="2,0" type="radio" class="ace" onchange="atualizarCampos(4, '25', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
@@ -3348,7 +3439,7 @@
 																			<td>
 																				<div class="radio">
 																					<label>
-																						<input name="atec4q25" id="atec4q253" value="3,0" type="radio" class="ace" onchange="radioOnChange(4, '25', this.value)">
+																						<input name="atec4Q25" id="atec4Q253" value="3,0" type="radio" class="ace" onchange="atualizarCampos(4, '25', this.value)">
 																						<span class="lbl">&nbsp</span>
 																					</label>
 																				</div>
