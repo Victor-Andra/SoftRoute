@@ -390,15 +390,14 @@
 													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >vlr.Dif</th>
 													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo PG</th>
 													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Pagamento</th>
-													
+													<th style="width: 50px;" class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >PG?</th>
+													<!-- Impostos-->
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >PIS</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >CSLL</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >COFINS</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >IRPJ</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" style="color: crimson;" >ISS</th>
-													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Quitado?</th><!-- quadrado e pintar a linha de verde-->
-												
-													<th>Ação</th>
+													<th style="width: 70px;">Ação</th>
 												</tr>
 											
 											</thead><!-- Fim Cabeçalho da tabela -->
@@ -411,8 +410,8 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
-														<td><b>{{contarec_nfnum}}</b></td>
-														<td>{{contarec_benenome}}</td>
+														<td><b>NF{{contarec_nfnum}}</b></td>
+														<td>{{contarec_benenometipo}}</td>
 														{{#each ../convs}}<!-- Ok -->	
 																{{#ifEqual this._id ../contarec_convid}}
 																	<td>{{conv_nome}}</td>
@@ -431,30 +430,25 @@
 														
 														<td>{{datapg}}</td>
 														
+														{{#ifEqual this.contarec_pg "Não"}}
+															<td style="text-align: center;"><span class="badge badge-danger">Não</span></td>
+															{{else}}
+															<td style="text-align: center;"><span class="badge badge-success">Sim</span></td>
+														{{/ifEqual}}
+
 														<td style="text-align: right; color: crimson;">{{contarec_vlrpis}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrcssl}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrcofins}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlrirpj}}</td>
 														<td style="text-align: right; color: crimson;">{{contarec_vlriss}}</td>
 
-														
-														{{#ifEqual this.contarec_pg "Não"}}
-																	<td><span class="label label-sm label-danger">Não</span></td>
-																	{{else}}
-																	<td><span class="label label-sm label-success">Sim</span></td>
-																{{/ifEqual}}
 														<td>
 															<div class="action-buttons">
 																<a class="green" href="/menu/financeiro/receita/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																<a class="blue" href="" style="font-size: 9px;" title={{contarec_descr}}>
-																	<i class="ace-icon fa fa-tags bigger-130"></i>
-																</a>
-																<a class="blue" href="" style="font-size: 9px;" title={{contarec_obs}}>
-																	<i class="ace-icon fa fa-tags bigger-130"></i>
-																</a>
-																<a class="red" onclick="javascript:confirmeDeletar('{{_id}}');" href="">
+																
+																<a class="red" onclick="javascript:confirmeDeletar('{{_id}}');" >
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
 															</div>
@@ -541,43 +535,84 @@
 			$('<th >').text('').appendTo(headerRow);
 			$('<th>').html('<div class="action-buttons"><a class="green" href="/menu/financeiro/receita/cad"><i class="ace-icon fa fa-plus bigger-130"></i></a></div>').appendTo(headerRow);
 
-			// Evento para atualizar os totais ao redesenhar
-table.on('draw.dt', function () {
-    // Obter os dados filtrados
-    var filteredData = table.rows({ search: 'applied' }).data();
+			// Adicione uma linha de total para "Lote" no cabeçalho
+			var loteTotalRow = $('<tr>').appendTo('#dynamic-table thead');
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
 
-    // Lógica para calcular totais e atualizar a linha de total
-    // Substitua este exemplo com a lógica específica para o seu projeto
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th >').text('').appendTo(loteTotalRow);
+			$('<th>').text('').appendTo(loteTotalRow);
 
-    // Índices das colunas a serem somadas
-    var colunasSoma = [7, 11, 12, 15, 16, 17, 18, 19];
+			table.on('draw.dt', function () {
+			// Obter os dados filtrados
+			var filteredDataInd = table.rows({ search: 'applied' }).data();
+			var filteredDataLote = table.rows({ search: 'applied' }).data();
 
-    // Inicializar totais
-    var totais = Array(colunasSoma.length).fill(0);
+			// Índices das colunas a serem somadas
+			var colunasSoma = [2, 7, 11, 12, 16, 17, 18, 19, 20];
+			var colunasLoteTotal = [2, 7, 11, 12, 16, 17, 18, 19, 20]; // Índices das colunas para o total do "Lote"
 
-    // Iterar sobre os dados filtrados e calcular os totais
-    filteredData.each(function (value, index) {
-        colunasSoma.forEach(function (colunaIndex, i) {
-            // Converta os valores do formato brasileiro para americano antes de somar
-            var valorColuna = parseFloat(value[colunaIndex].replace('.', '').replace(',', '.')) || 0;
-            totais[i] += valorColuna;
-        });
-    });
-
-    // Atualizar a linha de total
-    colunasSoma.forEach(function (colunaIndex, i) {
-        var totalFormatado = totais[i].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-
-        // Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
-        headerRow.find('th:eq(' + colunaIndex + ')').text(totalFormatado).addClass('text-right');
-    });
-});
-
+			// Inicializar totais
+			var totais = Array(colunasSoma.length).fill(0);
+			var loteTotal = Array(colunasLoteTotal.length).fill(0);
 			
-			// Configuração adicional para o estilo dos botões
-			$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+			
+			// Iterar sobre os dados filtrados e calcular os totais
+			filteredDataLote.each(function (value, index) {
+				colunasSoma.forEach(function (colunaIndex, i) {
+					// Converta os valores do formato brasileiro para americano antes de somar
+					var valorColuna = parseFloat(value[colunaIndex].replace('.', '').replace(',', '.')) || 0;
+					totais[i] += valorColuna;
+
+					// Se a linha contiver o texto "Lote", adicione à variável loteTotal
+					if (value[colunasLoteTotal[0]].toLowerCase() === 'lote') {
+						loteTotal[i] += valorColuna;
+					}
+				});
+			});
+
+
+			// Atualizar a linha de total principal
+			colunasSoma.forEach(function (colunaIndex, i) {
+				var totalFormatado = totais[i].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+				// Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
+				headerRow.find('th:eq(' + colunaIndex + ')').text(totalFormatado).addClass('text-right');
+			});
+
+			// Atualizar a linha de total para "Lote"
+			colunasLoteTotal.forEach(function (colunaIndex, i) {
+				var loteTotalFormatado = loteTotal[i].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+				// Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
+				loteTotalRow.find('th:eq(' + colunaIndex + ')').text(loteTotalFormatado).addClass('text-right');
+			});
 		});
 
+
+						
+						// Configuração adicional para o estilo dos botões
+						$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+					});
+		
 		
 		
 		</script>

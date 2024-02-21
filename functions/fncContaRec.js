@@ -11,6 +11,9 @@ const convClass = require("../models/conv")
 const usuClass = require("../models/usuario")
 const convImpClass = require("../models/convImp")
 const impostoClass = require("../models/imposto")
+const respostaClass = require("../models/resposta")
+//Tabela Ata
+
 
 //tabelas Extrangeira
 const Bene = mongoose.model("tb_bene")
@@ -18,6 +21,7 @@ const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const ConvImp = mongoose.model("tb_convimp")
 const Imposto = mongoose.model("tb_imposto")
+const Resposta = mongoose.model("tb_resposta")
 
 //Funções auxiliares
 const fncContaRec = require("./fncContaRec")
@@ -70,49 +74,67 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    
     atualizar(req,res){
-        let resposta;
+        let resultado
+        let resposta = new Resposta()
         try{
             contaRecClass.contarecEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resposta = res;
+                resultado = res;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resposta = err;
+                resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resposta){
-                    //Volta para a contaRec de listagem
-                    this.listar(req,res);
+                if(resultado == true){
+                    //Volta para lista de Nf´s
+                    console.log("Listagem Realizada!")
+                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.sucesso = "true"
+                    this.listar(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+                    console.log(resultado)
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    this.listar(req,res,resposta)
                 }
             })
         } catch(err1){
             console.log(err1)
+            res.render('admin/erro')
         }
     },
-    adicionar: async (req, res) => {
-        try {
-            let cadastro = await contaRecClass.contarecAdicionar(req, res);
-    
-            if (cadastro === true) {
-                console.log('Cadastro realizado!');
-                res.render('financeiro/receita/contaRecCad');
+    adicionar(req,res){
+        console.log("chegou")
+        let resultado
+        let flash = new Resposta();
+        contaRecClass.contarecAdicionar(req, res).then((result)=>{
+            console.log("Cadastro Realizado!")
+            console.log(result)
+            resultado = true;
+        }).catch((err)=>{
+            resultado = err
+            console.log("ERRO:")
+        }).finally(()=>{
+            if (resultado == true){
+                flash.texto = "NF cadastrada com sucesso!"
+                flash.sucesso = "true"
+                console.log('verdadeiro')
+                this.listar(req,res,flash)
             } else {
-                console.log(cadastro);
-                res.render('admin/erro');
+                flash.texto = resultado
+                flash.sucesso = "false"
+                console.log('falso')
+                res.render('admin/erro', flash);
             }
-        } catch (error) {
-            console.error(error);
-            res.render('admin/erro');
-        }
+        })
     },
+    
    
     listar(req, res){
         ContaRec.find().then((conta) =>{

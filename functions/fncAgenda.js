@@ -47,6 +47,7 @@ const Resposta = mongoose.model("tb_resposta")
 const atendFnc = require("../functions/fncAtend")
 const fncGeral = require("./fncGeral")
 const fncEvoatend = require("../functions/fncEvoatend")
+const terapia = require("../models/terapia")
 const ObjectId = require('mongodb').ObjectId;
 
 class FiltroAtend{
@@ -2273,6 +2274,7 @@ module.exports = {
         let sexta;
         let beneConvid;
         let benenomeconv;
+        let soFixo = req.body.soFixo;
         let dtFill = new Date(req.body.dataFinal);
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -2344,7 +2346,7 @@ module.exports = {
 
         let busca;
         //console.log("req.body.soFixo:"+req.body.soFixo)
-        if (req.body.soFixo == "true"){
+        if (soFixo == "true"){
             busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, "agenda_categoria": "SubstitutoFixo" };
         } else {
             busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false };
@@ -2424,6 +2426,33 @@ module.exports = {
                                     //console.log("Tem "+z+"?"+haddia)
                                     this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
                                 })
+                                
+                                agenda.forEach((a)=>{
+                                    if (soFixo == "true"){
+                                        //console.log("agenda: "+a)
+                                        let terapeutaAgendaSubF;
+                                        let terapiaAgendaSubF;
+                                        //let terapeutaAgendaSubF = terapeuta.filter((t)=>{(""+t._id+"") == (""+a.agenda_mergeterapeutaid+"")});
+                                        //let terapiaAgendaSubF = terapia.filter((t)=>{(""+t._id+"") == (""+a.agenda_mergeterapiaid+"")});
+                                        console.log("a._id: "+a._id);
+                                        console.log("a.agenda_mergeterapeutaid: "+a.agenda_mergeterapeutaid)
+                                        terapeuta.forEach((t)=>{
+                                            if ((""+t._id+"") == (""+a.agenda_mergeterapeutaid+"")){
+                                                terapeutaAgendaSubF = t.usuario_nome;
+                                            }
+                                        })
+                                        terapia.forEach((t)=>{
+                                            if ((""+t._id+"") == (""+a.agenda_mergeterapiaid+"")){
+                                                terapiaAgendaSubF = t.terapia_nome;
+                                            }
+                                        })
+                                        if (terapeutaAgendaSubF != undefined && terapeutaAgendaSubF != "undefined" && terapiaAgendaSubF != undefined && terapiaAgendaSubF != "undefined"){
+                                            a.agenda_obs="SubFix: "+terapeutaAgendaSubF +"/"+terapiaAgendaSubF;
+                                        } else {
+                                            a.agenda_obs="Erro";
+                                        }
+                                    }
+                                })
 
                                 agenda.sort(function(a, b) {
                                     let h1 = a.agenda_hora.substring(0,2);
@@ -2448,7 +2477,7 @@ module.exports = {
                                     //console.log("Listagem Realizada de Terapia")
                                     benenomeconv = nomeBene+" / "+nomeConv;
                                     //console.log("benenomeconv:"+benenomeconv)
-                                    res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+                                    res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, bene, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, soFixo, segunda, terca, quarta, quinta, sexta})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

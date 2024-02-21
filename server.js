@@ -54,7 +54,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         })
 
         exports.IsAuthenticated = function(req,res,next){//Passport creates a function to your session called isAuthenticated(), so you can use it to verify if the user really login in the app
-            console.log("AUTENTICADO?"+req.isAuthenticated())
+            //console.log("AUTENTICADO?"+req.isAuthenticated())
 
             if(req.isAuthenticated()){//So, here you are saying that if the route called had any other function, it will goes to the next one ( which is rendering the HTML )
                 next();
@@ -85,7 +85,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 compareThis: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){
                         return options.inverse(this);
                     } else {
@@ -113,7 +113,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 compareUndefined: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){
                         return options.fn(this);
                     } else {
@@ -209,7 +209,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 menorOuigual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (parseInt(""+v1+"") <= parseInt(""+v2+"")) {
                         return options.fn(this);
                     } else {
@@ -217,7 +217,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 maiorOuigual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (parseInt(""+v1+"") >= parseInt(""+v2+"")) {
                         return options.fn(this);
                     } else {
@@ -225,7 +225,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 maiorQue: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
-                    console.log("/"+v1+"="+v2+"/")
+                    //console.log("/"+v1+"="+v2+"/")
                     if (parseInt(""+v1+"") > parseInt(""+v2+"")) {
                         return options.fn(this);
                     } else {
@@ -259,6 +259,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 //Outros
 const PORT = 8081
 app.listen(PORT, () => {
-    console.log("Servidor rodando")
+    //console.log("Servidor rodando")
 })
 

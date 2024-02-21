@@ -111,6 +111,13 @@
 							<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
 							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
 							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+								{{#compareThis agenda_obs "Erro"}}
+								{{else}}
+									<a style="vertical-align: middle" class="pink" id="open-event" href="#" title="{{agenda_obs}}">
+										<i class="ace-icon fa fa-random bigger-110"></i>
+										&nbsp;
+									</a>
+								{{/compareThis}}
 								<a class="blue" href="/menu/agenda/edi/{{_id}}">
 									<i class="ace-icon fa fa-pencil bigger-130"></i>
 								</a>

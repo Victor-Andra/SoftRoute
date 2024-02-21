@@ -81,6 +81,11 @@ const beneClass = require("../models/bene")
 const Bene = mongoose.model("tb_bene")
 const fncBene = require("../functions/fncBene")
 
+//Exceções, Peculiaridades da Fichas de Frequência
+const excecaoClass = require("../models/excecao")
+const Excecao = mongoose.model("tb_excecao")
+const fncExcecao = require("../functions/fncExcecao")
+
 //Fotos dos beneficiarios
 //As fotos dos beneficiários ficam em tabela e função a parte para não pesar listagens e outras fuções do sistema
 //Só em rarissimas esceções ele é chamado para exibir a foto, no formulário do Dossiê
@@ -2044,6 +2049,35 @@ router.get('/area/escalas/atec/atecedi/:id', fncGeral.IsAuthenticated, (req,res)
 //Deleta Atec Selecionado
 router.get('/area/escalas/atec/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
     fncAtec.deletaAtec(req,res);
+})
+
+//Menu Exceções ** 
+//Carrega Cadastro
+router.get('/beneficiario/excecao/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
+    fncExcecao.carregaExcecao(req, res);
+})
+
+//adiciona registro
+router.post('/beneficiario/excecao/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro
+    fncExcecao.cadastraExcecao(req, res);
+})
+
+router.post('/beneficiario/excecao/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+fncExcecao.atualizaExcecao(req, res);
+})
+
+//carrega registro para edição
+router.get('/beneficiario/excecao/excecaoedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+    fncExcecao.carregaExcecaoEdi(req, res);
+})
+
+//Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/beneficiario/excecao/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para lista
+    fncExcecao.listaExcecao(req, res);
+})
+//Deleta Excecao Selecionado
+router.get('/beneficiario/excecao/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
+    fncExcecao.deletaExcecao(req,res);
 })
 
 //Menu ATA ** Area Tecnicos e Escalas 
