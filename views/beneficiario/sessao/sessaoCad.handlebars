@@ -51,10 +51,10 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/beneficiario/sessao/add" method="POST">
 								<div class="form-horizontal" role="form">
-									<div class="col-sm-12" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+									<div class="col-sm-6" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">Cadastro das Tabelas de Sessoes de Terapias</h4>
+												<h4 class="widget-title">Cadastro do índice do beneficiário e convênio</h4>
 
 												<span class="widget-toolbar">
 
@@ -71,46 +71,45 @@
 											<div class="widget-body">
 												<div class="widget-main">
 
-												<label>Beneficiário</label>
-												<div class="hidden">
-													{{#each benes}}
-														{{#each ../convs}}
-															{{#ifEqual ../bene_convid _id}}
-																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
-															{{/ifEqual}}
+													<label>Beneficiário</label>
+													<div class="hidden">
+														{{#each benes}}
+															{{#each ../convs}}
+																{{#ifEqual ../bene_convid _id}}
+																	<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+																{{/ifEqual}}
+															{{/each}}
 														{{/each}}
-													{{/each}}
-													<input value="X" id="X" name="refBeneConv" />
-												</div>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="sessaoBeneid" name="sessaoBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																<option value="766f69643132333435366964"></option>
-																{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-														</select>
+														<input value="X" id="X" name="refBeneConv" />
 													</div>
-												</div>
-
-												<label>Convênio</label>		
-												<div class="form-group">
+													<div class="form-group">
 														<div class="col-sm-4">
-															<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="sessaoConvid" name="sessaoConvid" class="chosen-select" data-placeholder="Escolha...">
+															<select id="sessaoBeneid" name="sessaoBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																	<option value="766f69643132333435366964"></option>
 																	{{#each benes}}
-																		{{#each ../convs}}
-																			{{#ifEqual ../bene_convid _id}}
-																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
-																			{{/ifEqual}}
-																		{{/each}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
 															</select>
 														</div>
-												</div>
+													</div>
+													<label>Convênio</label>		
+													<div class="form-group">
+															<div class="col-sm-4">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="sessaoConvid" name="sessaoConvid" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="766f69643132333435366964"></option>
+																		{{#each benes}}
+																			{{#each ../convs}}
+																				{{#ifEqual ../bene_convid _id}}
+																					<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																				{{/ifEqual}}
+																			{{/each}}
+																		{{/each}}
+																</select>
+															</div>
+													</div>
 
 													<div class="row">
-														<div class="col-sm-12">
+														<div class="col-xs-6">
 															<div class="alert alert-danger">
 																<button type="button" class="close" data-dismiss="alert">
 																	<i class="ace-icon fa fa-times"></i>
@@ -140,54 +139,454 @@
 																	
 															</div>
 														</div>
-													</div>	
-													<label>Terapia</label>
-													<div class="input-group">
-															<div >
-																<select name="sessaoTerapiaid" id="sessaoTerapiaid"  class="chosen-select" data-placeholder="Escolha..." style="width: 300px;">
-																		<option value="X">&nbsp;</option>
-																		{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
-																		{{else}}
-																		{{/each}}
-																</select>
-															</div>
 													</div>
-
-
-
-													<label> Qt Sessões Previstas </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiaprev" id="sessaoQtterapiaprev" placeholder="" class="form-control" style="width: 200px;"/>
-														</div>
-													</div>
-
-													<label> Qt Sessões Realizadas </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiacon" id="sessaoQtterapiacon" placeholder="" class="form-control" style="width: 200px;"/>
-														</div>
-													</div>
-
-													<label> Saldo </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiasaldo" id="sessaoQtterapiasaldo" placeholder="" class="form-control" style="width: 200px;"/>
-														</div>
-													</div>
-
-
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
+									
+									<div class="col-sm-6" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Tabela de Sessoes de Terapias</h4>
 
-								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th colspan="1"><label>Terapia</label></th>
+																<th colspan="1"><label>Qt previstas </label></th>
+																<th colspan="1"><label>Qt realizadas </label></th>
+																<th colspan="1"><label>Saldo </label></th>
+															</tr>
+														</thead>
+
+														<tbody>
+															<tr><!-- 1AReg -->
+																<td>
+																	<select name="sessaoTerapiaid01" id="sessaoTerapiaid01"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev01" id="sessaoQtterapiaprev01" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon01" id="sessaoQtterapiacon01" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo01" id="sessaoQtterapiasaldo01" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 2AReg -->
+																<td>
+																	<select name="sessaoTerapiaid02" id="sessaoTerapiaid02"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev02" id="sessaoQtterapiaprev02" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon02" id="sessaoQtterapiacon02" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo02" id="sessaoQtterapiasaldo02" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 3AReg -->
+																<td>
+																	<select name="sessaoTerapiaid03" id="sessaoTerapiaid03"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev03" id="sessaoQtterapiaprev03" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon03" id="sessaoQtterapiacon03" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo03" id="sessaoQtterapiasaldo03" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 4AReg -->
+																<td>
+																	<select name="sessaoTerapiaid04" id="sessaoTerapiaid04"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev04" id="sessaoQtterapiaprev04" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon04" id="sessaoQtterapiacon04" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo04" id="sessaoQtterapiasaldo04" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 5AReg -->
+																<td>
+																	<select name="sessaoTerapiaid05" id="sessaoTerapiaid05"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev05" id="sessaoQtterapiaprev05" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon05" id="sessaoQtterapiacon05" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo05" id="sessaoQtterapiasaldo05" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 6AReg -->
+																<td>
+																	<select name="sessaoTerapiaid06" id="sessaoTerapiaid06"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev06" id="sessaoQtterapiaprev06" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon06" id="sessaoQtterapiacon06" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo06" id="sessaoQtterapiasaldo06" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 7AReg -->
+																<td>
+																	<select name="sessaoTerapiaid07" id="sessaoTerapiaid07"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev07" id="sessaoQtterapiaprev07" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon07" id="sessaoQtterapiacon07" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo07" id="sessaoQtterapiasaldo07" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 8AReg -->
+																<td>
+																	<select name="sessaoTerapiaid08" id="sessaoTerapiaid08"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev08" id="sessaoQtterapiaprev08" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon08" id="sessaoQtterapiacon08" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo08" id="sessaoQtterapiasaldo08" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 9AReg -->
+																<td>
+																	<select name="sessaoTerapiaid09" id="sessaoTerapiaid09"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev09" id="sessaoQtterapiaprev09" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon09" id="sessaoQtterapiacon09" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo09" id="sessaoQtterapiasaldo09" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 10AReg -->
+																<td>
+																	<select name="sessaoTerapiaid10" id="sessaoTerapiaid10"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev10" id="sessaoQtterapiaprev10" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon10" id="sessaoQtterapiacon10" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo10" id="sessaoQtterapiasaldo10" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 11AReg -->
+																<td>
+																	<select name="sessaoTerapiaid11" id="sessaoTerapiaid11"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev11" id="sessaoQtterapiaprev11" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon11" id="sessaoQtterapiacon11" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo11" id="sessaoQtterapiasaldo11" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 12AReg -->
+																<td>
+																	<select name="sessaoTerapiaid12" id="sessaoTerapiaid12"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev12" id="sessaoQtterapiaprev12" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon12" id="sessaoQtterapiacon12" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo12" id="sessaoQtterapiasaldo12" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 13AReg -->
+																<td>
+																	<select name="sessaoTerapiaid13" id="sessaoTerapiaid13"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev13" id="sessaoQtterapiaprev13" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon13" id="sessaoQtterapiacon13" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo13" id="sessaoQtterapiasaldo13" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 14AReg -->
+																<td>
+																	<select name="sessaoTerapiaid14" id="sessaoTerapiaid14"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev14" id="sessaoQtterapiaprev14" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon14" id="sessaoQtterapiacon14" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo14" id="sessaoQtterapiasaldo14" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 15AReg -->
+																<td>
+																	<select name="sessaoTerapiaid15" id="sessaoTerapiaid15"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev15" id="sessaoQtterapiaprev15" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon15" id="sessaoQtterapiacon15" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo15" id="sessaoQtterapiasaldo15" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 16AReg -->
+																<td>
+																	<select name="sessaoTerapiaid16" id="sessaoTerapiaid16"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev16" id="sessaoQtterapiaprev16" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon16" id="sessaoQtterapiacon16" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo16" id="sessaoQtterapiasaldo16" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 17AReg -->
+																<td>
+																	<select name="sessaoTerapiaid17" id="sessaoTerapiaid17"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev17" id="sessaoQtterapiaprev17" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon17" id="sessaoQtterapiacon17" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo17" id="sessaoQtterapiasaldo17" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 18AReg -->
+																<td>
+																	<select name="sessaoTerapiaid18" id="sessaoTerapiaid18"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev18" id="sessaoQtterapiaprev18" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon18" id="sessaoQtterapiacon18" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo18" id="sessaoQtterapiasaldo18" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 19AReg -->
+																<td>
+																	<select name="sessaoTerapiaid19" id="sessaoTerapiaid19"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev19" id="sessaoQtterapiaprev19" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon19" id="sessaoQtterapiacon19" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo19" id="sessaoQtterapiasaldo19" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															<tr><!-- 20AReg -->
+																<td>
+																	<select name="sessaoTerapiaid20" id="sessaoTerapiaid20"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev20" id="sessaoQtterapiaprev20" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon20" id="sessaoQtterapiacon20" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo20" id="sessaoQtterapiasaldo20" placeholder="" class="form-control" s/>
+																</td>
+															</tr>
+															
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+										
+								</div>
+								
+
+									<div class="col-sm-12" style="text-align: center;"><!-- Widget Dados Básicos -->
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
@@ -199,7 +598,6 @@
 											Voltar
 										</button>
 									</div>
-								</div>
 							</form>
 
 							

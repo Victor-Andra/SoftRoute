@@ -22,6 +22,8 @@ const atendClass = require("../models/atend")
 const especialidadeClass = require("../models/especialidade")
 const especializacaoClass = require("../models/especializacao")
 const extraClass = require("../models/extra")
+const sessaoClass = require("../models/sessao")
+const excecaoClass = require("../models/excecao")
 
 //Tabelas Extrangeiras
 const Bene = mongoose.model("tb_bene")
@@ -40,6 +42,8 @@ const Atend = mongoose.model("tb_atend")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 const Extra = mongoose.model("tb_extra")
+const Sessao = mongoose.model("tb_sessao")
+const Excecao = mongoose.model("tb_excecao")
 
 //Funções Auxiliares
 const respostaClass = require("../models/resposta")
@@ -9965,17 +9969,18 @@ module.exports = {
                             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                             //console.log("Listagem terapeutas!")
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                if(resposta.sucesso == ""){
-                                    //console.log(' objeto vazio');
-                                    flash.texto = ""
-                                    flash.sucesso = ""
-                                } else {
-                                    //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                                    flash.texto = resposta.texto
-                                    flash.sucesso = resposta.sucesso
-                                }
-                                res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, flash})
-        })})})})})}).catch((err) =>{
+                                Sessao.find().then((sessao)=>{
+                                    if(resposta.sucesso == ""){
+                                        //console.log(' objeto vazio');
+                                        flash.texto = ""
+                                        flash.sucesso = ""
+                                    } else {
+                                        //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                                        flash.texto = resposta.texto
+                                        flash.sucesso = resposta.sucesso
+                                    }
+                                    res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, sessaos: sessao, flash})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

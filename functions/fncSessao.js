@@ -132,32 +132,39 @@ module.exports = {
                                     Usuario.find().then((usuario)=>{
                                     console.log("Listagem Realizada Usuário!")
                                         res.render("beneficiario/sessao/sessaoEdi", {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
-                })})})})}).catch((err) =>{
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao gerar o editar Sessões")
             res.redirect('admin/erro')
-            })
-
+        })
     },
-
     listaSessao(req, res){
         let sessao = new Array();
         console.log('listando Sessao')
         Sessao.find().then((sessao) =>{
             console.log("Listagem Realizada Sessão!")
-        Bene.find().then((bene) =>{
-            console.log("Listagem Realizada Bene!")
-                    Conv.find().then((conv)=>{
+            Bene.find().then((bene) =>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                console.log("Listagem Realizada Bene!")
+                Conv.find().then((conv)=>{
                     console.log("Listagem Realizada Convênio!")
-                            Terapia.find().then((terapia)=>{
+                        Terapia.find().then((terapia)=>{
                             console.log("Listagem Realizada Terapia!")
-                                Usuario.find().then((usuario)=>{
+                            Usuario.find().then((usuario)=>{
                                 console.log("Listagem Realizada Usuário!")
+                                sessao.forEach((s)=>{
+                                    console.log("s: "+s);
+                                    bene.forEach((b)=>{
+                                        if ((""+b._id+"") == (""+s.sessao_beneid+"")){
+                                            console.log("b.bene_nome: "+b.bene_nome);
+                                        }
+                                    })
+                                })
                                 res.render("beneficiario/sessao/sessaoLis", {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
         })})})})}).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao listar Sessões")
-        res.redirect('admin/erro')
+        console.log(err);
+        req.flash("error_message", "houve um erro ao listar Sessões");
+        res.redirect('admin/erro');
         })
     },
 

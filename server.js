@@ -77,7 +77,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
             handlebars: allowInsecurePrototypeAccess(handlebars),
             helpers: {
                 ifEqual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
-                    //console.log("/"+v1+"="+v2+"/")
+                    console.log("???")
+                    console.log("/"+v1+"="+v2+"/");
+                    console.log((""+v1+"") === (""+v2+""));
                     if ((""+v1+"") === (""+v2+"")) {
                         return options.fn(this);
                     } else {
