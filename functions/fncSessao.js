@@ -26,10 +26,12 @@ module.exports = {
         Sessao.find().then((sessao) =>{
         console.log("Listagem Realizada Sessao!")
             Bene.find().then((bene) =>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada Bene!")
                         Conv.find().then((conv)=>{
                         console.log("Listagem Realizada Convênio!")
-                                Terapia.find().then((terapia)=>{
+                                Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
+                                    terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
                                 console.log("Listagem Realizada Terapia!")
                                     Usuario.find().then((usuario)=>{
                                     console.log("Listagem Realizada Usuário!")
@@ -51,10 +53,12 @@ module.exports = {
             Sessao.find().then((sessao) =>{
             console.log("Listagem Realizada Sessao!")
                 Bene.find().then((bene) =>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     console.log("Listagem Realizada Bene!")
                             Conv.find().then((conv)=>{
                             console.log("Listagem Realizada Convênio!")
-                                    Terapia.find().then((terapia)=>{
+                            Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
+                                terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
                                     console.log("Listagem Realizada Terapia!")
                                         Usuario.find().then((usuario)=>{
                                         console.log("Listagem Realizada Usuário!")
@@ -121,17 +125,15 @@ module.exports = {
     },
 
     carregaSessaoEdi(req, res){
-        Sessao.find({_id: req.params.id}).then((sessao) =>{
-            console.log(sessao)
-                Bene.find().then((bene) =>{
-                console.log("Listagem Realizada Bene!")
+        Sessao.findOne({sessao_beneid: req.params.id}).then((sessao) =>{
+            console.log("sessao: "+sessao)
+            Bene.find().then((bene) =>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
                         Conv.find().then((conv)=>{
-                        console.log("Listagem Realizada Convênio!")
-                                Terapia.find().then((terapia)=>{
-                                console.log("Listagem Realizada Terapia!")
+                            Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
+                                terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
                                     Usuario.find().then((usuario)=>{
-                                    console.log("Listagem Realizada Usuário!")
-                                        res.render("beneficiario/sessao/sessaoEdi", {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+                                        res.render("beneficiario/sessao/sessaoEdi", {sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao gerar o editar Sessões")
@@ -143,7 +145,7 @@ module.exports = {
         console.log('listando Sessao')
         Sessao.find().then((sessao) =>{
             console.log("Listagem Realizada Sessão!")
-            Bene.find().then((bene) =>{
+            Bene.find({bene_status:"Ativo"}).then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 console.log("Listagem Realizada Bene!")
                 Conv.find().then((conv)=>{
@@ -172,15 +174,16 @@ module.exports = {
         console.log('listando Sessao')
         Sessao.find({sessao_beneid: req.params.id}).then((sessao) =>{
             console.log("Listagem Realizada Sessão!")
-        Bene.find().then((bene) =>{
-            console.log("Listagem Realizada Bene!")
-                    Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada Convênio!")
-                            Terapia.find().then((terapia)=>{
-                            console.log("Listagem Realizada Terapia!")
-                                Usuario.find().then((usuario)=>{
-                                console.log("Listagem Realizada Usuário!")
-                                res.render("beneficiario/sessao/sessaoLisTab", {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+                Bene.find().then((bene) =>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    console.log("Listagem Realizada Bene!")
+                            Conv.find().then((conv)=>{
+                            console.log("Listagem Realizada Convênio!")
+                                    Terapia.find().then((terapia)=>{
+                                    console.log("Listagem Realizada Terapia!")
+                                        Usuario.find().then((usuario)=>{
+                                        console.log("Listagem Realizada Usuário!")
+                                        res.render("beneficiario/sessao/sessaoLisTab", {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
         })})})})}).catch((err) =>{
         console.log(err)
         req.flash("error_message", "houve um erro ao listar Sessões")

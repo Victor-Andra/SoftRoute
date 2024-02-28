@@ -77,9 +77,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
             handlebars: allowInsecurePrototypeAccess(handlebars),
             helpers: {
                 ifEqual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
-                    console.log("???")
-                    console.log("/"+v1+"="+v2+"/");
-                    console.log((""+v1+"") === (""+v2+""));
+                    //console.log("/"+v1+"="+v2+"/");
                     if ((""+v1+"") === (""+v2+"")) {
                         return options.fn(this);
                     } else {
@@ -234,7 +232,25 @@ app.post('/upload', upload.single('file'), (req, res) => {
                         return options.inverse(this);
                     }
                 },
-                
+                contidoEmArray: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
+                    //O CODIGO SIMPLESMENTE NAO PASSA AQUI< ELE FINGE QUE ESSE HELPER NAO EXISTE
+                    console.log("/"+v2+"/");
+                    console.log("/"+v1+"="+v2+"/");
+                    if (v1 != undefined && v1 != "undefined" && v1 != "" && v1 != "-"){
+                        let resultado;
+                        let existe = (objeto) => objeto == v2;
+                        let novo_vetor = v1.split(",");
+                        resultado = novo_vetor.some(existe);
+                        console.log("resultado: "+resultado)
+                        if (resultado){
+                            return options.fn(this);
+                        } else {
+                            return options.inverse(this);
+                        }
+                    } else {
+                        return options.inverse(this);
+                    }
+                }
             }
         }));
         app.set('view engine', 'handlebars');

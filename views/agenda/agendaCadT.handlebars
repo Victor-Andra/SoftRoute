@@ -153,10 +153,11 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Liminar</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Realizado</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Saldo</th>
+													<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Liminar</th>
+													<th style="width: 60px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Realizado</th>
+													<th style="width: 30px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Saldo</th>
+													<th style="width: 30px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -171,6 +172,11 @@
 															<td>{{../sessao_qtterapiaprev01}}</td>
 															<td>{{../sessao_qtterapiacon01}}</td>
 															<td>{{../sessao_qtterapiasaldo01}}</td>
+															<td>
+																<a class="red" >
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																</a>
+															</td>
 														</tr>
 													{{/ifEqual}}
 												{{/each}}
@@ -444,7 +450,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-3"><!-- Widget Dados Básicos -->
+								<div class="col-xs-12 col-sm-3"><!-- Widget Quadro de sessões -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Quadro de sessões</h4>
@@ -459,10 +465,8 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<div class="row">
-													<div id="blocoSessoes" name="nameless">
+													<div id="blocoSessoes" name="nameless"><!-- Div que recebe a tabela pronta, escolhida pelo usuário, na hora do input do beneficiário -->
 													</div>
-												</div>
 											</div>
 										</div>
 									</div>
@@ -484,5 +488,9 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+
+		
+	
 	</body>
 </html>

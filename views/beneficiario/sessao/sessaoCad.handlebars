@@ -49,9 +49,9 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/sessao/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/sessao/add" method="POST">
 								<div class="form-horizontal" role="form">
-									<div class="col-sm-6" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+									<div class="col-sm-4" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">Cadastro do índice do beneficiário e convênio</h4>
@@ -108,8 +108,7 @@
 															</div>
 													</div>
 
-													<div class="row">
-														<div class="col-xs-6">
+													
 															<div class="alert alert-danger">
 																<button type="button" class="close" data-dismiss="alert">
 																	<i class="ace-icon fa fa-times"></i>
@@ -138,14 +137,13 @@
 																	<br>
 																	
 															</div>
-														</div>
-													</div>
+														
 												</div>
 											</div>
 										</div>
 									</div>
 									
-									<div class="col-sm-6" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+									<div class="col-sm-8" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">Tabela de Sessoes de Terapias</h4>
@@ -167,10 +165,11 @@
 													<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 														<thead>
 															<tr>
-																<th colspan="1"><label>Terapia</label></th>
-																<th colspan="1"><label>Qt previstas </label></th>
-																<th colspan="1"><label>Qt realizadas </label></th>
-																<th colspan="1"><label>Saldo </label></th>
+																<th style="width: 40%;"colspan="1"><label>Terapia</label></th>
+																<th style="width: 5%;"colspan="1"><label>Qt previstas </label></th>
+																<th style="width: 5%;"colspan="1"><label>Qt realizadas </label></th>
+																<th style="width: 5%;" colspan="1"><label>Saldo </label></th>
+																<th style="width: 55%;" colspan="1"><label>Observação </label></th>
 															</tr>
 														</thead>
 
@@ -192,7 +191,10 @@
 																	<input type="text" name="sessaoQtterapiacon01" id="sessaoQtterapiacon01" placeholder="" class="form-control" />
 																</td>
 																<td>
-																	<input type="text" name="sessaoQtterapiasaldo01" id="sessaoQtterapiasaldo01" placeholder="" class="form-control" s/>
+																	<input type="text" name="sessaoQtterapiasaldo01" id="sessaoQtterapiasaldo01" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao01" id="sessaoObssessao01" placeholder="" class="form-control" ></textarea>
 																</td>
 															</tr>
 															<tr><!-- 2AReg -->
@@ -214,6 +216,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo02" id="sessaoQtterapiasaldo02" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao02" id="sessaoObssessao02" placeholder="" class="form-control" ></textarea>
+																</td>
 															</tr>
 															<tr><!-- 3AReg -->
 																<td>
@@ -233,6 +238,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo03" id="sessaoQtterapiasaldo03" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao03" id="sessaoObssessao03" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 4AReg -->
@@ -254,6 +262,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo04" id="sessaoQtterapiasaldo04" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao04" id="sessaoObssessao04" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 5AReg -->
 																<td>
@@ -273,6 +284,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo05" id="sessaoQtterapiasaldo05" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao05" id="sessaoObssessao05" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 6AReg -->
@@ -294,6 +308,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo06" id="sessaoQtterapiasaldo06" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao06" id="sessaoObssessao06" placeholder="" class="form-control" ></textarea>
+																</td>
 															</tr>
 															<tr><!-- 7AReg -->
 																<td>
@@ -313,6 +330,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo07" id="sessaoQtterapiasaldo07" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao07" id="sessaoObssessao07" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 8AReg -->
@@ -334,6 +354,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo08" id="sessaoQtterapiasaldo08" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao08" id="sessaoObssessao08" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 9AReg -->
 																<td>
@@ -353,6 +376,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo09" id="sessaoQtterapiasaldo09" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao09" id="sessaoObssessao09" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 10AReg -->
@@ -374,6 +400,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo10" id="sessaoQtterapiasaldo10" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao10" id="sessaoObssessao10" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 11AReg -->
 																<td>
@@ -393,6 +422,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo11" id="sessaoQtterapiasaldo11" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao11" id="sessaoObssessao11" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 12AReg -->
@@ -414,6 +446,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo12" id="sessaoQtterapiasaldo12" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao12" id="sessaoObssessao12" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 13AReg -->
 																<td>
@@ -433,6 +468,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo13" id="sessaoQtterapiasaldo13" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao13" id="sessaoObssessao13" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 14AReg -->
@@ -454,6 +492,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo14" id="sessaoQtterapiasaldo14" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao14" id="sessaoObssessao14" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 15AReg -->
 																<td>
@@ -473,6 +514,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo15" id="sessaoQtterapiasaldo15" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao15" id="sessaoObssessao15" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 16AReg -->
@@ -494,6 +538,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo16" id="sessaoQtterapiasaldo16" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao16" id="sessaoObssessao16" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 17AReg -->
 																<td>
@@ -513,6 +560,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo17" id="sessaoQtterapiasaldo17" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao17" id="sessaoObssessao17" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 18AReg -->
@@ -534,6 +584,9 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo18" id="sessaoQtterapiasaldo18" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao18" id="sessaoObssessao18" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
 															<tr><!-- 19AReg -->
 																<td>
@@ -553,6 +606,9 @@
 																</td>
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo19" id="sessaoQtterapiasaldo19" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao19" id="sessaoObssessao19" placeholder="" class="form-control"></textarea>
 																</td>
 															</tr>
 															<tr><!-- 20AReg -->
@@ -574,8 +630,125 @@
 																<td>
 																	<input type="text" name="sessaoQtterapiasaldo20" id="sessaoQtterapiasaldo20" placeholder="" class="form-control" s/>
 																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao20" id="sessaoObssessao20" placeholder="" class="form-control"></textarea>
+																</td>
 															</tr>
-															
+															<tr><!-- 21AReg -->
+																<td>
+																	<select name="sessaoTerapiaid21" id="sessaoTerapiaid21"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev21" id="sessaoQtterapiaprev21" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon21" id="sessaoQtterapiacon21" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo21" id="sessaoQtterapiasaldo21" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao21" id="sessaoObssessao21" placeholder="" class="form-control"></textarea>
+																</td>
+															</tr>
+															<tr><!-- 22AReg -->
+																<td>
+																	<select name="sessaoTerapiaid22" id="sessaoTerapiaid22"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev22" id="sessaoQtterapiaprev22" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon22" id="sessaoQtterapiacon22" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo22" id="sessaoQtterapiasaldo22" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao22" id="sessaoObssessao22" placeholder="" class="form-control"></textarea>
+																</td>
+															</tr>
+															<tr><!-- 23AReg -->
+																<td>
+																	<select name="sessaoTerapiaid23" id="sessaoTerapiaid23"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev23" id="sessaoQtterapiaprev23" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon23" id="sessaoQtterapiacon23" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo23" id="sessaoQtterapiasaldo23" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao23" id="sessaoObssessao23" placeholder="" class="form-control"></textarea>
+																</td>
+															</tr>
+															<tr><!-- 24AReg -->
+																<td>
+																	<select name="sessaoTerapiaid24" id="sessaoTerapiaid24"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev24" id="sessaoQtterapiaprev24" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon24" id="sessaoQtterapiacon24" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo24" id="sessaoQtterapiasaldo24" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao24" id="sessaoObssessao24" placeholder="" class="form-control"></textarea>
+																</td>
+															</tr>
+															<tr><!-- 25AReg -->
+																<td>
+																	<select name="sessaoTerapiaid25" id="sessaoTerapiaid25"  class="chosen-select" data-placeholder="Escolha..." >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapias}}
+																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiaprev25" id="sessaoQtterapiaprev25" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiacon25" id="sessaoQtterapiacon25" placeholder="" class="form-control" />
+																</td>
+																<td>
+																	<input type="text" name="sessaoQtterapiasaldo25" id="sessaoQtterapiasaldo25" placeholder="" class="form-control" s/>
+																</td>
+																<td>
+																	<textarea type="text" name="sessaoObssessao25" id="sessaoObssessao25" placeholder="" class="form-control"></textarea>
+																</td>
+															</tr>
 														</tbody>
 													</table>
 												</div>

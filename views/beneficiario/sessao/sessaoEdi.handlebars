@@ -4,7 +4,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<title>Editar de Qt de Sessões</title>
+		<title>Tabela de Sessões</title>
 		
 		<script type="text/javascript">
 	
@@ -20,18 +20,162 @@
 				console.log(convId)
 			}
 
+			function carregaBody(){
+				document.getElementById("sessaoBeneid").value = document.getElementById("sessaoBeneidEdi").value;
+				document.getElementById("sessaoConvid").value = document.getElementById("sessaoConvidEdi").value;
+				for (i = 1;i <= 25;i++){
+					let indexSessao = "";
+					if (i <= 9){
+						indexSessao = "0"+i+"";
+					} else {
+						indexSessao = ""+i+"";
+					}
+					if ((""+document.getElementById("sessaoTerapiaid"+indexSessao+"Edi").value+"") != ("766f69643132333435366964")){
+						document.getElementById("sessaoTerapiaid"+indexSessao).value = document.getElementById("sessaoTerapiaid"+indexSessao+"Edi").value;
+						document.getElementById("sessaoQtterapiaprev"+indexSessao).value = document.getElementById("sessaoQtterapiaprev"+indexSessao+"Edi").value;
+						document.getElementById("sessaoQtterapiacon"+indexSessao).value = document.getElementById("sessaoQtterapiacon"+indexSessao+"Edi").value;
+						document.getElementById("sessaoQtterapiasaldo"+indexSessao).value = document.getElementById("sessaoQtterapiasaldo"+indexSessao+"Edi").value;
+						document.getElementById("sessaoObssessao"+indexSessao).value = document.getElementById("sessaoObssessao"+indexSessao+"Edi").value;
+						document.getElementById("sessaoBeneid").value = document.getElementById("sessaoBeneidEdi").value;
+						document.getElementById("sessaoConvid").value = document.getElementById("sessaoConvidEdi").value;
+						document.getElementById("sessaoTerapiaid01").value = document.getElementById("sessaoTerapiaid01Edi").value;
+						document.getElementById("sessaoQtterapiaprev01").value = document.getElementById("sessaoQtterapiaprev01Edi").value;
+						document.getElementById("sessaoQtterapiacon01").value = document.getElementById("sessaoQtterapiacon01Edi").value;
+						document.getElementById("sessaoQtterapiasaldo01").value = document.getElementById("sessaoQtterapiasaldo01Edi").value;
+						document.getElementById("sessaoObssessao01").value = document.getElementById("sessaoObssessao01Edi").value;
+						document.getElementById("sessaoTerapiaid02").value = document.getElementById("sessaoTerapiaid02Edi").value;
+						document.getElementById("sessaoQtterapiaprev02").value = document.getElementById("sessaoQtterapiaprev02Edi").value;
+						document.getElementById("sessaoQtterapiacon02").value = document.getElementById("sessaoQtterapiacon02Edi").value;
+						document.getElementById("sessaoQtterapiasaldo02").value = document.getElementById("sessaoQtterapiasaldo02Edi").value;
+						document.getElementById("sessaoObssessao02").value = document.getElementById("sessaoObssessao02Edi").value;
+						document.getElementById("sessaoTerapiaid03").value = document.getElementById("sessaoTerapiaid03Edi").value;
+						document.getElementById("sessaoQtterapiaprev03").value = document.getElementById("sessaoQtterapiaprev03Edi").value;
+						document.getElementById("sessaoQtterapiacon03").value = document.getElementById("sessaoQtterapiacon03Edi").value;
+						document.getElementById("sessaoQtterapiasaldo03").value = document.getElementById("sessaoQtterapiasaldo03Edi").value;
+						document.getElementById("sessaoObssessao03").value = document.getElementById("sessaoObssessao03Edi").value;
+						document.getElementById("sessaoTerapiaid04").value = document.getElementById("sessaoTerapiaid04Edi").value;
+						document.getElementById("sessaoQtterapiaprev04").value = document.getElementById("sessaoQtterapiaprev04Edi").value;
+						document.getElementById("sessaoQtterapiacon04").value = document.getElementById("sessaoQtterapiacon04Edi").value;
+						document.getElementById("sessaoQtterapiasaldo04").value = document.getElementById("sessaoQtterapiasaldo04Edi").value;
+						document.getElementById("sessaoObssessao04").value = document.getElementById("sessaoObssessao04Edi").value;
+						document.getElementById("sessaoTerapiaid05").value = document.getElementById("sessaoTerapiaid05Edi").value;
+						document.getElementById("sessaoQtterapiaprev05").value = document.getElementById("sessaoQtterapiaprev05Edi").value;
+						document.getElementById("sessaoQtterapiacon05").value = document.getElementById("sessaoQtterapiacon05Edi").value;
+						document.getElementById("sessaoQtterapiasaldo05").value = document.getElementById("sessaoQtterapiasaldo05Edi").value;
+						document.getElementById("sessaoObssessao05").value = document.getElementById("sessaoObssessao05Edi").value;
+						document.getElementById("sessaoTerapiaid06").value = document.getElementById("sessaoTerapiaid06Edi").value;
+						document.getElementById("sessaoQtterapiaprev06").value = document.getElementById("sessaoQtterapiaprev06Edi").value;
+						document.getElementById("sessaoQtterapiacon06").value = document.getElementById("sessaoQtterapiacon06Edi").value;
+						document.getElementById("sessaoQtterapiasaldo06").value = document.getElementById("sessaoQtterapiasaldo06Edi").value;
+						document.getElementById("sessaoObssessao06").value = document.getElementById("sessaoObssessao06Edi").value;
+						document.getElementById("sessaoTerapiaid07").value = document.getElementById("sessaoTerapiaid07Edi").value;
+						document.getElementById("sessaoQtterapiaprev07").value = document.getElementById("sessaoQtterapiaprev07Edi").value;
+						document.getElementById("sessaoQtterapiacon07").value = document.getElementById("sessaoQtterapiacon07Edi").value;
+						document.getElementById("sessaoQtterapiasaldo07").value = document.getElementById("sessaoQtterapiasaldo07Edi").value;
+						document.getElementById("sessaoObssessao07").value = document.getElementById("sessaoObssessao07Edi").value;
+						document.getElementById("sessaoTerapiaid08").value = document.getElementById("sessaoTerapiaid08Edi").value;
+						document.getElementById("sessaoQtterapiaprev08").value = document.getElementById("sessaoQtterapiaprev08Edi").value;
+						document.getElementById("sessaoQtterapiacon08").value = document.getElementById("sessaoQtterapiacon08Edi").value;
+						document.getElementById("sessaoQtterapiasaldo08").value = document.getElementById("sessaoQtterapiasaldo08Edi").value;
+						document.getElementById("sessaoObssessao08").value = document.getElementById("sessaoObssessao08Edi").value;
+						document.getElementById("sessaoTerapiaid09").value = document.getElementById("sessaoTerapiaid09Edi").value;
+						document.getElementById("sessaoQtterapiaprev09").value = document.getElementById("sessaoQtterapiaprev09Edi").value;
+						document.getElementById("sessaoQtterapiacon09").value = document.getElementById("sessaoQtterapiacon09Edi").value;
+						document.getElementById("sessaoQtterapiasaldo09").value = document.getElementById("sessaoQtterapiasaldo09Edi").value;
+						document.getElementById("sessaoObssessao09").value = document.getElementById("sessaoObssessao09Edi").value;
+						document.getElementById("sessaoTerapiaid10").value = document.getElementById("sessaoTerapiaid10Edi").value;
+						document.getElementById("sessaoQtterapiaprev10").value = document.getElementById("sessaoQtterapiaprev10Edi").value;
+						document.getElementById("sessaoQtterapiacon10").value = document.getElementById("sessaoQtterapiacon10Edi").value;
+						document.getElementById("sessaoQtterapiasaldo10").value = document.getElementById("sessaoQtterapiasaldo10Edi").value;
+						document.getElementById("sessaoObssessao10").value = document.getElementById("sessaoObssessao10Edi").value;
+						document.getElementById("sessaoTerapiaid11").value = document.getElementById("sessaoTerapiaid11Edi").value;
+						document.getElementById("sessaoQtterapiaprev11").value = document.getElementById("sessaoQtterapiaprev11Edi").value;
+						document.getElementById("sessaoQtterapiacon11").value = document.getElementById("sessaoQtterapiacon11Edi").value;
+						document.getElementById("sessaoQtterapiasaldo11").value = document.getElementById("sessaoQtterapiasaldo11Edi").value;
+						document.getElementById("sessaoObssessao11").value = document.getElementById("sessaoObssessao11Edi").value;
+						document.getElementById("sessaoTerapiaid12").value = document.getElementById("sessaoTerapiaid12Edi").value;
+						document.getElementById("sessaoQtterapiaprev12").value = document.getElementById("sessaoQtterapiaprev12Edi").value;
+						document.getElementById("sessaoQtterapiacon12").value = document.getElementById("sessaoQtterapiacon12Edi").value;
+						document.getElementById("sessaoQtterapiasaldo12").value = document.getElementById("sessaoQtterapiasaldo12Edi").value;
+						document.getElementById("sessaoObssessao12").value = document.getElementById("sessaoObssessao12Edi").value;
+						document.getElementById("sessaoTerapiaid13").value = document.getElementById("sessaoTerapiaid13Edi").value;
+						document.getElementById("sessaoQtterapiaprev13").value = document.getElementById("sessaoQtterapiaprev13Edi").value;
+						document.getElementById("sessaoQtterapiacon13").value = document.getElementById("sessaoQtterapiacon13Edi").value;
+						document.getElementById("sessaoQtterapiasaldo13").value = document.getElementById("sessaoQtterapiasaldo13Edi").value;
+						document.getElementById("sessaoObssessao13").value = document.getElementById("sessaoObssessao13Edi").value;
+						document.getElementById("sessaoTerapiaid14").value = document.getElementById("sessaoTerapiaid14Edi").value;
+						document.getElementById("sessaoQtterapiaprev14").value = document.getElementById("sessaoQtterapiaprev14Edi").value;
+						document.getElementById("sessaoQtterapiacon14").value = document.getElementById("sessaoQtterapiacon14Edi").value;
+						document.getElementById("sessaoQtterapiasaldo14").value = document.getElementById("sessaoQtterapiasaldo14Edi").value;
+						document.getElementById("sessaoObssessao14").value = document.getElementById("sessaoObssessao14Edi").value;
+						document.getElementById("sessaoTerapiaid15").value = document.getElementById("sessaoTerapiaid15Edi").value;
+						document.getElementById("sessaoQtterapiaprev15").value = document.getElementById("sessaoQtterapiaprev15Edi").value;
+						document.getElementById("sessaoQtterapiacon15").value = document.getElementById("sessaoQtterapiacon15Edi").value;
+						document.getElementById("sessaoQtterapiasaldo15").value = document.getElementById("sessaoQtterapiasaldo15Edi").value;
+						document.getElementById("sessaoObssessao15").value = document.getElementById("sessaoObssessao15Edi").value;
+						document.getElementById("sessaoTerapiaid16").value = document.getElementById("sessaoTerapiaid16Edi").value;
+						document.getElementById("sessaoQtterapiaprev16").value = document.getElementById("sessaoQtterapiaprev16Edi").value;
+						document.getElementById("sessaoQtterapiacon16").value = document.getElementById("sessaoQtterapiacon16Edi").value;
+						document.getElementById("sessaoQtterapiasaldo16").value = document.getElementById("sessaoQtterapiasaldo16Edi").value;
+						document.getElementById("sessaoObssessao16").value = document.getElementById("sessaoObssessao16Edi").value;
+						document.getElementById("sessaoTerapiaid17").value = document.getElementById("sessaoTerapiaid17Edi").value;
+						document.getElementById("sessaoQtterapiaprev17").value = document.getElementById("sessaoQtterapiaprev17Edi").value;
+						document.getElementById("sessaoQtterapiacon17").value = document.getElementById("sessaoQtterapiacon17Edi").value;
+						document.getElementById("sessaoQtterapiasaldo17").value = document.getElementById("sessaoQtterapiasaldo17Edi").value;
+						document.getElementById("sessaoObssessao17").value = document.getElementById("sessaoObssessao17Edi").value;
+						document.getElementById("sessaoTerapiaid18").value = document.getElementById("sessaoTerapiaid18Edi").value;
+						document.getElementById("sessaoQtterapiaprev18").value = document.getElementById("sessaoQtterapiaprev18Edi").value;
+						document.getElementById("sessaoQtterapiacon18").value = document.getElementById("sessaoQtterapiacon18Edi").value;
+						document.getElementById("sessaoQtterapiasaldo18").value = document.getElementById("sessaoQtterapiasaldo18Edi").value;
+						document.getElementById("sessaoObssessao18").value = document.getElementById("sessaoObssessao18Edi").value;
+						document.getElementById("sessaoTerapiaid19").value = document.getElementById("sessaoTerapiaid19Edi").value;
+						document.getElementById("sessaoQtterapiaprev19").value = document.getElementById("sessaoQtterapiaprev19Edi").value;
+						document.getElementById("sessaoQtterapiacon19").value = document.getElementById("sessaoQtterapiacon19Edi").value;
+						document.getElementById("sessaoQtterapiasaldo19").value = document.getElementById("sessaoQtterapiasaldo19Edi").value;
+						document.getElementById("sessaoObssessao19").value = document.getElementById("sessaoObssessao19Edi").value;
+						document.getElementById("sessaoTerapiaid20").value = document.getElementById("sessaoTerapiaid20Edi").value;
+						document.getElementById("sessaoQtterapiaprev20").value = document.getElementById("sessaoQtterapiaprev20Edi").value;
+						document.getElementById("sessaoQtterapiacon20").value = document.getElementById("sessaoQtterapiacon20Edi").value;
+						document.getElementById("sessaoQtterapiasaldo20").value = document.getElementById("sessaoQtterapiasaldo20Edi").value;
+						document.getElementById("sessaoObssessao20").value = document.getElementById("sessaoObssessao20Edi").value;
+						document.getElementById("sessaoTerapiaid21").value = document.getElementById("sessaoTerapiaid21Edi").value;
+						document.getElementById("sessaoQtterapiaprev21").value = document.getElementById("sessaoQtterapiaprev21Edi").value;
+						document.getElementById("sessaoQtterapiacon21").value = document.getElementById("sessaoQtterapiacon21Edi").value;
+						document.getElementById("sessaoQtterapiasaldo21").value = document.getElementById("sessaoQtterapiasaldo21Edi").value;
+						document.getElementById("sessaoObssessao21").value = document.getElementById("sessaoObssessao21Edi").value;
+						document.getElementById("sessaoTerapiaid22").value = document.getElementById("sessaoTerapiaid22Edi").value;
+						document.getElementById("sessaoQtterapiaprev22").value = document.getElementById("sessaoQtterapiaprev22Edi").value;
+						document.getElementById("sessaoQtterapiacon22").value = document.getElementById("sessaoQtterapiacon22Edi").value;
+						document.getElementById("sessaoQtterapiasaldo22").value = document.getElementById("sessaoQtterapiasaldo22Edi").value;
+						document.getElementById("sessaoObssessao22").value = document.getElementById("sessaoObssessao22Edi").value;
+						document.getElementById("sessaoTerapiaid23").value = document.getElementById("sessaoTerapiaid23Edi").value;
+						document.getElementById("sessaoQtterapiaprev23").value = document.getElementById("sessaoQtterapiaprev23Edi").value;
+						document.getElementById("sessaoQtterapiacon23").value = document.getElementById("sessaoQtterapiacon23Edi").value;
+						document.getElementById("sessaoQtterapiasaldo23").value = document.getElementById("sessaoQtterapiasaldo23Edi").value;
+						document.getElementById("sessaoObssessao23").value = document.getElementById("sessaoObssessao23Edi").value;
+						document.getElementById("sessaoTerapiaid24").value = document.getElementById("sessaoTerapiaid24Edi").value;
+						document.getElementById("sessaoQtterapiaprev24").value = document.getElementById("sessaoQtterapiaprev24Edi").value;
+						document.getElementById("sessaoQtterapiacon24").value = document.getElementById("sessaoQtterapiacon24Edi").value;
+						document.getElementById("sessaoQtterapiasaldo24").value = document.getElementById("sessaoQtterapiasaldo24Edi").value;
+						document.getElementById("sessaoObssessao24").value = document.getElementById("sessaoObssessao24Edi").value;
+						document.getElementById("sessaoTerapiaid25").value = document.getElementById("sessaoTerapiaid25Edi").value;
+						document.getElementById("sessaoQtterapiaprev25").value = document.getElementById("sessaoQtterapiaprev25Edi").value;
+						document.getElementById("sessaoQtterapiacon25").value = document.getElementById("sessaoQtterapiacon25Edi").value;
+						document.getElementById("sessaoQtterapiasaldo25").value = document.getElementById("sessaoQtterapiasaldo25Edi").value;
+						document.getElementById("sessaoObssessao25").value = document.getElementById("sessaoObssessao25Edi").value;
+
+					}
+				}
+				
+			}
 
 
 		</script>
 		
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
-
-
+	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
 		<div class="main-container" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs " id="breadcrumbs">
@@ -40,43 +184,169 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-
-							<li class="active">Editar Tabela com Qt de Sessões</li>
+							<li class="active">Tabela de Sessões</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/sessao/atualizar" method="POST">
-								<div class="form-horizontal" role="form">
-									<div class="col-sm-12" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">Cadastro das Tabelas de Sessoes de Terapias</h4>
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/sessao/edi" method="POST">
+								<div class="form-horizontal" role="form" hidden>
+									<input type="text" id="sessaoBeneidEdi" name="sessaoBeneidEdi" value="{{sessao.sessao_beneid}}"/>
+									<input type="text" id="sessaoConvidEdi" name="sessaoConvidEdi" value="{{sessao.sessao_convid}}"/>
+									<input type="text" id="sessaoTerapiaid01Edi" name="sessaoTerapiaid01Edi" value="{{sessao.sessao_terapiaid01}}"/>
+									<input type="text" id="sessaoQtterapiaprev01Edi" name="sessaoQtterapiaprev01Edi" value="{{sessao.sessao_qtterapiaprev01}}"/>
+									<input type="text" id="sessaoQtterapiacon01Edi" name="sessaoQtterapiacon01Edi" value="{{sessao.sessao_qtterapiacon01}}"/>
+									<input type="text" id="sessaoQtterapiasaldo01Edi" name="sessaoQtterapiasaldo01Edi" value="{{sessao.sessao_qtterapiasaldo01}}"/>
+									<input type="text" id="sessaoObssessao01Edi" name="sessaoObssessao01Edi" value="{{sessao.sessao_obssessao01}}"/>
+									<input type="text" id="sessaoTerapiaid02Edi" name="sessaoTerapiaid02Edi" value="{{sessao.sessao_terapiaid02}}"/>
+									<input type="text" id="sessaoQtterapiaprev02Edi" name="sessaoQtterapiaprev02Edi" value="{{sessao.sessao_qtterapiaprev02}}"/>
+									<input type="text" id="sessaoQtterapiacon02Edi" name="sessaoQtterapiacon02Edi" value="{{sessao.sessao_qtterapiacon02}}"/>
+									<input type="text" id="sessaoQtterapiasaldo02Edi" name="sessaoQtterapiasaldo02Edi" value="{{sessao.sessao_qtterapiasaldo02}}"/>
+									<input type="text" id="sessaoObssessao02Edi" name="sessaoObssessao02Edi" value="{{sessao.sessao_obssessao02}}"/>
+									<input type="text" id="sessaoTerapiaid03Edi" name="sessaoTerapiaid03Edi" value="{{sessao.sessao_terapiaid03}}"/>
+									<input type="text" id="sessaoQtterapiaprev03Edi" name="sessaoQtterapiaprev03Edi" value="{{sessao.sessao_qtterapiaprev03}}"/>
+									<input type="text" id="sessaoQtterapiacon03Edi" name="sessaoQtterapiacon03Edi" value="{{sessao.sessao_qtterapiacon03}}"/>
+									<input type="text" id="sessaoQtterapiasaldo03Edi" name="sessaoQtterapiasaldo03Edi" value="{{sessao.sessao_qtterapiasaldo03}}"/>
+									<input type="text" id="sessaoObssessao03Edi" name="sessaoObssessao03Edi" value="{{sessao.sessao_obssessao03}}"/>
+									<input type="text" id="sessaoTerapiaid04Edi" name="sessaoTerapiaid04Edi" value="{{sessao.sessao_terapiaid04}}"/>
+									<input type="text" id="sessaoQtterapiaprev04Edi" name="sessaoQtterapiaprev04Edi" value="{{sessao.sessao_qtterapiaprev04}}"/>
+									<input type="text" id="sessaoQtterapiacon04Edi" name="sessaoQtterapiacon04Edi" value="{{sessao.sessao_qtterapiacon04}}"/>
+									<input type="text" id="sessaoQtterapiasaldo04Edi" name="sessaoQtterapiasaldo04Edi" value="{{sessao.sessao_qtterapiasaldo04}}"/>
+									<input type="text" id="sessaoObssessao04Edi" name="sessaoObssessao04Edi" value="{{sessao.sessao_obssessao04}}"/>
+									<input type="text" id="sessaoTerapiaid05Edi" name="sessaoTerapiaid05Edi" value="{{sessao.sessao_terapiaid05}}"/>
+									<input type="text" id="sessaoQtterapiaprev05Edi" name="sessaoQtterapiaprev05Edi" value="{{sessao.sessao_qtterapiaprev05}}"/>
+									<input type="text" id="sessaoQtterapiacon05Edi" name="sessaoQtterapiacon05Edi" value="{{sessao.sessao_qtterapiacon05}}"/>
+									<input type="text" id="sessaoQtterapiasaldo05Edi" name="sessaoQtterapiasaldo05Edi" value="{{sessao.sessao_qtterapiasaldo05}}"/>
+									<input type="text" id="sessaoObssessao05Edi" name="sessaoObssessao05Edi" value="{{sessao.sessao_obssessao05}}"/>
+									<input type="text" id="sessaoTerapiaid06Edi" name="sessaoTerapiaid06Edi" value="{{sessao.sessao_terapiaid06}}"/>
+									<input type="text" id="sessaoQtterapiaprev06Edi" name="sessaoQtterapiaprev06Edi" value="{{sessao.sessao_qtterapiaprev06}}"/>
+									<input type="text" id="sessaoQtterapiacon06Edi" name="sessaoQtterapiacon06Edi" value="{{sessao.sessao_qtterapiacon06}}"/>
+									<input type="text" id="sessaoQtterapiasaldo06Edi" name="sessaoQtterapiasaldo06Edi" value="{{sessao.sessao_qtterapiasaldo06}}"/>
+									<input type="text" id="sessaoObssessao06Edi" name="sessaoObssessao06Edi" value="{{sessao.sessao_obssessao06}}"/>
+									<input type="text" id="sessaoTerapiaid07Edi" name="sessaoTerapiaid07Edi" value="{{sessao.sessao_terapiaid07}}"/>
+									<input type="text" id="sessaoQtterapiaprev07Edi" name="sessaoQtterapiaprev07Edi" value="{{sessao.sessao_qtterapiaprev07}}"/>
+									<input type="text" id="sessaoQtterapiacon07Edi" name="sessaoQtterapiacon07Edi" value="{{sessao.sessao_qtterapiacon07}}"/>
+									<input type="text" id="sessaoQtterapiasaldo07Edi" name="sessaoQtterapiasaldo07Edi" value="{{sessao.sessao_qtterapiasaldo07}}"/>
+									<input type="text" id="sessaoObssessao07Edi" name="sessaoObssessao07Edi" value="{{sessao.sessao_obssessao07}}"/>
+									<input type="text" id="sessaoTerapiaid08Edi" name="sessaoTerapiaid08Edi" value="{{sessao.sessao_terapiaid08}}"/>
+									<input type="text" id="sessaoQtterapiaprev08Edi" name="sessaoQtterapiaprev08Edi" value="{{sessao.sessao_qtterapiaprev08}}"/>
+									<input type="text" id="sessaoQtterapiacon08Edi" name="sessaoQtterapiacon08Edi" value="{{sessao.sessao_qtterapiacon08}}"/>
+									<input type="text" id="sessaoQtterapiasaldo08Edi" name="sessaoQtterapiasaldo08Edi" value="{{sessao.sessao_qtterapiasaldo08}}"/>
+									<input type="text" id="sessaoObssessao08Edi" name="sessaoObssessao08Edi" value="{{sessao.sessao_obssessao08}}"/>
+									<input type="text" id="sessaoTerapiaid09Edi" name="sessaoTerapiaid09Edi" value="{{sessao.sessao_terapiaid09}}"/>
+									<input type="text" id="sessaoQtterapiaprev09Edi" name="sessaoQtterapiaprev09Edi" value="{{sessao.sessao_qtterapiaprev09}}"/>
+									<input type="text" id="sessaoQtterapiacon09Edi" name="sessaoQtterapiacon09Edi" value="{{sessao.sessao_qtterapiacon09}}"/>
+									<input type="text" id="sessaoQtterapiasaldo09Edi" name="sessaoQtterapiasaldo09Edi" value="{{sessao.sessao_qtterapiasaldo09}}"/>
+									<input type="text" id="sessaoObssessao09Edi" name="sessaoObssessao09Edi" value="{{sessao.sessao_obssessao09}}"/>
+									<input type="text" id="sessaoTerapiaid10Edi" name="sessaoTerapiaid10Edi" value="{{sessao.sessao_terapiaid10}}"/>
+									<input type="text" id="sessaoQtterapiaprev10Edi" name="sessaoQtterapiaprev10Edi" value="{{sessao.sessao_qtterapiaprev10}}"/>
+									<input type="text" id="sessaoQtterapiacon10Edi" name="sessaoQtterapiacon10Edi" value="{{sessao.sessao_qtterapiacon10}}"/>
+									<input type="text" id="sessaoQtterapiasaldo10Edi" name="sessaoQtterapiasaldo10Edi" value="{{sessao.sessao_qtterapiasaldo10}}"/>
+									<input type="text" id="sessaoObssessao10Edi" name="sessaoObssessao10Edi" value="{{sessao.sessao_obssessao10}}"/>
+									<input type="text" id="sessaoTerapiaid11Edi" name="sessaoTerapiaid11Edi" value="{{sessao.sessao_terapiaid11}}"/>
+									<input type="text" id="sessaoQtterapiaprev11Edi" name="sessaoQtterapiaprev11Edi" value="{{sessao.sessao_qtterapiaprev11}}"/>
+									<input type="text" id="sessaoQtterapiacon11Edi" name="sessaoQtterapiacon11Edi" value="{{sessao.sessao_qtterapiacon11}}"/>
+									<input type="text" id="sessaoQtterapiasaldo11Edi" name="sessaoQtterapiasaldo11Edi" value="{{sessao.sessao_qtterapiasaldo11}}"/>
+									<input type="text" id="sessaoObssessao11Edi" name="sessaoObssessao11Edi" value="{{sessao.sessao_obssessao11}}"/>
+									<input type="text" id="sessaoTerapiaid12Edi" name="sessaoTerapiaid12Edi" value="{{sessao.sessao_terapiaid12}}"/>
+									<input type="text" id="sessaoQtterapiaprev12Edi" name="sessaoQtterapiaprev12Edi" value="{{sessao.sessao_qtterapiaprev12}}"/>
+									<input type="text" id="sessaoQtterapiacon12Edi" name="sessaoQtterapiacon12Edi" value="{{sessao.sessao_qtterapiacon12}}"/>
+									<input type="text" id="sessaoQtterapiasaldo12Edi" name="sessaoQtterapiasaldo12Edi" value="{{sessao.sessao_qtterapiasaldo12}}"/>
+									<input type="text" id="sessaoObssessao12Edi" name="sessaoObssessao12Edi" value="{{sessao.sessao_obssessao12}}"/>
+									<input type="text" id="sessaoTerapiaid13Edi" name="sessaoTerapiaid13Edi" value="{{sessao.sessao_terapiaid13}}"/>
+									<input type="text" id="sessaoQtterapiaprev13Edi" name="sessaoQtterapiaprev13Edi" value="{{sessao.sessao_qtterapiaprev13}}"/>
+									<input type="text" id="sessaoQtterapiacon13Edi" name="sessaoQtterapiacon13Edi" value="{{sessao.sessao_qtterapiacon13}}"/>
+									<input type="text" id="sessaoQtterapiasaldo13Edi" name="sessaoQtterapiasaldo13Edi" value="{{sessao.sessao_qtterapiasaldo13}}"/>
+									<input type="text" id="sessaoObssessao13Edi" name="sessaoObssessao13Edi" value="{{sessao.sessao_obssessao13}}"/>
+									<input type="text" id="sessaoTerapiaid14Edi" name="sessaoTerapiaid14Edi" value="{{sessao.sessao_terapiaid14}}"/>
+									<input type="text" id="sessaoQtterapiaprev14Edi" name="sessaoQtterapiaprev14Edi" value="{{sessao.sessao_qtterapiaprev14}}"/>
+									<input type="text" id="sessaoQtterapiacon14Edi" name="sessaoQtterapiacon14Edi" value="{{sessao.sessao_qtterapiacon14}}"/>
+									<input type="text" id="sessaoQtterapiasaldo14Edi" name="sessaoQtterapiasaldo14Edi" value="{{sessao.sessao_qtterapiasaldo14}}"/>
+									<input type="text" id="sessaoObssessao14Edi" name="sessaoObssessao14Edi" value="{{sessao.sessao_obssessao14}}"/>
+									<input type="text" id="sessaoTerapiaid15Edi" name="sessaoTerapiaid15Edi" value="{{sessao.sessao_terapiaid15}}"/>
+									<input type="text" id="sessaoQtterapiaprev15Edi" name="sessaoQtterapiaprev15Edi" value="{{sessao.sessao_qtterapiaprev15}}"/>
+									<input type="text" id="sessaoQtterapiacon15Edi" name="sessaoQtterapiacon15Edi" value="{{sessao.sessao_qtterapiacon15}}"/>
+									<input type="text" id="sessaoQtterapiasaldo15Edi" name="sessaoQtterapiasaldo15Edi" value="{{sessao.sessao_qtterapiasaldo15}}"/>
+									<input type="text" id="sessaoObssessao15Edi" name="sessaoObssessao15Edi" value="{{sessao.sessao_obssessao15}}"/>
+									<input type="text" id="sessaoTerapiaid16Edi" name="sessaoTerapiaid16Edi" value="{{sessao.sessao_terapiaid16}}"/>
+									<input type="text" id="sessaoQtterapiaprev16Edi" name="sessaoQtterapiaprev16Edi" value="{{sessao.sessao_qtterapiaprev16}}"/>
+									<input type="text" id="sessaoQtterapiacon16Edi" name="sessaoQtterapiacon16Edi" value="{{sessao.sessao_qtterapiacon16}}"/>
+									<input type="text" id="sessaoQtterapiasaldo16Edi" name="sessaoQtterapiasaldo16Edi" value="{{sessao.sessao_qtterapiasaldo16}}"/>
+									<input type="text" id="sessaoObssessao16Edi" name="sessaoObssessao16Edi" value="{{sessao.sessao_obssessao16}}"/>
+									<input type="text" id="sessaoTerapiaid17Edi" name="sessaoTerapiaid17Edi" value="{{sessao.sessao_terapiaid17}}"/>
+									<input type="text" id="sessaoQtterapiaprev17Edi" name="sessaoQtterapiaprev17Edi" value="{{sessao.sessao_qtterapiaprev17}}"/>
+									<input type="text" id="sessaoQtterapiacon17Edi" name="sessaoQtterapiacon17Edi" value="{{sessao.sessao_qtterapiacon17}}"/>
+									<input type="text" id="sessaoQtterapiasaldo17Edi" name="sessaoQtterapiasaldo17Edi" value="{{sessao.sessao_qtterapiasaldo17}}"/>
+									<input type="text" id="sessaoObssessao17Edi" name="sessaoObssessao17Edi" value="{{sessao.sessao_obssessao17}}"/>
+									<input type="text" id="sessaoTerapiaid18Edi" name="sessaoTerapiaid18Edi" value="{{sessao.sessao_terapiaid18}}"/>
+									<input type="text" id="sessaoQtterapiaprev18Edi" name="sessaoQtterapiaprev18Edi" value="{{sessao.sessao_qtterapiaprev18}}"/>
+									<input type="text" id="sessaoQtterapiacon18Edi" name="sessaoQtterapiacon18Edi" value="{{sessao.sessao_qtterapiacon18}}"/>
+									<input type="text" id="sessaoQtterapiasaldo18Edi" name="sessaoQtterapiasaldo18Edi" value="{{sessao.sessao_qtterapiasaldo18}}"/>
+									<input type="text" id="sessaoObssessao18Edi" name="sessaoObssessao18Edi" value="{{sessao.sessao_obssessao18}}"/>
+									<input type="text" id="sessaoTerapiaid19Edi" name="sessaoTerapiaid19Edi" value="{{sessao.sessao_terapiaid19}}"/>
+									<input type="text" id="sessaoQtterapiaprev19Edi" name="sessaoQtterapiaprev19Edi" value="{{sessao.sessao_qtterapiaprev19}}"/>
+									<input type="text" id="sessaoQtterapiacon19Edi" name="sessaoQtterapiacon19Edi" value="{{sessao.sessao_qtterapiacon19}}"/>
+									<input type="text" id="sessaoQtterapiasaldo19Edi" name="sessaoQtterapiasaldo19Edi" value="{{sessao.sessao_qtterapiasaldo19}}"/>
+									<input type="text" id="sessaoObssessao19Edi" name="sessaoObssessao19Edi" value="{{sessao.sessao_obssessao19}}"/>
+									<input type="text" id="sessaoTerapiaid20Edi" name="sessaoTerapiaid20Edi" value="{{sessao.sessao_terapiaid20}}"/>
+									<input type="text" id="sessaoQtterapiaprev20Edi" name="sessaoQtterapiaprev20Edi" value="{{sessao.sessao_qtterapiaprev20}}"/>
+									<input type="text" id="sessaoQtterapiacon20Edi" name="sessaoQtterapiacon20Edi" value="{{sessao.sessao_qtterapiacon20}}"/>
+									<input type="text" id="sessaoQtterapiasaldo20Edi" name="sessaoQtterapiasaldo20Edi" value="{{sessao.sessao_qtterapiasaldo20}}"/>
+									<input type="text" id="sessaoObssessao20Edi" name="sessaoObssessao20Edi" value="{{sessao.sessao_obssessao20}}"/>
+									<input type="text" id="sessaoTerapiaid21Edi" name="sessaoTerapiaid21Edi" value="{{sessao.sessao_terapiaid21}}"/>
+									<input type="text" id="sessaoQtterapiaprev21Edi" name="sessaoQtterapiaprev21Edi" value="{{sessao.sessao_qtterapiaprev21}}"/>
+									<input type="text" id="sessaoQtterapiacon21Edi" name="sessaoQtterapiacon21Edi" value="{{sessao.sessao_qtterapiacon21}}"/>
+									<input type="text" id="sessaoQtterapiasaldo21Edi" name="sessaoQtterapiasaldo21Edi" value="{{sessao.sessao_qtterapiasaldo21}}"/>
+									<input type="text" id="sessaoObssessao21Edi" name="sessaoObssessao21Edi" value="{{sessao.sessao_obssessao21}}"/>
+									<input type="text" id="sessaoTerapiaid22Edi" name="sessaoTerapiaid22Edi" value="{{sessao.sessao_terapiaid22}}"/>
+									<input type="text" id="sessaoQtterapiaprev22Edi" name="sessaoQtterapiaprev22Edi" value="{{sessao.sessao_qtterapiaprev22}}"/>
+									<input type="text" id="sessaoQtterapiacon22Edi" name="sessaoQtterapiacon22Edi" value="{{sessao.sessao_qtterapiacon22}}"/>
+									<input type="text" id="sessaoQtterapiasaldo22Edi" name="sessaoQtterapiasaldo22Edi" value="{{sessao.sessao_qtterapiasaldo22}}"/>
+									<input type="text" id="sessaoObssessao22Edi" name="sessaoObssessao22Edi" value="{{sessao.sessao_obssessao22}}"/>
+									<input type="text" id="sessaoTerapiaid23Edi" name="sessaoTerapiaid23Edi" value="{{sessao.sessao_terapiaid23}}"/>
+									<input type="text" id="sessaoQtterapiaprev23Edi" name="sessaoQtterapiaprev23Edi" value="{{sessao.sessao_qtterapiaprev23}}"/>
+									<input type="text" id="sessaoQtterapiacon23Edi" name="sessaoQtterapiacon23Edi" value="{{sessao.sessao_qtterapiacon23}}"/>
+									<input type="text" id="sessaoQtterapiasaldo23Edi" name="sessaoQtterapiasaldo23Edi" value="{{sessao.sessao_qtterapiasaldo23}}"/>
+									<input type="text" id="sessaoObssessao23Edi" name="sessaoObssessao23Edi" value="{{sessao.sessao_obssessao23}}"/>
+									<input type="text" id="sessaoTerapiaid24Edi" name="sessaoTerapiaid24Edi" value="{{sessao.sessao_terapiaid24}}"/>
+									<input type="text" id="sessaoQtterapiaprev24Edi" name="sessaoQtterapiaprev24Edi" value="{{sessao.sessao_qtterapiaprev24}}"/>
+									<input type="text" id="sessaoQtterapiacon24Edi" name="sessaoQtterapiacon24Edi" value="{{sessao.sessao_qtterapiacon24}}"/>
+									<input type="text" id="sessaoQtterapiasaldo24Edi" name="sessaoQtterapiasaldo24Edi" value="{{sessao.sessao_qtterapiasaldo24}}"/>
+									<input type="text" id="sessaoObssessao24Edi" name="sessaoObssessao24Edi" value="{{sessao.sessao_obssessao24}}"/>
+									<input type="text" id="sessaoTerapiaid25Edi" name="sessaoTerapiaid25Edi" value="{{sessao.sessao_terapiaid25}}"/>
+									<input type="text" id="sessaoQtterapiaprev25Edi" name="sessaoQtterapiaprev25Edi" value="{{sessao.sessao_qtterapiaprev25}}"/>
+									<input type="text" id="sessaoQtterapiacon25Edi" name="sessaoQtterapiacon25Edi" value="{{sessao.sessao_qtterapiacon25}}"/>
+									<input type="text" id="sessaoQtterapiasaldo25Edi" name="sessaoQtterapiasaldo25Edi" value="{{sessao.sessao_qtterapiasaldo25}}"/>
+									<input type="text" id="sessaoObssessao25Edi" name="sessaoObssessao25Edi" value="{{sessao.sessao_obssessao25}}"/>
 
-												<span class="widget-toolbar">
+								</div>
+								<div class="col-sm-4" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Cadastro do índice do beneficiário e convênio</h4>
 
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
+											<span class="widget-toolbar">
 
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
 
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
 
 												<label>Beneficiário</label>
 												<div class="hidden">
 													{{#each benes}}
 														{{#each ../convs}}
 															{{#ifEqual ../bene_convid _id}}
-																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv"/>
+																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
 															{{/ifEqual}}
 														{{/each}}
 													{{/each}}
@@ -84,137 +354,713 @@
 												</div>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select id="sessaoBeneid" name="sessaoBeneid" class="chosen-select" data-placeholder="Escolha..."  value="{{sessao_beneid}}" readonly="true" onchange="javascript:selectConv()">
+														<select id="sessaoBeneid" name="sessaoBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+															<option value="766f69643132333435366964"></option>
+															{{#each benes}}
+															<option value="{{_id}}">{{bene_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Convênio</label>		
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="sessaoConvid" name="sessaoConvid" class="chosen-select" data-placeholder="Escolha...">
 																<option value="766f69643132333435366964"></option>
 																{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
+																	{{#each ../convs}}
+																		{{#ifEqual ../bene_convid _id}}
+																			<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																		{{/ifEqual}}
+																	{{/each}}
 																{{/each}}
 														</select>
 													</div>
 												</div>
-
-												<label>Convênio</label>		
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="sessaoConvid" name="sessaoConvid" class="chosen-select"  value="{{sessao_convid}}" readonly="true" data-placeholder="Escolha...">
-																	<option value="766f69643132333435366964"></option>
-																	{{#each benes}}
-																		{{#each ../convs}}
-																			{{#ifEqual ../bene_convid _id}}
-																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
-																			{{/ifEqual}}
-																		{{/each}}
-																	{{/each}}
-															</select>
-														</div>
-												</div>
-
-
-													<label>Terapia</label>
-													<div class="input-group">
-															<div >
-																<select name="sessaoTerapiaid" id="sessaoTerapiaid"  class="chosen-select" data-placeholder="Escolha..."  value="{{sessao_terapiaid}}" style="width: 300px;">
-																		<option value="X">&nbsp;</option>
-																		{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
-																		{{else}}
-																		{{/each}}
-																</select>
-															</div>
-													</div>
-
-
-
-													<label> Qt Sessões Previstas </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiaprev" id="sessaoQtterapiaprev" placeholder="" class="form-control"  value="{{sessao_Qtterapiaprev}}" style="width: 200px;"/>
-														</div>
-													</div>
-
-													<label> Qt Sessões Realizadas </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiacon" id="sessaoQtterapiacon" placeholder="" class="form-control"  value="{{sessao_Qtterapiacon}}" style="width: 200px;"/>
-														</div>
-													</div>
-
-													<label> Saldo </label>
-													<div class="input-group">
-														<div >
-															<input type="text" name="sessaoQtterapiasaldo" id="sessaoQtterapiasaldo" placeholder="" class="form-control"  value="{{sessao_Qtterapiasaldo}}"style="width: 200px;"/>
-														</div>
-													</div>
-													
-													<div class="hidden">
-														<input ID="sessaoId" value="{{_id}}" />
-													</div>
-
+												<div class="alert alert-danger">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<span><b>Ao selecionar a Terapia tenha em mente que:</b></span>
+													<hr>
+													<span>- Há Terapias remuneradas e não remuneradas pelos convênios.</span>
+													<br>
+													<span>- Há Terapias remuneradas e suas quantidades devem ser cadastradas <b>primeiro</b>.</span>
+													<br>
+													<span>- Toda Terapias não remuneradas e suas quantidades devem haver terapias substitutas com respectivas quantidades reservadas.</span>
+													<br>
+													<span>- Há terapias que não sáo remuneradas pelo convênio do beneficiário escolhido, então, cabe a você determinar qual terapia ira substituir.</span>
+													<br>	
+													&nbsp;&nbsp;&nbsp;<span> a) em caso de terapias substitutas, a quantidade de sessões pode variar em relação a quantidade substituida.</span>
+													<br>
+													&nbsp;&nbsp;&nbsp;<span>Exemplo: 5 sessões de Musicoterapia: que normalmente deve se substituida. ao invés de 5 sessões de ABA para substituir poderá haver, 2 de ABA e 3 de Fono.<br></span>
+													&nbsp;&nbsp;&nbsp;<span>pois em determinados casos o programa de sessões e terapias, não comporta a quantidade substituida, devendo distribuir para outras terapias.</span>
+													<br>
+													<span>- Há Terapias específicas para beneficiários específicos, pois os valores a ele referenciado tanto para receita como para pagamento a terapeutas são diferentes.</span>
+													<br>
+													<span>- A quantidade de sessões é Semanal e não mensal.</span>
+													<br>
+													<span>- A quantidade de sessões totais não pode ultrapassar a quantidade de sessões estipuladas pelo laudo ou ação judicial.</span>
+													<br>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
+									
+								<div class="col-sm-8" style="padding-top: 50px;"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Tabela de Sessoes de Terapias</h4>
 
-								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
-										<button class="btn btn-info"  name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
+											<span class="widget-toolbar">
 
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"   href="/menu/beneficiario/sessao/listab/{{_id}}">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											voltar
-										</button>
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+													<thead>
+														<tr>
+															<th style="width: 40%;"colspan="1"><label>Terapia</label></th>
+															<th style="width: 5%;"colspan="1"><label>Qt previstas </label></th>
+															<th style="width: 5%;"colspan="1"><label>Qt realizadas </label></th>
+															<th style="width: 5%;" colspan="1"><label>Saldo </label></th>
+															<th style="width: 55%;" colspan="1"><label>Observação </label></th>
+														</tr>
+													</thead>
+
+													<tbody>
+														<tr><!-- 1AReg -->
+															<td>
+																<select name="sessaoTerapiaid01" id="sessaoTerapiaid01"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev01" id="sessaoQtterapiaprev01" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon01" id="sessaoQtterapiacon01" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo01" id="sessaoQtterapiasaldo01" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao01" id="sessaoObssessao01" placeholder="" class="form-control" ></textarea>
+															</td>
+														</tr>
+														<tr><!-- 2AReg -->
+															<td>
+																<select name="sessaoTerapiaid02" id="sessaoTerapiaid02"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev02" id="sessaoQtterapiaprev02" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon02" id="sessaoQtterapiacon02" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo02" id="sessaoQtterapiasaldo02" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao02" id="sessaoObssessao02" placeholder="" class="form-control" ></textarea>
+															</td>
+														</tr>
+														<tr><!-- 3AReg -->
+															<td>
+																<select name="sessaoTerapiaid03" id="sessaoTerapiaid03"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev03" id="sessaoQtterapiaprev03" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon03" id="sessaoQtterapiacon03" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo03" id="sessaoQtterapiasaldo03" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao03" id="sessaoObssessao03" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 4AReg -->
+															<td>
+																<select name="sessaoTerapiaid04" id="sessaoTerapiaid04"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev04" id="sessaoQtterapiaprev04" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon04" id="sessaoQtterapiacon04" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo04" id="sessaoQtterapiasaldo04" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao04" id="sessaoObssessao04" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 5AReg -->
+															<td>
+																<select name="sessaoTerapiaid05" id="sessaoTerapiaid05"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev05" id="sessaoQtterapiaprev05" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon05" id="sessaoQtterapiacon05" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo05" id="sessaoQtterapiasaldo05" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao05" id="sessaoObssessao05" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 6AReg -->
+															<td>
+																<select name="sessaoTerapiaid06" id="sessaoTerapiaid06"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev06" id="sessaoQtterapiaprev06" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon06" id="sessaoQtterapiacon06" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo06" id="sessaoQtterapiasaldo06" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao06" id="sessaoObssessao06" placeholder="" class="form-control" ></textarea>
+															</td>
+														</tr>
+														<tr><!-- 7AReg -->
+															<td>
+																<select name="sessaoTerapiaid07" id="sessaoTerapiaid07"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev07" id="sessaoQtterapiaprev07" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon07" id="sessaoQtterapiacon07" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo07" id="sessaoQtterapiasaldo07" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao07" id="sessaoObssessao07" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 8AReg -->
+															<td>
+																<select name="sessaoTerapiaid08" id="sessaoTerapiaid08"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev08" id="sessaoQtterapiaprev08" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon08" id="sessaoQtterapiacon08" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo08" id="sessaoQtterapiasaldo08" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao08" id="sessaoObssessao08" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 9AReg -->
+															<td>
+																<select name="sessaoTerapiaid09" id="sessaoTerapiaid09"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev09" id="sessaoQtterapiaprev09" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon09" id="sessaoQtterapiacon09" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo09" id="sessaoQtterapiasaldo09" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao09" id="sessaoObssessao09" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 10AReg -->
+															<td>
+																<select name="sessaoTerapiaid10" id="sessaoTerapiaid10"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev10" id="sessaoQtterapiaprev10" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon10" id="sessaoQtterapiacon10" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo10" id="sessaoQtterapiasaldo10" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao10" id="sessaoObssessao10" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 11AReg -->
+															<td>
+																<select name="sessaoTerapiaid11" id="sessaoTerapiaid11"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev11" id="sessaoQtterapiaprev11" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon11" id="sessaoQtterapiacon11" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo11" id="sessaoQtterapiasaldo11" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao11" id="sessaoObssessao11" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 12AReg -->
+															<td>
+																<select name="sessaoTerapiaid12" id="sessaoTerapiaid12"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev12" id="sessaoQtterapiaprev12" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon12" id="sessaoQtterapiacon12" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo12" id="sessaoQtterapiasaldo12" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao12" id="sessaoObssessao12" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 13AReg -->
+															<td>
+																<select name="sessaoTerapiaid13" id="sessaoTerapiaid13"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev13" id="sessaoQtterapiaprev13" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon13" id="sessaoQtterapiacon13" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo13" id="sessaoQtterapiasaldo13" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao13" id="sessaoObssessao13" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 14AReg -->
+															<td>
+																<select name="sessaoTerapiaid14" id="sessaoTerapiaid14"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev14" id="sessaoQtterapiaprev14" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon14" id="sessaoQtterapiacon14" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo14" id="sessaoQtterapiasaldo14" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao14" id="sessaoObssessao14" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 15AReg -->
+															<td>
+																<select name="sessaoTerapiaid15" id="sessaoTerapiaid15"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev15" id="sessaoQtterapiaprev15" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon15" id="sessaoQtterapiacon15" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo15" id="sessaoQtterapiasaldo15" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao15" id="sessaoObssessao15" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 16AReg -->
+															<td>
+																<select name="sessaoTerapiaid16" id="sessaoTerapiaid16"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev16" id="sessaoQtterapiaprev16" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon16" id="sessaoQtterapiacon16" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo16" id="sessaoQtterapiasaldo16" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao16" id="sessaoObssessao16" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 17AReg -->
+															<td>
+																<select name="sessaoTerapiaid17" id="sessaoTerapiaid17"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev17" id="sessaoQtterapiaprev17" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon17" id="sessaoQtterapiacon17" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo17" id="sessaoQtterapiasaldo17" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao17" id="sessaoObssessao17" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 18AReg -->
+															<td>
+																<select name="sessaoTerapiaid18" id="sessaoTerapiaid18"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev18" id="sessaoQtterapiaprev18" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon18" id="sessaoQtterapiacon18" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo18" id="sessaoQtterapiasaldo18" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao18" id="sessaoObssessao18" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 19AReg -->
+															<td>
+																<select name="sessaoTerapiaid19" id="sessaoTerapiaid19"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev19" id="sessaoQtterapiaprev19" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon19" id="sessaoQtterapiacon19" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo19" id="sessaoQtterapiasaldo19" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao19" id="sessaoObssessao19" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 20AReg -->
+															<td>
+																<select name="sessaoTerapiaid20" id="sessaoTerapiaid20"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev20" id="sessaoQtterapiaprev20" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon20" id="sessaoQtterapiacon20" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo20" id="sessaoQtterapiasaldo20" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao20" id="sessaoObssessao20" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 21AReg -->
+															<td>
+																<select name="sessaoTerapiaid21" id="sessaoTerapiaid21"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev21" id="sessaoQtterapiaprev21" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon21" id="sessaoQtterapiacon21" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo21" id="sessaoQtterapiasaldo21" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao21" id="sessaoObssessao21" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 22AReg -->
+															<td>
+																<select name="sessaoTerapiaid22" id="sessaoTerapiaid22"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev22" id="sessaoQtterapiaprev22" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon22" id="sessaoQtterapiacon22" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo22" id="sessaoQtterapiasaldo22" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao22" id="sessaoObssessao22" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 23AReg -->
+															<td>
+																<select name="sessaoTerapiaid23" id="sessaoTerapiaid23"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev23" id="sessaoQtterapiaprev23" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon23" id="sessaoQtterapiacon23" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo23" id="sessaoQtterapiasaldo23" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao23" id="sessaoObssessao23" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 24AReg -->
+															<td>
+																<select name="sessaoTerapiaid24" id="sessaoTerapiaid24"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev24" id="sessaoQtterapiaprev24" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon24" id="sessaoQtterapiacon24" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo24" id="sessaoQtterapiasaldo24" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao24" id="sessaoObssessao24" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+														<tr><!-- 25AReg -->
+															<td>
+																<select name="sessaoTerapiaid25" id="sessaoTerapiaid25"  class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiaprev25" id="sessaoQtterapiaprev25" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiacon25" id="sessaoQtterapiacon25" placeholder="" class="form-control" />
+															</td>
+															<td>
+																<input type="text" name="sessaoQtterapiasaldo25" id="sessaoQtterapiasaldo25" placeholder="" class="form-control" s/>
+															</td>
+															<td>
+																<textarea type="text" name="sessaoObssessao25" id="sessaoObssessao25" placeholder="" class="form-control"></textarea>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
 									</div>
 								</div>
-							</form>
+							</div>
 
-							
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+							<div class="col-sm-12" style="text-align: center;"><!-- Widget Dados Básicos -->
+								<button class="btn btn-info"  name="acao" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i>
+									Salvar
+								</button>
 
+								&nbsp; &nbsp; &nbsp;
+								<button class="btn btn-warning"  type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i>
+									Voltar
+								</button>
+							</div>
+						</form>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.main-content -->
+	</div><!-- /.main-container -->
+</body>
+	<div class="footer">
+		<div class="footer-inner">
+			<div class="footer-content">
+				<span class="bigger-120">
+					<span class="blue bolder">Soft</span>
+					Route © 2022
+				</span>
 
+				&nbsp; &nbsp;
+				<span class="action-buttons">
+					<a href="#">
+						<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+					</a>
 
+					<a href="#">
+						<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+					</a>
 
-				</div>
-			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
-	</body>
-		<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route © 2022
-						</span>
-
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-
-						</span>
-					</div>
-				</div>
+				</span>
+			</div>
+		</div>
 	</div>
-
 </html>
