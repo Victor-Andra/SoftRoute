@@ -3,21 +3,20 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Peculiaridades da Fichas de Frequência - Exceções</title>
+		<title>Lista das Peculiaridades das Fichas de Frequência</title>
 		<script>
 			function carregaBody(){
-				let arr = ["01","02","03","04","05"];
-				let novo_vetor;
+				let arr = document.getElementsByName("tagContainerTerapeuta");
+
 				arr.forEach((a)=>{
-					let arrayCompacto = document.getElementById("excecao_terapeutasids"+a).value;
-					if (arrayCompacto != undefined && arrayCompacto != "undefined" && arrayCompacto != "" && arrayCompacto != "-"){
-						novo_vetor = arrayCompacto.split(",");
-						//excecao_terapeutasid01ul
-						let excecao = document.getElementById("excecao_terapeutasid"+a+"ul");
-						novo_vetor.forEach((e)=>{
-							excecao.append(document.getElementById(e+"li").cloneNode(true));
-						})
-					}
+					let novo_vetor;
+					let input = document.getElementById(a.id + "_input");
+					console.log("input.value: "+input.value)
+					novo_vetor = input.value.split(",");
+					novo_vetor.forEach((e)=>{
+						let excecao = document.getElementById(e+"_span");
+						a.append(excecao.cloneNode(true));
+					})
 				})
 			}
 		</script>
@@ -32,17 +31,12 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Peculiaridades da Fichas de Frequência - Exceções</li>
+							<li class="active">Lista das Peculiaridades das Fichas de Frequência - Exceções</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div hidden id="divCarrega">
-						{{#each terapeutas}}
-							<li id="{{_id}}li" class="search-choice">
-								<span>{{usuario_nome}}</span>
-								<!--
-								<a class="search-choice-close" data-option-array-index="3"></a>
-								-->
-							</li>
+						{{#each usuarios}}
+							<span id="{{_id}}_span" class="tag">{{usuario_nome}}</span>
 						{{/each}}
 					</div>
 					{{#each error}}
@@ -61,199 +55,84 @@
 									</thead>
 									<tbody>
 										{{#each benes}}
-											<tr role="row" class="odd">
-												<td><label class="hidden">{{bene_nome}}</label>
-													<div class="widget-box collapsed">
-														<div class="widget-header">
-															<h6 class="widget-title" >{{bene_nome}}</h6>
-															<span class="widget-toolbar">
-																<a href="#" data-action="reload">
-																	<i class="ace-icon brown fa fa-refresh bigger-130"></i>
-																</a>
-																<a href="#" data-action="collapse">
-																	<i class="ace-icon fa fa-chevron-up bigger-130"></i>
-																</a>
-															</span>
-															<span class="widget-toolbar">
-																<a class="blue" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/excecao/cad">
-																	<i class="ace-icon fa fa-plus bigger-130"></i>
-																</a>
-																<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/excecao/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-															</span>
-															<span class="widget-toolbar">
-																<a name="acaoViz" id="acaoViz">
+										<tr role="row" class="odd">
+											<td><label class="hidden">{{bene_nome}}</label>
+												<div class="widget-box collapsed">
+													<div class="widget-header">
+														<h6 class="widget-title" >{{bene_nome}}</h6>
+														<span class="widget-toolbar">
+															<a href="#" data-action="reload">
+																<i class="ace-icon brown fa fa-refresh bigger-130"></i>
+															</a>
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up bigger-130"></i>
+															</a>
+														</span>
+														<span class="widget-toolbar">
+															<a class="blue" name="acaoCad" id="acaoCad" href="/menu/beneficiario/excecao/cad">
+																<i class="ace-icon fa fa-plus bigger-130"></i>
+															</a>
+															<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/excecao/edi/{{_id}}">
+																<i class="ace-icon fa fa-pencil bigger-130"></i>
+															</a>
+														</span>
+														<span class="widget-toolbar">
+															<a name="acaoViz" id="acaoViz">
+																{{#if countExcecaos}}
+																	<i class="ace-icon green fa fa-check bigger-130"></i>
+																{{else}}
+																	<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastradas sessões para esse beneficiário."></i>
+																{{/if}}
+															</a>
+														</span>
+													</div>
+													<div class="widget-body">
+														<div class="widget-main">
+															<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																<thead>
+																	<tr role="row">
+																		<th style="width: 10%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																		<th style="width: 30%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeutas</th>
+																		<th style="width: 30%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Substitutos</th>
+																		<th style="width: 40%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
+																	</tr>
+																</thead>
+																<tbody>
 																	{{#each ../excecaos}}
-																		{{#ifEqual ../_id excecao_beneid}}
-																			<i class="ace-icon green fa fa-check bigger-130"></i>
+																		{{#ifEqual this.excecao_beneid ../_id}}
+																			{{#isNull excecao_terapiaid}}
 																			{{else}}
-																			<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastradas sessões para esse beneficiário."></i>
+																			<tr role="row" class="odd">
+																				{{#each ../../terapias}}<!-- Ok -->
+																					{{#ifEqual this._id ../excecao_terapiaid}}
+																						<td>{{terapia_nome}}</td>
+																					{{/ifEqual}}
+																				{{/each}}
+																				<td>
+																					<div class="tags" id="containerExecaoTerapeuta_{{_id}}" name="tagContainerTerapeuta">
+																						<input hidden id="containerExecaoTerapeuta_{{_id}}_input" value="{{excecao_terapeutaid}}" />
+																					</div>
+																				</td>
+																				<td>
+																					<div class="tags" id="containerTerapeutaSubs_{{_id}}" name="tagContainerTerapeuta">
+																						<input hidden id="containerTerapeutaSubs_{{_id}}_input" value="{{excecao_substitutoid}}" />
+																					</div>
+																				</td>
+																				<td>{{excecao_obs}}</td>
+																			</tr>
+																			{{/isNull}}
 																		{{/ifEqual}}
 																	{{/each}}
-																</a>
-															</span>
-														</div>
-														<div class="widget-body">
-															<div class="widget-main">
-																<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-																	{{#each ../excecaos}}
-																	{{#ifEqual this.excecao_beneid ../_id}}
-																	<thead>
-																		<tr role="row">
-																			<th style="width: 30%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																			<th style="width: 5%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Liminar</th>
-																			<th style="width: 5%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Realizado</th>
-																			<th style="width: 5%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Saldo</th>
-																			<th>Obs</th>
-																			
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr role="row" class="odd">
-																			{{#each ../../terapias}}
-																				{{#ifEqual this._id ../excecao_terapiaid01}}
-																					<td>{{terapia_nome}}</td>
-																				{{/ifEqual}}
-																			{{/each}}
-																			<td>
-																				<div name="excecao_terapeutasid01" id="excecao_terapeutasid01"  class="chosen-container chosen-container-multi chosen-with-drop chosen-container-active" style="width: 803px;" title="">
-																					<ul name="excecao_terapeutasid01ul" id="excecao_terapeutasid01ul" class="chosen-choices">
-																						<input hidden id="excecao_terapeutasids01" value="{{excecao_terapeutasid01}}" />
-																						<!--
-																						{{#each terapeutas}}
-																							{{#contidoEmArray ../excecao_terapiaid01 this._id}}
-																							<li class="search-choice">
-																								<span>{{usuario_nome}}</span>
-																								<a class="search-choice-close" data-option-array-index="3"></a>
-																							</li>
-																							{{/contidoEmArray}}
-																						{{/each}}
-																						-->
-																					</ul>
-																				</div>
-																			</td>
-																			<td>{{excecao_carimbo01}}</td>
-																			<td>{{excecao_horario01}}</td>
-																			<td>{{excecao_obs01}}</td>
-																		</tr>
-																		<tr role="row" class="odd">
-																			{{#each ../../terapias}}
-																				{{#ifEqual this._id ../excecao_terapiaid02}}
-																					<td>{{terapia_nome}}</td>
-																				{{/ifEqual}}
-																			{{/each}}
-																			<td>
-																				<div name="excecao_terapeutasid02" id="excecao_terapeutasid02"  class="chosen-container chosen-container-multi chosen-with-drop chosen-container-active" style="width: 803px;" title="">
-																					<ul name="excecao_terapeutasid02ul" id="excecao_terapeutasid02ul" class="chosen-choices">
-																						<input hidden id="excecao_terapeutasids02" value="{{excecao_terapeutasid02}}" />
-																						{{#each terapeutas}}
-																							{{#contidoEmArray ../excecao_terapiaid02 this._id}}
-																							<li class="search-choice">
-																								<span>{{usuario_nome}}</span>
-																								<a class="search-choice-close" data-option-array-index="3"></a>
-																							</li>
-																							{{/contidoEmArray}}
-																						{{/each}}
-																					</ul>
-																				</div>
-																			</td>
-																			<td>{{excecao_carimbo02}}</td>
-																			<td>{{excecao_horario02}}</td>
-																			<td>{{excecao_obs02}}</td>
-																		</tr>
-																		<tr role="row" class="odd">
-																			{{#each ../../terapias}}
-																				{{#ifEqual this._id ../excecao_terapiaid03}}
-																					<td>{{terapia_nome}}</td>
-																				{{/ifEqual}}
-																			{{/each}}
-																			<td>
-																				<div name="excecao_terapeutasid03" id="excecao_terapeutasid03"  class="chosen-container chosen-container-multi chosen-with-drop chosen-container-active" style="width: 803px;" title="">
-																					<ul name="excecao_terapeutasid03ul" id="excecao_terapeutasid03ul" class="chosen-choices">
-																						<input hidden id="excecao_terapeutasids03" value="{{excecao_terapeutasid03}}" />
-																						{{#each terapeutas}}
-																							{{#contidoEmArray ../excecao_terapiaid03 this._id}}
-																							<li class="search-choice">
-																								<span>{{usuario_nome}}</span>
-																								<a class="search-choice-close" data-option-array-index="3"></a>
-																							</li>
-																							{{/contidoEmArray}}
-																						{{/each}}
-																					</ul>
-																				</div>
-																			</td>
-																			<td>{{excecao_carimbo03}}</td>
-																			<td>{{excecao_horario03}}</td>
-																			<td>{{excecao_obs03}}</td>
-																		</tr>
-																		
-																		<tr role="row" class="odd">
-																			{{#each ../../terapias}}
-																				{{#ifEqual this._id ../excecao_terapiaid04}}
-																					<td>{{terapia_nome}}</td>
-																				{{/ifEqual}}
-																			{{/each}}
-																			<td>
-																				<div name="excecao_terapeutasid04" id="excecao_terapeutasid04"  class="chosen-container chosen-container-multi chosen-with-drop chosen-container-active" style="width: 803px;" title="">
-																					<ul name="excecao_terapeutasid04ul" id="excecao_terapeutasid04ul" class="chosen-choices">
-																						<input hidden id="excecao_terapeutasids04" value="{{excecao_terapeutasid04}}" />
-																						{{#each terapeutas}}
-																							{{#contidoEmArray ../excecao_terapiaid04 this._id}}
-																							<li class="search-choice">
-																								<span>{{usuario_nome}}</span>
-																								<a class="search-choice-close" data-option-array-index="3"></a>
-																							</li>
-																							{{/contidoEmArray}}
-																						{{/each}}
-																					</ul>
-																				</div>
-																			</td>
-																			<td>{{excecao_carimbo04}}</td>
-																			<td>{{excecao_horario04}}</td>
-																			<td>{{excecao_obs04}}</td>
-																		</tr>
-																		
-																		<tr role="row" class="odd">
-																			{{#each ../../terapias}}
-																				{{#ifEqual this._id ../excecao_terapiaid05}}
-																					<td>{{terapia_nome}}</td>
-																				{{/ifEqual}}
-																			{{/each}}
-																			<td>
-																				<div name="excecao_terapeutasid05" id="excecao_terapeutasid05"  class="chosen-container chosen-container-multi chosen-with-drop chosen-container-active" style="width: 803px;" title="">
-																					<ul name="excecao_terapeutasid05ul" id="excecao_terapeutasid05ul" class="chosen-choices">
-																						<input hidden id="excecao_terapeutasids05" value="{{excecao_terapeutasid05}}" />
-																						{{#each terapeutas}}
-																							{{#contidoEmArray ../excecao_terapiaid05 this._id}}
-																							<li class="search-choice">
-																								<span>{{usuario_nome}}</span>
-																								<a class="search-choice-close" data-option-array-index="3"></a>
-																							</li>
-																							{{/contidoEmArray}}
-																						{{/each}}
-																					</ul>
-																				</div>
-																			</td>
-																			<td>{{excecao_carimbo05}}</td>
-																			<td>{{excecao_horario05}}</td>
-																			<td>{{excecao_obs05}}</td>
-																		</tr>
-																				
-																				
-																			{{/ifEqual}}
-																		{{/each}}
-																	</tbody>
-																</table>
-															</div>
+																</tbody>
+															</table>
 														</div>
 													</div>
-												</td>
-											</tr>
+												</div>
+											</td>
+										</tr>
 										{{/each}}
 									</tbody>
 								</table>
-								<!-- PAGE CONTENT END -->	
 							</div>
 						</div>
 					</div><!-- /.page-content -->
@@ -264,11 +143,8 @@
 			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
 		<!-- basic scripts -->
-
 		<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-		
-
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 		$(document).ready(function() {
@@ -285,61 +161,12 @@
 			"searching": true,
 			"ordering": true,
 			"info": true,
-			
 			select: {
 						style: 'multi'
 					}
 			});
 		});
 		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-		</script>
-		<script type="text/javascript">
-			jQuery(function($) {
-				$('#id-disable-check').on('click', function() {
-					var inp = $('#form-input-readonly').get(0);
-					if(inp.hasAttribute('disabled')) {
-						inp.setAttribute('readonly' , 'true');
-						inp.removeAttribute('disabled');
-						inp.value="This text field is readonly!";
-					}
-					else {
-						inp.setAttribute('disabled' , 'disabled');
-						inp.removeAttribute('readonly');
-						inp.value="This text field is disabled!";
-					}
-				});
-			
-			
-				if(!ace.vars['touch']) {
-					$('.chosen-select').chosen({allow_single_deselect:true}); 
-					//resize the chosen on window resize
-			
-					$(window)
-					.off('resize.chosen')
-					.on('resize.chosen', function() {
-						$('.chosen-select').each(function() {
-							 var $this = $(this);
-							 $this.next().css({'width': $this.parent().width()});
-						})
-					}).trigger('resize.chosen');
-					//resize chosen on sidebar collapse/expand
-					$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-						if(event_name != 'sidebar_collapsed') return;
-						$('.chosen-select').each(function() {
-							 var $this = $(this);
-							 $this.next().css({'width': $this.parent().width()});
-						})
-					});
-			
-			
-					$('#chosen-multiple-style .btn').on('click', function(e){
-						var target = $(this).find('input[type=radio]');
-						var which = parseInt(target.val());
-						if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-						 else $('#form-field-select-4').removeClass('tag-input-style');
-					});
-				}
-						
 		</script>
 	</body>
 </html>

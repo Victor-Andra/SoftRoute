@@ -19,6 +19,8 @@ const BeneSchema = mongoose.Schema({
     bene_cpf:{ type: String, required: false },
     bene_status:{ type: String, required: false },
     bene_convid:{ type: ObjectId, required: true },
+    bene_imphora:{ type: String, required: false},
+    bene_impcarimbo:{ type: String, required: false},
     bene_out:{ type: String, required: false},
     bene_graupar:{ type: String, required: false  },
     bene_supervisor:{ type: String, required: false },
@@ -99,6 +101,8 @@ const BeneSchema = mongoose.Schema({
     bene_obs:{ type: String, required: false},
     bene_obsadm:{ type: String, required: false},
     bene_datacad:{ type: Date, required: false },
+    bene_usuidcad:{ type: ObjectId, required: false },
+    bene_usuidedi:{ type: ObjectId, required: false },
     bene_dataedi:{ type: Date, required: false }
     
 })
@@ -106,7 +110,7 @@ const BeneSchema = mongoose.Schema({
 class Bene{
     constructor(
         bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
-        bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out, bene_graupar,
+        bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_out,bene_imphora,bene_impcarimbo, bene_graupar,
         bene_supervisor, bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, 
         bene_outendcidade, bene_outenduf, bene_outendcep, bene_outcel, bene_outcel2, bene_outemail, bene_ordempg, bene_ordemdoc, bene_ordemnome, bene_ordemretem, bene_pai, 
         bene_paiprof, bene_paiident, bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, 
@@ -114,7 +118,8 @@ class Bene{
         bene_maecpf, bene_maeend, bene_maeendcompl, bene_maeendbairro, bene_maeendcidade, bene_maeenduf, bene_maeendcep, 
         bene_maecel, bene_maecel2, bene_maeemail, bene_escolanome, bene_escolafone, bene_escolaend, bene_escolacomp, bene_escolabairro, bene_escolacidade, bene_escolauf, 
         bene_escolacep, bene_escolaano, bene_escolaserie, bene_escolacoord, bene_escolacoordtel, bene_escolaoutro1, bene_escolaoutro1func, bene_escolaoutro1tel,
-        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs ,bene_escolaemail, bene_escolaturno, bene_obs, bene_obsadm,bene_datacad, bene_dataedi
+        bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs ,bene_escolaemail, bene_escolaturno, bene_obs, bene_obsadm, 
+        bene_datacad, bene_usuidcad, bene_usuidedi, bene_dataedi
          ){
             this.bene_nome = bene_nome,
             this.bene_apelido = bene_apelido,
@@ -132,6 +137,8 @@ class Bene{
             this.bene_status = bene_status,
             this.bene_convid = bene_convid,
             this.bene_out = bene_out,
+            this.bene_out = bene_imphora,
+            this.bene_out = bene_impcarimbo,
             this.bene_graupar = bene_graupar,
             this.bene_supervisor = bene_supervisor,
             this.bene_outprof = bene_outprof,
@@ -211,6 +218,8 @@ class Bene{
             this.bene_obsadm = bene_obsadm,
             this.bene_obs = bene_obs,
             this.bene_datacad = bene_datacad,
+            this.bene_usuidcad = bene_usuidcad,
+            this.bene_usuidedi = bene_usuidedi,
             this.bene_dataedi = bene_dataedi
             
             
@@ -221,9 +230,10 @@ BeneSchema.loadClass(Bene)
 const BeneModel = mongoose.model('tb_bene', BeneSchema)
 module.exports = {BeneModel,BeneSchema,
     beneEditar: async (req, res) => {
-        let dataAtual = new Date();
+        let dataAtual = new Date();//Pega data atual
         let resultado;
-        //Pega data atual
+        let usuarioAtual = req.cookies['idUsu'];
+        
         
         //Realiza Atualização
         await BeneModel.findByIdAndUpdate(req.body.id, 
@@ -243,6 +253,9 @@ module.exports = {BeneModel,BeneSchema,
                 bene_cpf: req.body.beneCpf,
                 bene_status: req.body.beneStatus,
                 bene_convid: req.body.beneConvid,
+                bene_imphora: req.body.beneImphora,
+                bene_impcarimbo: req.body.beneImpcarimbo,
+
                 bene_out: req.body.beneOut,
                 bene_graupar: req.body.beneGraupar,
                 bene_supervisor: req.body.beneSupervisor,
@@ -322,6 +335,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaobs: req.body.beneEscolaobs,
                 bene_obsadm: req.body.beneObsadm,
                 bene_obs: req.body.beneObs,
+                bene_usuidedi: usuarioAtual,
                 bene_dataedi: dataAtual
             }}
         ).then((res) =>{
@@ -336,9 +350,9 @@ module.exports = {BeneModel,BeneSchema,
         return resultado;
     },
     benesupEditar: async (req, res) => {
-        let dataAtual = new Date();
+        let dataAtual = new Date();//Pega data atual
         let resultado;
-        //Pega data atual
+        let usuarioAtual = req.cookies['idUsu'];
         
         //Realiza Atualização dos beneficiários sessãoe escola
         await BeneModel.findByIdAndUpdate(req.body.beneId, 
@@ -374,6 +388,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaemail: req.body.beneEscolaemail,
                 //Permitir Bene Obs também ser editado pelos Supervisores
                 bene_obs: req.body.beneObs,
+                bene_usuidcad: usuarioAtual,
                 bene_dataedi: dataAtual
                 }}
         ).then((res) =>{
@@ -390,7 +405,7 @@ module.exports = {BeneModel,BeneSchema,
     beneAdicionar: async (req,res) => {
         let beneExiste =  await BeneModel.findOne({bene_nome: req.body.beneNome});//quando não acha fica null
         let dataAtual = new Date();
-        
+        let usuarioAtual = req.cookies['idUsu'];
         if(beneExiste){//se tiver null cai no else
             return "O nome da bene já existe";
         } else {
@@ -411,6 +426,8 @@ module.exports = {BeneModel,BeneSchema,
                 bene_cpf: req.body.beneCpf,
                 bene_status: req.body.beneStatus,
                 bene_convid: req.body.beneConvid,
+                bene_imphora: req.body.beneImphora,
+                bene_impcarimbo: req.body.beneImpcarimbo,
                 bene_out: req.body.beneOut,
                 bene_graupar: req.body.beneGraupar,
                 bene_supervisor: req.body.beneSupervisor,
@@ -490,6 +507,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaobs: req.body.beneEscolaobs,
                 bene_obsadm: req.body.beneObsadm,
                 bene_obs: req.body.beneObs,
+                bene_usuidcad: usuarioAtual,
                 bene_datacad: dataAtual                
             });
             console.log("newBene save");

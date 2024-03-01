@@ -12,6 +12,7 @@ const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
 const especializacaoClass = require("../models/especializacao")
 const metodoClass = require("../models/metodo")
+const metoutClass = require("../models/metout")
 const respostaClass = require("../models/resposta")
 const Resposta = mongoose.model("tb_resposta")
 
@@ -23,6 +24,7 @@ const Funcao = mongoose.model("tb_funcao")
 const Especialidade = mongoose.model("tb_especialidade")
 const Especializacao = mongoose.model("tb_especializacao")
 const Metodo = mongoose.model("tb_metodo")
+const Metout = mongoose.model("tb_metout")
 
 
 module.exports = {
@@ -37,8 +39,10 @@ module.exports = {
                                 especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
                                 Metodo.find().then((metodo)=>{ //Métodos
                                     metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
-                res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
-            })})})})})}).catch((err) =>{
+                                    Metout.find().then((metout)=>{ //Métodos
+                                        metout.sort((a,b) => ((a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+                                    res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
+            })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
@@ -56,8 +60,10 @@ module.exports = {
                                         especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
                                         Metodo.find().then((metodo)=>{ //Métodos
                                             metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
-            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao})
-        })})})})})})}).catch((err) =>{
+                                            Metout.find().then((metout)=>{ //Métodos
+                                                metout.sort((a,b) => ((a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+                                            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
@@ -79,8 +85,10 @@ module.exports = {
                                         base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
                                     }
                                     metodo.sort((a,b) => ((a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
-            res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, funcaos: funcao, base64Image})
-        })})})})})})}).catch((err) =>{
+                                    Metout.find().then((metout)=>{ //Métodos
+                                        metout.sort((a,b) => ((a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+                                    res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao, base64Image})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

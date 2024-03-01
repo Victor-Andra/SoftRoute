@@ -118,6 +118,33 @@
 					document.getElementById('usuarioMetodo').value = selectedValues.join(';');
 				}
 
+				//Outros Método multipla seleção:
+				// Obtém todos os checkboxes com o nome 'usuarioMetoutOp'
+				var metoutCheckboxes = document.getElementsByName('usuarioMetoutOp');
+
+				// Adiciona um evento change a cada checkbox
+				metoutCheckboxes.forEach(function(checkbox) {
+					checkbox.addEventListener('change', function() {
+						updateUsuarioMetout();
+					});
+				});
+
+				// Função para atualizar o valor do input text com base nas seleções de método
+				function updateUsuarioMetout() {
+					// Obtém todos os checkboxes de método marcados
+					var selectedCheckboxes = Array.from(metoutCheckboxes).filter(function(checkbox) {
+						return checkbox.checked;
+					});
+
+					// Obtém os valores dos checkboxes de método marcados
+					var selectedValues = selectedCheckboxes.map(function(checkbox) {
+						return checkbox.value;
+					});
+
+					// Atualiza o valor do input text com os valores separados por ';'
+					document.getElementById('usuarioMetout').value = selectedValues.join(';');
+				}
+
 		</script>
 	</head>
 
@@ -345,13 +372,14 @@
 														</div>
 														
 														<div class="row">
-															<div class="col-sm-6">
+															<div class="col-sm-6" class="table-responsive">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 																	<thead>
 																		<tr>
 																			<th>Graduações</td>
 																			<th>Especializações</td>
 																			<th>Métodos</td>
+																			<th>Outros</td>
 																		</tr>
 																	</thead>
 																	<tbody>
@@ -398,17 +426,32 @@
 																				{{/each}}
 																				
 																			</td>
+																			<td>
+																				
+																				{{#each metouts}}
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioMetoutOp" id="usuarioMetoutOp" type="checkbox" class="ace" value="{{_id}}" onchange="javascript:updateUsuarioMetout()">
+																						<span class="lbl">&nbsp;{{metout_nome}}</span>
+																					</label>
+																				</div>
+																				
+																				{{else}}
+																				{{/each}}
+																				
+																			</td>
 																		</tr>
 																		<tr hidden>
 																			<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{_id}}"></td>
 																			<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text"  value="{{_id}}"></td>
 																			<td><input name="usuarioMetodo" id="usuarioMetodo" type="text"  value="{{_id}}"></td>
+																			<td><input name="usuarioMetout" id="usuarioMetout" type="text"  value="{{_id}}"></td>
 																		</tr>
 																		<tr>
-																			<td colspan="3"><label>Outras informações</label></td>
+																			<td colspan="4"><label>Outras informações</label></td>
 																		</tr>
 																		<tr>
-																			<td colspan="3"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
+																			<td colspan="4"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
 																		</tr>
 																	</tbody>
 																</table>

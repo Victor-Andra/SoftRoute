@@ -419,6 +419,7 @@ module.exports = {SessaoModel,SessaoSchema,
     sessaoEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
+        let usuarioAtual = req.cookies['idUsu'];
         
         //Realiza Atualização
         await SessaoModel.findByIdAndUpdate(req.body.sessaoId, 
@@ -551,10 +552,8 @@ module.exports = {SessaoModel,SessaoSchema,
                 sessao_qtterapiasaldo25 : req.body.sessaoQtterapiasaldo25,
                 sessao_obssessao25 : req.body.sessaoObssessao25,
                 //Atributos de controle
-                sessao_usuidedi : req.body.sessaoUsuidedi,
+                sessao_usuidedi : usuarioAtual,
                 sessao_dataedi : dataAtual.toISOString()
-                
-                
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -577,7 +576,8 @@ module.exports = {SessaoModel,SessaoSchema,
         //O campo de Integridade verifica se há mais de uma terapia igual para um mesmo beneficiário é impede o cadastro
         let sessaoExiste =  await SessaoModel.findOne({sessao_beneid: req.body.sessaoBeneid , sessao_terapiaid: req.body.sessaoTerapiaid});//quando não acha fica null
         let dataAtual = new Date();
-        
+        let usuarioAtual = req.cookies['idUsu'];
+
         if(sessaoExiste){//se tiver null cai no else
             return "O nome da sessao já existe";
             //programar alert
@@ -712,7 +712,7 @@ module.exports = {SessaoModel,SessaoSchema,
                 sessao_qtterapiasaldo25 : req.body.sessaoQtterapiasaldo25,
                 sessao_obssessao25 : req.body.sessaoObssessao25,
                 //Atributos de controle
-                sessao_usuidcad : req.body.sessaoUsuidcad,
+                sessao_usuidcad : usuarioAtual,
                 sessao_datacad : dataAtual.toISOString()
             });
             console.log("newSessao save");

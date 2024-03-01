@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista das Peculiaridades das Fichas de Frequência</title>
+		
+	
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Lista das Peculiaridades das Fichas de Frequência - Exceções</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#each error}}
+					<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12 col-sm-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											
+											<thead>
+												<tr role="row">
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each benes}}
+													<tr role="row" class="odd">
+														<td><label class="hidden">{{bene_nome}}</label>
+															<div class="widget-box collapsed">
+																<div class="widget-header">
+																	<h6 class="widget-title" >{{bene_nome}}</h6>
+																	
+																	<span class="widget-toolbar">
+																		<a href="#" data-action="reload">
+																			<i class="ace-icon brown fa fa-refresh bigger-130"></i>
+																		</a>
+																		<a href="#" data-action="collapse">
+																			<i class="ace-icon fa fa-chevron-up bigger-130"></i>
+																		</a>
+																	</span>
+																	<span class="widget-toolbar">
+																		<a class="blue" name="acaoCad" id="acaoCad" href="/menu/beneficiario/excecao/cad">
+																			<i class="ace-icon fa fa-plus bigger-130"></i>
+																		</a>
+																		<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/excecao/edi/{{_id}}">
+																			<i class="ace-icon fa fa-pencil bigger-130"></i>
+																		</a>
+																	</span>
+																	<span class="widget-toolbar">
+																		<a name="acaoViz" id="acaoViz">
+																			{{#if countExcecaos}}
+																				<i class="ace-icon green fa fa-check bigger-130"></i>
+																			{{else}}
+																				<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastradas sessões para esse beneficiário."></i>
+																			{{/if}}
+																		</a>
+																	</span>
+																	
+																</div>
+																
+																<div class="widget-body">
+																	<div class="widget-main">
+																		<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																			
+																			<thead>
+																				<tr role="row">
+																					<th style="width: 10%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																					<th style="width: 30%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeutas</th>
+																					<th style="width: 30%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Substitutos</th>
+																					<th style="width: 40%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
+																					
+																					
+																				</tr>
+																			</thead>
+																			<tbody>
+																				{{#each ../excecaos}}
+																					{{#ifEqual this.excecao_beneid ../_id}}
+																					
+																						{{#isNull excecao_terapiaid}}
+																						{{else}}
+																						<tr role="row" class="odd">
+																							{{#each ../../terapias}}<!-- Ok -->
+																								{{#ifEqual this._id ../excecao_terapiaid}}
+																									<td>{{terapia_nome}}</td>
+																								{{/ifEqual}}
+																							{{/each}}
+																							<td>
+																								<div class="tags" id="tagContainer1">
+																									<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="Enter tags ..." style="display: none;">
+																								</div>
+
+																								
+
+																							</td>
+																							<td>
+																								<div class="tags" id="tagContainer2">
+																									<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="Enter tags ..." style="display: none;">
+																								</div>
+
+																								<script>
+																									// Supondo que excecao_terapeutaid seja uma string contendo tags separadas por vírgula
+																									var tagsString = "{{excecao_substitutoid}}";
+																									var tagContainer2 = document.getElementById('tagContainer2');
+
+																									if (tagsString) {
+																										var splitTags = tagsString.split(',').map(tag => tag.trim());
+
+																										splitTags.forEach(function(tag) {
+																											var span = document.createElement('span');
+																											span.className = 'tag';
+																											span.innerHTML = tag + '<button type="button" class="close">×</button>';
+																											tagContainer2.appendChild(span);
+																										});
+																										}else if (tagContent) {
+																										tagContainer2.appendChild(tagsString);
+																										
+																									}
+																								</script>
+																								
+																							</td>
+																							<td>{{excecao_obs}}</td>
+																						</tr>
+																						{{/isNull}}
+																						
+																					{{/ifEqual}}
+																				{{/each}}
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</td>
+														
+
+
+
+
+
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+								
+								
+								<!-- PAGE CONTENT END -->	
+							</div>
+						</div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container ace-save-state --><!-- basic scripts --><!--[if !IE]> -->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [null],
+			"responsive": true,
+			"lengthMenu": [ 100, 200],
+			"lengthChange": true,
+			"autoWidth": false,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+		
+	</body>
+</html>

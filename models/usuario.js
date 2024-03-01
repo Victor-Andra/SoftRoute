@@ -45,6 +45,7 @@ const UsuarioSchema = mongoose.Schema({
     usuario_graduacao :{type: String, required: false },
     usuario_especializacao :{type: String, required: false },
     usuario_metodo :{type: String, required: false },
+    usuario_metout :{type: String, required: false },
     
     usuario_graduacao1 :{type: String, required: false },
     usuario_especializacao1 :{type: String, required: false },
@@ -104,6 +105,7 @@ class Usuario{
         usuario_graduacao,
         usuario_especializacao,
         usuario_metodo,
+        usuario_metout,
         usuario_graduacao1,
         usuario_especializacao1,
         usuario_metodo1,
@@ -158,6 +160,7 @@ class Usuario{
         this.usuario_graduacao = usuario_graduacao ,
         this.usuario_especializacao = usuario_especializacao ,
         this.usuario_metodo = usuario_metodo ,
+        this.usuario_metout = usuario_metout ,
         this.usuario_graduacao1 = usuario_graduacao ,
         this.usuario_especializacao1 = usuario_especializacao ,
         this.usuario_metodo1 = usuario_metodo ,
@@ -187,6 +190,7 @@ module.exports = {
         let resultado;
         //Pega data atual
         let nome = req.body.usuarioNome;
+        let usuarioAtual = req.cookies['idUsu'];
 
         while((nome.substring(nome.length - 1))==" "){
             nome = nome.substring(0, nome.length - 1)
@@ -243,6 +247,7 @@ module.exports = {
                 usuario_graduacao : req.body.usuarioGraduacao ,
                 usuario_especializacao : req.body.usuarioEspecializacao ,
                 usuario_metodo : req.body.usuarioMetodo ,
+                usuario_metout : req.body.usuarioMetout ,
 
                 usuario_graduacao1 : req.body.usuarioGraduacao1 ,
                 usuario_especializacao1 : req.body.usuarioEspecializacao1 ,
@@ -272,6 +277,7 @@ module.exports = {
     usuarioAdicionar: async (req,res) => {
         let usuarioExiste =  await UsuarioModel.findOne({usuario_nome: req.body.usuarioNome});//quando não acha fica null
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
         
         if(usuarioExiste){//se tiver null cai no else
             return "O nome da usuario já existe";
@@ -318,6 +324,7 @@ module.exports = {
             usuario_graduacao : req.body.usuarioGraduacao ,
             usuario_especializacao : req.body.usuarioEspecializacao ,
             usuario_metodo : req.body.usuarioMetodo ,
+            usuario_metout : req.body.usuarioMetout ,
 
             usuario_graduacao1 : req.body.usuarioGraduacao1 ,
             usuario_especializacao1 : req.body.usuarioEspecializacao1 ,

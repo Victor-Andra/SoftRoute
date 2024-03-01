@@ -25,6 +25,7 @@
 				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
 				document.getElementById("usuarioMetodo").value = document.getElementById("usuMetodo").value;
+				document.getElementById("usuarioMetout").value = document.getElementById("usuMetout").value;
 				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
 				console.log("termina");
 			}
@@ -50,6 +51,7 @@
 				preencherCheckbox('usuarioGraduacaoOp', 'usuarioGraduacao');
 				preencherCheckbox('usuarioEspecializacaoOp', 'usuarioEspecializacao');
 				preencherCheckbox('usuarioMetodoOp', 'usuarioMetodo');
+				preencherCheckbox('usuarioMetoutOp', 'usuarioMetout');
 			}
 
 			// Função para preencher os checkboxes com base nos valores existentes
@@ -95,6 +97,7 @@
 			adicionarEventosChange('usuarioGraduacaoOp', 'usuarioGraduacao');
 			adicionarEventosChange('usuarioEspecializacaoOp', 'usuarioEspecializacao');
 			adicionarEventosChange('usuarioMetodoOp', 'usuarioMetodo');
+			adicionarEventosChange('usuarioMetoutOp', 'usuarioMetout');
 
 			// Chama a função para preencher os checkboxes ao carregar a página
 			preencherCheckboxes();
@@ -440,6 +443,7 @@
 																			<th>Graduações</td>
 																			<th>Especializações</td>
 																			<th>Métodos</td>
+																			<th>Outros</td>
 																		</tr>
 																	</thead>
 																	<tbody>
@@ -477,18 +481,30 @@
 																				{{else}}
 																				{{/each}}
 																			</td>
+																			<td>
+																				{{#each metouts}}
+																				<div class="checkbox">
+																					<label>
+																						<input name="usuarioMetoutOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCamposTexto('usuarioMetoutOp', 'usuarioMetout')">
+																						<span class="lbl">&nbsp;{{metout_nome}}</span>
+																					</label>
+																				</div>
+																				{{else}}
+																				{{/each}}
+																			</td>
 																		</tr>
 																		<tr hidden>
 																			<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{_id}}"></td>
 																			<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text"  value="{{_id}}"></td>
 																			<td><input name="usuarioMetodo" id="usuarioMetodo" type="text"  value="{{_id}}"></td>
+																			<td><input name="usuarioMetout" id="usuarioMetout" type="text"  value="{{_id}}"></td>
 																			
 																		</tr>
 																		<tr>
-																			<td colspan="3"><label>Outras informações</label></td>
+																			<td colspan="4"><label>Outras informações</label></td>
 																		</tr>
 																		<tr>
-																			<td colspan="3"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
+																			<td colspan="4"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -718,6 +734,7 @@
 																		<input id="usuGraduacao" name="usuGraduacao" value="{{usuario.usuario_graduacao}}" />
 																		<input id="usuEspecializacao" name="usuEspecializacao" value="{{usuario.usuario_especializacao}}" />
 																		<input id="usuMetodo" name="usuMetodo" value="{{usuario.usuario_metodo}}" />
+																		<input id="usuMetout" name="usuMetout" value="{{usuario.usuario_metout}}" />
 																		<input id="usuEscolaridadeobs" name="usuEscolaridadeobs" value="{{usuario.usuario_escolaridadeobs}}" />
 																		
 

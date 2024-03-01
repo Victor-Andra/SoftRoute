@@ -50,50 +50,27 @@
 																		</a>
 																	</span>
 																	<span class="widget-toolbar">
-																		<a class="blue" name="acaoCad" id="acaoCad" href="/menu/beneficiario/sessao/cad">
+																		<a class="blue" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/sessao/cad">
 																			<i class="ace-icon fa fa-plus bigger-130"></i>
 																		</a>
 																		<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/beneficiario/sessao/edi/{{_id}}">
 																			<i class="ace-icon fa fa-pencil bigger-130"></i>
 																		</a>
 																	</span>
-																	<span class="widget-toolbar">
-																		<a name="acaoViz" id="acaoViz">
-																			{{#if countSessaos}}
-																				<i class="ace-icon green fa fa-check bigger-130"></i>
-																			{{else}}
-																				<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastradas sessões para esse beneficiário."></i>
-																			{{/if}}
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
+																		<span class="widget-toolbar">
 																		<a name="acaoViz" id="acaoViz">
 																			{{#each ../sessaos}}
+																				
 																					{{#ifEqual ../_id sessao_beneid}}
-																						{{#verificarVazioOuIndefinido sessao_dataedi}}
-																							<label>--/--/----</label>
+																						<i class="ace-icon green fa fa-check bigger-130"></i>
 																						{{else}}
-																							<label><b>{{dataedi}}</b>&nbsp;</label>
-																							<label>{{sessao_usuidedi}}</label>
-																						{{/verificarVazioOuIndefinido}}
+																						<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastradas sessões para esse beneficiário."></i>
 																					{{/ifEqual}}
 																				
 																			{{/each}}
 																			
 																		</a>
 																	</span>
-																	<span class="widget-toolbar">
-																		<a name="acaoViz" id="acaoViz">
-																			{{#each ../sessaos}}
-																					{{#ifEqual ../_id sessao_beneid}}
-																						<label><b>{{datacad}}</b>&nbsp;</label>
-																						<label>{{sessao_usuidcad}}</label>
-																					{{/ifEqual}}
-																			{{/each}}
-																			
-																		</a>
-																	</span>
-																	
 																</div>
 																
 																<div class="widget-body">

@@ -34,6 +34,11 @@ const metodoClass = require("../models/metodo")
 const Metodo = mongoose.model("tb_metodo")
 const fncMetodo = require("../functions/fncMetodo")
 
+//Métout, Metout, metout, Outros Métodos, 
+const metoutClass = require("../models/metout")
+const Metout = mongoose.model("tb_metout")
+const fncMetout = require("../functions/fncMetout")
+
 //escola
 const escolaClass = require("../models/escola")
 const Escola = mongoose.model("tb_escola")
@@ -2057,6 +2062,10 @@ router.get('/beneficiario/excecao/cad', fncGeral.IsAuthenticated, (req,res) =>{/
     fncExcecao.carregaExcecao(req, res);
 })
 
+router.get('/beneficiario/excecao/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
+    fncExcecao.carregaExcecaoEdi(req, res);
+})
+
 //adiciona registro
 router.post('/beneficiario/excecao/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro
     fncExcecao.cadastraExcecao(req, res);
@@ -2596,6 +2605,8 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         fncEspecializacao.atualizaEspecializacao(req, res);
     })
 
+//Menu Ferramentas
+    //Submenu Grade Curricular, grade
     //Método, Metodo
     router.get('/ferramentas/metodo/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Métodos
         let resposta = new Resposta()
@@ -2622,6 +2633,36 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
     router.post('/ferramentas/metodo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro do Metodo
         fncMetodo.atualizaMetodo(req, res);
+    })
+
+//Menu Ferramentas
+    //Submenu Grade Curricular, grade
+    //Métout, Metout
+    router.get('/ferramentas/metout/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Métodos
+        let resposta = new Resposta()
+        resposta.texto = ""
+        resposta.sucesso = ""
+        fncMetout.listaMetout(req, res, resposta);
+    })
+
+    router.get('/ferramentas/metout/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de metout
+        fncMetout.carregaMetout(req, res);
+    })
+
+    router.post('/ferramentas/metout/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metout
+        fncMetout.cadastraMetout(req, res);
+    })
+
+    router.get('/ferramentas/metout/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metout
+        fncMetout.deletaMetout(req, res);
+    })
+
+    router.get('/ferramentas/metout/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metout
+        fncMetout.carregaMetoutEdi(req, res);
+    })
+
+    router.post('/ferramentas/metout/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro do Metout
+        fncMetout.atualizaMetout(req, res);
     })
 
 //Menu Ferramentas
