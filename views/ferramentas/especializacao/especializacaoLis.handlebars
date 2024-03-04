@@ -86,8 +86,9 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Especializacao: activate to sort column ascending">Especializacao</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Descrição:     activate to sort column ascending">Descrição</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especializacao</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ordem</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
 														<th>Ação</th>
 
 													</tr>
@@ -106,6 +107,7 @@
 															</th>
 
 															<td>{{especializacao_nome}}</td>
+															<td>{{especializacao_ordem}}</td>
 															<td>{{especializacao_descricao}}</td>
 															<td>
 																<div class="action-buttons">
@@ -180,9 +182,9 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthMenu": [ 100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

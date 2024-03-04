@@ -45,33 +45,6 @@
 				document.getElementsByName("excecaoTerapeutaid").value = document.getElementById("excecaoTerapeutaidEdi").value;
 				document.getElementsByName("excecaoSubstitutoid").value = document.getElementById("excecaoSubstitutoidEdi").value;
 				document.getElementById("excecaoObs").value = document.getElementById("excecaoObsEdi").value;
-
-				 // Recupere a string com os IDs das terapias do campo excecaoTerapiaidEdi
-					var terapiaIdsString = document.getElementById("excecaoTerapiaidEdi").value;
-
-					// Converta a string para um array de IDs
-					var terapiaIds = terapiaIdsString ? terapiaIdsString.split(',') : [];
-
-					// Selecione o controle select
-					var selectTerapeuta = $("#excecaoTerapeutaidtemp");
-
-					// Armazene as opções padrão
-					var defaultOptions = selectTerapeuta.html();
-
-					// Remova todas as opções existentes
-					selectTerapeuta.empty();
-
-					// Adicione as opções padrão de volta
-					selectTerapeuta.append(defaultOptions);
-
-					// Adicione novas opções com base nos IDs da terapia
-					terapiaIds.forEach(function(terapiaId) {
-						selectTerapeuta.find('option[value="' + terapiaId + '"]').prop('selected', true);
-					});
-
-					// Atualize o controle Chosen
-					selectTerapeuta.trigger("chosen:updated");
-
 				}
 			</script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>

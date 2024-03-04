@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const MetoutSchema = mongoose.Schema({
     metout_nome: {type: String, unique: true, required: true},
+    metout_ordem: {type: String },
     metout_descricao: {type: String },
     metout_vis: {type: String },
     metout_datacad: {type: Date},
@@ -12,12 +13,14 @@ const MetoutSchema = mongoose.Schema({
 class Metout{
     constructor(
         metout_nome,
+        metout_ordem,
         metout_descricao,
         metout_vis,
         metout_datacad,
         metout_dataedi
         ){
         this.metout_nome = metout_nome,
+        this.metout_ordem = metout_ordem,
         this.metout_descricao = metout_descricao,
         this.metout_vis = metout_vis,
         this.metout_datacad = metout_datacad,
@@ -38,6 +41,7 @@ module.exports = {MetoutModel,MetoutSchema,
         await MetoutModel.findByIdAndUpdate(req.body.metoutId, 
             {$set: {
                 metout_nome: req.body.metoutNome,
+                metout_ordem: req.body.metoutOrdem,
                 metout_descricao: req.body.metoutDescricao,
                 metout_vis: req.body.metoutvis,
                 metout_edi: dataAtual
@@ -58,6 +62,7 @@ module.exports = {MetoutModel,MetoutSchema,
             console.log("metoutmodel");
             const newMetout = new MetoutModel({
                 metout_nome: req.body.metoutNome,
+                metout_ordem: req.body.metoutOrdem,
                 metout_descricao: req.body.metoutDescricao,
                 metout_vis: req.body.metoutvis,
                 metout_datacad: dataAtual

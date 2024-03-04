@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const EspecializacaoSchema = mongoose.Schema({
     especializacao_nome: { type: String, unique: true, required: true },
+    especializacao_ordem: {type: String },
     especializacao_descricao: {type: String },
     especializacao_vis: {type: String },
     especializacao_datacad: { type: Date },
@@ -13,14 +14,16 @@ const EspecializacaoSchema = mongoose.Schema({
 class Especializacao{
     constructor(
         especializacao_nome,
+        especializacao_ordem,
         especializacao_descricao,
         especializacao_vis,
         especializacao_datacad,
         especializacao_dataedi
         ){
         this.especializacao_nome = especializacao_nome,
+        this.especializacao_ordem = especializacao_ordem,
         this.especializacao_descricao = especializacao_descricao,
-        thid.especializacao_vis = especializacao_vis,
+        this.especializacao_vis = especializacao_vis,
         this.especializacao_datacad = especializacao_datacad,
         this.especializacao_dataedi = especializacao_dataedi
     }
@@ -39,6 +42,7 @@ module.exports = {EspecializacaoModel,EspecializacaoSchema,
         await EspecializacaoModel.findByIdAndUpdate(req.body.especializacaoId, 
             {$set: {
                 especializacao_nome: req.body.especializacaoNome,
+                especializacao_ordem: req.body.especializacaoOrdem,
                 especializacao_descricao: req.body.especializacaoDescricao,
                 especializacao_vis: req.body.especializacaoVis,
                 especializacao_edi: dataAtual
@@ -59,6 +63,7 @@ module.exports = {EspecializacaoModel,EspecializacaoSchema,
             console.log("especializacaomodel");
             const newEspecializacao = new EspecializacaoModel({
                 especializacao_nome: req.body.especializacaoNome,
+                especializacao_ordem: req.body.especializacaoOrdem,
                 especializacao_descricao: req.body.especializacaoDescricao,
                 especializacao_vis: req.body.especializacaoVis,
                 especializacao_datacad: dataAtual

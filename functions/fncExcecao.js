@@ -109,12 +109,13 @@ module.exports = {
         res.redirect('admin/erro')
         })
     },
-
+   
     carregaExcecaoEdi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
-        let excecao = new Array();
-        Excecao.find().then((excecao) =>{
+        //let excecao = new Array();
+        Excecao.findOne({_id : req.params.id}).then((excecao)=>{
+            console.log(excecao);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         Conv.find().then((conv)=>{
@@ -124,7 +125,7 @@ module.exports = {
                                             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{
                                                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
-                                res.render("beneficiario/excecao/excecaoEdi", {excecaos: excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
+                                res.render("beneficiario/excecao/excecaoEdi", {excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
         })})})})})}).catch((err) =>{
         console.log(err)
         req.flash("error_message", "houve um erro ao listar exceção")

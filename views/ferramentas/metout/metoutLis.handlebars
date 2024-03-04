@@ -93,6 +93,7 @@
 															</label>
 														</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Métodos</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ordem</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
 														<th>Ação</th>
 														<th>
@@ -118,6 +119,7 @@
 															</th>
 
 															<td>{{metout_nome}}</td>
+															<td>{{metout_ordem}}</td>
 															<td>{{metout_descricao}}</td>
 															<td colspan="2">
 																<div class="action-buttons">
@@ -192,9 +194,9 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null,null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [25, 50, 100, 200],
+			"lengthMenu": [100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

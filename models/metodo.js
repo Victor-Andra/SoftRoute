@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const MetodoSchema = mongoose.Schema({
     metodo_nome: {type: String, unique: true, required: true},
+    metodo_ordem: {type: String },
     metodo_descricao: {type: String },
     metodo_vis: {type: String },
     metodo_datacad: {type: Date},
@@ -12,12 +13,14 @@ const MetodoSchema = mongoose.Schema({
 class Metodo{
     constructor(
         metodo_nome,
+        metodo_ordem,
         metodo_descricao,
         metodo_vis,
         metodo_datacad,
         metodo_dataedi
         ){
         this.metodo_nome = metodo_nome,
+        this.metodo_ordem = metodo_ordem,
         this.metodo_descricao = metodo_descricao,
         this.metodo_vis = metodo_vis,
         this.metodo_datacad = metodo_datacad,
@@ -38,6 +41,7 @@ module.exports = {MetodoModel,MetodoSchema,
         await MetodoModel.findByIdAndUpdate(req.body.metodoId, 
             {$set: {
                 metodo_nome: req.body.metodoNome,
+                metodo_ordem: req.body.metodoOrdem,
                 metodo_descricao: req.body.metodoDescricao,
                 metodo_vis: req.body.metodovis,
                 metodo_edi: dataAtual
@@ -58,6 +62,7 @@ module.exports = {MetodoModel,MetodoSchema,
             console.log("metodomodel");
             const newMetodo = new MetodoModel({
                 metodo_nome: req.body.metodoNome,
+                metodo_ordem: req.body.metodoOrdem,
                 metodo_descricao: req.body.metodoDescricao,
                 metodo_vis: req.body.metodovis,
                 metodo_datacad: dataAtual
