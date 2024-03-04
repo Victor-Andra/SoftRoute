@@ -2,98 +2,64 @@
 <html lang="pt-br">
 	<head>
 		<title>Peculiaridades da Fichas de Frequência - Exceções</title>
-				<style>
-				/* Estilos para simular a aparência do controle de seleção personalizado */
-				.custom-select {
-					position: relative;
-					width: 200px;
-					border: 1px solid #ccc;
-					border-radius: 5px;
-					padding: 5px;
-					cursor: pointer;
-				}
+		<style>
+        /* Estilos para simular a aparência do controle de seleção personalizado */
+        .custom-select {
+            position: relative;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: text;
+        }
 
-				.selected-options {
-					display: flex;
-					flex-wrap: wrap;
-					gap: 5px;
-				}
+        .selected-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
 
-				.selected-option {
-					background-color: #e0e0e0;
-					border-radius: 3px;
-					padding: 3px 8px;
-					display: flex;
-					align-items: center;
-					margin-right: 5px;
-				}
+        .selected-option {
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            padding: 3px 8px;
+            display: flex;
+            align-items: center;
+            margin-right: 5px;
+        }
 
-				.remove-icon {
-					margin-left: 5px;
-					cursor: pointer;
-				}
+        .remove-icon {
+            margin-left: 5px;
+            cursor: text;
+        }
 
-				.options-list {
-					display: none;
-					position: absolute;
-					top: 100%;
-					left: 0;
-					z-index: 1;
-					background-color: #fff;
-					box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-					border-radius: 5px;
-					overflow-y: auto;
-					max-height: 150px;
-				}
+        .options-list {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow-y: auto;
+            max-height: 150px;
+        }
 
-				.option {
-					padding: 8px;
-					cursor: pointer;
-				}
+        .option {
+            padding: 8px;
+            cursor: text;
+        }
 
-				.option:hover {
-					background-color: #f0f0f0;
-				}
+        .option:hover {
+            background-color: #f0f0f0;
+        }
 
-				.option.selected {
-					background-color: #ddd;
-					pointer-events: none;
-				}
-				.custom-select-chosen {
-			position: relative;
-			display: inline-block;
-			width: 100%;
-		}
-
-				.chosen-choices {
-					position: relative;
-					overflow: hidden;
-					margin: 0;
-					padding: 0 5px;
-					width: 100%;
-					height: auto !important;
-					height: 1%;
-					border: 1px solid #aaa;
-					background-color: #fff;
-					background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(1%, #eee), color-stop(15%, #fff));
-					background-image: -webkit-linear-gradient(#eee 1%, #fff 15%);
-					background-image: -moz-linear-gradient(#eee 1%, #fff 15%);
-					background-image: -o-linear-gradient(#eee 1%, #fff 15%);
-					background-image: linear-gradient(#eee 1%, #fff 15%);
-					cursor: text;
-				}
-
-				.chosen-container-active .chosen-choices {
-					border: 1px solid #5897fb;
-					box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-				}
-
-				.chosen-container * {
-					-webkit-box-sizing: border-box;
-					-moz-box-sizing: border-box;
-					box-sizing: border-box;
-				}
-			</style>
+        .option.selected {
+            background-color: #ddd;
+            pointer-events: none;
+        }
+    </style>
 			<script type="text/javascript">
 				function selectConv(){
 				let	v1 = document.getElementById(document.getElementById("excecaoBeneid").value).value.toString();
@@ -127,7 +93,6 @@
 				$(document).ready(function(){
 					$(".chosen-select-especial").chosen({allow_single_deselect:true});
 				});
-				
 
 				function carregaBody(){
 				document.getElementById("excecaoBeneid").value = document.getElementById("excecaoBeneidEdi").value;
@@ -174,11 +139,6 @@
 					$(".chosen-select-especial").chosen({allow_single_deselect:true});
 				});
 			</script>
-			
-
-<!-- Elemento select para os terapeutas -->
-<select name="excecaoSubstitutoidtemp" id="excecaoSubstitutoidtemp" multiple="chosen-select-especial tag-input-style" class="chosen-select-especial tag-input-style" data-placeholder="Escolha os terapeutas..." style="width:100%;" onchange="atualizaSubstituto()">
-</select>
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -308,13 +268,7 @@
 																</td>
 																<td>
 																	<div>
-																		<select name="excecaoSubstitutoid" id="excecaoSubstitutoidtemp" multiple="chosen-select-especial tag-input-style" class="chosen-select-especial tag-input-style" data-placeholder="Escolha os terapeutas..." style="width:100%;" onchange="atualizaTerapeuta()">
-																			<option value="766f69643132333435366964">-</option>
-																			{{#each terapeutas}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																			{{else}}
-																			{{/each}}
-																		</select><select name="excecaoSubstitutoid" id="excecaoSubstitutoidtemp" >
+																		<select name="excecaoSubstitutoid" id="excecaoSubstitutoidtemp" multiple="chosen-select-especial tag-input-style" class="chosen-select-especial tag-input-style" data-placeholder="Escolha os terapeutas..." style="width:100%;" onchange="atualizaSubstituto()">
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -331,7 +285,7 @@
 															</tr>
 															<tr>
 																<div class="custom-select" id="customSelect">
-																	<div class="selected-options" id="selectedOptions" ></div>
+																	<div class="selected-options" id="selectedOptions"></div>
 																	<input type="text" id="searchInput" placeholder="Pesquisar...">
 																	<div class="options-list" id="optionsList">
 																		<!-- Lista de opções -->

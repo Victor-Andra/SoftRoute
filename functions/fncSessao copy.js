@@ -10,15 +10,12 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
-const respostaClass = require("../models/resposta")
 
 //tabelas Extrangeiras
-
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Terapia = mongoose.model("tb_terapia")
 const Usuario = mongoose.model("tb_usuario")
-const Resposta = mongoose.model("tb_resposta")
 
 
 
@@ -92,38 +89,89 @@ module.exports = {
 
     },
 
-    atualizaSessao(req,res){
-        let resultado
-        let resposta = new Resposta()
+    atualizaSessao(req, res){
+        let resposta;
         try{
             sessaoClass.sessaoEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
-                resultado = res;
+                resposta = res;
             }).catch((err) =>{
                 console.log("error1")
                 console.log(err)
-                resultado = err;
+                resposta = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resultado == true){
-                    //Volta para a listagem
-                    console.log("Listagem Realizada!")
-                    resposta.texto = "Atualizado com Sucesso!"
-                    resposta.sucesso = "true"
-                    this.listaSessao(req,res,resposta)
+                if(resposta){
+                    //Volta para a Sessaoese de listagem
+                    Sessao.find().then((sessao) =>{
+                        sessao.forEach((b) => {
+                            //Formatação da Exibição da Data de cadastro
+                            let datacad = new Date(b.sessao_datacad);
+                            let mes = (datacad.getMonth() + 1).toString();
+                            let dia = (datacad.getUTCDate()).toString();
+                            if (mes.length == 1) {
+                                mes = "0" + mes;
+                            }
+                            if (dia.length == 1) {
+                                dia = "0" + dia;
+                            }
+                            let fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
+                            b.datacad = fulldate;
+                
+                            //Formatação da Exibição da Data de Edição
+                            datacad = new Date(b.sessao_dataedi);
+                            mes = (datacad.getMonth() + 1).toString();
+                            dia = (datacad.getUTCDate()).toString();
+                            if (mes.length == 1) {
+                                mes = "0" + mes;
+                            }
+                            if (dia.length == 1) {
+                                dia = "0" + dia;
+                            }
+                            fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
+                            b.dataedi = fulldate;
+                        });
+                        console.log("Listagem Realizada Sessao!")
+                            Bene.find().then((bene) =>{
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                                  
+                                // Adicionando a propriedade countSessaos a cada bene
+                                    bene.forEach((b) => {
+                                        b.countSessaos = sessao.filter((s) => s.sessao_beneid.toString() === b._id.toString()).length;
+                                    });
+            
+                                    sessao.forEach((s) => {
+                                        console.log("s: " + s);
+                                        bene.forEach((b) => {
+                                            if (("" + b._id + "") == ("" + s.sessao_beneid + "")) {
+                                                console.log("b.bene_nome: " + b.bene_nome);
+                                            }
+                                        });
+                                    });   
+                                console.log("Listagem Realizada Bene!")
+                                        Conv.find().then((conv)=>{
+                                        console.log("Listagem Realizada Convênio!")
+                                                Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
+                                                    terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
+                                                console.log("Listagem Realizada Terapia!")
+                                                    Usuario.find().then((usuario)=>{
+                                                    console.log("Listagem Realizada Usuário!")
+                        res.render('beneficiario/sessao/sessaoLis', {sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+                    })})})})}).catch((err) =>{
+                        console.log("err:")
+                        console.log(err)
+                        res.render('admin/erro')
+                    })
                 }else{
                     //passar classe de erro
                     console.log("error")
-                    console.log(resultado)
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    this.listaSessao(req,res,resposta)
+                    console.log(resposta)
+                    res.render('admin/erro')
                 }
             })
         } catch(err1){
             console.log(err1)
-            res.render('admin/erro')
         }
     },
 

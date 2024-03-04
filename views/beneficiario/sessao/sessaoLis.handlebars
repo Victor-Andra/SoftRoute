@@ -74,7 +74,11 @@
 																							<label>--/--/----</label>
 																						{{else}}
 																							<label><b>{{dataedi}}</b>&nbsp;</label>
-																							<label>{{sessao_usuidedi}}</label>
+																							{{#each ../../usuarios}}
+																								{{#ifEqual ../sessao_usuidedi this._id}}
+																									<label>{{this.usuario_nome}}</label> <!-- Modificado aqui -->
+																								{{/ifEqual}}
+																							{{/each}}
 																						{{/verificarVazioOuIndefinido}}
 																					{{/ifEqual}}
 																				
@@ -85,12 +89,15 @@
 																	<span class="widget-toolbar">
 																		<a name="acaoViz" id="acaoViz">
 																			{{#each ../sessaos}}
-																					{{#ifEqual ../_id sessao_beneid}}
-																						<label><b>{{datacad}}</b>&nbsp;</label>
-																						<label>{{sessao_usuidcad}}</label>
-																					{{/ifEqual}}
+																				{{#ifEqual ../_id sessao_beneid}}
+																					<label><b>{{datacad}}</b>&nbsp;</label>
+																					{{#each ../../usuarios}}
+																						{{#ifEqual ../sessao_usuidcad this._id}}
+																							<label>{{this.usuario_nome}}</label> <!-- Modificado aqui -->
+																						{{/ifEqual}}
+																					{{/each}}
+																				{{/ifEqual}}
 																			{{/each}}
-																			
 																		</a>
 																	</span>
 																	

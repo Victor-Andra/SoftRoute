@@ -192,6 +192,7 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/beneficiario/sessao/atualizar" method="POST">
 								<div class="form-horizontal" role="form" hidden>
+									<input id="sessaoId" name="sessaoId" value="{{sessao._id}}" />
 									<input type="text" id="sessaoBeneidEdi" name="sessaoBeneidEdi" value="{{sessao.sessao_beneid}}"/>
 									<input type="text" id="sessaoConvidEdi" name="sessaoConvidEdi" value="{{sessao.sessao_convid}}"/>
 									<input type="text" id="sessaoTerapiaid01Edi" name="sessaoTerapiaid01Edi" value="{{sessao.sessao_terapiaid01}}"/>

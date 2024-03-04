@@ -9461,12 +9461,10 @@ module.exports = {
                             //console.log("Listagem terapia!")
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                                console.log("Listagem terapeutas!")
+                                //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    console.log("Abre Edição Agenda Semanal")
-                                    Sessao.find().then((sessao)=>{
-        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId, sessaos: sessao})
-        })})})})})})})}).catch((err) =>{
+        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -9864,7 +9862,7 @@ module.exports = {
             }
         })
         //console.log("isAgendaTerapeuta:"+isAgendaTerapeuta);
-        let flash = new Resposta();
+        let flash = new Resposta()
         let resultado;
         let id = req.params.id;
         if (id == '' || id == undefined || id == 'undefined' || id == null){
@@ -9875,7 +9873,6 @@ module.exports = {
             let dat = new Date(agenda.agenda_data);
             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
             let min = ""+dat.getMinutes();
-            
             if (hora.length == 1){hora = "0" + hora + "";}
             if (min.length == 1){min = "0" + min + "";}
             agenda.agenda_hora = hora+":"+min;
@@ -9895,10 +9892,8 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    console.log("Abre Edição Agenda Fixa")
-                                    Sessao.find().then((sessao)=>{
-                                    res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, sessaos: sessao})
-        })})})})})})})}).catch((err) =>{
+                                    res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
