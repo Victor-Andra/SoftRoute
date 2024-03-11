@@ -87,6 +87,38 @@
 																{{/if}}
 															</a>
 														</span>
+															<span class="widget-toolbar">
+																<a name="acaoVizedi" id="acaoVizedi">
+																	{{#each ../excecaos}}
+																			{{#ifEqual ../_id excecao_beneid}}
+																				{{#verificarVazioOuIndefinido excecao_dataedi}}
+																					<label>--/--/----</label>
+																				{{else}}
+																					<label><b>{{dataedi}}</b>&nbsp;</label>
+																					{{#each ../../usuarios}}
+																						{{#ifEqual ../excecao_usuidedi this._id}}
+																							<label>{{this.usuario_nome}}</label> <!-- Modificado aqui -->
+																						{{/ifEqual}}
+																					{{/each}}
+																				{{/verificarVazioOuIndefinido}}
+																			{{/ifEqual}}
+																	{{/each}}
+																</a>
+															</span>
+															<span class="widget-toolbar">
+																<a name="acaoVizcad" id="acaoVizcad">
+																	{{#each ../excecaos}}
+																		{{#ifEqual ../_id excecao_beneid}}
+																			<label><b>{{datacad}}</b>&nbsp;</label>
+																			{{#each ../../usuarios}}
+																				{{#ifEqual ../excecao_usuidcad this._id}}
+																					<label>{{this.usuario_nome}}</label> <!-- Modificado aqui -->
+																				{{/ifEqual}}
+																			{{/each}}
+																		{{/ifEqual}}
+																	{{/each}}
+																</a>
+															</span>
 													</div>
 													<div class="widget-body">
 														<div class="widget-main">

@@ -60,30 +60,6 @@
 					$(".chosen-select-especial").chosen({allow_single_deselect:true});
 				});
 
-				function removeExcecaoTerapeutaid(id){
-					document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-					document.getElementById(id+"_clone").remove();
-					if (document.getElementById("excecaoTerapeutaid").value == ""){
-						document.getElementById("spanShowTerapeuta").style = "display:''";
-					}
-				}
-				function addExcecaoTerapeutaid(){
-					document.getElementById("spanShowTerapeuta").style = "display:none";
-					let id = document.getElementById("excecaoTerapeutaidselect");
-					let excecaoSubid = document.getElementById("excecaoTerapeutaid");
-					let span = document.getElementById(id.value+"_span").cloneNode(true);
-					span.id = ""+id.value+"_clone";
-					document.getElementById("divExcecaoTerapeuta").append(span);
-					if (excecaoSubid.value == ""){
-						excecaoSubid.value = ""+id.value+"";
-					} else {
-						excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
-					}
-					console.log("document.getElementById(divExcecaoTerapeutaid: "+document.getElementById("divExcecaoTerapeutaid").value)
-					id.value = "766f69643132333435366964";
-				}
-
-				
 				function addExcecaoSubstitutoid(){
 					document.getElementById("spanShow").style = "display:none";
 					let id = document.getElementById("excecaoSubstitutoidselect");
@@ -128,10 +104,10 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecao/add" method="POST">
 								<div  id="divCarrega" >
-									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value=""/>
-									<input type="text" id="excecaoSubstitutoid" name="excecaoSubstitutoid" style="width: 400px;" value=""/>
+									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" value=""/>
+									<input type="text" id="excecaoSubstitutoid" name="excecaoSubstitutoid" value=""/>
 									{{#each terapeutas}}
-									<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');removeExcecaoTerapeutaid('{{_id}}')" class="fa fa-times aClose" ></a></span>
+									<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');" class="fa fa-times aClose" ></a></span>
 									{{else}}
 									{{/each}}
 								</div>	
@@ -208,18 +184,21 @@
 															</td>
 															<td>
 																<div>
-																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" onchange="addExcecaoTerapeutaid()">
+																	<select name="excecaoTerapeutaidtemp" id="excecaoTerapeutaidtemp" multiple="chosen-select-especial tag-input-style" class="chosen-select-especial tag-input-style" data-placeholder="Escolha os terapeutas..." style="width:100%;" onchange="atualizaTerapeuta()">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{else}}
 																		{{/each}}
 																	</select>
-																	<div id="divExcecaoTerapeuta" name="excecaoTerapeutaidtemp" style="display: block;width: 446px;border: 1px solid #000;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																		<span id="spanShowTerapeuta" class="spanAzul">Escolha o Terapeuta</span>
-																	</div>
+																	<select name="excecaoTerapeutaidtemp" id="excecaoTerapeutaidtemp" >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each terapeutas}}
+																		<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{else}}
+																		{{/each}}
+																	</select>
 																</div>
-																
 															</td>
 															<td>
 																<div>

@@ -1,10 +1,10 @@
 //Exports
 const mongoose = require("mongoose")
 
+//Excecao
 //As classe tem que ser declaradas antes das tabelas
-//Classe  Analise funcional do comportamento
 const excecaoClass = require("../models/excecao")
-
+const Excecao = mongoose.model("tb_excecao")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
@@ -12,8 +12,6 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const respostaClass = require("../models/resposta")
-//Tabela Excecao
-const Excecao = mongoose.model("tb_excecao")
 
 //Tabelas Extrangeiras
 
@@ -32,8 +30,8 @@ module.exports = {
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         Excecao.find().then((excecao) =>{
-
             excecao.forEach((b)=>{
+                //Formatação da Exibição da Data de cadastro
                 let datacad = new Date(b.excecao_datacad)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
@@ -118,18 +116,18 @@ module.exports = {
             console.log(excecao);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Conv.find().then((conv)=>{
-                                Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
-                                    terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
-                                        Usuario.find().then((usuario)=>{
-                                            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
-                                                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{
-                                                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
-                                res.render("beneficiario/excecao/excecaoEdi", {excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
+                    Conv.find().then((conv)=>{
+                        Terapia.find({terapia_status:"Ativo"}).then((terapia)=>{
+                            terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
+                                Usuario.find().then((usuario)=>{
+                                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
+                                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{
+                                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
+                                        res.render("beneficiario/excecao/excecaoEdi", {excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
         })})})})})}).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao listar exceção")
-        res.redirect('admin/erro')
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar exceção")
+            res.redirect('admin/erro')
         })
     },
 

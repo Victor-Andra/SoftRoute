@@ -2,6 +2,7 @@
 const mongoose = require("mongoose")
 
 //Sessao
+//As classe tem que ser declaradas antes das tabelas
 const sessaoClass = require("../models/sessao")
 const Sessao = mongoose.model("tb_sessao")
 
@@ -20,7 +21,7 @@ const Terapia = mongoose.model("tb_terapia")
 const Usuario = mongoose.model("tb_usuario")
 const Resposta = mongoose.model("tb_resposta")
 
-
+//Funções auxiliares
 
 module.exports = {
     carregaSessao(req,res){
@@ -184,7 +185,6 @@ module.exports = {
                     Terapia.find().then((terapia) => {
                         console.log("Listagem Realizada Terapia!");
                         Usuario.find().then((usuario) => {
-                            console.log("Listagem Realizada Usuário!");
     
                             // Adicionando a propriedade countSessaos a cada bene
                             bene.forEach((b) => {

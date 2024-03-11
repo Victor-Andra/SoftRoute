@@ -577,24 +577,27 @@
 			
 			
 			// Iterar sobre os dados filtrados e calcular os totais
-				filteredDataInd.each(function (value, index) {
-					// Verificar se o valor na coluna 2 não é igual a "Lote" antes de somar
-					if (value[colunasSoma[0]].toLowerCase() !== 'lote') {
-						colunasSoma.forEach(function (colunaIndex, i) {
-							// Converta os valores do formato brasileiro para americano antes de somar
-							var valorColuna = parseFloat(value[colunaIndex].replace('.', '').replace(',', '.')) || 0;
-							totais[i] += valorColuna;
-						});
+			filteredDataInd.each(function (value, index) {
+				colunasSoma.forEach(function (colunaIndex, i) {
+					// Converta os valores do formato brasileiro para americano antes de somar
+					var valorColuna = parseFloat(value[colunaIndex].replace('.', '').replace(',', '.')) || 0;
+					totais[i] += valorColuna;
+
+					// Se a linha contiver o texto "Lote", adicione à variável totais
+					if (value[colunasSoma[0]].toLowerCase() === 'lote') {
+						totais[i] += valorColuna;
 					}
 				});
+			});
 
-				// Atualizar a linha de total principal
-				colunasSoma.forEach(function (colunaIndex, i) {
-					var totalFormatado = totais[i].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
-					// Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
-					headerRow.find('th:eq(' + colunaIndex + ')').text(totalFormatado).addClass('text-right');
-				});
+			// Atualizar a linha de total principal
+			colunasSoma.forEach(function (colunaIndex, i) {
+				var totalFormatado = totais[i].toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+				// Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
+				headerRow.find('th:eq(' + colunaIndex + ')').text(totalFormatado).addClass('text-right');
+			});
 			
 			// Iterar sobre os dados filtrados e calcular os totais Lote
 			filteredDataLote.each(function (value, index) {
@@ -616,8 +619,6 @@
 			// Atualize o conteúdo da célula e adicione a classe de alinhamento à direita
 				loteTotalRow.find('th:eq(' + colunaIndex + ')').text(loteTotalFormatado).addClass('text-right');
 			});
-
-			
 		});
 
 
