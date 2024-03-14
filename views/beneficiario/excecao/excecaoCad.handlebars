@@ -61,8 +61,14 @@
 				});
 
 				function removeExcecaoTerapeutaid(id){
-					document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-					document.getElementById(id+"_clone").remove();
+					if (document.getElementById("excecaoTerapeutaid").value.includes(",")){
+						document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+						document.getElementById(id+"_clone").remove();
+					} else {
+						document.getElementById("excecaoTerapeutaid").value = "";
+						document.getElementById(id+"_clone").remove();
+					}
+					
 					if (document.getElementById("excecaoTerapeutaid").value == ""){
 						document.getElementById("spanShowTerapeuta").style = "display:''";
 					}
@@ -101,12 +107,19 @@
 				}
 
 				function removeExcecaoSubstitutoid(id){
-					document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-					document.getElementById(id+"_clone").remove();
+					if (document.getElementById("excecaoSubstitutoid").value.includes(",")){
+						document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+						document.getElementById(id+"_clone").remove();
+					} else {
+						document.getElementById("excecaoSubstitutoid").value = "";
+						document.getElementById(id+"_clone").remove();
+					}
+					
 					if (document.getElementById("excecaoSubstitutoid").value == ""){
 						document.getElementById("spanShow").style = "display:''";
 					}
 				}
+				
 			</script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 	</head>
@@ -208,30 +221,33 @@
 															</td>
 															<td>
 																<div>
-																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" onchange="addExcecaoTerapeutaid()">
+																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" onchange="addExcecaoTerapeutaid();">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{else}}
 																		{{/each}}
 																	</select>
-																	<div id="divExcecaoTerapeuta" name="excecaoTerapeutaidtemp" style="display: block;width: 446px;border: 1px solid #000;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
+																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="">Deleta todos os selecionados</button>
+																	<div id="divExcecaoTerapeuta" name="excecaoTerapeutaidtemp" style="display: block;width: 446px;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
 																		<span id="spanShowTerapeuta" class="spanAzul">Escolha o Terapeuta</span>
 																	</div>
 																</div>
 																
 															</td>
-															<td>
+															<td style="align-items: center;">
 																<div>
-																	<select name="excecaoSubstitutoidselect" id="excecaoSubstitutoidselect" onchange="addExcecaoSubstitutoid()">
+																	<select name="excecaoSubstitutoidselect" id="excecaoSubstitutoidselect" onchange="addExcecaoSubstitutoid();">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{else}}
 																		{{/each}}
 																	</select>
-																	<div id="divExcecaoSubstituto" style="display: block;width: 446px;border: 1px solid #000;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																		<span id="spanShow" class="spanAzul">Escolha o Terapeuta</span>
+																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="">Deleta todos os selecionados</button>
+																	<br>
+																	<div id="divExcecaoSubstituto" style="display: block; width: 446px; min-height: 30px;max-height: 500px;text-align: left;padding: 4px;" >
+																		<span id="spanShow" class="spanAzul" >Escolha o Terapeuta</span>
 																	</div>
 																	
 																</div>
@@ -275,7 +291,7 @@
 						inp.value="This text field is disabled!";
 					}
 				});
-			
+			}
 			
 				if(!ace.vars['touch']) {
 					$('.chosen-select').chosen({allow_single_deselect:true}); 

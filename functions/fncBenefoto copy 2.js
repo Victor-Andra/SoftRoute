@@ -15,6 +15,20 @@ const usuarioClass = require("../models/usuario")
 const Bene = mongoose.model("tb_bene")
 const Usuario = mongoose.model("tb_usuario")
 
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/upload-imagem', upload.single('beneFoto_foto'), (req, res) => {
+    // Lógica para processar o upload
+    const imageData = req.file.buffer; // Aqui está a imagem como um Buffer
+    // Agora você pode salvar 'imageData' no campo 'beneFoto_foto' do MongoDB
+
+    // ... Lógica para salvar no banco de dados ...
+
+    res.send('Upload de imagem concluído com sucesso!');
+});
+
 module.exports = {
     carregaFotoLis(req,res){
         let base64Image;
@@ -44,7 +58,7 @@ module.exports = {
             console.log("ERRO:"+err)
         }).finally(()=>{
             if (resposta == true){
-                
+                res.render(carregaFotoLis())
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 

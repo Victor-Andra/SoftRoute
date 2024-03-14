@@ -2,31 +2,31 @@
 <html lang="pt-br">
 	<head>
 		<title>Peculiaridades da Fichas de Frequência - Exceções</title>
-			<style>
-				.spanAzul {
-					display: inline-block;
-					position: relative;
-					font-weight: 400;
-					vertical-align: baseline;
-					white-space: nowrap;
-					background-color: #91b8d0;color: #fff;
-					text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
-					padding: 4px 22px 5px 9px;
-					margin-bottom: 3px;
-					margin-right: 3px;
-				}
-				.aClose {
-					position: absolute;
-					top: 0;
-					bottom: 0;
-					right: 0;
-					width: 18px;
-					height: auto;
-					line-height: 25px;
-					text-align: center;
-				}
-			</style>
-			<script type="text/javascript">
+		<style>
+			.spanAzul {
+				display: inline-block;
+				position: relative;
+				font-weight: 400;
+				vertical-align: baseline;
+				white-space: nowrap;
+				background-color: #91b8d0;color: #fff;
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+				padding: 4px 22px 5px 9px;
+				margin-bottom: 3px;
+				margin-right: 3px;
+			}
+			.aClose {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				width: 18px;
+				height: auto;
+				line-height: 25px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript">
 				function selectConv(){
 				let	v1 = document.getElementById(document.getElementById("excecaoBeneid").value).value.toString();
 					console.log(v1)
@@ -96,10 +96,11 @@
 					} else {
 						excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
 					}
-					console.log("document.getElementById(excecaoSubstitutoid: "+document.getElementById("excecaoSubstitutoid").value)
+					console.log("document.getElementById(divExcecaoSubstitutoid: "+document.getElementById("divExcecaoSubstitutoid").value)
 					id.value = "766f69643132333435366964";
 				}
 
+			
 				function removeExcecaoSubstitutoid(id){
 					document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
 					document.getElementById(id+"_clone").remove();
@@ -107,99 +108,64 @@
 						document.getElementById("spanShow").style = "display:''";
 					}
 				}
-
-				function preencheDivComSpansTera() {
-					// Obtém o elemento com o ID "excecaoTerapeutaid"
-					let excecaoTerapeutaidElement = document.getElementById("excecaoTerapeutaidEdi");
-
-					// Verifica se o elemento foi encontrado e se a propriedade 'value' está presente
-					if (excecaoTerapeutaidElement && excecaoTerapeutaidElement.value) {
-						// Obtém a array de excecaoTerapeutaid e verifica se não está vazia
-						let excecaoTerapeutaidArray = excecaoTerapeutaidElement.value.split(",");
-						console.log("excecaoTerapeutaidArray:", excecaoTerapeutaidArray);
-
-						if (excecaoTerapeutaidArray.length > 0) {
-							let divExcecaoTerapeuta = document.getElementById("divExcecaoTerapeuta");
-							console.log("divExcecaoTerapeuta antes da limpeza:", divExcecaoTerapeuta.innerHTML);
-
-							divExcecaoTerapeuta.innerHTML = "";  // Limpa o conteúdo atual da div
-							console.log("divExcecaoTerapeuta depois da limpeza:", divExcecaoTerapeuta.innerHTML);
-
-							excecaoTerapeutaidArray.forEach(function (idValue, index) {
-								console.log("Criando span para:", idValue);
-								console.log("idValue: "+idValue)
-								let spanTera =  document.getElementById(idValue+"_span").cloneNode(true);
-								divExcecaoTerapeuta.appendChild(spanTera);
-
-								// Adiciona uma vírgula entre os spans, exceto no último
-								if (index < excecaoTerapeutaidArray.length - 1) {
-									let separator = document.createTextNode(" ");
-									divExcecaoTerapeuta.appendChild(separator);
-								}
-							});
+				
+				function addExcecaoSubstitutoid(excecaoArray) {
+					document.getElementById("spanShow").style = "display:none";
+					let excecaoSubid = document.getElementById("excecaoSubstitutoid");
+					let divExcecaoSubstituto = document.getElementById("divExcecaoSubstituto");
+					
+					
+					excecaoArray.forEach(function (idValue) {
+						// Criar um novo span e atribuir o conteúdo da array
+						let span = document.createElement("span");
+						span.id = idValue + "_clone";
+						span.textContent = idValue;
+						
+						document.getElementById("divExcecaoSubstituto").append(span);
+						if (excecaoSubid.value === "") {
+							excecaoSubid.value = idValue;
+						} else {
+							excecaoSubid.value += "," + idValue;
 						}
-						console.log("Finalizado. divExcecaoTerapeuta contém:", divExcecaoTerapeuta.innerHTML);
-					} else {
-						console.error("Elemento com o ID 'excecaoTerapeutaid' não encontrado ou não possui a propriedade 'value'.");
-					}
-				}
+					});
 
-				function preencheDivComSpansSubs() {
-					// Obtém o elemento com o ID "excecaoTerapeutaid"
-					let excecaoSubsElement = document.getElementById("excecaoSubstitutoidEdi");
-
-					// Verifica se o elemento foi encontrado e se a propriedade 'value' está presente
-					if (excecaoSubsElement && excecaoSubsElement.value) {
-						// Obtém a array de excecaoTerapeutaid e verifica se não está vazia
-						let excecaoSubsidArray = excecaoSubsElement.value.split(",");
-						console.log("excecaoSubsidArray:", excecaoSubsidArray);
-
-						if (excecaoSubsidArray.length > 0) {
-							let divExcecaoSubstituto = document.getElementById("divExcecaoSubstituto");
-							console.log("divExcecaoSubstituto antes da limpeza:", divExcecaoSubstituto.innerHTML);
-
-							divExcecaoSubstituto.innerHTML = "";  // Limpa o conteúdo atual da div
-							console.log("divExcecaoSubstituto depois da limpeza:", divExcecaoSubstituto.innerHTML);
-
-							excecaoSubsidArray.forEach(function (idValue, index) {
-								console.log("Criando span para:", idValue);
-								console.log("idValue: "+idValue)
-								let spanSub =  document.getElementById(idValue+"_spansub").cloneNode(true);
-								divExcecaoSubstituto.appendChild(spanSub);
-
-								// Adiciona uma vírgula entre os spans, exceto no último
-								if (index < excecaoSubsidArray.length - 1) {
-									let separator = document.createTextNode(" ");
-									divExcecaoSubstituto.appendChild(separator);
-								}
-							});
-						}
-						console.log("Finalizado. divExcecaoSubstituto contém:", divExcecaoSubstituto.innerHTML);
-					} else {
-						console.error("Elemento com o ID 'excecaoTerapeutaid' não encontrado ou não possui a propriedade 'value'.");
-					}
+					document.getElementById("excecaoSubstitutoidselect").value = "766f69643132333435366964";
 				}
 
 
 				function carregaBody(){
-				
 				document.getElementById("excecaoBeneid").value = document.getElementById("excecaoBeneidEdi").value;
 				document.getElementById("excecaoConvid").value = document.getElementById("excecaoConvidEdi").value;
 				
 				document.getElementById("excecaoTerapiaid").value = document.getElementById("excecaoTerapiaidEdi").value;
-				document.getElementById("excecaoObs").value = document.getElementById("excecaoObsEdi").value;
-				
+
 				document.getElementsByName("excecaoTerapeutaid").value = document.getElementById("excecaoTerapeutaidEdi").value;
 				document.getElementsByName("excecaoSubstitutoid").value = document.getElementById("excecaoSubstitutoidEdi").value;
-				preencheDivComSpansTera();
-				preencheDivComSpansSubs();
-				}
+				document.getElementById("excecaoObs").value = document.getElementById("excecaoObsEdi").value;
 				
+				let excecaoArray = [document.getElementById("excecaoTerapeutaidEdi").value];
+				addExcecaoSubstitutoid(excecaoArray);
+				
+				
+
+				}
 			</script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
+			<script>
+				$(document).ready(function(){
+					$(".chosen-select-especial").chosen({allow_single_deselect:true});
+				});
+			</script>
+			
 	</head>
+
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
+
+
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -208,15 +174,17 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
+
 							<li class="active">Peculiaridades da Fichas de Frequência - Exceções</li>
 						</ul><!-- /.breadcrumb -->
+
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecao/add" method="POST">
-								<div hidden id="divCarrega" >
+							<div  id="divCarrega" >
 									<input id="excecaoId" name="excecaoId" value="{{excecao._id}}" />
+									 
 									<input type="text" id="excecaoBeneidEdi" name="excecaoBeneidEdi" style="width: 400px;" value="{{excecao.excecao_beneid}}"/>
 									<input type="text" id="excecaoConvidEdi" name="excecaoConvidEdi" style="width: 400px;" value="{{excecao.excecao_convid}}"/>
 									<input type="text" id="excecaoTerapiaidEdi" name="excecaoTerapiaidEdi" style="width: 400px;" value="{{excecao.excecao_terapiaid}}"/>
@@ -224,22 +192,12 @@
 										<input type="text" id="excecaoSubstitutoidEdi" name="excecaoSubstitutoidEdi" style="width: 400px;" value="{{excecao.excecao_substitutoid}}"/>
 										<input type="text" id="excecaoObsEdi" name="excecaoObsEdi" style="width: 400px;" value="{{excecao.excecao_obs}}"/>
 									{{#each terapeutas}}
-										{{#ifEqual _id excecao.excecao_terapeutaid}}
-											<label type="text" id="{{_id}}" name="terapeutaid" style="width: 400px;" >{{usuario_nome}}</label>
-										{{/ifEqual}}
-										<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoTerapeutaid('{{_id}}');removeExcecaoTerapeutaid('{{_id}}')" class="fa fa-times aClose" ></a></span>
+										<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');removeExcecaoTerapeutaid('{{_id}}')" class="fa fa-times aClose" ></a></span>
 									{{else}}
 									{{/each}}
-
-									{{#each terapeutas}}
-										{{#ifEqual _id excecao.excecao_substitutoid}}
-											<label type="text" id="{{_id}}" name="substitutoid" style="width: 400px;" >{{usuario_nome}}</label>
-										{{/ifEqual}}
-										<span id="{{_id}}_spansub" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');removeExcecaoSubstitutoid('{{_id}}')" class="fa fa-times aClose" ></a></span>
-									{{else}}
-									{{/each}}
-
 								</div>	
+							
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecao/atualizar" method="POST">
 								<div class="col-sm-12" ><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -325,9 +283,8 @@
 																		<span id="spanShowTerapeuta" class="spanAzul">Escolha o Terapeuta</span>
 																	</div>
 																</div>
-																
 															</td>
-															<td style="align-items: center;">
+															<td>
 																<div>
 																	<select name="excecaoSubstitutoidselect" id="excecaoSubstitutoidselect" onchange="addExcecaoSubstitutoid();">
 																		<option value="766f69643132333435366964">-</option>
@@ -347,6 +304,9 @@
 															<td>
 																<textarea type="text" name="excecaoObs" id="excecaoObs" placeholder="" class="form-control" style="font-size: 12px;"></textarea>
 															</td>
+														</tr>
+														<tr>
+															
 														</tr>
 													</tbody>
 												</table>
@@ -368,7 +328,88 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
-						
-		
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const terapeutas = [
+				{{#each terapeutas}}
+					{_id:"{{_id}}",usuario_nome:"{{usuario_nome}}"},
+					{{else}}
+				{{/each}}
+			];
+		const terapeutasSelecionadosElement = document.getElementById("excecaoTerapeutaid");
+        const terapeutasSelecionadosString = terapeutasSelecionadosElement.value;
+        const terapeutasSelecionados = terapeutasSelecionadosString.split(",");
+
+        const customSelect = document.getElementById("customSelect");
+        const selectedOptionsContainer = document.getElementById("selectedOptions");
+        const optionsList = document.getElementById("optionsList");
+        const searchInput = document.getElementById("searchInput");
+
+        terapeutas.forEach(terapeuta => {
+            const option = document.createElement("div");
+            option.className = "option";
+            option.textContent = terapeuta.usuario_nome;
+            option.dataset.id = terapeuta._id;
+            optionsList.appendChild(option);
+
+            if (terapeutasSelecionados.includes(terapeuta._id)) {
+                const selectedOption = option.cloneNode(true);
+                selectedOption.className = "selected-option";
+                const removeIcon = document.createElement("span");
+                removeIcon.className = "remove-icon";
+                removeIcon.textContent = "x";
+                removeIcon.addEventListener("click", function () {
+                    selectedOption.remove();
+                    option.classList.remove("selected");
+                });
+                selectedOption.appendChild(removeIcon);
+                selectedOptionsContainer.appendChild(selectedOption);
+                option.classList.add("selected");
+            }
+        });
+
+        customSelect.addEventListener("click", function () {
+            optionsList.style.display = optionsList.style.display === "none" ? "block" : "none";
+        });
+
+        searchInput.addEventListener("input", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            const options = optionsList.querySelectorAll(".option");
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    option.style.display = "block";
+                } else {
+                    option.style.display = "none";
+                }
+            });
+        });
+
+        optionsList.addEventListener("click", function (event) {
+            if (event.target.classList.contains("option") && !event.target.classList.contains("selected")) {
+                const selectedOption = event.target.cloneNode(true);
+                selectedOption.className = "selected-option";
+                const removeIcon = document.createElement("span");
+                removeIcon.className = "remove-icon";
+                removeIcon.textContent = "x";
+                removeIcon.addEventListener("click", function () {
+                    selectedOption.remove();
+                    event.target.classList.remove("selected");
+                });
+                selectedOption.appendChild(removeIcon);
+                selectedOptionsContainer.appendChild(selectedOption);
+                event.target.classList.add("selected");
+                searchInput.value = "";
+                optionsList.style.display = "none";
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!customSelect.contains(event.target)) {
+                optionsList.style.display = "none";
+            }
+        });
+    });
+		</script>
 	</body>
 </html>

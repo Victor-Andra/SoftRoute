@@ -5,66 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Foto</title>
     <!-- Adicione links para folhas de estilo, bibliotecas JavaScript, etc., conforme necessário -->
+    <style>
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+			rows: 2; /* Número de linhas padrão */
+        }
+	</style>
+    <script>
+        function validarFormulario() {
+				var benefotoInput = document.getElementById("benefotoFoto");
+				if (benefotoInput.files.length === 0) {
+					alert("Selecione uma imagem para a Foto!");
+					return false; // Impede o envio do formulário
+				}
+				return true; // Permite o envio do formulário
+			}
+    </script>
 </head>
-<body>
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Cadastrar Foto do Beneficiário</a>
+                        </li>
 
-    <header>
-        <h1>Cadastro de Foto</h1>
-    </header>
+                    </ul><!-- /.breadcrumb -->
 
-    <main>
-        <form class="form-horizontal" role="form" action="/menu/beneficiario/cadastrarFoto" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario();">
-			<div class="alert alert-warning">
-				<button type="button" class="close" data-dismiss="alert">
-					<i class="ace-icon fa fa-times"></i>
-				</button>
-				<strong>Importante!</strong><br>
-				A foto deve ser menor ou igual a 5Mb, <br>
-				formato PNG.<br>
-				Servirá de ajuda para identificação do beneficiário.<br>
-				<br>
-				
+                </div>
 
-			</div>
-			<div class="alert alert-danger">
-				<button type="button" class="close" data-dismiss="alert">
-					<i class="ace-icon fa fa-times"></i>
-				</button>
-				<strong>{{bene.bene_nome}}</strong><br>
-			</div>
-            <label for="beneFotoFoto">Foto:</label>
-            <input type="file" id="beneFotoFoto" name="beneFotoFoto" accept="image/*" onchange="carregarImagem()" required>
-            <div id="previewCarimbo">
-                <img id="previewImage" src="" alt="Visualização da foto" style="max-width: 100%; max-height: 200px;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                         <form class="form-horizontal" role="form" action="/menu/beneficiario/cadastrarFoto" enctype="multipart/form-data" method="POST" onsubmit="validarFormulario();">
+                            <div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-key bigger-110"></i>
+												
+												Foto do Beneficiário</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+                                            <div class="widget-main">
+                                                <div class="alert alert-warning">
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                    </button>
+                                                    <strong>Importante!</strong><br>
+                                                    A foto deve ser menor ou igual a 5Mb, <br>
+                                                    formato PNG.<br>
+                                                    
+                                                </div>
+                                                <div class="alert alert-danger">
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                    </button>
+                                                    <strong>{{bene.bene_nome}}</strong><br>
+                                                </div>
+                                                <div>
+                                                    <label >Foto:</label>
+                                                    <input type="file" id="benefotoFoto" name="benefotoFoto" accept="image/*" onchange="carregarImagem();" required>
+                                                    <div id="previewCarimbo">
+                                                        <img id="previewImage" src="" alt="Visualização da foto" style="max-width: 100%; max-height: 200px;">
+                                                    </div>
+                                                </div>
+                                                <div hidden>
+                                                    <label for="benefotoBeneid">ID do Beneficiário:</label>
+                                                    <input type="text" id="benefotoBeneId" name="benefotoBeneId" value="{{bene._id}}" required>
+                                                </div>
+                                                <br>
+                                                <label>Observações:</label>
+                                                <textarea id="benefotoObs" name="benefotoObs"></textarea>
+                                            
+                                            </div>
+                                        </div>
+
+                            <div>
+                                <div class="col-xs-12" style="text-align: center;" >
+                                   <button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+
+                                    &nbsp; &nbsp; &nbsp;
+                                    <button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <label for="beneFotoBeneid">ID do Beneficiário:</label>
-            <input type="text" id="beneFotoBeneid" name="beneFotoBeneid" value="{{bene._id}}" required>
-
-            <label for="beneFotoObs">Observações:</label>
-            <textarea id="beneFotoObs" name="beneFotoObs"></textarea>
-
-            <div class="form-actions">
-				<div class="col-xs-12" style="text-align: center;" >
-					<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" onclick="javascript:submitForm();">
-						<i class="ace-icon fa fa-check bigger-110"></i>
-						Salvar
-					</button>
-
-					&nbsp; &nbsp; &nbsp;
-					<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-						<i class="ace-icon fa fa-undo bigger-110"></i>
-						Cancelar
-					</button>
-				</div>
-			</div>
-        </form>
-    </main>
+    
+       
+    
 
     <script>
         function carregarImagem() {
             var preview = document.getElementById('previewImage');
-            var fileInput = document.getElementById('beneFotoFoto');
+            var fileInput = document.getElementById('benefotoFoto');
 
             if (fileInput.files && fileInput.files[0]) {
                 var reader = new FileReader();
@@ -78,32 +138,7 @@
             }
         }
 
-        function enviarFormulario() {
-            // Aqui você pode adicionar código JavaScript para processar o formulário
-            // Por exemplo, pode usar fetch para enviar os dados para o servidor
-
-            // Exemplo básico usando fetch (substitua a URL com sua lógica de backend)
-            fetch('/url-do-backend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    beneFotoFoto: document.getElementById('beneFotoFoto').files[0],
-                    beneFotoBeneid: document.getElementById('beneFotoBeneid').value,
-                    beneFotoObs: document.getElementById('beneFotoObs').value
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Resposta do servidor:', data);
-                // Adicione aqui lógica para lidar com a resposta do servidor, se necessário
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                // Adicione aqui lógica para lidar com erros, se necessário
-            });
-        }
+        
     </script>
 
 </body>
