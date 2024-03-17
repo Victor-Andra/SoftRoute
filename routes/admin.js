@@ -2075,12 +2075,9 @@ router.post('/beneficiario/excecao/atualizar', fncGeral.IsAuthenticated, (req,re
 fncExcecao.atualizaExcecao(req, res);
 })
 
-//carrega registro para edição
-router.get('/beneficiario/excecao/excecaoedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
-    fncExcecao.carregaExcecaoEdi(req, res);
-})
 
-//Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
+
+//Lista Exceção por Tipo, Beneficiário. Tecnico, Medico e data
 router.get('/beneficiario/excecao/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para lista
     fncExcecao.listaExcecao(req, res);
 })

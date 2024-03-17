@@ -201,17 +201,17 @@ module.exports = {
         }).catch((err) =>{
             resposta = err;
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar as ATAS")
+            req.flash("error_message", "houve um erro ao listar as Exceções")
             res.render('admin/erro')
         }).finally(()=>{
             if (resposta == "true"){
-                flash.texto = "ATA deletada!";
+                flash.texto = "Exceção deletada!";
                 flash.sucesso = "true";
             } else {
                 flash.texto = "Erro ao deletar a ATA";
                 flash.sucesso = "false";
             }
-            this.listaExcecao(req,res, resposta)
+            this.listaExcecao(req,res, Exceção)
         })
     }
 

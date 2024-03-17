@@ -2,6 +2,30 @@
 <html lang="pt-br">
 	<head>
 		<title>Agendamentos Cadastro Fixo</title>
+		<style>
+			.spanAzul {
+				display: inline-block;
+				position: relative;
+				font-weight: 400;
+				vertical-align: baseline;
+				white-space: nowrap;
+				background-color: #91b8d0;color: #fff;
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+				padding: 4px 22px 5px 9px;
+				margin-bottom: 3px;
+				margin-right: 3px;
+			}
+			.aClose {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				width: 18px;
+				height: auto;
+				line-height: 25px;
+				text-align: center;
+			}
+		</style>
 		<script type="text/javascript">
 			function controlaCategoria(){
 				let origem = document.getElementById("agendaOrg").value;
@@ -53,7 +77,74 @@
 				document.getElementById("agendaExtra").checked = true;
 				document.getElementById("agendaExtra").checked = false;
 				console.log("carregou!");
+				
+				// construtor da tabela de exceções
+				//Constroi as Tags dentro da div de Terapeutas e Substitutos
+				let arr = document.getElementsByName("tagContainerTerapeuta");
+
+				arr.forEach((a)=>{
+					let novo_vetor;
+					let input = document.getElementById(a.id + "_input");
+					if (input && input.value){
+						console.log("input.value: "+input.value)
+						novo_vetor = input.value.split(",");
+						novo_vetor.forEach((e)=>{
+							let excecao = document.getElementById(e+"_span");
+							a.append(excecao.cloneNode(true));
+						})
+					}
+				})
+
+				let arrBene = document.getElementsByName("beneid");
+				arrBene.forEach((bene)=>{
+					let beneval = bene.value;
+					let inputExcecao = document.getElementsByName("idBeneExceTera_"+beneval);
+
+					if (inputExcecao){
+						inputExcecao.forEach((exec)=>{
+							let idExcecao = exec.value;
+							let idsExceTera = document.getElementById(idExcecao);
+							if (idsExceTera && idsExceTera.value){
+								let arr = idsExceTera.value;
+								if (arr.includes(",")){
+									let arrIdTera = arr.split(",");
+									arrIdTera.forEach((tera)=>{
+										let elementoClonado = document.getElementById(tera+"_span").cloneNode(true);
+										document.getElementById("containerExecaoTerapeuta_"+idExcecao+"_"+beneval).append(elementoClonado);
+									})
+								} else {
+									let elementoClonado = document.getElementById(idsExceTera.value+"_span").cloneNode(true);
+									document.getElementById("containerExecaoTerapeuta_"+idExcecao+"_"+beneval).append(elementoClonado);
+								}
+							}
+						})
+					}
+
+					let inputSubstituto = document.getElementsByName("idBeneSubsTera_"+beneval);
+
+					if (inputSubstituto && inputSubstituto != ""){
+						inputSubstituto.forEach((Subs)=>{
+							let idSubstituto = Subs.value;
+							let idsSubsTera = document.getElementById(idSubstituto);
+							if (idsSubsTera && idsSubsTera.value) {
+								let arr = idsSubsTera.value;
+								if (arr.includes(",")){
+									let arrIdSubs = arr.split(",");
+									arrIdSubs.forEach((subs)=>{
+										let elementoClonado = document.getElementById(subs+"_span").cloneNode(true);
+										document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonado);
+									})
+								} else {
+									let elementoClonado = document.getElementById(idsSubsTera.value+"_span").cloneNode(true);
+									document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonado);
+								}
+							}
+						})
+					}
+				});
+				
 			}
+			
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
 				if(chck.checked){
@@ -100,9 +191,19 @@
 					document.getElementById("blocoSessoes").append(elementoClonado);
 				}
 			}
+			//atualiza a tabela de Excecões
+			function selectExcecao() {
+				document.getElementById("blocoExcecaos").innerHTML = "";
+				document.getElementById("blocoExcecaos").innerHTML = "";
+				let beneId = document.getElementById("agendaBeneid").value;
+				let tableClone = document.getElementById(beneId+"_divBeneExcecao").cloneNode(true);
+				document.getElementById("blocoExcecaos").append(tableClone);
+				
+			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();controlaCategoria();">
+	<!-- controlaNave(); deve ser a primeira função chamada no onliad do body -->
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();controlaCategoria();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -149,6 +250,9 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<div id="divCarrega" hidden>
+								{{#each terapeutas}}
+									<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}</span>
+								{{/each}}
 								{{#each sessaos}}
 									<div id="{{sessao_beneid}}_sessao" >
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
@@ -165,7 +269,7 @@
 												{{#each ../benes}}
 													{{#ifEqual ../sessao_beneid this._id}}
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid01}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -181,7 +285,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid02}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -197,7 +301,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid03}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -213,7 +317,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid04}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -229,7 +333,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid05}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -245,7 +349,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid06}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -261,7 +365,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid07}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -277,7 +381,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid08}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -293,7 +397,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid09}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -309,7 +413,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid10}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -325,7 +429,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid11}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -341,7 +445,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid12}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -357,7 +461,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid13}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -372,7 +476,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid14}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -387,7 +491,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid15}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -402,7 +506,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid16}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -417,7 +521,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid17}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -432,7 +536,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid18}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -447,7 +551,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid20}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -462,7 +566,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid21}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -477,7 +581,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid22}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -492,7 +596,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid23}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -507,7 +611,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid24}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -522,7 +626,7 @@
 															</td>
 														</tr>
 														<tr role="row" class="odd">
-															{{#each ../../terapias}}<!-- Ok -->
+															{{#each ../../terapias}}
 																{{#ifEqual this._id ../../sessao_terapiaid25}}
 																	<td>{{terapia_nome}}</td>
 																{{/ifEqual}}
@@ -537,6 +641,59 @@
 															</td>
 														</tr>
 
+													{{/ifEqual}}
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								{{/each}}
+							</div>
+							<div id="divcarrega2" hidden>
+								{{#each benes}}
+									<input class="hidden" id="bene" name="beneid" value="{{_id}}" />
+									<div id="{{_id}}_divBeneExcecao" name="excecaoAmostra">
+										<table id="dynamic-table2" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th style="width: 15%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th style="width: 15%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeutas</th>
+													<th style="width: 15%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Substitutos</th>
+													<th style="width: 20%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
+												</tr>
+											</thead>
+											<tbody style="">
+												{{#each ../excecaos}}
+													{{#ifEqual this.excecao_beneid ../_id}}
+														{{#isNull excecao_terapiaid}}
+														{{else}}
+														<tr role="row" class="odd">
+															{{#each ../../terapias}}
+																{{#ifEqual this._id ../excecao_terapiaid}}
+																	<td>{{terapia_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+															<td>
+																<div class="tags" id="containerExecaoTerapeuta_{{_id}}_{{excecao_beneid}}" name="tagContainerTerapeuta" >
+																	<input hidden id="{{_id}}" name="idsExceTera" value="{{excecao_terapeutaid}}" />
+																	<input hidden id="idBeneExceTera_{{_id}}" name="idBeneExceTera_{{excecao_beneid}}" value="{{_id}}" />
+																</div>
+															</td>
+															<td>
+																<div class="tags" id="containerSubsTerapeuta_{{_id}}_{{excecao_beneid}}" name="tagContainerTerapeuta" >
+																	<input hidden id="{{_id}}" name="idsSubsTera" value="{{excecao_substitutoid}}" />
+																	<input hidden id="idBeneSubsTera_{{_id}}" name="idBeneSubsTera_{{excecao_beneid}}" value="{{_id}}" />
+																</div>
+															</td>
+															<td>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{excecao_obs}}" />
+																<a class="red" href="#" title="{{excecao_obs}}">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	&nbsp;
+																</a>
+															</td>
+															
+														</tr>
+														{{/isNull}}
 													{{/ifEqual}}
 												{{/each}}
 											</tbody>
@@ -650,7 +807,7 @@
 														</div>
 														<div class="form-group" >
 															<div class="col-xs-9 col-sm-9">
-																<select class="col-xs-9 col-sm-9" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv();selectSessao();">
+																<select class="col-xs-9 col-sm-9" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv();selectSessao();selectExcecao();">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -802,8 +959,7 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<div class="row">
-													
+												<div id="blocoExcecaos" name="nameless"><!-- Div que recebe a tabela pronta de Exceções (excecaos), escolhida pelo usuário, na hora do input do beneficiário -->
 												</div>
 											</div>
 										</div>
@@ -824,7 +980,7 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-													<div id="blocoSessoes" name="nameless"><!-- Div que recebe a tabela pronta, escolhida pelo usuário, na hora do input do beneficiário -->
+													<div id="blocoSessoes" name="nameless"><!-- Div que recebe a tabela pronta Sessões (sessaos), escolhida pelo usuário, na hora do input do beneficiário -->
 													</div>
 											</div>
 										</div>

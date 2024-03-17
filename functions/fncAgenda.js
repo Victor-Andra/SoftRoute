@@ -9465,8 +9465,9 @@ module.exports = {
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     console.log("Abre Edição Agenda Semanal")
                                     Sessao.find().then((sessao)=>{
-        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId, sessaos: sessao})
-        })})})})})})})}).catch((err) =>{
+                                        Excecao.find().then((excecao)=>{
+        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId, sessaos: sessao, excecaos: excecao})
+        })})})})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -9897,8 +9898,9 @@ module.exports = {
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     console.log("Abre Edição Agenda Fixa")
                                     Sessao.find().then((sessao)=>{
-                                    res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, sessaos: sessao})
-        })})})})})})})}).catch((err) =>{
+                                        Excecao.find().then((excecao)=>{
+                                    res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, sessaos: sessao, excecaos: excecao})
+        })})})})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -9984,8 +9986,9 @@ module.exports = {
                                         flash.texto = resposta.texto
                                         flash.sucesso = resposta.sucesso
                                     }
-                                    res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, sessaos: sessao, flash})
-        })})})})})})}).catch((err) =>{
+                                    Excecao.find().then((excecao)=>{
+                                    res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, sessaos: sessao, excecaos: excecao, flash})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

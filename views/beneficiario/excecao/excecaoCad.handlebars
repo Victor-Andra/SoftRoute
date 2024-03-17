@@ -2,126 +2,134 @@
 <html lang="pt-br">
 	<head>
 		<title>Peculiaridades da Fichas de Frequência - Exceções</title>
-			<style>
-				.spanAzul {
-					display: inline-block;
-					position: relative;
-					font-weight: 400;
-					vertical-align: baseline;
-					white-space: nowrap;
-					background-color: #91b8d0;color: #fff;
-					text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
-					padding: 4px 22px 5px 9px;
-					margin-bottom: 3px;
-					margin-right: 3px;
-				}
-				.aClose {
-					position: absolute;
-					top: 0;
-					bottom: 0;
-					right: 0;
-					width: 18px;
-					height: auto;
-					line-height: 25px;
-					text-align: center;
-				}
-			</style>
-			<script type="text/javascript">
-				function selectConv(){
-				let	v1 = document.getElementById(document.getElementById("excecaoBeneid").value).value.toString();
-					console.log(v1)
-					document.getElementById("excecaoConvid").value = v1;
-				}
+		<style>
+			.spanAzul {
+				display: inline-block;
+				position: relative;
+				font-weight: 400;
+				vertical-align: baseline;
+				white-space: nowrap;
+				background-color: #91b8d0;color: #fff;
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+				padding: 4px 22px 5px 9px;
+				margin-bottom: 3px;
+				margin-right: 3px;
+			}
+			.aClose {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				width: 18px;
+				height: auto;
+				line-height: 25px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript">
+			function selectConv(){
+			let	v1 = document.getElementById(document.getElementById("excecaoBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("excecaoConvid").value = v1;
+			}
 
-				function atualizaConvId(){
-				let	convId = document.getElementById("excecaoConvid").value;
-					console.log(convId)
+			function atualizaConvId(){
+			let	convId = document.getElementById("excecaoConvid").value;
+				console.log(convId)
+			}
+			function atualizaTerapeuta() {
+				var selectId = "excecaoTerapeutaid" + "temp";
+				var inputId = "excecaoTerapeutaid";
+
+				var selectedValues = $('#' + selectId).val();
+				var formattedValues = selectedValues ? selectedValues.join(',') : '';
+
+				$('#' + inputId).val(formattedValues);
+			}
+			function atualizaSubstituto() {
+				var selectId = "excecaoSubstitutoid" + "temp";
+				var inputId = "excecaoSubstitutoid";
+
+				var selectedValues = $('#' + selectId).val();
+				var formattedValues = selectedValues ? selectedValues.join(',') : '';
+
+				$('#' + inputId).val(formattedValues);
+			}
+
+			$(document).ready(function(){
+				$(".chosen-select-especial").chosen({allow_single_deselect:true});
+			});
+
+			function removeExcecaoTerapeutaid(id){
+				if (document.getElementById("excecaoTerapeutaid").value.includes(",")){
+					document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+					document.getElementById(id+"_cloneExceTera").remove();
+				} else {
+					document.getElementById("excecaoTerapeutaid").value = "";
+					document.getElementById(id+"_cloneExceTera").remove();
 				}
-				function atualizaTerapeuta() {
-					var selectId = "excecaoTerapeutaid" + "temp";
-					var inputId = "excecaoTerapeutaid";
-
-					var selectedValues = $('#' + selectId).val();
-					var formattedValues = selectedValues ? selectedValues.join(',') : '';
-
-					$('#' + inputId).val(formattedValues);
+				
+				if (document.getElementById("excecaoTerapeutaid").value == ""){
+					document.getElementById("spanShowExceTera").style = "display:''";
 				}
-				function atualizaSubstituto() {
-					var selectId = "excecaoSubstitutoid" + "temp";
-					var inputId = "excecaoSubstitutoid";
-
-					var selectedValues = $('#' + selectId).val();
-					var formattedValues = selectedValues ? selectedValues.join(',') : '';
-
-					$('#' + inputId).val(formattedValues);
+			}
+			function addExcecaoTerapeutaid(){
+				document.getElementById("spanShowExceTera").style = "display:none";
+				let id = document.getElementById("excecaoTerapeutaidselect");
+				let excecaoSubid = document.getElementById("excecaoTerapeutaid");
+				let span = document.getElementById(id.value+"_spanExce").cloneNode(true);
+				span.id = ""+id.value+"_cloneExceTera";
+				document.getElementById("divExcecaoTerapeuta").append(span);
+				if (excecaoSubid.value == ""){
+					excecaoSubid.value = ""+id.value+"";
+				} else {
+					excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
 				}
+				//console.log("document.getElementById(divExcecaoTerapeutaid: "+document.getElementById("divExcecaoTerapeutaid").value)
+				id.value = "766f69643132333435366964";
+			}
+							
+			function addExcecaoSubstitutoid(){
+				document.getElementById("spanShowSubsTera").style = "display:none";
+				let id = document.getElementById("excecaoSubstitutoidselect");
+				let excecaoSubid = document.getElementById("excecaoSubstitutoid");
+				let span = document.getElementById(id.value+"_spanSubs").cloneNode(true);
+				span.id = ""+id.value+"_cloneSubsTera";
+				document.getElementById("divExcecaoSubstituto").append(span);
+				if (excecaoSubid.value == ""){
+					excecaoSubid.value = ""+id.value+"";
+				} else {
+					excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
+				}
+				//console.log("document.getElementById(excecaoSubstitutoid: "+document.getElementById("excecaoSubstitutoid").value)
+				id.value = "766f69643132333435366964";
+			}
 
-				$(document).ready(function(){
-					$(".chosen-select-especial").chosen({allow_single_deselect:true});
+			function removeExcecaoSubstitutoid(id){
+				if (document.getElementById("excecaoSubstitutoid").value.includes(",")){
+					document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+					document.getElementById(id+"_cloneSubsTera").remove();
+				} else {
+					document.getElementById("excecaoSubstitutoid").value = "";
+					document.getElementById(id+"_cloneSubsTera").remove();
+				}
+				
+				if (document.getElementById("excecaoSubstitutoid").value == ""){
+					document.getElementById("spanShowSubsTera").style = "display:''";
+				}
+			}
+
+			function removeTudo(alvo, clone){
+				let arr = document.getElementById(""+alvo+"").value.split(",");
+				arr.forEach((a)=>{
+					console.log(a+"_clone"+clone+'Tera');
+					document.getElementById(a+"_clone"+clone+"Tera").remove();
 				});
-
-				function removeExcecaoTerapeutaid(id){
-					if (document.getElementById("excecaoTerapeutaid").value.includes(",")){
-						document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-						document.getElementById(id+"_clone").remove();
-					} else {
-						document.getElementById("excecaoTerapeutaid").value = "";
-						document.getElementById(id+"_clone").remove();
-					}
-					
-					if (document.getElementById("excecaoTerapeutaid").value == ""){
-						document.getElementById("spanShowTerapeuta").style = "display:''";
-					}
-				}
-				function addExcecaoTerapeutaid(){
-					document.getElementById("spanShowTerapeuta").style = "display:none";
-					let id = document.getElementById("excecaoTerapeutaidselect");
-					let excecaoSubid = document.getElementById("excecaoTerapeutaid");
-					let span = document.getElementById(id.value+"_span").cloneNode(true);
-					span.id = ""+id.value+"_clone";
-					document.getElementById("divExcecaoTerapeuta").append(span);
-					if (excecaoSubid.value == ""){
-						excecaoSubid.value = ""+id.value+"";
-					} else {
-						excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
-					}
-					console.log("document.getElementById(divExcecaoTerapeutaid: "+document.getElementById("divExcecaoTerapeutaid").value)
-					id.value = "766f69643132333435366964";
-				}
-
-				
-				function addExcecaoSubstitutoid(){
-					document.getElementById("spanShow").style = "display:none";
-					let id = document.getElementById("excecaoSubstitutoidselect");
-					let excecaoSubid = document.getElementById("excecaoSubstitutoid");
-					let span = document.getElementById(id.value+"_span").cloneNode(true);
-					span.id = ""+id.value+"_clone";
-					document.getElementById("divExcecaoSubstituto").append(span);
-					if (excecaoSubid.value == ""){
-						excecaoSubid.value = ""+id.value+"";
-					} else {
-						excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
-					}
-					console.log("document.getElementById(excecaoSubstitutoid: "+document.getElementById("excecaoSubstitutoid").value)
-					id.value = "766f69643132333435366964";
-				}
-
-				function removeExcecaoSubstitutoid(id){
-					if (document.getElementById("excecaoSubstitutoid").value.includes(",")){
-						document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-						document.getElementById(id+"_clone").remove();
-					} else {
-						document.getElementById("excecaoSubstitutoid").value = "";
-						document.getElementById(id+"_clone").remove();
-					}
-					
-					if (document.getElementById("excecaoSubstitutoid").value == ""){
-						document.getElementById("spanShow").style = "display:''";
-					}
-				}
-				
-			</script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+				document.getElementById(""+alvo+"").value = "";
+				document.getElementById("spanShow"+clone+"Tera").style = "display: ''";
+			}
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -140,11 +148,12 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecao/add" method="POST">
-								<div  id="divCarrega" >
+								<div hidden id="divCarrega" >
 									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value=""/>
 									<input type="text" id="excecaoSubstitutoid" name="excecaoSubstitutoid" style="width: 400px;" value=""/>
 									{{#each terapeutas}}
-									<span id="{{_id}}_span" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');removeExcecaoTerapeutaid('{{_id}}')" class="fa fa-times aClose" ></a></span>
+									<span id="{{_id}}_spanSubs" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoSubstitutoid('{{_id}}');" class="fa fa-times aClose" ></a></span>
+									<span id="{{_id}}_spanExce" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeExcecaoTerapeutaid('{{_id}}');" class="fa fa-times aClose" ></a></span>
 									{{else}}
 									{{/each}}
 								</div>	
@@ -228,9 +237,9 @@
 																		{{else}}
 																		{{/each}}
 																	</select>
-																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="">Deleta todos os selecionados</button>
+																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('excecaoTerapeutaid','Exce');">Deleta todos os selecionados</button>
 																	<div id="divExcecaoTerapeuta" name="excecaoTerapeutaidtemp" style="display: block;width: 446px;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																		<span id="spanShowTerapeuta" class="spanAzul">Escolha o Terapeuta</span>
+																		<span id="spanShowExceTera" class="spanAzul">Escolha o Terapeuta</span>
 																	</div>
 																</div>
 																
@@ -244,10 +253,10 @@
 																		{{else}}
 																		{{/each}}
 																	</select>
-																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="">Deleta todos os selecionados</button>
+																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('excecaoSubstitutoid','Subs');">Deleta todos os selecionados</button>
 																	<br>
 																	<div id="divExcecaoSubstituto" style="display: block; width: 446px; min-height: 30px;max-height: 500px;text-align: left;padding: 4px;" >
-																		<span id="spanShow" class="spanAzul" >Escolha o Terapeuta</span>
+																		<span id="spanShowSubsTera" class="spanAzul" >Escolha o Terapeuta</span>
 																	</div>
 																	
 																</div>
@@ -267,7 +276,6 @@
 										<i class="ace-icon fa fa-check bigger-110"></i>
 										Salvar
 									</button>
-
 								</div>
 							</form>
 						</div><!-- /.col -->
@@ -291,7 +299,7 @@
 						inp.value="This text field is disabled!";
 					}
 				});
-			}
+			})
 			
 				if(!ace.vars['touch']) {
 					$('.chosen-select').chosen({allow_single_deselect:true}); 
