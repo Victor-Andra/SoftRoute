@@ -25,6 +25,28 @@
 				line-height: 25px;
 				text-align: center;
 			}
+			.icon-container {
+				position: relative;
+				display: inline-block;
+			}
+
+			.icon-text {
+				position: absolute;
+				top: 100%; /* Posiciona o texto abaixo do ícone */
+				left: 50%;
+				transform: translateX(-50%);
+				background-color: rgba(0, 0, 0, 0.8); /* Cor de fundo para legibilidade */
+				color: #fff; /* Cor do texto */
+				font-size: 14px; /* Tamanho da fonte */
+				padding: 5px 10px; /* Espaçamento interno */
+				border-radius: 5px; /* Borda arredondada */
+				display: none; /* Inicialmente oculta o texto */
+			}
+
+			.icon-container:hover .icon-text {
+				display: block; /* Exibe o texto quando o mouse passa sobre o ícone */
+			}
+			
 		</style>
 		<script type="text/javascript">
 			function controlaCategoria(){
@@ -278,10 +300,11 @@
 															<td>{{../sessao_qtterapiacon01}}</td>
 															<td>{{../sessao_qtterapiasaldo01}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao01}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_sessao_obssessao01" value="{{sessao_obssessao01}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao01}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -294,10 +317,11 @@
 															<td>{{../sessao_qtterapiacon02}}</td>
 															<td>{{../sessao_qtterapiasaldo02}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao02}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_sessao_obssessao02" value="{{sessao_obssessao02}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao02}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -310,10 +334,11 @@
 															<td>{{../sessao_qtterapiacon03}}</td>
 															<td>{{../sessao_qtterapiasaldo03}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao03}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_sessao_obssessao03" value="{{sessao_obssessao03}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao03}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -326,10 +351,11 @@
 															<td>{{../sessao_qtterapiacon04}}</td>
 															<td>{{../sessao_qtterapiasaldo04}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao04}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao04}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao04}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -342,10 +368,11 @@
 															<td>{{../sessao_qtterapiacon05}}</td>
 															<td>{{../sessao_qtterapiasaldo05}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao05}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao05}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao05}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -358,10 +385,11 @@
 															<td>{{../sessao_qtterapiacon06}}</td>
 															<td>{{../sessao_qtterapiasaldo06}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao06}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao06}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao06}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -374,10 +402,11 @@
 															<td>{{../sessao_qtterapiacon07}}</td>
 															<td>{{../sessao_qtterapiasaldo07}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao07}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao07}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao07}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -390,10 +419,11 @@
 															<td>{{../sessao_qtterapiacon08}}</td>
 															<td>{{../sessao_qtterapiasaldo08}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao08}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao08}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao08}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -406,10 +436,11 @@
 															<td>{{../sessao_qtterapiacon09}}</td>
 															<td>{{../sessao_qtterapiasaldo09}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao09}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao09}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao09}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -422,10 +453,11 @@
 															<td>{{../sessao_qtterapiacon10}}</td>
 															<td>{{../sessao_qtterapiasaldo10}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao10}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao10}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao10}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -438,10 +470,11 @@
 															<td>{{../sessao_qtterapiacon11}}</td>
 															<td>{{../sessao_qtterapiasaldo11}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao11}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao11}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao11}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -454,10 +487,11 @@
 															<td>{{../sessao_qtterapiacon12}}</td>
 															<td>{{../sessao_qtterapiasaldo12}}</td>
 															<td>
-																<a class="red" href="#" title="{{sessao_obssessao12}}" >
-																	<i class="ace-icon fa fa-search bigger-130" ></i>
-																	&nbsp;
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao12}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao12}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -470,9 +504,11 @@
 															<td>{{../sessao_qtterapiacon13}}</td>
 															<td>{{../sessao_qtterapiasaldo13}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao13}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao13}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao13}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -485,9 +521,11 @@
 															<td>{{../sessao_qtterapiacon14}}</td>
 															<td>{{../sessao_qtterapiasaldo14}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao14}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao14}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao14}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -500,9 +538,11 @@
 															<td>{{../sessao_qtterapiacon15}}</td>
 															<td>{{../sessao_qtterapiasaldo15}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao15}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao15}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao15}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -515,9 +555,11 @@
 															<td>{{../sessao_qtterapiacon16}}</td>
 															<td>{{../sessao_qtterapiasaldo16}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao16}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao16}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao16}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -530,9 +572,11 @@
 															<td>{{../sessao_qtterapiacon17}}</td>
 															<td>{{../sessao_qtterapiasaldo17}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao17}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao17}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao17}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -545,9 +589,11 @@
 															<td>{{../sessao_qtterapiacon18}}</td>
 															<td>{{../sessao_qtterapiasaldo18}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao18}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao18}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao18}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -560,9 +606,11 @@
 															<td>{{../sessao_qtterapiacon20}}</td>
 															<td>{{../sessao_qtterapiasaldo20}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao20}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao20}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao20}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -575,9 +623,11 @@
 															<td>{{../sessao_qtterapiacon21}}</td>
 															<td>{{../sessao_qtterapiasaldo21}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao21}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao21}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao21}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -590,9 +640,11 @@
 															<td>{{../sessao_qtterapiacon22}}</td>
 															<td>{{../sessao_qtterapiasaldo22}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao22}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao22}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao22}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -605,9 +657,11 @@
 															<td>{{../sessao_qtterapiacon23}}</td>
 															<td>{{../sessao_qtterapiasaldo23}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao23}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao23}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao23}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -620,9 +674,11 @@
 															<td>{{../sessao_qtterapiacon24}}</td>
 															<td>{{../sessao_qtterapiasaldo24}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao24}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao24}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao24}}</span>
+																</div>
 															</td>
 														</tr>
 														<tr role="row" class="odd">
@@ -635,9 +691,11 @@
 															<td>{{../sessao_qtterapiacon25}}</td>
 															<td>{{../sessao_qtterapiasaldo25}}</td>
 															<td>
-																<a class="red" >
-																	<i class="ace-icon fa fa-search bigger-130" title="{{sessao_obssessao25}}"></i>
-																</a>
+																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao25}}" />
+																<div class="icon-container">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																	<span class="icon-text">{{sessao_obssessao25}}</span>
+																</div>
 															</td>
 														</tr>
 
@@ -686,10 +744,10 @@
 															</td>
 															<td>
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{excecao_obs}}" />
-																<a class="red" href="#" title="{{excecao_obs}}">
+																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	&nbsp;
-																</a>
+																	<span class="icon-text">{{excecao_obs}}</span>
+																</div>
 															</td>
 															
 														</tr>
@@ -702,7 +760,7 @@
 								{{/each}}
 							</div>
 							<form class="form-horizontal" role="form" action="/menu/agenda/add" method="POST">
-								<div class="col-xs-12 col-sm-6"><!-- Widget Dados Básicos -->
+								<div class="col-xs-12 col-sm-5"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Agendamentos Fixos</h4>
@@ -745,9 +803,14 @@
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
 																<input class="hidden" id="agendaExtra" name="agendaExtra" value="false" />
-																<input id="extra" name="extra" type="checkbox" onchange="javascript:alteraCheck('extra','agendaExtra');" />
-																<label style="color: crimson;">Marque somente em caso de agendamento Extraordinário.</label>
-																<span id="spamid" class="lbl"></span>
+																<tr>
+																	<td><input id="extra" name="extra" type="checkbox" onchange="javascript:alteraCheck('extra','agendaExtra');" /></td>
+																	<td><label style="color: crimson;">Marque somente em caso de <br>agendamento Extraordinário.</label>
+																		<span id="spamid" class="lbl"></span>
+																	</td>
+																</tr>
+																
+																
 															</div>
 														</div>
 													</div>
@@ -944,7 +1007,7 @@
 										<input id="agendaData" name="agendaData" type="date" />
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-3"><!-- Widget de Exceções -->
+								<div class="col-xs-12 col-sm-4"><!-- Widget de Exceções -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Exceções</h4>

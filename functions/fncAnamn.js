@@ -114,12 +114,16 @@ carregaAnamn(req, res){
     },
 
     carregaAnamnEdi(req, res){
+        let base64Image;
         Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
         Bene.find().sort({bene_nome: 1}).then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                     res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene})
+                if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
+                    base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
+                }     
+                res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene, base64Image})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')

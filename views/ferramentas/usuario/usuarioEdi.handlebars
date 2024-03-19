@@ -15,6 +15,7 @@
 				let funcaoId = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
+				document.getElementById("usuarioFilhos").value = document.getElementById("usuFilhos").value;
 				console.log("usuperfdilid:"+document.getElementById("usuPerfilId").value);
 				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
 				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
@@ -235,7 +236,7 @@
 																</div>
 															</div>
 							
-															<label > Nome Completo</label>
+															<label > Nome completo</label>
 															<div class="form-group">
 																<div class="col-sm-9">
 																	<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" value="{{usuario.usuario_nomecompleto}}"/>
@@ -252,7 +253,7 @@
 																				<div>
 																					<div>
 																						
-																						<label for="id-date-picker-1">Data Nascimento</label>
+																						<label for="id-date-picker-1">Data de nascimento</label>
 																						<div class="row ">
 																							<div class="input-group">
 																								<div class="col-sm-4">
@@ -320,7 +321,7 @@
 
 																<div class="space space-8"></div>
 
-																<label > Nome pai </label>
+																<label > Nome do pai </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
 																		<input class="col-sm-8" type="text" name="usuarioNomepai" placeholder="" class="form-control"  value="{{usuario.usuario_nomepai}}"/>
@@ -332,7 +333,7 @@
 															<div class="col-xs-6">													
 																
 																<div class="space space-8"></div>
-																	<label > Nome Mãe </label>
+																	<label > Nome da mãe </label>
 																	<div class="form-group">
 																		<div class="col-sm-12">
 																			<input class="col-sm-8" type="text" name="usuarioNomemae" placeholder="" class="form-control"  value="{{usuario.usuario_nomemae}}"/>
@@ -381,7 +382,8 @@
 																<label> Filhos</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha..." value="{{usuario.usuario_filhos}}">
+																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																		</select>
@@ -392,7 +394,7 @@
 															<div class="col-xs-6">													
 																
 																<div class="space space-8"></div>
-																<label> Quantidade de Filhos</label>
+																<label> Quantidade de filhos</label>
 																<div class="form-group">
 																	<div class="col-sm-3">
 																		<input type="text" name="usuarioFilhosQt" id="usuarioFilhosQt" placeholder="" class="form-control"  value="{{usuario.usuario_filhosqt}}"/>
@@ -406,7 +408,7 @@
 														<div class="row">
 															<div class="col-xs-12">
 																<div class="space space-8"></div>
-																<label> Observação Usuario</label>
+																<label> Observação</label>
 																<div class="form-group">
 																	<div class="col-sm-3">
 																		<input style="width: 400px;" type="text" name="usuarioObs" id="usuarioObs" placeholder="" class="form-control"  value="{{usuario.usuario_obs}}" />
@@ -595,7 +597,7 @@
 															</div>
 														</div>
 														<div>
-															<label>Email</label>
+															<label>E-mail</label>
 															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="ace-icon fa fa-envelope-o"></i>
@@ -728,7 +730,7 @@
 																		<input id="usuPerfilId" name="usuPerfilId" value="{{usuario.usuario_perfilid}}" />
 																		<input id="usuContaTipo" name="usuContaTipo" value="{{usuario.usuario_contatipo}}" />
 																		<input id="usuTipoPix" name="usuTipoPix" value="{{usuario.usuario_tipopix}}" />
-
+																		<input id="usuFilhos" name="usuFilhos" value="{{usuario.usuario_filhos}}" />
 																		<input id="usuEscolaridade" name="usuEscolaridade" value="{{usuario.usuario_escolaridade}}" />
 																		
 																		<input id="usuGraduacao" name="usuGraduacao" value="{{usuario.usuario_graduacao}}" />
@@ -769,7 +771,7 @@
 														</div>
 													</div>
 													<div id="carimbo" class="tab-pane fade">
-														<label for="carimbo">Carimbo e Assinatura:</label>
+														<label for="carimbo">Carimbo e assinatura:</label>
 														<br>
 														<!-- Div para mostrar a imagem -->
 														<div id="previewCarimbo">

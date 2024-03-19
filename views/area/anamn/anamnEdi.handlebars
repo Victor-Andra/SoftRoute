@@ -12,6 +12,21 @@
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
 				}
+				function carregarImagem() {
+					var preview = document.getElementById('previewImage');
+					var fileInput = document.getElementById('usuarioCarimbo');
+
+					if (fileInput.files && fileInput.files[0]) {
+						var reader = new FileReader();
+
+						reader.onload = function (e) {
+							preview.src = e.target.result;
+							document.getElementById('previewCarimbo').style.display = 'block'; // Exibe a div
+						};
+
+						reader.readAsDataURL(fileInput.files[0]);
+					}
+				}
 				function atualizaDadosbene(){
 					
 					let beneid = document.getElementById("anamnBeneid").value;
@@ -80,7 +95,11 @@
 
 					return [year, month, day].join('-');
 				}
-
+				function submeterFormulario(){
+					document.getElementById("previewImage").remove();
+					let form = document.getElementById("formUsuarioAdd");
+					form.submit();
+				}
 				function carregaBody(){
 					//document.getElementById("anamnDatacad").value = new Date();
 					//Rotinas
@@ -619,6 +638,7 @@
 						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 						
 					}
+					carregarImagem();
 				}
 			</script>
 	</head>
@@ -7081,7 +7101,7 @@
 													<label>Terapeuta que realizou a anamnese</label>
 													<div class="form-group">
 														<div class="col-xs-8">
-															<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select"  >
+															<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select" onchange="carregarImagem();" >
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
@@ -7089,6 +7109,14 @@
 														</div>
 													</div>
 												</div>
+												<div class="col-xs-12" id="carimbo" >
+													<label for="carimbo">Carimbo e Assinatura:</label>
+													<br>
+													<!-- Div para mostrar a imagem -->
+													<div id="previewCarimbo">
+														<img id="previewImage" src="data:image/png;base64, {{usuarios.usuario_img}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
+													</div>
+												</div>	
 																								
 												<div class="col-xs-12 " >
 													<label class="hidden" for="id-date-picker-1">Data de digitação no sistema</label>
