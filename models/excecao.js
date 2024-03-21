@@ -9,6 +9,7 @@ const ExcecaoSchema = mongoose.Schema({
     excecao_terapiaid :{ type: ObjectId, required: false },
     excecao_terapeutaid :{ type: String, required: false },
     excecao_substitutoid :{ type: String, required: false },
+    excecao_substerapiaid :{ type: ObjectId, required: false },
     excecao_obs :{ type: String, required: false },
     
     //Atributos de controle
@@ -27,6 +28,7 @@ class Excecao{
         excecao_terapiaid,
         excecao_terapeutaid,
         excecao_substitutoid,
+        excecao_substerapiaid,
         excecao_obs,
         
         //Atributos de controle
@@ -44,6 +46,7 @@ class Excecao{
     this.excecao_terapiaid = excecao_terapiaid,
     this.excecao_terapeutaid = excecao_terapeutaid,
     this.excecao_substitutoid = excecao_substitutoid,
+    this.excecao_substerapiaid = excecao_substerapiaid,
     this.excecao_obs = excecao_obs,
     //Atributos de controle
     this.excecao_usuidcad = excecao_usuidcad,
@@ -72,6 +75,7 @@ module.exports = {ExcecaoModel,ExcecaoSchema,
                 excecao_terapiaid : req.body.excecaoTerapiaid,
                 excecao_terapeutaid : req.body.excecaoTerapeutaid,
                 excecao_substitutoid : req.body.excecaoSubstitutoid,
+                excecao_substerapiaid : req.body.excecaoSubsterapiaid,
                 excecao_obs : req.body.excecaoObs,
                 //Atributos de controle
                 excecao_usuidedi : usuarioAtual,
@@ -99,6 +103,7 @@ module.exports = {ExcecaoModel,ExcecaoSchema,
                 excecao_terapiaid : req.body.excecaoTerapiaid,
                 excecao_terapeutaid : req.body.excecaoTerapeutaid,
                 excecao_substitutoid : req.body.excecaoSubstitutoid,
+                excecao_substerapiaid : req.body.excecaoSubsterapiaid,
                 excecao_obs : req.body.excecaoObs,
                 //Atributos de controle
                 excecao_usuidcad : usuarioAtual,

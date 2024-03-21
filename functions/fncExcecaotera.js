@@ -1,10 +1,10 @@
 //Exports
 const mongoose = require("mongoose")
 
-//Excecao
+//Excecaotera
 //As classe tem que ser declaradas antes das tabelas
-const excecaoClass = require("../models/excecao")
-const Excecao = mongoose.model("tb_excecao")
+const excecaoteraClass = require("../models/excecaotera")
+const Excecaotera = mongoose.model("tb_excecaotera")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
@@ -26,13 +26,13 @@ const Terapia = mongoose.model("tb_terapia")
 
 
 module.exports = {
-    listaExcecao(req, res, resposta){
+    listaExcecaotera(req, res, resposta){
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
-        Excecao.find().then((excecao) =>{
-            excecao.forEach((b)=>{
+        Excecaotera.find().then((excecaotera) =>{
+            excecaotera.forEach((b)=>{
                 //Formatação da Exibição da Data de cadastro
-                let datacad = new Date(b.excecao_datacad)
+                let datacad = new Date(b.excecaotera_datacad)
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -44,7 +44,7 @@ module.exports = {
                 let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.datacad=fulldate;
                 
-                dataedi = new Date(b.excecao_dataedi)
+                dataedi = new Date(b.excecaotera_dataedi)
                 mes = (dataedi.getMonth()+1).toString();
                 dia = (dataedi.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -63,13 +63,13 @@ module.exports = {
                 // Adicionando a propriedade countSessaos a cada bene
                 
                 bene.forEach((b) => {
-                    b.countExcecaos = excecao.filter((s) => s.excecao_beneid.toString() === b._id.toString()).length;
+                    b.countExcecaoteras = excecaotera.filter((s) => s.excecaotera_beneid.toString() === b._id.toString()).length;
                 });
 
-                excecao.forEach((s) => {
+                excecaotera.forEach((s) => {
                     console.log("s: " + s);
                     bene.forEach((b) => {
-                        if (("" + b._id + "") == ("" + s.excecao_beneid + "")) {
+                        if (("" + b._id + "") == ("" + s.excecaotera_beneid + "")) {
                             console.log("b.bene_nome: " + b.bene_nome);
                         }
                     });
@@ -80,7 +80,7 @@ module.exports = {
                             terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
                             Conv.find().sort({conv_nome: 1}).then((conv)=>{
                                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                                res.render('beneficiario/excecao/excecaoLis', {excecaos: excecao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
+                                res.render('beneficiario/excecaotera/excecaoteraLis', {excecaoteras: excecaotera, usuarios: usuario, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -88,9 +88,9 @@ module.exports = {
         })
     },
 
-    carregaExcecao(req,res){
-        let excecao = new Array();
-        Excecao.find().then((excecao) =>{
+    carregaExcecaotera(req,res){
+        let excecaotera = new Array();
+        Excecaotera.find().then((excecaotera) =>{
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         Conv.find().then((conv)=>{
@@ -100,7 +100,7 @@ module.exports = {
                                             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{
                                                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
-                                res.render("beneficiario/excecao/excecaoCad", {excecaos: excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene})
+                                res.render("beneficiario/excecaotera/excecaoteraCad", {excecaoteras: excecaotera, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene})
         })})})})})}).catch((err) =>{
         console.log(err)
         req.flash("error_message", "houve um erro ao listar exceção")
@@ -108,12 +108,12 @@ module.exports = {
         })
     },
    
-    carregaExcecaoEdi(req,res){
+    carregaExcecaoteraEdi(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
-        //let excecao = new Array();
-        Excecao.findOne({_id : req.params.id}).then((excecao)=>{
-            console.log(excecao);
+        //let excecaotera = new Array();
+        Excecaotera.findOne({_id : req.params.id}).then((excecaotera)=>{
+            console.log(excecaotera);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Conv.find().then((conv)=>{
@@ -123,7 +123,7 @@ module.exports = {
                                     usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{
                                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
-                                        res.render("beneficiario/excecao/excecaoEdi", {excecao, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
+                                        res.render("beneficiario/excecaotera/excecaoteraEdi", {excecaotera, usuarios: usuario, terapias: terapia, terapeutas: terapeuta, convs: conv, benes: bene,usuarioAtual, perfilAtual})
         })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar exceção")
@@ -131,12 +131,12 @@ module.exports = {
         })
     },
 
-    cadastraExcecao(req,res){
+    cadastraExcecaotera(req,res){
         console.log("chegou")
         let resultado
         let flash = new Resposta();
         
-        excecaoClass.excecaoAdicionar(req,res).then((result)=>{
+        excecaoteraClass.excecaoteraAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(result)
             resultado = true;
@@ -148,7 +148,7 @@ module.exports = {
                 flash.texto = "ATA cadastrada com sucesso!"
                 flash.sucesso = "true"
                 console.log('verdadeiro')
-                this.listaExcecao(req,res,flash)
+                this.listaExcecaotera(req,res,flash)
             } else {
                 flash.texto = resultado
                 flash.sucesso = "false"
@@ -158,11 +158,11 @@ module.exports = {
         })
     },
 
-    atualizaExcecao(req,res){
+    atualizaExcecaotera(req,res){
         let resultado
         let resposta = new Resposta()
         try{
-            excecaoClass.excecaoEditar(req,res).then((res)=>{
+            excecaoteraClass.excecaoteraEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -177,14 +177,14 @@ module.exports = {
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
-                    this.listaExcecao(req,res,resposta)
+                    this.listaExcecaotera(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
                     console.log(resultado)
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    this.listaExcecao(req,res,resposta)
+                    this.listaExcecaotera(req,res,resposta)
                 }
             })
         } catch(err1){
@@ -193,10 +193,10 @@ module.exports = {
         }
     },
 
-    deletaExcecao(req,res){
+    deletaExcecaotera(req,res){
         let resposta;
         let flash = new Resposta()
-        Excecao.deleteOne({_id: req.params.id}).then(() =>{
+        Excecaotera.deleteOne({_id: req.params.id}).then(() =>{
             resposta = "true";
         }).catch((err) =>{
             resposta = err;
@@ -211,7 +211,7 @@ module.exports = {
                 flash.texto = "Erro ao deletar a ATA";
                 flash.sucesso = "false";
             }
-            this.listaExcecao(req,res, Exceção)
+            this.listaExcecaotera(req,res, Exceção)
         })
     }
 

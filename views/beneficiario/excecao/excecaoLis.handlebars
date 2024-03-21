@@ -101,6 +101,7 @@
 																		<th style="width: 15%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 																		<th style="width: 15%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeutas</th>
 																		<th style="width: 15%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Substitutos</th>
+																		<th style="width: 15%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia Subst</th>
 																		<th style="width: 20%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
 																		<th style="width: 10%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Criado por:</th>
 																		<th style="width: 10%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Alterado por:</th>
@@ -128,6 +129,11 @@
 																						<input hidden id="containerTerapeutaSubs_{{_id}}_input" value="{{excecao_substitutoid}}" />
 																					</div>
 																				</td>
+																				{{#each ../../terapias}}<!-- Ok -->
+																					{{#ifEqual this._id ../excecao_substerapiaid}}
+																						<td>{{terapia_nome}}</td>
+																					{{/ifEqual}}
+																				{{/each}}
 																				<td>
 																					{{excecao_obs}}
 																				</td>

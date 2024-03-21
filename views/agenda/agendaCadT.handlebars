@@ -125,7 +125,7 @@
 					if (inputExcecao){
 						inputExcecao.forEach((exec)=>{
 							let idExcecao = exec.value;
-							let idsExceTera = document.getElementById(idExcecao);
+							let idsExceTera = document.getElementById(idExcecao+"_idsExceTera");
 							if (idsExceTera && idsExceTera.value){
 								let arr = idsExceTera.value;
 								if (arr.includes(",")){
@@ -145,26 +145,25 @@
 					let inputSubstituto = document.getElementsByName("idBeneSubsTera_"+beneval);
 
 					if (inputSubstituto && inputSubstituto != ""){
-						inputSubstituto.forEach((Subs)=>{
-							let idSubstituto = Subs.value;
-							let idsSubsTera = document.getElementById(idSubstituto);
+						inputSubstituto.forEach((subs)=>{
+							let idSubstituto = subs.value;
+							let idsSubsTera = document.getElementById(idSubstituto+"_idsSubsTera");
 							if (idsSubsTera && idsSubsTera.value) {
 								let arr = idsSubsTera.value;
 								if (arr.includes(",")){
 									let arrIdSubs = arr.split(",");
 									arrIdSubs.forEach((subs)=>{
-										let elementoClonado = document.getElementById(subs+"_span").cloneNode(true);
-										document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonado);
+										let elementoClonadosubs = document.getElementById(subs+"_span").cloneNode(true);
+										document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonadosubs);
 									})
 								} else {
-									let elementoClonado = document.getElementById(idsSubsTera.value+"_span").cloneNode(true);
-									document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonado);
+									let elementoClonadosubs = document.getElementById(idsSubsTera.value+"_span").cloneNode(true);
+									document.getElementById("containerSubsTerapeuta_"+idSubstituto+"_"+beneval).append(elementoClonadosubs);
 								}
 							}
 						})
 					}
 				});
-				
 			}
 			
 			function alteraMigrado(){
@@ -303,7 +302,7 @@
 																<input class="hidden" id="{{_id}}_sessao_obssessao01" value="{{sessao_obssessao01}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao01}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao01}}</span>
 																</div>
 															</td>
 														</tr>
@@ -320,7 +319,7 @@
 																<input class="hidden" id="{{_id}}_sessao_obssessao02" value="{{sessao_obssessao02}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao02}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao02}}</span>
 																</div>
 															</td>
 														</tr>
@@ -337,7 +336,7 @@
 																<input class="hidden" id="{{_id}}_sessao_obssessao03" value="{{sessao_obssessao03}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao03}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao03}}</span>
 																</div>
 															</td>
 														</tr>
@@ -354,7 +353,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao04}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao04}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao04}}</span>
 																</div>
 															</td>
 														</tr>
@@ -371,7 +370,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao05}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao05}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao05}}</span>
 																</div>
 															</td>
 														</tr>
@@ -388,7 +387,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao06}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao06}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao06}}</span>
 																</div>
 															</td>
 														</tr>
@@ -405,7 +404,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao07}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao07}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao07}}</span>
 																</div>
 															</td>
 														</tr>
@@ -422,7 +421,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao08}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao08}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao08}}</span>
 																</div>
 															</td>
 														</tr>
@@ -439,7 +438,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao09}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao09}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao09}}</span>
 																</div>
 															</td>
 														</tr>
@@ -456,7 +455,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao10}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao10}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao10}}</span>
 																</div>
 															</td>
 														</tr>
@@ -473,7 +472,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao11}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao11}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao11}}</span>
 																</div>
 															</td>
 														</tr>
@@ -490,7 +489,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao12}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao12}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao12}}</span>
 																</div>
 															</td>
 														</tr>
@@ -507,7 +506,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao13}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao13}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao13}}</span>
 																</div>
 															</td>
 														</tr>
@@ -524,7 +523,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao14}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao14}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao14}}</span>
 																</div>
 															</td>
 														</tr>
@@ -541,7 +540,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao15}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao15}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao15}}</span>
 																</div>
 															</td>
 														</tr>
@@ -558,7 +557,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao16}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao16}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao16}}</span>
 																</div>
 															</td>
 														</tr>
@@ -575,7 +574,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao17}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao17}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao17}}</span>
 																</div>
 															</td>
 														</tr>
@@ -592,7 +591,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao18}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao18}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao18}}</span>
 																</div>
 															</td>
 														</tr>
@@ -609,7 +608,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao20}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao20}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao20}}</span>
 																</div>
 															</td>
 														</tr>
@@ -626,7 +625,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao21}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao21}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao21}}</span>
 																</div>
 															</td>
 														</tr>
@@ -643,7 +642,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao22}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao22}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao22}}</span>
 																</div>
 															</td>
 														</tr>
@@ -660,7 +659,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao23}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao23}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao23}}</span>
 																</div>
 															</td>
 														</tr>
@@ -677,7 +676,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao24}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao24}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao24}}</span>
 																</div>
 															</td>
 														</tr>
@@ -694,7 +693,7 @@
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{sessao_obssessao25}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{sessao_obssessao25}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{sessao_obssessao25}}</span>
 																</div>
 															</td>
 														</tr>
@@ -705,8 +704,6 @@
 										</table>
 									</div>
 								{{/each}}
-							</div>
-							<div id="divcarrega2" hidden>
 								{{#each benes}}
 									<input class="hidden" id="bene" name="beneid" value="{{_id}}" />
 									<div id="{{_id}}_divBeneExcecao" name="excecaoAmostra">
@@ -716,7 +713,8 @@
 													<th style="width: 15%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th style="width: 15%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeutas</th>
 													<th style="width: 15%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Substitutos</th>
-													<th style="width: 20%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
+													<th style="width: 15%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia Substituta</th>
+													<th style="width: 5%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Obs</th>
 												</tr>
 											</thead>
 											<tbody style="">
@@ -732,24 +730,28 @@
 															{{/each}}
 															<td>
 																<div class="tags" id="containerExecaoTerapeuta_{{_id}}_{{excecao_beneid}}" name="tagContainerTerapeuta" >
-																	<input hidden id="{{_id}}" name="idsExceTera" value="{{excecao_terapeutaid}}" />
+																	<input hidden id="{{_id}}_idsExceTera" name="idsExceTera" value="{{excecao_terapeutaid}}" />
 																	<input hidden id="idBeneExceTera_{{_id}}" name="idBeneExceTera_{{excecao_beneid}}" value="{{_id}}" />
 																</div>
 															</td>
 															<td>
 																<div class="tags" id="containerSubsTerapeuta_{{_id}}_{{excecao_beneid}}" name="tagContainerTerapeuta" >
-																	<input hidden id="{{_id}}" name="idsSubsTera" value="{{excecao_substitutoid}}" />
+																	<input hidden id="{{_id}}_idsSubsTera" name="idsSubsTera" value="{{excecao_substitutoid}}" />
 																	<input hidden id="idBeneSubsTera_{{_id}}" name="idBeneSubsTera_{{excecao_beneid}}" value="{{_id}}" />
 																</div>
 															</td>
+															{{#each ../../terapias}}
+																{{#ifEqual this._id ../excecao_substerapiaid}}
+																	<td>{{terapia_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
 															<td>
 																<input class="hidden" id="{{_id}}_exce_obs" value="{{excecao_obs}}" />
 																<div class="icon-container">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																	<span class="icon-text">{{excecao_obs}}</span>
+																	<span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Observação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>{{excecao_obs}}</span>
 																</div>
 															</td>
-															
 														</tr>
 														{{/isNull}}
 													{{/ifEqual}}
@@ -760,7 +762,7 @@
 								{{/each}}
 							</div>
 							<form class="form-horizontal" role="form" action="/menu/agenda/add" method="POST">
-								<div class="col-xs-12 col-sm-5"><!-- Widget Dados Básicos -->
+								<div class="col-xs-12 col-sm-4"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Agendamentos Fixos</h4>
@@ -897,21 +899,6 @@
 													</div><!-- /.span -->
 												</div>
 												<div class="row">
-													<div class="col-xs-9 col-sm-9">
-														<label>Terapeuta</label>
-														<div class="form-group">
-															<div class="col-xs-9 col-sm-9">
-																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
-																	<option value="766f69643132333435366964">-</option>
-																	{{#each terapeutas}}
-																	<option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-																</select>
-															</div>
-														</div>												
-													</div>
-												</div>
-												<div class="row">
 													<div class="col-xs-6">													
 														<label>Terapia</label>
 														<div class="form-group">
@@ -926,6 +913,22 @@
 														</div>
 													</div>
 												</div>
+												<div class="row">
+													<div class="col-xs-9 col-sm-9">
+														<label>Terapeuta</label>
+														<div class="form-group">
+															<div class="col-xs-9 col-sm-9">
+																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapeutas}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>												
+													</div>
+												</div>
+												
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<div class="widget-box" name="widgetboxSubs" id="widgetboxSubs" style="display:none">
@@ -1007,7 +1010,7 @@
 										<input id="agendaData" name="agendaData" type="date" />
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-4"><!-- Widget de Exceções -->
+								<div class="col-xs-12 col-sm-5"><!-- Widget de Exceções -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Exceções</h4>

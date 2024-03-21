@@ -208,19 +208,21 @@
 														</select>
 													</div>
 												</div>
-												<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+												
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover ">
 													<thead>
 														<tr>
-															<th style="width: 10%;"colspan="1"><label>Terapia</label></th>
+															<th style="width: 20%;"colspan="1"><label>Terapia</label></th>
 															<th style="width: 30%;"colspan="1"><label>Terapeutas </label></th>
 															<th style="width: 30%;"colspan="1"><label>Substitutos</label></th>
-															<th style="width: 40%;" colspan="1"><label>Observação </label></th>
+															<th style="width: 20%;"colspan="1"><label>Terapia Substituta</label></th>
+															
 														</tr>
 													</thead>
 													<tbody>
 														<tr><!-- 1AReg -->
 															<td>
-																<select name="excecaoTerapiaid" id="excecaoTerapiaid"  class="chosen-select" data-placeholder="Escolha..." >
+																<select name="excecaoTerapiaid" id="excecaoTerapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
@@ -230,7 +232,7 @@
 															</td>
 															<td>
 																<div>
-																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" onchange="addExcecaoTerapeutaid();">
+																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" class="chosen-select" onchange="addExcecaoTerapeutaid();">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -246,7 +248,7 @@
 															</td>
 															<td style="align-items: center;">
 																<div>
-																	<select name="excecaoSubstitutoidselect" id="excecaoSubstitutoidselect" onchange="addExcecaoSubstitutoid();">
+																	<select name="excecaoSubstitutoidselect" id="excecaoSubstitutoidselect" class="chosen-select" onchange="addExcecaoSubstitutoid();">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -262,11 +264,28 @@
 																</div>
 															</td>
 															<td>
-																<textarea type="text" name="excecaoObs" id="excecaoObs" placeholder="" class="form-control" style="font-size: 12px;"></textarea>
+																<select name="excecaoSubsterapiaid" id="excecaoSubsterapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each terapias}}
+																	<option value="{{_id}}">{{terapia_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
 															</td>
+															<tr>
+																<td colspan="4">
+																	<label>Observação </label>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="4">
+																	<textarea type="text" name="excecaoObs" id="excecaoObs" placeholder="" class="form-control" style="font-size: 12px;"></textarea>
+																</td>
+															</tr>
 														</tr>
 													</tbody>
 												</table>
+												
 											</div>
 										</div>
 									</div>
