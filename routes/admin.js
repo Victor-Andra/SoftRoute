@@ -2033,6 +2033,8 @@ router.get('/area/aba/nat/natlis', fncGeral.IsAuthenticated, (req,res) =>{//dire
     fncNat.listaNat(req, res);
 })
 
+//------------------------------------------------------------------------------------------------
+
 //Menu ATEC ** Area Tecnicos e Escalas 
 //Carrega Cadastro
 router.get('/area/escalas/atec/ateccad', fncGeral.IsAuthenticated, (req,res) =>{//carrega Cadastro Atec
@@ -2060,6 +2062,8 @@ router.get('/area/escalas/atec/atecedi/:id', fncGeral.IsAuthenticated, (req,res)
 router.get('/area/escalas/atec/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
     fncAtec.deletaAtec(req,res);
 })
+
+//------------------------------------------------------------------------------------------------
 
 //Menu Exceções ** 
 //Carrega Cadastro
@@ -2089,7 +2093,39 @@ router.get('/beneficiario/excecao/del/:id', fncGeral.IsAuthenticated, (req,res) 
     fncExcecao.deletaExcecao(req,res);
 })
 
+//------------------------------------------------------------------------------------------------
 
+//Menu Exceções de terapeutas que independente do beneficiário devem ter substituição fixa 
+//Carrega Cadastro 
+router.get('/beneficiario/excecaotera/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
+    fncExcecaotera.carregaExcecaotera(req, res);
+})
+//carrega o editar
+router.get('/beneficiario/excecaotera/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
+    fncExcecaotera.carregaExcecaoteraEdi(req, res);
+})
+
+//Adiciona registro
+router.post('/beneficiario/excecaotera/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro
+    fncExcecaotera.cadastraExcecaotera(req, res);
+})
+
+//Edita o registro
+router.post('/beneficiario/excecaotera/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+fncExcecaotera.atualizaExcecaotera(req, res);
+})
+
+//Carrega a lista
+router.get('/beneficiario/excecaotera/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para lista
+    fncExcecaotera.listaExcecaotera(req, res);
+})
+
+//Deleta Selecionado
+router.get('/beneficiario/excecaotera/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
+    fncExcecaotera.deletaExcecaotera(req,res);
+})
+
+//------------------------------------------------------------------------------------------------
 
 //Menu ATA ** Area Tecnicos e Escalas 
 //Carrega Cadastro
@@ -2120,6 +2156,8 @@ router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{/
     fncAta.deletaAta(req,res);
 })
 
+//------------------------------------------------------------------------------------------------
+
 //Menu CARS ** Area Tecnicos e Escalas 
 //Carrega Cadastro
 router.get('/area/escalas/cars/carscad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o formulário de cadastro
@@ -2147,6 +2185,8 @@ router.post('/area/escalas/cars/atualizar', fncGeral.IsAuthenticated, (req,res) 
 router.get('/area/escalas/cars/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
     fncCars.deletaCars(req,res);
 })
+
+//------------------------------------------------------------------------------------------------
 
 //Menu Notasup ** Area Tecnicos e ABA 
 //Carrega Cadastro

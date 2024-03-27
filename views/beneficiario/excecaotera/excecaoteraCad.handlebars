@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Terapeutas com Exceções</title>
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Exceções de Terapeutas</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecaotera/add" method="POST">
+								
+								<div class="col-sm-12" ><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Exceções de Terapeutas</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="alert alert-warning">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="ace-icon fa fa-times"></i>
+												</button>
+												Os terapeutas cadastrados aqui não podem ter agendamentos relacionados a eles sem sua devida substituição fixa.
+												Isso posto, por conta de restrições, junto aos planos de saúde / convênios.
+												<br>
+											</div>
+											<div class="widget-main">
+												<label>Terapeuta</label>
+												<div class="form-group">
+													<div class="col-sm-5">
+														<select id="excecaoteraTerapeutaid" name="excecaoteraTerapeutaid" class="chosen-select form-control" data-placeholder="Escolha..." >
+															<option value="766f69643132333435366964">-</option>
+															{{#each terapeutas}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="col-sm-5">
+														<label>Terapia</label>
+														<select name="excecaoteraTerapiaid" id="excecaoteraTerapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+															<option value="766f69643132333435366964">-</option>
+															{{#each terapias}}
+															<option value="{{_id}}">{{terapia_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Observação</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="excecaoteraObs" id="excecaoteraObs" placeholder="" class="form-control" style="font-size: 12px;"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12" style="text-align: center;"><!-- Widget Dados Básicos -->
+									<button class="btn btn-info"  name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('#id-disable-check').on('click', function() {
+					var inp = $('#form-input-readonly').get(0);
+					if(inp.hasAttribute('disabled')) {
+						inp.setAttribute('readonly' , 'true');
+						inp.removeAttribute('disabled');
+						inp.value="This text field is readonly!";
+					}
+					else {
+						inp.setAttribute('disabled' , 'disabled');
+						inp.removeAttribute('readonly');
+						inp.value="This text field is disabled!";
+					}
+				});
+			})
+			
+				if(!ace.vars['touch']) {
+					$('.chosen-select').chosen({allow_single_deselect:true}); 
+					//resize the chosen on window resize
+			
+					$(window)
+					.off('resize.chosen')
+					.on('resize.chosen', function() {
+						$('.chosen-select').each(function() {
+							 var $this = $(this);
+							 $this.next().css({'width': $this.parent().width()});
+						})
+					}).trigger('resize.chosen');
+					//resize chosen on sidebar collapse/expand
+					$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+						if(event_name != 'sidebar_collapsed') return;
+						$('.chosen-select').each(function() {
+							 var $this = $(this);
+							 $this.next().css({'width': $this.parent().width()});
+						})
+					});
+			
+			
+					$('#chosen-multiple-style .btn').on('click', function(e){
+						var target = $(this).find('input[type=radio]');
+						var which = parseInt(target.val());
+						if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+						 else $('#form-field-select-4').removeClass('tag-input-style');
+					});
+				}
+						
+		</script>
+	</body>
+</html>

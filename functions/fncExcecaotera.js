@@ -59,29 +59,16 @@ module.exports = {
            
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                //console.log("Listagem Realizada bene!")
-                // Adicionando a propriedade countSessaos a cada bene
-                
-                bene.forEach((b) => {
-                    b.countExcecaoteras = excecaotera.filter((s) => s.excecaotera_beneid.toString() === b._id.toString()).length;
-                });
-
-                excecaotera.forEach((s) => {
-                    console.log("s: " + s);
-                    bene.forEach((b) => {
-                        if (("" + b._id + "") == ("" + s.excecaotera_beneid + "")) {
-                            console.log("b.bene_nome: " + b.bene_nome);
-                        }
-                    });
-                });
                     Usuario.find().then((usuario)=>{
                         usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Terapia.find().then((terapia)=>{
-                            terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
-                            Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                                res.render('beneficiario/excecaotera/excecaoteraLis', {excecaoteras: excecaotera, usuarios: usuario, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
-        })})})})}).catch((err) =>{
+                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                                Terapia.find().then((terapia)=>{
+                                    terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
+                                    Conv.find().sort({conv_nome: 1}).then((conv)=>{
+                                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                                        res.render('beneficiario/excecaotera/excecaoteraLis', {excecaoteras: excecaotera, usuarios: usuario, terapeutas: terapeuta, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -173,13 +160,13 @@ module.exports = {
                 res.render('admin/erro')
             }).finally(() =>{
                 if(resultado == true){
-                    //Volta para a debitsubcateg de listagem
+                    //Volta para a Lista
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
                     this.listaExcecaotera(req,res,resposta)
                 }else{
-                    //passar classe de erro
+                    //Passar classe de erro
                     console.log("error")
                     console.log(resultado)
                     resposta.texto = resultado

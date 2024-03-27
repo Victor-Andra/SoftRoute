@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Terapeutas com Exceções</title>
+			<style>
+				.spanAzul {
+					display: inline-block;
+					position: relative;
+					font-weight: 400;
+					vertical-align: baseline;
+					white-space: nowrap;
+					background-color: #91b8d0;color: #fff;
+					text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+					padding: 4px 22px 5px 9px;
+					margin-bottom: 3px;
+					margin-right: 3px;
+				}
+				.aClose {
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					right: 0;
+					width: 18px;
+					height: auto;
+					line-height: 25px;
+					text-align: center;
+				}
+			</style>
+			<script type="text/javascript">
+				
+				function carregaBody(){
+					
+					document.getElementById("excecaoteraTerapiaid").value = document.getElementById("excecaoteraTerapiaidEdi").value;
+					document.getElementById("excecaoteraTerapeutaid").value = document.getElementById("excecaoteraTerapeutaidEdi").value;
+					document.getElementById("excecaoteraObs").value = document.getElementById("excecaoteraObsEdi").value;
+				
+				}
+				
+			</script>
+			
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Exceções de Terapeutas</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/beneficiario/excecaotera/atualizar" method="POST">
+								<div hidden id="divCarrega" >
+									<!-- Controles de Atualização de Cadastro -->
+									<input id="excecaoteraId" name="excecaoteraId" value="{{excecaotera._id}}" />
+									<input type="text" id="excecaoteraTerapiaidEdi" name="excecaoteraTerapiaidEdi" style="width: 400px;"  value="{{excecaotera.excecaotera_terapiaid}}"/>
+									<input type="text" id="excecaoteraTerapeutaidEdi" name="excecaoteraTerapeutaidEdi" style="width: 400px;" value="{{excecaotera.excecaotera_terapeutaid}}"/>
+									<input type="text" id="excecaoteraObsEdi" name="excecaoteraObsEdi" style="width: 400px;" value="{{excecaotera.excecaotera_obs}}"/>
+								</div>	
+								<div class="col-sm-12" ><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Exceções de Terapeutas</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<label>Beneficiário</label>
+												<div class="form-group">
+													<div class="col-sm-5">
+														<select id="excecaoteraTerapeutaid" name="excecaoteraTerapeutaid" class="chosen-select form-control" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+															<option value="766f69643132333435366964">-</option>
+															{{#each terapeutas}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="col-sm-5">
+														<select name="excecaoteraTerapiaid" id="excecaoteraTerapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+															<option value="766f69643132333435366964">-</option>
+															{{#each terapias}}
+															<option value="{{_id}}">{{terapia_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Observação</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="excecaoteraObs" id="excecaoteraObs" placeholder="" class="form-control" style="font-size: 12px;"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12" style="text-align: center;"><!-- Widget Dados Básicos -->
+									<button class="btn btn-info"  name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+						
+		
+	</body>
+</html>
