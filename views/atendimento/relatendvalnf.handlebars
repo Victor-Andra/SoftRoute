@@ -203,14 +203,14 @@
 											</div><!-- /.row -->
 											<div class="col-xs-12">
 												<div class="row">
-													<label>REFERENTE ÁS CONSULTAS MULTIDISCIPLINARES DO BENEFICIÁRIO:</label>
+													<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
 													<label> {{bene_nome}}</label>
 												</div>
 												<div class="row">
 													<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
 												</div>
 												<div class="row">
-													<label>CONSULTAS REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
+													<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
 												</div>											
 												
 												{{#each rels}}
@@ -220,7 +220,7 @@
 																{{terapia_nomecid}} : 
 															{{/ifEqual}}
 														{{/each}}
-														{{sessoes}} CONSULTAS * 
+														{{sessoes}} SESSÃO(ÕES) * 
 														R$ {{valor}} CADA = 		
 														R$ {{total}}
 													</div>				
