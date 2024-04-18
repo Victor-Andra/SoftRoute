@@ -172,6 +172,21 @@ const progClass = require("../models/prog")
 const Prog = mongoose.model("tb_prog")
 const fncProg = require("../functions/fncProg")
 
+//Programa tipo - ABA
+const progtipoClass = require("../models/progtipo")
+const Progtipo = mongoose.model("tb_progtipo")
+const fncProgtipo = require("../functions/fncProgtipo")
+
+//Programa nivel - ABA
+const prognivelClass = require("../models/prognivel")
+const Prognivel = mongoose.model("tb_prognivel")
+const fncPrognivel = require("../functions/fncPrognivel")
+
+//Programa dica - ABA
+const progdicaClass = require("../models/progdica")
+const Progdica = mongoose.model("tb_progdica")
+const fncProgdica = require("../functions/fncProgdica")
+
 //Gráfico do Programa - ABA
 const grafprogClass = require("../models/grafprog")
 const Grafprog = mongoose.model("tb_grafprog")

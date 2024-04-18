@@ -2,11 +2,199 @@
 <html lang="pt-br">
 	<head>
 		<title>Programas ABA</title>
+		<style>
+			h2,.progress-title{
+			color: #94979B;
+			}
+
+			h4{
+			color: #166d9e;
+			}
+
+			h4 .material-icons, .message-read h4 .fa, .message-read h4 .glyphicon {
+				margin-right: 15px;
+				display: inline-flex;
+				vertical-align: middle;
+			}
+
+			.material-icons {
+				font-size: 20px;
+			}
+
+			.progress-title{
+				font-size: 14px;
+				font-weight: 700;
+				margin-bottom: 16px;
+				margin-top: 44px;
+			}
+
+			.progress-name{
+				font-size: 12px;
+				font-weight: 700;
+				vertical-align: middle;
+				
+				
+			}
+
+			.progress{
+				height: 30px;
+				background: #e9e9e9;
+				border-radius: 0;
+				box-shadow: none;
+				margin-bottom: 30px;
+				overflow: visible;
+			}
+
+			.progress .progress-bar{
+				box-shadow: none;
+				position: relative;
+				-webkit-animation: animate-positive 2s;
+				animation: animate-positive 2s;
+				height: 30px;
+			}
+
+			.progress .progress-value{
+				font-size: 15px;
+				font-weight: bold;
+				color: #000;
+				position: absolute;
+				top: -18px;
+				right: 0;
+			}
+
+			.progress.pink{
+			.progress-bar{
+				background: #FF0084;
+				&:after{
+				background: #FF7E55;
+				}
+			}
+			}
+
+			.progress.red{
+			.progress-bar{
+				background: #ff5555;
+				&:after{
+				background: #FF7E55;
+				}
+			}
+			}
+
+			.progress.purple{
+			.progress-bar{
+				background: #800080;
+				&:after{
+				background: #FF7E55;
+				}
+			}
+			}
+			.progress.green{
+			.progress-bar{
+				background: #2FB399;
+				&:after{
+				background: #2FB399;
+				}
+			}
+			}
+			.progress.orange{
+			.progress-bar{
+				background: #FFa500;
+				&:after{
+				background: #2FB399;
+				}
+			}
+			}
+
+			@-webkit-keyframes animate-positive{
+				0% { width: 0; }
+			}
+
+			@keyframes animate-positive{
+				0% { width: 0; }
+			}
+			.col-sm-7 input[type="text"] {
+				width: 100%;
+			}
+			
+			.spanAzul {
+				display: inline-block;
+				position: relative;
+				font-weight: 400;
+				vertical-align: baseline;
+				white-space: nowrap;
+				background-color: #91b8d0;color: #fff;
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+				padding: 4px 22px 5px 9px;
+				margin-bottom: 3px;
+				margin-right: 3px;
+			}
+			.aClose {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				width: 18px;
+				height: auto;
+				line-height: 25px;
+				text-align: center;
+			}
+		</style>
 		<script type="text/javascript">
-		
+			function addDicatipoid(){
+				document.getElementById("spanShowSubsTera").style = "display:none";
+				let id = document.getElementById("excecaoSubstitutoidselect");
+				let excecaoSubid = document.getElementById("excecaoSubstitutoid");
+				let span = document.getElementById(id.value+"_spanSubs").cloneNode(true);
+				span.id = ""+id.value+"_cloneSubsTera";
+				document.getElementById("divExcecaoSubstituto").append(span);
+				if (excecaoSubid.value == ""){
+					excecaoSubid.value = ""+id.value+"";
+				} else {
+					excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
+				}
+				id.value = "766f69643132333435366964";
+			}
+
+			function removeDicatipoid(id){
+				if (document.getElementById("excecaoSubstitutoid").value.includes(",")){
+					document.getElementById("excecaoSubstitutoid").value = (document.getElementById("excecaoSubstitutoid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+					document.getElementById(id+"_cloneSubsTera").remove();
+				} else {
+					document.getElementById("excecaoSubstitutoid").value = "";
+					document.getElementById(id+"_cloneSubsTera").remove();
+				}
+				
+				if (document.getElementById("excecaoSubstitutoid").value == ""){
+					document.getElementById("spanShowSubsTera").style = "display:''";
+				}
+			}
+
+			function removeTudo(alvo, clone){
+				let arr = document.getElementById(""+alvo+"").value.split(",");
+				arr.forEach((a)=>{
+					console.log(a+"_clone"+clone+'Tera');
+					document.getElementById(a+"_clone"+clone+"Tera").remove();
+				});
+				document.getElementById(""+alvo+"").value = "";
+				document.getElementById("spanShow"+clone+"Tera").style = "display: ''";
+			}
+			function progressValue(){  
+				$('.progress-bar').each(function(){    
+					var positionProgressValue = $(this).children('.progress-value').css('left','auto');
+					var progressBarValue = $(this).children('.progress-value').html();    
+					$(this).width(progressBarValue);    
+					if($(this).width() < 21){
+					positionProgressValue.css('left','0');
+					}    
+				});
+				}
+				progressValue();
+				$(window).resize(function(){
+				progressValue();
+			});
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();progressValue();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -26,11 +214,22 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
+								<div hidden id="divCarrega" >
+									
+									<input type="text" id="excecaoSubstitutoid" name="excecaoSubstitutoid" style="width: 400px;" value=""/>
+									{{#each terapeutas}}
+									<span id="{{_id}}_spanSubs" class="spanAzul">{{usuario_nome}}<a onclick="javascript:removeDicatipoid('{{_id}}');" class="fa fa-times aClose" ></a></span>
+									
+									{{else}}
+									{{/each}}
+								</div>	
+								
+								
 								<div class="col-xs-12">
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
 											<h5 class="widget-title">
-											<i class="ace-icon fa fa-line-chart"></i>
+											<i class="ace-icon fa fa-child"></i>
 											Identificação do programa ABA
 											</h5>
 											<div class="widget-toolbar">
@@ -138,7 +337,7 @@
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
 											<h5 class="widget-title">
-											<i class="ace-icon fa fa-line-chart"></i>
+											<i class="orange ace-icon fa fa-line-chart"></i>
 											Objetivos do Programa
 											</h5>
 											
@@ -173,10 +372,10 @@
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+									<div class="widget-box ui-sortable-handle" id="widget-box-2">
 										<div class="widget-header">
 											<h5 class="widget-title">
-												<i class="ace-icon fa fa-bullseye"></i>
+												<i class="pink ace-icon fa fa-bullseye"></i>
 												Alvo
 											</h5>
 
@@ -212,38 +411,40 @@
 															<option value="1">1</option>
 															<option value="2">2</option>
 															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
 														</select>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-7">
 														<span class="label label-sm label-pink arrowed-right">Alvo 1:</span>
-														
+														<input id="progalvo1" name="progalvo1" type="text" onchange="">
 													</div>
 													
 												</div>
 												<div class="row">
 													<div class="col-sm-7">
 														<span class="label label-sm label-pink arrowed-right">Alvo 2:</span>
-														
+														<input id="progalvo2" name="progalvo2" type="text" onchange="">
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-7">
 														<span class="label label-sm label-pink arrowed-right">Alvo 3:</span>
-														
+														<input id="progalvo3" name="progalvo3" type="text" onchange="">
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-7">
 														<span class="label label-sm label-pink arrowed-right">Alvo 4:</span>
-														
+														<input id="progalvo4" name="progalvo4" type="text" onchange="">
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-7">
 														<span class="label label-sm label-pink arrowed-right">Alvo 5:</span>
-														
+														<input id="progalvo5" name="progalvo5" type="text" onchange="">
 													</div>
 												</div>
 
@@ -251,10 +452,10 @@
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+									<div class="widget-box ui-sortable-handle" id="widget-box-3">
 										<div class="widget-header">
 											<h5 class="widget-title">
-												<i class="ace-icon fa fa-cogs"></i>
+												<i class="brown ace-icon fa fa-cogs"></i>
 												Estrutura do Programa
 											</h5>
 
@@ -297,7 +498,7 @@
 													<div class="col-sm-2">
 													
 														<div class="row">
-																															<div class="checkbox">
+															<div class="checkbox">
 																<label class="block">
 																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Brincar</span>
@@ -308,7 +509,7 @@
 													<div class="col-sm-2">
 													
 														<div class="row">
-																															<div class="checkbox">
+															<div class="checkbox">
 																<label class="block">
 																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> NET</span>
@@ -323,10 +524,10 @@
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+									<div class="widget-box ui-sortable-handle" id="widget-box-4">
 										<div class="widget-header">
 											<h5 class="widget-title">
-												<i class="ace-icon fa fa-cubes"></i>
+												<i class="red ace-icon fa fa-cubes"></i>
 												Materiais
 											</h5>
 
@@ -345,13 +546,12 @@
 
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
-												
 												<div class="row">
 													<div class="col-sm-2">
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> 3D</span>
 																</label>
 															</div>
@@ -361,7 +561,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> 2D</span>
 																</label>
 															</div>
@@ -371,7 +571,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Livro(s)</span>
 																</label>
 															</div>
@@ -381,7 +581,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Vídeo(s)</span>
 																</label>
 															</div>
@@ -393,7 +593,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Tablet</span>
 																</label>
 															</div>
@@ -403,32 +603,41 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
+																	<span class="lbl bigger-120"> N/A</span>
+																</label>
+															</div>
+														</div>
+													</div>	
+													<div class="col-sm-2">
+														<div class="row">
+															<div class="checkbox">
+																<label class="block">
+																	<input name="progMateriais" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Outros</span>
 																</label>
 															</div>
 														</div>
 													</div>
-													<div class="col-sm-2">
+													
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
-																	<span class="lbl bigger-120"> N/A</span>
+																	<input id="progMateriaisoutro" name="progMateriaisoutro" type="text" onchange="">
 																</label>
 															</div>
 														</div>
-													</div>												
+																							
 												</div>
 
 											</div>
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+									<div class="widget-box ui-sortable-handle" id="widget-box-5">
 										<div class="widget-header">
 											<h5 class="widget-title">
-												<i class="ace-icon fa fa-gavel"></i>
+												<i class="green ace-icon fa fa-gavel"></i>
 												Procedimentos
 											</h5>
 
@@ -458,7 +667,7 @@
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+									<div class="widget-box ui-sortable-handle" id="widget-box-6">
 										<div class="widget-header">
 											<h5 class="widget-title">
 												<i class="ace-icon fa fa-clone"></i>
@@ -489,15 +698,48 @@
 												</div>
 											</div>
 										</div>
+									</div>
+									
+									<div class="widget-box ui-sortable-handle" id="widget-box-7">
+										<div class="widget-header">
+											<h5 class="widget-title">
+												<i class="orange ace-icon fa fa-key"></i>
+												Pontos Chaves
+											</h5>
+
+											<div class="widget-toolbar">
+												
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</div>
+										</div>
+
+										<div class="widget-body" style="display: block;">
+											<div class="widget-main">
+												<div>
+													<textarea type="text" name="progExemplos" id="progExemplos" placeholder="" class="form-control"></textarea>
+												</div>
+											</div>
+										</div>
 									</div>										
 								</div>
 							
-								<div class="col-xs-5">
+								<div class="col-xs-5"><!-- .Tipos de Dicas -->
 									<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
-													<i class="ace-icon fa fa-info"></i>
-													Dica
+													<i class="pink ace-icon fa fa-tags"></i>
+													Tipos de Dicas
 													
 												</h4>
 
@@ -515,43 +757,270 @@
 											</div>
 											<div class="widget-body">
 												<div class="widget-main">
-													<div class="alert alert-warning">
+													<p class="alert alert-info">
+														Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente.
+													</p>
 														<div class="row">
-															<strong>Tipos de Dicas</strong><br>
-																<i class="ace-icon fa fa-check-square-o"></i>
-																	Visual |
-																<i class="ace-icon fa fa-check-square-o"></i>
-																	Ecóico
-														</div>
-														<br>
-														<div class="row">
-															<strong>Procedimentos de Dicas</strong><br>
-																<i class="ace-icon fa fa-check-square-o"></i>
-																Errorless |
-																<i class="ace-icon fa fa-square-o"></i>
-																Most-to-Lead |
-																<i class="ace-icon fa fa-square-o"></i>
-																Least-to-Most
-														</div>
-														<br>
-														<div class="row">
-															<strong>Hierarquia de Dicas</strong><br>
-															<div style="text-align: center;">
-																<img width="320" height="200" alt="150x150" style="alight center" src="/images/gallery/progr_aba_graf_hierarquicadicas.png">
+															<div class="col-xs-5">
+																<select name="progDicatiposelect" id="progDicatiposelect" class="chosen-select" onchange="addDicatipoid();">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each dicas}}
+																	<option value="{{_id}}">{{dicas_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+																<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('excecaoSubstitutoid','Subs');">Deleta</button>
+																
+																<br>
+
+																<div id="divExcecaoSubstituto" style="display: block; width: 446px; min-height: 30px;max-height: 500px;text-align: left;padding: 4px;" >
+																	<span id="spanShowSubsTera" class="spanAzul" >Escolha as dicas</span>
+																</div>
+																
 															</div>
 														</div>
-														<br>
+												</div>
+											</div>
+									</div>
+								</div>
+								<div class="col-xs-5"><!-- .Procedimento de Dicas -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="red ace-icon fa fa-random"></i>
+												Procedimento de Dicas
+											</h4>
+
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<p class="alert alert-info">
+													Determine o procedimento de dicas
+												</p>
+													
+												<div class="row">
+													<div class="col-sm-2">
 														<div class="row">
-															<strong>Sequências de Dica</strong><br>
-																<strong>1.</strong> Se você for fisicamente incitar <strong><input style="border: transparent; background-color: transparent;"  id="dica1bene" name="dica1bene" value="Sem Info"></input></strong> e ele começar a responder de forma adequada, reduza o uso da dica ecóica
-																<i class="ace-icon fa fa-share"></i> para dica visual.<br>
-																<strong>2.</strong> Quando <strong><input style="border: transparent; background-color: transparent;"  id="dica2bene" name="dica1bene" value="Sem Info"></input></strong> começar a responder à dica visual, reduza <i class="ace-icon fa fa-share"></i>a partir da dica visual.<br>
-																<strong>3.</strong> Quando <strong><input style="border: transparent; background-color: transparent;"  id="dica3bene" name="dica1bene" value="Sem Info"></input></strong> começar a responder à dica visual, desvanecer a dica.<br>
-																<strong>4.</strong> Agora <strong><input style="border: transparent; background-color: transparent;"  id="dica4bene" name="dica1bene" value="Sem Info"></input></strong> está respondendo de forma independente, puro Intraverbal.
+															<div class="radio">
+																<label>
+																	<input name="form-field-radio" type="radio" class="ace">
+																	<span class="lbl"> Errorless</span>
+																</label>
+															</div>
+														</div>
+													</div>
+													<div class="col-sm-2">
+														<div class="row">
+															<div class="radio">
+															<label>
+																<input name="form-field-radio" type="radio" class="ace">
+																<span class="lbl"> Most-to-Lead</span>
+															</label>
+															</div>
+														</div>
+													</div>
+													<div class="col-sm-2">
+														<div class="row">
+															<div class="radio">
+																<label>
+																	<input name="form-field-radio" type="radio" class="ace">
+																	<span class="lbl"> Most-to-Lead</span>
+																</label>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-xs-5"><!-- .Hierarquia de Dicas (Gráfico) -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="brown ace-icon fa fa-sort-amount-desc"></i>
+												Hierarquia de Dicas (Gráfico)
+												
+											</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+											
+												<div class="row">
+												<div class="col-xs-5">
+													
+													<div class="row">
+														<div class="col-sm-2">
+															<div class="container">
+																<div class="row">
+																	<div class="col-md-6">
+																		<br>
+																		<div class="progress orange">
+																			<div class="progress-bar">
+																				<div class="progress-value" hidden>45%</div>
+																				<div class="progress-name">Teste</div>
+																			</div>
+																		</div>
+
+																		<div class="progress red">
+																			<div class="progress-bar">
+																				<div class="progress-value" hidden>25%</div>
+																				<div class="progress-name">Teste</div>
+																			</div>
+																		</div>
+																		
+																		<div class="progress pink">
+																			<div class="progress-bar">
+																				<div class="progress-value" hidden>20%</div>
+																				<div class="progress-name">Teste</div>
+																			</div>
+																		</div>
+																		
+																		<div class="progress purple">
+																			<div class="progress-bar">
+																				<div class="progress-value" hidden>10%</div>
+																				<div class="progress-name">Teste</div>
+																			</div>
+																		</div>
+																		
+																		<div class="progress green">
+																			<div class="progress-bar">
+																				<div class="progress-value" hidden>5%</div>
+																				<div class="progress-name">Teste</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-2">
+															<p>
+																
+															</p>
+														</div>
+													</div>
+													<div class="row" hidden>
+														<div class="col-sm-2">
+															<p>
+																
+															</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-2" hidden>
+															<p>
+																
+															</p>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-xs-5"><!-- .Implementação de Dica -->
+									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+										<div class="widget-header">
+											<h5 class="widget-title">
+											<i class="blue ace-icon fa fa-database"></i>
+											Implementação de Dica 
+											</h5>
+											
+
+											<div class="widget-toolbar">
+												
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											
+											</div>
+										</div>
+
+										<div class="widget-body" style="display: block;">
+											<div class="widget-main">
+												<p class="alert alert-info">
+													Determine as implementações das dicas para esse programa.
+												</p>
+												<div>
+													<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" rows="6" class="form-control"></textarea>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-5"><!-- .Sequências de Dica -->
+									<div class="widget-box ui-sortable-handle" id="widget-box-1">
+										<div class="widget-header">
+											<h5 class="widget-title">
+											<i class="orange ace-icon fa fa-list-ol"></i>
+											Sequências de Dica
+											</h5>
+											
+
+											<div class="widget-toolbar">
+												
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											
+											</div>
+										</div>
+
+										<div class="widget-body" style="display: block;">
+											<div class="widget-main">
+												<p class="alert alert-info">
+													Determine as sequências de dicas para esse programa.
+												</p>
+												<div>
+													<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" rows="6" class="form-control"></textarea>
+												</div>
+												
+											</div>
+										</div>
 									</div>
 								</div>
 							

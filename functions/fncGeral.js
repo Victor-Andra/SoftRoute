@@ -264,5 +264,9 @@ module.exports = {Filtros,
             isoString.push(ano.toString()+"-"+mes.toString()+"-"+dia.toString()+"T"+horario+":"+segs+".000Z")
         });
         return isoString;
+    },
+    diasNoMes(mes, ano) {
+        var data = new Date(ano, mes, 0);
+        return data.getDate();
     }
 }

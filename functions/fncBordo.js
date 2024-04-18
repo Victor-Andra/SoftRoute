@@ -96,21 +96,27 @@ module.exports = {
 
         switch (tipoData){
             case "Ano/Mes":
-                dataIni = new Date();
-                let mesIni = parseInt(req.body.mesBordo);//UTCMonth = 0-11
+                //dataIni = new Date();
+                let mesIni = parseInt(req.body.mesBordo)+1;//UTCMonth = 0-11//+1 Month = 1-12
                 let anoIni = parseInt(req.body.anoBordo);
+                let diaBordo = fncGeral.diasNoMes((mesIni),anoIni);
+
+                dataIni = new Date(""+anoIni+"-"+((""+mesIni+"").length == 1 ? "0"+mesIni : mesIni)+"-01");
+                if (dataIni.getTimezoneOffset() == 180){
+                    dataIni.setHours(dataIni.getHours()+3);
+                }
+
+                diaBordo = fncGeral.diasNoMes((mesIni),anoIni);
+                dataFim = new Date(""+anoIni+"-"+((""+mesIni+"").length == 1 ? "0"+mesIni : mesIni)+"-"+((""+diaBordo+"").length == 1 ? "0"+diaBordo : diaBordo)+"");
+                if (dataFim.getTimezoneOffset() == 180){
+                    dataFim.setHours(dataFim.getHours()+3);
+                }
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
                 
-                dataIni.setDate(01);
-                dataIni.setFullYear(anoIni);
-                dataIni.setUTCMonth(mesIni);
-                dataIni.setHours(0, 0, 0, 0);
-                
-                dataFim = new Date();
-                dataFim.setFullYear(anoIni);
-                dataFim.setUTCMonth(mesIni+1);
-                dataFim.setDate(01);
-                dataFim.setDate(dataFim.getDate()-1);
-                dataFim.setHours(23, 59, 59, 0);
+                dataIni = fncGeral.getDateToIsostring(dataIni);
+                dataFim = fncGeral.getDateToIsostring(dataFim);
 
                 break;
             case "Semana":
@@ -163,8 +169,8 @@ module.exports = {
                         sex.setUTCDate(sex.getUTCDate() + 5);
                         break;
                 }
-                dataIni = seg.toISOString();
-                dataFim = sex.toISOString();
+                dataIni = fncGeral.getDateToIsostring(seg);
+                dataFim = fncGeral.getDateToIsostring(sex);
 
                 break;
             case "Dia":
@@ -184,6 +190,9 @@ module.exports = {
                 dataFim.setUTCMonth(mes);
                 dataFim.setDate(dia);
                 dataFim.setHours(23,59,59,0);
+
+                dataIni = fncGeral.getDateToIsostring(dataIni);
+                dataFim = fncGeral.getDateToIsostring(dataFim);
 
                 break;
             default:
@@ -217,7 +226,6 @@ module.exports = {
                 break;
         }
 
-        console.log('listando Diários de Bordo')
         Bordo.find(busca).then((bordo) =>{
             console.log("Listagem Realizada dos Diários de Bordo!")
             bordo.forEach((b)=>{
