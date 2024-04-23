@@ -45,7 +45,8 @@ class BordoMapa{
 
 module.exports = {
     listaBordo(req, res, resposta){
-        let flash = new Resposta()
+        let usuarioAtual = req.cookies['idUsu'];
+        let flash = new Resposta();
         let resultado;
         let bordo = [];
         console.log('listando Diários de Bordo')
@@ -65,7 +66,7 @@ module.exports = {
                         flash.texto = resposta.texto;
                         flash.sucesso = resposta.sucesso;
                     }
-                    res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, flash})
+                    res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, usuarioAtual, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
@@ -73,6 +74,7 @@ module.exports = {
         })
     },
     filtraBordo(req, res){
+        let usuarioAtual = req.cookies['idUsu'];
         let tipoPessoa = req.body.bordoTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
@@ -203,23 +205,23 @@ module.exports = {
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario };
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario };
                 }
                 break;
             case "Terapeuta":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
                 } else {
-                    busca = { bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: req.body.bordoTerapeuta };
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: req.body.bordoTerapeuta };
                 }
                 break;
             default:
@@ -243,7 +245,7 @@ module.exports = {
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
                             terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                             console.log("Listagem Realizada Usuário!")
-                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene})
+                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
@@ -328,12 +330,12 @@ module.exports = {
                 terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                 console.log("terapeutasina: "+terapeutasina.length)
                 console.log("Listagem Realizada de Usuário")
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        console.log("Listagem Realizada de beneficiarios")
-                        Escola.find().then((escola) =>{
-                            escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                res.render("area/bordo/bordoMapa", {escolas: escola, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene})
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    console.log("Listagem Realizada de beneficiarios")
+                    Escola.find().then((escola) =>{
+                        escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                        res.render("area/bordo/bordoMapa", {escolas: escola, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
         })
@@ -602,11 +604,11 @@ module.exports = {
         }
     },
 
-
     deletaBordo(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
         let resposta;
         let flash = new Resposta()
-        Bordo.deleteOne({_id: req.params.id}).then(() =>{
+        Bordo.findByIdAndUpdate(req.params.id,{$set: {'bordo_lixo': 'true', 'bordo_usuidedi': usuarioAtual}}).then(() =>{
             resposta = "true";
         }).catch((err) =>{
             resposta = err;

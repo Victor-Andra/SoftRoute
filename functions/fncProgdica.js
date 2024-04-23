@@ -16,7 +16,7 @@ module.exports = {
         Progdica.find().then((progdica) =>{
             console.log("Listagem Realizada!")
 
-            if(resposta.sucesso == ""){
+            if(resposta.sucesso == "" || !resposta){
                 console.log(' objeto vazio');
                 flash.texto = ""
                 flash.sucesso = ""
@@ -25,7 +25,7 @@ module.exports = {
                 flash.sucesso = resposta.sucesso
             }
 
-            res.render('ferramentas/progdica/progdicaLis', {progdicas: progdica, resposta, flash})
+            res.render('area/aba/progdica/progdicaLis', {progdicas: progdica, resposta, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Progdicas")
@@ -35,13 +35,13 @@ module.exports = {
     },
 
     carregaProgdica(req,res){
-        res.render("ferramentas/progdica/progdicaCad")
+        res.render("area/aba/progdica/progdicaCad")
     },
 
     carregaProgdicaEdi(req,res){
         Progdica.findById(req.params.id).then((progdica) =>{
             console.log(progdica)
-            res.render('ferramentas/progdica/progdicaEdi', {progdica})
+            res.render('area/aba/progdica/progdicaEdi', {progdica})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -114,7 +114,7 @@ module.exports = {
         Progdica.deleteOne({_id: req.params.id}).then(() =>{
             Progdica.find().then((progdica) =>{
                 req.flash("success_message", "Método deletado!")
-                res.render('ferramentas/progdica/progdicaLis', {progdicas: progdica})
+                res.render('area/aba/progdica/progdicaLis', {progdicas: progdica})
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Métodos")

@@ -3,7 +3,8 @@ const ObjectId = mongoose.Types.ObjectId
 
 const ProgtipoSchema = mongoose.Schema({
     progtipo_nome: {type: String, unique: true, required: true},
-    progtipo_descricao: {type: String },
+    progtipo_ordem: {type: String, required: false },
+    progtipo_descricao: {type: String, required: false },
     //Atributos de controle
     progtipo_usuidcad :{ type: ObjectId, required: false },
     progtipo_usuidedi :{ type: ObjectId, required: false },
@@ -14,6 +15,7 @@ const ProgtipoSchema = mongoose.Schema({
 class Progtipo{
     constructor(
         progtipo_nome,
+        progtipo_ordem,
         progtipo_descricao,
         //Atributos de controle
         progtipo_usuidcad,
@@ -22,6 +24,7 @@ class Progtipo{
         progtipo_dataedi
         ){
         this.progtipo_nome = progtipo_nome,
+        this.progtipo_ordem = progtipo_ordem,
         this.progtipo_descricao = progtipo_descricao,
          //Atributos de controle
         this.progtipo_usuidcad = progtipo_usuidcad,
@@ -44,6 +47,7 @@ module.exports = {ProgtipoModel,ProgtipoSchema,
         await ProgtipoModel.findByIdAndUpdate(req.body.progtipoId, 
             {$set: {
                 progtipo_nome: req.body.progtipoNome,
+                progtipo_ordem: req.body.progtipoOrdem,
                 progtipo_descricao: req.body.progtipoDescricao,
                 prog_usuidedi : req.body.progUsuidedi,
                 prog_dataedi : dataAtual
@@ -65,6 +69,7 @@ module.exports = {ProgtipoModel,ProgtipoSchema,
             console.log("progtipomodel");
             const newProgtipo = new ProgtipoModel({
                 progtipo_nome: req.body.progtipoNome,
+                progtipo_ordem: req.body.progtipoOrdem,
                 progtipo_descricao: req.body.progtipoDescricao,
                 progtipo_usuidcad: req.body.progtipoUsuidedi ,
                 progtipo_datacad: dataAtual

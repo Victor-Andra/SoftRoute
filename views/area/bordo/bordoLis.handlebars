@@ -252,6 +252,7 @@
 						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+						<input id="usuarioAtual" value="{{usuarioAtual.usuarioAtual}}" >
 					</div>
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
@@ -432,11 +433,11 @@
 																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
-																<!-- ocultar 
+															{{#ifEqual usuarioAtual.usuarioAtual bordo_terapeutaid}}
 																<a class="ridden" class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-																-->
+															{{/ifEqual}}
 															</div>
 															
 														</td>

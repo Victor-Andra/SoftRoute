@@ -16,7 +16,7 @@ module.exports = {
         Progtipo.find().then((progtipo) =>{
             console.log("Listagem Realizada!")
 
-            if(resposta.sucesso == ""){
+            if(resposta.sucesso == "" || !resposta){
                 console.log(' objeto vazio');
                 flash.texto = ""
                 flash.sucesso = ""
@@ -25,7 +25,7 @@ module.exports = {
                 flash.sucesso = resposta.sucesso
             }
 
-            res.render('ferramentas/progtipo/progtipoLis', {progtipos: progtipo, resposta, flash})
+            res.render('area/aba/progtipo/progtipoLis', {progtipos: progtipo, resposta, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Progtipos")
@@ -35,13 +35,13 @@ module.exports = {
     },
 
     carregaProgtipo(req,res){
-        res.render("ferramentas/progtipo/progtipoCad")
+        res.render("area/aba/progtipo/progtipoCad")
     },
 
     carregaProgtipoEdi(req,res){
         Progtipo.findById(req.params.id).then((progtipo) =>{
             console.log(progtipo)
-            res.render('ferramentas/progtipo/progtipoEdi', {progtipo})
+            res.render('area/aba/progtipo/progtipoEdi', {progtipo})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -114,7 +114,7 @@ module.exports = {
         Progtipo.deleteOne({_id: req.params.id}).then(() =>{
             Progtipo.find().then((progtipo) =>{
                 req.flash("success_message", "Método deletado!")
-                res.render('ferramentas/progtipo/progtipoLis', {progtipos: progtipo})
+                res.render('area/aba/progtipo/progtipoLis', {progtipos: progtipo})
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Métodos")

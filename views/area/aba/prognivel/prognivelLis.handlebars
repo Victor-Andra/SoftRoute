@@ -12,7 +12,7 @@
 			function confirmeDeletar(id){
 				let confirmado = confirm("Quer mesmo deletar esse Laudo? essa ação é irreversível");
 				if(confirmado == true){
-					window.location.href=("/menu/ferramentas/metodo/del/"+id);
+					window.location.href=("/menu/area/aba/prognivel/del/"+id);
 				}
 			}
 		</script>
@@ -95,20 +95,20 @@
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Métodos</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Ordem</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
-														<th>Ação</th>
 														<th>
+															Ação
 															<div class="action-buttons">
-																<a class="green" title="Adicionar Novo" href="/menu/ferramentas/metodo/cad">
+																<a class="green" title="Adicionar Novo" href="/menu/area/aba/prognivel/prognivelcad">
 																	<i class="ace-icon fa fa-plus bigger-130"></i>
 																</a>
 															</div>
-														</th>
+															</th>
 													</tr>
 													
 												</thead>
 												
 												<tbody>
-													{{#each metodos}}
+													{{#each prognivels}}
 														<tr role="row" class="odd">
 
 															<th class="center">
@@ -118,12 +118,12 @@
 																</label>
 															</th>
 
-															<td>{{metodo_nome}}</td>
-															<td>{{metodo_ordem}}</td>
-															<td>{{metodo_descricao}}</td>
+															<td>{{prognivel_nome}}</td>
+															<td>{{prognivel_ordem}}</td>
+															<td>{{prognivel_descricao}}</td>
 															<td colspan="2">
 																<div class="action-buttons">
-																	<a class="green" href="/menu/ferramentas/metodo/edi/{{_id}}">
+																	<a class="green" href="/menu/area/aba/prognivel/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
 																	<a class="hidden" class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">

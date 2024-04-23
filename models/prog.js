@@ -8,6 +8,9 @@ const ProgSchema = mongoose.Schema({
     prog_tipo :{ type: String, required: false },
     prog_nivel :{ type: String, required: false },
     prog_data :{ type: String, required: false },
+    prog_dataini :{ type: String, required: false },
+    prog_status :{ type: String, required: false },
+    prog_datastatus :{ type: String, required: false },
     prog_objetivo :{ type: String, required: false },
     prog_alvo :{ type: String, required: false },
     prog_estrutura :{ type: String, required: false },
@@ -25,8 +28,8 @@ const ProgSchema = mongoose.Schema({
     prog_usuidcad :{ type: ObjectId, required: false },
     prog_usuidedi :{ type: ObjectId, required: false },
     prog_datacad :{ type: String, required: false },
-    prog_dataedi :{ type: String, required: false }
-
+    prog_dataedi :{ type: String, required: false },
+    prog_lixo :{ type: String, required: false }
 })
 
 class Prog{
@@ -35,6 +38,9 @@ class Prog{
         prog_tipo,
         prog_nivel,
         prog_data,
+        prog_dataini,
+        prog_status,
+        prog_datastatus,
         prog_objetivo,
         prog_alvo,
         prog_estrutura,
@@ -52,12 +58,16 @@ class Prog{
         prog_usuidcad,
         prog_usuidedi,
         prog_datacad,
-        prog_dataedi
+        prog_dataedi,
+        prog_lixo
         ){
         this.prog_beneid = prog_beneid,
         this.prog_tipo = prog_tipo,
         this.prog_nivel = prog_nivel,
         this.prog_data = prog_data,
+        this.prog_dataini = prog_dataini,
+        this.prog_status = prog_status,
+        this.prog_datastatus = prog_datastatus,
         this.prog_objetivo = prog_objetivo,
         this.prog_alvo = prog_alvo,
         this.prog_estrutura = prog_estrutura,
@@ -75,7 +85,8 @@ class Prog{
         this.prog_usuidcad = prog_usuidcad,
         this.prog_usuidedi = prog_usuidedi,
         this.prog_datacad = prog_datacad,
-        this.prog_dataedi = prog_dataedi
+        this.prog_dataedi = prog_dataedi,
+        this.prog_lixo = prog_lixo
     }
 }
 
@@ -94,6 +105,9 @@ module.exports = {ProgModel,ProgSchema,
                 prog_tipo : req.body.progTipo,
                 prog_nivel : req.body.progNivel,
                 prog_data : req.body.progData,
+                prog_dataini : req.body.progDataini,
+                prog_status : req.body.progStatus,
+                prog_datastatus : req.body.progDatastatus,
                 prog_objetivo : req.body.progObjetivo,
                 prog_alvo : req.body.progAlvo,
                 prog_estrutura : req.body.progEstrutura,
@@ -109,8 +123,10 @@ module.exports = {ProgModel,ProgSchema,
                 prog_obs : req.body.progObs,
                 //Atributos de controle
                 prog_usuidedi : req.body.progUsuidedi,
-                prog_dataedi : dataAtual.toISOString()
+                prog_dataedi : dataAtual.toISOString(),
+                prog_lixo : req.body.progLixo,
                 }}
+
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -131,6 +147,9 @@ module.exports = {ProgModel,ProgSchema,
             prog_tipo : req.body.progTipo,
             prog_nivel : req.body.progNivel,
             prog_data : req.body.progData,
+            prog_dataini : req.body.progDataini,
+            prog_status : req.body.progStatus,
+            prog_datastatus : req.body.progDatastatus,
             prog_objetivo : req.body.progObjetivo,
             prog_alvo : req.body.progAlvo,
             prog_estrutura : req.body.progEstrutura,
@@ -146,7 +165,8 @@ module.exports = {ProgModel,ProgSchema,
             prog_obs : req.body.progObs,
             //Atributos de controle
             prog_usuidcad : req.body.progUsuidcad,
-            prog_datacad : dataAtual.toISOString()
+            prog_datacad : dataAtual.toISOString(),
+            prog_lixo : req.body.progLixo,
             
         });
         console.log("newAtend save");

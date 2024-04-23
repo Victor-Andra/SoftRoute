@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Metodo</title>
+		<title>Dicas dos programas ABA Editar</title>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -16,10 +16,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Metodo Editar</a>
+								<a href="#">Dica Editar</a>
 							</li>
 
-							<li class="active">Metodo Editar</li>
+							<li class="active">Dica Editar</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,13 +27,13 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/metodo/atualizar" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progdica/atualizar" method="POST">
 
 
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Métodos</h4>
+											<h4 class="widget-title">Dicas</h4>
 
 											<span class="widget-toolbar">
 
@@ -52,33 +52,31 @@
 											<div class="widget-main">
 
 												<div class="hidden">
-													<input id="idMetodo" name="idMetodo" value="{{metodo._id}}" />
+													<input id="idProgdica" name="idProgdica" value="{{progdica._id}}" />
 												</div>
 				
-												<label> Método</label>
+												<label> Dica</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="metodoNome" id="metodoNome" class="form-control" value="{{metodo.metodo_nome}}"/>
+														<input type="text" name="progdicaNome" id="progdicaNome" class="form-control" value="{{metodo.progdica_nome}}"/>
 													</div>
 												</div>
 												
 												<label> Ordem</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="metodoOrdem" id="metodoOrdem"  class="form-control" value="{{metout.metodo_ordem}}"/>
+														<input type="text" name="progdicaOrdem" id="progdicaOrdem"  class="form-control" value="{{metout.progdica_ordem}}"/>
 													</div>
 												</div>
 				
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="metodoDescricao" id="metodoDescricao" class="form-control" value="{{metodo.metodo_descricao}}"/>
+														<input type="text" name="progdicaDescricao" id="progdicaDescricao" class="form-control" value="{{metodo.progdica_descricao}}"/>
 													</div>
 												</div>
 
-												<div class="hidden">
-													<input name="metodoId" value="{{metodo._id}}" />
-												</div>
+												
 
 
 
@@ -99,7 +97,7 @@
 										</button>
 	
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/ferramentas/metodo/lis">
+										<button class="btn btn-warning"  href="/menu/area/aba/metodo/lis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>

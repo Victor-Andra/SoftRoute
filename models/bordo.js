@@ -100,7 +100,8 @@ const BordoSchema = mongoose.Schema({
     bordo_datacad :{type: Date, required: false},
     bordo_dataedi :{type: Date, required: false},
     bordo_usuidcad :{type: String, required: false},
-    bordo_usuidedi :{type: String, required: false}
+    bordo_usuidedi :{type: String, required: false},
+    bordo_lixo: {type: String, required: false}
 })
 
 class Bordo{
@@ -199,7 +200,8 @@ class Bordo{
         bordo_datacad,
         bordo_dataedi,
         bordo_usuidcad,
-        bordo_usuidedi
+        bordo_usuidedi,
+        bordo_lixo
     ){
         this.bordo_terapeutaid = bordo_terapeutaid,
         this.bordo_beneid = bordo_beneid,
@@ -295,7 +297,8 @@ class Bordo{
         this.bordo_datacad = bordo_datacad,
         this.bordo_dataedi = bordo_dataedi,
         this.bordo_usuidcad = bordo_usuidcad,
-        this.bordo_usuidedi = bordo_usuidedi
+        this.bordo_usuidedi = bordo_usuidedi,
+        this.bordo_lixo = bordo_lixo
     }
 }
 
@@ -402,7 +405,8 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_incidente: req.body.bordoIncidente,
                 bordo_obs: req.body.bordoObs,
                 bordo_dataedi : dataAtual,
-                bordo_usuidedi: req.cookies['idUsu']
+                bordo_usuidedi: req.cookies['idUsu'],
+                bordo_lixo: req.body.bordoLixo
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -515,7 +519,8 @@ module.exports = {BordoModel,BordoSchema,
             bordo_incidente: req.body.bordoIncidente,
             bordo_obs: req.body.bordoObs,
             bordo_datacad: dataAtual,
-            bordo_usuidcad: usuarioAtual
+            bordo_usuidcad: usuarioAtual,
+            bordo_lixo: req.body.bordoLixo
         });
         console.log("newBordo save");
         await newBordo.save().then(()=>{

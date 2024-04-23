@@ -3,7 +3,8 @@ const ObjectId = mongoose.Types.ObjectId
 
 const PrognivelSchema = mongoose.Schema({
     prognivel_nome: {type: String, unique: true, required: true},
-    prognivel_descricao: {type: String },
+    prognivel_ordem: {type: String, required: false },
+    prognivel_descricao: {type: String, required: false },
     //Atributos de controle
     prognivel_usuidcad :{ type: ObjectId, required: false },
     prognivel_usuidedi :{ type: ObjectId, required: false },
@@ -14,6 +15,7 @@ const PrognivelSchema = mongoose.Schema({
 class Prognivel{
     constructor(
         prognivel_nome,
+        prognivel_ordem,
         prognivel_descricao,
         //Atributos de controle
         prognivel_usuidcad,
@@ -22,6 +24,7 @@ class Prognivel{
         prognivel_dataedi
         ){
         this.prognivel_nome = prognivel_nome,
+        this.prognivel_ordem = prognivel_ordem,
         this.prognivel_descricao = prognivel_descricao,
          //Atributos de controle
         this.prognivel_usuidcad = prognivel_usuidcad,
@@ -44,6 +47,7 @@ module.exports = {PrognivelModel,PrognivelSchema,
         await PrognivelModel.findByIdAndUpdate(req.body.prognivelId, 
             {$set: {
                 prognivel_nome: req.body.prognivelNome,
+                prognivel_ordem: req.body.prognivelOrdem,
                 prognivel_descricao: req.body.prognivelDescricao,
                 prog_usuidedi : req.body.progUsuidedi,
                 prog_dataedi : dataAtual
@@ -65,6 +69,7 @@ module.exports = {PrognivelModel,PrognivelSchema,
             console.log("prognivelmodel");
             const newPrognivel = new PrognivelModel({
                 prognivel_nome: req.body.prognivelNome,
+                prognivel_ordem: req.body.prognivelOrdem,
                 prognivel_descricao: req.body.prognivelDescricao,
                 prognivel_usuidcad: req.body.prognivelUsuidedi ,
                 prognivel_datacad: dataAtual

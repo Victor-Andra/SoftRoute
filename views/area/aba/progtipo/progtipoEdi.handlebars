@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Metodo</title>
+		<title>Tipo programa ABA editar</title>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -16,10 +16,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Metodo Editar</a>
+								<a href="#">Home</a>
 							</li>
 
-							<li class="active">Metodo Editar</li>
+							<li class="active">Tipo programa ABA Editar</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,13 +27,13 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/metodo/atualizar" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progtipo/atualizar" method="POST">
 
 
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Métodos</h4>
+											<h4 class="widget-title">Tipo programa ABA</h4>
 
 											<span class="widget-toolbar">
 
@@ -52,36 +52,31 @@
 											<div class="widget-main">
 
 												<div class="hidden">
-													<input id="idMetodo" name="idMetodo" value="{{metodo._id}}" />
+													<input id="progtipoId" name="progtipoId" value="{{progtipo._id}}" />
 												</div>
 				
-												<label> Método</label>
+												<label> Tipo</label>
 												<div class="form-group">
 													<div class="col-sm-12">
-														<input type="text" name="metodoNome" id="metodoNome" class="form-control" value="{{metodo.metodo_nome}}"/>
+														<input type="text" name="progtipoNome" id="progtipoNome" class="form-control" value="{{metodo.metodo_nome}}"/>
 													</div>
 												</div>
 												
 												<label> Ordem</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="metodoOrdem" id="metodoOrdem"  class="form-control" value="{{metout.metodo_ordem}}"/>
+														<input type="text" name="progtipoOrdem" id="progtipoOrdem"  class="form-control" value="{{metout.metodo_ordem}}"/>
 													</div>
 												</div>
 				
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="metodoDescricao" id="metodoDescricao" class="form-control" value="{{metodo.metodo_descricao}}"/>
+														<input type="text" name="progtipoDescricao" id="progtipoDescricao" class="form-control" value="{{metodo.metodo_descricao}}"/>
 													</div>
 												</div>
 
-												<div class="hidden">
-													<input name="metodoId" value="{{metodo._id}}" />
-												</div>
-
-
-
+												
 											</div>
 										</div>
 									</div>
@@ -99,7 +94,7 @@
 										</button>
 	
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/ferramentas/metodo/lis">
+										<button class="btn btn-warning"  href="/menu/area/aba/progtipo/lis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>

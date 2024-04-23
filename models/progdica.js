@@ -3,7 +3,8 @@ const ObjectId = mongoose.Types.ObjectId
 
 const ProgdicaSchema = mongoose.Schema({
     progdica_nome: {type: String, unique: true, required: true},
-    progdica_descricao: {type: String },
+    progdica_ordem: {type: String, required: false },
+    progdica_descricao: {type: String, required: false },
     //Atributos de controle
     progdica_usuidcad :{ type: ObjectId, required: false },
     progdica_usuidedi :{ type: ObjectId, required: false },
@@ -14,6 +15,7 @@ const ProgdicaSchema = mongoose.Schema({
 class Progdica{
     constructor(
         progdica_nome,
+        progdica_ordem,
         progdica_descricao,
         //Atributos de controle
         progdica_usuidcad,
@@ -22,6 +24,7 @@ class Progdica{
         progdica_dataedi
         ){
         this.progdica_nome = progdica_nome,
+        this.progdica_ordem = progdica_ordem,
         this.progdica_descricao = progdica_descricao,
          //Atributos de controle
         this.progdica_usuidcad = progdica_usuidcad,
@@ -44,6 +47,7 @@ module.exports = {ProgdicaModel,ProgdicaSchema,
         await ProgdicaModel.findByIdAndUpdate(req.body.progdicaId, 
             {$set: {
                 progdica_nome: req.body.progdicaNome,
+                progdica_ordem: req.body.progdicaOrdem,
                 progdica_descricao: req.body.progdicaDescricao,
                 prog_usuidedi : req.body.progUsuidedi,
                 prog_dataedi : dataAtual
@@ -65,6 +69,7 @@ module.exports = {ProgdicaModel,ProgdicaSchema,
             console.log("progdicamodel");
             const newProgdica = new ProgdicaModel({
                 progdica_nome: req.body.progdicaNome,
+                progdica_ordem: req.body.progdicaOrdem,
                 progdica_descricao: req.body.progdicaDescricao,
                 progdica_usuidcad: req.body.progdicaUsuidedi ,
                 progdica_datacad: dataAtual

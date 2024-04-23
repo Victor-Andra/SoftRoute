@@ -1649,7 +1649,6 @@ router.get('/beneficiario/sessao/lis', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessao(req, res);
 })
 
-
 //Lista de Requisição de Tabela com QT de Atendimentos por beneficiario.
 router.get('/beneficiario/sessao/listab/:id', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessaoTab(req, res); 
@@ -1994,38 +1993,144 @@ router.get('/area/mapabll/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//del
 
 
 //Menu Sonda ** Area Tecnicos e ABA 
-//Carrega Cadastro
+//Carrega Cadastro sonda (DELETAR)
 router.get('/area/aba/sonda/sondacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncSonda.carregaSonda(req, res);
 })
 
-//Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
+//Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data (DELETAR)
 router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncSonda.listaSonda(req, res);
 })
 
+//------------------------------------------------------------------------------------------------
+
 //Menu Programas ** Area Tecnicos e ABA 
-//Carrega Cadastro
+//Carrega Cadastro ABA
 router.get('/area/aba/prog/progcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncProg.carregaProg(req, res);
 })
 
-//Lista Progrmas por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
-    fncProg.listaProg(req, res);
+router.get('/area/aba/prog/progcadBene/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncProg.carregaProg(req, res);
 })
 
-//Menu Gráfico do Programa ** Area Tecnicos e ABA 
-//Carrega Cadastro
+//Lista Programas ABA
+router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncProg.listaProg(req, res, resposta);
+})
+
+router.post('/area/aba/prog/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+    fncProg.cadastraProg(req, res);
+})
+
+router.get('/area/aba/prog/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+    fncProg.deletaProg(req, res);
+})
+
+router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProg.carregaProgEdi(req, res);
+})
+
+//------------------------------------------------------------------------------------------------
+
+//Menu Dicas ** Area Tecnicos e ABA 
+//Carrega Cadastro de Dicas programa ABA
+router.get('/area/aba/progdica/progdicacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de dicas
+    fncProgdica.carregaProgdica(req, res);
+})
+
+//Lista Dicas do Programas ABA
+router.get('/area/aba/progdica/progdicalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de dica
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncProgdica.listaProgdica(req, res, resposta);
+})
+
+router.post('/area/aba/progdica/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+    fncProgdica.cadastraProgdica(req, res);
+})
+
+router.get('/area/aba/progdica/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+    fncProgdica.deletaProgdica(req, res);
+})
+
+router.get('/area/aba/progdica/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProgdica.carregaProgdicaEdi(req, res);
+})
+
+//------------------------------------------------------------------------------------------------
+
+//Menu Nivel ** Area Tecnicos e ABA 
+//Carrega Cadastro de Nivel dos programa ABA
+router.get('/area/aba/prognivel/prognivelcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de dicas
+    fncPrognivel.carregaPrognivel(req, res);
+})
+
+//Lista Nivel do Programas ABA
+router.get('/area/aba/prognivel/prognivellis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de dica
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncPrognivel.listaPrognivel(req, res, resposta);;
+})
+
+router.post('/area/aba/prognivel/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+    fncPrognivel.cadastraPrognivel(req, res);
+})
+
+router.get('/area/aba/prognivel/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+    fncPrognivel.deletaPrognivel(req, res);
+})
+
+router.get('/area/aba/prognivel/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncPrognivel.carregaPrognivelEdi(req, res);
+})
+
+//----------------------------------------------------------------------------------------------
+
+//Menu Tipo ** Area Tecnicos e ABA 
+//Carrega Cadastro de Tipos dos programa ABA
+router.get('/area/aba/progtipo/progtipocad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de dicas
+    fncProgtipo.carregaProgtipo(req, res);
+})
+
+//Lista Tipo do Programas ABA
+router.get('/area/aba/progtipo/progtipolis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de dica
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncProgtipo.listaProgtipo(req, res, resposta);;
+})
+
+router.post('/area/aba/progtipo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+    fncProgtipo.cadastraProgtipo(req, res);
+})
+
+router.get('/area/aba/progtipo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+    fncProgtipo.deletaProgtipo(req, res);
+})
+
+router.get('/area/aba/progtipo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProgtipo.carregaProgtipoEdi(req, res);
+})
+//------------------------------------------------------------------------------------------------
+//Menu Gráfico do Programa ** Area Tecnicos e ABA (DELETAR)
+//Carrega Cadastro (DELETAR)
 router.get('/area/aba/grafprog/grafprogcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
     fncGrafprog.carregaGrafprog(req, res);
 })
 
-//Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data
+//Lista Grafico Programa ABA (DELETAR)
 router.get('/area/aba/grafprog/grafproglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
     fncGrafprog.listaGrafprog(req, res);
 })
 
+//------------------------------------------------------------------------------------------------
 //Menu SET ** Area Tecnicos e ABA 
 //Carrega Cadastro
 router.get('/area/aba/set/setcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
@@ -2037,6 +2142,7 @@ router.get('/area/aba/set/setlis', fncGeral.IsAuthenticated, (req,res) =>{//dire
     fncSet.listaSet(req, res);
 })
 
+//------------------------------------------------------------------------------------------------
 //Menu NAT ** Area Tecnicos e ABA 
 //Carrega Cadastro
 router.get('/area/aba/nat/natcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario NAT - Naturalístico

@@ -234,15 +234,9 @@
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
 								<div  id="divCarrega" >
 									<input type="text" id="idBene" name="idBene" style="width: 400px;" value="{{idBene}}"/>
-									
-									<input type="text" id="progEstrutura" name="progEstrutura" style="width: 400px;" />
-									<input type="text" id="progMateriais" name="progMateriais" style="width: 400px;" />
 
-									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value=""/>
-									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value=""/>
 
 									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value=""/>
-									
 									{{#each progdicas}}
 									<span id="{{_id}}_spanExce" class="spanAzul">{{progdica_nome}}<a onclick="javascript:removeExcecaoTerapeutaid('{{_id}}');" class="fa fa-times aClose" ></a></span>
 									{{else}}
@@ -309,7 +303,6 @@
 														<div class="input-group">
 															<div class="input-group">
 																<select name="progStatus" id="progStatus" class="chosen-select" onchange="">
-																			<option value="Aguardando">Aguardando</option>
 																			<option value="Inicio">Inicio</option>
 																			<option value="Andamento">Andamento</option>
 																			<option value="Pausado">Pausado</option>
@@ -319,10 +312,10 @@
 														</div>
 													</div>
 													<div class="col-sm-3">
-														<label>Data do Status</label>
+														<label>Data do evento do programa ABA</label>
 														<div class="input-group">
 															<div class="input-group">
-																<input id="progDatastatus" name="progDatastatus" type="date" onchange="">
+																<input id="progDataeve" name="progDataeve" type="date" onchange="">
 															</div>
 														</div>
 													</div>
@@ -402,15 +395,15 @@
 										</div>
 									</div>
 
-									<div class="widget-box ui-sortable-handle" id="widget-box-5">
+									<div class="widget-box ui-sortable-handle" id="widget-box-2">
 										<div class="widget-header">
 											<h5 class="widget-title">
-												<i class="green ace-icon fa fa-bullseye"></i>
-												Alvo(s)
+												<i class="pink ace-icon fa fa-bullseye"></i>
+												Alvo
 											</h5>
 
 											<div class="widget-toolbar">
-								
+												
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
 												</a>
@@ -422,18 +415,62 @@
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
+											
 											</div>
 										</div>
 
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<p class="alert alert-info">
-													Determine a lista de alvo(s) e descreva cada um deles.
+													Determine a quantidade de alvos e descreva cada um deles!
 												</p>
-												<div>
-													<textarea type="text" name="progAlvo" id="progAlvo" rows="8" class="form-control"></textarea>
+												<div class="row">
+													<div class="col-sm-2">
+														<label>Quantidade de alvo(s):</label>
+													</div>
+													<div class="col-sm-2">
+														<select name="progNivelid" id="progNivelid" class="chosen-select" onchange="">
+															<option value="-">-</option>
+															<option value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
+														</select>
+													</div>
 												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<span class="label label-sm label-pink arrowed-right">Alvo 1:</span>
+														<input id="progalvo1" name="progalvo1" type="text" onchange="">
+													</div>
+													
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<span class="label label-sm label-pink arrowed-right">Alvo 2:</span>
+														<input id="progalvo2" name="progalvo2" type="text" onchange="">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<span class="label label-sm label-pink arrowed-right">Alvo 3:</span>
+														<input id="progalvo3" name="progalvo3" type="text" onchange="">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<span class="label label-sm label-pink arrowed-right">Alvo 4:</span>
+														<input id="progalvo4" name="progalvo4" type="text" onchange="">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<span class="label label-sm label-pink arrowed-right">Alvo 5:</span>
+														<input id="progalvo5" name="progalvo5" type="text" onchange="">
+													</div>
+												</div>
+
 											</div>
 										</div>
 									</div>
@@ -465,7 +502,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura1" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Estruturado</span>
 																</label>
 															</div>
@@ -475,7 +512,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura2" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Desestruturado</span>
 																</label>
 															</div>
@@ -486,7 +523,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura3" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> Brincar</span>
 																</label>
 															</div>
@@ -497,7 +534,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura4" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input name="form-field-checkbox" type="checkbox" class="ace input-lg">
 																	<span class="lbl bigger-120"> NET</span>
 																</label>
 															</div>
@@ -744,8 +781,8 @@
 											</div>
 											<div class="widget-body">
 												<div class="widget-main">
-													<p class="alert alert-danger">
-														Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+													<p class="alert alert-info">
+														Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente.
 													</p>
 														
 														

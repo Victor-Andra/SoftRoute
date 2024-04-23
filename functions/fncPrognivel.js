@@ -16,7 +16,7 @@ module.exports = {
         Prognivel.find().then((prognivel) =>{
             console.log("Listagem Realizada!")
 
-            if(resposta.sucesso == ""){
+            if(resposta.sucesso == "" || !resposta){
                 console.log(' objeto vazio');
                 flash.texto = ""
                 flash.sucesso = ""
@@ -25,7 +25,7 @@ module.exports = {
                 flash.sucesso = resposta.sucesso
             }
 
-            res.render('ferramentas/prognivel/prognivelLis', {prognivels: prognivel, resposta, flash})
+            res.render('area/aba/prognivel/prognivelLis', {prognivels: prognivel, resposta, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Prognivels")
@@ -35,13 +35,13 @@ module.exports = {
     },
 
     carregaPrognivel(req,res){
-        res.render("ferramentas/prognivel/prognivelCad")
+        res.render("area/aba/prognivel/prognivelCad")
     },
 
     carregaPrognivelEdi(req,res){
         Prognivel.findById(req.params.id).then((prognivel) =>{
             console.log(prognivel)
-            res.render('ferramentas/prognivel/prognivelEdi', {prognivel})
+            res.render('area/aba/prognivel/prognivelEdi', {prognivel})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -114,7 +114,7 @@ module.exports = {
         Prognivel.deleteOne({_id: req.params.id}).then(() =>{
             Prognivel.find().then((prognivel) =>{
                 req.flash("success_message", "Método deletado!")
-                res.render('ferramentas/prognivel/prognivelLis', {prognivels: prognivel})
+                res.render('area/aba/prognivel/prognivelLis', {prognivels: prognivel})
             }).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Métodos")
