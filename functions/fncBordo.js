@@ -75,6 +75,7 @@ module.exports = {
     },
     filtraBordo(req, res){
         let usuarioAtual = req.cookies['idUsu'];
+        console.log("usuarioAtual: "+usuarioAtual)
         let tipoPessoa = req.body.bordoTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
@@ -87,7 +88,6 @@ module.exports = {
         let mes;
         let dia;
         let isAgendaTerapeuta = false;
-        let idUsu = req.cookies['idUsu'];
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421903a12aa557219a0fd3','6242191fa12aa557219a0fd9','6242190fa12aa557219a0fd6','624218f5a12aa557219a0fd0'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -205,21 +205,21 @@ module.exports = {
         switch (tipoPessoa){
             case "Geral":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(usuarioAtual) }
                 } else {
                     busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } }
                 }
                 break;
             case "Beneficiario":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario , bordo_terapeutaid: new ObjectId(usuarioAtual) }
                 } else {
                     busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_beneid: req.body.bordoBeneficiario };
                 }
                 break;
             case "Terapeuta":
                 if (isAgendaTerapeuta){
-                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(idUsu) }
+                    busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: new ObjectId(usuarioAtual) }
                 } else {
                     busca = { bordo_lixo : "false", bordo_dataativ: { $gte :new Date(dataIni), $lte:  new Date(dataFim), } , bordo_terapeutaid: req.body.bordoTerapeuta };
                 }
@@ -245,7 +245,7 @@ module.exports = {
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
                             terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                             console.log("Listagem Realizada Usuário!")
-                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual})
+                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
