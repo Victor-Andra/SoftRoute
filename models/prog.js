@@ -5,8 +5,8 @@ const ObjectId = mongoose.Types.ObjectId
 
 const ProgSchema = mongoose.Schema({
     prog_beneid :{ type: ObjectId, required: false },
-    prog_tipo :{ type: String, required: false },
-    prog_nivel :{ type: String, required: false },
+    prog_tipo :{ type: ObjectId, required: false },
+    prog_nivel :{ type: ObjectId, required: false },
     prog_data :{ type: String, required: false },
     prog_dataini :{ type: String, required: false },
     prog_status :{ type: String, required: false },
@@ -18,7 +18,7 @@ const ProgSchema = mongoose.Schema({
     prog_procedimento :{ type: String, required: false },
     prog_exemplo :{ type: String, required: false },
     prog_pchave :{ type: String, required: false },
-    prog_dicatipo :{ type: String, required: false },
+    prog_dicatipo :{ type: ObjectId, required: false },
     prog_dicaproced :{ type: String, required: false },
     prog_dicahiera :{ type: String, required: false },
     prog_dicasequen :{ type: String, required: false },
@@ -124,7 +124,7 @@ module.exports = {ProgModel,ProgSchema,
                 //Atributos de controle
                 prog_usuidedi : req.body.progUsuidedi,
                 prog_dataedi : dataAtual.toISOString(),
-                prog_lixo : req.body.progLixo,
+                prog_lixo : "false"
                 }}
 
         ).then((res) =>{
@@ -137,45 +137,44 @@ module.exports = {ProgModel,ProgSchema,
         })
         return resultado;
     },
+    
     progAdicionar: async (req,res) => {
         let dataAtual = new Date();
-        console.log("progmodel");
-        console.log("req.body.progdata:")
-        console.log(req.body.progdata)
-        const NewProg = new ProgModel({
-            prog_beneid : req.body.progBeneid,
-            prog_tipo : req.body.progTipo,
-            prog_nivel : req.body.progNivel,
-            prog_data : req.body.progData,
-            prog_dataini : req.body.progDataini,
-            prog_status : req.body.progStatus,
-            prog_datastatus : req.body.progDatastatus,
-            prog_objetivo : req.body.progObjetivo,
-            prog_alvo : req.body.progAlvo,
-            prog_estrutura : req.body.progEstrutura,
-            prog_materiais : req.body.progMateriais,
-            prog_procedimento : req.body.progProcedimento,
-            prog_exemplo : req.body.progExemplo,
-            prog_pchave : req.body.progPchave,
-            prog_dicatipo : req.body.progDicatipo,
-            prog_dicaproced : req.body.progDicaproced,
-            prog_dicahiera : req.body.progDicahiera,
-            prog_dicasequen : req.body.progDicasequen,
-            prog_dicaimplement : req.body.progDicaimplement,
-            prog_obs : req.body.progObs,
-            //Atributos de controle
-            prog_usuidcad : req.body.progUsuidcad,
-            prog_datacad : dataAtual.toISOString(),
-            prog_lixo : req.body.progLixo,
-            
-        });
-        console.log("newAtend save");
-        await newAtend.save().then(()=>{
-            console.log("Cadastro realizado!");
-            return true;
-        }).catch((err) => {
-            console.log(err)
-            return err;
-        });
+           console.log("progmodel");
+           const newProg = new ProgModel({
+                prog_beneid : req.body.progBeneid,
+                prog_tipo : req.body.progTipo,
+                prog_nivel : req.body.progNivel,
+                prog_data : req.body.progData,
+                prog_dataini : req.body.progDataini,
+                prog_status : req.body.progStatus,
+                prog_datastatus : req.body.progDatastatus,
+                prog_objetivo : req.body.progObjetivo,
+                prog_alvo : req.body.progAlvo,
+                prog_estrutura : req.body.progEstrutura,
+                prog_materiais : req.body.progMateriais,
+                prog_procedimento : req.body.progProcedimento,
+                prog_exemplo : req.body.progExemplo,
+                prog_pchave : req.body.progPchave,
+                prog_dicatipo : req.body.progDicatipo,
+                prog_dicaproced : req.body.progDicaproced,
+                prog_dicahiera : req.body.progDicahiera,
+                prog_dicasequen : req.body.progDicasequen,
+                prog_dicaimplement : req.body.progDicaimplement,
+                prog_obs : req.body.progObs,
+                //Atributos de controle
+                prog_usuidcad : req.body.progUsuidcad,
+                prog_datacad : dataAtual.toISOString(),
+                prog_lixo : "false"
+           });
+           console.log("newProg save");
+           await newProg.save().then(()=>{
+               console.log("Cadastro realizado!");
+               return true;
+           }).catch((err) => {
+               console.log(err)
+               return err;
+           });
     }
+
 };

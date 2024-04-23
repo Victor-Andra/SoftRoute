@@ -406,7 +406,7 @@ module.exports = {BordoModel,BordoSchema,
                 bordo_obs: req.body.bordoObs,
                 bordo_dataedi : dataAtual,
                 bordo_usuidedi: req.cookies['idUsu'],
-                bordo_lixo: req.body.bordoLixo
+                bordo_lixo: "false"
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -520,7 +520,7 @@ module.exports = {BordoModel,BordoSchema,
             bordo_obs: req.body.bordoObs,
             bordo_datacad: dataAtual,
             bordo_usuidcad: usuarioAtual,
-            bordo_lixo: req.body.bordoLixo
+            bordo_lixo: "false"
         });
         console.log("newBordo save");
         await newBordo.save().then(()=>{

@@ -144,6 +144,38 @@
 				$(".chosen-select-especial").chosen({allow_single_deselect:true});
 			});
 
+			function atualizaDicaproced(valor) {
+				var valorDicaproced = valor;
+				document.getElementById("progDicaproced").value = "";
+				document.getElementById("progDicaproced").value = valorDicaproced;
+			}
+
+			function atualizarMateriais() {
+				var checkboxes = document.querySelectorAll('input[type="checkbox"][id^="progMateriais"]');
+				var valoresSelecionados = [];
+
+				checkboxes.forEach(function(checkbox) {
+					if (checkbox.checked) {
+						valoresSelecionados.push(checkbox.nextElementSibling.textContent.trim());
+					}
+				});
+
+				document.getElementById('progMateriais').value = valoresSelecionados.join(", ");
+			}
+
+			function atualizarEstrutura() {
+				var checkboxes = document.querySelectorAll('input[type="checkbox"][id^="progEstrutura"]');
+				var valoresSelecionados = [];
+
+				checkboxes.forEach(function(checkbox) {
+					if (checkbox.checked) {
+						valoresSelecionados.push(checkbox.nextElementSibling.textContent.trim());
+					}
+				});
+
+				document.getElementById('progEstrutura').value = valoresSelecionados.join(", ");
+			}
+
 			function atualizaTerapeuta() {
 				var selectId = "excecaoTerapeutaid" + "temp";
 				var inputId = "excecaoTerapeutaid";
@@ -173,6 +205,7 @@
 				let span = document.getElementById(id.value+"_spanExce").cloneNode(true);
 				span.id = ""+id.value+"_cloneExceTera";
 				document.getElementById("divExcecaoTerapeuta").append(span);
+				
 				if (excecaoSubid.value == ""){
 					excecaoSubid.value = ""+id.value+"";
 				} else {
@@ -233,16 +266,19 @@
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
 								<div  id="divCarrega" >
-									<input type="text" id="idBene" name="idBene" style="width: 400px;" value="{{idBene}}"/>
-									
-									<input type="text" id="progEstrutura" name="progEstrutura" style="width: 400px;" />
-									<input type="text" id="progMateriais" name="progMateriais" style="width: 400px;" />
-
-									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value=""/>
-									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value=""/>
-
-									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value=""/>
-									
+									<label>idBene -></label>
+									<input type="text" id="idBene" name="idBene" style="width: 400px;" value="{{idBene}}" />
+									<label>progEstrutura -></label>
+									<input type="text" id="progEstrutura" name="progEstrutura" style="width: 400px;" value="" />
+									<label>progMateriais -></label>
+									<input type="text" id="progMateriais" name="progMateriais" style="width: 400px;" value="" />
+									<label>progDicatipo -></label>
+									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value="" />
+									<label>progDicaproced -></label>
+									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value="" />
+									<label>excecaoTerapeutaid -></label>
+									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value="" />
+									<label>_spanExce -></label>
 									{{#each progdicas}}
 									<span id="{{_id}}_spanExce" class="spanAzul">{{progdica_nome}}<a onclick="javascript:removeExcecaoTerapeutaid('{{_id}}');" class="fa fa-times aClose" ></a></span>
 									{{else}}
@@ -465,7 +501,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura1" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input id="progEstrutura1" name="progEstrutura1" type="checkbox" class="ace input-lg" onchange="atualizarEstrutura();">
 																	<span class="lbl bigger-120"> Estruturado</span>
 																</label>
 															</div>
@@ -475,7 +511,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura2" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input id="progEstrutura2" name="progEstrutura1" type="checkbox" class="ace input-lg" onchange="atualizarEstrutura();">
 																	<span class="lbl bigger-120"> Desestruturado</span>
 																</label>
 															</div>
@@ -486,7 +522,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura3" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input id="progEstrutura3" name="progEstrutura1" type="checkbox" class="ace input-lg" onchange="atualizarEstrutura();">
 																	<span class="lbl bigger-120"> Brincar</span>
 																</label>
 															</div>
@@ -497,7 +533,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progEstrutura4" name="progEstrutura1" type="checkbox" class="ace input-lg">
+																	<input id="progEstrutura4" name="progEstrutura1" type="checkbox" class="ace input-lg" onchange="atualizarEstrutura();">
 																	<span class="lbl bigger-120"> NET</span>
 																</label>
 															</div>
@@ -537,7 +573,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais1" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais1" name="progMateriais1" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> 3D</span>
 																</label>
 															</div>
@@ -547,7 +583,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais2" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais2" name="progMateriais2" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> 2D</span>
 																</label>
 															</div>
@@ -557,7 +593,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais3" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais3" name="progMateriais3" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> Livro(s)</span>
 																</label>
 															</div>
@@ -567,7 +603,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais4" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais4" name="progMateriais4" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> Vídeo(s)</span>
 																</label>
 															</div>
@@ -577,7 +613,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais5" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais5" name="progMateriais5" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> Tablet</span>
 																</label>
 															</div>
@@ -587,7 +623,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais6" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais6" name="progMateriais6" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> N/A</span>
 																</label>
 															</div>
@@ -601,7 +637,7 @@
 														<div class="row">
 															<div class="checkbox">
 																<label class="block">
-																	<input id="progMateriais7" name="progMateriais" type="checkbox" class="ace input-lg">
+																	<input id="progMateriais7" name="progMateriais7" type="checkbox" class="ace input-lg" onchange="atualizarMateriais();">
 																	<span class="lbl bigger-120"> Outros</span>
 																</label>
 															</div>
@@ -797,7 +833,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input name="form-field-radio" type="radio" class="ace">
+																	<input id="progDicaprocedop1" name="progDicaprocedop" type="radio" class="ace" value="Errorless" onchange="atualizaDicaproced(value);">
 																	<span class="lbl"> Errorless</span>
 																</label>
 															</div>
@@ -807,7 +843,7 @@
 														<div class="row">
 															<div class="radio">
 															<label>
-																<input name="form-field-radio" type="radio" class="ace">
+																<input id="progDicaprocedop2" name="progDicaprocedop" type="radio" class="ace" value="Most-to-Lead" onchange="atualizaDicaproced(value);">
 																<span class="lbl"> Most-to-Lead</span>
 															</label>
 															</div>
@@ -817,7 +853,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input name="form-field-radio" type="radio" class="ace">
+																	<input id="progDicaprocedop3" name="progDicaprocedop" type="radio" class="ace" value="Least-to-Most" onchange="atualizaDicaproced(value);">
 																	<span class="lbl"> Least-to-Most</span>
 																</label>
 															</div>
@@ -938,7 +974,7 @@
 													Determine as implementações das dicas para esse programa.
 												</p>
 												<div>
-													<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" rows="6" class="form-control"></textarea>
+													<textarea type="text" name="progDicaimplement" id="progDicaimplement" placeholder="" rows="6" class="form-control"></textarea>
 												</div>
 												
 											</div>
@@ -977,7 +1013,7 @@
 													Determine as sequências de dicas para esse programa.
 												</p>
 												<div>
-													<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" rows="6" class="form-control"></textarea>
+													<textarea type="text" name="progDicasequen" id="progDicasequen" placeholder="" rows="6" class="form-control"></textarea>
 												</div>
 												
 											</div>
