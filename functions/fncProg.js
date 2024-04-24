@@ -78,12 +78,11 @@ module.exports = {
                 });
                     Usuario.find().then((usuario)=>{
                         usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Terapia.find().then((terapia)=>{
-                            terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
-                            Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                                res.render('area/aba/prog/progLis', {progs: prog, usuarios: usuario, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
-        })})})})}).catch((err) =>{
+                        Progdica.find().then((progdica)=>{
+                            Progtipo.find().then((progtipo)=>{
+                                Prognivel.find().then((prognivel)=>{
+                                res.render('area/aba/prog/progLis', {progs: prog, usuarios: usuario, benes: bene, perfilAtual, flash , progdicas: progdica, progtipos: progtipo, prognivels: prognivel})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')

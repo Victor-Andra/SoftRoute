@@ -4,7 +4,7 @@
 		<title>Programas ABA</title>
 		<style>
 			h2,.progress-title{
-			color: #94979B;
+			color: #0a1829;
 			}
 
 			h4{
@@ -32,8 +32,9 @@
 				font-size: 12px;
 				font-weight: 700;
 				vertical-align: middle;
-				
-				
+				color: #000;
+				text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff; /* Adiciona contorno branco */
+				line-height: 30px; /* Define a linha centralizada verticalmente com a altura da barra de progresso */
 			}
 
 			.progress{
@@ -127,6 +128,7 @@
 				padding: 4px 22px 5px 9px;
 				margin-bottom: 3px;
 				margin-right: 3px;
+				max-width: 45%; /* Define a largura máxima como 45% da largura da tela */
 			}
 			.aClose {
 				position: absolute;
@@ -176,55 +178,174 @@
 				document.getElementById('progEstrutura').value = valoresSelecionados.join(", ");
 			}
 
-			function atualizaTerapeuta() {
-				var selectId = "excecaoTerapeutaid" + "temp";
-				var inputId = "excecaoTerapeutaid";
+			function removeExcecaoDicaid(id){
+				if (document.getElementById("progDicatipo").value.includes(",")){
+					document.getElementById("progDicatipo").value = (document.getElementById("progDicatipo").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
+					document.getElementById(id+"_cloneExceTera").remove();
+				} else {
+					document.getElementById("progDicatipo").value = "";
+					document.getElementById(id+"_cloneExceTera").remove();
+				}
+				
+				if (document.getElementById("progDicatipo").value == ""){
+					document.getElementById("spanShowExceTera").style = "display:''";
+				}
+			}
+			function removeExcecaoDicatext(text) {
+				var inputValue = document.getElementById("progDicatipotext").value;
+				var items = inputValue.split(",");
+
+				for (var i = 0; i < items.length; i++) {
+					if (items[i].trim() === text) {
+						items.splice(i, 1);
+						break;
+					}
+				}
+
+				document.getElementById("progDicatipotext").value = items.join(", ");
+
+				var removedElement = document.getElementById(text + "_cloneExceTera");
+				if (removedElement) {
+					removedElement.remove();
+				}
+
+				if (document.getElementById("progDicatipotext").value === "") {
+					document.getElementById("spanShowExceTera").style.display = '';
+				}
+				// Atualizar os progress bars após remover seleções
+				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
+			}
+
+
+
+			function atualizaDica() {
+				var selectId = "progDicatipo" + "temp";
+				var inputId = "progDicatipo";
+				var inputTextId = "progDicatipotext";
 
 				var selectedValues = $('#' + selectId).val();
 				var formattedValues = selectedValues ? selectedValues.join(',') : '';
 
 				$('#' + inputId).val(formattedValues);
-			}
-			function removeExcecaoTerapeutaid(id){
-				if (document.getElementById("excecaoTerapeutaid").value.includes(",")){
-					document.getElementById("excecaoTerapeutaid").value = (document.getElementById("excecaoTerapeutaid").value.replace((","+id+""), "").replace((""+id+","), "").replace((",,"), ","));
-					document.getElementById(id+"_cloneExceTera").remove();
-				} else {
-					document.getElementById("excecaoTerapeutaid").value = "";
-					document.getElementById(id+"_cloneExceTera").remove();
-				}
-				
-				if (document.getElementById("excecaoTerapeutaid").value == ""){
-					document.getElementById("spanShowExceTera").style = "display:''";
-				}
-			}
-			function addExcecaoTerapeutaid(){
-				document.getElementById("spanShowExceTera").style = "display:none";
-				let id = document.getElementById("excecaoTerapeutaidselect");
-				let excecaoSubid = document.getElementById("excecaoTerapeutaid");
-				let span = document.getElementById(id.value+"_spanExce").cloneNode(true);
-				span.id = ""+id.value+"_cloneExceTera";
-				document.getElementById("divExcecaoTerapeuta").append(span);
-				
-				if (excecaoSubid.value == ""){
-					excecaoSubid.value = ""+id.value+"";
-				} else {
-					excecaoSubid.value = ""+excecaoSubid.value+","+id.value+"";
-				}
-				//console.log("document.getElementById(divExcecaoTerapeutaid: "+document.getElementById("divExcecaoTerapeutaid").value)
-				id.value = "766f69643132333435366964";
-			}
-			function removeTudo(alvo, clone){
-				let arr = document.getElementById(""+alvo+"").value.split(",");
-				arr.forEach((a)=>{
-					console.log(a+"_clone"+clone+'Tera');
-					document.getElementById(a+"_clone"+clone+"Tera").remove();
+
+				// Atualiza o valor do campo progDicatipotext com os nomes das opções selecionadas
+				var selectedOptionsText = [];
+				$("#" + selectId + " option:selected").each(function() {
+					selectedOptionsText.push($(this).text());
 				});
-				document.getElementById(""+alvo+"").value = "";
-				document.getElementById("spanShow"+clone+"Tera").style = "display: ''";
+				$("#" + inputTextId).val(selectedOptionsText.join(", "));
+
+				var selectedTextValues = $('#' + inputTextId).val(); // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
 			}
-					
-			
+
+			function addExcecaoDicaid() {
+			document.getElementById("spanShowExceTera").style = "display:none";
+
+			var id = document.getElementById("progDicatiposelect").value;
+			var progSubid = document.getElementById("progDicatipo");
+			var span = document.getElementById(id + "_spanExce").cloneNode(true);
+
+			// Obtendo o nome da opção selecionada
+			var selectedOptionText = $("#progDicatiposelect option:selected").text();
+
+			span.id = "" + id + "_cloneExceTera";
+			document.getElementById("divExcecaoDica").append(span);
+
+			if (progSubid.value == "") {
+				progSubid.value = "" + id + "";
+			} else {
+				progSubid.value = "" + progSubid.value + "," + id + "";
+			}
+
+			// Adicionando o nome da opção à div progDicatipotext
+			var progDicatipotextInput = document.getElementById("progDicatipotext");
+			if (progDicatipotextInput.value == "") {
+				progDicatipotextInput.value = selectedOptionText;
+			} else {
+				progDicatipotextInput.value += ", " + selectedOptionText;
+			}
+
+			// Chamando atualizaProgressBars após adicionar uma seleção
+			var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+			atualizaProgressBars(selectedTextValues); // Alteração aqui
+
+			// Resetando o valor do select
+			document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
+		}
+
+		function removeTudo(alvo, clone) {
+			let arr = document.getElementById("" + alvo + "").value.split(",");
+			arr.forEach((a) => {
+				var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
+
+				// Remover o valor correspondente do campo progDicatipotext
+				var progDicatipotextInput = document.getElementById("progDicatipotext");
+				var currentValue = progDicatipotextInput.value;
+
+				// Remover o texto da opção atual da string de valor atual
+				var newValue = currentValue.replace(selectedOptionText, "");
+
+				// Remover qualquer vírgula extra e espaços em branco do novo valor
+				newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+
+				// Atualizar o valor do campo progDicatipotext
+				progDicatipotextInput.value = newValue;
+
+				// Remover o elemento clonado
+				$("#" + a + "_clone" + clone + "Tera").remove();
+			});
+
+				// Limpar o valor do campo alvo
+				document.getElementById("" + alvo + "").value = "";
+
+				// Mostrar novamente o span oculto
+				document.getElementById("spanShow" + clone + "Tera").style.display = "";
+
+				// Limpar o valor
+				document.getElementById("progDicatipo").value = "";
+				document.getElementById("progDicatipotext").value = "";
+
+				// Atualizar os progress bars após remover seleções
+				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
+			}
+
+
+		function atualizaProgressBars(selectedTextValues) {
+			var selectedValues = selectedTextValues.split(", "); // Alteração aqui
+			var numSelected = selectedValues.length;
+
+			// Definindo os valores para os progress-bars com base no número de seleções
+			var progressValues = [];
+			if (numSelected === 1) {
+				progressValues = [100];
+			} else if (numSelected === 2) {
+				progressValues = [70, 30];
+			} else if (numSelected === 3) {
+				progressValues = [50, 30, 20];
+			} else if (numSelected === 4) {
+				progressValues = [40, 30, 20, 10];
+			} else if (numSelected === 5) {
+				progressValues = [35, 25, 20, 15, 5];
+			}
+
+				// Atualizando os elementos progress-bar
+				for (var i = 0; i < 5; i++) {
+					var progressBar = $('#porgress' + (i + 1));
+					if (i < numSelected) {
+						progressBar.show();
+						progressBar.find('.progress-value').hide(); // Oculta a porcentagem
+						progressBar.find('.progress-bar').css('width', progressValues[i] + '%'); // Define a largura da barra de progresso diretamente
+						progressBar.find('.progress-name').text(selectedValues[i]).show();
+					} else {
+						progressBar.hide();
+					}
+				}
+			}
+		
+		
 			function progressValue(){  
 				$('.progress-bar').each(function(){    
 					var positionProgressValue = $(this).children('.progress-value').css('left','auto');
@@ -265,7 +386,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
-								<div  id="divCarrega" >
+								<div  id="divCarrega" hidden>
 									<label>idBene -></label>
 									<input type="text" id="idBene" name="idBene" style="width: 400px;" value="{{idBene}}" />
 									<label>progEstrutura -></label>
@@ -276,17 +397,15 @@
 									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value="" />
 									<label>progDicaproced -></label>
 									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value="" />
-									<label>excecaoTerapeutaid -></label>
-									<input type="text" id="excecaoTerapeutaid" name="excecaoTerapeutaid" style="width: 400px;" value="" />
+									<input type="text" id="progDicatipotext" name="progDicatipotext" style="width: 400px;" value="" />
 									<label>_spanExce -></label>
 									{{#each progdicas}}
-									<span id="{{_id}}_spanExce" class="spanAzul">{{progdica_nome}}<a onclick="javascript:removeExcecaoTerapeutaid('{{_id}}');" class="fa fa-times aClose" ></a></span>
+									<span id="{{_id}}_spanExce" class="spanAzul">{{progdica_nome}}
+										<a onclick="javascript:removeExcecaoDicaid('{{_id}}');removeExcecaoDicatext('{{progdica_nome}}');" class="fa fa-times aClose" ></a>
+									</span>
 									{{else}}
 									{{/each}}
-
-									
 								</div>	
-								
 								
 								<div class="col-xs-12">
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
@@ -369,7 +488,7 @@
 															<label>Tipo de Programa</label>
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="progTipoid" id="progTipoid" class="chosen-select" onchange="">
+																	<select name="progTipo" id="progTipo" class="chosen-select" onchange="">
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each progtipos}}
 																				<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -383,7 +502,7 @@
 															<label>Nível do Programa</label>
 															<div class="input-group">
 																<div class="input-group">
-																	<select name="progNivelid" id="progNivelid" class="chosen-select" onchange="">
+																	<select name="progNivel" id="progNivel" class="chosen-select" onchange="">
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each prognivels}}
 																				<option value="{{_id}}">{{prognivel_nome}}</option>
@@ -399,7 +518,7 @@
 										</div>
 								</div>
 
-								<div class="col-xs-7">
+								<div class="col-xs-6">
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
 											<h5 class="widget-title">
@@ -757,55 +876,52 @@
 									</div>										
 								</div>
 							
-								<div class="col-xs-5"><!-- .Tipos de Dicas -->
+								<div class="col-xs-6"> <!-- Remova a largura definida -->
 									<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="pink ace-icon fa fa-tags"></i>
-													Tipos de Dicas
-													
-												</h4>
-
-												<span class="widget-toolbar">
-
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
-													<p class="alert alert-danger">
-														Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
-													</p>
-														
-														
-															<div class="row">
-																<div class="col-xs-5">
-																	<select name="excecaoTerapeutaidselect" id="excecaoTerapeutaidselect" class="chosen-select" onchange="addExcecaoTerapeutaid();">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each progdicas}}
-																		<option value="{{_id}}">{{progdica_nome}}</option>
-																		{{else}}
-																		{{/each}}
-																	</select>
-																	<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('excecaoTerapeutaid','Exce');">Remover</button>
-																	<div id="divExcecaoTerapeuta" name="excecaoTerapeutaidtemp" style="display: block;width: 446px;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																		<span id="spanShowExceTera" class="spanAzul">Escolha a dica</span>
-																	</div>
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="pink ace-icon fa fa-tags"></i>
+												Tipos de Dicas
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<p class="alert alert-danger">
+													Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+												</p>
+												<div class="row">
+													<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+														<select name="progDicatiposelect" id="progDicatiposelect" class="chosen-select" onchange="addExcecaoDicaid();atualizaProgressBars();">
+															<option value="766f69643132333435366964">-</option>
+															{{#each progdicas}}
+															<option value="{{_id}}">{{progdica_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
+														<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('progDicatipo','Exce');">Remover</button>
+														<div class="row">
+															<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+																<div id="divExcecaoDica" name="progDicatipotemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
+																	<span id="spanShowExceTera" class="spanAzul">Escolha a dica</span>
 																</div>
-																
 															</div>
+														</div>
+													</div>
 												</div>
 											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-xs-5"><!-- .Procedimento de Dicas -->
+
+								<div class="col-xs-6"><!-- .Procedimento de Dicas -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -865,7 +981,7 @@
 									</div>
 								</div>
 
-								<div class="col-xs-5"><!-- .Hierarquia de Dicas (Gráfico) -->
+								<div class="col-xs-6"><!-- .Hierarquia de Dicas (Gráfico) -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -889,47 +1005,43 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
-													<div class="col-xs-5">
-														<div class="row">
-															<div class="col-sm-2">
-																<div class="container">
-																	<div class="row">
-																		<div class="col-md-6">
-																			<br>
-																			<div class="progress orange">
-																				<div class="progress-bar">
-																					<div class="progress-value" hidden>45%</div>
-																					<div class="progress-name">Teste</div>
-																				</div>
-																			</div>
+													<div class="col-xs-6">
+														<div class="container" class="container-fluid">
+															<div class="row">
+																<div class="col-md-6">
+																	<br>
+																	<div id="porgress1" class="progress orange" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>45%</div>
+																			<div class="progress-name"></div>
+																		</div>
+																	</div>
 
-																			<div class="progress red">
-																				<div class="progress-bar">
-																					<div class="progress-value" hidden>25%</div>
-																					<div class="progress-name">Teste</div>
-																				</div>
-																			</div>
-																			
-																			<div class="progress pink">
-																				<div class="progress-bar">
-																					<div class="progress-value" hidden>20%</div>
-																					<div class="progress-name">Teste</div>
-																				</div>
-																			</div>
-																			
-																			<div class="progress purple">
-																				<div class="progress-bar">
-																					<div class="progress-value" hidden>10%</div>
-																					<div class="progress-name">Teste</div>
-																				</div>
-																			</div>
-																			
-																			<div class="progress green">
-																				<div class="progress-bar">
-																					<div class="progress-value" hidden>5%</div>
-																					<div class="progress-name">Teste</div>
-																				</div>
-																			</div>
+																	<div id="porgress2" class="progress red" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>25%</div>
+																			<div class="progress-name"></div>
+																		</div>
+																	</div>
+																	
+																	<div id="porgress3" class="progress pink" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>20%</div>
+																			<div class="progress-name"></div>
+																		</div>
+																	</div>
+																	
+																	<div id="porgress4" class="progress purple" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>10%</div>
+																			<div class="progress-name"></div>
+																		</div>
+																	</div>
+																	
+																	<div id="porgress5" class="progress green" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>5%</div>
+																			<div class="progress-name"></div>
 																		</div>
 																	</div>
 																</div>
@@ -942,7 +1054,7 @@
 									</div>
 								</div>
 								
-								<div class="col-xs-5"><!-- .Implementação de Dica -->
+								<div class="col-xs-6"><!-- .Implementação de Dica -->
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
 											<h5 class="widget-title">
@@ -981,7 +1093,8 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-5"><!-- .Sequências de Dica -->
+
+								<div class="col-xs-6"><!-- .Sequências de Dica -->
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
 											<h5 class="widget-title">
