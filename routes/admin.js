@@ -193,9 +193,9 @@ const Grafprog = mongoose.model("tb_grafprog")
 const fncGrafprog = require("../functions/fncGrafprog")
 
 //SET - ABA
-const setClass = require("../models/set")
-const Set = mongoose.model("tb_set")
-const fncSet = require("../functions/fncSet")
+const progsetClass = require("../models/progset")
+const Progset = mongoose.model("tb_progset")
+const fncProgset = require("../functions/fncProgset")
 
 //NAT - ABA
 const natClass = require("../models/nat")
@@ -2133,15 +2133,19 @@ router.get('/area/aba/grafprog/grafproglis', fncGeral.IsAuthenticated, (req,res)
 //------------------------------------------------------------------------------------------------
 //Menu SET ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/set/setcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
-    fncSet.carregaSet(req, res);
+router.get('/area/aba/progset/progsetcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+    fncProgset.carregaProgset(req, res);
 })
 
 //Lista SET por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/set/setlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
-    fncSet.listaSet(req, res);
+router.get('/area/aba/progset/progsetlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+    fncProgset.listaProgset(req, res);
 })
 
+//adiciona registro
+router.post('/area/aba/progset/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro Atec
+    fncProgset.cadastraProgset(req, res);
+})
 //------------------------------------------------------------------------------------------------
 //Menu NAT ** Area Tecnicos e ABA 
 //Carrega Cadastro

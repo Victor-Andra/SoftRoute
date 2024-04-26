@@ -10,9 +10,11 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
+const progsetClass = require("../models/progset")
 const progdicaClass = require("../models/progdica")
 const prognivelClass = require("../models/prognivel")
 const progtipoClass = require("../models/progtipo")
+
 
 //prog, tipos de prog 
 const Prog = mongoose.model("tb_prog")
@@ -23,71 +25,96 @@ const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 
+const Progset = mongoose.model("tb_progset")
 const Progdica = mongoose.model("tb_progdica")
 const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
 
 module.exports = {
-    listaProg(req, res, resposta){
+    listaProg(req, res, resposta) {
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
-        Prog.find().then((prog) =>{
-            prog.forEach((b)=>{
-                //Formatação da Exibição da Data de cadastro
-                let datacad = new Date(b.prog_datacad)
-                let mes = (datacad.getMonth()+1).toString();
+    
+        Prog.find().then((prog) => {
+            // Variáveis para contar os programas adquiridos e não adquiridos
+            let countProgs = 0;
+            let countProgsC = 0;
+            let countProgsA = 0;
+    
+            prog.forEach((b) => {
+                // Formatação da Exibição da Data de cadastro
+                let datacad = new Date(b.prog_datacad);
+                let mes = (datacad.getMonth() + 1).toString();
                 let dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
+                if (mes.length == 1) {
+                    mes = "0" + mes;
                 }
-                if (dia.length == 1){
-                    dia = "0"+dia;
+                if (dia.length == 1) {
+                    dia = "0" + dia;
                 }
-                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.datacad=fulldate;
-                
-                dataedi = new Date(b.prog_dataedi)
-                mes = (dataedi.getMonth()+1).toString();
+                let fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
+                b.datacad = fulldate;
+    
+                dataedi = new Date(b.prog_dataedi);
+                mes = (dataedi.getMonth() + 1).toString();
                 dia = (dataedi.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
+                if (mes.length == 1) {
+                    mes = "0" + mes;
                 }
-                if (dia.length == 1){
-                    dia = "0"+dia;
+                if (dia.length == 1) {
+                    dia = "0" + dia;
                 }
-                fulldate=(dataedi.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.dataedi=fulldate;
-            })
-           
-            Bene.find({bene_status:"Ativo"}).then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                //console.log("Listagem Realizada bene!")
-                // Adicionando a propriedade countSessaos a cada bene
-                
+                fulldate = (dataedi.getFullYear() + "-" + mes + "-" + dia).toString();
+                b.dataedi = fulldate;
+            });
+    
+            Bene.find({ bene_status: "Ativo" }).then((bene) => {
+                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+    
                 bene.forEach((b) => {
                     b.countProgs = prog.filter((s) => s.prog_beneid.toString() === b._id.toString()).length;
+                    // Contagem de progs adquiridos e não adquiridos
+                    b.countProgsC += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status === "Adquirido").length;
+                    b.countProgsA += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status !== "Adquirido").length;
                 });
-
-                prog.forEach((s) => {
-                    console.log("s: " + s);
-                    bene.forEach((b) => {
-                        if (("" + b._id + "") == ("" + s.prog_beneid + "")) {
-                            console.log("b.bene_nome: " + b.bene_nome);
-                        }
+    
+                // Aqui, você pode usar as variáveis countProgs e countProgsA como quiser
+                // Por exemplo, enviá-las para sua view junto com outros dados
+    
+                Usuario.find().then((usuario) => {
+                    usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+    
+                    Progdica.find().then((progdica) => {
+                        Progtipo.find().then((progtipo) => {
+                            Prognivel.find().then((prognivel) => {
+                                Progset.find().then((progset) => {
+                                    res.render('area/aba/prog/progLis', {
+                                        progs: prog,
+                                        progsets: progset,
+                                        usuarios: usuario,
+                                        benes: bene,
+                                        perfilAtual,
+                                        flash,
+                                        progdicas: progdica,
+                                        progtipos: progtipo,
+                                        prognivels: prognivel,
+                                        countProgs, // Envia a contagem de progs adquiridos
+                                        countProgsA, // Envia a contagem de progs não adquiridos
+                                        countProgsC
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
-                    Usuario.find().then((usuario)=>{
-                        usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Progdica.find().then((progdica)=>{
-                            Progtipo.find().then((progtipo)=>{
-                                Prognivel.find().then((prognivel)=>{
-                                res.render('area/aba/prog/progLis', {progs: prog, usuarios: usuario, benes: bene, perfilAtual, flash , progdicas: progdica, progtipos: progtipo, prognivels: prognivel})
-        })})})})})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar!")
-            res.redirect('admin/erro')
-        })
+            });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
     },
+    
 
     carregaProg(req,res){
         let idBene;

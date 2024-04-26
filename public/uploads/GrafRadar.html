@@ -1,0 +1,352 @@
+Introdução
+Os gráficos de radar, também conhecidos como gráficos de aranha ou gráficos de radar, são uma visualização de dados usada para comparar observações com várias variáveis ​​quantitativas. Cada variável é codificada para um raio que são equidistantes separados. Quanto mais alto o valor, mais distante é o ponto do centro do gráfico. Os gráficos de radar são mais utilizados para comparar o ‘perfil’ das observações e para detectar discrepâncias nos dados. Eles são, portanto, bastante utilizados nos esportes, principalmente no basquete e futebol para definir perfis de jogadores .
+
+Neste tutorial, ensinarei como criar seu próprio gráfico de radar com JavaScript e como usá-lo para ajudar em uma das decisões mais difíceis da história dos jogos: qual pokemon inicial escolher?
+
+É isso mesmo, estaremos construindo gráficos de radar para realizar análise de dados no Bulbasaur, Charmander e Squirtle para determinar, de uma vez por todas, qual é a melhor escolha.
+
+Construindo um gráfico de radar JavaScript
+Para construir nossos gráficos de radar, usaremos uma biblioteca de gráficos. As bibliotecas de gráficos removem grande parte da carga de criação de gráficos (em comparação com algo como d3.js.) e permitem que você obtenha um gráfico de maneira rápida e fácil. Para este tutorial, escolhi usar a biblioteca JavaScript AnyChart . Eu escolhi o AnyChart porque criar gráficos com ele é realmente rápido e é uma biblioteca incrível para iniciantes, devido à documentação bastante intensa .
+
+Etapa 1: configurar a página
+O primeiro passo para criar nossos gráficos de radar é configurar a página html e carregar os scripts necessários.
+
+<html>
+  <head>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js">     </script>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-radar.min.js"></script>
+    <style type="text/css">
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      anychart.onDocumentReady(function () {
+        // drawing our chart goes here
+      });
+    </script>
+  </body>
+</html>
+Tudo o que fiz aqui foi criada uma nova página html, adicionados os scripts necessários para criar um gráfico de radar ‘anychart-core.min.js’ e ‘anychart-radar.min.js’. O primeiro é necessário para todos os gráficos de qualquer gráfico e vem com os gráficos básicos (dispersão, barra, etc.), enquanto o último fornece o módulo necessário para a construção de um gráfico de radar.
+
+Em seguida, criamos uma regra CSS para nossa página html, que define o tamanho do nosso gráfico. Adotamos 100% de largura e altura e 0 margens para criar dados de tela cheia, mas se você quiser algo diferente, vá em frente e altere esses valores para algo que melhor se adapte às suas necessidades.
+
+Por fim, usamos anychart.onDocumentReady (). Nosso gráfico irá nesta função. O que isso faz é que ele dispara a função somente quando o documento está pronto e não antes.
+
+Etapa 2: carregar os dados
+Para desenhar gráficos de radar para o nosso Pokemon inicial, precisamos obter os dados. Achei isso em bulbapedia.bulbagarden.net (que fofo?), Que parece ter as estatísticas de todos os Pokémon de todos os tempos!
+
+Construindo um gráfico de radar JavaScript
+Em seguida, precisamos reformatar esses dados em algo que o AnyChart saiba ler. O AnyChart gosta dos dados de cada observação no seguinte formato:
+
+var data1 = [
+  {x: "HP", value: 39},
+  {x: "Attack", value: 52},
+  {x: "Defense", value: 43},
+  {x: "Special Attack", value: 60},
+  {x: "Special Defense", value: 50},
+  {x: "Speed", value: 65},
+];
+Uma matriz de objetos com cada variável com a variável do eixo x a ser denominada ‘x’ e a variável do eixo y a ser denominada ‘valor’. No caso do gráfico de radar, a variável do eixo x é o nome da variável, enquanto a variável do eixo y é o valor.
+
+Repetimos esta etapa para cada Pokémon inicial, resultando nas três seguintes matrizes:
+
+var data1 = [
+  {x: "HP", value: 39},
+  {x: "Attack", value: 52},
+  {x: "Defense", value: 43},
+  {x: "Special Attack", value: 60},
+  {x: "Special Defense", value: 50},
+  {x: "Speed", value: 65},
+ ];
+ 
+var data2 = [
+  {x: "HP", value: 45},
+  {x: "Attack", value: 49},
+  {x: "Defense", value: 49},
+  {x: "Special Attack", value: 65},
+  {x: "Special Defense", value: 65},
+  {x: "Speed", value: 45},
+]; 
+ 
+var data3 = [
+  {x: "HP", value: 44},
+  {x: "Attack", value: 48},
+  {x: "Defense", value: 65},
+  {x: "Special Attack", value: 50},
+  {x: "Special Defense", value: 64},
+  {x: "Speed", value: 43},
+]; 
+Etapa 3: desenhando o gráfico
+Agora que temos todos os nossos patos (psy) seguidos, é hora de desenhar nosso gráfico.
+
+// create radar chart
+var chart = anychart.radar();
+
+// set chart title
+chart.title("Starter Pokemon Comparison Chart");
+
+// set chart yScale settings
+chart.yScale()
+  .minimum(0)
+  .maximum(100)
+  .ticks({'interval':20});
+
+// create first series
+chart.line(data1)
+// create second series
+chart.line(data2)
+// create third series
+chart.line(data3)
+
+// set container id for the chart
+chart.container('container');
+// initiate chart drawing
+chart.draw();
+O que resulta em:
+
+Construindo um gráfico de radar JavaScript
+Isso não parece muito informativo, não é? As diferentes séries parecem todas iguais. Podemos resolver isso facilmente. Se alterarmos os valores mínimo e máximo de yScale, poderemos ver as diferenças entre as 3 séries muito melhor. Em seguida, defino o valor máximo para 65 e o valor mínimo para 35, escolhi esses valores com base nos dados que estou tentando visualizar. Se um dos nossos pokemon tivesse uma variável com um valor maior que 65 ou menor que 35, eu teria escolhido valores diferentes para acomodar isso.
+
+// set chart yScale settings
+chart.yScale()
+  .minimum(35)
+  .maximum(65)
+  .ticks({'interval':5});
+O que resulta nisso:
+
+Construindo um gráfico de radar JavaScript
+Codepen Link
+
+<html>
+  <head>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-radar.min.js"></script>
+    <style type="text/css">
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    anychart.onDocumentReady(function () {
+    // our data from bulbapedia
+      var data1 = [
+        {x: "HP", value: 39},
+        {x: "Attack", value: 52},
+        {x: "Defense", value: 43},
+        {x: "Special Attack", value: 60},
+        {x: "Special Defense", value: 50},
+        {x: "Speed", value: 65},
+      ];
+
+      var data2 = [
+        {x: "HP", value: 45},
+        {x: "Attack", value: 49},
+        {x: "Defense", value: 49},
+        {x: "Special Attack", value: 65},
+        {x: "Special Defense", value: 65},
+        {x: "Speed", value: 45},
+      ];  
+
+      var data3 = [
+        {x: "HP", value: 44},
+        {x: "Attack", value: 48},
+        {x: "Defense", value: 65},
+        {x: "Special Attack", value: 50},
+        {x: "Special Defense", value: 64},
+        {x: "Speed", value: 43},
+      ];  
+
+      // create radar chart
+      var chart = anychart.radar();
+      // set chart yScale settings
+      chart.yScale()
+        .minimum(35)
+        .maximum(65)
+        .ticks({'interval':5});
+
+      // create first series
+      chart.line(data1)
+      // create second series
+      chart.line(data2)
+      // create third series
+      chart.line(data3)
+
+      // set chart title
+      chart.title("Starter Pokemon Comparison Chart");
+
+      // set container id for the chart
+      chart.container('container');
+      // initiate chart drawing
+      chart.draw();
+
+    });
+  </script>
+</html>
+Muito melhor. Agora podemos diferenciar entre nossas séries.
+
+Etapa 4: Personalizando o Gráfico
+Como mostrei acima, alterando um aspecto do gráfico, o tornei muito mais atraente e informativo. É seu trabalho como desenvolvedor de visualização de dados usar todas as ferramentas à sua disposição para ajudar a contar sua história de dados de uma maneira melhor.
+
+Qualquer biblioteca de gráficos que se preze tem meios de personalizar seus gráficos para permitir que você conte melhor sua história. Agora vou passar por algumas técnicas de personalização para aproveitar melhor meu gráfico de radar.
+
+Cor da célula
+
+Uma das desvantagens do uso de um gráfico de radar é que é difícil comparar os valores entre diferentes variáveis ​​(porque elas são posicionadas ciclicamente em vez de linearmente). Podemos atenuar um pouco essa desvantagem colorindo células alternadas para criar referências para comparar melhor as variáveis.
+
+// color alternating cells
+chart.yGrid().palette(["gray 0.1", "gray 0.2"]);
+Construindo um gráfico de radar JavaScript
+Codepen Link
+
+Esse código colore as células do radar em cinza e as células alternadas com diferentes opacidades *.
+
+* Usar opacidade é um truque bem conhecido para ter cores diferentes que combinam bem.
+
+Área, Preenchimento, Traçado e Legenda
+
+Para criar um perfil melhor de nossas séries diferentes, alterarei o tipo de série de linha para área. Isso nos permitirá alterar o preenchimento do polígono. Também mudarei as cores de cada série para representar melhor o Pokémon em questão.
+
+// create first series
+chart.area(data1).name('Charmander').markers(true).fill("#E55934", 0.3).stroke("#E55934")
+// create second series
+chart.area(data2).name('Bulbasaur').markers(true).fill("#9BC53D", 0.3).stroke("#9BC53D")
+// create third series
+chart.area(data3).name('Squirtle').markers(true).fill("#5BC0EB", 0.3).stroke("#5BC0EB")
+Uma lenda também nos permite dizer qual série é qual.
+
+// set chart title
+chart.title("Starter Pokemon Comparison Chart");
+  // set legend
+  .legend(true);
+Construindo um gráfico de radar JavaScript
+Codepen Link
+
+Reorganizar variáveis
+
+Outro problema com os gráficos de radar é que os usuários tendem a ver conexões entre variáveis ​​vizinhas, o que não é o caso. Isso é lamentável e não se pode fazer muito a respeito, no entanto, podemos tentar aproveitar ao máximo e reorganizar nossas variáveis ​​para que as variáveis ​​mais relacionadas estejam próximas umas das outras. Isso fortaleceria ainda mais o uso do gráfico de radar para ver ‘perfis’ analíticos.
+
+Em nosso exemplo, reorganizaríamos isso:
+
+var data1 = [
+  {x: "HP", value: 39},
+  {x: "Attack", value: 52},
+  {x: "Defense", value: 43},
+  {x: "Special Attack", value: 60},
+  {x: "Special Defense", value: 50},
+  {x: "Speed", value: 65},
+];
+Para isso
+
+var data1 = [
+  {x: "Speed", value: 65},
+  {x: "HP", value: 39},
+  {x: "Defense", value: 43},
+  {x: "Special Defense", value: 50},
+  {x: "Special Attack", value: 60},
+  {x: "Attack", value: 52},
+];
+Como você pode ver, isso é mais uma arte do que uma ciência. Mas como você pode ver abaixo, temos uma imagem muito melhor de nossos diferentes perfis.
+
+Construindo um gráfico de radar JavaScript
+Codepen Link
+
+<html>
+  <head>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-radar.min.js"></script>
+    <style type="text/css">
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    anychart.onDocumentReady(function () {
+      // our data from bulbapedia
+     var data1 = [
+       {x: "Speed", value: 65},
+       {x: "HP", value: 39},
+       {x: "Defense", value: 43},
+       {x: "Special Defense", value: 50},
+       {x: "Special Attack", value: 60},
+       {x: "Attack", value: 52}
+     ];
+
+     var data2 = [
+       {x: "Speed", value: 45},
+       {x: "HP", value: 45},
+       {x: "Defense", value: 49},
+       {x: "Special Defense", value: 65},
+       {x: "Special Attack", value: 65},
+       {x: "Attack", value: 49}
+     ];  
+
+     var data3 = [
+       {x: "Speed", value: 43},
+       {x: "HP", value: 44},
+       {x: "Defense", value: 65},
+       {x: "Special Defense", value: 64},
+       {x: "Special Attack", value: 50},
+       {x: "Attack", value: 48}
+     ];  
+
+     // create radar chart
+     var chart = anychart.radar();
+
+     // set chart yScale settings
+     chart.yScale()
+       .minimum(35)
+       .maximum(65)
+       .ticks({'interval':5});
+
+      // color alternating cells
+      chart.yGrid().palette(["gray 0.1", "gray 0.2"]);
+
+      // create first series
+      chart.area(data1).name('Charmander').markers(true).fill("#E55934", 0.3).stroke("#E55934")
+      // create second series
+      chart.area(data2).name('Bulbasaur').markers(true).fill("#9BC53D", 0.3).stroke("#9BC53D")
+      // create third series
+      chart.area(data3).name('Squirtle').markers(true).fill("#5BC0EB", 0.3).stroke("#5BC0EB")
+
+      // set chart title
+      chart.title("Starter Pokemon Comparison Chart")
+        // set legend
+        .legend(true);
+
+      // set container id for the chart
+      chart.container('container');
+      // initiate chart drawing
+      chart.draw();
+
+    });
+  </script>
+</html>
+Podemos ver claramente que Charmander é mais ofensivo, esguicha mais defensivo e bulbasaur é mais bem-arredondado. E, portanto, eu diria que, usando este gráfico (e percebo como essa é uma conclusão anticlimática), podemos ver claramente que todos os Pokémon são a escolha correta. Eles são todos muito bem equilibrados e todos têm suas próprias forças e fraquezas.
+
+Conclusão
+Fazer um gráfico de radar é claramente muito mais fácil do que a maioria das pessoas pensa e acho que os resultados são muito interessantes e interessantes. No entanto, são mais difíceis de usar do que outras visualizações de dados e têm várias desvantagens.
+
+Se houver muitas variáveis, o gráfico fica difícil de ler. Se houver muitas observações, é aconselhável separá-las em seu próprio gráfico. Eles também precisam que todas as variáveis ​​tenham a mesma escala. Observe também que os usuários tendem a perceber a área das observações como uma medida de valor e, infelizmente, isso geralmente não é o caso.
+
+Com essas advertências em mente, sugiro usar um gráfico de linhas ou barras. Onde os gráficos de radar realmente brilham é que eles provavelmente são muito mais fortes do que os gráficos de linhas e barras para atrair um usuário; portanto, quando eles trabalham, eles funcionam muito bem!

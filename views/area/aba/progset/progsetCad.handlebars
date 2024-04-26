@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>SET Cadastrar</title>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">SET Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Cabeçalho do SET e Índices
+											</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">	
+														<label>Programa</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetProgid" id="progsetProgid" class="chosen-select" value="Sem Info" onchange="" >
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each progs}}
+																			<option value="{{_id}}">{{_id}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">	
+														<label>Beneficiário</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" value="Sem Info" onchange="" >
+																	<option value="766f69643132333435366964">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-4">
+														<label>Tipo de Programa</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetProgtipo" id="progsetProgtipo" class="chosen-select" onchange="">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each progtipos}}
+																			<option value="{{_id}}">{{progtipo_nome}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+													
+													<div class="col-sm-4">
+														<label>Nível do Programa</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetPrognivel" id="progsetPrognivel" class="chosen-select" onchange="">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each prognivels}}
+																			<option value="{{_id}}">{{prognivel_nome}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="space space-8"></div>
+												<label for="id-date-picker-1"> Data da criação do SET</label>
+												<div class="row">
+													<div class="input-group">
+														<div class="col-sm-4">
+															<input id="progsetDataprogset" name="progsetDataprogset" type="date">
+														</div>
+													</div>
+												</div>
+
+												<div class="space space-8"></div>
+												<label for="id-date-picker-1"> Data Inicial do SET</label>
+												<div class="row">
+													<div class="input-group">
+														<div class="col-sm-4">
+															<input id="progsetDataini" name="progsetDataini" type="date">
+														</div>
+													</div>
+												</div>
+
+
+												<div class="space space-8"></div>
+												<label for="id-date-picker-1"> Data Final do SET</label>
+												<div class="row">
+													<div class="input-group">
+														<div class="col-sm-4">
+															<input id="progsetDatafin" name="progsetDatafin" type="date">
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</div>	
+								</div>
+								<div class="col-xs-12">		
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bullseye"></i>
+												SET
+											</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>	
+										
+										<div class="widget-body">
+											<div class="widget-main">
+
+												<label> Descrição </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="5"></textarea>
+													</div>
+												</div>
+
+												<div class="space space-8"></div>
+												<label> Introdução</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="progsetIntro" id="progsetIntro" placeholder="" class="form-control" rows="5" ></textarea>
+													</div>
+												</div>
+
+												<div class="space space-8"></div>
+												<label> Aquisição</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="progsetAcsicao" id="progsetAcsicao" placeholder="" class="form-control" rows="5" ></textarea>
+													</div>
+												</div>
+												
+												<div class="space space-8"></div>
+												<label> Observações</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="5" ></textarea>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+									
+									
+									</div>
+								</div>
+	
+								<div >
+									<div class="col-md-offprogset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+	
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  type="reprogset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>

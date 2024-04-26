@@ -1,37 +1,34 @@
 //Exports
 const mongoose = require("mongoose")
 
-//As classe tem que ser declaradas antes das tabelas
-//Classe Programa ABA
+//progs
 const progClass = require("../models/prog")
+const respostaClass = require("../models/resposta")
 
-
-//Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
-const respostaClass = require("../models/resposta")
 
+const setClass = require("../models/progset")
 const progdicaClass = require("../models/progdica")
 const prognivelClass = require("../models/prognivel")
 const progtipoClass = require("../models/progtipo")
 
-//Tabela Programa ABA
-const Prog = mongoose.model("tb_prog")
 
-//Tabelas Extrangeiras
+//prog, tipos de prog 
+const Prog = mongoose.model("tb_prog")
+const Resposta = mongoose.model("tb_resposta")
+
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
-const Resposta = mongoose.model("tb_resposta")
 
+const Set = mongoose.model("tb_set")
 const Progdica = mongoose.model("tb_progdica")
 const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
-//Funções auxiliares
-
 
 module.exports = {
     listaProg(req, res, resposta){
@@ -63,6 +60,7 @@ module.exports = {
                 }
                 fulldate=(dataedi.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.dataedi=fulldate;
+                
             })
            
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
@@ -73,6 +71,7 @@ module.exports = {
                 bene.forEach((b) => {
                     b.countProgs = prog.filter((s) => s.prog_beneid.toString() === b._id.toString()).length;
                 });
+                
 
                 prog.forEach((s) => {
                     console.log("s: " + s);
@@ -84,12 +83,12 @@ module.exports = {
                 });
                     Usuario.find().then((usuario)=>{
                         usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Terapia.find().then((terapia)=>{
-                            terapia.sort((a,b) => ((a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.terapia_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena em OA
-                            Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                                res.render('area/aba/prog/progLis', {progs: prog, usuarios: usuario, terapias: terapia, convs: conv, benes: bene, perfilAtual, flash})
-        })})})})}).catch((err) =>{
+                        Progdica.find().then((progdica)=>{
+                            Progtipo.find().then((progtipo)=>{
+                                Prognivel.find().then((prognivel)=>{
+                                    Set.find().then((set)=>{
+                                res.render('area/aba/prog/progLis', {progs: prog, sets: set, usuarios: usuario, benes: bene, perfilAtual, flash , progdicas: progdica, progtipos: progtipo, prognivels: prognivel})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -125,18 +124,10 @@ module.exports = {
     },
 
     carregaProgEdi(req,res){
-        Prog.find().then((prog)=>{
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                            Progdica.find().then((progdica)=>{
-                                Progtipo.find().then((progtipo)=>{
-                                    Prognivel.find().then((prognivel)=>{
-                                res.render("area/aba/prog/progEdi", {progs: prog, terapias: terapia, usuarios: usuario, benes: bene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel})
-        })})})})})})}).catch((err) =>{
+        Prog.findById(req.params.id).then((prog) =>{
+            console.log(prog)
+            res.render('area/aba/prog/progEdi', {prog})
+        }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -184,13 +175,13 @@ module.exports = {
                 resultado = err;
                 res.render('admin/erro')
             }).finally(() =>{
-                if(resultado == true){
-                    console.log("Listagem Realizada!")
+                if (resultado == true){
+                    console.log('verdadeiro')
                     req.flash("success_message", "Cadastro realizado com sucesso!")
-                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.texto = "Atualizado com sucesso!"
                     resposta.sucesso = "true"
                     this.listaProg(req,res,resposta)
-                }else{
+                } else {
                     console.log('falso')
                     resposta.texto = resultado
                     resposta.sucesso = "false"
@@ -199,30 +190,22 @@ module.exports = {
                 }
             })
         } catch(err1){
-            console.log(err1)
-            res.render('admin/erro')
+            console.log("Erro TryCatch:"+err1)
+            res.render('admin/erro');
         }
     },
 
-
     deletaProg(req,res){
         Prog.deleteOne({_id: req.params.id}).then(() =>{
-            prog.find().then((prog)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Programa ABA deletado!")
-                res.render('area/aba/prog/progLis', {progs: prog, terapias: terapia, usuarios: usuario, benes: bene, flash})
-            })})})}).catch((err) =>{
+            Prog.find().then((prog) =>{
+                req.flash("success_message", "Método deletado!")
+                res.render('area/aba/prog/progLis', {progs: prog})
+            }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
+                req.flash("error_message", "houve um erro ao listar Métodos")
                 res.render('admin/erro')
             })
         })
     }
-
 
 }

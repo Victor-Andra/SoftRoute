@@ -1,44 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista ABA</title>
-			
-			<script>
-				$(document).ready(function() {
-					// Seleciona todos os elementos com a classe easy-pie-chart
-					$('.easy-pie-chart').each(function() {
-						var $this = $(this);
-						var percent = parseInt($this.data('percent'));
+		<script>
+			function carregaBody(){
+				let arr = document.getElementsByName("tagContainerTerapeuta");
 
-						// Inicializa o EasyPieChart
-						$this.easyPieChart({
-							barColor: '#87CEEB', // Cor do gráfico
-							trackColor: '#f2f2f2', // Cor de fundo
-							scaleColor: false,
-							lineWidth: 8, // Largura da linha do gráfico
-							size: 46, // Tamanho do gráfico
-							animate: 10000 // Duração da animação
-						});
-
-						// Atualiza o valor percentual do gráfico
-						$this.data('easyPieChart').update(percent);
-					});
-				});
-
-				function carregaBody(){
-					
+				arr.forEach((a)=>{
+					let novo_vetor;
+					let input = document.getElementById(a.id + "_input");
+					console.log("input.value: "+input.value)
+					novo_vetor = input.value.split(",");
+					novo_vetor.forEach((e)=>{
+						let excecao = document.getElementById(e+"_span");
+						a.append(excecao.cloneNode(true));
+					})
+				})
+			}
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar essa Exceção?");
+				if(confirmado == true){
+					window.location.href=("/menu/beneficiario/excecao/del/"+id);
 				}
-
-				function confirmeDeletar(id){
-					let confirmado = confirm("Quer mesmo deletar essa Exceção?");
-					if(confirmado == true){
-						window.location.href=("/menu/beneficiario/excecao/del/"+id);
-					}
-				}
-			</script>
+			}
+		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -66,7 +53,7 @@
 						<div class="row"><!--.row -->
 							<div class="col-xs-12 col-sm-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<table id="dynamic-table1" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 									<thead>
 										<tr role="row">
 											<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
@@ -89,7 +76,7 @@
 																<i class="ace-icon brown fa fa-refresh bigger-130"></i>
 															</a>
 															<a href="#" data-action="collapse">
-																<i class="orange ace-icon fa fa-chevron-up bigger-130"></i>
+																<i class="ace-icon fa fa-chevron-up bigger-130"></i>
 															</a>
 														</span>
 														<span class="widget-toolbar">
@@ -106,12 +93,6 @@
 																{{/if}}
 															</a>
 														</span>
-														<span class="widget-toolbar">
-															Qt. Programas:&nbsp;&nbsp;
-															<span class="badge badge-info">{{countProgs}}</span>
-														</span>
-														
-														
 															
 													</div>
 													<div class="widget-body">
@@ -256,7 +237,7 @@
 																								</a>
 																							</span>
 																							<span class="widget-toolbar">
-																								<a class="red" name="acaoCadprogset" id="acaoEdi" href="/menu/area/aba/progset/progsetcad" title="Cadastrar novo SET para esse programa ABA.">
+																								<a class="red" name="acaoCadset" id="acaoEdi" href="/menu/area/aba/set/setcad" title="Cadastrar novo SET para esse programa ABA.">
 																									<i class="ace-icon fa fa-plus bigger-130"></i>
 																								</a>
 																							</span>
@@ -267,97 +248,66 @@
 																		</div>
 																		<div class="widget-body">
 																			<div class="widget-main">
-																				
-																					<span class="label label-danger arrowed-in-right ">
-																						&nbsp;Lista de SET's do programa ABA acima.
-																					</span>
-																				
 																				<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 																					<thead>
-																						<tr role="row" >
-																							<th class="center" style="width: 3%">
+																						<tr role="row" style="width:25px">
+																							<th class="center">
 																									<label class="pos-rel">
 																										<input type="checkbox" class="ace" />
 																										<span class="lbl"></span>
 																									</label>
 																							</th>
-																							<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%">ID do SET</th>
-																							<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 18%">Descrição do SET</th>
-																							<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%" >Data</th>
-																							<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 10%">Status</th>
-																							<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%;">Ação</th>
-																							<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 62%" >REGISTROS
-																								<span class="widget-toolbar">
-																									<a class="red" name="acaoCadprogset" id="acaoEdi" href="/menu/area/aba/progreg/progregcad" title="Cadastrar novo REGISTRO para esse programa SET.">
-																										<i class="ace-icon fa fa-plus bigger-130"></i>
-																									</a>
-																								</span>
-
-																							</th>
+																							<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Nome SET</th>
+																							<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+																							<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
+																							<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 90px;">Ação</th>
+																							<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >REGISTROS</th>
 																						</tr>
 																					</thead>
 																					<tbody>
-																						{{#each ../../progsets}}
-																							{{#ifEqual this.progset_progid ../_id}}
-																								<tr role="row" class="odd">
-																									<td class="center">
-																										<label class="pos-rel">
-																											<input type="checkbox" class="ace" />
-																											<span class="lbl"></span>
-																										</label>
-																									</td>
-																									<td>{{this.progset_progid}}</td>
-																									<td>{{this.progset_desc}}</td>		
-																									<td>{{this.progset_dataprogset}}</td>			
-																									<td>
-																										
-																												<div class="easy-pie-chart percentage" data-percent="42" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
-																													<span class="percent">42</span>%
-																												<canvas height="69" width="69" style="height: 46px; width: 46px;"></canvas></div>
-																											
-																									</td>
-																									<td>
-																										<div class="action-buttons">
-																											<a id="botaoEditar" class="pink" href="">
-																												<i class="ace-icon fa fa-search bigger-130"></i>
-																											</a>
-																										{{#ifEqual ../usuarioAtual bordo_terapeutaid}}
-																											<a class="red" name="acaoDel" id="acaoDel" >
-																												<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																											</a>
-																										{{/ifEqual}}
+																						<!-- {{#each ../sets}} -->
+																							<tr role="row" class="odd">
+																								<td class="center">
+																									<label class="pos-rel">
+																										<input type="checkbox" class="ace" />
+																										<span class="lbl"></span>
+																									</label>
+																								</td>
+																								<td>Nome do set</td>	
+																								<td> 01/04/2024</td>			
+																								<td>
+																									<div class="infobox infobox-blue2">
+																										<div class="infobox-progress">
+																											<div class="easy-pie-chart percentage" data-percent="42" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
+																												<span class="percent">42</span>%
+																											<canvas height="69" width="69" style="height: 46px; width: 46px;"></canvas></div>
 																										</div>
-																										
-																									</td>
-																									<td>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">01/04/2024</label>
-																										</button>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">06/04/2024</label>
-																										</button>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">07/04/2024</label>
-																										</button>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">15/04/2024</label>
-																										</button>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">18/04/2024</label>
-																										</button>
-																										<button class="btn btn-minier btn-app btn-purple btn-sm">
-																											<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																											<label for="form-field-select-1">25/04/2024</label>
-																										</button>
-																									</td>
-																								</tr>
-																							{{/ifEqual}}
-																						{{/each}}
+
+																										<div class="infobox-data">
+																											<span class="infobox-text">Status</span>
+
+																											<div class="infobox-content">
+																												<span class="bigger-110">~</span>
+																												58GB remaining
+																											</div>
+																										</div>
+																									</div>
+																								</td>
+																								<td>
+																									<div class="action-buttons">
+																										<a id="botaoEditar" class="pink" href="">
+																											<i class="ace-icon fa fa-search bigger-130"></i>
+																										</a>
+																									{{#ifEqual ../usuarioAtual bordo_terapeutaid}}
+																										<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																											<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																										</a>
+																									{{/ifEqual}}
+																									</div>
+																									
+																								</td>
+																							</tr>
+																						<!-- {{/each}} -->
 																					</tbody>
 																				</table>
 																			</div>
@@ -391,7 +341,7 @@
 				$("#dynamic-table").DataTable({
 				"language": { "url": "/js/lang/datatable-pt-br.json" },
 				"aaSorting": [],
-				"aoColumns": [{ "bSortable": false }, null, null,null,null,{ "bSortable": false }, { "bSortable": false }],
+				"aoColumns": [null],
 				"responsive": true,
 				"lengthMenu": [ 100, 200],
 				"lengthChange": true,
