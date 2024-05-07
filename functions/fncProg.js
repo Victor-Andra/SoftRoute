@@ -15,6 +15,8 @@ const progdicaClass = require("../models/progdica")
 const prognivelClass = require("../models/prognivel")
 const progtipoClass = require("../models/progtipo")
 
+const folregClass = require("../models/folreg")
+
 
 //prog, tipos de prog 
 const Prog = mongoose.model("tb_prog")
@@ -29,6 +31,8 @@ const Progset = mongoose.model("tb_progset")
 const Progdica = mongoose.model("tb_progdica")
 const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
+
+const Folreg = mongoose.model("tb_folreg")
 
 module.exports = {
     listaProg(req, res, resposta) {
@@ -88,19 +92,22 @@ module.exports = {
                         Progtipo.find().then((progtipo) => {
                             Prognivel.find().then((prognivel) => {
                                 Progset.find().then((progset) => {
-                                    res.render('area/aba/prog/progLis', {
-                                        progs: prog,
-                                        progsets: progset,
-                                        usuarios: usuario,
-                                        benes: bene,
-                                        perfilAtual,
-                                        flash,
-                                        progdicas: progdica,
-                                        progtipos: progtipo,
-                                        prognivels: prognivel,
-                                        countProgs, // Envia a contagem de progs adquiridos
-                                        countProgsA, // Envia a contagem de progs não adquiridos
-                                        countProgsC
+                                    Folreg.find().then((folreg) => {
+                                        res.render('area/aba/prog/progLis', {
+                                            progs: prog,
+                                            progsets: progset,
+                                            usuarios: usuario,
+                                            benes: bene,
+                                            perfilAtual,
+                                            flash,
+                                            progdicas: progdica,
+                                            progtipos: progtipo,
+                                            prognivels: prognivel,
+                                            countProgs, // Envia a contagem de progs adquiridos
+                                            countProgsA, // Envia a contagem de progs não adquiridos
+                                            countProgsC,
+                                            folregs: folreg
+                                        });
                                     });
                                 });
                             });

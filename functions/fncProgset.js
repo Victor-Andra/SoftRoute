@@ -95,35 +95,65 @@ module.exports = {
         })
     },
 
+    preCarregaProgset(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+            console.log("Listagem Realizada de Usuário")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        console.log("Listagem Realizada de beneficiarios")
+                        Prog.findOne({_id: req.params.id}).then((prog)=>{
+                            Progdica.find().then((progdica)=>{
+                                Progtipo.find().then((progtipo)=>{
+                                    Prognivel.find().then((prognivel)=>{
+                                res.render("area/aba/progset/progsetPreCad", {usuarios: usuario, benes: bene, prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, usuarioAtual})
+        })})})})})})}).catch((err) =>{
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar escolas");
+            res.redirect('admin/erro');
+        })
+    },
+
     carregaProgsetEdi(req,res){
         Progset.findById(req.params.id).then((progset) =>{
-        let idProg;
-        if (req.params.id){
-            idProg = req.params.id;
-        } else {
-            idProg = "766f69643132333435366964";
-        }
-        let idBene;
-        if (req.params.id){
-            idBene = req.params.id;
-        } else {
-            idBene = "766f69643132333435366964";
-        }
-        let idProgtipo;
-        if (req.params.id){
-            idProgtipo = req.params.id;
-        } else {
-            idProgtipo = "766f69643132333435366964";
-        }
-        let idPrognivel;
-        if (req.params.id){
-            idPrognivel = req.params.id;
-        } else {
-            idPrognivel = "766f69643132333435366964";
-        }
-            console.log(progset)
-            res.render('area/aba/progset/progsetEdi', {progset, idProg, idBene, idProgtipo, idPrognivel,})
-        }).catch((err) =>{
+            console.log("ID: "+progset._id)
+            let idProg;
+            if (req.params.id){
+                idProg = req.params.id;
+            } else {
+                idProg = "766f69643132333435366964";
+            }
+            let idBene;
+            if (req.params.id){
+                idBene = req.params.id;
+            } else {
+                idBene = "766f69643132333435366964";
+            }
+            let idProgtipo;
+            if (req.params.id){
+                idProgtipo = req.params.id;
+            } else {
+                idProgtipo = "766f69643132333435366964";
+            }
+            let idPrognivel;
+            if (req.params.id){
+                idPrognivel = req.params.id;
+            } else {
+                idPrognivel = "766f69643132333435366964";
+            }
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")
+                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                            console.log("Listagem Realizada de Usuário")    
+                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                                        console.log("Listagem Realizada de beneficiarios")
+                                        Progdica.find().then((progdica)=>{
+                                            Progtipo.find().then((progtipo)=>{
+                                                Prognivel.find().then((prognivel)=>{
+                                                    Prog.find().then((prog)=>{
+                                    res.render("area/aba/progset/progsetEdi", {usuarios: usuario, benes: bene, idProg, idBene, idProgtipo, idPrognivel, progset, progs: prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
+            })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

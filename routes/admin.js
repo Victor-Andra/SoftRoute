@@ -2133,19 +2133,34 @@ router.get('/area/aba/grafprog/grafproglis', fncGeral.IsAuthenticated, (req,res)
 //------------------------------------------------------------------------------------------------
 //Menu SET ** Area Tecnicos e ABA 
 //Carrega Cadastro
-router.get('/area/aba/progset/progsetcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
-    fncProgset.carregaProgset(req, res);
-})
 
 //Lista SET por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/progset/progsetlis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/progset/progsetlis', fncGeral.IsAuthenticated, (req,res) =>{//carrega a Lista.
     fncProgset.listaProgset(req, res);
 })
 
+router.get('/area/aba/progset/progsetcad', fncGeral.IsAuthenticated, (req,res) =>{//carrega o Formulario de cadastro.
+    fncProgset.carregaProgset(req, res);
+})
+
+router.get('/area/aba/progset/progsetprecad/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o Formulario de cadastro.
+    fncProgset.preCarregaProgset(req, res);
+})
+
 //adiciona registro
-router.post('/area/aba/progset/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro Atec
+router.post('/area/aba/progset/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro.
     fncProgset.cadastraProgset(req, res);
 })
+
+//carrega registro para edição
+router.get('/area/aba/progset/progsetedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o Formulario de edição.
+    fncProgset.carregaProgsetEdi(req, res);
+})
+
+router.post('/area/aba/progset/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o registro.
+    fncProgset.atualizaProgset(req, res);
+})
+
 //------------------------------------------------------------------------------------------------
 //Menu NAT ** Area Tecnicos e ABA 
 //Carrega Cadastro
@@ -2324,6 +2339,7 @@ router.get('/area/aba/notasup/notasupcad', fncGeral.IsAuthenticated, (req,res) =
 router.get('/area/aba/notasup/notasuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
     fncNotasup.listaNotasup(req, res);
 })
+//-----------------------------------------------------------------------------
 
 //Menu Folha de Registro ** Area Tecnicos e ABA 
 //Carrega Cadastro
@@ -2331,10 +2347,30 @@ router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{
     fncFolreg.carregaFolreg(req, res);
 })
 
+router.get('/area/aba/folreg/folregPrecad/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
+    fncFolreg.preCarregaFolreg(req, res);
+})
+
 //Lista Folha Registro ** Area Tecnicos e ABA
 router.get('/area/aba/folreg/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista de registros
     fncFolreg.listaFolreg(req, res);
 })
+
+//Adiciona Registro Pecs
+router.post('/area/aba/folreg/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona pecs
+    fncFolreg.cadastraFolreg(req, res); 
+})
+
+//Carrega Editar Pecs
+router.get('/area/aba/folreg/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncFolreg.carregaFolregEdi(req,res);
+})
+
+//Carrega Atualizar Pecs
+router.post('/area/aba/folreg/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncFolreg.atualizaFolreg(req,res);
+})
+//-----------------------------------------------------------------------------
 
 //Menu pecs ** Area Tecnicos e ABA 
 //Carrega Cadastro pecs
@@ -2362,6 +2398,7 @@ router.get('/area/aba/pecs/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//ad
 router.post('/area/aba/pecs/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncPecs.atualizaPecs(req,res);
 })
+//-----------------------------------------------------------------------------
 
 //Menu visual ** Area Tecnicos e ABA 
 //Carrega Cadastro visual
@@ -2388,6 +2425,7 @@ router.post('/area/aba/visual/add', fncGeral.IsAuthenticated, (req,res) =>{//adi
 router.post('/area/aba/visual/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncVisual.atualizaVisual(req,res);
 })
+//-----------------------------------------------------------------------------
 
 //Menu Relsem ** Area Terapeutas
 //Carrega Cadastro Relsem
@@ -2431,6 +2469,7 @@ router.get('/area/relsem/capa/:id', fncGeral.IsAuthenticated, (req,res) =>{//adi
 router.post('/area/relsem/impFil', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
     fncRelsem.relsemImpFiltro(req,res);
 })
+//-----------------------------------------------------------------------------
 
 //Menu Acompanhamento devolutivas e reuniões ** Area Tecnicos e ABA 
 //Carrega Cadastro Acompanhamento, devolutivas e reuniões

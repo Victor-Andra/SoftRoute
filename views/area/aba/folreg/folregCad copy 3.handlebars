@@ -266,7 +266,69 @@
 
 													</div>
 												</div>
-											
+												<div class="row" name="chart-Duplo">
+													<div class="col-xs-12">
+														
+														<div style="width: 50%;">
+															<canvas id="stackedBarChartLeft" width="400" height="200"></canvas>
+														</div>
+														<div style="width: 50%;">
+															<canvas id="stackedBarChartRight" width="400" height="200"></canvas>
+														</div>
+														<div style="width: 50%; float: left;">
+															<table border="1">
+															<caption>Coluna Esquerda</caption>
+															<tr>
+																<th>Categoria</th>
+																<th>Valor</th>
+															</tr>
+															<tr>
+																<td>I</td>
+																<td id="leftI"></td>
+															</tr>
+															<tr>
+																<td>+d</td>
+																<td id="leftPlusD"></td>
+															</tr>
+															<tr>
+																<td>E</td>
+																<td id="leftE"></td>
+															</tr>
+															<tr>
+																<td>-d</td>
+																<td id="leftMinusD"></td>
+															</tr>
+															</table>
+														</div>
+														
+														<div style="width: 50%; float: left;">
+															<table border="1">
+															<caption>Coluna Direita</caption>
+															<tr>
+																<th>Categoria</th>
+																<th>Valor</th>
+															</tr>
+															<tr>
+																<td>I</td>
+																<td id="rightI"></td>
+															</tr>
+															<tr>
+																<td>+d</td>
+																<td id="rightPlusD"></td>
+															</tr>
+															<tr>
+																<td>E</td>
+																<td id="rightE"></td>
+															</tr>
+															<tr>
+																<td>-d</td>
+																<td id="rightMinusD"></td>
+															</tr>
+															</table>
+														</div>
+
+													</div>
+												</div>
 											</div>
 											<div id="reg" class="tab-pane fade in active">
 												<div class="alert alert-warning">
@@ -1808,7 +1870,72 @@
 			]
 			};
 
-			
+			// Dados do gráfico (coluna direita)
+			const dataRight = {
+			labels: ['SET'],
+			datasets: [
+				{
+				label: 'I',
+				backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+				data: [randomValue(5, 20)]
+				},
+				{
+				label: '+d',
+				backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
+				data: [randomValue(5, 20)]
+				},
+				{
+				label: 'E',
+				backgroundColor: 'rgba(255, 255, 0, 0.5)', // amarelo
+				data: [randomValue(5, 20)]
+				},
+				{
+				label: '-d',
+				backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
+				data: [randomValue(5, 20)]
+				}
+			]
+			};
+
+			// Opções do gráfico
+			const options = {
+			scales: {
+				x: { stacked: true },
+				y: { stacked: true, min: 0, max: 30 } // Define o intervalo de valores no eixo y
+			}
+			};
+
+			// Configuração do gráfico (coluna esquerda)
+			const configLeft = {
+			type: 'bar',
+			data: dataLeft,
+			options: options
+			};
+
+			// Configuração do gráfico (coluna direita)
+			const configRight = {
+			type: 'bar',
+			data: dataRight,
+			options: options
+			};
+
+			// Renderizar o gráfico (coluna esquerda)
+			window.onload = function() {
+			const ctxLeft = document.getElementById('stackedBarChartLeft');
+			if (ctxLeft) {
+				new Chart(ctxLeft, configLeft);
+			} else {
+				console.error('Não foi possível encontrar o elemento canvas (esquerda).');
+			}
+
+			// Renderizar o gráfico (coluna direita)
+			const ctxRight = document.getElementById('stackedBarChartRight');
+			if (ctxRight) {
+				new Chart(ctxRight, configRight);
+			} else {
+				console.error('Não foi possível encontrar o elemento canvas (direita).');
+			}
+			};
 		</script>	
 	</body>
 </html>

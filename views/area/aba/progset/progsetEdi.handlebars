@@ -1,10 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>SET Cadastrar</title>
+		<title>SET Editar</title>
+		<script>
+		function atualizaData(){
+			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+			var dataFmt = new Date(dataIso);
+			console.log(dataFmt.toISOString());
+			document.getElementById("a").value = dataFmt;
+		}
+		function carregaBody(){
+			document.getElementById("progsetProgid").value = document.getElementById("progsetProgidEdi").value;
+			console.log("progsetProgidEdi");
+			document.getElementById("progsetBeneid").value = document.getElementById("progsetBeneidEdi").value;
+			console.log("1");
+			document.getElementById("progsetProgtipoid").value = document.getElementById("progsetProgtipoidEdi").value;
+			console.log("2");
+			document.getElementById("progsetPrognivelid").value = document.getElementById("progsetPrognivelidEdi").value;
+			console.log("3");
+			document.getElementById("progsetNum").value = document.getElementById("progsetNumEdi").value;
+			console.log("4");
+			document.getElementById("progsetDataprogset").value = document.getElementById("progsetDataprogsetEdi").value;
+			console.log("5");
+			document.getElementById("progsetDataini").value = document.getElementById("progsetDatainiEdi").value;
+			console.log("6");
+			document.getElementById("progsetDatafin").value = document.getElementById("progsetDatafinEdi").value;
+			console.log("7");
+			document.getElementById("progsetDesc").value = document.getElementById("progsetDescEdi").value;
+			console.log("8");
+			document.getElementById("progsetIntro").value = document.getElementById("progsetIntroEdi").value;
+			console.log("9");
+			document.getElementById("progsetAcsicao").value = document.getElementById("progsetAcsicaoEdi").value;
+			console.log("10");
+			document.getElementById("progsetObs").value = document.getElementById("progsetObsEdi").value;
+		}
+		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody()" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -19,7 +52,7 @@
 								<a href="#">Home</a>
 							</li>
 
-							<li class="active">SET Cadastro</li>
+							<li class="active">SET Editar</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,7 +60,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/atualizar" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -35,7 +68,25 @@
 												<i class="ace-icon fa fa-bookmark-o"></i>
 												Cabeçalho do SET e Índices
 											</h4>
+											<div id="divCarrega" name="divCarrega" class="">
+												<input id="progsetId" name="progsetId" value="{{progset._id}}" />
+												<input type="text" id="progsetProgidEdi" name="progsetProgidEdi" value="{{progset.progset_progid}}"/>
+												<input type="text" id="progsetBeneidEdi" name="progsetBeneidEdi" value="{{progset.progset_beneid}}"/>
+												
+												<input type="text" id="progsetProgtipoidEdi" name="progsetProgtipoidEdi" value="{{progset.progset_progtipoid}}"/>
+												<input type="text" id="progsetPrognivelidEdi" name="progsetPrognivelidEdi" value="{{progset.progset_prognivelid}}"/>
+												
+												<input type="text" id="progsetNumEdi" name="progsetNumEdi" value="{{progset.progset_num}}"/>
+												<input type="text" id="progsetDataprogsetEdi" name="progsetDataprogsetEdi" value="{{progset.progset_dataprogset}}"/>
+												<input type="text" id="progsetDatainiEdi" name="progsetDatainiEdi" value="{{progset.progset_dataini}}"/>
+												<input type="text" id="progsetDatafinEdi" name="progsetDatafinEdi" value="{{progset.progset_datafin}}"/>
+												<input type="text" id="progsetDescEdi" name="progsetDescEdi" value="{{progset.progset_desc}}"/>
+												<input type="text" id="progsetIntroEdi" name="progsetIntroEdi" value="{{progset.progset_intro}}"/>
+												<input type="text" id="progsetAcsicaoEdi" name="progsetAcsicaoEdi" value="{{progset.progset_acsicao}}"/>
+												<input type="text" id="progsetObsEdi" name="progsetObsEdi" value="{{progset.progset_obs}}"/>
 
+
+											</div>
 											<span class="widget-toolbar">
 
 												<a href="#" data-action="reload">
@@ -87,7 +138,7 @@
 														<label>Tipo de Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" onchange="">
+																<select name="progsetProgtipo" id="progsetProgtipo" class="chosen-select" onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each progtipos}}
 																			<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -101,7 +152,7 @@
 														<label>Nível do Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select" onchange="">
+																<select name="progsetPrognivel" id="progsetPrognivel" class="chosen-select" onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each prognivels}}
 																			<option value="{{_id}}">{{prognivel_nome}}</option>
@@ -142,7 +193,7 @@
 														</select>
 													</div>
 												</div>
-
+													
 												<div class="space space-8"></div>
 												<label for="id-date-picker-1"> Data da criação do SET</label>
 												<div class="row">

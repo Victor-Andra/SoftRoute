@@ -11,6 +11,12 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const progClass = require("../models/prog")
+const progsetClass = require("../models/progset")
+const progdicaClass = require("../models/progdica")
+const progtipoClass = require("../models/progtipo")
+const prognivelClass = require("../models/prognivel")
+const respostaClass = require("../models/resposta")
 
 //Tabela Plano de Folregamento 
 const Folreg = mongoose.model("tb_folreg")
@@ -20,6 +26,12 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
+const Prog = mongoose.model("tb_prog")
+const Progset = mongoose.model("tb_progset")
+const Progdica = mongoose.model("tb_progdica")
+const Progtipo = mongoose.model("tb_progtipo")
+const Prognivel = mongoose.model("tb_prognivel")
+const Resposta = mongoose.model("tb_resposta")
 
 
 //Funções auxiliares
@@ -58,13 +70,37 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                             //console.log("Listagem Realizada de Terapia")
-                                res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta})
-        })})})}).catch((err) =>{
+                            Prog.find().then((prog)=>{
+                                Progset.find().then((progset)=>{
+                                res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta, progs: prog, progsets: progset})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
         })
+    },
 
+    preCarregaFolreg(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        Progset.find().then((progset)=>{
+                            Prog.findOne({_id: req.params.id}).then((prog)=>{
+                                Progdica.find().then((progdica)=>{
+                                    Progtipo.find().then((progtipo)=>{
+                                        Prognivel.find().then((prognivel)=>{
+                                            res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progsets: progset, prog, usuarioAtual})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar escolas");
+            res.redirect('admin/erro');
+        })
     },
 
     carregaFolregEdi(req,res){
@@ -75,8 +111,10 @@ module.exports = {
                     console.log("Listagem Realizada de Usuário")
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/aba/folreg/folregEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
-        })})})}).catch((err) =>{
+                            Prog.find().then((prog)=>{
+                                Progset.find().then((progset)=>{
+                                res.render("area/aba/folreg/folregEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, progs: prog, progsets: progset})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -84,28 +122,25 @@ module.exports = {
     },
 
     cadastraFolreg(req,res){
-        console.log("chegou")
         let resultado
         let resposta = new Resposta()
+        let cadastro = folregClass.folregAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
-        folregClass.cadastraFolregFisio(req,res).then((result)=>{
-            console.log("Cadastro Realizado!")
-            console.log(res)
+        cadastro.then((result)=>{
             resultado = true;
         }).catch((err)=>{
             resultado = err
             console.log("ERRO:"+err)
         }).finally(()=>{
             if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaFolreg(req,res,resposta)
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
             } else {
+                console.log('falso')
                 resposta.texto = resultado
                 resposta.sucesso = "false"
-                console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
                 res.render('admin/erro', resposta);
             }
@@ -116,7 +151,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            folregClass.escolaEditar(req,res).then((res)=>{
+            folregClass.folregEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -149,7 +184,7 @@ module.exports = {
 
 
     deletaFolreg(req,res){
-        Folregfisio.deleteOne({_id: req.params.id}).then(() =>{
+        Folreg.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")

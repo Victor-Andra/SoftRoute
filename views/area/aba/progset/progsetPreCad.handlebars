@@ -2,14 +2,17 @@
 <html lang="pt-br">
 	<head>
 		<title>SET Cadastrar</title>
+		<script>
+			function carregaBody(){
+				document.getElementById("progsetBeneid").value = document.getElementById("progBene").value;
+				document.getElementById("progsetProgtipoid").value = document.getElementById("progTipo").value;
+				document.getElementById("progsetPrognivelid").value = document.getElementById("progNivel").value;
+				document.getElementById("progsetTecid").value = document.getElementById("usuarioAtual").value;
+			}
+		</script>
 	</head>
-
-	<body onload="javascript:controlaNave();" class="no-skin">
-
-
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -21,13 +24,18 @@
 
 							<li class="active">SET Cadastro</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
+								<div id="divCarrega" hidden>
+									<input id="progId" value="{{prog._id}}" />
+									<input id="progBene" value="{{prog.prog_beneid}}" />
+									<input id="progTipo" value="{{prog.prog_tipo}}" />
+									<input id="progNivel" value="{{prog.prog_nivel}}" />
+									<input id="usuarioAtual" value="{{usuarioAtual}}" />
+								</div>
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -35,9 +43,7 @@
 												<i class="ace-icon fa fa-bookmark-o"></i>
 												Cabeçalho do SET e Índices
 											</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
@@ -47,26 +53,10 @@
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<div class="row">
-													<div class="col-xs-12">	
-														<label>Programa</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetProgid" id="progsetProgid" class="chosen-select" value="Sem Info" onchange="" >
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each progs}}
-																			<option value="{{_id}}">{{_id}}</option>
-																		{{/each}}
-																</select>
-															</div>
-														</div>
-													</div>
-												</div>
 												<div class="row">
 													<div class="col-xs-12">	
 														<label>Beneficiário</label>
@@ -96,16 +86,15 @@
 															</div>
 														</div>
 													</div>
-													
 													<div class="col-sm-4">
 														<label>Nível do Programa</label>
 														<div class="input-group">
 															<div class="input-group">
 																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select" onchange="">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each prognivels}}
-																			<option value="{{_id}}">{{prognivel_nome}}</option>
-																		{{/each}}
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each prognivels}}
+																	<option value="{{_id}}">{{prognivel_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
@@ -115,10 +104,10 @@
 														<div class="input-group">
 															<div class="input-group">
 																<select name="progsetTecid" id="progsetTecid" class="chosen-select" onchange="">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each usuarios}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
@@ -128,21 +117,20 @@
 												<div class="input-group">
 													<div class="input-group">
 														<select name="progsetNum" id="progsetNum" class="chosen-select" onchange="">
-																<option value="-">-</option>
-																<option value="SET 01">SET 01</option>
-																<option value="SET 02">SET 02</option>
-																<option value="SET 03">SET 03</option>
-																<option value="SET 04">SET 04</option>
-																<option value="SET 05">SET 05</option>
-																<option value="SET 06">SET 06</option>
-																<option value="SET 07">SET 07</option>
-																<option value="SET 08">SET 08</option>
-																<option value="SET 09">SET 09</option>
-																<option value="SET 10">SET 10</option>
+															<option value="-">-</option>
+															<option value="SET 01">SET 01</option>
+															<option value="SET 02">SET 02</option>
+															<option value="SET 03">SET 03</option>
+															<option value="SET 04">SET 04</option>
+															<option value="SET 05">SET 05</option>
+															<option value="SET 06">SET 06</option>
+															<option value="SET 07">SET 07</option>
+															<option value="SET 08">SET 08</option>
+															<option value="SET 09">SET 09</option>
+															<option value="SET 10">SET 10</option>
 														</select>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label for="id-date-picker-1"> Data da criação do SET</label>
 												<div class="row">
@@ -152,7 +140,6 @@
 														</div>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label for="id-date-picker-1"> Data Inicial do SET</label>
 												<div class="row">
@@ -162,7 +149,6 @@
 														</div>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label for="id-date-picker-1"> Data Final do SET</label>
 												<div class="row">
@@ -172,7 +158,6 @@
 														</div>
 													</div>
 												</div>
-
 											</div>
 										</div>
 									</div>	
@@ -184,9 +169,7 @@
 												<i class="ace-icon fa fa-bullseye"></i>
 												SET
 											</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
@@ -196,20 +179,16 @@
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>	
-										
 										<div class="widget-body">
 											<div class="widget-main">
-
 												<label> Descrição </label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="5"></textarea>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label> Introdução</label>
 												<div class="form-group">
@@ -217,7 +196,6 @@
 														<textarea type="text" name="progsetIntro" id="progsetIntro" placeholder="" class="form-control" rows="5" ></textarea>
 													</div>
 												</div>
-
 												<div class="space space-8"></div>
 												<label> Aquisição</label>
 												<div class="form-group">
@@ -225,7 +203,6 @@
 														<textarea type="text" name="progsetAcsicao" id="progsetAcsicao" placeholder="" class="form-control" rows="5" ></textarea>
 													</div>
 												</div>
-												
 												<div class="space space-8"></div>
 												<label> Observações</label>
 												<div class="form-group">
@@ -233,21 +210,16 @@
 														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="5" ></textarea>
 													</div>
 												</div>
-
 											</div>
 										</div>
-									
-									
 									</div>
 								</div>
-	
-								<div >
+								<div>
 									<div class="col-md-offprogset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-	
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  type="reprogset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -260,7 +232,6 @@
 					</div><!-- /.row -->
 				</div>
 			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>
