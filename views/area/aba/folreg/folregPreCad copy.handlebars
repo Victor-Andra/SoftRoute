@@ -20,9 +20,9 @@
 			
 		</style>
 		<title>REGISTROS: Simples ou Duplo</title>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		
 		<script type="text/javascript">
-			src="https://cdn.jsdelivr.net/npm/chart.js"
 			function mudaRegistro() {
 				let tipodoc = document.getElementById("folregTiporeg").value;
 				console.log(tipodoc)
@@ -47,7 +47,7 @@
 					document.getElementById('chart-Simples').style.display = 'none';
 					document.getElementById('chart-Duplo').style.display = 'none';
 				}
-				
+				document.getElementById('folregTiporeg').ReadOnly
    			}
 			function atualizaTerapeutaId(){
 				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
@@ -97,84 +97,91 @@
 			}
 
 			function somaResEsqDuplo() {
-					// Variáveis para armazenar os totais
-					let totalI = 0;
-					let totalE = 0;
-					let totalMaisD = 0;
-					let totalMenosD = 0;
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
 
-					// Encontra todos os inputs de rádio marcados
-					let inputs = document.querySelectorAll('input[name$="Resesqu"]:checked');
+				// Encontra todos os inputs de rádio marcados
+				let inputs = document.querySelectorAll('input[name$="Resesqu"]:checked');
 
-					// Loop através de todos os inputs encontrados
-					inputs.forEach(function(input) {
-						// Verifica o valor do input
-						switch(input.value) {
-							case 'I':
-								totalI++;
-								break;
-							case 'E':
-								totalE++;
-								break;
-							case '+d':
-								totalMaisD++;
-								break;
-							case '-d':
-								totalMenosD++;
-								break;
-							default:
-								break;
-						}
-					});
+				// Loop através de todos os inputs encontrados
+				inputs.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalI++;
+							break;
+						case 'E':
+							totalE++;
+							break;
+						case '+d':
+							totalMaisD++;
+							break;
+						case '-d':
+							totalMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
 
-					// Atualiza os campos de input com os totais calculados
-					document.getElementById("folregTotalduploesq1").value = totalI;
-					document.getElementById("folregTotalduploesq2").value = totalE;
-					document.getElementById("folregTotalduploesq3").value = totalMaisD;
-					document.getElementById("folregTotalduploesq4").value = totalMenosD;
-				}
+				// Atualiza os campos de input com os totais calculados
+				document.getElementById("folregTotalduploesq1").value = totalI;
+				document.getElementById("folregTotalduploesq2").value = totalE;
+				document.getElementById("folregTotalduploesq3").value = totalMaisD;
+				document.getElementById("folregTotalduploesq4").value = totalMenosD;
+			}
 
 
 			function somaResDirDuplo() {
-					// Variáveis para armazenar os totais
-					let totalI = 0;
-					let totalE = 0;
-					let totalMaisD = 0;
-					let totalMenosD = 0;
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
 
-					// Encontra todos os inputs de rádio marcados
-					let inputs = document.querySelectorAll('input[name$="Resdir"]:checked');
+				// Encontra todos os inputs de rádio marcados
+				let inputs = document.querySelectorAll('input[name$="Resdir"]:checked');
 
-					// Loop através de todos os inputs encontrados
-					inputs.forEach(function(input) {
-						// Verifica o valor do input
-						switch(input.value) {
-							case 'I':
-								totalI++;
-								break;
-							case 'E':
-								totalE++;
-								break;
-							case '+d':
-								totalMaisD++;
-								break;
-							case '-d':
-								totalMenosD++;
-								break;
-							default:
-								break;
-						}
-					});
+				// Loop através de todos os inputs encontrados
+				inputs.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalI++;
+							break;
+						case 'E':
+							totalE++;
+							break;
+						case '+d':
+							totalMaisD++;
+							break;
+						case '-d':
+							totalMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
 
-					// Atualiza os campos de input com os totais calculados
-					document.getElementById("folregTotalduplodir1").value = totalI;
-					document.getElementById("folregTotalduplodir2").value = totalE;
-					document.getElementById("folregTotalduplodir3").value = totalMaisD;
-					document.getElementById("folregTotalduplodir4").value = totalMenosD;
-				}
+				// Atualiza os campos de input com os totais calculados
+				document.getElementById("folregTotalduplodir1").value = totalI;
+				document.getElementById("folregTotalduplodir2").value = totalE;
+				document.getElementById("folregTotalduplodir3").value = totalMaisD;
+				document.getElementById("folregTotalduplodir4").value = totalMenosD;
+			}
+
+			function carregaBody(){
+
+			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+
+	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -187,11 +194,20 @@
 
 							<li class="active">ABA</li>
 						</ul><!-- /.breadcrumb -->
+
 					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
+								<div id="divCarrega">
+									<input id="progId" value="{{prog._id}}" />
+									<input id="progBene" value="{{prog.prog_beneid}}" />
+									<input id="progTipo" value="{{prog.prog_tipo}}" />
+									<input id="progNivel" value="{{prog.prog_nivel}}" />
+									<input id="usuarioAtual" value="{{usuarioAtual}}" />
+								</div>
 								<div class="col-xs-12">
 									<div class="tabbable">
 										<ul class="nav nav-tabs" id="myTab">
@@ -201,6 +217,7 @@
 													Registro
 												</a>
 											</li>
+
 											<li>
 												<a data-toggle="tab" href="#graf" aria-expanded="false">
 													<i class="red ace-icon fa  fa-bar-chart-o bigger-120"></i>
@@ -414,11 +431,14 @@
 																			</select>
 																		</div>
 																	</div>
+																	
+
 
 																	<label>Observações Adicionais</label>
 																	<div class="form-group">
 																		<div class="col-sm-12">
-																			<textarea type="text" name="folregObs" id="folregObs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+																			<textarea type="text" name="folregObs" id="folregObs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																			</textarea>
 																		</div>
 																	</div>
 																	
@@ -961,7 +981,9 @@
 																		<tbody>
 																			<tr><!-- 1Reg -->
 																				<td class="center">
-																					<span class="badge badge-purple">1</span>
+																					
+																						<span class="badge badge-purple">1</span>
+																					
 																				</td>
 																				<td>
 																					<label class="pos-rel">
@@ -1650,7 +1672,7 @@
 																				</td>
 																				
 																				<td colspan="1">
-																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduploesq1" id="folregTotalduploesq1" type="text" style="width: 15%;" readonly/>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span><input name="folregTotalduploesq1" id="folregTotalduploesq1" type="text" style="width: 15%;" readonly/>
 																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduploesq2" id="folregTotalduploesq2" type="text" style="width: 15%;" readonly/>
 																					<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalduploesq3" id="folregTotalduploesq3" type="text" style="width: 15%;" readonly/>	
 																					<span class="label label-success arrowed-in">-d</span><input name="folregTotalduploesq4" id="folregTotalduploesq4" type="text" style="width: 15%;" readonly/>																				
@@ -1658,10 +1680,10 @@
 																				<td></td>
 																				<td></td>
 																				<td colspan="1">
-																					<input name="folregTotalduplodir1" id="folregTotalduplodir1" type="text" style="width: 15%;" readonly/>
-																					<input name="folregTotalduplodir2" id="folregTotalduplodir2" type="text" style="width: 15%;" readonly/>
-																					<input name="folregTotalduplodir3" id="folregTotalduplodir3" type="text" style="width: 15%;" readonly/>	
-																					<input name="folregTotalduplodir4" id="folregTotalduplodir4" type="text" style="width: 15%;" readonly/>																				
+																					<span class="label label-danger arrowed-in">&nbsp;I</span><input name="folregTotalduplodir1" id="folregTotalduplodir1" type="text" style="width: 15%;" readonly/>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduplodir2" id="folregTotalduplodir2" type="text" style="width: 15%;" readonly/>
+																					<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalduplodir3" id="folregTotalduplodir3" type="text" style="width: 15%;" readonly/>	
+																					<span class="label label-success arrowed-in">-d</span><input name="folregTotalduplodir4" id="folregTotalduplodir4" type="text" style="width: 15%;" readonly/>																				
 																				</td>
 																				<td></td>
 																				<td></td>
@@ -1747,47 +1769,27 @@
 				options: options
 				};
 
-				// Renderizar o gráfico
-				window.onload = function() {
-				const ctx = document.getElementById('stackedBarChart-Simples');
-				if (ctx) {
-					new Chart(ctx, config);
-				} else {
-					console.error('Não foi possível encontrar o elemento canvas.');
+				// Função para renderizar o gráfico
+				function renderizarGrafico() {
+					const ctx = document.getElementById('stackedBarChart-Simples');
+					if (ctx) {
+						new Chart(ctx, config);
+					} else {
+						console.error('Não foi possível encontrar o elemento canvas.');
+					}
 				}
-				};
+
+				// Chamar a função de renderização quando o DOM estiver pronto
+				document.addEventListener('DOMContentLoaded', function() {
+					renderizarGrafico();
+				});
 		 
 			// Função para gerar valores aleatórios entre min e max
 			function randomValue(min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
 			}
 
-			// Dados do gráfico (coluna esquerda)
-			const dataLeft = {
-			labels: ['SET'],
-			datasets: [
-				{
-				label: 'I',
-				backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
-				data: [randomValue(5, 20)]
-				},
-				{
-				label: '+d',
-				backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
-				data: [randomValue(5, 20)]
-				},
-				{
-				label: 'E',
-				backgroundColor: 'rgba(255, 255, 0, 0.5)', // amarelo
-				data: [randomValue(5, 20)]
-				},
-				{
-				label: '-d',
-				backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
-				data: [randomValue(5, 20)]
-				}
-			]
-			};
+			
 
 			
 		</script>	

@@ -3,6 +3,27 @@
 	<head>
 		<title>Anamnese</title>
 			<script type="text/javascript">
+				function formataData(date) {//yyyy-MM-dd
+					var d = new Date(date);
+					if (d.getTimezoneOffset() == 180){
+						d.setHours(d.getHours()+3);
+					}
+					console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+					if (month.length == 1) {
+						month = '0' + month;
+					}
+						
+					if (day.length == 1) {
+						day = '0' + day;
+					}
+
+					return [year, month, day].join('-');
+				}
+
 				function atualizaData(){
 					var hora = "00:00"
 					var data = document.getElementById("anamnDataedi").value+"T"+hora+":00.000Z";
@@ -28,73 +49,24 @@
 					}
 				}
 				function atualizaDadosbene(){
-					
 					let beneid = document.getElementById("anamnBeneid").value;
-					let mae_beneid = document.getElementById(beneid+"_beneMaeEdi").value;
-					let pai_beneid = document.getElementById(beneid+"_benePaiEdi").value;
 
-					var dataIso = document.getElementById(beneid+"_beneDatanascEdi").value;
+					var dataIso = document.getElementById(beneid+"_anamnBenedatanasc").value;
 					if (dataIso != undefined && dataIso != "undefined"){
 						var dataFmt = new Date(dataIso);
-						console.log("dataFmt:"+dataFmt)
+						let dataAtual = new Date(); 
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-						document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
+						//console.log("dataFmt:"+dataFmt);
+						//console.log("calculaIdade(dataFmt): "+calculaIdade(dataFmt));
+						//document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
 					}
-
-					if (pai_beneid != undefined && pai_beneid != "undefined" && pai_beneid != null){
-						document.getElementById("anamnPainome").value = pai_beneid;
-					}
-
-					if (mae_beneid != undefined && mae_beneid != "undefined" && mae_beneid != null){
-						document.getElementById("anamnMaenome").value = mae_beneid;
-					}
-					document.getElementById("anamnBenenomeinfo").value = document.getElementById(beneid+"_beneNome").value;
+					document.getElementById("anamnMaenome").value = document.getElementById(beneid+"_beneMae").value;
+					document.getElementById("anamnPainome").value = document.getElementById(beneid+"_benePai").value;
 					document.getElementById("anamnBenenome").value = document.getElementById(beneid+"_beneNome").value;
-				}
-				function calculaIdade(dataFmt) {
-				// Data atual
-				const hoje = new Date();
-
-				// Data de aniversário
-				const aniversario = new Date(dataFmt);
-
-				// Cálculo da idade
-				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
-				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
-
-				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
-				if (hoje.getDate() < aniversario.getDate()) {
-					idadeMeses--;
+					document.getElementById("anamnBenenomeinfo").value = document.getElementById(beneid+"_beneNome").value;
 				}
 
-				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
-				if (idadeMeses < 0) {
-					idadeAnos--;
-					idadeMeses += 12;
-				}
-				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-				
-				}
-				function formataData(date) {//yyyy-MM-dd
-					var d = new Date(date);
-					if (d.getTimezoneOffset() == 180){
-						d.setHours(d.getHours()+3);
-					}
-					console.log("d:"+d);
-						month = '' + (d.getMonth() + 1);
-						day = '' + d.getDate();
-						year = d.getFullYear();
-
-					if (month.length == 1) {
-						month = '0' + month;
-					}
-						
-					if (day.length == 1) {
-						day = '0' + day;
-					}
-
-					return [year, month, day].join('-');
-				}
+								
 				function submeterFormulario(){
 					document.getElementById("previewImage").remove();
 					let form = document.getElementById("formUsuarioAdd");
@@ -608,6 +580,7 @@
 					}
 					let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 					document.getElementById("anamnDataanamnese").value = fulldate;
+					
 					//anamnBenedatanasc
 					dtnsc = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
 					mes = (dtnsc.getMonth()+1).toString();
@@ -633,7 +606,7 @@
 					fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
 					console.log(fulldate)
 					document.getElementById("anamnBenedatanasc").value = fulldate;
-					document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
+					
 					if (document.getElementById("anamnBenenomeEdi").value != ""){
 						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 						

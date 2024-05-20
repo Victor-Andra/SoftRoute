@@ -316,8 +316,10 @@
 		function atualizaProgressBars(selectedTextValues) {
 			var selectedValues = selectedTextValues.split(", "); // Alteração aqui
 			var numSelected = selectedValues.length;
-
-			// Definindo os valores para os progress-bars com base no número de seleções
+			var procdica = document.getElementById("progDicaproced").value;
+			console.log(procdica);
+			if (procdica === "" || "Errorless" || "Most-to-Lead"){
+			// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo diferente de "Least-to-Most"
 			var progressValues = [];
 			if (numSelected === 1) {
 				progressValues = [100];
@@ -329,10 +331,30 @@
 				progressValues = [40, 30, 20, 10];
 			} else if (numSelected === 5) {
 				progressValues = [35, 25, 20, 15, 5];
+			} else if (numSelected === 6) {
+				progressValues = [30, 27, 20, 15, 5, 2];
+			}
+			} else {
+			// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo igual a "Least-to-Most"
+			// O gráfico fica invertido
+			if (numSelected === 1) {
+				progressValues = [2];
+			} else if (numSelected === 2) {
+				progressValues = [2, 5];
+			} else if (numSelected === 3) {
+				progressValues = [2, 5, 15];
+			} else if (numSelected === 4) {
+				progressValues = [2, 5, 15, 20];
+			} else if (numSelected === 5) {
+				progressValues = [2,5,15,20,25];
+			} else if (numSelected === 6) {
+				progressValues = [2, 5, 15, 20, 27, 30];
+			}
+
 			}
 
 				// Atualizando os elementos progress-bar
-				for (var i = 0; i < 5; i++) {
+				for (var i = 0; i < 6; i++) {
 					var progressBar = $('#porgress' + (i + 1));
 					if (i < numSelected) {
 						progressBar.show();
@@ -895,7 +917,7 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<p class="alert alert-danger">
-													Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+													Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 6 (Seis).
 												</p>
 												<div class="row">
 													<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
@@ -949,7 +971,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input id="progDicaprocedop1" name="progDicaprocedop" type="radio" class="ace" value="Errorless" onchange="atualizaDicaproced(value);">
+																	<input id="progDicaprocedop1" name="progDicaprocedop" type="radio" class="ace" value="Errorless" onchange="atualizaDicaproced(value);atualizaProgressBars();">
 																	<span class="lbl"> Errorless</span>
 																</label>
 															</div>
@@ -959,7 +981,7 @@
 														<div class="row">
 															<div class="radio">
 															<label>
-																<input id="progDicaprocedop2" name="progDicaprocedop" type="radio" class="ace" value="Most-to-Lead" onchange="atualizaDicaproced(value);">
+																<input id="progDicaprocedop2" name="progDicaprocedop" type="radio" class="ace" value="Most-to-Lead" onchange="atualizaDicaproced(value);atualizaProgressBars();">
 																<span class="lbl"> Most-to-Lead</span>
 															</label>
 															</div>
@@ -969,7 +991,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input id="progDicaprocedop3" name="progDicaprocedop" type="radio" class="ace" value="Least-to-Most" onchange="atualizaDicaproced(value);">
+																	<input id="progDicaprocedop3" name="progDicaprocedop" type="radio" class="ace" value="Least-to-Most" onchange="atualizaDicaproced(value);atualizaProgressBars();">
 																	<span class="lbl"> Least-to-Most</span>
 																</label>
 															</div>
@@ -1041,6 +1063,12 @@
 																	<div id="porgress5" class="progress green" hidden>
 																		<div class="progress-bar">
 																			<div class="progress-value" hidden>5%</div>
+																			<div class="progress-name"></div>
+																		</div>
+																	</div>
+																	<div id="porgress6" class="progress brown" hidden>
+																		<div class="progress-bar">
+																			<div class="progress-value" hidden>2%</div>
 																			<div class="progress-name"></div>
 																		</div>
 																	</div>

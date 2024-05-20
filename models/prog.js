@@ -97,11 +97,11 @@ ProgSchema.loadClass(Prog)
 const ProgModel = mongoose.model('tb_prog', ProgSchema)
 module.exports = {ProgModel,ProgSchema,
     progEditar: async (req, res) => {
-        let dataAtual = new Date();
-        let resultado;
         //Pega data atual
-        
-        //Realiza Atualização
+        let dataAtual = new Date();
+        //Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
         await ProgModel.findByIdAndUpdate(req.body.progId, 
             {$set: {
                 prog_beneid : req.body.progBeneid,
@@ -126,7 +126,7 @@ module.exports = {ProgModel,ProgSchema,
                 prog_dicaimplement : req.body.progDicaimplement,
                 prog_obs : req.body.progObs,
                 //Atributos de controle
-                prog_usuidedi : req.body.progUsuidedi,
+                prog_usuidedi : usuarioAtual,
                 prog_dataedi : dataAtual.toISOString(),
                 prog_lixo : "false"
                 }}
@@ -143,8 +143,11 @@ module.exports = {ProgModel,ProgSchema,
     },
     
     progAdicionar: async (req,res) => {
+        //Pega data atual
         let dataAtual = new Date();
-           console.log("progmodel");
+        //Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
            const newProg = new ProgModel({
                 prog_beneid : req.body.progBeneid,
                 prog_tipo : req.body.progTipo,
@@ -168,7 +171,7 @@ module.exports = {ProgModel,ProgSchema,
                 prog_dicaimplement : req.body.progDicaimplement,
                 prog_obs : req.body.progObs,
                 //Atributos de controle
-                prog_usuidcad : req.body.progUsuidcad,
+                prog_usuidcad : usuarioAtual,
                 prog_datacad : dataAtual.toISOString(),
                 prog_lixo : "false"
            });

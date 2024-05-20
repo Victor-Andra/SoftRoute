@@ -113,48 +113,41 @@
 														</div>
 													</div>
 												</div>
-												<label>Número do SET</label>
+												<label>Número do SET</label><label style="color: brown;">&nbsp;&nbsp;Ex.: SET 01, SET 09, SET 12 etc</label>
 												<div class="input-group">
 													<div class="input-group">
-														<select name="progsetNum" id="progsetNum" class="chosen-select" onchange="">
-															<option value="-">-</option>
-															<option value="SET 01">SET 01</option>
-															<option value="SET 02">SET 02</option>
-															<option value="SET 03">SET 03</option>
-															<option value="SET 04">SET 04</option>
-															<option value="SET 05">SET 05</option>
-															<option value="SET 06">SET 06</option>
-															<option value="SET 07">SET 07</option>
-															<option value="SET 08">SET 08</option>
-															<option value="SET 09">SET 09</option>
-															<option value="SET 10">SET 10</option>
-														</select>
+														<input type="text" id="progsetNum" name="progsetNum" />
 													</div>
 												</div>
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data da criação do SET</label>
 												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDataprogset" name="progsetDataprogset" type="date">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da criação do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDataprogset" name="progsetDataprogset" type="date">
+																</div>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data Inicial do SET</label>
-												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDataini" name="progsetDataini" type="date">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de inicio do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDataini" name="progsetDataini" type="date">
+																</div>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data Final do SET</label>
-												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDatafin" name="progsetDatafin" type="date">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de acsição / Meta</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatafin" name="progsetDatafin" type="date">
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -186,28 +179,123 @@
 												<label> Descrição </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="5"></textarea>
+														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
 													</div>
 												</div>
-												<div class="space space-8"></div>
-												<label> Introdução</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetIntro" id="progsetIntro" placeholder="" class="form-control" rows="5" ></textarea>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEsta" id="progsetEsta" type="text"  />
+																</div>
+															</div>
+														</div>
 													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEstb" id="progsetEstb" type="text"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEstc" id="progsetEstc" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEstd" id="progsetEstd" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEste" id="progsetEste" type="text"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEstf" id="progsetEstf" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>																								
 												</div>
-												<div class="space space-8"></div>
-												<label> Aquisição</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetAcsicao" id="progsetAcsicao" placeholder="" class="form-control" rows="5" ></textarea>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEstg" id="progsetEstg" type="text"  />
+																</div>
+															</div>
+														</div>
 													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEsth" id="progsetEsth" type="text"/>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-2">
+														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+														<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+														<div class="row">
+															<div class="col-sm-4">
+																<div class="input-group">
+																	<input name="progsetEsti" id="progsetEsti" type="text"  />
+																</div>
+															</div>
+														</div>
+													</div>		
 												</div>
 												<div class="space space-8"></div>
 												<label> Observações</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="5" ></textarea>
+														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
 													</div>
 												</div>
 											</div>

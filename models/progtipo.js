@@ -39,18 +39,19 @@ ProgtipoSchema.loadClass(Progtipo)
 const ProgtipoModel = mongoose.model('tb_progtipo', ProgtipoSchema)
 module.exports = {ProgtipoModel,ProgtipoSchema,
     progtipoEditar: async (req, res) => {
-        let dataAtual = new Date();
-        let resultado;
         //Pega data atual
-        
+        let dataAtual = new Date();
+        //Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
         //Realiza Atualização
         await ProgtipoModel.findByIdAndUpdate(req.body.progtipoId, 
             {$set: {
                 progtipo_nome: req.body.progtipoNome,
                 progtipo_ordem: req.body.progtipoOrdem,
                 progtipo_descricao: req.body.progtipoDescricao,
-                prog_usuidedi : req.body.progUsuidedi,
-                prog_dataedi : dataAtual
+                prog_usuidedi : usuarioAtual,
+                prog_dataedi : dataAtual.toISOString()
                 
                 }}
         ).then((res) =>{
@@ -65,14 +66,19 @@ module.exports = {ProgtipoModel,ProgtipoSchema,
         return resultado;
     },
     progtipoAdicionar: async (req,res) => {
-         let dataAtual = new Date();
+         //Pega data atual
+        let dataAtual = new Date();
+        //Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
+        //Realiza Atualização
             console.log("progtipomodel");
             const newProgtipo = new ProgtipoModel({
                 progtipo_nome: req.body.progtipoNome,
                 progtipo_ordem: req.body.progtipoOrdem,
                 progtipo_descricao: req.body.progtipoDescricao,
-                progtipo_usuidcad: req.body.progtipoUsuidedi ,
-                progtipo_datacad: dataAtual
+                progtipo_usuidcad: usuarioAtual ,
+                progtipo_datacad: dataAtual.toISOString()
             });
             console.log("newProgtipo save");
             await newProgtipo.save().then(()=>{

@@ -39,18 +39,19 @@ PrognivelSchema.loadClass(Prognivel)
 const PrognivelModel = mongoose.model('tb_prognivel', PrognivelSchema)
 module.exports = {PrognivelModel,PrognivelSchema,
     prognivelEditar: async (req, res) => {
-        let dataAtual = new Date();
-        let resultado;
-        //Pega data atual
-        
-        //Realiza Atualização
+       //Pega data atual
+       let dataAtual = new Date();
+       //Pega Usuário Atual
+       let usuarioAtual = req.cookies['idUsu'];
+       let resultado;
+       //Realiza Atualização
         await PrognivelModel.findByIdAndUpdate(req.body.prognivelId, 
             {$set: {
                 prognivel_nome: req.body.prognivelNome,
                 prognivel_ordem: req.body.prognivelOrdem,
                 prognivel_descricao: req.body.prognivelDescricao,
-                prog_usuidedi : req.body.progUsuidedi,
-                prog_dataedi : dataAtual
+                prog_usuidedi : usuarioAtual,
+                prog_dataedi : dataAtual.toISOString()
                 
                 }}
         ).then((res) =>{
@@ -65,14 +66,19 @@ module.exports = {PrognivelModel,PrognivelSchema,
         return resultado;
     },
     prognivelAdicionar: async (req,res) => {
-         let dataAtual = new Date();
+        //Pega data atual
+        let dataAtual = new Date();
+        //Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
+        //Realiza Atualização
             console.log("prognivelmodel");
             const newPrognivel = new PrognivelModel({
                 prognivel_nome: req.body.prognivelNome,
                 prognivel_ordem: req.body.prognivelOrdem,
                 prognivel_descricao: req.body.prognivelDescricao,
-                prognivel_usuidcad: req.body.prognivelUsuidedi ,
-                prognivel_datacad: dataAtual
+                prognivel_usuidcad: usuarioAtual ,
+                prognivel_datacad: dataAtual.toISOString()
             });
             console.log("newPrognivel save");
             await newPrognivel.save().then(()=>{
