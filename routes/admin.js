@@ -2330,14 +2330,33 @@ router.get('/area/escalas/cars/del/:id', fncGeral.IsAuthenticated, (req,res) =>{
 
 //Menu Notasup ** Area Tecnicos e ABA 
 
-//Carrega Cadastro
-router.get('/area/aba/notasup/notasupcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para o Formulario Nota Supervisor
+router.get('/area/aba/notasup/notasupcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Nota de Supervisão
     fncNotasup.carregaNotasup(req, res);
 })
 
-//Lista Notasup por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/aba/notasup/notasuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista para o Formulario Nota Supervisor
-    fncNotasup.listaNotasup(req, res);
+//Carrega Cadastro Nota Supervisão com informações adicionais
+router.get('/area/aba/notasup/notasupPrecad/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
+    fncNotasup.preCarregaNotasup(req, res);
+})
+
+//Menu Notasup ** Area Tecnicos e ABA 
+router.get('/area/aba/notasup/folreglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista de Nota de Supervisão
+    fncNotasup.listaFolreg(req, res);
+})
+
+//Adiciona Notasup** Area Tecnicos e ABA 
+router.post('/area/aba/notasup/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncNotasup.cadastraNotasup(req, res); 
+})
+
+//Carrega Editar Notasup
+router.get('/area/aba/notasup/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncNotasup.carregaNotasupEdi(req,res);
+})
+
+//Carrega Atualizar Notasup
+router.post('/area/aba/folreg/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncNotasup.atualizaNotasup(req,res);
 })
 //-----------------------------------------------------------------------------
 
@@ -2347,6 +2366,7 @@ router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{
     fncFolreg.carregaFolreg(req, res);
 })
 
+//Carrega Cadastro folha de registro com informações adicionais
 router.get('/area/aba/folreg/folregPrecad/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
     fncFolreg.preCarregaFolreg(req, res);
 })

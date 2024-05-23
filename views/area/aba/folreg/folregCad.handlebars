@@ -333,26 +333,14 @@
 																	<label>SET</label>
 																	<div class="input-group">
 																		<div class="input-group">
-																				<input name="folregSetid" id="folregSetid" type="text"  />
+																			<input name="folregSetid" id="folregSetid" type="text"  />
 																		</div>
 																	</div>
 
 																	<label>Número do SET</label>
 																	<div class="input-group">
 																		<div class="input-group">
-																			<select name="folregSetnum" id="folregSetnum" class="chosen-select" onchange="">
-																					<option value="-">-</option>
-																					<option value="SET 01">SET 01</option>
-																					<option value="SET 02">SET 02</option>
-																					<option value="SET 03">SET 03</option>
-																					<option value="SET 04">SET 04</option>
-																					<option value="SET 05">SET 05</option>
-																					<option value="SET 06">SET 06</option>
-																					<option value="SET 07">SET 07</option>
-																					<option value="SET 08">SET 08</option>
-																					<option value="SET 09">SET 09</option>
-																					<option value="SET 10">SET 10</option>
-																			</select>
+																			<input name="folregSetnum" id="folregSetnum" type="text"  />
 																		</div>
 																	</div>
 																	<label>Técnico Aplicador</label>
@@ -365,7 +353,21 @@
 																			</select>
 																		</div>
 																	</div>
-																																									
+																	<div class="col-xs-12 col-sm-2">
+																		<label>Quantidade de Estímulos Reservados no SET</label>
+																		<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																			<option value="1">1</option>
+																			<option value="2">2</option>
+																			<option value="3">3</option>
+																			<option value="4">4</option>
+																			<option value="5">5</option>
+																			<option value="6">6</option>
+																			<option value="7">7</option>
+																			<option value="8">8</option>
+																			<option value="9">9</option>
+																		</select>
+																		<hr>
+																	</div>																							
 																	<div class="row">
 																		<div class="col-xs-12 col-sm-2">
 																			<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>

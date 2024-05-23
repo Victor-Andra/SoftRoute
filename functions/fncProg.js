@@ -16,6 +16,7 @@ const prognivelClass = require("../models/prognivel")
 const progtipoClass = require("../models/progtipo")
 
 const folregClass = require("../models/folreg")
+const notasupClass = require("../models/notasup")
 
 
 //prog, tipos de prog 
@@ -33,10 +34,19 @@ const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
 
 const Folreg = mongoose.model("tb_folreg")
+const Notasup = mongoose.model("tb_notasup")
 
 module.exports = {
     listaProg(req, res, resposta) {
         let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
         let perfilAtual = req.cookies['lvlUsu'];
     
         Prog.find().then((prog) => {
@@ -93,20 +103,23 @@ module.exports = {
                             Prognivel.find().then((prognivel) => {
                                 Progset.find().then((progset) => {
                                     Folreg.find().then((folreg) => {
-                                        res.render('area/aba/prog/progLis', {
-                                            progs: prog,
-                                            progsets: progset,
-                                            usuarios: usuario,
-                                            benes: bene,
-                                            perfilAtual,
-                                            flash,
-                                            progdicas: progdica,
-                                            progtipos: progtipo,
-                                            prognivels: prognivel,
-                                            countProgs, // Envia a contagem de progs adquiridos
-                                            countProgsA, // Envia a contagem de progs não adquiridos
-                                            countProgsC,
-                                            folregs: folreg
+                                        Notasup.find().then((notasup) => {
+                                            res.render('area/aba/prog/progLis', {
+                                                progs: prog,
+                                                progsets: progset,
+                                                usuarios: usuario,
+                                                benes: bene,
+                                                perfilAtual,
+                                                flash,
+                                                progdicas: progdica,
+                                                progtipos: progtipo,
+                                                prognivels: prognivel,
+                                                countProgs, // Envia a contagem de progs adquiridos
+                                                countProgsA, // Envia a contagem de progs não adquiridos
+                                                countProgsC,
+                                                folregs: folreg,
+                                                notasups: notasup
+                                            });
                                         });
                                     });
                                 });

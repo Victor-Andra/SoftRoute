@@ -514,7 +514,8 @@ const AnamnSchema = mongoose.Schema({
     anamn_usuidcad: { type: ObjectId, required: false }, //Ok
     anamn_dataedi: { type: Date, required: false }, //Ok
     anamn_usuidedi: { type: ObjectId, required: false }, //Ok
-    anamn_terapeutaid: { type: ObjectId, required: false } //Ok
+    anamn_terapeutaid: { type: ObjectId, required: false }, //Ok
+    anamn_lixo :{ type: String, required: false }
 })
 
 class Anamn{
@@ -1032,7 +1033,8 @@ class Anamn{
     anamn_dataedi, //Ok
     anamn_usuidcad, //Ok
     anamn_usuidedi, //Ok
-    anamn_terapeutaid //Ok
+    anamn_terapeutaid, //Ok
+    anamn_lixo
          ){
             this.anamn_id = anamn_id, 
             this.anamn_data = anamn_data, //Ok
@@ -1548,7 +1550,8 @@ class Anamn{
             this.anamn_dataedi = anamn_dataedi,
             this.anamn_usuidcad = anamn_usuidcad,
             this.anamn_usuidedi = anamn_usuidedi,
-            this.anamn_terapeutaid = anamn_terapeutaid
+            this.anamn_terapeutaid = anamn_terapeutaid,
+            this.anamn_lixo = anamn_lixo
 
     }
 }
@@ -2084,8 +2087,8 @@ module.exports = {AnamnModel,AnamnSchema,
                 anamn_dataedi: dataAtual,
                 //anamn_usuidcad: req.body.anamnUsuidcad, //Somente leitura
                 anamn_usuidedi: idUsu,
-                anamn_terapeutaid: req.body.anamnTerapeutaid
-                
+                anamn_terapeutaid: req.body.anamnTerapeutaid,
+                anamn_lixo: "false"
                 }}
                 ).then((res) =>{
                     console.log("Salvo")
@@ -2618,7 +2621,8 @@ module.exports = {AnamnModel,AnamnSchema,
             //anamn_dataedi: dataAtual, //somente na edição é habilitado
             anamn_usuidcad: idUsu,
             //anamn_usuidedi: idUsu, //somente na edição é habilitado
-            anamn_terapeutaid: req.body.anamnTerapeutaid 
+            anamn_terapeutaid: req.body.anamnTerapeutaid,
+            anamn_lixo: "false"
         });
         console.log("newAnamn save");
         await newAnamn.save().then(()=>{

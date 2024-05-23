@@ -11,6 +11,8 @@ const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
+const fncProg = require("../functions/fncProg")
+
 
 //Tabela Notasup 
 const Notasup = mongoose.model("tb_notasup")
@@ -20,13 +22,23 @@ const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
+const Prog = mongoose.model("tb_prog")
 
-
-//Funções auxiliares
-
+//Extrutura de Resposta
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
     listaNotasup(req, res){
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
         let convs = new Array();
         console.log('listando Diários de Notasup')
         Notasup.find().then((notasup) =>{
@@ -36,7 +48,7 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/notasup/notasupLis', {Notasups: notasup, Terapeutas: terapeuta, Benes: bene})
+                        fncProg.listaProg(req,res,flash)
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Notasup")
@@ -85,7 +97,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         
-        notasupClass.cadastraNotasupFisio(req,res).then((result)=>{
+        notasupClass.notasupAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
             resultado = true;
@@ -146,7 +158,7 @@ module.exports = {
 
 
     deletaNotasup(req,res){
-        Notasupfisio.deleteOne({_id: req.params.id}).then(() =>{
+        Notasup.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
@@ -155,7 +167,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Notasupamento Fisioterapêutico deletado!")
+                req.flash("success_message", "Nota de Supervisão deletado!")
                 res.render('area/aba/notasup/notasupLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
@@ -163,6 +175,10 @@ module.exports = {
                 res.render('admin/erro')
             })
         })
+    },
+
+    preCarregaNotasup(req,res){
+
     }
 
 
