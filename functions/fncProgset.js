@@ -26,6 +26,8 @@ const Progdica = mongoose.model("tb_progdica")
 const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
 
+const fncProg = require("../functions/fncProg")
+
 
 module.exports = {
     listaProgset(req,res,resposta){
@@ -176,7 +178,7 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
-                //res.render('area/aba/prog/progLis')
+                fncProg.listaProg(req,res,resposta)
             } else {
                 console.log('falso')
                 resposta.texto = resultado

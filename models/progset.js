@@ -4,6 +4,7 @@ const ObjectId = mongoose.Types.ObjectId
 const ProgprogsetSchema = mongoose.Schema({
     progset_progid :{ type: ObjectId, required: false },
     progset_beneid :{ type: ObjectId, required: false },
+    progset_teraid :{ type: ObjectId, required: false },
     progset_progtipoid :{ type: ObjectId, required: false },
     progset_prognivelid :{ type: ObjectId, required: false },
     progset_num :{ type: String, required: false },
@@ -11,7 +12,7 @@ const ProgprogsetSchema = mongoose.Schema({
     progset_dataini :{ type: String, required: false },
     progset_datafin :{ type: String, required: false },
     progset_desc :{ type: String, required: false },
-    porgset_qtest :{ type: String, required: false },
+    progset_qtest :{ type: String, required: false },
     progset_esta :{ type: String, required: false },
     progset_estb :{ type: String, required: false },
     progset_estc :{ type: String, required: false },
@@ -30,12 +31,14 @@ const ProgprogsetSchema = mongoose.Schema({
     progset_dataedi :{ type: String, required: false },
     progset_lixo :{ type: String, required: false }
 
+
     })
 
 class Progprogset{
     constructor(
         progset_progid,
         progset_beneid,
+        progset_teraid,
         progset_progtipoid,
         progset_prognivelid,
         progset_num,
@@ -43,7 +46,7 @@ class Progprogset{
         progset_dataini,
         progset_datafin,
         progset_desc,
-        porgset_qtest,
+        progset_qtest,
         progset_esta,
         progset_estb,
         progset_estc,
@@ -62,9 +65,11 @@ class Progprogset{
         progset_dataedi,
         progset_lixo
 
+
         ){
             this.progset_progid = progset_progid,
             this.progset_beneid = progset_beneid,
+            this.progset_teraid = progset_teraid,
             this.progset_progtipoid = progset_progtipoid,
             this.progset_prognivelid = progset_prognivelid,
             this.progset_num = progset_num,
@@ -72,7 +77,7 @@ class Progprogset{
             this.progset_dataini = progset_dataini,
             this.progset_datafin = progset_datafin,
             this.progset_desc = progset_desc,
-            this.porgset_qtest = porgset_qtest,
+            this.progset_qtest = progset_qtest,
             this.progset_esta = progset_esta,
             this.progset_estb = progset_estb,
             this.progset_estc = progset_estc,
@@ -90,6 +95,7 @@ class Progprogset{
             this.progset_datacad = progset_datacad,
             this.progset_dataedi = progset_dataedi,
             this.progset_lixo = progset_lixo
+
     }
 }
 
@@ -108,6 +114,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
             {$progset: {
                 progset_progid : req.body.progsetProgid,
                 progset_beneid : req.body.progsetBeneid,
+                progset_teraid : req.body.progsetTeraid,
                 progset_progtipoid : req.body.progsetProgtipoid,
                 progset_prognivelid : req.body.progsetPrognivelid,
                 progset_num : req.body.progsetNum,
@@ -115,7 +122,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
                 progset_dataini : req.body.progsetDataini,
                 progset_datafin : req.body.progsetDatafin,
                 progset_desc : req.body.progsetDesc,
-                porgset_qtest : req.body.progsetQtest,
+                progset_qtest : req.body.progsetQtest,
                 progset_esta : req.body.progsetEsta,
                 progset_estb : req.body.progsetEstb,
                 progset_estc : req.body.progsetEstc,
@@ -155,6 +162,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
             const newProgprogset = new ProgprogsetModel({
                 progset_progid : req.body.progsetProgid,
                 progset_beneid : req.body.progsetBeneid,
+                progset_teraid : req.body.progsetTeraid,
                 progset_progtipoid : req.body.progsetProgtipoid,
                 progset_prognivelid : req.body.progsetPrognivelid,
                 progset_num : req.body.progsetNum,
@@ -162,7 +170,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
                 progset_dataini : req.body.progsetDataini,
                 progset_datafin : req.body.progsetDatafin,
                 progset_desc : req.body.progsetDesc,
-                porgset_qtest : req.body.progsetQtest,
+                progset_qtest : req.body.progsetQtest,
                 progset_esta : req.body.progsetEsta,
                 progset_estb : req.body.progsetEstb,
                 progset_estc : req.body.progsetEstc,

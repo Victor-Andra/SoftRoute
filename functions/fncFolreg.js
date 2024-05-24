@@ -12,6 +12,7 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const progClass = require("../models/prog")
+const progvClass = require("../models/prog")
 const progsetClass = require("../models/progset")
 const progdicaClass = require("../models/progdica")
 const progtipoClass = require("../models/progtipo")
@@ -27,15 +28,15 @@ const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Prog = mongoose.model("tb_prog")
+const Progv = mongoose.model("tb_prog")
 const Progset = mongoose.model("tb_progset")
 const Progdica = mongoose.model("tb_progdica")
 const Progtipo = mongoose.model("tb_progtipo")
 const Prognivel = mongoose.model("tb_prognivel")
 const Resposta = mongoose.model("tb_resposta")
 
-
 //Funções auxiliares
-
+const fncProg = require("../functions/fncProg")
 
 module.exports = {
     listaFolreg(req, res){
@@ -67,13 +68,14 @@ module.exports = {
                 Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
-                        Terapia.find().then((terapia)=>{
+                    Progv.find().then((progv)=>{    
+                    Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                             //console.log("Listagem Realizada de Terapia")
                             Prog.find().then((prog)=>{
                                 Progset.find().then((progset)=>{
-                                res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta, progs: prog, progsets: progset})
-        })})})})})}).catch((err) =>{
+                                res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv ,progs: prog, progsets: progset})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
@@ -90,13 +92,14 @@ module.exports = {
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                        Progset.find().then((progset)=>{
+                        Progv.find().then((progv)=>{    
                             Prog.findOne({_id: req.params.id}).then((prog)=>{
-                                Progdica.find().then((progdica)=>{
-                                    Progtipo.find().then((progtipo)=>{
-                                        Prognivel.find().then((prognivel)=>{
-                                            res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progsets: progset, prog, usuarioAtual})
-        })})})})})})})})}).catch((err) =>{
+                                Progset.findOne({_id: req.params.id}).then((progset)=>{
+                                    Progdica.find().then((progdica)=>{
+                                        Progtipo.find().then((progtipo)=>{
+                                            Prognivel.find().then((prognivel)=>{
+                                                res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
+        })})})})})})})})})}).catch((err) =>{
             console.log(err);
             req.flash("error_message", "houve um erro ao listar escolas");
             res.redirect('admin/erro');
@@ -137,6 +140,7 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
+                fncProg.listaProg(req,res,resposta)
             } else {
                 console.log('falso')
                 resposta.texto = resultado
@@ -166,14 +170,14 @@ module.exports = {
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
-                    this.listaFolreg(req,res,resposta)
+                    fncProg.listaProg(req,res,resposta)
                 }else{
                     //passar classe de erro
                     console.log("error")
                     console.log(resultado)
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    this.listaFolreg(req,res,resposta)
+                    fncProg.listaProg(req,res,resposta)
                 }
             })
         } catch(err1){

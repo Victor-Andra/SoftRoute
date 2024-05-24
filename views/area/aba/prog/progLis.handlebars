@@ -669,7 +669,7 @@
 																										{{this.progset_num}}
 																									</td>
 																									<td>{{this.progset_desc}}</td>		
-																									<td>{{this.progset_dataprogset}}</td>			
+																									<td>{{this.progset_dataini}}</td>			
 																									<td>
 																										<div class="easy-pie-chart percentage" data-percent="42" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
 																											<span class="percent">42</span>%
@@ -686,7 +686,16 @@
 																											{{#ifEqual this.folreg_setid ../_id}}
 																											<button class="btn btn-minier btn-app btn-purple btn-xs">
 																												<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
-																												<label for="form-field-select-1" style="font-size: 10px;">{{this.folreg_datareg}}</label>
+																												<label for="form-field-select-1" style="font-size: 10px;">
+																													{{this.folreg_datareg}}
+																													<br>
+																													{{#each ../../usuarios}}<!-- Ok -->
+																														{{#ifEqual this._id ../this.folreg_usuid}}
+																															{{usuario_nome}}
+																														{{/ifEqual}}
+																													{{/each}}
+																													
+																												</label>
 																											</button>
 																											{{/ifEqual}}
 																										{{/each}}

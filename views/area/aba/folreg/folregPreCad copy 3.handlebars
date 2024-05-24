@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>REGISTROS: Simples ou Duplo</title>
+		<style>
+			.table-wrapper {
+				overflow-x: auto;
+				max-width: 100%;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th, td {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+			.container {
+				width: 100%;
+				max-width: 600px; /* Defina a largura máxima que deseja para o gráfico */
+				margin: 0 auto; /* Centralize o contêiner */
+			}
+			canvas {
+				width: 100% !important;
+				height: auto !important;
+				max-width: 100% !important;
+			}
+			
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script type="text/javascript">
+			function mudaRegistro() {
+				let tipodoc = document.getElementById("folregTiporeg").value;
+				console.log(tipodoc)
+				if (tipodoc == "Não Informado") {
+					document.getElementById('simples').style.display = 'none';
+					document.getElementById('duplo').style.display = 'none';
+					
+				} else if (tipodoc == "Duplo") {
+					document.getElementById('duplo').style.display = 'block';
+					document.getElementById('simples').style.display = 'none';
+					
+				} else if (tipodoc == "Simples") {
+					document.getElementById('duplo').style.display = 'none';
+					document.getElementById('simples').style.display = 'block';
+					
+				} else {
+					document.getElementById('simples').style.display = 'none';
+					document.getElementById('duplo').style.display = 'none';
+					
+				}
+				
+   			}
+			function atualizaTerapeutaId(){
+				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+			function somaResEstSI() {
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados
+				let inputs = document.querySelectorAll('input[name$="Ressimples"]:checked');
+
+				// Loop através de todos os inputs encontrados
+				inputs.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalI++;
+							break;
+						case 'E':
+							totalE++;
+							break;
+						case '+d':
+							totalMaisD++;
+							break;
+						case '-d':
+							totalMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados
+				document.getElementById("folregTotalsimples1").value = totalI;
+				document.getElementById("folregTotalsimples2").value = totalE;
+				document.getElementById("folregTotalsimples3").value = totalMaisD;
+				document.getElementById("folregTotalsimples4").value = totalMenosD;
+			}
+
+			//###########################################################################
+			function somaResEstDuplo() {
+				// Variáveis para armazenar os totais do lado esquerdo
+				let totalEsqI = 0;
+				let totalEsqE = 0;
+				let totalEsqMaisD = 0;
+				let totalEsqMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado esquerdo
+				let inputsEsq = document.querySelectorAll('input[name$="Resesqu"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado esquerdo
+				inputsEsq.forEach(function(input) {
+					// Verifica o valor do input
+				switch(input.value) {
+					case 'I':
+						totalEsqI++;
+						break;
+					case 'E':
+						totalEsqE++;
+						break;
+					case '+d':
+						totalEsqMaisD++;
+						break;
+					case '-d':
+						totalEsqMenosD++;
+						break;
+					default:
+						break;
+				}
+			});
+
+				// Atualiza os campos de input com os totais calculados no lado esquerdo
+				document.getElementById("folregTotalduploesq1").value = totalEsqI;
+				document.getElementById("folregTotalduploesq2").value = totalEsqE;
+				document.getElementById("folregTotalduploesq3").value = totalEsqMaisD;
+				document.getElementById("folregTotalduploesq4").value = totalEsqMenosD;
+
+				// Variáveis para armazenar os totais do lado direito
+				let totalDirI = 0;
+				let totalDirE = 0;
+				let totalDirMaisD = 0;
+				let totalDirMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado direito
+				let inputsDir = document.querySelectorAll('input[name$="Resdir"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado direito
+				inputsDir.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalDirI++;
+							break;
+						case 'E':
+							totalDirE++;
+							break;
+						case '+d':
+							totalDirMaisD++;
+							break;
+						case '-d':
+							totalDirMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados no lado direito
+				document.getElementById("folregTotalduplodir1").value = totalDirI;
+				document.getElementById("folregTotalduplodir2").value = totalDirE;
+				document.getElementById("folregTotalduplodir3").value = totalDirMaisD;
+				document.getElementById("folregTotalduplodir4").value = totalDirMenosD;
+			}
+
+			function atualizarGraficoDuplo() {
+				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado esquerdo
+				const valoresEsq = [
+					parseInt(document.getElementById("folregTotalduploesq1").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq2").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq3").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq4").value) * 10
+				];
+
+				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado direito
+				const valoresDir = [
+					parseInt(document.getElementById("folregTotalduplodir1").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir2").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir3").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir4").value) * 10
+				];
+
+				// Atualiza os dados do gráfico duplo
+				dataDuplo.datasets[0].data = valoresEsq;
+				dataDuplo.datasets[1].data = valoresDir;
+
+				// Atualiza o gráfico duplo
+				if (graficoDuplo !== null) {
+					graficoDuplo.update();
+				} else {
+					console.error('O gráfico duplo não foi inicializado corretamente.');
+				}
+			}
+
+			// Chamar as funções para atualizar o gráfico duplo quando os radio buttons forem alterados
+			document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
+
+			document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
+
+			document.addEventListener('DOMContentLoaded', function() {
+				function updateStimulusFields() {
+					var select = document.getElementById('folregQtest');
+					var value = parseInt(select.value, 10);
+
+					// Hide all stimulus fields
+					var fields = document.querySelectorAll('.stimulus-field');
+					fields.forEach(function(field) {
+						field.style.display = 'none';
+					});
+
+					// Show only the number of fields selected
+					for (var i = 0; i < value; i++) {
+						document.getElementById('stimulus' + String.fromCharCode(65 + i)).style.display = 'block';
+					}
+				}
+
+				// Initialize fields on page load
+				updateStimulusFields();
+
+				// Add change event listener to the select element
+				document.getElementById('folregQtest').addEventListener('change', updateStimulusFields);
+			});
+
+			function carregaBody(){
+
+			}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="#">Registro</a>
+						</li>
+
+						<li class="active">ABA</li>
+					</ul><!-- /.breadcrumb -->
+
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
+							<div id="divCarrega">
+								<input name="progId" id="progId" value="{{prog._id}}" />
+								<input name="progBene" id="progBene" value="{{prog.prog_beneid}}" />
+								<input name="progTipo" id="progTipo" value="{{prog.prog_tipo}}" />
+								<input name="progNivel" id="progNivel" value="{{prog.prog_nivel}}" />
+								<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
+
+							</div>
+							<div class="col-xs-12">
+								<div class="tabbable">
+									<ul class="nav nav-tabs" id="myTab">
+										<li class="active">
+											<a data-toggle="tab" href="#reg" aria-expanded="true">
+												<i class="orange ace-icon fa fa-pencil bigger-120"></i>
+												Registro
+											</a>
+										</li>
+									</ul>
+
+									<div class="tab-content">
+										
+										<div id="reg" class="tab-pane fade in active">
+											
+											<div class="row">
+												<div class="col-sm-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+													<div class="widget-box">
+														<div class="widget-header">
+															<h4 class="widget-title">
+																<i class="red ace-icon fa fa-bookmark-o bigger-110"></i>
+																
+																Cabeçalho</h4>
+
+															<span class="widget-toolbar">
+
+																<a href="#" data-action="reload">
+																	<i class="ace-icon fa fa-refresh"></i>
+																</a>
+
+																<a href="#" data-action="collapse">
+																	<i class="ace-icon fa fa-chevron-up"></i>
+																</a>
+
+															</span>
+														</div>
+
+														<div class="widget-body">
+															<div class="widget-main">
+																<div class="alert alert-warning">
+																	<button type="button" class="close" data-dismiss="alert">
+																		<i class="ace-icon fa fa-times"></i>
+																	</button>
+																	<strong>Folha de registro, pode ser Simples ou Duplo, escolha antes de preencher a folha. </strong>
+																	<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
+																	<br>
+																</div>
+																<label>Tipo do Registro</label>
+																<div class="form-group">
+																		<div class="col-sm-4">
+																			<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																				<option value="Não Informado">Não Informado</option>
+																				<option value="Simples">Simples</option>
+																				<option value="Duplo">Duplo</option>
+																			</select>
+																		</div>
+																</div>	
+															
+																<label for="id-date-picker-1">Data do Registro</label>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="folregDatareg" id="folregDatareg" type="date" onchange="javascript:atualizaData()" />
+																		</div>
+																	</div>
+																</div>
+															
+																<label>Beneficiário</label>
+																<div class="form-group">
+																	<div class="col-sm-8">
+																		<select name="folregBeneid" id="folregBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																			{{#each benes}}
+																				<option value="{{_id}}">{{bene_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+																
+																<label>Programa</label>
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="folregProgid" id="folregProgid" class="chosen-select" value="Sem Info" onchange="" >
+																				<option value="766f69643132333435366964">-</option>
+																				{{#each progs}}
+																					<option value="{{_id}}">{{_id}}</option>
+																				{{/each}}
+																		</select>
+																	</div>
+																</div>
+																
+																<label>SET</label>
+																<div class="input-group">
+																	<div class="input-group">
+																			<input name="folregSetid" id="folregSetid" type="text"  />
+																	</div>
+																</div>
+
+																<label>Número do SET</label>
+																<div class="input-group">
+																	<div class="input-group">
+																		<input name="folregSetnum" id="folregSetnum" type="text"  />
+																	</div>
+																</div>
+																<label>Técnico Aplicador</label>
+																<div class="form-group">
+																	<div class="col-sm-8">
+																		<select name="folregUsuid" id="folregUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																			{{#each terapeutas}}
+																				<option value="{{_id}}">{{usuario_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+																
+																
+																<div class="alert alert-danger">
+																	<button type="button" class="close" data-dismiss="alert">
+																		<i class="ace-icon fa fa-times"></i>
+																	</button>
+																	<strong>Os estímulos são herdados da TABELA SET, e são preenchidos automaticamente. </strong>
+																	<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
+																	<br>
+																</div>	
+
+																<div class="row">
+																	<div class="col-xs-12 col-sm-2">
+																		<label>Quantidade de Estímulos Reservados no SET</label>
+																		<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+																			<option value="1">1</option>
+																			<option value="2">2</option>
+																			<option value="3">3</option>
+																			<option value="4">4</option>
+																			<option value="5">5</option>
+																			<option value="6">6</option>
+																			<option value="7">7</option>
+																			<option value="8">8</option>
+																			<option value="9">9</option>
+																		</select>
+																		
+																	</div>
+																</div>
+																<div class="row">
+																	<br>
+																</div>																				
+																<div class="row">
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusA">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEsta" id="folregEsta" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusB">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEstb" id="folregEstb" type="text"/>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusC">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEstc" id="folregEstc" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusD">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEstd" id="folregEstd" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusE">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEste" id="folregEste" type="text"/>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusF">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEstf" id="folregEstf" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>																								
+																</div>
+																<div class="row">
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusG">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEstg" id="folregEstg" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusH">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEsth" id="folregEsth" type="text"/>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusI">
+																		<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																		<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+																		<div class="row">
+																			<div class="col-sm-4">
+																				<div class="input-group">
+																					<input name="folregEsti" id="folregEsti" type="text"  />
+																				</div>
+																			</div>
+																		</div>
+																	</div>		
+																</div>
+																<label>Sequência da Aplicação dos Estímulos</label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<select name="folregEstseq" id="folregEstseq" class="chosen-select" data-placeholder="Escolha..." >
+																			<option value="-">-</option>
+																			<option value="1">ABC;BAC;BAC</option>
+																			<option value="2">BAC;BAC;BCA</option>
+																			<option value="3">CBA;CBA;ACB</option>
+																		</select>
+																	</div>
+																</div>
+																
+
+
+																<label>Observações Adicionais</label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<textarea type="text" name="folregObs" id="folregObs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa">
+																		</textarea>
+																	</div>
+																</div>
+																
+																<div class="row">
+																	<div class="col-sm-2">
+																		<input name="folregStatus" id="folregStatus1"  type="radio" class="ace" value="1">
+																		<span class="lbl"></span>
+																		<span class="label label-yellow arrowed-in">Esvanecimento de dica</span>
+																	</div>
+																	<div class="col-sm-2">
+																		<input name="folregStatus" id="folregStatus2"  type="radio" class="ace"  value="2">
+																		<span class="lbl"></span>
+																		<span class="label label-success arrowed-in">Meta</span>
+																	</div>
+																	<div class="col-sm-2">
+																		<input name="folregStatus" id="folregStatus3"  type="radio" class="ace"  value="3">
+																		<span class="lbl"></span>
+																		<span class="label label-danger arrowed-in">Volta de Passo de Dica</span>
+																	</div>
+																</div>
+															</div>	
+														</div>		
+													</div>
+												</div>
+						
+												<div class="col-xs-12 col-sm-12" name="simples" id="simples"><!-- Registro Simples -->
+													<div class="widget-box">
+														<div class="widget-header">
+															<h4 class="widget-title">
+																<i class="orange ace-icon fa fa-file-o bigger-110"></i>
+																Registro Simples</h4>
+																<span class="widget-toolbar">
+																	<a href="#" data-action="reload">
+																		<i class="ace-icon fa fa-refresh"></i>
+																	</a>
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																
+																</span>
+														</div>
+														<div class="widget-body">
+															<div class="widget-main">												
+																<div class="row">
+																	<table name="Simples" id="dynamic-table" class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th class="center">Tent</th>
+																				<th class="center" >RA</th>
+																				<th>Resultado</th>
+																				<th>Passo D</th>
+																				<th>Tipo D</th>														
+																			</tr>
+																		</thead>
+
+																		<tbody>
+																			<tr><!-- 1Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-purple">1</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT1Ressimples" id="folregT1Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT1Ressimples" id="folregT1Ressimples2"  type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT1Ressimples" id="folregT1Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT1Ressimples" id="folregT1Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P1</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT1Tipodsimples" id="folregT1Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Física</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 2Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">2</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT2Ressimples" id="folregT2Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT2Ressimples" id="folregT2Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT2Ressimples" id="folregT2Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT2Ressimples" id="folregT2Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P2</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT2Tipodsimples" id="folregT2Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Gestual</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 3Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">3</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT3Ressimples" id="folregT3Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT3Ressimples" id="folregT3Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT3Ressimples" id="folregT3Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT3Ressimples" id="folregT3Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P3</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT3Tipodsimples" id="folregT3Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Ecóica</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 4Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-purple">4</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT4Ressimples" id="folregT3Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT4Ressimples" id="folregT4Ressimples2"  type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT4Ressimples" id="folregT4Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT4Ressimples" id="folregT4Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P4</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT4Tipodsimples" id="folregT4Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Visual</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 5Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">5</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT5Ressimples" id="folregT5Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT5Ressimples" id="folregT5Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT5Ressimples" id="folregT5Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT5Ressimples" id="folregT5Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P5</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT5Tipodsimples" id="folregT5Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 6Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">6</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT6Ressimples" id="folregT6Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT6Ressimples" id="folregT6Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT6Ressimples" id="folregT6Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT6Ressimples" id="folregT6Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P6</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT6Tipodsimples" id="folregT6Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Modelação</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 7Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-purple">7</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT7Ressimples" id="folregT7Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT7Ressimples" id="folregT7Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT7Ressimples" id="folregT7Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT7Ressimples" id="folregT7Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					<span class="label label-lg label-pink arrowed-right">P7</span>
+																					<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT7Tipodsimples" id="folregT7Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Verbal</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 8Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">8</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT8Ressimples" id="folregT8Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT8Ressimples" id="folregT8Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT8Ressimples" id="folregT8Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT8Ressimples" id="folregT8Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					
+																				</td>
+																				<td>
+																					<div class="checkbox">
+																						<label>
+																							<input name="folregT8Tipodsimples" id="folregT8Tipodsimples" type="checkbox" class="ace" value="Sim">
+																							<span class="lbl"></span>
+																							<span class="label label-lg label-purple arrowed">Textual</span>
+																						</label>
+																					</div>
+																				</td>
+																			</tr>
+
+																			<tr><!-- 9Reg -->
+																				<td class="center">
+																					
+																						<span class="badge badge-gray">9</span>
+																					
+																				</td>
+																				<td>
+																					<label class="pos-rel">
+																						<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																					</label>
+																				</td>
+																				
+																				<td>
+																					<input name="folregT9Ressimples" id="folregT9Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																				
+																					<input name="folregT9Ressimples" id="folregT9Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																				
+																					<input name="folregT9Ressimples" id="folregT9Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-yellow arrowed-in">+d</span>
+																				
+																					<input name="folregT9Ressimples" id="folregT9Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
+																					<span class="lbl"></span>
+																					<span class="label label-success arrowed-in">-d</span>
+																				</td>
+																				<td>
+																					
+																				</td>
+																				<td>
+																					
+																				</td>
+																			</tr>
+
+																			<tr><!-- 10Reg -->
+																				
+																				<td colspan="2" style="text-align:right">
+																					<label class="pos-rel">
+																					<span  class="label label-lg label-inverse arrowed-right">Totais</span>
+																					</label>
+																				</td>
+																				
+																				<td colspan="3">
+																					<span class="label label-danger arrowed-in">&nbsp;I</span><input name="folregTotalsimples1" id="folregTotalsimples1" type="text" style="width: 15%;" readonly/><!-- Valor para "I" -->
+																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalsimples2" id="folregTotalsimples2" type="text" style="width: 15%;" readonly/><!-- Valor para "E" -->
+																					<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalsimples3" id="folregTotalsimples3" type="text" style="width: 15%;" readonly/><!-- Valor para "+d" -->
+																					<span class="label label-success arrowed-in">-d</span><input name="folregTotalsimples4" id="folregTotalsimples4" type="text" style="width: 15%;" readonly/><!-- Valor para "-d" -->														
+																				</td>
+																			</tr>
+
+																		</tbody>
+																	</table>
+																	<div class="row" style="position: relative;">
+																		<div class="col-xs-12">
+																			<!-- GRAFICO -->
+																			<div class="container" style="width: 100%;">
+																				<canvas id="stackedBarChart-Simples" width="400" height="200"></canvas>
+																			</div>
+																		</div>																		
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>	
+												<div class="col-xs-12 col-sm-12" name="duplo" id="duplo"><!-- Registro Duplo -->
+													<div class="widget-box">
+														<div class="widget-header">
+															<h4 class="widget-title">
+																<i class="orange ace-icon fa fa-files-o bigger-110"></i>
+																Registro Duplo</h4>
+																<span class="widget-toolbar">
+																	<a href="#" data-action="reload">
+																		<i class="ace-icon fa fa-refresh"></i>
+																	</a>
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																
+																</span>
+														</div>
+														<div class="widget-body">
+															<div class="widget-main">												
+																<div class="row">
+																	<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																	<thead>
+																		<tr>
+																			<th class="center">Tent</th>
+																			<th class="center" >RA</th>
+																			<!-- Esquerda -->
+																			<th>Resultado</th>
+																			<th>Passo D</th>
+																			<th>Tipo D</th>
+																			<!-- Direita -->
+																			<th>Resultado</th>
+																			<th>Passo D</th>
+																			<th>Tipo D</th>															
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr><!-- 1Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-purple">1</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT1Resesqu" id="folregT1Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT1Resesqu" id="folregT1Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT1Resesqu" id="folregT1Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT1Resesqu" id="folregT1Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P1</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT1Tipodesqu" id="folregT1Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Física</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT1Resdir" id="folregT1Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT1Resdir" id="folregT1Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT1Resdir" id="folregT1Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT1Resdir" id="folregT1Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P1</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT1Tipodird" id="folregT1Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Física</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 2Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">2</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT2Resesqu" id="folregT2Resesqu1"  type="radio" class="ace" value="I">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT2Resesqu" id="folregT2Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT2Resesqu" id="folregT2Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT2Resesqu" id="folregT2Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P2</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT2Tipodesqu" id="folregT2Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Gestual</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT2Resdir" id="folregT2Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT2Resdir" id="folregT2Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT2Resdir" id="folregT2Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT2Resdir" id="folregT2Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P2</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT2Tipodird" id="folregT2Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Gestual</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 3Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">3</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT3Resesqu" id="folregT3Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT3Resesqu" id="folregT3Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT3Resesqu" id="folregT3Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT3Resesqu" id="folregT3Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P3</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT3Tipodesqu" id="folregT3Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Ecóica</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT3Resdir" id="folregT3Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT3Resdir" id="folregT3Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT3Resdir" id="folregT3Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT3Resdir" id="folregT3Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P3</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT3Tipodird" id="folregT3Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Ecóica</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 4Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-purple">4</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT4Resesqu" id="folregT4Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT4Resesqu" id="folregT4Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT4Resesqu" id="folregT4Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT4Resesqu" id="folregT4Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P4</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT4Tipodesqu" id="folregT4Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Visual</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT4Resdir" id="folregT4Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT4Resdir" id="folregT4Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT4Resdir" id="folregT4Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT4Resdir" id="folregT4Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P4</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT4Tipodird" id="folregT4Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Visual</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 5Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">5</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT5Resesqu" id="folregT5Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT5Resesqu" id="folregT5Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT5Resesqu" id="folregT5Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT5Resesqu" id="folregT5Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P5</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT5Tipodesqu" id="folregT5Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT5Resdir" id="folregT5Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT5Resdir" id="folregT5Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT5Resdir" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT5Resdir" id="folregT5Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P5</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT5Tipodird" id="folregT5Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 6Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">6</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT6Resesqu" id="folregT6Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT6Resesqu" id="folregT6Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT6Resesqu" id="folregT6Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT6Resesqu" id="folregT6Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P6</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT6Tipodesqu" id="folregT6Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Modelação</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT6Resdir" id="folregT6Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT6Resdir" id="folregT6Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT6Resdir" id="folregT6Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT6Resdir" id="folregT6Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P6</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT6Tipodird" id="folregT6Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Modelação</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 7Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-purple">7</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT7Resesqu" id="folregT7Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT7Resesqu" id="folregT7Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT7Resesqu" id="folregT7Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT7Resesqu" id="folregT7Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P7</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT7Tipodesqu" id="folregT7Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Verbal</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT7Resdir" id="folregT7Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT7Resdir" id="folregT7Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT7Resdir" id="folregT7Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT7Resdir" id="folregT7Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				<span class="label label-lg label-pink arrowed-right">P7</span>
+																				<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT8Tipodird" id="folregT8Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Verbal</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 8Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">8</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT8Resesqu" id="folregT8Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT8Resesqu" id="folregT8Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT8Resesqu" id="folregT8Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT8Resesqu" id="folregT8Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT8Tipodesqu" id="folregT8Tipodesqu" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Textual</span>
+																					</label>
+																				</div>
+																			</td>
+																			<td>
+																				<input name="folregT8Resdir" id="folregT8Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT8Resdir" id="folregT8Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT8Resdir" id="folregT8Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT8Resdir" id="folregT8Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				
+																			</td>
+																			<td>
+																				<div class="checkbox">
+																					<label>
+																						<input name="folregT8Tipodird" id="folregT8Tipodird" type="checkbox" value="Sim" class="ace">
+																						<span class="lbl"></span>
+																						<span class="label label-lg label-purple arrowed">Textual</span>
+																					</label>
+																				</div>
+																			</td>
+																		</tr>
+
+																		<tr><!-- 9Reg -->
+																			<td class="center">
+																				
+																					<span class="badge badge-gray">9</span>
+																				
+																			</td>
+																			<td>
+																				<label class="pos-rel">
+																					<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																				</label>
+																			</td>
+																			
+																			<td>
+																				<input name="folregT9Resesqu" id="folregT9Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT9Resesqu" id="folregT9Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT9Resesqu" id="folregT9Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT9Resesqu" id="folregT9Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				
+																			</td>
+																			<td>
+																				
+																			</td>
+																			<td>
+																				<input name="folregT9Resdir" id="folregT9Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-danger arrowed-in">&nbsp;I</span>
+																			
+																				<input name="folregT9Resdir" id="folregT9Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span>
+																			
+																				<input name="folregT9Resdir" id="folregT9Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-yellow arrowed-in">+d</span>
+																			
+																				<input name="folregT9Resdir" id="folregT9Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResDirDuplo();">
+																				<span class="lbl"></span>
+																				<span class="label label-success arrowed-in">-d</span>
+																			</td>
+																			<td>
+																				
+																			</td>
+																			<td>
+																				
+																			</td>
+																		</tr>
+
+																		<tr><!-- 10Reg -->
+																			
+																			<td colspan="2" style="text-align:right">
+																				<label class="pos-rel">
+																				<span  class="label label-lg label-inverse arrowed-right">Totais</span>
+																				</label>
+																			</td>
+																			
+																			<td colspan="3">
+																				<span class="label label-danger arrowed-in">&nbsp;I</span><input name="folregTotalduploesq1" id="folregTotalduploesq1" type="text" style="width: 15%;" readonly/>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduploesq2" id="folregTotalduploesq2" type="text" style="width: 15%;" readonly/>
+																				<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalduploesq3" id="folregTotalduploesq3" type="text" style="width: 15%;" readonly/>	
+																				<span class="label label-success arrowed-in">-d</span><input name="folregTotalduploesq4" id="folregTotalduploesq4" type="text" style="width: 15%;" readonly/>																				
+																			</td>
+																			
+																			
+																			<td colspan="3">
+																				<span class="label label-danger arrowed-in">&nbsp;I</span><input name="folregTotalduplodir1" id="folregTotalduplodir1" type="text" style="width: 15%;" readonly/>
+																				<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduplodir2" id="folregTotalduplodir2" type="text" style="width: 15%;" readonly/>
+																				<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalduplodir3" id="folregTotalduplodir3" type="text" style="width: 15%;" readonly/>	
+																				<span class="label label-success arrowed-in">-d</span><input name="folregTotalduplodir4" id="folregTotalduplodir4" type="text" style="width: 15%;" readonly/>																				
+																			</td>
+																			
+																			
+																		</tr>
+
+																	</tbody>
+
+																</table>
+																<div class="row" style="position: relative;">
+																		<div class="col-xs-12">
+																			<!-- GRAFICO DUPLO-->
+																			<div class="container" style="width: 100%;">
+																				<canvas id="doubleBarChart" width="400" height="200"></canvas>
+																			</div>
+																		</div>																		
+																	</div>	
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>	
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<br>
+								<div class="col-md-12" style="text-align: center;">
+									<button class="btn btn-info" name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning"  type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
+								</div>
+							</div>
+							
+							
+						</form>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.main-container -->
+		<script>
+			//######################################################################################################
+			//GRAFICO SIMPLES
+			// Dados do gráfico SIMPLES (mantenha os rótulos e as cores, mas os dados serão atualizados dinamicamente)
+			const data = {
+				labels: ['SET'],
+				datasets: [
+					{
+						label: 'I',
+						backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+						data: [0] // Inicialmente, os dados estão vazios
+					},
+					{
+						label: '+d',
+						backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
+						data: [0]
+					},
+					{
+						label: 'E',
+						backgroundColor: 'rgba(255, 255, 0, 0.5)', // amarelo
+						data: [0]
+					},
+					{
+						label: '-d',
+						backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
+						data: [0]
+					}
+				]
+			};
+
+			// Opções do gráfico
+			const options = {
+				scales: {
+					x: { stacked: true },
+					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+				}
+			};
+
+			// Configuração do gráfico
+			const config = {
+				type: 'bar',
+				data: data,
+				options: options
+			};
+
+			// Referência para o gráfico
+			let grafico = null;
+
+			// Função para renderizar o gráfico
+			function renderizarGrafico() {
+				const ctx = document.getElementById('stackedBarChart-Simples');
+				if (ctx) {
+					// Se já existe um gráfico, destruímos ele antes de renderizar um novo
+					if (grafico !== null) {
+						grafico.destroy();
+					}
+					grafico = new Chart(ctx, config);
+				} else {
+					console.error('Não foi possível encontrar o elemento canvas.');
+				}
+			}
+
+			// Função para atualizar os dados do gráfico e renderizá-lo
+			function atualizarEAtualizarGrafico() {
+				// Chama a função para calcular os totais
+				somaResEstSI();
+
+				// Obtém os valores dos campos de entrada e multiplica por 10
+				const valorI = parseInt(document.getElementById("folregTotalsimples1").value) * 10;
+				const valorE = parseInt(document.getElementById("folregTotalsimples2").value) * 10;
+				const valorMaisD = parseInt(document.getElementById("folregTotalsimples3").value) * 10;
+				const valorMenosD = parseInt(document.getElementById("folregTotalsimples4").value) * 10;
+
+				// Atualiza os dados do gráfico
+				data.datasets[0].data = [valorI];
+				data.datasets[1].data = [valorE];
+				data.datasets[2].data = [valorMaisD];
+				data.datasets[3].data = [valorMenosD];
+
+				// Atualiza o gráfico
+				if (grafico !== null) {
+					grafico.update();
+				} else {
+					console.error('O gráfico não foi inicializado corretamente.');
+				}
+			}
+
+			// Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
+			document.querySelectorAll('input[name$="Ressimples"]').forEach(function(input) {
+				input.addEventListener("change", atualizarEAtualizarGrafico);
+			});
+
+			// Chamar a função para renderizar o gráfico quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function() {
+				renderizarGrafico();
+			});
+
+		//######################################################################################################
+		//GRAFICO Duplo
+		// Referência para o gráfico
+        let graficoDuplo = null;
+
+        // Dados do gráfico Duplo
+        const dataDuplo = {
+            labels: ['Esquerda', 'Direita'], // Repete o rótulo
+            datasets: [
+                {
+                    label: 'I',
+                    backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+                    data: [0, 0] // Repete os valores da primeira coluna
+                },
+                {
+                    label: '+d',
+                    backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
+                    data: [0, 0] // Repete os valores da segunda coluna
+                },
+                {
+                    label: 'E',
+                    backgroundColor: 'rgba(255, 255, 0, 0.5)', // amarelo
+                    data: [0, 0] // Repete os valores da terceira coluna
+                },
+                {
+                    label: '-d',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
+                    data: [0, 0] // Repete os valores da quarta coluna
+                }
+            ]
+        };
+
+        // Função para renderizar o gráfico
+        function renderizarGraficoDuplo() {
+            console.log('Renderizando gráfico duplo...');
+            
+            // Opções do gráfico
+            const chartOptions = {
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+                }
+            };
+
+            // Configuração do gráfico
+            const config = {
+                type: 'bar',
+                data: dataDuplo,
+                options: chartOptions
+            };
+
+            const ctx = document.getElementById('doubleBarChart');
+            if (ctx) {
+                console.log('Elemento canvas encontrado.');
+                // Se já existe um gráfico, destruímos ele antes de renderizar um novo
+                if (graficoDuplo !== null) {
+                    console.log('Destruindo gráfico existente...');
+                    graficoDuplo.destroy();
+                }
+                console.log('Criando novo gráfico...');
+                graficoDuplo = new Chart(ctx, config);
+            } else {
+                console.error('Não foi possível encontrar o elemento canvas.');
+            }
+        }
+
+        // Função para atualizar os dados do gráfico e renderizá-lo
+        function atualizarDuploGrafico() {
+            console.log('Atualizando dados do gráfico...');
+            // Chama a função para calcular os totais
+            somaResEstDuplo();
+           
+
+            // Obtém os valores dos campos de entrada e multiplica por 10
+            const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
+            const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
+            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
+            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
+
+            const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
+            const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
+            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
+            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
+
+            // Atualiza os dados do gráfico
+            dataDuplo.datasets[0].data = [valoresqI, valordirI];
+            dataDuplo.datasets[1].data = [valoresqE, valordirE];
+            dataDuplo.datasets[2].data = [valoresqMaisD, valordirMaisD];
+            dataDuplo.datasets[3].data = [valoresqMenosD, valordirMenosD];
+
+            // Atualiza o gráfico
+            if (graficoDuplo !== null) {
+                console.log('Atualizando gráfico...');
+                graficoDuplo.update();
+            } else {
+                console.error('O gráfico não foi inicializado corretamente.');
+            }
+        }
+
+        // Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
+        document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+            input.addEventListener("change", function() {
+                console.log('Input de esquerda alterado. Atualizando gráfico...');
+                atualizarDuploGrafico();
+            });
+        });
+
+        document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+            input.addEventListener("change", function() {
+                console.log('Input de direita alterado. Atualizando gráfico...');
+                atualizarDuploGrafico();
+            });
+        });
+
+        // Chamar a função para renderizar o gráfico quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM pronto. Renderizando gráfico duplo...');
+            renderizarGraficoDuplo();
+        });
+		</script>
+	</body>
+</html>
