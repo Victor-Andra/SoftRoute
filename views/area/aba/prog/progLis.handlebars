@@ -158,7 +158,7 @@
 																						<tr>
 																							<th colspan="5">
 																								<span class=" label label-purple arrowed-in-right ">
-																									&nbsp;Supervisões ABA
+																									&nbsp;Check-List's
 																								</span>
 																																																	
 																								<span >
@@ -171,72 +171,62 @@
 																						</tr>
 																						<tr>
 																							
-																							<th style="width:220px">
+																							<th style="width:30px">
 																								<a href="#" data-action="">
 																									<i class="ace-icon fa fa-tags bigger-130"></i>
 																								</a>
 																								&nbsp;
-																								Tipo Sup
+																								Programa ABA
 																							</th>
 																							<th style="width:220px">
 																								<a href="#" data-action="">
 																									<i class="ace-icon fa fa-calendar bigger-130"></i>
 																								</a>
 																								&nbsp;
-																								Data
-																							</th>
-																							<th style="width:220px">
-																								<a href="#" data-action="">
-																									<i class="ace-icon fa fa-calendar-check-o bigger-130"></i>
-																								</a>
-																								&nbsp;
-																								Hora
-																							</th>
-																							<th style="width:220px">
-																								<a href="#" data-action="">
-																									<i class="ace-icon fa fa-user-secret bigger-120 bigger-130"></i>
-																								</a>
-																								&nbsp;
-																								Supervisor
+																								Data e Terapeuta
 																							</th>
 																							
-																							<th style="width:220px">
-																								<a href="#" data-action="">
-																									<i class="ace-icon fa fa-tags bigger-130"></i>
-																								</a>
-																								&nbsp;
-																								Ação
-																							</th>
 																						</tr>
 																					</thead>
-																						{{#each ../notasups}}
-																							{{#ifEqual this.notasup_beneid ../_id}}
-																								<tbody>
-
-																									<tr>
-																										
-																										<td>{{notasup_tiposup}}</td>
-																										<td>{{notasup_datanotasup}}</td>
-																										<td>{{notasup_horanotasup}}</td>
-																										{{#each ../../usuarios}}
-																											{{#ifEqual this._id ../notasup_supid}}
-																												<td>{{usuario_nome}}</td>
+																					<!-- .Extrutura hierárquica dos registros, sets, programas pertencentes a cada beneficiário -->
+																					{{#each ../progs}}
+																						{{#ifEqual this.prog_beneid ../_id}}
+																							<tbody>
+																								<tr>
+																									<!-- .informa os Programas pertencentes ao Beneficiário chaveado acima -->
+																									{{#each ../../progtipos}}<!-- Ok -->
+																										{{#ifEqual this._id ../prog_tipo}}
+																											<td>{{progtipo_nome}}</td>
+																										{{/ifEqual}}
+																									{{/each}}
+																									<td>
+																									<!-- /.informa os Programas pertencentes ao Beneficiário chaveado acima -->
+																										{{#each ../../progsets}}
+																											{{#ifEqual this.progset_progid ../_id}}
+																												{{#each ../../../folregs}}
+																													{{#ifEqual this.folreg_setid ../_id}}
+																													<button class="btn btn-minier btn-app btn-purple btn-xs">
+																														<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
+																														<label for="form-field-select-1" style="font-size: 10px;">
+																															{{this.folreg_datareg}}
+																															<br>
+																															{{#each ../../../../usuarios}}<!-- Ok -->
+																																{{#ifEqual this._id ../folreg_usuid}}
+																																	{{usuario_nome}}
+																																{{/ifEqual}}
+																															{{/each}}
+																														</label>
+																													</button>
+																													{{/ifEqual}}
+																												{{/each}}
 																											{{/ifEqual}}
 																										{{/each}}
-																										<td>
-																											<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/area/aba/notasup/edi/{{_id}}" title="Editar Supervisões ABA.">
-																												<i class="ace-icon fa fa-search bigger-130"></i>
-																											</a>
-																										</td>
-																										
-																									</tr>
-
-																								</tbody>
+																									</td>
+																								</tr>
+																							</tbody>
 																						{{/ifEqual}}
 																					{{/each}}
-																					
 																				</table>
-
 																			</div>
 																			<div id="super" class="tab-pane">
 																				<p class="alert alert-danger">
@@ -251,7 +241,7 @@
 																								</span>
 																																																	
 																								<span >
-																									<a class="red" name="acaoCad" id="acaoCad" href="/menu/area/aba/notasup/notasupcad" title="Cadastrar nova Supervisão ABA para &nbsp;{{bene_nome}}">
+																									<a class="red" name="acaoCad" id="acaoCad" href="/menu/area/aba/notasup/notasupcad/{{_id}}" title="Cadastrar nova Supervisão ABA para &nbsp;{{bene_nome}}">
 																										<i class="ace-icon fa fa-plus bigger-130"></i>
 																									</a>
 																								</span>

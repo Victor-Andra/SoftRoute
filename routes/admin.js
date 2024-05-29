@@ -2330,7 +2330,7 @@ router.get('/area/escalas/cars/del/:id', fncGeral.IsAuthenticated, (req,res) =>{
 
 //Menu Notasup ** Area Tecnicos e ABA 
 
-router.get('/area/aba/notasup/notasupcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Nota de Supervisão
+router.get('/area/aba/notasup/notasupcad/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Nota de Supervisão
     fncNotasup.carregaNotasup(req, res);
 })
 

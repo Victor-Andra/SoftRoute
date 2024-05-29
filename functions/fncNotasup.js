@@ -10,6 +10,9 @@ const notasupClass = require("../models/notasup")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
+const notaSupObsClass = require("../models/NotaSupObs")
+const progClass = require("../models/prog")
+const progtipoClass = require("../models/progtipo")
 const terapiaClass = require("../models/terapia")
 const fncProg = require("../functions/fncProg")
 
@@ -21,8 +24,10 @@ const Notasup = mongoose.model("tb_notasup")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+const NotaSupObs = mongoose.model("tb_notaSupObs")
 const Prog = mongoose.model("tb_prog")
+const Progtipo = mongoose.model("tb_progtipo")
+const Terapia = mongoose.model("tb_terapia")
 
 //Extrutura de Resposta
 const respostaClass = require("../models/resposta")
@@ -57,6 +62,7 @@ module.exports = {
     },
 
     carregaNotasup(req,res){
+        let beneid = req.params.id
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -64,15 +70,16 @@ module.exports = {
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
                     console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/aba/notasup/notasupCad", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
-        })})})}).catch((err) =>{
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        console.log("Listagem Realizada de beneficiarios")
+                        Progtipo.find().then((progtipo)=>{
+                            Prog.find().then((prog)=>{
+                              res.render("area/aba/notasup/notasupCad", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, Progtipos: progtipo, Progs: prog, beneid})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaNotasupEdi(req,res){
@@ -96,7 +103,12 @@ module.exports = {
         console.log("chegou")
         let resultado
         let resposta = new Resposta()
-        
+        let resultadoNotasup;
+        NotaSupObs.notaSupObsAdicionarMuitos(req,res).then((result)=>{
+            resultadoNotasup = result;
+        })
+
+        console.log("resultadoNotasup: "+resultadoNotasup);
         notasupClass.notasupAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
