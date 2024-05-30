@@ -45,7 +45,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         //Realiza Atualização
         await NotaSupObsModel.findByIdAndUpdate(req.body.notaSupObsId, 
             {$set: {
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notaSupObsProgid,
                 notaSupObs_analise: req.body.notaSupObsAnalise,   
                 notaSupObs_sugestao: req.body.notaSupObsSugestao
@@ -55,7 +55,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             resultado = true;
         }).catch((err) =>{
             console.log("erro mongo:")
-            console.log(err)
+            console.log("ERRO: "+err);
             resultado = err;
         })
         return resultado;
@@ -64,11 +64,26 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         let dataAtual = new Date();
         console.log("notaSupObsmodel");
         //trabalhar a func aqui
-        let qtd = req.body.qtdTrNotasupObs;
+        let qtdTrNotasupObs = req.body.qtdTrNotasupObs;
+        let newidId;
+        let arrayNewIds = "";
+        let qtd = parseInt((""+qtdTrNotasupObs+""));
         
-        if (qtd => 1){
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("qtd: "+qtd)
+        console.log("req.body.notasupObsprogid_1 != undefined && qtd >= 1: "+(req.body.notasupObsprogid_1 != undefined && qtd >= 1))
+        if (req.body.notasupObsprogid_1 != undefined && qtd >= 1){
+            newidId = new ObjectId();
+            arrayNewIds = ""+newidId+"";
+
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_1,
                 notaSupObs_analise: req.body.notasupObsana_1,   
                 notaSupObs_sugestao: req.body.notasupObssugest_1
@@ -78,14 +93,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
-        if (qtd => 2){
+        console.log("req.body.notasupObsprogid_2 != undefined && qtd >= 2: "+req.body.notasupObsprogid_2 != undefined && qtd >= 2)
+        if (req.body.notasupObsprogid_2 != undefined && qtd >= 2){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_2,
                 notaSupObs_analise: req.body.notasupObsana_2,   
                 notaSupObs_sugestao: req.body.notasupObssugest_2
@@ -95,14 +115,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
-        
-        if (qtd => 3){
+
+        console.log("req.body.notasupObsprogid_3 != undefined && qtd >= 3: "+(req.body.notasupObsprogid_3 != undefined && qtd >= 3))
+        if (req.body.notasupObsprogid_3 != undefined && qtd >= 3){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_3,
                 notaSupObs_analise: req.body.notasupObsana_3,   
                 notaSupObs_sugestao: req.body.notasupObssugest_3
@@ -112,14 +137,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
-        
-        if (qtd => 4){
+
+        console.log("req.body.notasupObsprogid_4 != undefined && qtd >= 4? "+(req.body.notasupObsprogid_4 != undefined && qtd >= 4))
+        if (req.body.notasupObsprogid_4 != undefined && qtd >= 4){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_4,
                 notaSupObs_analise: req.body.notasupObsana_4,   
                 notaSupObs_sugestao: req.body.notasupObssugest_4
@@ -129,14 +159,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
-
-        if (qtd => 5){
+        
+        console.log("req.body.notasupObsprogid_5 != undefined && qtd >= 5: "+(req.body.notasupObsprogid_5 != undefined && qtd >= 5))
+        if (req.body.notasupObsprogid_5 != undefined && qtd >= 5){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_5,
                 notaSupObs_analise: req.body.notasupObsana_5,   
                 notaSupObs_sugestao: req.body.notasupObssugest_5
@@ -146,14 +181,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
-        if (qtd => 6){
+        console.log("req.body.notasupObsprogid_6 != undefined && qtd >= 6: "+(req.body.notasupObsprogid_6 != undefined && qtd >= 6))
+        if (req.body.notasupObsprogid_6 != undefined && qtd >= 6){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_6,
                 notaSupObs_analise: req.body.notasupObsana_6,   
                 notaSupObs_sugestao: req.body.notasupObssugest_6
@@ -163,14 +203,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
-        if (qtd => 7){
+        console.log("req.body.notasupObsprogid_7 != undefined && qtd >= 7: "+(req.body.notasupObsprogid_7 != undefined && qtd >= 7))
+        if (req.body.notasupObsprogid_7 != undefined && qtd >= 7){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_7,
                 notaSupObs_analise: req.body.notasupObsana_7,   
                 notaSupObs_sugestao: req.body.notasupObssugest_7
@@ -180,14 +225,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
         
-        if (qtd => 8){
+        console.log("req.body.notasupObsprogid_8 != undefined && qtd >= 8: "+(req.body.notasupObsprogid_8 != undefined && qtd >= 8))
+        if (req.body.notasupObsprogid_8 != undefined && qtd >= 8){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_8,
                 notaSupObs_analise: req.body.notasupObsana_8,   
                 notaSupObs_sugestao: req.body.notasupObssugest_8
@@ -197,14 +247,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
-        if (qtd => 9){
+        console.log("req.body.notasupObsprogid_9 != undefined && qtd >= 9? "+(req.body.notasupObsprogid_9 != undefined && qtd >= 9))
+        if (req.body.notasupObsprogid_9 != undefined && qtd >= 9){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_9,
                 notaSupObs_analise: req.body.notasupObsana_9,   
                 notaSupObs_sugestao: req.body.notasupObssugest_9
@@ -214,14 +269,19 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
-        if (qtd => 10){
+        console.log("req.body.notasupObsprogid_10 != undefined && qtd >= 10???????? "+(req.body.notasupObsprogid_10 != undefined && qtd >= 10));
+        if (req.body.notasupObsprogid_10 != undefined && qtd >= 10){
+            newidId = new ObjectId();
+            arrayNewIds = arrayNewIds+","+newidId+"";
+            
             const newNotaSupObs = new NotaSupObsModel({
-                notaSupObs_beneid : req.body.notaSupObsBeneid,
+                _id: newidId,
+                notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progId: req.body.notasupObsprogid_10,
                 notaSupObs_analise: req.body.notasupObsana_10,   
                 notaSupObs_sugestao: req.body.notasupObssugest_10
@@ -231,12 +291,12 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             await newNotaSupObs.save().then(()=>{
                 
             }).catch((err) => {
-                console.log(err)
+                console.log("ERRO: "+err);
                 return err;
             });
         }
 
         console.log("Cadastro realizado!");
-            return true;
+        return arrayNewIds;
     }
 };

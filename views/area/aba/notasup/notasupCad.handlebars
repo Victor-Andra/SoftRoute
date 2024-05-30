@@ -137,8 +137,6 @@
 										</tr>
 									</tbody>
 								</table>
-								<input id="qtdTrNotasupObs" name="qtdTrNotasupObs" value="1" />
-								<input id="beneid" name="beneid" value="{{beneid}}" />
 								{{#each Progs}}
 									<input id="prog_{{prog_beneid}}" name="progBene" value="{{prog_tipo}}" />
 								{{/each}}
@@ -147,6 +145,10 @@
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
+											<div id="divOculta" hidden >
+												<input id="qtdTrNotasupObs" name="qtdTrNotasupObs" value="1" />
+												<input id="beneid" name="beneid" value="{{beneid}}" />
+											</div>
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-bookmark-o"></i>

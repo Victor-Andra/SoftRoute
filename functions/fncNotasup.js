@@ -24,7 +24,6 @@ const Notasup = mongoose.model("tb_notasup")
 const Bene = mongoose.model("tb_bene")
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
-const NotaSupObs = mongoose.model("tb_notaSupObs")
 const Prog = mongoose.model("tb_prog")
 const Progtipo = mongoose.model("tb_progtipo")
 const Terapia = mongoose.model("tb_terapia")
@@ -100,33 +99,18 @@ module.exports = {
     },
 
     cadastraNotasup(req,res){
-        console.log("chegou")
-        let resultado
-        let resposta = new Resposta()
-        let resultadoNotasup;
-        NotaSupObs.notaSupObsAdicionarMuitos(req,res).then((result)=>{
-            resultadoNotasup = result;
-        })
-
-        console.log("resultadoNotasup: "+resultadoNotasup);
-        notasupClass.notasupAdicionar(req,res).then((result)=>{
-            console.log("Cadastro Realizado!")
-            console.log(res)
-            resultado = true;
-        }).catch((err)=>{
-            resultado = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resultado == true){
+        let resposta = new Resposta();
+        notasupClass.notaSupEObsAdicionar(req,res).then((resultado)=>{
+            if (resultado == "true"){
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
-                console.log('verdadeiro')
+                console.log('retorno verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 this.listaNotasup(req,res,resposta)
             } else {
-                resposta.texto = resultado
+                resposta.texto = "Erro ao carastrar Notas de Supervisão. "+resultado;
                 resposta.sucesso = "false"
-                console.log('falso')
+                console.log('retorno falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
                 res.render('admin/erro', resposta);
             }
