@@ -651,42 +651,46 @@
 																							</div>
 																						</div>
 																					</div>
-																					{{#each ../../notasup}}
-																						{{#ifEqual this.notaSupObs_progId ../_id}}
+																					
 																							<div class="row">
 																								<div class="col-sm-4">
 																									<p class="alert alert-info">
-																										
-																											<label><b>Tipo:</b></label>&nbsp;&nbsp;Direta
-																											&nbsp;&nbsp;
-																										<br>
-																											<label><b>Data:</b></label>&nbsp;&nbsp;02/05/2024
-																											&nbsp;&nbsp;
-																											<label><b>Hora:</b></label> 09:00h - 12:00h
-																											&nbsp;&nbsp;
-																											<label><b>Supervisor:</b></label>&nbsp;&nbsp;Jason
-																											&nbsp;&nbsp;
+																											{{#each ../../notasup}}
+																												{{#ifEqual this.notaSupObs_progId ../_id}}
+																														<label><b>Tipo:</b></label>&nbsp;&nbsp;{{notasup.notasup_tiposup}}
+																														&nbsp;&nbsp;
+																													<br>
+																														<label><b>Data:</b></label>&nbsp;&nbsp;{{notasup.notasup_datanotasup}}
+																														&nbsp;&nbsp;
+																														<label><b>Hora:</b></label>{{notasup.notasup_horanotasup}}
+																														&nbsp;&nbsp;
+																														<label><b>Supervisor:</b></label>&nbsp;&nbsp;{{notasup.notasup_terapeutaid}}
+																														&nbsp;&nbsp;
+																												{{/ifEqual}}
+																											{{/each}}
 																										
 																									</p>
 																								</div>
-																								
 																								<div class="col-sm-4">
-																									
 																										<p class="alert alert-danger">
-																											Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+																											{{#each ../../notasup}}
+																												{{#ifEqual this.notaSupObs_progId ../_id}}
+																													{{notaSupObs.notaSupObs_analise}}
+																												{{/ifEqual}}
+																											{{/each}}
 																										</p>
-																									
 																								</div>
 																								<div class="col-sm-4">
-																									
 																										<p class="alert alert-warning">
-																											Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+																											{{#each ../../notasup}}
+																												{{#ifEqual this.notaSupObs_progId ../_id}}
+																													{{notaSupObs.notaSupObs_sugestao}}
+																												{{/ifEqual}}
+																											{{/each}}
 																										</p>
-																									
 																								</div>
 																							</div>
-																							{{/ifEqual}}
-																					{{/each}}
+																					
 																							<div>
 																								<br>
 																							</div>
