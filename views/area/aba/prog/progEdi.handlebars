@@ -35,6 +35,8 @@
 				color: #000;
 				text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff; /* Adiciona contorno branco */
 				line-height: 30px; /* Define a linha centralizada verticalmente com a altura da barra de progresso */
+				white-space: nowrap;
+				margin-left: 15px;
 			}
 
 			.progress{
@@ -147,9 +149,9 @@
 			});
 
 			function atualizaDicaproced(valor) {
-				var valorDicaproced = valor;
-				document.getElementById("progDicaproced").value = "";
-				document.getElementById("progDicaproced").value = valorDicaproced;
+				//var valorDicaproced = valor;
+				//document.getElementById("progDicaproced").value = "";
+				document.getElementById("progDicaproced").value = valor;
 			}
 
 			function atualizarMateriais() {
@@ -191,6 +193,7 @@
 					document.getElementById("spanShowExceTera").style = "display:''";
 				}
 			}
+
 			function removeExcecaoDicatext(text) {
 				var inputValue = document.getElementById("progDicatipotext").value;
 				var items = inputValue.split(",");
@@ -213,8 +216,8 @@
 					document.getElementById("spanShowExceTera").style.display = '';
 				}
 				// Atualizar os progress bars após remover seleções
-				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
-				atualizaProgressBars(selectedTextValues); // Alteração aqui
+				//var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+				//atualizaProgressBars(selectedTextValues); // Alteração aqui
 			}
 
 
@@ -241,61 +244,61 @@
 			}
 
 			function addExcecaoDicaid() {
-			document.getElementById("spanShowExceTera").style = "display:none";
+				document.getElementById("spanShowExceTera").style = "display:none";
 
-			var id = document.getElementById("progDicatiposelect").value;
-			var progSubid = document.getElementById("progDicatipo");
-			var span = document.getElementById(id + "_spanExce").cloneNode(true);
+				var id = document.getElementById("progDicatiposelect").value;
+				var progSubid = document.getElementById("progDicatipo");
+				var span = document.getElementById(id + "_spanExce").cloneNode(true);
 
-			// Obtendo o nome da opção selecionada
-			var selectedOptionText = $("#progDicatiposelect option:selected").text();
+				// Obtendo o nome da opção selecionada
+				var selectedOptionText = $("#progDicatiposelect option:selected").text();
 
-			span.id = "" + id + "_cloneExceTera";
-			document.getElementById("divExcecaoDica").append(span);
+				span.id = "" + id + "_cloneExceTera";
+				document.getElementById("divExcecaoDica").append(span);
 
-			if (progSubid.value == "") {
-				progSubid.value = "" + id + "";
-			} else {
-				progSubid.value = "" + progSubid.value + "," + id + "";
-			}
+				if (progSubid.value == "") {
+					progSubid.value = "" + id + "";
+				} else {
+					progSubid.value = "" + progSubid.value + "," + id + "";
+				}
 
-			// Adicionando o nome da opção à div progDicatipotext
-			var progDicatipotextInput = document.getElementById("progDicatipotext");
-			if (progDicatipotextInput.value == "") {
-				progDicatipotextInput.value = selectedOptionText;
-			} else {
-				progDicatipotextInput.value += ", " + selectedOptionText;
-			}
-
-			// Chamando atualizaProgressBars após adicionar uma seleção
-			var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
-			atualizaProgressBars(selectedTextValues); // Alteração aqui
-
-			// Resetando o valor do select
-			document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
-		}
-
-		function removeTudo(alvo, clone) {
-			let arr = document.getElementById("" + alvo + "").value.split(",");
-			arr.forEach((a) => {
-				var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
-
-				// Remover o valor correspondente do campo progDicatipotext
+				// Adicionando o nome da opção à div progDicatipotext
 				var progDicatipotextInput = document.getElementById("progDicatipotext");
-				var currentValue = progDicatipotextInput.value;
+				if (progDicatipotextInput.value == "") {
+					progDicatipotextInput.value = selectedOptionText;
+				} else {
+					progDicatipotextInput.value += ", " + selectedOptionText;
+				}
 
-				// Remover o texto da opção atual da string de valor atual
-				var newValue = currentValue.replace(selectedOptionText, "");
+				// Chamando atualizaProgressBars após adicionar uma seleção
+				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
 
-				// Remover qualquer vírgula extra e espaços em branco do novo valor
-				newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+				// Resetando o valor do select
+				document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
+			}
 
-				// Atualizar o valor do campo progDicatipotext
-				progDicatipotextInput.value = newValue;
+			function removeTudo(alvo, clone) {
+				let arr = document.getElementById("" + alvo + "").value.split(",");
+				arr.forEach((a) => {
+					var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
 
-				// Remover o elemento clonado
-				$("#" + a + "_clone" + clone + "Tera").remove();
-			});
+					// Remover o valor correspondente do campo progDicatipotext
+					var progDicatipotextInput = document.getElementById("progDicatipotext");
+					var currentValue = progDicatipotextInput.value;
+
+					// Remover o texto da opção atual da string de valor atual
+					var newValue = currentValue.replace(selectedOptionText, "");
+
+					// Remover qualquer vírgula extra e espaços em branco do novo valor
+					newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+
+					// Atualizar o valor do campo progDicatipotext
+					progDicatipotextInput.value = newValue;
+
+					// Remover o elemento clonado
+					$("#" + a + "_clone" + clone + "Tera").remove();
+				});
 
 				// Limpar o valor do campo alvo
 				document.getElementById("" + alvo + "").value = "";
@@ -313,23 +316,23 @@
 			}
 
 
-		function atualizaProgressBars(selectedTextValues) {
-			var selectedValues = selectedTextValues.split(", "); // Alteração aqui
-			var numSelected = selectedValues.length;
+			function atualizaProgressBars(selectedTextValues) {
+				var selectedValues = selectedTextValues.split(", "); // Alteração aqui
+				var numSelected = selectedValues.length;
 
-			// Definindo os valores para os progress-bars com base no número de seleções
-			var progressValues = [];
-			if (numSelected === 1) {
-				progressValues = [100];
-			} else if (numSelected === 2) {
-				progressValues = [70, 30];
-			} else if (numSelected === 3) {
-				progressValues = [50, 30, 20];
-			} else if (numSelected === 4) {
-				progressValues = [40, 30, 20, 10];
-			} else if (numSelected === 5) {
-				progressValues = [35, 25, 20, 15, 5];
-			}
+				// Definindo os valores para os progress-bars com base no número de seleções
+				var progressValues = [];
+				if (numSelected === 1) {
+					progressValues = [100];
+				} else if (numSelected === 2) {
+					progressValues = [70, 30];
+				} else if (numSelected === 3) {
+					progressValues = [50, 30, 20];
+				} else if (numSelected === 4) {
+					progressValues = [40, 30, 20, 10];
+				} else if (numSelected === 5) {
+					progressValues = [35, 25, 20, 15, 5];
+				}
 
 				// Atualizando os elementos progress-bar
 				for (var i = 0; i < 5; i++) {
@@ -355,14 +358,96 @@
 					positionProgressValue.css('left','0');
 					}    
 				});
-				}
-				progressValue();
-				$(window).resize(function(){
-				progressValue();
-			});
+			}
 
 			function carregaBody() {
-				document.getElementById("progBeneid").value = document.getElementById("idBene").value;
+				progressValue();
+				$(window).resize(function(){
+					progressValue();
+				});
+				
+				document.getElementById("progBeneid").value = document.getElementById("idBeneEdi").value;
+				document.getElementById("progData").value = document.getElementById("progDataEdi").value;
+				document.getElementById("progDataini").value = document.getElementById("progDataIniEdi").value;
+				document.getElementById("progStatus").value = document.getElementById("progStatusEdi").value;
+				document.getElementById("progDatastatus").value = document.getElementById("progDataStatusEdi").value;
+				document.getElementById("progTipo").value = document.getElementById("progTipoEdi").value;
+				document.getElementById("progNivel").value = document.getElementById("progNivelEdi").value;
+				document.getElementById("progObjetivo").value = document.getElementById("progObjetivoEdi").value;
+				document.getElementById("progAlvo").value = document.getElementById("progAlvoEdi").value;
+				document.getElementById("progMateriaisout").value = document.getElementById("progMateriaisoutEdi").value;
+				document.getElementById("progProcedimento").value = document.getElementById("progProcedimentoEdi").value;
+				document.getElementById("progExemplo").value = document.getElementById("progExemploEdi").value;
+				document.getElementById("progPontoChave").value = document.getElementById("progPontoChaveEdi").value;
+				document.getElementById("progDicaimplement").value = document.getElementById("progDicaImplementEdi").value;
+				document.getElementById("progDicasequen").value = document.getElementById("progDicasequenEdi").value;
+
+				let progEstruturaArr = [];
+				progEstruturaArr = (document.getElementById("progEstruturaEdi").value.replaceAll(" ","")).split(",");
+				progEstruturaArr.forEach((e)=>{
+					switch (e) {
+						case "Estruturado":
+							document.getElementById("progEstrutura1").checked = true;
+							break;
+						case "Desestruturado":
+							document.getElementById("progEstrutura2").checked = true;
+							break;
+						case "Brincar":
+							document.getElementById("progEstrutura3").checked = true;
+							break;
+						case "NET":
+							document.getElementById("progEstrutura4").checked = true;
+							break;
+					}
+				});
+
+				let progMateriaisArr = [];
+				progMateriaisArr = (document.getElementById("progMateriaisEdi").value.replaceAll(" ","")).split(",");
+				progMateriaisArr.forEach((e)=>{
+					switch (e) {
+						case "3D":
+							document.getElementById("progMateriais1").checked = true;
+							break;
+						case "2D":
+							document.getElementById("progMateriais2").checked = true;
+							break;
+						case "Livro(s)":
+							document.getElementById("progMateriais3").checked = true;
+							break;
+						case "Vídeo(s)":
+							document.getElementById("progMateriais4").checked = true;
+							break;
+						case "Tablet":
+							document.getElementById("progMateriais5").checked = true;
+							break;
+						case "N/A":
+							document.getElementById("progMateriais6").checked = true;
+							break;
+						case "Outros":
+							document.getElementById("progMateriais7").checked = true;
+							break;
+					}
+				});
+
+				let progDicatipoEdiArr = [];
+				progDicatipoEdiArr = (document.getElementById("progDicatipoEdi").value.replaceAll(" ","")).split(",");
+				progDicatipoEdiArr.forEach((e)=>{
+					document.getElementById("progDicatiposelect").value = e;
+					addExcecaoDicaid();
+					//atualizaProgressBars();
+				});
+
+				switch (document.getElementById("progDicaprocedEdi").value) {
+					case "Errorless":
+						document.getElementById("progDicaprocedop1").checked = true;
+						break;
+					case "Most-to-Lead":
+						document.getElementById("progDicaprocedop2").checked = true;
+						break;
+					case "Least-to-Most":
+						document.getElementById("progDicaprocedop3").checked = true;
+						break;
+				}
 			}
 		</script>
 	</head>
@@ -385,26 +470,41 @@
 					
 					<div class="row">
 						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/add" method="POST">
-								<div  id="divCarrega" hidden>
-									<label>idBene -></label>
-									<input type="text" id="idBene" name="idBene" style="width: 400px;" value="{{idBene}}" />
-									<label>progEstrutura -></label>
-									<input type="text" id="progEstrutura" name="progEstrutura" style="width: 400px;" value="" />
-									<label>progMateriais -></label>
-									<input type="text" id="progMateriais" name="progMateriais" style="width: 400px;" value="" />
-									<label>progDicatipo -></label>
-									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value="" />
-									<label>progDicaproced -></label>
-									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value="" />
-									<input type="text" id="progDicatipotext" name="progDicatipotext" style="width: 400px;" value="" />
-									<label>_spanExce -></label>
+							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/atualizar" method="POST">
+								<div id="divCarrega" >
+									<input type="text" id="progId" name="progId" value="{{prog._id}}" />
+									<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{idBene}}" />
+									<input type="text" id="progDataEdi" name="progDataEdi" value="{{prog.prog_data}}" />
+									<input type="text" id="progDataIniEdi" name="progDataIniEdi" value="{{prog.prog_dataini}}" />
+									<input type="text" id="progDataStatusEdi" name="progDataStatusEdi" value="{{prog.prog_datastatus}}" />
+									<input type="text" id="progTipoEdi" name="progTipoEdi" value="{{prog.prog_tipo}}" />
+									<input type="text" id="progNivelEdi" name="progNivelEdi" value="{{prog.prog_nivel}}" />
+									<input type="text" id="progObjetivoEdi" name="progObjetivoEdi" value="{{prog.prog_objetivo}}" />
+									<input type="text" id="progAlvoEdi" name="progAlvoEdi" value="{{prog.prog_alvo}}" />
+									<input type="text" id="progEstruturaEdi" name="progEstruturaEdi" value="{{prog.prog_estrutura}}" />
+									<input type="text" id="progMateriaisEdi" name="progMateriaisEdi" value="{{prog.prog_materiais}}" />
+									<input type="text" id="progMateriaisoutEdi" name="progMateriaisoutEdi" value="{{prog.prog_materiaisout}}" />
+									<input type="text" id="progProcedimentoEdi" name="progProcedimentoEdi" value="{{prog.prog_procedimento}}" />
+									<input type="text" id="progExemploEdi" name="progExemploEdi" value="{{prog.prog_exemplo}}" />
+									<input type="text" id="progPontoChaveEdi" name="progPontoChaveEdi" value="{{prog.prog_pchave}}" />
+									<input type="text" id="progStatusEdi" name="progStatusEdi" value="{{prog.prog_status}}" />
+									<input type="text" id="progDicatipoEdi" name="progDicatipoEdi" value="{{prog.prog_dicatipo}}" />
+									<input type="text" id="progDicaprocedEdi" name="progDicaprocedEdi" value="{{prog.prog_dicaproced}}" />
+									<input type="text" id="progDicatipotextEdi" name="progDicatipotextEdi" value="{{prog.prog_dicatipotext}}" />
+									<input type="text" id="progDicaImplementEdi" name="progDicaImplementEdi" value="{{prog.prog_dicaimplement}}" />
+									<input type="text" id="progDicasequenEdi" name="progDicasequenEdi" value="{{prog.prog_dicasequen}}" />
+									
 									{{#each progdicas}}
 									<span id="{{_id}}_spanExce" class="spanAzul">{{progdica_nome}}
 										<a onclick="javascript:removeExcecaoDicaid('{{_id}}');removeExcecaoDicatext('{{progdica_nome}}');" class="fa fa-times aClose" ></a>
 									</span>
 									{{else}}
 									{{/each}}
+									<input type="text" id="progEstrutura" name="progEstrutura" style="width: 400px;" value="" />
+									<input type="text" id="progMateriais" name="progMateriais" style="width: 400px;" value="" />
+									<input type="text" id="progDicatipo" name="progDicatipo" style="width: 400px;" value="" />
+									<input type="text" id="progDicaproced" name="progDicaproced" style="width: 400px;" value="" />
+									<input type="text" id="progDicatipotext" name="progDicatipotext" style="width: 400px;" value="" />
 								</div>	
 								
 								<div class="col-xs-12">
@@ -764,7 +864,7 @@
 													</div>
 													<div class="row">
 														<label class="block">
-															<input id="progMateriaisoutro" name="progMateriaisoutro" type="text" onchange="">
+															<input id="progMateriaisout" name="progMateriaisout" type="text" onchange="">
 														</label>
 													</div>			
 													
@@ -803,7 +903,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progProcedimentos" id="progProcedimentos" rows="8" class="form-control"></textarea>
+													<textarea type="text" name="progProcedimento" id="progProcedimento" rows="8" class="form-control"></textarea>
 												</div>
 											</div>
 										</div>
@@ -836,7 +936,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progExemplos" id="progExemplos" rows="8" placeholder="" class="form-control"></textarea>
+													<textarea type="text" name="progExemplo" id="progExemplo" rows="8" placeholder="" class="form-control"></textarea>
 												</div>
 											</div>
 										</div>
@@ -869,7 +969,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progExemplos" id="progExemplos" rows="8" placeholder="" class="form-control"></textarea>
+													<textarea type="text" name="progPontoChave" id="progPontoChave" rows="8" placeholder="" class="form-control"></textarea>
 												</div>
 											</div>
 										</div>
@@ -949,7 +1049,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input id="progDicaprocedop1" name="progDicaprocedop" type="radio" class="ace" value="Errorless" onchange="atualizaDicaproced(value);">
+																	<input id="progDicaprocedop1" name="progDicaprocedop" type="radio" class="ace" value="Errorless" onchange="atualizaDicaproced('Errorless');">
 																	<span class="lbl"> Errorless</span>
 																</label>
 															</div>
@@ -959,7 +1059,7 @@
 														<div class="row">
 															<div class="radio">
 															<label>
-																<input id="progDicaprocedop2" name="progDicaprocedop" type="radio" class="ace" value="Most-to-Lead" onchange="atualizaDicaproced(value);">
+																<input id="progDicaprocedop2" name="progDicaprocedop" type="radio" class="ace" value="Most-to-Lead" onchange="atualizaDicaproced('Most-to-Lead');">
 																<span class="lbl"> Most-to-Lead</span>
 															</label>
 															</div>
@@ -969,7 +1069,7 @@
 														<div class="row">
 															<div class="radio">
 																<label>
-																	<input id="progDicaprocedop3" name="progDicaprocedop" type="radio" class="ace" value="Least-to-Most" onchange="atualizaDicaproced(value);">
+																	<input id="progDicaprocedop3" name="progDicaprocedop" type="radio" class="ace" value="Least-to-Most" onchange="atualizaDicaproced('Least-to-Most');">
 																	<span class="lbl"> Least-to-Most</span>
 																</label>
 															</div>

@@ -18,7 +18,6 @@ const progtipoClass = require("../models/progtipo")
 const folregClass = require("../models/folreg")
 const notasupClass = require("../models/notasup")
 
-
 //prog, tipos de prog 
 const Prog = mongoose.model("tb_prog")
 const Resposta = mongoose.model("tb_resposta")
@@ -40,6 +39,7 @@ module.exports = {
     listaProg(req, res, resposta) {
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
         let idUsu;
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -97,28 +97,32 @@ module.exports = {
     
                 Usuario.find().then((usuario) => {
                     usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-    
-                    Progdica.find().then((progdica) => {
-                        Progtipo.find().then((progtipo) => {
-                            Prognivel.find().then((prognivel) => {
-                                Progset.find().then((progset) => {
-                                    Folreg.find().then((folreg) => {
-                                        Notasup.find().then((notasup) => {
-                                            res.render('area/aba/prog/progLis', {
-                                                progs: prog,
-                                                progsets: progset,
-                                                usuarios: usuario,
-                                                benes: bene,
-                                                perfilAtual,
-                                                flash,
-                                                progdicas: progdica,
-                                                progtipos: progtipo,
-                                                prognivels: prognivel,
-                                                countProgs, // Envia a contagem de progs adquiridos
-                                                countProgsA, // Envia a contagem de progs não adquiridos
-                                                countProgsC,
-                                                folregs: folreg,
-                                                notasups: notasup
+                                        
+                    Prog.find().then((prog) => {
+                        Progdica.find().then((progdica) => {
+                            Progtipo.find().then((progtipo) => {
+                                Prognivel.find().then((prognivel) => {
+                                    Progset.find().then((progset) => {
+                                        Folreg.find().then((folreg) => {
+                                            Notasup.find().then((notasup) => {
+                                                res.render('area/aba/prog/progLis', {
+                                                    progs: prog,
+                                                    progsets: progset,
+                                                    usuarios: usuario,
+                                                    benes: bene,
+                                                    perfilAtual,
+                                                    flash,
+                                                    progdicas: progdica,
+                                                    progtipos: progtipo,
+                                                    prognivels: prognivel,
+                                                    countProgs, // Envia a contagem de progs adquiridos
+                                                    countProgsA, // Envia a contagem de progs não adquiridos
+                                                    countProgsC,
+                                                    dataAtual,
+                                                    folregs: folreg,
+                                                    notasups: notasup,
+                                                    porgs: prog
+                                                });
                                             });
                                         });
                                     });
@@ -151,7 +155,7 @@ module.exports = {
                     console.log("Listagem Realizada de Usuário")
                     Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")    
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                             Progdica.find().then((progdica)=>{
                                 Progtipo.find().then((progtipo)=>{
@@ -165,10 +169,23 @@ module.exports = {
     },
 
     carregaProgEdi(req,res){
+        let idBene = "";
         Prog.findById(req.params.id).then((prog) =>{
-            console.log(prog)
-            res.render('area/aba/prog/progEdi', {prog})
-        }).catch((err) =>{
+            idBene = prog.prog_beneid;
+            Terapia.find().then((terapia)=>{
+                console.log("Listagem Realizada de terapias")
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    console.log("Listagem Realizada de Usuário")
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")    
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                            Progdica.find().then((progdica)=>{
+                                Progtipo.find().then((progtipo)=>{
+                                    Prognivel.find().then((prognivel)=>{
+                                        console.log(prog)
+                                        res.render('area/aba/prog/progEdi', {prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

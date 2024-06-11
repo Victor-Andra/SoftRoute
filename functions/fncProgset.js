@@ -12,7 +12,8 @@ const progClass = require("../models/prog")
 const progdicaClass = require("../models/progdica")
 const prognivelClass = require("../models/prognivel")
 const progtipoClass = require("../models/progtipo")
-
+const folregClass = require("../models/folreg")
+const fncProg = require("../functions/fncProg")
 
 //progset, tipos de progset 
 const Progset = mongoose.model("tb_progset")
@@ -25,8 +26,7 @@ const Prog = mongoose.model("tb_prog")
 const Progdica = mongoose.model("tb_progdica")
 const Prognivel = mongoose.model("tb_prognivel")
 const Progtipo = mongoose.model("tb_progtipo")
-
-const fncProg = require("../functions/fncProg")
+const Folreg = mongoose.model("tb_folreg")
 
 
 module.exports = {
@@ -100,9 +100,9 @@ module.exports = {
     preCarregaProgset(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-            console.log("Listagem Realizada de Usuário")
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                console.log("Listagem Realizada de Usuário")
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome
                     Bene.find().sort({bene_nome: 1}).then((bene)=>{
                         console.log("Listagem Realizada de beneficiarios")
                         Prog.findOne({_id: req.params.id}).then((prog)=>{
@@ -154,8 +154,9 @@ module.exports = {
                                             Progtipo.find().then((progtipo)=>{
                                                 Prognivel.find().then((prognivel)=>{
                                                     Prog.find().then((prog)=>{
-                                    res.render("area/aba/progset/progsetEdi", {usuarios: usuario, benes: bene, idProg, idBene, idProgtipo, idPrognivel, progset, progs: prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
-            })})})})})})})}).catch((err) =>{
+                                                        Folreg.find().then((folreg)=>{
+                                    res.render("area/aba/progset/progsetEdi", {usuarios: usuario, benes: bene, idProg, idBene, idProgtipo, idPrognivel, progset, progs: prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, folregs: folreg})
+            })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
@@ -189,36 +190,36 @@ module.exports = {
         })
     },
 
-    atualizaProgset(req,res){
-        let resultado
-        let resposta = new Resposta()
-        try{
-            progsetClass.progsetEditar(req,res).then((res)=>{
+    atualizaProgset(req, res) {
+        let resultado;
+        let resposta = new Resposta();
+        try {
+            progsetClass.progsetEditar(req, res).then((res) => {
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
-            }).catch((err) =>{
+            }).catch((err) => {
                 console.log("error1")
                 console.log(err)
                 resultado = err;
                 res.render('admin/erro')
-            }).finally(() =>{
-                if (resultado == true){
+            }).finally(() => {
+                if (resultado == true) {
                     console.log('verdadeiro')
                     req.flash("success_message", "Cadastro realizado com sucesso!")
                     resposta.texto = "Atualizado com sucesso!"
                     resposta.sucesso = "true"
-                    this.listaProgset(req,res,resposta)
+                    fncProg.listaProg(req, res, resposta)
                 } else {
                     console.log('falso')
                     resposta.texto = resultado
                     resposta.sucesso = "false"
                     req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    this.listaProgset(req,res,resposta)
+                    fncProg.listaProg(req, res, resposta)
                 }
             })
-        } catch(err1){
-            console.log("Erro TryCatch:"+err1)
+        } catch (err1) {
+            console.log("Erro TryCatch:" + err1)
             res.render('admin/erro');
         }
     },

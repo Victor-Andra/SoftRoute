@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
-const ProgprogsetSchema = mongoose.Schema({
+const ProgsetSchema = mongoose.Schema({
     progset_progid :{ type: ObjectId, required: false },
     progset_beneid :{ type: ObjectId, required: false },
     progset_teraid :{ type: ObjectId, required: false },
@@ -11,6 +11,9 @@ const ProgprogsetSchema = mongoose.Schema({
     progset_dataset :{ type: String, required: false },
     progset_dataini :{ type: String, required: false },
     progset_datafin :{ type: String, required: false },
+    progset_datameta :{ type: String, required: false },
+    progset_status :{ type: String, required: false },
+    progset_tiporeg :{ type: String, required: false },
     progset_desc :{ type: String, required: false },
     progset_qtest :{ type: String, required: false },
     progset_esta :{ type: String, required: false },
@@ -23,6 +26,7 @@ const ProgprogsetSchema = mongoose.Schema({
     progset_esth :{ type: String, required: false },
     progset_esti :{ type: String, required: false },
     progset_estj :{ type: String, required: false },
+    progset_metatipo :{ type: String, required: false },
     progset_obs :{ type: String, required: false },
     //Atributos de controle
     progset_usuidcad :{ type: ObjectId, required: false },
@@ -34,7 +38,7 @@ const ProgprogsetSchema = mongoose.Schema({
 
     })
 
-class Progprogset{
+class Progset{
     constructor(
         progset_progid,
         progset_beneid,
@@ -45,6 +49,9 @@ class Progprogset{
         progset_dataset,
         progset_dataini,
         progset_datafin,
+        progset_datameta,
+        progset_status,
+        progset_tiporeg,
         progset_desc,
         progset_qtest,
         progset_esta,
@@ -57,6 +64,7 @@ class Progprogset{
         progset_esth,
         progset_esti,
         progset_estj,
+        progset_metatipo,
         progset_obs,
         //Atributos de controle
         progset_usuidcad,
@@ -64,8 +72,6 @@ class Progprogset{
         progset_datacad,
         progset_dataedi,
         progset_lixo
-
-
         ){
             this.progset_progid = progset_progid,
             this.progset_beneid = progset_beneid,
@@ -76,6 +82,9 @@ class Progprogset{
             this.progset_dataset = progset_dataset,
             this.progset_dataini = progset_dataini,
             this.progset_datafin = progset_datafin,
+            this.progset_datameta = progset_datameta,
+            this.progset_status = progset_status,
+            this.progset_tiporeg = progset_tiporeg,
             this.progset_desc = progset_desc,
             this.progset_qtest = progset_qtest,
             this.progset_esta = progset_esta,
@@ -88,6 +97,7 @@ class Progprogset{
             this.progset_esth = progset_esth,
             this.progset_esti = progset_esti,
             this.progset_estj = progset_estj,
+            this.progset_metatipo = progset_metatipo,
             this.progset_obs = progset_obs,
             //Atributos de controle
             this.progset_usuidcad = progset_usuidcad,
@@ -100,50 +110,56 @@ class Progprogset{
 }
 
 
-ProgprogsetSchema.loadClass(Progprogset)
-const ProgprogsetModel = mongoose.model('tb_progset', ProgprogsetSchema)
-module.exports = {ProgprogsetModel,ProgprogsetSchema,
-    progsetEditar: async (req, res) => {
-       //Pega data atual
-       let dataAtual = new Date();
-       //Pega Usuário Atual
-       let usuarioAtual = req.cookies['idUsu'];
-       let resultado;
-       //Realiza Atualização
-        await ProgprogsetModel.findByIdAndUpdate(req.body.progsetId, 
-            {$progset: {
-                progset_progid : req.body.progsetProgid,
-                progset_beneid : req.body.progsetBeneid,
-                progset_teraid : req.body.progsetTeraid,
-                progset_progtipoid : req.body.progsetProgtipoid,
-                progset_prognivelid : req.body.progsetPrognivelid,
-                progset_num : req.body.progsetNum,
-                progset_dataset : req.body.progsetDataset,
-                progset_dataini : req.body.progsetDataini,
-                progset_datafin : req.body.progsetDatafin,
-                progset_desc : req.body.progsetDesc,
-                progset_qtest : req.body.progsetQtest,
-                progset_esta : req.body.progsetEsta,
-                progset_estb : req.body.progsetEstb,
-                progset_estc : req.body.progsetEstc,
-                progset_estd : req.body.progsetEstd,
-                progset_este : req.body.progsetEste,
-                progset_estf : req.body.progsetEstf,
-                progset_estg : req.body.progsetEstg,
-                progset_esth : req.body.progsetEsth,
-                progset_esti : req.body.progsetEsti,
-                progset_estj : req.body.progsetEstj,
-                progset_obs : req.body.progsetObs,
-                //Atributos de controle
-                progset_usuidedi : usuarioAtual,
-                progset_dataedi : dataAtual.toISOString(),
-                progset_lixo : "false"
+ProgsetSchema.loadClass(Progset)
+const ProgsetModel = mongoose.model('tb_progset', ProgsetSchema)
 
-                }}
-        ).then((res) =>{
+module.exports = {
+    ProgsetModel,
+    ProgsetSchema,
+    progsetEditar: async (req, res) => {
+        // Pega data atual
+        let dataAtual = new Date();
+        // Pega Usuário Atual
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
+        // Realiza Atualização
+        await ProgsetModel.findByIdAndUpdate(req.body.progsetId, 
+            {
+                progset_progid: req.body.progsetProgid,
+                progset_beneid: req.body.progsetBeneid,
+                progset_teraid: req.body.progsetTeraid,
+                progset_progtipoid: req.body.progsetProgtipoid,
+                progset_prognivelid: req.body.progsetPrognivelid,
+                progset_num: req.body.progsetNum,
+                progset_dataset: req.body.progsetDataset,
+                progset_dataini: req.body.progsetDataini,
+                progset_datafin: req.body.progsetDatafin,
+                progset_datameta: req.body.progsetDatameta,
+                progset_status: req.body.progsetStatus,
+                progset_tiporeg : req.body.progsetTiporeg,
+                progset_desc: req.body.progsetDesc,
+                progset_qtest: req.body.progsetQtest,
+                progset_esta: req.body.progsetEsta,
+                progset_estb: req.body.progsetEstb,
+                progset_estc: req.body.progsetEstc,
+                progset_estd: req.body.progsetEstd,
+                progset_este: req.body.progsetEste,
+                progset_estf: req.body.progsetEstf,
+                progset_estg: req.body.progsetEstg,
+                progset_esth: req.body.progsetEsth,
+                progset_esti: req.body.progsetEsti,
+                progset_estj: req.body.progsetEstj,
+                progset_metatipo: req.body.progsetMetatipo,
+                progset_obs: req.body.progsetObs,
+                // Atributos de controle
+                progset_usuidedi: usuarioAtual,
+                progset_dataedi: dataAtual.toISOString(),
+                progset_lixo: "false"
+            }
+        ).then((res) => {
             console.log("Salvo")
             resultado = true;
-        }).catch((err) =>{
+        }).catch((err) => {
             console.log("erro mongo:")
             console.log(err)
             resultado = err;
@@ -151,6 +167,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
         })
         return resultado;
     },
+
     progsetAdicionar: async (req,res) => {
         //Pega data atual
         let dataAtual = new Date();
@@ -159,7 +176,7 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
         let resultado;
         //Realiza Atualização
             console.log("progsetmodel");
-            const newProgprogset = new ProgprogsetModel({
+            const newProgset = new ProgsetModel({
                 progset_progid : req.body.progsetProgid,
                 progset_beneid : req.body.progsetBeneid,
                 progset_teraid : req.body.progsetTeraid,
@@ -169,6 +186,9 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
                 progset_dataset : req.body.progsetDataset,
                 progset_dataini : req.body.progsetDataini,
                 progset_datafin : req.body.progsetDatafin,
+                progset_datameta : req.body.progsetDatameta,
+                progset_status : req.body.progsetStatus,
+                progset_tiporeg : req.body.progsetTiporeg,
                 progset_desc : req.body.progsetDesc,
                 progset_qtest : req.body.progsetQtest,
                 progset_esta : req.body.progsetEsta,
@@ -181,14 +201,15 @@ module.exports = {ProgprogsetModel,ProgprogsetSchema,
                 progset_esth : req.body.progsetEsth,
                 progset_esti : req.body.progsetEsti,
                 progset_estj : req.body.progsetEstj,
+                progset_metatipo : req.body.progsetMetatipo,
                 progset_obs : req.body.progsetObs,
                 //Atributos de controle
                 progset_usuidcad : usuarioAtual,
                 progset_datacad : dataAtual.toISOString(),
                 progset_lixo : "false"
             });
-            console.log("newProgprogset save");
-            await newProgprogset.save().then(()=>{
+            console.log("newProgset save");
+            await newProgset.save().then(()=>{
                 console.log("Cadastro realizado!");
                 return true;
             }).catch((err) => {

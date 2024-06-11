@@ -7,7 +7,8 @@
 				document.getElementById("progsetBeneid").value = document.getElementById("progBene").value;
 				document.getElementById("progsetProgtipoid").value = document.getElementById("progTipo").value;
 				document.getElementById("progsetPrognivelid").value = document.getElementById("progNivel").value;
-				document.getElementById("progsetTecid").value = document.getElementById("usuarioAtual").value;
+				document.getElementById("progsetTeraid").value = document.getElementById("usuarioAtual").value;
+				document.getElementById("progsetDataset").value = new Date();
 			}
 			document.addEventListener('DOMContentLoaded', function() {
 				function updateStimulusFields() {
@@ -60,7 +61,7 @@
 									<input name="usuarioAtual" id="usuarioAtual"value="{{usuarioAtual}}" />
 								</div>
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
+									<div class="widget-box" id="cabecset">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="ace-icon fa fa-bookmark-o"></i>
@@ -85,7 +86,7 @@
 														<label>Beneficiário</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" value="Sem Info" onchange="" >
+																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select readonly" value="Sem Info" readonly onchange="" >
 																	<option value="766f69643132333435366964">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -100,7 +101,7 @@
 														<label>Tipo de Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" onchange="">
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select readonly"  onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each progtipos}}
 																			<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -113,7 +114,7 @@
 														<label>Nível do Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select" onchange="">
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select readonly" onchange="">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each prognivels}}
 																	<option value="{{_id}}">{{prognivel_nome}}</option>
@@ -126,7 +127,7 @@
 														<label>Terapeuta Resposável</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetTecid" id="progsetTecid" class="chosen-select" onchange="">
+																<select name="progsetTeraid" id="progsetTecid" class="chosen-select" onchange="">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
@@ -136,10 +137,10 @@
 														</div>
 													</div>
 												</div>
-												<label>Número do SET</label><label style="color: brown;">&nbsp;&nbsp;Ex.: SET 01, SET 09, SET 12 etc</label>
+												<label>Número do SET</label>
 												<div class="input-group">
 													<div class="input-group">
-														<input type="text" id="progsetNum" name="progsetNum" />
+														<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01"/>
 													</div>
 												</div>
 												<div class="row">
@@ -148,7 +149,7 @@
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
-																	<input id="progsetDataset" name="progsetDataset" type="date">
+																	<input id="progsetDataset" name="progsetDataset" type="date" >
 																</div>
 															</div>
 														</div>
@@ -164,7 +165,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1"> Data de acsição / Meta</label>
+														<label for="id-date-picker-1"> Data de previsão para Meta</label>
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
@@ -173,13 +174,62 @@
 															</div>
 														</div>
 													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da Meta </label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatameta" name="progsetDatameta" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo Meta</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetMetatipo" id="progsetMetatipo" class="chosen-select" onchange="">
+																	<option value="3">3</option>
+																	<option value="25">25</option>
+																</select>
+																<label>&nbsp;Vezes.</label>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<label>Status do SET</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="">
+																	<option value="Agendado">Agendado</option>
+																	<option value="Andamento">Andamento</option>
+																	<option value="Pausado">Pausado</option>
+																	<option value="Meta">Meta</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo do Registro para TODO o SET</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																	<option value="Não Informado">Não Informado</option>
+																	<option value="Simples">Simples</option>
+																	<option value="Duplo">Duplo</option>
+																</select>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>	
 								</div>
-								<div class="col-xs-12">		
-									<div class="widget-box">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="mainset">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="ace-icon fa fa-bullseye"></i>
@@ -196,150 +246,184 @@
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
 											</span>
-										</div>	
+										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<label> Descrição </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
-													</div>
-												</div>
-												<label> Quantidade de Estímulos para esse SET </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
-															<option value="1">1</option>
-															<option value="2">2</option>
-															<option value="3">3</option>
-															<option value="4">4</option>
-															<option value="5">5</option>
-															<option value="6">6</option>
-															<option value="7">7</option>
-															<option value="8">8</option>
-															<option value="9">9</option>
-														</select>
-													</div>
-												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusA">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-info arrowed arrowed-righ">A</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsta" id="progsetEsta" type="text"  />
-																</div>
+													<div class="col-xs-12">
+														<label> Descrição </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
 															</div>
 														</div>
-													</div>
+														<label> Quantidade de Estímulos para esse SET </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	<option value="5">5</option>
+																	<option value="6">6</option>
+																	<option value="7">7</option>
+																	<option value="8">8</option>
+																	<option value="9">9</option>
+																</select>
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusA">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsta" id="progsetEsta" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusB">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstb" id="progsetEstb" type="text"/>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusB">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstb" id="progsetEstb" type="text"/>
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusC">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstc" id="progsetEstc" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusC">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstc" id="progsetEstc" type="text"  />
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusD">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-info arrowed arrowed-righ">D</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstd" id="progsetEstd" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusD">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstd" id="progsetEstd" type="text"  />
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusE">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEste" id="progsetEste" type="text"/>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusE">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEste" id="progsetEste" type="text"/>
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusF">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusF">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstf" id="progsetEstf" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>																								
+														</div>
 														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstf" id="progsetEstf" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusG">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstg" id="progsetEstg" type="text"  />
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>																								
-												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusG">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstg" id="progsetEstg" type="text"  />
-																</div>
-															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusH">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-success arrowed arrowed-righ">H</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsth" id="progsetEsth" type="text"/>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusH">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsth" id="progsetEsth" type="text"/>
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusI">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsti" id="progsetEsti" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusI">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsti" id="progsetEsti" type="text"  />
+																		</div>
+																	</div>
 																</div>
+															</div>		
+														</div>
+														
+														<label> Observações</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
 															</div>
 														</div>
-													</div>		
-												</div>
-												<div class="space space-8"></div>
-												<label> Observações</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									</div>	
+								</div>
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="grafset">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bar-chart"></i>
+												Gráfico Consolidado do SET
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">
+													<p class="alert alert-info">
+														Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
+													</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
 								</div>
 								<div>
 									<div class="col-md-offprogset-3 col-md-9">
@@ -360,5 +444,18 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
+		<script>//O script abaixo só roda após garantir que todos os elementos da página já estejam carregados e disponíveis para o script manipular, evitando problemas que podem ocorrer se o script tentar acessar elementos que ainda não foram carregados.
+			document.addEventListener("DOMContentLoaded", function() {
+				var selects = document.querySelectorAll('.readonly');
+				selects.forEach(function(select) {
+					select.addEventListener('mousedown', function(e) {
+						e.preventDefault();
+					});
+					select.addEventListener('keydown', function(e) {
+						e.preventDefault();
+					});
+				});
+			});
+		</script>
 	</body>
 </html>

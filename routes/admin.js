@@ -76,6 +76,7 @@ const fncEstado = require("../functions/fncEstado")
 
 
 
+
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
 const Usuario = mongoose.model("tb_usuario")
@@ -2035,6 +2036,10 @@ router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//di
     fncProg.carregaProgEdi(req, res);
 })
 
+router.post('/area/aba/prog/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProg.atualizaProg(req, res);
+})
+
 //------------------------------------------------------------------------------------------------
 
 //Menu Dicas ** Area Tecnicos e ABA 
@@ -2355,7 +2360,7 @@ router.get('/area/aba/notasup/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{/
 })
 
 //Carrega Atualizar Notasup
-router.post('/area/aba/folreg/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+router.post('/area/aba/notasup/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
     fncNotasup.atualizaNotasup(req,res);
 })
 //-----------------------------------------------------------------------------

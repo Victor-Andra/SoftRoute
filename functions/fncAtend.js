@@ -698,7 +698,7 @@ module.exports = {
                             atends = [];
                             at.forEach((ats)=>{
                                 categorias = ats.atend_categoria
-                                console.log("categorias: "+categorias);
+                                //console.log("categorias: "+categorias);
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = ats.atend_terapiaid;
@@ -862,11 +862,16 @@ module.exports = {
         let bene_nome;
         let terapiaAtend;
         let terapeutaAtend;
+        console.log("req.body.dataIni: "+req.body.dataIni)
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        console.log("periodoDe:? "+periodoDe)
+        console.log("periodoAte:? "+periodoAte)
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        console.log("seg: "+seg)
+        console.log("sex: "+sex)
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -917,10 +922,12 @@ module.exports = {
                                 if (req.body.porHoras == "sim"){
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora;
                                 } else {
+                                    console.log("atend.atend_atenddata: "+atend.atend_atenddata)
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                    console.log("rab.dt: "+rab.dt)
                                 }
                                 categorias = atend.atend_categoria
-                                console.log("categorias:"+categorias)
+                                //console.log("categorias:"+categorias)
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;

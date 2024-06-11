@@ -7,26 +7,65 @@
 		<title>Lista ABA</title>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.7/jquery.easypiechart.min.js"></script>
 			<script>
-				function initEasyPieCharts() {
+				 function initEasyPieCharts() {
 					// Seleciona todos os elementos com a classe easy-pie-chart
 					$('.easy-pie-chart').each(function() {
 						var $this = $(this);
-						var percent = parseInt($this.data('percent'));
+						var startDate = $this.data('start');
+						var endDate = $this.data('end');
+						var percent = calculatePercent(startDate, endDate);
+
+						// Determina a cor do gráfico com base na porcentagem
+						var barColor;
+						if (percent <= 50) {
+							barColor = 'green';
+						} else if (percent <= 75) {
+							barColor = 'orange';
+						} else {
+							barColor = 'red';
+						}
 
 						// Inicializa o EasyPieChart
 						$this.easyPieChart({
-							barColor: '#87CEEB', // Cor do gráfico
+							barColor: barColor, // Cor do gráfico
 							trackColor: '#f2f2f2', // Cor de fundo
 							scaleColor: false,
 							lineWidth: 8, // Largura da linha do gráfico
 							size: 46, // Tamanho do gráfico
-							animate: 10000 // Duração da animação
+							animate: 1000 // Duração da animação
 						});
 
 						// Atualiza o valor percentual do gráfico
 						$this.data('easyPieChart').update(percent);
+						$this.find('.percent').text(percent); // Atualiza o texto da porcentagem
 					});
 				}
+
+				function calculatePercent(startDate, endDate) {
+					const currentDate = new Date();
+					const start = new Date(startDate);
+					const end = new Date(endDate);
+					
+					// Se a data inicial for superior ou igual à data atual, retorna 0%
+					if (start >= currentDate) {
+						return 0;
+					}
+
+					const totalDuration = (end - start) / (1000 * 60 * 60 * 24); // Duração total em dias
+					const elapsedDuration = (currentDate - start) / (1000 * 60 * 60 * 24); // Duração passada em dias
+
+					if (elapsedDuration >= totalDuration) {
+						return 100; // Se a duração passada é maior ou igual à duração total, retorna 100%
+					}
+
+					const percent = (elapsedDuration / totalDuration) * 100;
+					return Math.round(percent); // Arredonda a porcentagem para o valor inteiro mais próximo
+				}
+
+				$(document).ready(function() {
+					// Inicializar os gráficos
+					initEasyPieCharts();
+				});
 
 				function carregaBody(){
 					// Inicializar os gráficos
@@ -39,6 +78,27 @@
 						window.location.href=("/menu/beneficiario/excecao/del/"+id);
 					}
 				}
+				// Função para formatar a data no formato desejado
+				function formatDate(date) {
+					let d = new Date(date);
+					let year = d.getFullYear();
+					let month = (d.getMonth() + 1).toString().padStart(2, '0');
+					let day = d.getDate().toString().padStart(2, '0');
+					return `${year}/${month}/${day}`;
+				}
+
+				// Função para definir a data formatada no span
+				function setFormattedDate() {
+					let dataAtual = new Date();
+					let dataFormatada = formatDate(dataAtual);
+					document.getElementById('dataAtual').textContent = dataFormatada;
+				}
+
+				// Executa a função setFormattedDate após o carregamento da página
+				window.addEventListener('DOMContentLoaded', (event) => {
+					setFormattedDate();
+				});
+				
 			</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -68,6 +128,8 @@
 							<div class="col-xs-12 col-sm-12">
 								<form id="formEnv">
 									<div hidden>
+
+										<input type="text" id="DataAgora" name="DataAgora"/>
 										<!--.dados do beneficiário -->
 										<input type="text" id="progsetBeneidEnv" name="progsetBeneidEnv" value="{{prog.prog_beneid}}"/>
 										<!--.dados do programa ABA -->
@@ -206,8 +268,9 @@
 																												{{#ifEqual this.progset_progid ../_id}}
 																													{{#each ../../../folregs}}
 																														{{#ifEqual this.folreg_setid ../_id}}
-																														<button class="btn btn-minier btn-app btn-purple btn-xs">
-																															<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
+																														<button class="btn btn-xs btn-purple" style="vertical-align: middle;">
+																															<i class="ace-icon fa fa-newspaper-o bigger-110"></i>
+
 																															<label for="form-field-select-1" style="font-size: 10px;">
 																																{{this.folreg_datareg}}
 																																<br>
@@ -217,7 +280,9 @@
 																																	{{/ifEqual}}
 																																{{/each}}
 																															</label>
+																															
 																														</button>
+																														
 																														{{/ifEqual}}
 																													{{/each}}
 																												{{/ifEqual}}
@@ -586,41 +651,46 @@
 																							</div>
 																						</div>
 																					</div>
-																					<div class="row">
-																						<div class="col-sm-4">
-																							<p class="alert alert-info">
+																					{{#each ../../notasup}}
+																						{{#ifEqual this.notaSupObs_progId ../_id}}
+																							<div class="row">
+																								<div class="col-sm-4">
+																									<p class="alert alert-info">
+																										
+																											<label><b>Tipo:</b></label>&nbsp;&nbsp;Direta
+																											&nbsp;&nbsp;
+																										<br>
+																											<label><b>Data:</b></label>&nbsp;&nbsp;02/05/2024
+																											&nbsp;&nbsp;
+																											<label><b>Hora:</b></label> 09:00h - 12:00h
+																											&nbsp;&nbsp;
+																											<label><b>Supervisor:</b></label>&nbsp;&nbsp;Jason
+																											&nbsp;&nbsp;
+																										
+																									</p>
+																								</div>
 																								
-																									<label><b>Tipo:</b></label>&nbsp;&nbsp;Direta
-																									&nbsp;&nbsp;
+																								<div class="col-sm-4">
+																									
+																										<p class="alert alert-danger">
+																											Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+																										</p>
+																									
+																								</div>
+																								<div class="col-sm-4">
+																									
+																										<p class="alert alert-warning">
+																											Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+																										</p>
+																									
+																								</div>
+																							</div>
+																							{{/ifEqual}}
+																					{{/each}}
+																							<div>
 																								<br>
-																									<label><b>Data:</b></label>&nbsp;&nbsp;02/05/2024
-																									&nbsp;&nbsp;
-																									<label><b>Hora:</b></label> 09:00h - 12:00h
-																									&nbsp;&nbsp;
-																									<label><b>Supervisor:</b></label>&nbsp;&nbsp;Jason
-																									&nbsp;&nbsp;
-																								
-																							</p>
-																						</div>
+																							</div>
 																						
-																						<div class="col-sm-4">
-																							
-																								<p class="alert alert-danger">
-																									Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
-																								</p>
-																							
-																						</div>
-																						<div class="col-sm-4">
-																							
-																								<p class="alert alert-warning">
-																									Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
-																								</p>
-																							
-																						</div>
-																					</div>
-																					<div>
-																						<br>
-																					</div>
 																					<span class="label label-danger arrowed-in-right ">
 																						&nbsp;Lista de SET's do programa ABA acima.
 																					</span>&nbsp;&nbsp;&nbsp;
@@ -638,7 +708,7 @@
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%">SET</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 15%">Descrição</th>
 																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%" >Data</th>
-																								<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 10%">Status</th>
+																								<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 10%">Prazo</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >
 																									<span class="label label-purple arrowed-in-right ">
 																										&nbsp;Conjunto de Registros
@@ -660,11 +730,12 @@
 																											{{this.progset_num}}
 																										</td>
 																										<td>{{this.progset_desc}}</td>		
-																										<td>{{this.progset_dataini}}</td>			
+																										<td><span class="badge badge-success">{{this.progset_dataini}}</span><br><span class="badge badge-danger">{{this.progset_datafin}}</span></td>			
 																										<td>
-																											<div class="easy-pie-chart percentage" data-percent="42" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
-																												<span class="percent">42</span>%
-																											<canvas height="69" width="69" style="height: 46px; width: 46px;"></canvas></div>
+																											 <div class="easy-pie-chart percentage" data-start="{{this.progset_dataini}}" data-end="{{this.progset_datafin}}" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
+																													<span class="percent"></span>%
+																												</div>
+																											</div>
 																										</td>
 																										<td>
 																											<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/folreg/folregPrecad/{{this._id}}" title="Cadastrar novo REGISTRO para esse programa SET.">
@@ -675,19 +746,18 @@
 																										<td style="vertical-align: top; text-align: left;">
 																											{{#each ../../../folregs}}
 																												{{#ifEqual this.folreg_setid ../_id}}
-																												<button class="btn btn-minier btn-app btn-purple btn-xs">
+																												<a href="/menu/area/aba/folreg/Edi/{{this._id}}" class="btn btn-minier btn-app btn-purple btn-xs">
 																													<i class="ace-icon fa fa-newspaper-o bigger-200"></i>
 																													<label for="form-field-select-1" style="font-size: 10px;">
 																														{{this.folreg_datareg}}
 																														<br>
-																														{{#each ../../usuarios}}<!-- Ok -->
+																														{{#each ../../usuarios}}
 																															{{#ifEqual this._id ../this.folreg_usuid}}
 																																{{usuario_nome}}
 																															{{/ifEqual}}
 																														{{/each}}
-																														
 																													</label>
-																												</button>
+																												</a>
 																												{{/ifEqual}}
 																											{{/each}}
 																										</td>

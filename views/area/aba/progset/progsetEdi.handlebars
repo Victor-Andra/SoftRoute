@@ -2,47 +2,248 @@
 <html lang="pt-br">
 	<head>
 		<title>SET Editar</title>
+		<style>
+			.table-wrapper {
+				overflow-x: auto;
+				max-width: 100%;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th, td {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+			.container {
+				width: 100%;
+				max-width: 600px; /* Defina a largura máxima que deseja para o gráfico */
+				margin: 0 auto; /* Centralize o contêiner */
+			}
+			canvas {
+				width: 100% !important;
+				height: auto !important;
+				max-width: 100% !important;
+			}
+			
+		</style>
 		<script>
-		function atualizaData(){
-			var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-			var dataFmt = new Date(dataIso);
-			console.log(dataFmt.toISOString());
-			document.getElementById("a").value = dataFmt;
-		}
-		function carregaBody(){
-			document.getElementById("progsetProgid").value = document.getElementById("progsetProgidEdi").value;
-			console.log("progsetProgidEdi");
-			document.getElementById("progsetBeneid").value = document.getElementById("progsetBeneidEdi").value;
-			console.log("1");
-			document.getElementById("progsetProgtipoid").value = document.getElementById("progsetProgtipoidEdi").value;
-			console.log("2");
-			document.getElementById("progsetPrognivelid").value = document.getElementById("progsetPrognivelidEdi").value;
-			console.log("3");
-			document.getElementById("progsetNum").value = document.getElementById("progsetNumEdi").value;
-			console.log("4");
-			document.getElementById("progsetDataprogset").value = document.getElementById("progsetDataprogsetEdi").value;
-			console.log("5");
-			document.getElementById("progsetDataini").value = document.getElementById("progsetDatainiEdi").value;
-			console.log("6");
-			document.getElementById("progsetDatafin").value = document.getElementById("progsetDatafinEdi").value;
-			console.log("7");
-			document.getElementById("progsetDesc").value = document.getElementById("progsetDescEdi").value;
-			console.log("8");
-			document.getElementById("progsetIntro").value = document.getElementById("progsetIntroEdi").value;
-			console.log("9");
-			document.getElementById("progsetAcsicao").value = document.getElementById("progsetAcsicaoEdi").value;
-			console.log("10");
-			document.getElementById("progsetObs").value = document.getElementById("progsetObsEdi").value;
-		}
+			function carregaBody(){
+				document.getElementById("progsetProgid").value = document.getElementById("progsetProgidEdi").value;
+				document.getElementById("progsetTeraid").value = document.getElementById("progsetTeraidEdi").value;
+				document.getElementById("progsetBeneid").value = document.getElementById("progsetBeneidEdi").value;
+				document.getElementById("progsetPrognivelid").value = document.getElementById("progsetPrognivelidEdi").value;
+				document.getElementById("progsetProgtipoid").value = document.getElementById("progsetProgtipoidEdi").value;
+				document.getElementById("progsetNum").value = document.getElementById("progsetNumEdi").value;
+				document.getElementById("progsetDataset").value = document.getElementById("progsetDatasetEdi").value;
+				document.getElementById("progsetDataini").value = document.getElementById("progsetDatainiEdi").value;
+				document.getElementById("progsetDatafin").value = document.getElementById("progsetDatafinEdi").value;
+				document.getElementById("progsetDatameta").value = document.getElementById("progsetDatametaEdi").value;
+				document.getElementById("progsetStatus").value = document.getElementById("progsetStatusEdi").value;
+				document.getElementById("progsetTiporeg").value = document.getElementById("progsetTiporegEdi").value;
+				document.getElementById("progsetDesc").value = document.getElementById("progsetDescEdi").value;
+				document.getElementById("progsetQtest").value = document.getElementById("progsetQtestEdi").value;
+				document.getElementById("progsetEsta").value = document.getElementById("progsetEstaEdi").value;
+				document.getElementById("progsetEstb").value = document.getElementById("progsetEstbEdi").value;
+				document.getElementById("progsetEstc").value = document.getElementById("progsetEstcEdi").value;
+				document.getElementById("progsetEstd").value = document.getElementById("progsetEstdEdi").value;
+				document.getElementById("progsetEste").value = document.getElementById("progsetEsteEdi").value;
+				document.getElementById("progsetEstf").value = document.getElementById("progsetEstfEdi").value;
+				document.getElementById("progsetEstg").value = document.getElementById("progsetEstgEdi").value;
+				document.getElementById("progsetEsth").value = document.getElementById("progsetEsthEdi").value;
+				document.getElementById("progsetEsti").value = document.getElementById("progsetEstiEdi").value;
+				//document.getElementById("progsetEstj").value = document.getElementById("progsetEstjEdi").value;
+				document.getElementById("progsetMetatipo").value = document.getElementById("progsetMetatipoEdi").value;
+				document.getElementById("progsetObs").value = document.getElementById("progsetObsEdi").value;
+				updateStimulusFields(); // Chama a função após preencher os campos
+				
+				
+
+			}
+			 function updateStimulusFields() {
+				var select = document.getElementById('progsetQtest');
+				var value = parseInt(select.value, 10);
+
+				// Hide all stimulus fields
+				var fields = document.querySelectorAll('.stimulus-field');
+				fields.forEach(function(field) {
+					field.style.display = 'none';
+				});
+
+				// Show only the number of fields selected
+				for (var i = 0; i < value; i++) {
+					document.getElementById('stimulus' + String.fromCharCode(65 + i)).style.display = 'block';
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				// Initialize fields on page load
+				carregaBody();
+
+				// Add change event listener to the select element
+				document.getElementById('progsetQtest').addEventListener('change', updateStimulusFields);
+			});
+			function somaResEstSI() {
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados
+				let inputs = document.querySelectorAll('input[name$="Ressimples"]:checked');
+
+				// Loop através de todos os inputs encontrados
+				inputs.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalI++;
+							break;
+						case 'E':
+							totalE++;
+							break;
+						case '+d':
+							totalMaisD++;
+							break;
+						case '-d':
+							totalMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados
+				document.getElementById("folregTotalsimples1").value = totalI;
+				document.getElementById("folregTotalsimples2").value = totalE;
+				document.getElementById("folregTotalsimples3").value = totalMaisD;
+				document.getElementById("folregTotalsimples4").value = totalMenosD;
+			}
+
+			//###########################################################################
+			function somaResEstDuplo() {
+				// Variáveis para armazenar os totais do lado esquerdo
+				let totalEsqI = 0;
+				let totalEsqE = 0;
+				let totalEsqMaisD = 0;
+				let totalEsqMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado esquerdo
+				let inputsEsq = document.querySelectorAll('input[name$="Resesqu"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado esquerdo
+				inputsEsq.forEach(function(input) {
+					// Verifica o valor do input
+				switch(input.value) {
+					case 'I':
+						totalEsqI++;
+						break;
+					case 'E':
+						totalEsqE++;
+						break;
+					case '+d':
+						totalEsqMaisD++;
+						break;
+					case '-d':
+						totalEsqMenosD++;
+						break;
+					default:
+						break;
+				}
+			});
+
+				// Atualiza os campos de input com os totais calculados no lado esquerdo
+				document.getElementById("folregTotalduploesq1").value = totalEsqI;
+				document.getElementById("folregTotalduploesq2").value = totalEsqE;
+				document.getElementById("folregTotalduploesq3").value = totalEsqMaisD;
+				document.getElementById("folregTotalduploesq4").value = totalEsqMenosD;
+
+				// Variáveis para armazenar os totais do lado direito
+				let totalDirI = 0;
+				let totalDirE = 0;
+				let totalDirMaisD = 0;
+				let totalDirMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado direito
+				let inputsDir = document.querySelectorAll('input[name$="Resdir"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado direito
+				inputsDir.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalDirI++;
+							break;
+						case 'E':
+							totalDirE++;
+							break;
+						case '+d':
+							totalDirMaisD++;
+							break;
+						case '-d':
+							totalDirMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados no lado direito
+				document.getElementById("folregTotalduplodir1").value = totalDirI;
+				document.getElementById("folregTotalduplodir2").value = totalDirE;
+				document.getElementById("folregTotalduplodir3").value = totalDirMaisD;
+				document.getElementById("folregTotalduplodir4").value = totalDirMenosD;
+			}
+
+			function atualizarGraficoDuplo() {
+				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado esquerdo
+				const valoresEsq = [
+					parseInt(document.getElementById("folregTotalduploesq1").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq2").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq3").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq4").value) * 10
+				];
+
+				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado direito
+				const valoresDir = [
+					parseInt(document.getElementById("folregTotalduplodir1").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir2").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir3").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir4").value) * 10
+				];
+
+				// Atualiza os dados do gráfico duplo
+				dataDuplo.datasets[0].data = valoresEsq;
+				dataDuplo.datasets[1].data = valoresDir;
+
+				// Atualiza o gráfico duplo
+				if (graficoDuplo !== null) {
+					graficoDuplo.update();
+				} else {
+					console.error('O gráfico duplo não foi inicializado corretamente.');
+				}
+			}
+
+			// Chamar as funções para atualizar o gráfico duplo quando os radio buttons forem alterados
+			document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
+
+			document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
 		</script>
 	</head>
-
-	<body onload="javascript:controlaNave();carregaBody()" class="no-skin">
-
-
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -54,41 +255,52 @@
 
 							<li class="active">SET Editar</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/atualizar" method="POST">
+								<div id="divCarrega" hidden>
+									
+									<input type="text" id="progsetId" name="progsetId" value="{{progset._id}}"/>
+									<input type="text" id="progsetProgid" name="progsetProgid" value="{{progset.progset_progid}}"/>
+									
+									<input type="text" id="progsetProgidEdi" name="progsetProgidEdi" value="{{progset.progset_progid}}"/>
+									<input type="text" id="progsetBeneidEdi" name="progsetBeneidEdi" value="{{progset.progset_beneid}}"/>
+									<input type="text" id="progsetTeraidEdi" name="progsetTeraidEdi" value="{{progset.progset_teraid}}"/>
+									<input type="text" id="progsetProgtipoidEdi" name="progsetProgtipoidEdi" value="{{progset.progset_progtipoid}}"/>
+									<input type="text" id="progsetPrognivelidEdi" name="progsetPrognivelidEdi" value="{{progset.progset_prognivelid}}"/>
+									<input type="text" id="progsetNumEdi" name="progsetNumEdi" value="{{progset.progset_num}}"/>
+									<input type="text" id="progsetDatasetEdi" name="progsetDatasetEdi" value="{{progset.progset_dataset}}"/>
+									<input type="text" id="progsetDatainiEdi" name="progsetDatainiEdi" value="{{progset.progset_dataini}}"/>
+									<input type="text" id="progsetDatafinEdi" name="progsetDatafinEdi" value="{{progset.progset_datafin}}"/>
+									<input type="text" id="progsetDatametaEdi" name="progsetDatametaEdi" value="{{progset.progset_datameta}}"/>
+									<input type="text" id="progsetStatusEdi" name="progsetStatusEdi" value="{{progset.progset_status}}"/>
+									<input type="text" id="progsetTiporegEdi" name="progsetTiporegEdi" value="{{progset.progset_tiporeg}}"/>
+									<input type="text" id="progsetDescEdi" name="progsetDescEdi" value="{{progset.progset_desc}}"/>
+									<input type="text" id="progsetQtestEdi" name="progsetQtestEdi" value="{{progset.progset_qtest}}"/>
+									<input type="text" id="progsetEstaEdi" name="progsetEstaEdi" value="{{progset.progset_esta}}"/>
+									<input type="text" id="progsetEstbEdi" name="progsetEstbEdi" value="{{progset.progset_estb}}"/>
+									<input type="text" id="progsetEstcEdi" name="progsetEstcEdi" value="{{progset.progset_estc}}"/>
+									<input type="text" id="progsetEstdEdi" name="progsetEstdEdi" value="{{progset.progset_estd}}"/>
+									<input type="text" id="progsetEsteEdi" name="progsetEsteEdi" value="{{progset.progset_este}}"/>
+									<input type="text" id="progsetEstfEdi" name="progsetEstfEdi" value="{{progset.progset_estf}}"/>
+									<input type="text" id="progsetEstgEdi" name="progsetEstgEdi" value="{{progset.progset_estg}}"/>
+									<input type="text" id="progsetEsthEdi" name="progsetEsthEdi" value="{{progset.progset_esth}}"/>
+									<input type="text" id="progsetEstiEdi" name="progsetEstiEdi" value="{{progset.progset_esti}}"/>
+									<!--<input type="text" id="progsetEstjEdi" name="progsetEstjEdi" value="{{progset.progset_estj}}"/> 10 tentativas caso haja necessidade-->
+									<input type="text" id="progsetMetatipoEdi" name="progsetMetatipoEdi" value="{{progset.progset_metatipo}}"/>
+									<input type="text" id="progsetObsEdi" name="progsetObsEdi" value="{{progset.progset_obs}}"/>
+
+								</div>
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
+									<div class="widget-box" id="cabecset">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="ace-icon fa fa-bookmark-o"></i>
 												Cabeçalho do SET e Índices
 											</h4>
-											<div id="divCarrega" name="divCarrega" class="">
-												<input id="progsetId" name="progsetId" value="{{progset._id}}" />
-												<input type="text" id="progsetProgidEdi" name="progsetProgidEdi" value="{{progset.progset_progid}}"/>
-												<input type="text" id="progsetBeneidEdi" name="progsetBeneidEdi" value="{{progset.progset_beneid}}"/>
-												
-												<input type="text" id="progsetProgtipoidEdi" name="progsetProgtipoidEdi" value="{{progset.progset_progtipoid}}"/>
-												<input type="text" id="progsetPrognivelidEdi" name="progsetPrognivelidEdi" value="{{progset.progset_prognivelid}}"/>
-												
-												<input type="text" id="progsetNumEdi" name="progsetNumEdi" value="{{progset.progset_num}}"/>
-												<input type="text" id="progsetDataprogsetEdi" name="progsetDataprogsetEdi" value="{{progset.progset_dataprogset}}"/>
-												<input type="text" id="progsetDatainiEdi" name="progsetDatainiEdi" value="{{progset.progset_dataini}}"/>
-												<input type="text" id="progsetDatafinEdi" name="progsetDatafinEdi" value="{{progset.progset_datafin}}"/>
-												<input type="text" id="progsetDescEdi" name="progsetDescEdi" value="{{progset.progset_desc}}"/>
-												<input type="text" id="progsetIntroEdi" name="progsetIntroEdi" value="{{progset.progset_intro}}"/>
-												<input type="text" id="progsetAcsicaoEdi" name="progsetAcsicaoEdi" value="{{progset.progset_acsicao}}"/>
-												<input type="text" id="progsetObsEdi" name="progsetObsEdi" value="{{progset.progset_obs}}"/>
-
-
-											</div>
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
@@ -98,32 +310,16 @@
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
 													<div class="col-xs-12">	
-														<label>Programa</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetProgid" id="progsetProgid" class="chosen-select" value="Sem Info" onchange="" >
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each progs}}
-																			<option value="{{_id}}">{{_id}}</option>
-																		{{/each}}
-																</select>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-xs-12">	
 														<label>Beneficiário</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" value="Sem Info" onchange="" >
+																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" value="Sem Info" disabled onchange="" >
 																	<option value="766f69643132333435366964">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -138,7 +334,7 @@
 														<label>Tipo de Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetProgtipo" id="progsetProgtipo" class="chosen-select" onchange="">
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" disabled onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each progtipos}}
 																			<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -147,16 +343,15 @@
 															</div>
 														</div>
 													</div>
-													
 													<div class="col-sm-4">
 														<label>Nível do Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetPrognivel" id="progsetPrognivel" class="chosen-select" onchange="">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each prognivels}}
-																			<option value="{{_id}}">{{prognivel_nome}}</option>
-																		{{/each}}
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select" disabled onchange="">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each prognivels}}
+																	<option value="{{_id}}">{{prognivel_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
@@ -165,67 +360,115 @@
 														<label>Terapeuta Resposável</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetTecid" id="progsetTecid" class="chosen-select" onchange="">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each usuarios}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
+																<select name="progsetTeraid" id="progsetTeraid" class="chosen-select" onchange="">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
 													</div>
 												</div>
-												<label>Número do SET</label><label style="color: brown;">Ex.: SET 01, SET 09, SET 12 etc</label>
+												<label>Número do SET</label>
 												<div class="input-group">
 													<div class="input-group">
-														<input type="text" id="progsetNum" name="progsetNum" />
+														<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01"/>
 													</div>
 												</div>
-													
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data da criação do SET</label>
 												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDataprogset" name="progsetDataprogset" type="date">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da criação do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDataset" name="progsetDataset" type="date" >
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de inicio do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDataini" name="progsetDataini" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de previsão para Meta</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatafin" name="progsetDatafin" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da Meta </label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatameta" name="progsetDatameta" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo Meta</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetMetatipo" id="progsetMetatipo" class="chosen-select" onchange="">
+																	<option value="3">3</option>
+																	<option value="25">25</option>
+																</select>
+																<label>&nbsp;Vezes.</label>
+															</div>
 														</div>
 													</div>
 												</div>
-
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data de inicio do SET</label>
 												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDataini" name="progsetDataini" type="date">
+													<div class="col-xs-12 col-sm-2">
+														<label>Status do SET</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="">
+																	<option value="Agendado">Agendado</option>
+																	<option value="Andamento">Andamento</option>
+																	<option value="Pausado">Pausado</option>
+																	<option value="Meta">Meta</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo do Registro para TODO o SET</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																	<option value="Não Informado">Não Informado</option>
+																	<option value="Simples">Simples</option>
+																	<option value="Duplo">Duplo</option>
+																</select>
+															</div>
 														</div>
 													</div>
 												</div>
-
-												<div class="space space-8"></div>
-												<label for="id-date-picker-1"> Data de acsição / Meta</label>
-												<div class="row">
-													<div class="input-group">
-														<div class="col-sm-4">
-															<input id="progsetDatafin" name="progsetDatafin" type="date">
-														</div>
-													</div>
-												</div>
-
 											</div>
 										</div>
 									</div>	
 								</div>
-								<div class="col-xs-12">		
-									<div class="widget-box">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="mainset">
 										<div class="widget-header">
 											<h4 class="widget-title">
 												<i class="ace-icon fa fa-bullseye"></i>
 												SET
 											</h4>
-
 											<span class="widget-toolbar">
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
@@ -235,168 +478,201 @@
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</span>
-										</div>	
-										
+										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-
-												<label> Descrição </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="5"></textarea>
-													</div>
-												</div>
-												<label> Quantidade de Estímulos para esse SET </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" >
-															<option value="1">1</option>
-															<option value="2">2</option>
-															<option value="3">3</option>
-															<option value="4">4</option>
-															<option value="5">5</option>
-															<option value="6">6</option>
-															<option value="7">7</option>
-															<option value="8">8</option>
-															<option value="9">9</option>
-														</select>
-													</div>
-												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-info arrowed arrowed-righ">A</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsta" id="progsetEsta" type="text"  />
-																</div>
+													<div class="col-xs-12">
+														<label> Descrição </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
 															</div>
 														</div>
-													</div>
+														<label> Quantidade de Estímulos para esse SET </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	<option value="5">5</option>
+																	<option value="6">6</option>
+																	<option value="7">7</option>
+																	<option value="8">8</option>
+																	<option value="9">9</option>
+																</select>
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusA">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsta" id="progsetEsta" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>
 
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstb" id="progsetEstb" type="text"/>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusB">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstb" id="progsetEstb" type="text"/>
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstc" id="progsetEstc" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusC">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstc" id="progsetEstc" type="text"  />
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-info arrowed arrowed-righ">D</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstd" id="progsetEstd" type="text"  />
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusD">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstd" id="progsetEstd" type="text"  />
+																		</div>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</div>
 
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEste" id="progsetEste" type="text"/>
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusE">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEste" id="progsetEste" type="text"/>
+																		</div>
+																	</div>
 																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusF">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstf" id="progsetEstf" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>																								
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusG">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEstg" id="progsetEstg" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusH">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsth" id="progsetEsth" type="text"/>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusI">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<div class="input-group">
+																			<input name="progsetEsti" id="progsetEsti" type="text"  />
+																		</div>
+																	</div>
+																</div>
+															</div>		
+														</div>
+														
+														<label> Observações</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
 															</div>
 														</div>
 													</div>
-
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstf" id="progsetEstf" type="text"  />
-																</div>
-															</div>
-														</div>
-													</div>																								
 												</div>
-												<div class="row">
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEstg" id="progsetEstg" type="text"  />
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-success arrowed arrowed-righ">H</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsth" id="progsetEsth" type="text"/>
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<div class="col-xs-12 col-sm-2">
-														<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-														<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="input-group">
-																	<input name="progsetEsti" id="progsetEsti" type="text"  />
-																</div>
-															</div>
-														</div>
-													</div>		
-												</div>
-												
-												
-												<div class="space space-8"></div>
-												<label> Observações</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="5" ></textarea>
-													</div>
-												</div>
-
 											</div>
 										</div>
-									
-									
-									</div>
+									</div>	
 								</div>
-	
-								<div >
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="grafset">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bar-chart"></i>
+												Gráfico Consolidado do SET
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">
+													<p class="alert alert-info">
+														Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
+													</p>
+													</div>
+													<div class="row" style="position: relative;">
+															<div class="col-xs-12">
+																<!-- GRAFICO DUPLO-->
+																<div class="container" style="width: 100%;">
+																	<canvas id="doubleBarChart" width="400" height="200"></canvas>
+																</div>
+															</div>																		
+														</div>	
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
+								</div>
+								<div>
 									<div class="col-md-offprogset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-	
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  type="reprogset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -409,7 +685,223 @@
 					</div><!-- /.row -->
 				</div>
 			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
+		</div><!-- /.main-container --><!-- basic scripts -->
+		<script>
+			//######################################################################################################
+			//GRAFICO SIMPLES
+			// Dados do gráfico SIMPLES (mantenha os rótulos e as cores, mas os dados serão atualizados dinamicamente)
+			const data = {
+				labels: ['SET'],
+				datasets: [
+					{
+						label: 'I',
+						backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+						data: [0] // Inicialmente, os dados estão vazios
+					},
+					{
+						label: 'E',
+						backgroundColor: 'rgba(255, 255, 0, 0.5)', // Amarelo
+						data: [0]
+					},
+					{
+						label: '+d',
+						backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
+						data: [0]
+					},
+					{
+						label: '-d',
+						backgroundColor: 'rgba(255, 99, 132, 0.5)', // Rosa
+						data: [0]
+					}
+				]
+			};
+
+			// Opções do gráfico
+			const options = {
+				scales: {
+					x: { stacked: true },
+					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+				}
+			};
+
+			// Configuração do gráfico
+			const config = {
+				type: 'bar',
+				data: data,
+				options: options
+			};
+
+			// Referência para o gráfico
+			let grafico = null;
+
+			// Função para renderizar o gráfico
+			function renderizarGrafico() {
+				const ctx = document.getElementById('stackedBarChart-Simples');
+				if (ctx) {
+					// Se já existe um gráfico, destruímos ele antes de renderizar um novo
+					if (grafico !== null) {
+						grafico.destroy();
+					}
+					grafico = new Chart(ctx, config);
+				} else {
+					console.error('Não foi possível encontrar o elemento canvas.');
+				}
+			}
+
+			// Função para atualizar os dados do gráfico e renderizá-lo
+			function atualizarEAtualizarGrafico() {
+				// Chama a função para calcular os totais
+				somaResEstSI();
+
+				// Obtém os valores dos campos de entrada e multiplica por 10
+				const valorI = parseInt(document.getElementById("folregTotalsimples1").value) * 10;
+				const valorE = parseInt(document.getElementById("folregTotalsimples2").value) * 10;
+				const valorMaisD = parseInt(document.getElementById("folregTotalsimples3").value) * 10;
+				const valorMenosD = parseInt(document.getElementById("folregTotalsimples4").value) * 10;
+
+				// Atualiza os dados do gráfico
+				data.datasets[0].data = [valorI];
+				data.datasets[1].data = [valorE];
+				data.datasets[2].data = [valorMaisD];
+				data.datasets[3].data = [valorMenosD];
+
+				// Atualiza o gráfico
+				if (grafico !== null) {
+					grafico.update();
+				} else {
+					console.error('O gráfico não foi inicializado corretamente.');
+				}
+			}
+
+			// Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
+			document.querySelectorAll('input[name$="Ressimples"]').forEach(function(input) {
+				input.addEventListener("change", atualizarEAtualizarGrafico);
+			});
+
+			// Chamar a função para renderizar o gráfico quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function() {
+				renderizarGrafico();
+			});
+
+		//######################################################################################################
+		//GRAFICO Duplo
+		// Referência para o gráfico
+        let graficoDuplo = null;
+
+        // Dados do gráfico Duplo
+        const dataDuplo = {
+            labels: ['Esquerda', 'Direita'], // Repete o rótulo
+            datasets: [
+                {
+                    label: 'I',
+                    backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+                    data: [0, 0] // Repete os valores da primeira coluna
+                },
+                {
+                    label: 'E',
+                    backgroundColor: 'rgba(255, 255, 0, 0.5)', // Amarelo
+                    data: [0, 0] // Repete os valores da segunda coluna
+                },
+                {
+                    label: '+d',
+                    backgroundColor: 'rgba(255, 165, 0, 0.5)', // Laranja
+                    data: [0, 0] // Repete os valores da terceira coluna
+                },
+                {
+                    label: '-d',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)', // Rosa
+                    data: [0, 0] // Repete os valores da quarta coluna
+                }
+            ]
+        };
+
+        // Função para renderizar o gráfico
+        function renderizarGraficoDuplo() {
+            console.log('Renderizando gráfico duplo...');
+            
+            // Opções do gráfico
+            const chartOptions = {
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+                }
+            };
+
+            // Configuração do gráfico
+            const config = {
+                type: 'bar',
+                data: dataDuplo,
+                options: chartOptions
+            };
+
+            const ctx = document.getElementById('doubleBarChart');
+            if (ctx) {
+                console.log('Elemento canvas encontrado.');
+                // Se já existe um gráfico, destruímos ele antes de renderizar um novo
+                if (graficoDuplo !== null) {
+                    console.log('Destruindo gráfico existente...');
+                    graficoDuplo.destroy();
+                }
+                console.log('Criando novo gráfico...');
+                graficoDuplo = new Chart(ctx, config);
+            } else {
+                console.error('Não foi possível encontrar o elemento canvas.');
+            }
+        }
+
+        // Função para atualizar os dados do gráfico e renderizá-lo
+        function atualizarDuploGrafico() {
+            console.log('Atualizando dados do gráfico...');
+            // Chama a função para calcular os totais
+            somaResEstDuplo();
+           
+
+            // Obtém os valores dos campos de entrada e multiplica por 10
+            const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
+            const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
+            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
+            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
+
+            const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
+            const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
+            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
+            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
+
+            // Atualiza os dados do gráfico
+            dataDuplo.datasets[0].data = [valoresqI, valordirI];
+            dataDuplo.datasets[1].data = [valoresqE, valordirE];
+            dataDuplo.datasets[2].data = [valoresqMaisD, valordirMaisD];
+            dataDuplo.datasets[3].data = [valoresqMenosD, valordirMenosD];
+
+            // Atualiza o gráfico
+            if (graficoDuplo !== null) {
+                console.log('Atualizando gráfico...');
+                graficoDuplo.update();
+            } else {
+                console.error('O gráfico não foi inicializado corretamente.');
+            }
+        }
+
+        // Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
+        document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+            input.addEventListener("change", function() {
+                console.log('Input de esquerda alterado. Atualizando gráfico...');
+                atualizarDuploGrafico();
+            });
+        });
+
+        document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+            input.addEventListener("change", function() {
+                console.log('Input de direita alterado. Atualizando gráfico...');
+                atualizarDuploGrafico();
+            });
+        });
+
+        // Chamar a função para renderizar o gráfico quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM pronto. Renderizando gráfico duplo...');
+            renderizarGraficoDuplo();
+        });
+		</script>
 	</body>
 </html>
