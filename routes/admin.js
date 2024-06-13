@@ -1995,12 +1995,12 @@ router.get('/area/mapabll/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//del
 
 //Menu Sonda ** Area Tecnicos e ABA 
 //Carrega Cadastro sonda (DELETAR)
-router.get('/area/aba/sonda/sondacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/sonda/sondacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de sonda, com  bene e data.
     fncSonda.carregaSonda(req, res);
 })
 
 //Lista Sonda por Tipo, Beneficiário. Tecnico, Medico e data (DELETAR)
-router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de sonda, com bene e data.
     fncSonda.listaSonda(req, res);
 })
 
@@ -2008,35 +2008,35 @@ router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//
 
 //Menu Programas ** Area Tecnicos e ABA 
 //Carrega Cadastro ABA
-router.get('/area/aba/prog/progcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/prog/progcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro  de ABA, com  bene e data.
     fncProg.carregaProg(req, res);
 })
 
-router.get('/area/aba/prog/progcadBene/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de bordo, com  bene e data.
+router.get('/area/aba/prog/progcadBene/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de ABA, com  bene e data.
     fncProg.carregaProg(req, res);
 })
 
 //Lista Programas ABA
-router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de diário de bordo, com bene e data.
+router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona lista do ABA.
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     fncProg.listaProg(req, res, resposta);
 })
 
-router.post('/area/aba/prog/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona metodo
+router.post('/area/aba/prog/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona ABA
     fncProg.cadastraProg(req, res);
 })
 
-router.get('/area/aba/prog/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta metodo
+router.get('/area/aba/prog/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta ABA
     fncProg.deletaProg(req, res);
 })
 
-router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do ABA
     fncProg.carregaProgEdi(req, res);
 })
 
-router.post('/area/aba/prog/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+router.post('/area/aba/prog/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do ABA
     fncProg.atualizaProg(req, res);
 })
 

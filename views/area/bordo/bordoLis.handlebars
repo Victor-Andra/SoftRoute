@@ -134,69 +134,8 @@
 					window.location.href=("/menu/area/bordo/del/"+id);
 				}
 			}
-
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-				})
-			}
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipoData);
-				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-					let mes = (dat.getUTCMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Semana"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Dia"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				}
-			}
+			
+		
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
@@ -252,7 +191,7 @@
 						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
-						<input id="usuarioAtual" value="{{usuarioAtual.usuarioAtual}}" >
+						<input id="usuarioAtual" value="{{usuario._id}}" >
 					</div>
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
@@ -433,11 +372,42 @@
 																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
-															{{#ifEqual ../usuarioAtual bordo_terapeutaid}}
+																{{#ifEqual usuario._id bordo_terapeutaid}}<!-- /.id do terapeuta que inseriu o Diário -->
 																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
-															{{/ifEqual}}
+																{{/ifEqual}}
+
+																{{#ifEqual ../perfilAtual '644743aa78166939169f8486'}}<!-- /.id de perfil Supervisor -->
+																{{else}}
+																{{../perfilAtual}}
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																
+																{{/ifEqual}}
+																
+																
+																{{#ifEqual ../perfilAtual '644742e378166939169f82a1'}}<!-- /.id de perfil Coordenador -->
+																{{else}}
+																{{perfilAtual}}
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																
+																{{/ifEqual}}
+
+																{{#ifEqual ../perfilAtual '62421801a12aa557219a0fb9'}}<!-- /.id de perfil do Root -->
+																	{{else}}
+																	{{perfilAtual}}
+																	<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
+																	
+																{{/ifEqual}}
+																
+															
+															
 															</div>
 															
 														</td>

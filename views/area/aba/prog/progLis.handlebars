@@ -711,8 +711,9 @@
 																							<tr role="row" >
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%">SET</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 15%">Descrição</th>
+																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 10%" >Estímulos</th>
 																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%" >Data</th>
-																								<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 10%">Prazo</th>
+																								<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 5%">Prazo</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >
 																									<span class="label label-purple arrowed-in-right ">
 																										&nbsp;Conjunto de Registros
@@ -733,7 +734,78 @@
 																											</div>&nbsp;&nbsp;
 																											{{this.progset_num}}
 																										</td>
-																										<td>{{this.progset_desc}}</td>		
+																										<td>{{this.progset_desc}}</td>	
+																										<td>
+																											{{#ifEqual this.progset_qtest 1}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 2}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 3}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 4}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 5}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 6}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 7}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_qtest 8}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span class="badge badge-green">{{this.progset_esth}}</span>
+																												{{else}}
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span class="badge badge-yellow">{{this.progset_esth}}</span>
+																												<span class="badge badge-info">{{this.progset_esti}}</span>
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																												{{/ifEqual}}
+																											{{/ifEqual}}
+																										</td>	
 																										<td><span class="badge badge-success">{{this.progset_dataini}}</span><br><span class="badge badge-danger">{{this.progset_datafin}}</span></td>			
 																										<td>
 																											 <div class="easy-pie-chart percentage" data-start="{{this.progset_dataini}}" data-end="{{this.progset_datafin}}" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
@@ -742,6 +814,7 @@
 																											</div>
 																										</td>
 																										<td>
+																											
 																											<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/folreg/folregPrecad/{{this._id}}" title="Cadastrar novo REGISTRO para esse programa SET.">
 																												<i class="ace-icon fa fa-plus bigger-130"></i>
 																											</a>

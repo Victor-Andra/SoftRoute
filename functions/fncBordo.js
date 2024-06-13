@@ -46,6 +46,7 @@ class BordoMapa{
 module.exports = {
     listaBordo(req, res, resposta){
         let usuarioAtual = req.cookies['idUsu'];
+        let perfilAtual = req.cookies['lvlUsu'];
         let flash = new Resposta();
         let resultado;
         let bordo = [];
@@ -54,20 +55,21 @@ module.exports = {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             Escola.find().then((escola) =>{
                 escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
-                Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                    console.log("Listagem Realizada Usuário!")
-                    if(resposta.sucesso == ""){
-                        //console.log(' objeto vazio');
-                        flash.texto = "";
-                        flash.sucesso = "";
-                    } else {
-                        //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                        flash.texto = resposta.texto;
-                        flash.sucesso = resposta.sucesso;
-                    }
-                    res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, usuarioAtual, flash})
-        })})}).catch((err) =>{
+                Usuario.findOne({"_id":usuarioAtual}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
+                        console.log("Listagem Realizada Usuário!")
+                        if(resposta.sucesso == ""){
+                            //console.log(' objeto vazio');
+                            flash.texto = "";
+                            flash.sucesso = "";
+                        } else {
+                            //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                            flash.texto = resposta.texto;
+                            flash.sucesso = resposta.sucesso;
+                        }
+                        res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, usuario, perfilAtual,flash})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
@@ -625,5 +627,6 @@ module.exports = {
             }
             this.listaBordo(req,res, resposta)
         })
-    }
+    },
+    
 }
