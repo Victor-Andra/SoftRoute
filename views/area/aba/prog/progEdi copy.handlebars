@@ -401,7 +401,6 @@
 							break;
 					}
 				});
-				
 
 				let progMateriaisArr = [];
 				progMateriaisArr = (document.getElementById("progMateriaisEdi").value.replaceAll(" ","")).split(",");
@@ -430,8 +429,6 @@
 							break;
 					}
 				});
-				document.getElementById("progMateriais").value = document.getElementById("progMateriaisEdi").value;
-				
 
 				let progDicatipoEdiArr = [];
 				progDicatipoEdiArr = (document.getElementById("progDicatipoEdi").value.replaceAll(" ","")).split(",");
@@ -453,8 +450,6 @@
 						break;
 				}
 			}
-			
-		
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();progressValue();" class="no-skin">
@@ -477,7 +472,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/atualizar" method="POST">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden>
 									<input type="text" id="progId" name="progId" value="{{prog._id}}" />
 									<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{idBene}}" />
 									<input type="text" id="progDataEdi" name="progDataEdi" value="{{prog.prog_data}}" />

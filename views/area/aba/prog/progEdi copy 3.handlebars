@@ -430,7 +430,6 @@
 							break;
 					}
 				});
-				document.getElementById("progMateriais").value = document.getElementById("progMateriaisEdi").value;
 				
 
 				let progDicatipoEdiArr = [];
@@ -453,11 +452,35 @@
 						break;
 				}
 			}
+			function marcarCheckboxesMateriais() {
+			// Recupera o valor do campo de texto
+			var valorCampo = document.getElementById('progMateriaisEdi').value;
 			
+			// Separa os valores em um array
+			var valores = valorCampo.split(',').map(item => item.trim());
+			
+			// IDs dos checkboxes que queremos verificar
+			var checkboxIDs = ['progMateriais1', 'progMateriais2', 'progMateriais3', 'progMateriais4', 'progMateriais5', 'progMateriais6', 'progMateriais7'];
+			
+			// Itera sobre os checkboxes
+			checkboxIDs.forEach(function(id) {
+				var checkbox = document.getElementById(id);
+				// Verifica se o valor está presente no array
+				if (valores.includes(checkbox.nextElementSibling.textContent.trim())) {
+					checkbox.checked = true;
+				} else {
+					checkbox.checked = false;
+				}
+			});
+		}
+
+		// Chama a função inicialmente para marcar os checkboxes corretamente ao carregar a página
+		marcarCheckboxesMateriais();
+
 		
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();progressValue();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();progressValue();marcarCheckboxesMateriais();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -477,7 +500,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/atualizar" method="POST">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden>
 									<input type="text" id="progId" name="progId" value="{{prog._id}}" />
 									<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{idBene}}" />
 									<input type="text" id="progDataEdi" name="progDataEdi" value="{{prog.prog_data}}" />

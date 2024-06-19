@@ -244,10 +244,6 @@
 			function carregaBody(){
 				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
-				//tipos de dicas
-				document.getElementById("folregT1tipodsimples").value = document.getElementById("progDicatipotext").value;
-				document.getElementById("folregT1tipodesqu").value = document.getElementById("progDicatipotext").value;
-				document.getElementById("folregT1tipodird").value = document.getElementById("progDicatipotext").value;
 
 				document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
 				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
@@ -257,6 +253,7 @@
 				document.getElementById("progsetObs").value = document.getElementById("setObs").value;
 				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
 				//document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
+				
 
 				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
 				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
@@ -271,13 +268,9 @@
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 				
-				}
-				
-
-				
-
 				
 				
+			}
 		</script>
 	</head>
 
@@ -299,9 +292,9 @@
 						<!-- PAGE CONTENT BEGINS -->
 						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
 							<div class="col-xs-12">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden>
 									<!-- principais indices-->
-									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
+									Progsdicas<input name="folregProgDicatipo" id="folregProgDicatipo" value="{{progv.prog_dicaproced}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
 									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
 									progsetid<input name="folregSetid" id="folregSetid" value="{{progset._id}}"  />
@@ -329,10 +322,6 @@
 									g<input name="folregg" id="folregg" value="{{progset.progset_estg}}" />
 									h<input name="folregh" id="folregh" value="{{progset.progset_esth}}" />
 									i<input name="folregi" id="folregi" value="{{progset.progset_esti}}" />
-
-									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}">
-									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}">
-									<input type="hidden" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}">
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -458,7 +447,7 @@
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 															<div class="col-sm-4">
-																<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
+																<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
 																	<option value="Não Informado">Não Informado</option>
 																	<option value="Simples">Simples</option>
 																	<option value="Duplo">Duplo</option>
@@ -681,7 +670,7 @@
 															<th class="center" >RA</th>
 															<th>Resultado</th>
 															<th>Passo D</th>
-															<th>Tipo D</th>	
+															<th>Tipo D</th>														
 														</tr>
 													</thead>
 
@@ -719,47 +708,12 @@
 																<span class="label label-lg label-pink arrowed-right">P1</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
 															</td>
-															<td id="checkboxContainer1" rowspan="9">
-																<div class="checkbox" style="display: none;">
+															<td>
+																<div class="checkbox">
 																	<label>
-																		<input name="folregT1tipodsimples" id="folregT1tipodsimples" type="checkbox" class="ace">
+																		<input name="folregT1Tipodsimples" id="folregT1Tipodsimples" type="checkbox" class="ace" value="Sim">
 																		<span class="lbl"></span>
-																		<span name="checksimples1" id="checksimples1" class="label label-lg label-purple arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodsimples" id="folregT2tipodsimples" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span  name="checksimples2" id="checksimples2" class="label label-lg label-warning arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodsimples" id="folregT3tipodsimples" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checksimples3" id="checksimples3" class="label label-lg label-alert arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodsimples" id="folregT4tipodsimples" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checksimples4" id="checksimples4" class="label label-lg label-info arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodsimples" id="folregT5tipodsimples" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checksimples5" id="checksimples5" class="label label-lg label-success arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodsimples" id="folregT6tipodsimples" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checksimples6" id="checksimples6" class="label label-lg label-pink arrowed"></span>
+																		<span class="label label-lg label-purple arrowed">Física</span>
 																	</label>
 																</div>
 															</td>
@@ -798,7 +752,15 @@
 																<span class="label label-lg label-pink arrowed-right">P2</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT2Tipodsimples" id="folregT2Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Gestual</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 3Reg -->
@@ -834,7 +796,15 @@
 																<span class="label label-lg label-pink arrowed-right">P3</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT3Tipodsimples" id="folregT3Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Ecóica</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 4Reg -->
@@ -870,7 +840,15 @@
 																<span class="label label-lg label-pink arrowed-right">P4</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT4Tipodsimples" id="folregT4Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Visual</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 5Reg -->
@@ -906,7 +884,15 @@
 																<span class="label label-lg label-pink arrowed-right">P5</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT5Tipodsimples" id="folregT5Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 6Reg -->
@@ -942,7 +928,15 @@
 																<span class="label label-lg label-pink arrowed-right">P6</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT6Tipodsimples" id="folregT6Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Modelação</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 7Reg -->
@@ -978,7 +972,15 @@
 																<span class="label label-lg label-pink arrowed-right">P7</span>
 																<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT7Tipodsimples" id="folregT7Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Verbal</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 8Reg -->
@@ -1013,7 +1015,15 @@
 															<td>
 																
 															</td>
-															
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input name="folregT8Tipodsimples" id="folregT8Tipodsimples" type="checkbox" class="ace" value="Sim">
+																		<span class="lbl"></span>
+																		<span class="label label-lg label-purple arrowed">Textual</span>
+																	</label>
+																</div>
+															</td>
 														</tr>
 
 														<tr><!-- 9Reg -->
@@ -1048,7 +1058,9 @@
 															<td>
 																
 															</td>
-															
+															<td>
+																
+															</td>
 														</tr>
 
 														<tr><!-- 10Reg -->
@@ -1151,51 +1163,15 @@
 															<span class="label label-lg label-pink arrowed-right">P1</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
 														</td>
-														<td id="checkboxContainer2" rowspan="9">
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-purple arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-warning arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-alert arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-info arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-success arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduploe1" id="checkduploe1" class="label label-lg label-pink arrowed"></span>
-																	</label>
-																</div>
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT1Tipodesqu" id="folregT1Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Física</span>
+																</label>
+															</div>
 														</td>
-														
 														<td>
 															<input name="folregT1Resdir" id="folregT1Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1217,51 +1193,15 @@
 															<span class="label label-lg label-pink arrowed-right">P1</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
 														</td>
-														<td id="checkboxContainer3" rowspan="9">
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-purple arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-warning arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-alert arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-info arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-success arrowed"></span>
-																	</label>
-																</div>
-																<div class="checkbox" style="display: none;">
-																	<label>
-																		<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace">
-																		<span class="lbl"></span>
-																		<span name="checkduplod1" id="checkduplod1" class="label label-lg label-pink arrowed"></span>
-																	</label>
-																</div>
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT1Tipodird" id="folregT1Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Física</span>
+																</label>
+															</div>
 														</td>
-														
 													</tr>
 
 													<tr><!-- 2Reg -->
@@ -1297,7 +1237,15 @@
 															<span class="label label-lg label-pink arrowed-right">P2</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT2Tipodesqu" id="folregT2Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Gestual</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT2Resdir" id="folregT2Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1319,7 +1267,15 @@
 															<span class="label label-lg label-pink arrowed-right">P2</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT2Tipodird" id="folregT2Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Gestual</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 3Reg -->
@@ -1355,7 +1311,15 @@
 															<span class="label label-lg label-pink arrowed-right">P3</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT3Tipodesqu" id="folregT3Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Ecóica</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT3Resdir" id="folregT3Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1377,7 +1341,15 @@
 															<span class="label label-lg label-pink arrowed-right">P3</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT3Tipodird" id="folregT3Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Ecóica</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 4Reg -->
@@ -1413,7 +1385,15 @@
 															<span class="label label-lg label-pink arrowed-right">P4</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT4Tipodesqu" id="folregT4Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Visual</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT4Resdir" id="folregT4Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1435,7 +1415,15 @@
 															<span class="label label-lg label-pink arrowed-right">P4</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT4Tipodird" id="folregT4Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Visual</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 5Reg -->
@@ -1471,7 +1459,15 @@
 															<span class="label label-lg label-pink arrowed-right">P5</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT5Tipodesqu" id="folregT5Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT5Resdir" id="folregT5Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1493,7 +1489,15 @@
 															<span class="label label-lg label-pink arrowed-right">P5</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT5Tipodird" id="folregT5Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Intuitiva</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 6Reg -->
@@ -1529,7 +1533,15 @@
 															<span class="label label-lg label-pink arrowed-right">P6</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT6Tipodesqu" id="folregT6Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Modelação</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT6Resdir" id="folregT6Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1551,7 +1563,15 @@
 															<span class="label label-lg label-pink arrowed-right">P6</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT6Tipodird" id="folregT6Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Modelação</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 7Reg -->
@@ -1587,7 +1607,15 @@
 															<span class="label label-lg label-pink arrowed-right">P7</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT7Tipodesqu" id="folregT7Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Verbal</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT7Resdir" id="folregT7Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1609,7 +1637,15 @@
 															<span class="label label-lg label-pink arrowed-right">P7</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT8Tipodird" id="folregT8Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Verbal</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 8Reg -->
@@ -1644,7 +1680,15 @@
 														<td>
 															
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT8Tipodesqu" id="folregT8Tipodesqu" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Textual</span>
+																</label>
+															</div>
+														</td>
 														<td>
 															<input name="folregT8Resdir" id="folregT8Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1665,7 +1709,15 @@
 														<td>
 															
 														</td>
-														
+														<td>
+															<div class="checkbox">
+																<label>
+																	<input name="folregT8Tipodird" id="folregT8Tipodird" type="checkbox" value="Sim" class="ace">
+																	<span class="lbl"></span>
+																	<span class="label label-lg label-purple arrowed">Textual</span>
+																</label>
+															</div>
+														</td>
 													</tr>
 
 													<tr><!-- 9Reg -->
@@ -1700,7 +1752,9 @@
 														<td>
 															
 														</td>
-														
+														<td>
+															
+														</td>
 														<td>
 															<input name="folregT9Resdir" id="folregT9Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 															<span class="lbl"></span>
@@ -1721,7 +1775,9 @@
 														<td>
 															
 														</td>
-														
+														<td>
+															
+														</td>
 													</tr>
 
 													<tr><!-- 10Reg -->
@@ -2085,37 +2141,6 @@
                 });
             });
         });
-			// Função para popular os checkboxes
-			function populateCheckboxes(containerId, inputId) {
-				// Obtém o valor do campo de entrada
-				const nomesdicas = document.getElementById(inputId).value;
-
-				// Converte a string em um array
-				const progDicatipotext = nomesdicas.split(',');
-
-				// Seleciona todos os divs de checkbox dentro do <td> especificado
-				const checkboxes = document.querySelectorAll(`#${containerId} .checkbox`);
-
-				// Itera sobre os checkboxes
-				checkboxes.forEach((checkbox, index) => {
-					// Se o índice for menor que o comprimento do array, mostra e define o texto
-					if (index < progDicatipotext.length) {
-						const label = checkbox.querySelector('.label');
-						label.textContent = progDicatipotext[index];
-						checkbox.style.display = 'block';
-					} else {
-						// Caso contrário, esconde o checkbox
-						checkbox.style.display = 'none';
-					}
-				});
-			}
-
-			// Chama a função para popular os checkboxes após o carregamento do DOM
-			document.addEventListener('DOMContentLoaded', () => {
-				populateCheckboxes('checkboxContainer1', 'progDicatipotext1');
-				populateCheckboxes('checkboxContainer2', 'progDicatipotext2');
-				populateCheckboxes('checkboxContainer3', 'progDicatipotext3');
-			});
 		</script>
 	</body>
 </html>

@@ -2372,7 +2372,7 @@ router.get('/area/aba/folreg/folregcad', fncGeral.IsAuthenticated, (req,res) =>{
 })
 
 //Carrega Cadastro folha de registro com informações adicionais
-router.get('/area/aba/folreg/folregPrecad/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
+router.get('/area/aba/folreg/folregPrecad/:id/:idProg', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
     fncFolreg.preCarregaFolreg(req, res);
 })
 

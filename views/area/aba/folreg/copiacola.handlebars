@@ -1,0 +1,82 @@
+<div class="col-sm-12"><!-- Widget Dados Básicos -->
+<div class="widget-box"><!-- Widget Box -->
+    <div class="widget-header"><!-- Widget Cabeçalho -->
+        <h4 class="widget-title">Salas</h4>
+
+        <span class="widget-toolbar">
+
+            <a href="#" data-action="reload">
+                <i class="ace-icon fa fa-refresh"></i>
+            </a>
+
+            <a href="#" data-action="collapse">
+                <i class="ace-icon fa fa-chevron-up"></i>
+            </a>
+
+        </span>
+    </div><!-- / Widget Cabeçalho -->
+    <div class="widget-body"><!-- Widget Corpo -->
+        <div class="widget-main"><!-- Widget Corpo -->
+            <div class="row">
+
+                <div class="col-xs-12">
+                    <label>Beneficiário</label>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <select name="folregBeneid" id="folregBeneid" class="chosen-select" data-placeholder="Escolha..." >
+                                {{#each benes}}
+                                    <option value="{{_id}}">{{bene_nome}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                            <label>Programa Tipo</label>
+                            <div class="input-group">
+                                <select name="folregProgtipoid" id="folregProgtipoid" class="chosen-select" value="Sem Info" onchange="" >
+                                        <option value="766f69643132333435366964">-</option>
+                                        {{#each progtipos}}
+                                            <option value="{{_id}}">{{progtipo_nome}}</option>
+                                        {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Programa Nível</label>
+                            <div class="input-group">
+                                <select name="folregPrognivelid" id="folregPrognivelid" class="chosen-select" value="Sem Info" onchange="" >
+                                        <option value="766f69643132333435366964">-</option>
+                                        {{#each prognivels}}
+                                            <option value="{{_id}}">{{prognivel_nome}}</option>
+                                        {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">	
+                            <label>Número do SET</label>
+                            <div class="input-group">
+                                <input name="folregSetnum" id="folregSetnum" type="text"  />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Descrição do SET</label><!-- apenas para ver não precisa ser armazenado no banco-->
+                            <div class="input-group">
+                                <textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa" style="font-size: 13px;" value="{{progset.progset_descr}}"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Observações do SET</label><!-- apenas para ver não precisa ser armazenado no banco-->
+                            <div class="input-group">
+                                <textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa" style="font-size: 13px;" value="{{progset.progset_obs}}"></textarea>
+                            </div>
+                        </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>

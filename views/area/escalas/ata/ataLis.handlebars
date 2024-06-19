@@ -79,12 +79,32 @@
 														
 														<td>{{ata_terapeutaid}}</td>
 															
-														{{#each ../terapeutas}}<!-- Ok -->
-															{{#ifEqual this._id ../ata_correcusuid}}
-																<td>{{usuario_nome}}</td>
+																												
+														{{#if ata_correcusuid}}
+															{{#ifEqual this.ata_correcusuid "766f69643132333435366964"}}
+																<td>&nbsp;</td>
+																{{else}}
+																{{#each ../terapeutas}}<!-- Ok -->
+																	{{#ifEqual this._id ../ata_correcusuid}}
+																		<td>{{usuario_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
 															{{/ifEqual}}
-														{{/each}}
-														<td>{{datacorrec}}</td>
+														{{else}}
+															<td>&nbsp;</td>
+														{{/if}}
+
+														{{#if ata_correcusuid}}
+															{{#ifEqual this.datacorrec "NaN-NaN-NaN"}}
+																<td>&nbsp;</td>
+																{{else}}
+																<td>{{datacorrec}}</td>
+															{{/ifEqual}}
+														{{else}}
+															<td>&nbsp;</td>
+														{{/if}}
+														
+														
 														<td><span class="badge badge-info">{{ata_totalitens}}</span></td>
 														<td>{{#menorOuigual ata_totalpontos 14}}
 																<span class="badge badge-success">{{ata_totalpontos}}</span>

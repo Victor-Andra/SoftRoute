@@ -33,7 +33,6 @@
 			function mudaRegistro() {
 				let tipodoc = document.getElementById("folregTiporeg").value;
 				console.log(tipodoc)
-
 				if (tipodoc == "Não Informado") {
 					document.getElementById('simples').style.display = 'none';
 					document.getElementById('duplo').style.display = 'none';
@@ -332,11 +331,11 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- PAGE CONTENT BEGINS -->
-						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/atualiza" method="POST">
+						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
 							<div class="col-xs-12">
 								<div id="divCarrega" >
 									<!-- principais indices-->
-									Progsdicas<input name="folregProgDicatipoEdi" id="folregProgDicatipoEdi" value="{{folreg.folreg_progDicatipo}}" />
+									Progsdicas<input name="folregProgDicatipo" id="folregProgDicatipo" value="{{progv.prog_dicaproced}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
 									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
 									progsetid<input name="folregSetid" id="folregSetid" value="{{progset._id}}"  />
@@ -528,7 +527,7 @@
 													<div class="row">
 														<div class="col-xs-12 col-sm-2">
 															<label>Quantidade de Estímulos Reservados no SET</label>
-															<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" disabled onchange="updateStimulusFields()">
+															<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
 																<option value="1">1</option>
 																<option value="2">2</option>
 																<option value="3">3</option>
@@ -552,7 +551,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEsta" id="folregEsta" type="text" disabled />
+																		<input name="folregEsta" id="folregEsta" type="text" d />
 																	</div>
 																</div>
 															</div>
@@ -564,7 +563,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEstb" id="folregEstb" type="text" disabled/>
+																		<input name="folregEstb" id="folregEstb" type="text" d/>
 																	</div>
 																</div>
 															</div>
@@ -576,7 +575,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEstc" id="folregEstc" type="text" disabled/>
+																		<input name="folregEstc" id="folregEstc" type="text" d/>
 																	</div>
 																</div>
 															</div>
@@ -587,7 +586,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEstd" id="folregEstd" type="text" disabled />
+																		<input name="folregEstd" id="folregEstd" type="text" d />
 																	</div>
 																</div>
 															</div>
@@ -599,7 +598,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEste" id="folregEste" type="text" disabled/>
+																		<input name="folregEste" id="folregEste" type="text" d/>
 																	</div>
 																</div>
 															</div>
@@ -611,7 +610,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEstf" id="folregEstf" type="text" disabled />
+																		<input name="folregEstf" id="folregEstf" type="text" d />
 																	</div>
 																</div>
 															</div>
@@ -624,7 +623,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEstg" id="folregEstg" type="text" disabled />
+																		<input name="folregEstg" id="folregEstg" type="text" d />
 																	</div>
 																</div>
 															</div>
@@ -636,7 +635,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEsth" id="folregEsth" type="text" disabled/>
+																		<input name="folregEsth" id="folregEsth" type="text" d/>
 																	</div>
 																</div>
 															</div>
@@ -648,7 +647,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input name="folregEsti" id="folregEsti" type="text" disabled />
+																		<input name="folregEsti" id="folregEsti" type="text" d />
 																	</div>
 																</div>
 															</div>

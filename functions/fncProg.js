@@ -99,9 +99,12 @@ module.exports = {
                     usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
                                         
                     Prog.find().then((prog) => {
-                        Progdica.find().then((progdica) => {
-                            Progtipo.find().then((progtipo) => {
-                                Prognivel.find().then((prognivel) => {
+                        Progdica.find().then((progdica)=>{
+                            progdica.sort((a,b) => ((a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
+                            Progtipo.find().then((progtipo)=>{
+                                progtipo.sort((a,b) => ((a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
+                                Prognivel.find().then((prognivel)=>{
+                                    prognivel.sort((a,b) => ((a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                     Progset.find().then((progset) => {
                                         Folreg.find().then((folreg) => {
                                             Notasup.find().then((notasup) => {
@@ -158,8 +161,11 @@ module.exports = {
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                             Progdica.find().then((progdica)=>{
+                                progdica.sort((a,b) => ((a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                 Progtipo.find().then((progtipo)=>{
+                                    progtipo.sort((a,b) => ((a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                     Prognivel.find().then((prognivel)=>{
+                                        prognivel.sort((a,b) => ((a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                 res.render("area/aba/prog/progCad", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, idBene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
         })})})})})})})}).catch((err) =>{
             console.log(err)
@@ -181,8 +187,11 @@ module.exports = {
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             console.log("Listagem Realizada de beneficiarios")
                             Progdica.find().then((progdica)=>{
+                                progdica.sort((a,b) => ((a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                 Progtipo.find().then((progtipo)=>{
+                                    progtipo.sort((a,b) => ((a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                     Prognivel.find().then((prognivel)=>{
+                                        prognivel.sort((a,b) => ((a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                         console.log(prog)
                                         res.render('area/aba/prog/progEdi', {prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
         })})})})})})})}).catch((err) =>{
