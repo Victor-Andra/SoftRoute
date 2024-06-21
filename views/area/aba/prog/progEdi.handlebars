@@ -152,6 +152,7 @@
 				//var valorDicaproced = valor;
 				//document.getElementById("progDicaproced").value = "";
 				document.getElementById("progDicaproced").value = valor;
+				document.getElementById("progDicaprocedEdi").value = valor;
 			}
 
 			function atualizarMateriais() {
@@ -401,7 +402,7 @@
 							break;
 					}
 				});
-				
+				document.getElementById("progEstrutura").value = document.getElementById("progEstruturaEdi").value;
 
 				let progMateriaisArr = [];
 				progMateriaisArr = (document.getElementById("progMateriaisEdi").value.replaceAll(" ","")).split(",");
@@ -452,6 +453,7 @@
 						document.getElementById("progDicaprocedop3").checked = true;
 						break;
 				}
+				document.getElementById("progDicaproced").value = document.getElementById("progDicaprocedEdi").value;
 			}
 			
 		
@@ -477,7 +479,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/area/aba/prog/atualizar" method="POST">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden >
 									<input type="text" id="progId" name="progId" value="{{prog._id}}" />
 									<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{idBene}}" />
 									<input type="text" id="progDataEdi" name="progDataEdi" value="{{prog.prog_data}}" />
