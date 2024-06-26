@@ -4889,7 +4889,6 @@ module.exports = {
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
-                if (e._id == new ObjectId('65a57a55ead9402555f348e4')){console.log("ALO???????????????????????");}
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada

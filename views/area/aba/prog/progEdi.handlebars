@@ -142,6 +142,10 @@
 				line-height: 25px;
 				text-align: center;
 			}
+			.preserve-whitespace {
+				white-space: pre-wrap;
+			}
+	
 		</style>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -455,11 +459,14 @@
 				}
 				document.getElementById("progDicaproced").value = document.getElementById("progDicaprocedEdi").value;
 			}
-			
+			function loadText() {
+				const savedText = document.getElementById("progPontoChaveEdi").value;
+				document.getElementById('progPontoChave').innerHTML = savedText.replace(/\n/g, '<br>');
+			}
 		
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();progressValue();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();progressValue();loadText();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -697,7 +704,7 @@
 													Determine a lista de alvo(s) e descreva cada um deles.
 												</p>
 												<div>
-													<textarea type="text" name="progAlvo" id="progAlvo" rows="8" class="form-control"></textarea>
+													<textarea type="text" name="progAlvo" id="progAlvo" rows="8" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 											</div>
 										</div>
@@ -913,7 +920,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progProcedimento" id="progProcedimento" rows="8" class="form-control"></textarea>
+													<textarea type="text" name="progProcedimento" id="progProcedimento" rows="8" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 											</div>
 										</div>
@@ -946,7 +953,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progExemplo" id="progExemplo" rows="8" placeholder="" class="form-control"></textarea>
+													<textarea type="text" name="progExemplo" id="progExemplo" rows="8" placeholder="" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 											</div>
 										</div>
@@ -979,7 +986,7 @@
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div>
-													<textarea type="text" name="progPontoChave" id="progPontoChave" rows="8" placeholder="" class="form-control"></textarea>
+													<textarea type="text" name="progPontoChave" id="progPontoChave" rows="8" placeholder="" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 											</div>
 										</div>
@@ -1196,7 +1203,7 @@
 													Determine as implementações das dicas para esse programa.
 												</p>
 												<div>
-													<textarea type="text" name="progDicaimplement" id="progDicaimplement" placeholder="" rows="6" class="form-control"></textarea>
+													<textarea type="text" name="progDicaimplement" id="progDicaimplement" placeholder="" rows="6" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 												
 											</div>
@@ -1236,7 +1243,7 @@
 													Determine as sequências de dicas para esse programa.
 												</p>
 												<div>
-													<textarea type="text" name="progDicasequen" id="progDicasequen" placeholder="" rows="6" class="form-control"></textarea>
+													<textarea type="text" name="progDicasequen" id="progDicasequen" placeholder="" rows="6" class="form-control" class="preserve-whitespace"></textarea>
 												</div>
 												
 											</div>

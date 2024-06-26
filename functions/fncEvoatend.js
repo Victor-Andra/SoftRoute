@@ -228,6 +228,8 @@ module.exports = {FiltroEvoatend,
         sex.setSeconds(59);
         let tipoPessoa = req.body.atendTipoPessoa;
         let tipoData = req.body.tipoData;
+        let idsAgendasEx = [];
+        
         switch (tipoData){
             case "Ano/Mes":
                 dataIni = new Date();
@@ -412,6 +414,13 @@ module.exports = {FiltroEvoatend,
                         console.log("erro");
                         break;
                 }
+                if(e.agenda_temp){
+                    idsAgendasEx.push(e.agenda_tempId.toString());
+                }
+            })
+            idsAgendasEx.forEach((i)=>{
+                agenda = agenda.filter(a => (""+a.id+"") != (""+i+""));
+                //vai reatribuir o array de ageendas, sem o registro a ser substituido pela diaria
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Terapia.find().then((terapia)=>{
