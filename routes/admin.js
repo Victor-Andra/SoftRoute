@@ -727,6 +727,14 @@ router.post("/agenda/filSB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
     fncAgenda.carregaAgendaFilSB(req, res);
 })
 
+//nova
+router.get("/agenda/lisSemBM", fncGeral.IsAuthenticated, (req,res) =>{//Minha Agenda,Agenda semanal por beneficiário
+    fncAgenda.carregaAgendaSBMinhaage(req, res);
+})
+router.post("/agenda/filSemBM", fncGeral.IsAuthenticated, (req,res) =>{//Minha Agenda,Filtro Agenda semanal por beneficiário.
+    fncAgenda.carregaAgendaFilSBMinhaage(req, res);
+})
+
 router.get("/agenda/lisST/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Beneficiario  Semanal.
     fncAgenda.carregaAgendaST(req, res);
 })
