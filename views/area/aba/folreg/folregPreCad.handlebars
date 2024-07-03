@@ -299,7 +299,7 @@
 						<!-- PAGE CONTENT BEGINS -->
 						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
 							<div class="col-xs-12">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden>
 									<!-- principais indices-->
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
@@ -1775,7 +1775,7 @@
 										Salvar
 									</button>
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn btn-warning"  type="reset">
+									<button class="btn btn-warning" href="/menu/area/aba/prog/proglis">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>

@@ -251,7 +251,7 @@
 				document.getElementById("folregQtest").value = document.getElementById("folregQtestEdi").value;
 				
 				document.getElementById("folregUsuid").value = document.getElementById("folregUsuidEdi").value;
-				
+				//Estimulos vindos do SET e do Programa
 				document.getElementById("folregEsta").value = document.getElementById("folregEstaEdi").value;
 				document.getElementById("folregEstb").value = document.getElementById("folregEstbEdi").value;
 				document.getElementById("folregEstc").value = document.getElementById("folregEstcEdi").value;
@@ -264,7 +264,7 @@
 				document.getElementById("folregObs").value = document.getElementById("folregObsEdi").value;
 				
 				
-				//Carrega o status
+				//Carrega o status, Jason não Usa mas para manter o padrão internacional
 				switch (document.getElementById("folregStatus").value){
 					case 1:
 						document.getElementById("folregStatus1").checked = true;
@@ -280,8 +280,9 @@
 						break;
 				}
 				
-				if (document.getElementById("folregTiporeg").value = "Simples"){
-					/*Campos com valor do gráfico Simples
+				if (document.getElementById("folregTiporeg").value == "Simples"){
+					//Gráfico SIMPLES
+					//Campos com valor do gráfico Simples
 					document.getElementById("folregT1Tipodsimples").value = document.getElementById("folregT1TipodsimplesEdi").value;
 					document.getElementById("folregT2Tipodsimples").value = document.getElementById("folregT2TipodsimplesEdi").value;
 					document.getElementById("folregT3Tipodsimples").value = document.getElementById("folregT3TipodsimplesEdi").value;
@@ -305,8 +306,163 @@
 					document.getElementById("folregTotalsimples2").value = document.getElementById("folregTotalsimples2Edi").value;
 					document.getElementById("folregTotalsimples3").value = document.getElementById("folregTotalsimples3Edi").value;
 					document.getElementById("folregTotalsimples4").value = document.getElementById("folregTotalsimples4Edi").value;
-					*/
+					//Gráfico Simples
+					//popular radio box esquerda e Único
+					switch (document.getElementById("folregT1ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT1Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT2Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT3Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT4Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT5Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT6Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT7Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT8Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT9Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 				}else{
+					//Gráfico DUPLO
 					//Campos com resultados da esquerda do gráfico
 					document.getElementById("folregT1Resesqu").value = document.getElementById("folregT1ResesquEdi").value;
 					document.getElementById("folregT2Resesqu").value = document.getElementById("folregT2ResesquEdi").value;
@@ -328,6 +484,8 @@
 					document.getElementById("folregT8Resdir").value = document.getElementById("folregT8ResdirEdi").value;
 					document.getElementById("folregT9Resdir").value = document.getElementById("folregT9ResdirEdi").value;
 
+
+					//nomes vindos do Programa ABA para esquerda do Gráfico
 					document.getElementById("folregT1Tipodesqu").value = document.getElementById("folregT1TipodesquEdi").value;
 					document.getElementById("folregT2Tipodesqu").value = document.getElementById("folregT2TipodesquEdi").value;
 					document.getElementById("folregT3Tipodesqu").value = document.getElementById("folregT3TipodesquEdi").value;
@@ -337,7 +495,7 @@
 					document.getElementById("folregT7Tipodesqu").value = document.getElementById("folregT7TipodesquEdi").value;
 					document.getElementById("folregT8Tipodesqu").value = document.getElementById("folregT8TipodesquEdi").value;
 					document.getElementById("folregT9Tipodesqu").value = document.getElementById("folregT9TipodesquEdi").value;
-
+					//nomes vindos do Programa ABA para Direita do Gráfico
 					document.getElementById("folregT1Tipodird").value = document.getElementById("folregT1TipodirdEdi").value;
 					document.getElementById("folregT2Tipodird").value = document.getElementById("folregT2TipodirdEdi").value;
 					document.getElementById("folregT3Tipodird").value = document.getElementById("folregT3TipodirdEdi").value;
@@ -347,6 +505,7 @@
 					document.getElementById("folregT7Tipodird").value = document.getElementById("folregT7TipodirdEdi").value;
 					document.getElementById("folregT8Tipodird").value = document.getElementById("folregT8TipodirdEdi").value;
 					document.getElementById("folregT9Tipodird").value = document.getElementById("folregT9TipodirdEdi").value;
+					
 					//Campos com Total da Esquerda do gráfico Duplo
 					document.getElementById("folregTotalduploesq1").value = document.getElementById("folregTotalduploesq1Edi").value;
 					document.getElementById("folregTotalduploesq2").value = document.getElementById("folregTotalduploesq2Edi").value;
@@ -358,23 +517,315 @@
 					document.getElementById("folregTotalduplodir3").value = document.getElementById("folregTotalduplodir3Edi").value;
 					document.getElementById("folregTotalduplodir4").value = document.getElementById("folregTotalduplodir4Edi").value;
 
-					switch (document.getElementById("folregT1Resesqu").value){
-					case "I":
-						document.getElementById("folregT1Resesqu1").checked = true;
-						break;
-					case "E":
-						document.getElementById("folregT1Resesqu2").checked = true;
-						break;
-					case "+d":
-						document.getElementById("folregT1Resesqu3").checked = true;
-						break;
-					case "-d":
-						document.getElementById("folregT1Resesqu3").checked = true;
-						break;
-					default: 
-						console.log("vazio");
-						break;
-				}
+					//Gráfico Duplo
+					//popular radio box esquerda
+					switch (document.getElementById("folregT1ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT1Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT2Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT3Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT4Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT5Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT6Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT7Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT8Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT9Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					//popular radio box Direita
+					switch (document.getElementById("folregT1ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT1Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT2Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT3Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT4Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT5Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT6Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT7Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT8Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT9Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 				
 				}//fim if simples x duplo
 				showStimulusFieldsWithValues();
@@ -472,8 +923,11 @@
 									<input type="text" id="folregEsthEdi" name="folregEsthEdi" value="{{folreg.folreg_esth}}"/>
 									<input type="text" id="folregEstiEdi" name="folregEstiEdi" value="{{folreg.folreg_esti}}"/>
 									
+									<!-- campos Observação e status-->
 									<input type="text" id="folregObsEdi" name="folregObsEdi" value="{{folreg.folreg_obs}}"/>
 									<input type="text" id="folregStatus" name="folregStatus" value="{{folreg.folreg_status}}"/>
+									
+									<!-- campos Gráficos Simples-->
 									<input type="text" id="folregT1EstsEdi" name="folregT1EstsEdi" value="{{folreg.folreg_t1ests}}"/>
 									<input type="text" id="folregT2EstsEdi" name="folregT2EstsEdi" value="{{folreg.folreg_t2ests}}"/>
 									<input type="text" id="folregT3EstsEdi" name="folregT3EstsEdi" value="{{folreg.folreg_t3ests}}"/>
@@ -483,6 +937,7 @@
 									<input type="text" id="folregT7EstsEdi" name="folregT7EstsEdi" value="{{folreg.folreg_t7ests}}"/>
 									<input type="text" id="folregT8EstsEdi" name="folregT8EstsEdi" value="{{folreg.folreg_t8ests}}"/>
 									<input type="text" id="folregT9EstsEdi" name="folregT9EstsEdi" value="{{folreg.folreg_t9ests}}"/>
+									
 									<input type="text" id="folregT1EstdEdi" name="folregT1EstdEdi" value="{{folreg.folreg_t1estd}}"/>
 									<input type="text" id="folregT2EstdEdi" name="folregT2EstdEdi" value="{{folreg.folreg_t2estd}}"/>
 									<input type="text" id="folregT3EstdEdi" name="folregT3EstdEdi" value="{{folreg.folreg_t3estd}}"/>
@@ -492,6 +947,7 @@
 									<input type="text" id="folregT7EstdEdi" name="folregT7EstdEdi" value="{{folreg.folreg_t7estd}}"/>
 									<input type="text" id="folregT8EstdEdi" name="folregT8EstdEdi" value="{{folreg.folreg_t8estd}}"/>
 									<input type="text" id="folregT9EstdEdi" name="folregT9EstdEdi" value="{{folreg.folreg_t9estd}}"/>
+									
 									<input type="text" id="folregT1RessimplesEdi" name="folregT1RessimplesEdi" value="{{folreg.folreg_t1ressimples}}"/>
 									<input type="text" id="folregT2RessimplesEdi" name="folregT2RessimplesEdi" value="{{folreg.folreg_t2ressimples}}"/>
 									<input type="text" id="folregT3RessimplesEdi" name="folregT3RessimplesEdi" value="{{folreg.folreg_t3ressimples}}"/>
@@ -501,6 +957,7 @@
 									<input type="text" id="folregT7RessimplesEdi" name="folregT7RessimplesEdi" value="{{folreg.folreg_t7ressimples}}"/>
 									<input type="text" id="folregT8RessimplesEdi" name="folregT8RessimplesEdi" value="{{folreg.folreg_t8ressimples}}"/>
 									<input type="text" id="folregT9RessimplesEdi" name="folregT9RessimplesEdi" value="{{folreg.folreg_t9ressimples}}"/>
+									
 									<input type="text" id="folregT1TipodsimplesEdi" name="folregT1TipodsimplesEdi" value="{{folreg.folreg_t1tipodsimples}}"/>
 									<input type="text" id="folregT2TipodsimplesEdi" name="folregT2TipodsimplesEdi" value="{{folreg.folreg_t2tipodsimples}}"/>
 									<input type="text" id="folregT3TipodsimplesEdi" name="folregT3TipodsimplesEdi" value="{{folreg.folreg_t3tipodsimples}}"/>
@@ -510,7 +967,8 @@
 									<input type="text" id="folregT7TipodsimplesEdi" name="folregT7TipodsimplesEdi" value="{{folreg.folreg_t7tipodsimples}}"/>
 									<input type="text" id="folregT8TipodsimplesEdi" name="folregT8TipodsimplesEdi" value="{{folreg.folreg_t8tipodsimples}}"/>
 									<input type="text" id="folregT9TipodsimplesEdi" name="folregT9TipodsimplesEdi" value="{{folreg.folreg_t9tipodsimples}}"/>
-									<input type="text" id="folregT1ResesquEdi" name="folregT1ResesquEdi" value="{{folreg.folreg_t1resesqu}}"/>
+									
+									folregT1ResesquEdi<input type="text" id="folregT1ResesquEdi" name="folregT1ResesquEdi" value="{{folreg.folreg_t1resesqu}}"/>
 									<input type="text" id="folregT2ResesquEdi" name="folregT2ResesquEdi" value="{{folreg.folreg_t2resesqu}}"/>
 									<input type="text" id="folregT3ResesquEdi" name="folregT3ResesquEdi" value="{{folreg.folreg_t3resesqu}}"/>
 									<input type="text" id="folregT4ResesquEdi" name="folregT4ResesquEdi" value="{{folreg.folreg_t4resesqu}}"/>
@@ -519,6 +977,7 @@
 									<input type="text" id="folregT7ResesquEdi" name="folregT7ResesquEdi" value="{{folreg.folreg_t7resesqu}}"/>
 									<input type="text" id="folregT8ResesquEdi" name="folregT8ResesquEdi" value="{{folreg.folreg_t8resesqu}}"/>
 									<input type="text" id="folregT9ResesquEdi" name="folregT9ResesquEdi" value="{{folreg.folreg_t9resesqu}}"/>
+									
 									<input type="text" id="folregT1ResdirEdi" name="folregT1ResdirEdi" value="{{folreg.folreg_t1resdir}}"/>
 									<input type="text" id="folregT2ResdirEdi" name="folregT2ResdirEdi" value="{{folreg.folreg_t2resdir}}"/>
 									<input type="text" id="folregT3ResdirEdi" name="folregT3ResdirEdi" value="{{folreg.folreg_t3resdir}}"/>
@@ -528,6 +987,7 @@
 									<input type="text" id="folregT7ResdirEdi" name="folregT7ResdirEdi" value="{{folreg.folreg_t7resdir}}"/>
 									<input type="text" id="folregT8ResdirEdi" name="folregT8ResdirEdi" value="{{folreg.folreg_t8resdir}}"/>
 									<input type="text" id="folregT9ResdirEdi" name="folregT9ResdirEdi" value="{{folreg.folreg_t9resdir}}"/>
+									
 									<input type="text" id="folregT1TipodesquEdi" name="folregT1TipodesquEdi" value="{{folreg.folreg_t1tipodesqu}}"/>
 									<input type="text" id="folregT2TipodesquEdi" name="folregT2TipodesquEdi" value="{{folreg.folreg_t2tipodesqu}}"/>
 									<input type="text" id="folregT3TipodesquEdi" name="folregT3TipodesquEdi" value="{{folreg.folreg_t3tipodesqu}}"/>
@@ -537,6 +997,7 @@
 									<input type="text" id="folregT7TipodesquEdi" name="folregT7TipodesquEdi" value="{{folreg.folreg_t7tipodesqu}}"/>
 									<input type="text" id="folregT8TipodesquEdi" name="folregT8TipodesquEdi" value="{{folreg.folreg_t8tipodesqu}}"/>
 									<input type="text" id="folregT9TipodesquEdi" name="folregT9TipodesquEdi" value="{{folreg.folreg_t9tipodesqu}}"/>
+									
 									<input type="text" id="folregT1TipodirdEdi" name="folregT1TipodirdEdi" value="{{folreg.folreg_t1tipodird}}"/>
 									<input type="text" id="folregT2TipodirdEdi" name="folregT2TipodirdEdi" value="{{folreg.folreg_t2tipodird}}"/>
 									<input type="text" id="folregT3TipodirdEdi" name="folregT3TipodirdEdi" value="{{folreg.folreg_t3tipodird}}"/>
@@ -546,6 +1007,7 @@
 									<input type="text" id="folregT7TipodirdEdi" name="folregT7TipodirdEdi" value="{{folreg.folreg_t7tipodird}}"/>
 									<input type="text" id="folregT8TipodirdEdi" name="folregT8TipodirdEdi" value="{{folreg.folreg_t8tipodird}}"/>
 									<input type="text" id="folregT9TipodirdEdi" name="folregT9TipodirdEdi" value="{{folreg.folreg_t9tipodird}}"/>
+									
 									<input type="text" id="folregTotalsimples1Edi" name="folregTotalsimples1Edi" value="{{folreg.folreg_totalsimples1}}"/>
 									<input type="text" id="folregTotalsimples2Edi" name="folregTotalsimples2Edi" value="{{folreg.folreg_totalsimples2}}"/>
 									<input type="text" id="folregTotalsimples3Edi" name="folregTotalsimples3Edi" value="{{folreg.folreg_totalsimples3}}"/>
@@ -558,7 +1020,50 @@
 									<input type="text" id="folregTotalduplodir2Edi" name="folregTotalduplodir2Edi" value="{{folreg.folreg_totalduplodir2}}"/>
 									<input type="text" id="folregTotalduplodir3Edi" name="folregTotalduplodir3Edi" value="{{folreg.folreg_totalduplodir3}}"/>
 									<input type="text" id="folregTotalduplodir4Edi" name="folregTotalduplodir4Edi" value="{{folreg.folreg_totalduplodir4}}"/>
+									
 									<input type="text" id="folregT1Resesqu" name="folregT1Resesqu" value="{{folreg.folreg_t1resesqu}}"/>
+									<input type="text" id="folregT2Resesqu" name="folregT2Resesqu" value="{{folreg.folreg_t2resesqu}}"/>
+									<input type="text" id="folregT3Resesqu" name="folregT3Resesqu" value="{{folreg.folreg_t3resesqu}}"/>
+									<input type="text" id="folregT4Resesqu" name="folregT4Resesqu" value="{{folreg.folreg_t4resesqu}}"/>
+									<input type="text" id="folregT5Resesqu" name="folregT5Resesqu" value="{{folreg.folreg_t5resesqu}}"/>
+									<input type="text" id="folregT6Resesqu" name="folregT6Resesqu" value="{{folreg.folreg_t6resesqu}}"/>
+									<input type="text" id="folregT7Resesqu" name="folregT7Resesqu" value="{{folreg.folreg_t7resesqu}}"/>
+									<input type="text" id="folregT8Resesqu" name="folregT8Resesqu" value="{{folreg.folreg_t8resesqu}}"/>
+									<input type="text" id="folregT9Resesqu" name="folregT9Resesqu" value="{{folreg.folreg_t9resesqu}}"/>
+
+									<input type="text" id="folregT1Resdir" name="folregT1Resdir" value="{{folreg.folreg_t1Resdir}}"/>
+									<input type="text" id="folregT2Resdir" name="folregT2Resdir" value="{{folreg.folreg_t2Resdir}}"/>
+									<input type="text" id="folregT3Resdir" name="folregT3Resdir" value="{{folreg.folreg_t3Resdir}}"/>
+									<input type="text" id="folregT4Resdir" name="folregT4Resdir" value="{{folreg.folreg_t4Resdir}}"/>
+									<input type="text" id="folregT5Resdir" name="folregT5Resdir" value="{{folreg.folreg_t5Resdir}}"/>
+									<input type="text" id="folregT6Resdir" name="folregT6Resdir" value="{{folreg.folreg_t6Resdir}}"/>
+									<input type="text" id="folregT7Resdir" name="folregT7Resdir" value="{{folreg.folreg_t7Resdir}}"/>
+									<input type="text" id="folregT8Resdir" name="folregT8Resdir" value="{{folreg.folreg_t8Resdir}}"/>
+									<input type="text" id="folregT9Resdir" name="folregT9Resdir" value="{{folreg.folreg_t9Resdir}}"/>
+
+									<input type="text" id="folregT1Tipodesqu" name="folregT1Tipodesqu" value="{{folreg.folreg_t1Tipodesqu}}"/>
+									<input type="text" id="folregT2Tipodesqu" name="folregT2Tipodesqu" value="{{folreg.folreg_t2Tipodesqu}}"/>
+									<input type="text" id="folregT3Tipodesqu" name="folregT3Tipodesqu" value="{{folreg.folreg_t3Tipodesqu}}"/>
+									<input type="text" id="folregT4Tipodesqu" name="folregT4Tipodesqu" value="{{folreg.folreg_t4Tipodesqu}}"/>
+									<input type="text" id="folregT5Tipodesqu" name="folregT5Tipodesqu" value="{{folreg.folreg_t5Tipodesqu}}"/>
+									<input type="text" id="folregT6Tipodesqu" name="folregT6Tipodesqu" value="{{folreg.folreg_t6Tipodesqu}}"/>
+									<input type="text" id="folregT7Tipodesqu" name="folregT7Tipodesqu" value="{{folreg.folreg_t7Tipodesqu}}"/>
+									<input type="text" id="folregT8Tipodesqu" name="folregT8Tipodesqu" value="{{folreg.folreg_t8Tipodesqu}}"/>
+									<input type="text" id="folregT9Tipodesqu" name="folregT9Tipodesqu" value="{{folreg.folreg_t9Tipodesqu}}"/>
+
+									<input type="text" id="folregT1Tipodird" name="folregT1Tipodird" value="{{folreg.folreg_t1Tipodird}}"/>
+									<input type="text" id="folregT2Tipodird" name="folregT2Tipodird" value="{{folreg.folreg_t2Tipodird}}"/>
+									<input type="text" id="folregT3Tipodird" name="folregT3Tipodird" value="{{folreg.folreg_t3Tipodird}}"/>
+									<input type="text" id="folregT4Tipodird" name="folregT4Tipodird" value="{{folreg.folreg_t4Tipodird}}"/>
+									<input type="text" id="folregT5Tipodird" name="folregT5Tipodird" value="{{folreg.folreg_t5Tipodird}}"/>
+									<input type="text" id="folregT6Tipodird" name="folregT6Tipodird" value="{{folreg.folreg_t6Tipodird}}"/>
+									<input type="text" id="folregT7Tipodird" name="folregT7Tipodird" value="{{folreg.folreg_t7Tipodird}}"/>
+									<input type="text" id="folregT8Tipodird" name="folregT8Tipodird" value="{{folreg.folreg_t8Tipodird}}"/>
+									<input type="text" id="folregT9Tipodird" name="folregT9Tipodird" value="{{folreg.folreg_t9Tipodird}}"/>
+
+
+
+
 
 								</div>
 							</div>
@@ -2002,7 +2507,7 @@
 										Salvar
 									</button>
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn btn-warning"  type="reset">
+									<button class="btn btn-warning" href="/menu/area/aba/prog/proglis">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>
