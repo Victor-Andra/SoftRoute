@@ -2208,11 +2208,11 @@ module.exports = {
                                         terapeutaAtend = atend.atend_terapeutaid;
                                         break;
                                     case "Substituição":// so sub
-                                        if (atend.atend_terapeutaid == req.body.relTeraid){
-                                            continuar = false;
-                                        } else {
+                                        if (atend.atend_mergeterapeutaid == req.body.relTeraid){
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        } else {
+                                            continuar = false;
                                         }
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         terapeutaAtend = atend.atend_mergeterapeutaid;
