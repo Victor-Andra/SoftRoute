@@ -218,7 +218,6 @@ module.exports = {AtendModel,AtendSchema,
             atend_datacad : dataAtual.toISOString()
             
         });
-        console.log("req.body.atendMergeTerapeutaid: "+req.body.atendMergeTerapeutaid)
         console.log("newAtend save");
         await newAtend.save().then(()=>{
             console.log("Cadastro realizado!");
