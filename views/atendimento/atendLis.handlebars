@@ -525,22 +525,29 @@
 
 																												
 														{{#if atend_mergeterapiaid}}
-															{{#each ../terapias}}<!-- Ok -->
-																{{#ifEqual this._id ../atend_mergeterapiaid}}
-																	<td>{{terapia_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
+															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapias}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_mergeterapiaid}}
+																		<td>{{terapia_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
 														{{else}}
 															<td>-</td>
 														{{/if}}
 
-
 														{{#if atend_mergeterapeutaid}}
-															{{#each ../terapeutas}}<!-- Ok -->
-																{{#ifEqual this._id ../atend_mergeterapeutaid}}
-																	<td>{{usuario_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
+															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapeutas}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_mergeterapeutaid}}
+																		<td>{{usuario_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
 														{{else}}
 															<td>-</td>
 														{{/if}}

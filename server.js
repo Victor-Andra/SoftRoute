@@ -85,7 +85,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     }
                 },
                 compareThis: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
-                    //console.log("/"+v1+"="+v2+"/")
+                    console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){
                         return options.inverse(this);
                     } else {
