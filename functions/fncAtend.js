@@ -2149,12 +2149,14 @@ module.exports = {
         filtroAgendaFixo = {agenda_data: { $gte: seg, $lte: sex }, agenda_temp: false, agenda_extra: false, agenda_usuid: req.body.relTeraid}
 
         Agenda.find(filtroAgendaFixo).then((agendaFixa)=>{
+            console.log("agendaFixa: "+agendaFixa.length)
             let idsTemp =[];
             agendaFixa.forEach((af)=>{
                 idsTemp.push(af._id);
             })
             filtroAgendaSemanal = { $or: [ {agenda_tempId: { $in: idsTemp }},{agenda_data: { $gte: seg, $lte: sex },agenda_temp: true,agenda_usuid: req.body.relTeraid} ] };
             Agenda.find(filtroAgendaSemanal).then((agendaSemanal)=>{
+                console.log("agendaSemanal: "+agendaSemanal.length)
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
@@ -2222,7 +2224,7 @@ module.exports = {
 
                                 rab.hora = (hours+":"+mins);
                                 categorias = agenda.agenda_categoria;
-                                console.log("categorias: "+categorias)
+                                //console.log("categorias: "+categorias)
                                 switch (categorias){
                                     case "Apoio":// aparece nos 2
                                         if (agenda.agenda_usuid == req.body.relTeraid){
@@ -2268,12 +2270,8 @@ module.exports = {
                                         }
                                         break;
                                     case "SubstitutoFixo":
-                                        if (agenda.agenda_terapiaid == req.body.relTeraid) {
-                                            terapiaAtend = agenda.agenda_terapiaid;
-                                            terapeutaAtend = agenda.agenda_usuid;
-                                        } else {
-                                            continuar = "false";
-                                        }
+                                        terapiaAtend = agenda.agenda_terapiaid;
+                                        terapeutaAtend = agenda.agenda_usuid;
                                         break;
                                     case "Supervisão":
                                         terapiaAtend = agenda.agenda_terapiaid;
