@@ -249,6 +249,8 @@
 				document.getElementById("folregDatareg").value = document.getElementById("folregDataregEdi").value;
 				
 				document.getElementById("folregQtest").value = document.getElementById("folregQtestEdi").value;
+
+
 				
 				document.getElementById("folregUsuid").value = document.getElementById("folregUsuidEdi").value;
 				//Estimulos vindos do SET e do Programa
@@ -265,7 +267,7 @@
 				
 				
 				//Carrega o status, Jason não Usa mas para manter o padrão internacional
-				switch (document.getElementById("folregStatus").value){
+				switch (document.getElementById("folregStatusEdi").value){
 					case 1:
 						document.getElementById("folregStatus1").checked = true;
 						break;
@@ -274,6 +276,9 @@
 						break;
 					case 3:
 						document.getElementById("folregStatus3").checked = true;
+						break;
+					case 4:
+						document.getElementById("folregStatus4").checked = true;
 						break;
 					default: 
 						console.log("vazio");
@@ -925,7 +930,7 @@
 									
 									<!-- campos Observação e status-->
 									<input type="text" id="folregObsEdi" name="folregObsEdi" value="{{folreg.folreg_obs}}"/>
-									<input type="text" id="folregStatus" name="folregStatus" value="{{folreg.folreg_status}}"/>
+									<input type="text" id="folregStatusEdi" name="folregStatusEdi" value="{{folreg.folreg_status}}"/>
 									
 									<!-- campos Gráficos Simples-->
 									<input type="text" id="folregT1EstsEdi" name="folregT1EstsEdi" value="{{folreg.folreg_t1ests}}"/>
@@ -1381,6 +1386,11 @@
 													<input name="folregStatus" id="folregStatus3"  type="radio" class="ace"  value="3">
 													<span class="lbl"></span>
 													<span class="label label-danger arrowed-in">Volta de Passo de Dica</span>
+												</div>
+												<div class="col-sm-2">
+													<input name="folregStatus" id="folregStatus4"  type="radio" class="ace"  value="4">
+													<span class="lbl"></span>
+													<span class="label label-warning arrowed-in">Continuar...</span>
 												</div>
 											</div>
 										</div>	

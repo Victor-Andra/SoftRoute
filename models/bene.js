@@ -100,6 +100,7 @@ const BeneSchema = mongoose.Schema({
     bene_escolaobs:{ type: String, required: false},
     bene_obs:{ type: String, required: false},
     bene_obsadm:{ type: String, required: false},
+    bene_aba:{ type: String, required: false},
     bene_datacad:{ type: Date, required: false },
     bene_usuidcad:{ type: ObjectId, required: false },
     bene_usuidedi:{ type: ObjectId, required: false },
@@ -119,7 +120,7 @@ class Bene{
         bene_maecel, bene_maecel2, bene_maeemail, bene_escolanome, bene_escolafone, bene_escolaend, bene_escolacomp, bene_escolabairro, bene_escolacidade, bene_escolauf, 
         bene_escolacep, bene_escolaano, bene_escolaserie, bene_escolacoord, bene_escolacoordtel, bene_escolaoutro1, bene_escolaoutro1func, bene_escolaoutro1tel,
         bene_escolaoutro2, bene_escolaoutro2func, bene_escolaoutro2tel, bene_escolaoutro3, bene_escolaoutro3func, bene_escolaoutro3tel, bene_escolaobs ,bene_escolaemail, bene_escolaturno, bene_obs, bene_obsadm, 
-        bene_datacad, bene_usuidcad, bene_usuidedi, bene_dataedi
+        bene_aba, bene_datacad, bene_usuidcad, bene_usuidedi, bene_dataedi
          ){
             this.bene_nome = bene_nome,
             this.bene_apelido = bene_apelido,
@@ -217,6 +218,7 @@ class Bene{
             this.bene_escolaobs = bene_escolaobs,
             this.bene_obsadm = bene_obsadm,
             this.bene_obs = bene_obs,
+            this.bene_aba = bene_aba,
             this.bene_datacad = bene_datacad,
             this.bene_usuidcad = bene_usuidcad,
             this.bene_usuidedi = bene_usuidedi,
@@ -335,6 +337,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaobs: req.body.beneEscolaobs,
                 bene_obsadm: req.body.beneObsadm,
                 bene_obs: req.body.beneObs,
+                bene_aba: req.body.beneAba,
                 bene_usuidedi: usuarioAtual,
                 bene_dataedi: dataAtual
             }}
@@ -388,6 +391,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaemail: req.body.beneEscolaemail,
                 //Permitir Bene Obs também ser editado pelos Supervisores
                 bene_obs: req.body.beneObs,
+                bene_aba: req.body.beneAba,
                 bene_usuidcad: usuarioAtual,
                 bene_dataedi: dataAtual
                 }}
@@ -507,6 +511,7 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaobs: req.body.beneEscolaobs,
                 bene_obsadm: req.body.beneObsadm,
                 bene_obs: req.body.beneObs,
+                bene_aba: req.body.beneAba,
                 bene_usuidcad: usuarioAtual,
                 bene_datacad: dataAtual                
             });
