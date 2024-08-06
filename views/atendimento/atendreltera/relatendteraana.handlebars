@@ -26,10 +26,14 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value)
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
+
+				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value
+				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
+				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
@@ -46,17 +50,18 @@
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
 							<ul class="breadcrumb">
 								<label>Período de:</label>
-								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" />
+								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()"  />
+								<input class="hidden" id="dataIni" name="dataIni" value="{{pesquisa.dataIni}}" />
 								<label>até:</label>
-								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-								<input class="hidden" id="dataFim" name="dataFim" />
+								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()"  />
+								<input class="hidden" id="dataFim" name="dataFim" value="{{pesquisa.dataFim}}" />
 								<label>Terapeuta: </label>
 								<select style="height: 30px; width:300px;" name="relTeraid"  id="relTeraid" class="chosen-select" data-placeholder="Escolha...">
 									{{#each terapeutas}}
 										<option value="{{_id}}">{{usuario_nome}}</option>
 									{{/each}}
 								</select>
+								<input  hidden id="teraFiltro" name="teraFiltro"  value="{{pesquisa.terapeuta}}" />
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar
