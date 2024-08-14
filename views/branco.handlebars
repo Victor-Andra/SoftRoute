@@ -54,6 +54,152 @@
 							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{/compareString}}
 					{{/compareString}}
+					<div class="col-xs-12 col-md-5 col-sm-5" name="Faltaevo" id="Faltaevo"><!-- Evoluções Ausentes-->
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="red ace-icon fa fa-bookmark bigger-110"></i>
+									Evoluções Ausentes</h4>
+								<span class="widget-toolbar">
+									
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="col-xs-12">
+											<div class="row">
+												<div class="col-xs-12">
+												* Em Desenvolvimento...
+												</div>
+											</div>																	
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-5 col-sm-5" name="Pontage" id="Pontage"><!-- Pontuações na Agenda, Faltya Substituição etc -->
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="purple ace-icon fa fa-bullseye bigger-110"></i>
+									Pontuações na Agenda</h4>
+								<span class="widget-toolbar">
+									
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="col-xs-12">
+											<div class="row">
+												<div class="col-xs-12">
+												* Desenvolvimento ...
+												</div>
+											</div>																	
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-2 col-sm-2" name="percep" id="percep"><!-- Aniversariantes do MÊS -->
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="orange ace-icon fa fa-birthday-cake bigger-110"></i>
+									Aniversáriantes do Mês</h4>
+								<span class="widget-toolbar">
+									
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12 col-md-12 col-sm-12">
+											<p class="alert alert-info">
+												<b>Beneficiários</b>
+											</p>
+										</div>
+										<div class="col-xs-12">
+											<div class="row">
+												<div class="col-xs-12">
+													<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
+													<tr role="row">
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Dia</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Aniversariante</th>
+													</tr>
+													
+												</thead>
+												
+												<tbody>
+													{{#each benes}}
+														<tr role="row" class="odd">
+															<td>{{bene_datanasc}}</td>
+															<td>{{bene_nome}}</td>
+														</tr>
+													{{/each}}
+												</tbody>
+
+											</table>
+												</div>
+											</div>																	
+										</div>
+									</div>
+									<hr>
+									<div class="row">
+										<div class="col-xs-12 col-md-12 col-sm-12">
+											<p class="alert alert-warning">
+												<b>Colaboradores</b>
+											</p>
+										</div>
+										<div class="col-xs-12">
+											<div class="row">
+												<div class="col-xs-12">
+													<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
+													<tr role="row">
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Dia</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Aniversariante</th>
+													</tr>
+													
+												</thead>
+												
+												<tbody>
+													{{#each usuarios}}
+														<tr role="row" class="odd">
+															<td>{{bene_datanasc}}</td>
+															<td>{{bene_nome}}</td>
+														</tr>
+													{{/each}}
+												</tbody>
+
+											</table>
+												</div>
+											</div>																	
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>				
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->

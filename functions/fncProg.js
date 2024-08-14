@@ -90,10 +90,26 @@ module.exports = {
                     // Contagem de progs adquiridos e não adquiridos
                     b.countProgsC += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status === "Adquirido").length;
                     b.countProgsA += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status !== "Adquirido").length;
+                
+                    let datanasc = new Date(b.bene_datanasc);
+                    let mes = (datanasc.getMonth()+1).toString();
+                    let dia = (datanasc.getUTCDate()).toString();
+                    if (mes.length == 1){
+                        mes = "0"+mes;
+                    }
+                    if (dia.length == 1){
+                        dia = "0"+dia;
+                    }
+                    let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
+                    b.datanasc=fulldate;
+                
+                
                 });
     
                 // Aqui, você pode usar as variáveis countProgs e countProgsA como quiser
                 // Por exemplo, enviá-las para sua view junto com outros dados
+                //console.log("b.datanasc"+b.bene_datanasc)
+                
     
                 Usuario.find().then((usuario) => {
                     usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));

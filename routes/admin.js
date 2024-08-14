@@ -466,7 +466,7 @@ router.post("/ferramentas/usuario/resetarchave", fncGeral.IsAuthenticated, (req,
 })
 
 //Lista Aniversariantes Usuários e Terapeutas
-router.get("/area/relaniverUsu", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a cadastrar Senha
+router.get("/area/relaniverUsu", fncGeral.IsAuthenticated, (req,res) =>{//Direciona a Lista de usuário
     fncUsuario.relaniverUsu(req, res);
 })
 /*

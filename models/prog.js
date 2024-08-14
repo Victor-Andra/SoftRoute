@@ -132,7 +132,6 @@ module.exports = {ProgModel,ProgSchema,
                 //Atributos de controle
                 prog_usuidedi : usuarioAtual,
                 prog_dataedi : dataAtual.toISOString(),
-                prog_lixo : "false"
                 }}
 
         ).then((res) =>{
