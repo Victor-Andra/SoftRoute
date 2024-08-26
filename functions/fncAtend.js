@@ -2272,6 +2272,11 @@ module.exports = {
                                         //terapiaAtend = agenda.agenda_terapiaid;
                                         //terapeutaAtend = agenda.agenda_usuid;
                                         break;
+                                    case "Glosa":
+                                        continuar = "false";
+                                        //terapiaAtend = agenda.agenda_terapiaid;
+                                        //terapeutaAtend = agenda.agenda_usuid;
+                                        break;
                                     case "Padrão":
                                         terapiaAtend = agenda.agenda_terapiaid;
                                         terapeutaAtend = agenda.agenda_usuid;
