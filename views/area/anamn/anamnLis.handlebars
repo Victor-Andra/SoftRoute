@@ -82,10 +82,13 @@
 													</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Aniversário</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Idade Atual</th>
+													
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Anamnese</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Cadastro</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Atualização</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
 													<th>Ação</th>
 												</tr>
 											</thead>
@@ -109,6 +112,13 @@
 															<td>{{anamn_benenome}}<!-- notOk --></td>
 														{{/compareUndefined}}
 														<td>{{anamn_benedatanasc}}</td>
+														<td>	
+															{{#each ../benes}}<!-- Ok -->
+																{{#ifEqual this._id ../anamn_beneid}}
+																	{{idade}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
 														{{#each ../usuarios}}<!-- Ok -->
 															{{#ifEqual this._id ../anamn_terapeutaid}}
 																<td>{{usuario_nome}}</td>
@@ -126,8 +136,18 @@
 																{{/ifEqual}}
 															{{else}}
 																<td>&nbsp;</td>
-															{{/if}}
-														
+														{{/if}}
+														<td>	
+															{{#each ../benes}}<!-- Ok -->
+																{{#ifEqual this._id ../anamn_beneid}}
+																	{{#ifEqual this.bene_status "Inativo"}}
+																		<span class="label label-sm label-danger">{{bene_status}}</span>
+																		{{else}}
+																		<span class="label label-sm label-success">{{bene_status}}</span>
+																	{{/ifEqual}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
 														<td>
 															<div class="action-buttons">
 																<a class="blue" href="/menu/area/anamn/imp/{{_id}}">
@@ -179,7 +199,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [200, 500],
 			"lengthChange": true,

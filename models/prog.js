@@ -58,6 +58,7 @@ class Prog{
         prog_dicasequen,
         prog_dicaimplement,
         prog_obs,
+        prog_total_estimulos,
         //Atributos de controle
         prog_usuidcad,
         prog_usuidedi,
@@ -87,6 +88,7 @@ class Prog{
         this.prog_dicasequen = prog_dicasequen,
         this.prog_dicaimplement = prog_dicaimplement,
         this.prog_obs = prog_obs,
+        this.prog_total_estimulos = prog_total_estimulos,
         //Atributos de controle
         this.prog_usuidcad = prog_usuidcad,
         this.prog_usuidedi = prog_usuidedi,

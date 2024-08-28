@@ -284,10 +284,12 @@
 						console.log("vazio");
 						break;
 				}
-				
+				console.log("mudaRegistro();")
+				mudaRegistro();
 				if (document.getElementById("folregTiporeg").value == "Simples"){
 					//Gráfico SIMPLES
 					//Campos com valor do gráfico Simples
+					console.log("folregT1TipodsimplesEdi: "+document.getElementById("folregT1TipodsimplesEdi").value);
 					document.getElementById("folregT1Tipodsimples").value = document.getElementById("folregT1TipodsimplesEdi").value;
 					document.getElementById("folregT2Tipodsimples").value = document.getElementById("folregT2TipodsimplesEdi").value;
 					document.getElementById("folregT3Tipodsimples").value = document.getElementById("folregT3TipodsimplesEdi").value;
@@ -836,8 +838,7 @@
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 				//carregaRamdomico();
-				
-				mudaRegistro();
+				console.log("Prefim!")
 				populateCheckboxes();
 				console.log("carregaBody Carregado!")
 			}//fim carregaBody

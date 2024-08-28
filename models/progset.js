@@ -34,9 +34,7 @@ const ProgsetSchema = mongoose.Schema({
     progset_datacad :{ type: String, required: false },
     progset_dataedi :{ type: String, required: false },
     progset_lixo :{ type: String, required: false }
-
-
-    })
+})
 
 class Progset{
     constructor(

@@ -33,6 +33,7 @@ const UsuarioSchema = mongoose.Schema({
     usuario_contatipo : { type: String, required: false },
     usuario_contrato : { type: String, required: false },
     usuario_funcaoid : { type: ObjectId, required: true },
+    usuario_dataadm : { type: String, required: false },
     usuario_perfilid : { type: String, required: false },
     usuario_status : { type: String, required: false },
     usuario_senha : {type: String, required: false },
@@ -93,6 +94,7 @@ class Usuario{
         usuario_contatipo,
         usuario_contrato,
         usuario_funcaoid,
+        usuario_dataadm,
         usuario_perfilid,
         usuario_status,
         usuario_senha,
@@ -149,6 +151,7 @@ class Usuario{
 
         this.usuario_funcaoid = usuario_funcaoid ,
         this.usuario_perfilid = usuario_perfilid ,
+        this.usuario_dataadm = usuario_dataadm,
         this.usuario_status = usuario_status ,
         this.usuario_senha = usuario_senha ,
         this.usuario_img = usuario_img ,//Imagem foto miniatura
@@ -235,6 +238,7 @@ module.exports = {
 
                 usuario_funcaoid : req.body.usuarioFuncaoid ,
                 usuario_perfilid : req.body.usuarioPerfilid ,
+                usuario_dataadm : req.body.usuarioDataadm , //Data de admissão, alterado em 27/08/2024
                 usuario_status : req.body.usuarioStatus ,
                 usuario_senha : req.body.usuarioSenha ,
                 //usuario_img : req.body.usuarioImg , // não deveria passar arquivos de imagem no editar...
@@ -312,6 +316,7 @@ module.exports = {
 
             usuario_funcaoid : req.body.usuarioFuncaoid ,
             usuario_perfilid : req.body.usuarioPerfilid ,
+            usuario_dataadm : req.body.usuarioDataadm , //Data de admissão, alterado em 27/08/2024
             usuario_status : req.body.usuarioStatus ,
             usuario_senha : req.body.usuarioSenha ,
             usuario_img : req.body.usuarioImg ,

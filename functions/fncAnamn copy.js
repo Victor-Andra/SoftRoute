@@ -182,50 +182,9 @@ carregaAnamn(req, res){
             //console.log("anamn:");
             //console.log(anamn);
             //console.log("Listagem Realizada das Anamneses!")
-            Bene.find().then((bene) => { //Bene.find({ bene_status: "Ativo" }).then((bene) => {
-                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-    
-                bene.forEach((b) => {
-                    //console.log("b.datanasc"+b.bene_datanasc)
-                    let datanasc = new Date(b.bene_datanasc);
-                    let mes = (datanasc.getMonth()+1).toString();
-                    let dia = (datanasc.getUTCDate()).toString();
-                    if (mes.length == 1){
-                        mes = "0"+mes;
-                    }
-                    if (dia.length == 1){
-                        dia = "0"+dia;
-                    }
-                    let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
-                    b.datanasc=fulldate;
-    
-                    // Data atual
-                    const hoje = new Date();
-                    let idade = new Date(b.bene_idade);
-    
-                    // Data de aniversário
-                    let aniversario = datanasc;
-    
-                    // Cálculo da idade
-                    let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
-                    let idadeMeses = hoje.getMonth() - aniversario.getMonth();
-                    let idadedias = hoje.getDay() - aniversario.getDay();
-    
-                    // Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
-                    if (hoje.getDate() < aniversario.getDate()) {
-                        idadeMeses--;
-                    }
-    
-                    // Se o mês do aniversário for maior que o mês atual, ajusta a idade
-                    if (idadeMeses < 0) {
-                        idadeAnos--;
-                        idadeMeses += 12;
-                    }
-                    let fullidade = (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-                    b.idade = fullidade;
-                
-                
-                });
+                Bene.find().then((bene) =>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    //console.log("Listagem Realizada bene!")
                     Usuario.find().then((usuario)=>{
                         //console.log("Listagem Realizada Usuário!")
                         /*if(resposta.sucesso == ""){

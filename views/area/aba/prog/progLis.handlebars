@@ -163,7 +163,11 @@
 																&nbsp;{{bene_nome}}&nbsp;&nbsp;&nbsp;&nbsp;
 																
 																<i class="ace-icon orange fa fa-birthday-cake "></i>
-																{{datanasc}}
+																{{datanasc}}&nbsp;&nbsp;&nbsp;&nbsp;
+																
+																<i class="ace-icon red fa fa-sliders"></i>
+																{{idade}}
+
 																
 															</h6>
 															<span class="widget-toolbar">
@@ -712,7 +716,12 @@
 																							<tr role="row" >
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%">SET</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 15%">Descrição</th>
-																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 10%" >Estímulos</th>
+																								
+																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 10%" >
+																									Estímulos&nbsp;&nbsp;&nbsp;
+																									<span class="badge badge-warning">{{prog_total_estimulos}}</span>
+																								</th>
+
 																								<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 5%" >Data</th>
 																								<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" style="width: 5%">Prazo</th>
 																								<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >
@@ -806,6 +815,9 @@
 																												{{/ifEqual}}
 																												{{/ifEqual}}
 																											{{/ifEqual}}
+																										</td>
+																										<td>
+																											<span class="badge badge-warning">{{this.progset_qtest}}</span>
 																										</td>	
 																										<td><span class="badge badge-success">{{this.progset_dataini}}</span><br><span class="badge badge-danger">{{this.progset_datafin}}</span></td>			
 																										<td>
