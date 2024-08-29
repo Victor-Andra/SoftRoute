@@ -1396,11 +1396,11 @@
 													<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 													<br>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-xs-12 col-sm-6">
 													<label> Beneficiário</label>
 													<div class="form-group">
-														<div class="col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();" >
+														<div class="col-xs-12 col-sm-6">
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" class="form-control" onchange="javascript:atualizaDadosbene();" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -1409,8 +1409,8 @@
 														</div>
 													</div>
 													<div class="form-group" >
-														<div class="col-sm-6">
-															<input id="anamnBenenome" name="anamnBenenome" type="text" />
+														<div class="col-xs-12 col-sm-6">
+															<input id="anamnBenenome" name="anamnBenenome" class="form-control" type="text" />
 														</div>
 													</div>
 																										
@@ -1421,13 +1421,13 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" readonly="true">
+																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date"  readonly="true">
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-3">
-															<label> Idade:</label><!--idade beneficiário-->
+														<div class="col-xs-12 col-sm-6">
+															<label> Idade:&nbsp;&nbsp;</label><span class="label label-sm label-warning arrowed arrowed-righ">Idade no dia da realização da anamnese.</span><!--idade beneficiário-->
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-3">

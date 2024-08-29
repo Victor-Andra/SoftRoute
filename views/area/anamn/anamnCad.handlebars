@@ -360,11 +360,11 @@
 													<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 													<br>
 												</div>
-												<div class="col-xs-6">
+												<div class="col-xs-12 col-sm-6">
 													<label> Beneficiário</label>
 													<div class="form-group">
-														<div class="col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();" >
+														<div class="col-xs-12 col-sm-6">
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" class="form-control" onchange="javascript:atualizaDadosbene();" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -373,8 +373,8 @@
 														</div>
 													</div>
 													<div class="form-group" >
-														<div class="col-sm-6">
-															<input id="anamnBenenome" name="anamnBenenome" type="text" hidden/>
+														<div class="col-xs-12 col-sm-6">
+															<input id="anamnBenenome" name="anamnBenenome" class="form-control" type="text" hidden/>
 														</div>
 													</div>
 													<div class="alert alert-warning">
@@ -398,11 +398,11 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-5">
-															<label> Idade:</label><!--idade beneficiário-->
+														<div class="col-xs-12 col-sm-7">
+															<label> Idade:&nbsp;&nbsp;</label><span class="label label-sm label-warning arrowed arrowed-righ">Idade no dia da realização da anamnese.</span><!--idade beneficiário-->
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-5">
+																	<div class="col-sm-7">
 																		<input type="text" name="anamnBeneidade" id="anamnBeneidade" readonly="true" class="form-control" style="width: 150px;" />
 																	</div>
 																</div>
@@ -413,7 +413,7 @@
 													<label> Mãe:</label><!--Mãe beneficiário-->
 													<div class="input-group">
 														<div>
-															<input type="text" name="anamnMaenome" id="anamnMaenome" placeholder=""  readonly="true"class="form-control" style="width: 500px;"/>
+															<input type="text" name="anamnMaenome" id="anamnMaenome" placeholder=""  readonly="true" class="form-control" style="width: 500px;"/>
 														</div>
 													</div>
 													<label> Pai:</label><!--Pai beneficiário-->

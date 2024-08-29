@@ -32,6 +32,16 @@ const FolregSchema = mongoose.Schema({
         //Duplo direita
     folreg_passodicad :{ type: String, required: false },
 
+    //Tipos de Dicas herdadas do Programa ABA, ou seja,
+    // ao escolher os tipos de dicas, eles são trazidos e carregados para os Registros Novos ou Editados e
+    // o terapeuta escolhera algum ou todas as dicas a serem aplicadas
+    //Simples
+    folreg_tipodicaprogs :{ type: String, required: false },
+        //Duplo Esquerda
+    folreg_tipodicaproge :{ type: String, required: false },
+        //Duplo direita
+    folreg_tipodicaprogd :{ type: String, required: false },
+
     folreg_status :{ type: String, required: false },
     folreg_t1ests :{ type: String, required: false },
     folreg_t2ests :{ type: String, required: false },
@@ -157,9 +167,16 @@ class Folreg{
         folreg_estj,
         folreg_estseq,
         folreg_obs,
+
+        //Passos de dicas
         folreg_passodicas,
         folreg_passodicae,
         folreg_passodicad,
+        //Tipos de dicas originárias do Programa ABA
+        folreg_tipodicaprogs,
+        folreg_tipodicaproge,
+        folreg_tipodicaprogd,
+
         folreg_status,
         folreg_t1ests,
         folreg_t2ests,
@@ -283,9 +300,16 @@ class Folreg{
             this.folreg_estj = folreg_estj,
             this.folreg_estseq = folreg_estseq,
             this.folreg_obs = folreg_obs,
+
+            //Passos de Dicas
             this.folreg_passodicas = folreg_passodicas,
             this.folreg_passodicae = folreg_passodicae,
             this.folreg_passodicad = folreg_passodicad,
+             //Tipos de dicas originárias do Programa ABA
+            this.folreg_tipodicaprogs = folreg_tipodicaprogs,
+            this.folreg_tipodicaproge = folreg_tipodicaproge,
+            this.folreg_tipodicaprogd = folreg_tipodicaprogd,
+
             this.folreg_status = folreg_status,
             this.folreg_t1ests = folreg_t1ests,
             this.folreg_t2ests = folreg_t2ests,
@@ -422,9 +446,16 @@ module.exports = {FolregModel,FolregSchema,
                 folreg_estj : req.body.folregEstj,
                 folreg_estseq : req.body.folregEstseq,
                 folreg_obs : req.body.folregObs,
+                
+                //Passos de Dicas
                 folreg_passodicas : req.body.folregPassodicas,
                 folreg_passodicae : req.body.folregPassodicae,
                 folreg_passodicad : req.body.folregPassodicad,
+                //Tipos de dicas originárias do Programa ABA
+                folreg_tipodicaprogs : req.body.folregTipodicaprogs,
+                folreg_tipodicaproge : req.body.folregTipodicaproge,
+                folreg_tipodicaprogd : req.body.folregTipodicaprogd,
+
                 folreg_status : req.body.folregStatus,
                 folreg_t1ests : req.body.folregT1Ests,
                 folreg_t2ests : req.body.folregT2Ests,
@@ -564,9 +595,16 @@ module.exports = {FolregModel,FolregSchema,
             folreg_estj : req.body.folregEstj,
             folreg_estseq : req.body.folregEstseq,
             folreg_obs : req.body.folregObs,
-            folreg_passodicas : req.body.folregPassodicas,
-            folreg_passodicae : req.body.folregPassodicae,
-            folreg_passodicad : req.body.folregPassodicad,
+            
+             //Passos de Dicas
+             folreg_passodicas : req.body.folregPassodicas,
+             folreg_passodicae : req.body.folregPassodicae,
+             folreg_passodicad : req.body.folregPassodicad,
+             //Tipos de dicas originárias do Programa ABA
+             folreg_tipodicaprogs : req.body.folregTipodicaprogs,
+             folreg_tipodicaproge : req.body.folregTipodicaproge,
+             folreg_tipodicaprogd : req.body.folregTipodicaprogd,
+
             folreg_status : req.body.folregStatus,
             folreg_t1ests : req.body.folregT1Ests,
             folreg_t2ests : req.body.folregT2Ests,
