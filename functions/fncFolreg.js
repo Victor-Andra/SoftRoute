@@ -117,7 +117,8 @@ module.exports = {
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                            Progv.find().then((progv)=>{    
+                            Progv.find().then((progv)=>{
+                                console.log(" req.params.idProg: "+ req.params.idProg)
                                 Prog.findOne({_id: req.params.idProg}).then((prog)=>{
                                     Progset.findOne({_id: req.params.id}).then((progset)=>{
                                         Progdica.find().then((progdica)=>{

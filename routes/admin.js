@@ -2395,7 +2395,7 @@ router.post('/area/aba/folreg/add', fncGeral.IsAuthenticated, (req,res) =>{//adi
 })
 
 //Carrega Editar Pecs
-router.get('/area/aba/folreg/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+router.get('/area/aba/folreg/edi/:id/:idProg', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncFolreg.carregaFolregEdi(req,res);
 })
 

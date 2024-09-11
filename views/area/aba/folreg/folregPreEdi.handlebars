@@ -50,6 +50,15 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
+			function marcaImput(inputName) {
+				let elementoAlvo = document.getElementById(inputName);
+				if (elementoAlvo.checked == true) {
+					elementoAlvo.value = "true";
+				} else {
+					elementoAlvo.value = "false";
+				}
+			}
+
 			function mudaRegistro() {
 				let tipodoc = document.getElementById("folregTiporeg").value;
 				console.log(tipodoc)
@@ -238,9 +247,56 @@
 				});
 			});
 			
-			
+			function popularCheckboxDicaTipo() {
+				// Obtém o valor do campo de entrada
+				const nomesdicas = document.getElementById("progDicatipotext").value;
+
+				// Converte a string em um array
+				const progDicatipotext = nomesdicas.split(',');
+
+				// Seleciona todos os divs de checkbox dentro do <td> especificado
+				//const checkboxes = document.querySelectorAll(`#${'checkboxContainer1'} .checkbox`);
+
+				// Itera sobre os checkboxes
+				progDicatipotext.forEach((dicatipo, index) => {
+					// Se o índice for menor que o comprimento do array, mostra e define o texto
+					//if (index < progDicatipotext.length) {
+						document.getElementById("folregT"+index+"tipodsimples").innerHTML = dicatipo;
+						document.getElementById("folregT"+index+"tipodsimples").style.display = 'block';
+						document.getElementById("folregT"+index+"tipodesqu").innerHTML = dicatipo;
+						document.getElementById("folregT"+index+"tipodesqu").style.display = 'block';
+						document.getElementById("folregT"+index+"tipodird").innerHTML = dicatipo;
+						document.getElementById("folregT"+index+"tipodird").style.display = 'block';
+					//}
+				});
+			}
+
+			function switchCases(alvo, gatilho) {
+				switch (document.getElementById(gatilho).value){
+					case "I":
+						document.getElementById(alvo+"1").checked = true;
+						document.getElementById(alvo+"1").checked = document.getElementById(gatilho).value;
+						break;
+					case "E":
+						document.getElementById(alvo+"2").checked = true;
+						document.getElementById(alvo+"2").checked = document.getElementById(gatilho).value;
+						break;
+					case "+d":
+						document.getElementById(alvo+"3").checked = true;
+						document.getElementById(alvo+"3").checked = document.getElementById(gatilho).value;
+						break;
+					case "-d":
+						document.getElementById(alvo+"4").checked = true;
+						document.getElementById(alvo+"4").checked = document.getElementById(gatilho).value;
+						break;
+					default: 
+						console.log("vazio");
+						break;
+				}
+			}
 			
 			function carregaBody(){
+				//popularCheckboxDicaTipo();
 				document.getElementById("folregBeneid").value = document.getElementById("folregBeneidEdi").value;
 				document.getElementById("folregProgtipoid").value = document.getElementById("folregProgtipoidEdi").value;
 				document.getElementById("folregPrognivelid").value = document.getElementById("folregPrognivelidEdi").value;
@@ -250,7 +306,9 @@
 				
 				document.getElementById("folregQtest").value = document.getElementById("folregQtestEdi").value;
 
-
+				document.getElementById("folregT1tipodsimples").value = document.getElementById("progDicatipotext").value;
+				document.getElementById("folregT1tipodesqu").value = document.getElementById("progDicatipotext").value;
+				document.getElementById("folregT1tipodird").value = document.getElementById("progDicatipotext").value;
 				
 				document.getElementById("folregUsuid").value = document.getElementById("folregUsuidEdi").value;
 				//Estimulos vindos do SET e do Programa
@@ -284,30 +342,55 @@
 						console.log("vazio");
 						break;
 				}
-				console.log("mudaRegistro();")
 				mudaRegistro();
 				if (document.getElementById("folregTiporeg").value == "Simples"){
 					//Gráfico SIMPLES
 					//Campos com valor do gráfico Simples
 					console.log("folregT1TipodsimplesEdi: "+document.getElementById("folregT1TipodsimplesEdi").value);
-					document.getElementById("folregT1Tipodsimples").value = document.getElementById("folregT1TipodsimplesEdi").value;
-					document.getElementById("folregT2Tipodsimples").value = document.getElementById("folregT2TipodsimplesEdi").value;
-					document.getElementById("folregT3Tipodsimples").value = document.getElementById("folregT3TipodsimplesEdi").value;
-					document.getElementById("folregT4Tipodsimples").value = document.getElementById("folregT4TipodsimplesEdi").value;
-					document.getElementById("folregT5Tipodsimples").value = document.getElementById("folregT5TipodsimplesEdi").value;
-					document.getElementById("folregT6Tipodsimples").value = document.getElementById("folregT6TipodsimplesEdi").value;
-					document.getElementById("folregT7Tipodsimples").value = document.getElementById("folregT7TipodsimplesEdi").value;
-					document.getElementById("folregT8Tipodsimples").value = document.getElementById("folregT8TipodsimplesEdi").value;
+					if (document.getElementById("folregT1TipodsimplesEdi").value != ''){
+						document.getElementById("folregT1Tipodsimples").value = document.getElementById("folregT1TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT1tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT2TipodsimplesEdi").value != ''){
+						document.getElementById("folregT2Tipodsimples").value = document.getElementById("folregT2TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT2tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT3TipodsimplesEdi").value != ''){
+						document.getElementById("folregT3Tipodsimples").value = document.getElementById("folregT3TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT3tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT4TipodsimplesEdi").value != ''){
+						document.getElementById("folregT4Tipodsimples").value = document.getElementById("folregT4TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT4tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT5TipodsimplesEdi").value != ''){
+						document.getElementById("folregT5Tipodsimples").value = document.getElementById("folregT5TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT5tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT6TipodsimplesEdi").value != ''){
+						document.getElementById("folregT6Tipodsimples").value = document.getElementById("folregT6TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT6tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT7TipodsimplesEdi").value != ''){
+						document.getElementById("folregT7Tipodsimples").value = document.getElementById("folregT7TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT7tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT8TipodsimplesEdi").value != ''){
+						document.getElementById("folregT8Tipodsimples").value = document.getElementById("folregT8TipodsimplesEdi").value
+						document.getElementById("checksimplesfolregT8tipodsimples").checked = true;
+					}
 					//Campos com Resultado do gráfico Simples
-					document.getElementById("folregT1Ressimples").value = document.getElementById("folregT1RessimplesEdi").value;
-					document.getElementById("folregT2Ressimples").value = document.getElementById("folregT2RessimplesEdi").value;
-					document.getElementById("folregT3Ressimples").value = document.getElementById("folregT3RessimplesEdi").value;
-					document.getElementById("folregT4Ressimples").value = document.getElementById("folregT4RessimplesEdi").value;
-					document.getElementById("folregT5Ressimples").value = document.getElementById("folregT5RessimplesEdi").value;
-					document.getElementById("folregT6Ressimples").value = document.getElementById("folregT6RessimplesEdi").value;
-					document.getElementById("folregT7Ressimples").value = document.getElementById("folregT7RessimplesEdi").value;
-					document.getElementById("folregT8Ressimples").value = document.getElementById("folregT8RessimplesEdi").value;
-					document.getElementById("folregT9Ressimples").value = document.getElementById("folregT9RessimplesEdi").value;
+					
+					switchCases("folregT1Ressimples","folregT1RessimplesEdi");
+					switchCases("folregT2Ressimples","folregT2RessimplesEdi");
+					switchCases("folregT3Ressimples","folregT3RessimplesEdi");
+					switchCases("folregT4Ressimples","folregT4RessimplesEdi");
+					switchCases("folregT5Ressimples","folregT5RessimplesEdi");
+					switchCases("folregT6Ressimples","folregT6RessimplesEdi");
+					switchCases("folregT7Ressimples","folregT7RessimplesEdi");
+					switchCases("folregT8Ressimples","folregT8RessimplesEdi");
+					switchCases("folregT9Ressimples","folregT9RessimplesEdi");
+					
 					//Campos com Total da gráfico Simples
 					document.getElementById("folregTotalsimples1").value = document.getElementById("folregTotalsimples1Edi").value;
 					document.getElementById("folregTotalsimples2").value = document.getElementById("folregTotalsimples2Edi").value;
@@ -838,8 +921,6 @@
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 				//carregaRamdomico();
-				console.log("Prefim!")
-				populateCheckboxes();
 				console.log("carregaBody Carregado!")
 			}//fim carregaBody
 			
@@ -869,6 +950,7 @@
 							<div class="col-xs-12">
 								<div id="divCarrega" >
 									<!-- principais indices-->
+									Progid<input name="progid" id="progid" value="{{prog._id}}" />
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
 									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
@@ -1432,9 +1514,7 @@
 														<tbody>
 															<tr><!-- 1Reg -->
 																<td class="center">
-																	
-																		<span class="badge badge-purple">1</span>
-																	
+																	<span class="badge badge-purple">1</span>
 																</td>
 																<td>
 																	<label class="pos-rel">
@@ -1499,55 +1579,51 @@
 																<td id="checkboxContainer1" rowspan="9">
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT1tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT1tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples');">
+																			<span id="spanfolregT1tipodsimples" class="lbl"></span>
 																			<span name="checksimples1" id="checksimples1" class="label label-lg label-purple arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT2tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT2tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT2tipodsimples');">
+																			<span id="spanfolregT2tipodsimples" class="lbl"></span>
 																			<span  name="checksimples2" id="checksimples2" class="label label-lg label-warning arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT3tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT3tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT3tipodsimples');">
+																			<span id="spanfolregT3tipodsimples" class="lbl"></span>
 																			<span name="checksimples3" id="checksimples3" class="label label-lg label-alert arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT4tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT4tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT4tipodsimples');">
+																			<span id="spanfolregT4tipodsimples" class="lbl"></span>
 																			<span name="checksimples4" id="checksimples4" class="label label-lg label-info arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT5tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT5tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT5tipodsimples');">
+																			<span id="spanfolregT5tipodsimples" class="lbl"></span>
 																			<span name="checksimples5" id="checksimples5" class="label label-lg label-success arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT6tipodsimples" type="checkbox" class="ace">
-																			<span class="lbl"></span>
+																			<input name="folregT1tipodsimples" id="folregT6tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT6tipodsimples');">
+																			<span id="spanfolregT6tipodsimples" class="lbl"></span>
 																			<span name="checksimples6" id="checksimples6" class="label label-lg label-pink arrowed"></span>
 																		</label>
 																	</div>
 																</td>
-																
 															</tr>
-
 															<tr><!-- 2Reg -->
 																<td class="center">
-																	
 																		<span class="badge badge-gray">2</span>
-																	
 																</td>
 																<td>
 																	<label class="pos-rel">
@@ -1605,48 +1681,37 @@
 																	<span class="lbl"></span>
 																	<span class="label label-pink arrowed-in">&nbsp;-d</span>
 																</td>
-																
-																
 															</tr>
-
 															<tr><!-- 4Reg -->
 																<td class="center">
-																	
-																		<span class="badge badge-purple">4</span>
-																	
+																	<span class="badge badge-purple">4</span>
 																</td>
 																<td>
 																	<label class="pos-rel">
 																		<label class="pos-rel"><span class="label label-sm label-purple arrowed arrowed-righ RA">A</span></label></td>
 																	</label>
 																</td>
-																
 																<td>
 																	<input name="folregT4Ressimples" id="folregT3Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
-																	<span class="lbl"></span>
+																	<span name="spanfolregT4Ressimples" id="spanfolregT3Ressimples1" class="lbl"></span>
 																	<span class="label label-success arrowed-in">&nbsp;I</span>
 																
 																	<input name="folregT4Ressimples" id="folregT4Ressimples2"  type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
-																	<span class="lbl"></span>
+																	<span name="spanfolregT4Ressimples" id="spanfolregT4Ressimples2" class="lbl"></span>
 																	<span class="label label-yellow arrowed-in">&nbsp;E</span>
 																
 																	<input name="folregT4Ressimples" id="folregT4Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
-																	<span class="lbl"></span>
+																	<span name="spanfolregT4Ressimples" id="spanfolregT4Ressimples3" class="lbl"></span>
 																	<span class="label label-warning arrowed-in">+d</span>
 																
 																	<input name="folregT4Ressimples" id="folregT4Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI()">
-																	<span class="lbl"></span>
+																	<span name="spanfolregT4Ressimples" id="spanfolregT4Ressimples4" class="lbl"></span>
 																	<span class="label label-pink arrowed-in">&nbsp;-d</span>
 																</td>
-																
-																
 															</tr>
-
 															<tr><!-- 5Reg -->
 																<td class="center">
-																	
 																		<span class="badge badge-gray">5</span>
-																	
 																</td>
 																<td>
 																	<label class="pos-rel">
@@ -2194,9 +2259,7 @@
 
 														<tr><!-- 4Reg -->
 															<td class="center">
-																
-																	<span class="badge badge-purple">4</span>
-																
+																<span class="badge badge-purple">4</span>
 															</td>
 															<td>
 																<label class="pos-rel">
@@ -2350,9 +2413,7 @@
 
 														<tr><!-- 7Reg -->
 															<td class="center">
-																
-																	<span class="badge badge-purple">7</span>
-																
+																<span class="badge badge-purple">7</span>
 															</td>
 															<td>
 																<label class="pos-rel">
@@ -2666,126 +2727,126 @@
 				renderizarGrafico();
 			});
 
-		//######################################################################################################
-		//GRAFICO Duplo
-		// Referência para o gráfico
-        let graficoDuplo = null;
+			//######################################################################################################
+			//GRAFICO Duplo
+			// Referência para o gráfico
+			let graficoDuplo = null;
 
-        // Dados do gráfico Duplo
-        const dataDuplo = {
-            labels: ['Esquerda', 'Direita'], // Repete o rótulo
-            datasets: [
-                {
-                    label: 'I',
-                    backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
-                    data: [0, 0] // Repete os valores da primeira coluna
-                },
-                {
-                    label: 'E',
-                    backgroundColor: 'rgba(255, 255, 0, 0.5)', // Amarelo
-                    data: [0, 0] // Repete os valores da segunda coluna
-                },
-                {
-                    label: '+d',
-                    backgroundColor: 'rgba(255, 165, 0, 0.5)', // Laranja
-                    data: [0, 0] // Repete os valores da terceira coluna
-                },
-                {
-                    label: '-d',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)', // Rosa
-                    data: [0, 0] // Repete os valores da quarta coluna
-                }
-            ]
-        };
+			// Dados do gráfico Duplo
+			const dataDuplo = {
+				labels: ['Esquerda', 'Direita'], // Repete o rótulo
+				datasets: [
+					{
+						label: 'I',
+						backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+						data: [0, 0] // Repete os valores da primeira coluna
+					},
+					{
+						label: 'E',
+						backgroundColor: 'rgba(255, 255, 0, 0.5)', // Amarelo
+						data: [0, 0] // Repete os valores da segunda coluna
+					},
+					{
+						label: '+d',
+						backgroundColor: 'rgba(255, 165, 0, 0.5)', // Laranja
+						data: [0, 0] // Repete os valores da terceira coluna
+					},
+					{
+						label: '-d',
+						backgroundColor: 'rgba(255, 99, 132, 0.5)', // Rosa
+						data: [0, 0] // Repete os valores da quarta coluna
+					}
+				]
+			};
 
-        // Função para renderizar o gráfico
-        function renderizarGraficoDuplo() {
-            console.log('Renderizando gráfico duplo...');
-            
-            // Opções do gráfico
-            const chartOptions = {
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
-                }
-            };
+			// Função para renderizar o gráfico
+			function renderizarGraficoDuplo() {
+				console.log('Renderizando gráfico duplo...');
+				
+				// Opções do gráfico
+				const chartOptions = {
+					scales: {
+						x: { stacked: true },
+						y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+					}
+				};
 
-            // Configuração do gráfico
-            const config = {
-                type: 'bar',
-                data: dataDuplo,
-                options: chartOptions
-            };
+				// Configuração do gráfico
+				const config = {
+					type: 'bar',
+					data: dataDuplo,
+					options: chartOptions
+				};
 
-            const ctx = document.getElementById('doubleBarChart');
-            if (ctx) {
-                console.log('Elemento canvas encontrado.');
-                // Se já existe um gráfico, destruímos ele antes de renderizar um novo
-                if (graficoDuplo !== null) {
-                    console.log('Destruindo gráfico existente...');
-                    graficoDuplo.destroy();
-                }
-                console.log('Criando novo gráfico...');
-                graficoDuplo = new Chart(ctx, config);
-            } else {
-                console.error('Não foi possível encontrar o elemento canvas.');
-            }
-        }
+				const ctx = document.getElementById('doubleBarChart');
+				if (ctx) {
+					console.log('Elemento canvas encontrado.');
+					// Se já existe um gráfico, destruímos ele antes de renderizar um novo
+					if (graficoDuplo !== null) {
+						console.log('Destruindo gráfico existente...');
+						graficoDuplo.destroy();
+					}
+					console.log('Criando novo gráfico...');
+					graficoDuplo = new Chart(ctx, config);
+				} else {
+					console.error('Não foi possível encontrar o elemento canvas.');
+				}
+			}
 
-        // Função para atualizar os dados do gráfico e renderizá-lo
-        function atualizarDuploGrafico() {
-            console.log('Atualizando dados do gráfico...');
-            // Chama a função para calcular os totais
-            somaResEstDuplo();
-           
+			// Função para atualizar os dados do gráfico e renderizá-lo
+			function atualizarDuploGrafico() {
+				console.log('Atualizando dados do gráfico...');
+				// Chama a função para calcular os totais
+				somaResEstDuplo();
+			
 
-            // Obtém os valores dos campos de entrada e multiplica por 10
-            const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
-            const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
-            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
-            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
+				// Obtém os valores dos campos de entrada e multiplica por 10
+				const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
+				const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
+				const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
+				const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
 
-            const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
-            const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
-            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
-            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
+				const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
+				const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
+				const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
+				const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
 
-            // Atualiza os dados do gráfico
-            dataDuplo.datasets[0].data = [valoresqI, valordirI];
-            dataDuplo.datasets[1].data = [valoresqE, valordirE];
-            dataDuplo.datasets[2].data = [valoresqMaisD, valordirMaisD];
-            dataDuplo.datasets[3].data = [valoresqMenosD, valordirMenosD];
+				// Atualiza os dados do gráfico
+				dataDuplo.datasets[0].data = [valoresqI, valordirI];
+				dataDuplo.datasets[1].data = [valoresqE, valordirE];
+				dataDuplo.datasets[2].data = [valoresqMaisD, valordirMaisD];
+				dataDuplo.datasets[3].data = [valoresqMenosD, valordirMenosD];
 
-            // Atualiza o gráfico
-            if (graficoDuplo !== null) {
-                console.log('Atualizando gráfico...');
-                graficoDuplo.update();
-            } else {
-                console.error('O gráfico não foi inicializado corretamente.');
-            }
-        }
+				// Atualiza o gráfico
+				if (graficoDuplo !== null) {
+					console.log('Atualizando gráfico...');
+					graficoDuplo.update();
+				} else {
+					console.error('O gráfico não foi inicializado corretamente.');
+				}
+			}
 
-        // Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
-        document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
-            input.addEventListener("change", function() {
-                console.log('Input de esquerda alterado. Atualizando gráfico...');
-                atualizarDuploGrafico();
-            });
-        });
+			// Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
+			document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					console.log('Input de esquerda alterado. Atualizando gráfico...');
+					atualizarDuploGrafico();
+				});
+			});
 
-        document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
-            input.addEventListener("change", function() {
-                console.log('Input de direita alterado. Atualizando gráfico...');
-                atualizarDuploGrafico();
-            });
-        });
+			document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					console.log('Input de direita alterado. Atualizando gráfico...');
+					atualizarDuploGrafico();
+				});
+			});
 
-        // Chamar a função para renderizar o gráfico quando o DOM estiver pronto
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM pronto. Renderizando gráfico duplo...');
-            renderizarGraficoDuplo();
-        });
-		function showStimulusFieldsWithValues() {
+			// Chamar a função para renderizar o gráfico quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function() {
+				console.log('DOM pronto. Renderizando gráfico duplo...');
+				renderizarGraficoDuplo();
+			});
+			function showStimulusFieldsWithValues() {
 				var fields = ['folregEsta', 'folregEstb', 'folregEstc', 'folregEstd', 'folregEste', 'folregEstf', 'folregEstg', 'folregEsth', 'folregEsti'];
 				
 				fields.forEach(function(fieldId) {
@@ -2848,25 +2909,25 @@
 
 			};
 			document.addEventListener("DOMContentLoaded", function() {
-            const selects = [
-                'folregBeneid',
-                'folregProgtipoid',
-                'folregPrognivelid',
-                
-            ];
+				const selects = [
+					'folregBeneid',
+					'folregProgtipoid',
+					'folregPrognivelid',
+					
+				];
 
-            selects.forEach(function(id) {
-                var select = document.getElementById(id);
+				selects.forEach(function(id) {
+					var select = document.getElementById(id);
 
-                select.addEventListener("mousedown", function(event) {
-                    event.preventDefault();
-                });
+					select.addEventListener("mousedown", function(event) {
+						event.preventDefault();
+					});
 
-                select.addEventListener("keydown", function(event) {
-                    event.preventDefault();
-                });
-            });
-        });
+					select.addEventListener("keydown", function(event) {
+						event.preventDefault();
+					});
+				});
+			});
 			// Função para popular os checkboxes
 			function populateCheckboxes(containerId, inputId) {
 				// Obtém o valor do campo de entrada
@@ -2900,15 +2961,15 @@
 			});
 			
 			function alteraSelect() {
-            // Obtém o valor do campo folregTiporegEdi
-            var folregTiporegEdi = document.getElementById('folregTiporegEdi').value;
+				// Obtém o valor do campo folregTiporegEdi
+				var folregTiporegEdi = document.getElementById('folregTiporegEdi').value;
 
-            // Obtém o select
-            var select = document.getElementById('folregTiporeg');
+				// Obtém o select
+				var select = document.getElementById('folregTiporeg');
 
-            // Define o valor do select conforme o campo folregTiporegEdi
-            select.value = folregTiporegEdi;
-        }
+				// Define o valor do select conforme o campo folregTiporegEdi
+				select.value = folregTiporegEdi;
+        	}
 		</script>
 	</body>
 </html>
