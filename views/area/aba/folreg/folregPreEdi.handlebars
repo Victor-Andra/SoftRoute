@@ -98,22 +98,22 @@
 				let totalMenosD = 0;
 
 				// Encontra todos os inputs de rádio marcados
-				let inputs = document.querySelectorAll('input[name$="Ressimples"]:checked');
+				let inputs = document.querySelectorAll('input[name$="Ressimplesradio"]:checked');
 
 				// Loop através de todos os inputs encontrados
 				inputs.forEach(function(input) {
 					// Verifica o valor do input
-					switch(input.value) {
-						case 'I':
+					switch((input.id).substring((input.id).length-1,(input.id).length)) {
+						case '1':
 							totalI++;
 							break;
-						case 'E':
+						case '2':
 							totalE++;
 							break;
-						case '+d':
+						case '3':
 							totalMaisD++;
 							break;
-						case '-d':
+						case '4':
 							totalMenosD++;
 							break;
 						default:
@@ -122,10 +122,10 @@
 				});
 
 				// Atualiza os campos de input com os totais calculados
-				document.getElementById("folregTotalsimples1").value = totalI;
-				document.getElementById("folregTotalsimples2").value = totalE;
-				document.getElementById("folregTotalsimples3").value = totalMaisD;
-				document.getElementById("folregTotalsimples4").value = totalMenosD;
+				document.getElementById("folregTotalsimples_i").value = totalI;
+				document.getElementById("folregTotalsimples_e").value = totalE;
+				document.getElementById("folregTotalsimples_plusd").value = totalMaisD;
+				document.getElementById("folregTotalsimples_minusd").value = totalMenosD;
 			}
 
 			//###########################################################################
@@ -161,10 +161,10 @@
 			});
 
 				// Atualiza os campos de input com os totais calculados no lado esquerdo
-				document.getElementById("folregTotalduploesq1").value = totalEsqI;
-				document.getElementById("folregTotalduploesq2").value = totalEsqE;
-				document.getElementById("folregTotalduploesq3").value = totalEsqMaisD;
-				document.getElementById("folregTotalduploesq4").value = totalEsqMenosD;
+				document.getElementById("folregTotalduploesq_i").value = totalEsqI;
+				document.getElementById("folregTotalduploesq_e").value = totalEsqE;
+				document.getElementById("folregTotalduploesq_plusd").value = totalEsqMaisD;
+				document.getElementById("folregTotalduploesq_minusd").value = totalEsqMenosD;
 
 				// Variáveis para armazenar os totais do lado direito
 				let totalDirI = 0;
@@ -197,27 +197,27 @@
 				});
 
 				// Atualiza os campos de input com os totais calculados no lado direito
-				document.getElementById("folregTotalduplodir1").value = totalDirI;
-				document.getElementById("folregTotalduplodir2").value = totalDirE;
-				document.getElementById("folregTotalduplodir3").value = totalDirMaisD;
-				document.getElementById("folregTotalduplodir4").value = totalDirMenosD;
+				document.getElementById("folregTotalduplodir_i").value = totalDirI;
+				document.getElementById("folregTotalduplodir_e").value = totalDirE;
+				document.getElementById("folregTotalduplodir_plusd").value = totalDirMaisD;
+				document.getElementById("folregTotalduplodir_minusd").value = totalDirMenosD;
 			}
 
 			function atualizarGraficoDuplo() {
 				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado esquerdo
 				const valoresEsq = [
-					parseInt(document.getElementById("folregTotalduploesq1").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq2").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq3").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq4").value) * 10
+					parseInt(document.getElementById("folregTotalduploesq_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10
 				];
 
 				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado direito
 				const valoresDir = [
-					parseInt(document.getElementById("folregTotalduplodir1").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir2").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir3").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir4").value) * 10
+					parseInt(document.getElementById("folregTotalduplodir_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10
 				];
 
 				// Atualiza os dados do gráfico duplo
@@ -392,10 +392,10 @@
 					switchCases("folregT9Ressimples","folregT9RessimplesEdi");
 					
 					//Campos com Total da gráfico Simples
-					document.getElementById("folregTotalsimples1").value = document.getElementById("folregTotalsimples1Edi").value;
-					document.getElementById("folregTotalsimples2").value = document.getElementById("folregTotalsimples2Edi").value;
-					document.getElementById("folregTotalsimples3").value = document.getElementById("folregTotalsimples3Edi").value;
-					document.getElementById("folregTotalsimples4").value = document.getElementById("folregTotalsimples4Edi").value;
+					document.getElementById("folregTotalsimples_i").value = document.getElementById("folregTotalsimples1Edi").value;
+					document.getElementById("folregTotalsimples_e").value = document.getElementById("folregTotalsimples2Edi").value;
+					document.getElementById("folregTotalsimples_plusd").value = document.getElementById("folregTotalsimples3Edi").value;
+					document.getElementById("folregTotalsimples_minusd").value = document.getElementById("folregTotalsimples4Edi").value;
 					//Gráfico Simples
 					//popular radio box esquerda e Único
 					switch (document.getElementById("folregT1ResesquEdi").value){
@@ -597,15 +597,15 @@
 					document.getElementById("folregT9Tipodird").value = document.getElementById("folregT9TipodirdEdi").value;
 					
 					//Campos com Total da Esquerda do gráfico Duplo
-					document.getElementById("folregTotalduploesq1").value = document.getElementById("folregTotalduploesq1Edi").value;
-					document.getElementById("folregTotalduploesq2").value = document.getElementById("folregTotalduploesq2Edi").value;
-					document.getElementById("folregTotalduploesq3").value = document.getElementById("folregTotalduploesq3Edi").value;
-					document.getElementById("folregTotalduploesq4").value = document.getElementById("folregTotalduploesq4Edi").value;
+					document.getElementById("folregTotalduploesq_i").value = document.getElementById("folregTotalduploesq_iEdi").value;
+					document.getElementById("folregTotalduploesq_e").value = document.getElementById("folregTotalduploesq_eEdi").value;
+					document.getElementById("folregTotalduploesq_plusd").value = document.getElementById("folregTotalduploesq_plusdEdi").value;
+					document.getElementById("folregTotalduploesq_minusd").value = document.getElementById("folregTotalduploesq_minusdEdi").value;
 					//Campos com Total da Direita do gráfico Duplo
-					document.getElementById("folregTotalduplodir1").value = document.getElementById("folregTotalduplodir1Edi").value;
-					document.getElementById("folregTotalduplodir2").value = document.getElementById("folregTotalduplodir2Edi").value;
-					document.getElementById("folregTotalduplodir3").value = document.getElementById("folregTotalduplodir3Edi").value;
-					document.getElementById("folregTotalduplodir4").value = document.getElementById("folregTotalduplodir4Edi").value;
+					document.getElementById("folregTotalduplodir_i").value = document.getElementById("folregTotalduplodir_iEdi").value;
+					document.getElementById("folregTotalduplodir_e").value = document.getElementById("folregTotalduplodir_eEdi").value;
+					document.getElementById("folregTotalduplodir_plusd").value = document.getElementById("folregTotalduplodir_plusdEdi").value;
+					document.getElementById("folregTotalduplodir_minusd").value = document.getElementById("folregTotalduplodir_minusdEdi").value;
 
 					//Gráfico Duplo
 					//popular radio box esquerda
@@ -1096,18 +1096,18 @@
 									<input type="text" id="folregT8TipodirdEdi" name="folregT8TipodirdEdi" value="{{folreg.folreg_t8tipodird}}"/>
 									<input type="text" id="folregT9TipodirdEdi" name="folregT9TipodirdEdi" value="{{folreg.folreg_t9tipodird}}"/>
 									
-									<input type="text" id="folregTotalsimples1Edi" name="folregTotalsimples1Edi" value="{{folreg.folreg_totalsimples1}}"/>
-									<input type="text" id="folregTotalsimples2Edi" name="folregTotalsimples2Edi" value="{{folreg.folreg_totalsimples2}}"/>
-									<input type="text" id="folregTotalsimples3Edi" name="folregTotalsimples3Edi" value="{{folreg.folreg_totalsimples3}}"/>
-									<input type="text" id="folregTotalsimples4Edi" name="folregTotalsimples4Edi" value="{{folreg.folreg_totalsimples4}}"/>
-									<input type="text" id="folregTotalduploesq1Edi" name="folregTotalduploesq1Edi" value="{{folreg.folreg_totalduploesq1}}"/>
-									<input type="text" id="folregTotalduploesq2Edi" name="folregTotalduploesq2Edi" value="{{folreg.folreg_totalduploesq2}}"/>
-									<input type="text" id="folregTotalduploesq3Edi" name="folregTotalduploesq3Edi" value="{{folreg.folreg_totalduploesq3}}"/>
-									<input type="text" id="folregTotalduploesq4Edi" name="folregTotalduploesq4Edi" value="{{folreg.folreg_totalduploesq4}}"/>
-									<input type="text" id="folregTotalduplodir1Edi" name="folregTotalduplodir1Edi" value="{{folreg.folreg_totalduplodir1}}"/>
-									<input type="text" id="folregTotalduplodir2Edi" name="folregTotalduplodir2Edi" value="{{folreg.folreg_totalduplodir2}}"/>
-									<input type="text" id="folregTotalduplodir3Edi" name="folregTotalduplodir3Edi" value="{{folreg.folreg_totalduplodir3}}"/>
-									<input type="text" id="folregTotalduplodir4Edi" name="folregTotalduplodir4Edi" value="{{folreg.folreg_totalduplodir4}}"/>
+									<input type="text" id="folregTotalsimples1Edi" name="folregTotalsimples1Edi" value="{{folreg.folreg_totalsimples_i}}"/>
+									<input type="text" id="folregTotalsimples2Edi" name="folregTotalsimples2Edi" value="{{folreg.folreg_totalsimples_e}}"/>
+									<input type="text" id="folregTotalsimples3Edi" name="folregTotalsimples3Edi" value="{{folreg.folreg_totalsimples_plusd}}"/>
+									<input type="text" id="folregTotalsimples4Edi" name="folregTotalsimples4Edi" value="{{folreg.folreg_totalsimples_minusd}}"/>
+									<input type="text" id="folregTotalduploesq_iEdi" name="folregTotalduploesq_iEdi" value="{{folreg.folreg_totalduploesq_i}}"/>
+									<input type="text" id="folregTotalduploesq_eEdi" name="folregTotalduploesq_eEdi" value="{{folreg.folreg_totalduploesq_e}}"/>
+									<input type="text" id="folregTotalduploesq_plusdEdi" name="folregTotalduploesq_plusdEdi" value="{{folreg.folreg_totalduploesq_plusd}}"/>
+									<input type="text" id="folregTotalduploesq_minusdEdi" name="folregTotalduploesq_minusdEdi" value="{{folreg.folreg_totalduploesq_minusd}}"/>
+									<input type="text" id="folregTotalduplodir_iEdi" name="folregTotalduplodir_iEdi" value="{{folreg.folreg_totalduplodir_i}}"/>
+									<input type="text" id="folregTotalduplodir_eEdi" name="folregTotalduplodir_eEdi" value="{{folreg.folreg_totalduplodir_e}}"/>
+									<input type="text" id="folregTotalduplodir_plusdEdi" name="folregTotalduplodir_plusdEdi" value="{{folreg.folreg_totalduplodir_plusd}}"/>
+									<input type="text" id="folregTotalduplodir_minusdEdi" name="folregTotalduplodir_minusdEdi" value="{{folreg.folreg_totalduplodir_minusd}}"/>
 									
 									<input type="text" id="folregT1Resesqu" name="folregT1Resesqu" value="{{folreg.folreg_t1resesqu}}"/>
 									<input type="text" id="folregT2Resesqu" name="folregT2Resesqu" value="{{folreg.folreg_t2resesqu}}"/>
@@ -1881,10 +1881,10 @@
 																</td>
 																
 																<td colspan="3">
-																	<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalsimples1" id="folregTotalsimples1" type="text" style="width: 15%;" readonly/><!-- Valor para "I" -->
-																	<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalsimples2" id="folregTotalsimples2" type="text" style="width: 15%;" readonly/><!-- Valor para "E" -->
-																	<span class="label label-warning arrowed-in">+d</span><input name="folregTotalsimples3" id="folregTotalsimples3" type="text" style="width: 15%;" readonly/><!-- Valor para "+d" -->
-																	<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalsimples4" id="folregTotalsimples4" type="text" style="width: 15%;" readonly/><!-- Valor para "-d" -->														
+																	<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalsimples_i" id="folregTotalsimples_i" type="text" style="width: 15%;" readonly/><!-- Valor para "I" -->
+																	<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalsimples_e" id="folregTotalsimples_e" type="text" style="width: 15%;" readonly/><!-- Valor para "E" -->
+																	<span class="label label-warning arrowed-in">+d</span><input name="folregTotalsimples_plusd" id="folregTotalsimples_plusd" type="text" style="width: 15%;" readonly/><!-- Valor para "+d" -->
+																	<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalsimples_minusd" id="folregTotalsimples_minusd" type="text" style="width: 15%;" readonly/><!-- Valor para "-d" -->														
 																</td>
 															</tr>
 
@@ -2574,18 +2574,18 @@
 															</td>
 															
 															<td colspan="3">
-																<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalduploesq1" id="folregTotalduploesq1" type="text" style="width: 15%;" readonly/>
-																<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalduploesq2" id="folregTotalduploesq2" type="text" style="width: 15%;" readonly/>
-																<span class="label label-warning arrowed-in">+d</span><input name="folregTotalduploesq3" id="folregTotalduploesq3" type="text" style="width: 15%;" readonly/>	
-																<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalduploesq4" id="folregTotalduploesq4" type="text" style="width: 15%;" readonly/>																				
+																<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalduploesq_i" id="folregTotalduploesq_i" type="text" style="width: 15%;" readonly/>
+																<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalduploesq_e" id="folregTotalduploesq_e" type="text" style="width: 15%;" readonly/>
+																<span class="label label-warning arrowed-in">+d</span><input name="folregTotalduploesq_plusd" id="folregTotalduploesq_plusd" type="text" style="width: 15%;" readonly/>	
+																<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalduploesq_minusd" id="folregTotalduploesq_minusd" type="text" style="width: 15%;" readonly/>																				
 															</td>
 															
 															
 															<td colspan="3">
-																<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalduplodir1" id="folregTotalduplodir1" type="text" style="width: 15%;" readonly/>
-																<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalduplodir2" id="folregTotalduplodir2" type="text" style="width: 15%;" readonly/>
-																<span class="label label-warning arrowed-in">+d</span><input name="folregTotalduplodir3" id="folregTotalduplodir3" type="text" style="width: 15%;" readonly/>	
-																<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalduplodir4" id="folregTotalduplodir4" type="text" style="width: 15%;" readonly/>																				
+																<span class="label label-success arrowed-in">&nbsp;I</span><input name="folregTotalduplodir_i" id="folregTotalduplodir_i" type="text" style="width: 15%;" readonly/>
+																<span class="label label-yellow arrowed-in">&nbsp;E</span><input name="folregTotalduplodir_e" id="folregTotalduplodir_e" type="text" style="width: 15%;" readonly/>
+																<span class="label label-warning arrowed-in">+d</span><input name="folregTotalduplodir_plusd" id="folregTotalduplodir_plusd" type="text" style="width: 15%;" readonly/>	
+																<span class="label label-pink arrowed-in">&nbsp;-d</span><input name="folregTotalduplodir_minusd" id="folregTotalduplodir_minusd" type="text" style="width: 15%;" readonly/>																				
 															</td>
 															
 															
@@ -2698,10 +2698,10 @@
 				somaResEstSI();
 
 				// Obtém os valores dos campos de entrada e multiplica por 10
-				const valorI = parseInt(document.getElementById("folregTotalsimples1").value) * 10;
-				const valorE = parseInt(document.getElementById("folregTotalsimples2").value) * 10;
-				const valorMaisD = parseInt(document.getElementById("folregTotalsimples3").value) * 10;
-				const valorMenosD = parseInt(document.getElementById("folregTotalsimples4").value) * 10;
+				const valorI = parseInt(document.getElementById("folregTotalsimples_i").value) * 10;
+				const valorE = parseInt(document.getElementById("folregTotalsimples_e").value) * 10;
+				const valorMaisD = parseInt(document.getElementById("folregTotalsimples_plusd").value) * 10;
+				const valorMenosD = parseInt(document.getElementById("folregTotalsimples_minusd").value) * 10;
 
 				// Atualiza os dados do gráfico
 				data.datasets[0].data = [valorI];
@@ -2801,15 +2801,15 @@
 			
 
 				// Obtém os valores dos campos de entrada e multiplica por 10
-				const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
-				const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
-				const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
-				const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
+				const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10;
+				const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10;
+				const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10;
+				const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10;
 
-				const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
-				const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
-				const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
-				const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
+				const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10;
+				const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10;
+				const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10;
+				const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10;
 
 				// Atualiza os dados do gráfico
 				dataDuplo.datasets[0].data = [valoresqI, valordirI];

@@ -134,15 +134,15 @@
 													{{#each rels}}
 														<tbody>
 															<tr>
-																<td class="center">#</td>
+																<td class="center">{{inc @index}}</td>
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../nomecid}}
 																		<td>{{terapia_nomecid}}</td>
 																	{{/ifEqual}}
 																{{/each}}
 																<td>{{sessoes}}</td>
-																<td>{{valor}}</td>		
-																<td>{{total}}</td>				
+																<td>{{valor}}</td>
+																<td>{{total}}</td>
 															</tr>
 														</tbody>
 													{{/each}}

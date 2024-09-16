@@ -250,6 +250,10 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     } else {
                         return options.inverse(this);
                     }
+                },
+                inc: function (v1) {//Verifica 2 atributos vindos do banco que não sejam String
+                    //console.log("/"+v1)
+                    return v1 + 1;
                 }
             }
         }));

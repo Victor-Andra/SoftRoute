@@ -461,7 +461,7 @@ module.exports = {
                 res.render('admin/erro')
             }).finally(() =>{
                 if(resultado == true){
-                    //Volta para a debitsubcateg de listagem
+                    //Volta para a lista de Plano de tratamento
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
@@ -508,6 +508,41 @@ module.exports = {
                 }
             })
         })
+    },
+
+    lixoTrat(req,res){
+        let resposta = new Resposta()
+        let resultado
+        try{
+            tratClass.tratEditar(req,res).then((res)=>{
+                console.log("Atualização Realizada!")
+                console.log(res)
+                resultado = res;
+            }).catch((err) =>{
+                console.log("error1")
+                console.log(err)
+                resultado = err;
+                res.render('admin/erro')
+            }).finally(() =>{
+                if(resultado == true){
+                    //Volta para a lista de Plano de tratamento
+                    console.log("Listagem Realizada!")
+                    resposta.texto = "Atualizado com Sucesso!"
+                    resposta.sucesso = "true"
+                    this.listaTrat(req,res,resposta)
+                }else{
+                    //passar classe de erro
+                    console.log("error")
+                    console.log(resultado)
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    this.listaTrat(req,res,resposta)
+                }
+            })
+        } catch(err1){
+            console.log(err1)
+            res.render('admin/erro')
+        }
     }
 
 

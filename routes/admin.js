@@ -24,6 +24,11 @@ const especialidadeClass = require("../models/especialidade")
 const Especialidade = mongoose.model("tb_especialidade")
 const fncEspecialidade = require("../functions/fncEspecialidade")
 
+//especialidade do Plano de Tratamento
+const especialidadePlanoClass = require("../models/especialidadePlano")
+const EspecialidadePlano = mongoose.model("tb_especialidadePlano")
+const fncEspecialidadePlano = require("../functions/fncEspecialidadePlano")
+
 //especializacao
 const especializacaoClass = require("../models/especializacao")
 const Especializacao = mongoose.model("tb_especializacao")
@@ -1816,12 +1821,16 @@ router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//at
     fncTrat.atualizaTrat(req , res);
 })
 //Imprime plano tratamento trat
-router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Relsem Padrao
+router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona plano de tratamento
     fncTrat.tratImp(req,res);
 })
 //Deleta plano Selecionado
-router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
+router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta plano de tratamento
     fncTrat.deletaTrat(req, res);
+})
+//Envia para Lixeira o plano Selecionado
+router.get('/area/plano/lixo/:id', fncGeral.IsAuthenticated, (req,res) =>{//envia o plano de tratamento para lixeira
+    fncTrat.lixoTrat(req, res);
 })
 
 //Menu Extras ** Area Atendimentos Extras   
@@ -2813,6 +2822,36 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         })
 
         router.post('/ferramentas/especialidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Especialidadeimento
+            fncEspecialidade.atualizaEspecialidade(req, res);
+        })
+
+//Menu Ferramentas
+    //Especialidade do Plano de tratamento
+        router.get('/ferramentas/especialidadePlano/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especialidadePlanos
+            let resposta = new Resposta()
+            resposta.texto = ""
+            resposta.sucesso = ""
+            fncEspecialidadePlano.listaEspecialidadePlano(req, res, resposta);
+            
+        })
+
+        router.get('/ferramentas/especialidadePlano/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de especialidadePlano
+            fncEspecialidadePlano.carregaEspecialidadePlano(req, res);
+        })
+
+        router.post('/ferramentas/especialidadePlano/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona especialidadePlano
+            fncEspecialidadePlano.cadastraEspecialidadePlano(req, res);
+        })
+
+        router.get('/ferramentas/especialidadePlano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta especialidadePlano
+            fncEspecialidadePlano.deletaEspecialidadePlano(req, res);
+        })
+
+        router.get('/ferramentas/especialidadePlano/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de especialidadePlano
+            fncEspecialidade.carregaEspecialidadeEdi(req, res);
+        })
+
+        router.post('/ferramentas/especialidadePlano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Especialidadeimento
             fncEspecialidade.atualizaEspecialidade(req, res);
         })
 

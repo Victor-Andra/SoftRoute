@@ -155,10 +155,10 @@
 			});
 
 				// Atualiza os campos de input com os totais calculados no lado esquerdo
-				document.getElementById("folregTotalduploesq1").value = totalEsqI;
-				document.getElementById("folregTotalduploesq2").value = totalEsqE;
-				document.getElementById("folregTotalduploesq3").value = totalEsqMaisD;
-				document.getElementById("folregTotalduploesq4").value = totalEsqMenosD;
+				document.getElementById("folregTotalduploesq_i").value = totalEsqI;
+				document.getElementById("folregTotalduploesq_e").value = totalEsqE;
+				document.getElementById("folregTotalduploesq_plusd").value = totalEsqMaisD;
+				document.getElementById("folregTotalduploesq_minusd").value = totalEsqMenosD;
 
 				// Variáveis para armazenar os totais do lado direito
 				let totalDirI = 0;
@@ -191,27 +191,27 @@
 				});
 
 				// Atualiza os campos de input com os totais calculados no lado direito
-				document.getElementById("folregTotalduplodir1").value = totalDirI;
-				document.getElementById("folregTotalduplodir2").value = totalDirE;
-				document.getElementById("folregTotalduplodir3").value = totalDirMaisD;
-				document.getElementById("folregTotalduplodir4").value = totalDirMenosD;
+				document.getElementById("folregTotalduplodir_i").value = totalDirI;
+				document.getElementById("folregTotalduplodir_e").value = totalDirE;
+				document.getElementById("folregTotalduplodir_plusd").value = totalDirMaisD;
+				document.getElementById("folregTotalduplodir_minusd").value = totalDirMenosD;
 			}
 
 			function atualizarGraficoDuplo() {
 				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado esquerdo
 				const valoresEsq = [
-					parseInt(document.getElementById("folregTotalduploesq1").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq2").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq3").value) * 10,
-					parseInt(document.getElementById("folregTotalduploesq4").value) * 10
+					parseInt(document.getElementById("folregTotalduploesq_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10
 				];
 
 				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado direito
 				const valoresDir = [
-					parseInt(document.getElementById("folregTotalduplodir1").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir2").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir3").value) * 10,
-					parseInt(document.getElementById("folregTotalduplodir4").value) * 10
+					parseInt(document.getElementById("folregTotalduplodir_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10
 				];
 
 				// Atualiza os dados do gráfico duplo
@@ -839,15 +839,15 @@
            
 
             // Obtém os valores dos campos de entrada e multiplica por 10
-            const valoresqI = parseInt(document.getElementById("folregTotalduploesq1").value) * 10;
-            const valoresqE = parseInt(document.getElementById("folregTotalduploesq2").value) * 10;
-            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq3").value) * 10;
-            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq4").value) * 10;
+            const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10;
+            const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10;
+            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10;
+            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10;
 
-            const valordirI = parseInt(document.getElementById("folregTotalduplodir1").value) * 10;
-            const valordirE = parseInt(document.getElementById("folregTotalduplodir2").value) * 10;
-            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir3").value) * 10;
-            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir4").value) * 10;
+            const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10;
+            const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10;
+            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10;
+            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10;
 
             // Atualiza os dados do gráfico
             dataDuplo.datasets[0].data = [valoresqI, valordirI];

@@ -42,7 +42,8 @@ const TratSchema = mongoose.Schema({
     trat_usuidcad :{ type: ObjectId, required: false },
     trat_usuidedi :{ type: ObjectId, required: false },
     trat_datacad :{ type: Date, required: false },
-    trat_dataedi :{ type: Date, required: false }
+    trat_dataedi :{ type: Date, required: false },
+    trat_lixo :{ type: String, required: false }
 })
 
 class Trat{
@@ -87,7 +88,8 @@ class Trat{
         trat_usuidcad,
         trat_datacad,
         trat_usuidedi,
-        trat_dataedi
+        trat_dataedi,
+        trat_lixo,
 
         ){
         this.trat_id = trat_id,
@@ -130,7 +132,8 @@ class Trat{
         this.trat_usuidcad = trat_usuidcad,
         this.trat_datacad = trat_datacad,
         this.trat_usuidedi = trat_usuidedi,
-        this.trat_dataedi = trat_dataedi   
+        this.trat_dataedi = trat_dataedi,
+        this.trat_lixo = trat_lixo
     }
 }
 
@@ -194,10 +197,48 @@ module.exports = {TratModel,TratSchema,
         trat_objetivoavd : req.body.tratObjetivoavd,
         //Dados para de Sistema, quem fez, data criação e quem alterou
         trat_usuidedi: usuarioAtual,
-        trat_dataedi : dataAtual
+        trat_dataedi : dataAtual,
+        trat_lixo : "false"
+        
         }}
         ).then((res) =>{
             console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+        })
+        return resultado;
+    },
+    tratLixo: async (req, res) => {
+        let dataAtual = new Date();
+        let resultado;
+        let lvlUsu = req.cookies['lvlUsu'];
+        let usuarioAtual = req.cookies['idUsu'];
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
+        let tratId = new ObjectId(req.body.id);
+        //Pega data atual
+        console.log("req.body.id:"+req.body.id)
+        console.log("tratId:"+tratId)
+        
+        //Realiza Atualização
+        await TratModel.findByIdAndUpdate(req.body.tratId, 
+            {$set: {
+        //Dados para o Sistema: quem fez, data criação ou alteração
+        trat_usuidedi: usuarioAtual,
+        trat_dataedi : dataAtual,
+        trat_lixo : "true"
+        
+        }}
+        ).then((res) =>{
+            console.log("Encaminhado para a Lixeira")
             resultado = true;
         }).catch((err) =>{
             console.log("erro mongo:")
@@ -256,7 +297,8 @@ module.exports = {TratModel,TratSchema,
             trat_objetivoavd : req.body.tratObjetivoavd,
             //Dados para de Sistema, quem fez, data criação e quem alterou
             trat_usuidcad : usuarioAtual,
-            trat_datacad : dataAtual
+            trat_datacad : dataAtual,
+            trat_lixo : "false"
             
         });
         console.log("newTrat save");
