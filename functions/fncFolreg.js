@@ -83,7 +83,7 @@ module.exports = {
     },
 
     preCarregaFolreg(req,res){
-        let usuarioAtual = req.cookies['idUsu'];
+        let usuarioAtualId = req.cookies['idUsu'];
         Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             Conv.find().then((conv)=>{
@@ -98,8 +98,9 @@ module.exports = {
                                     Progdica.find().then((progdica)=>{
                                         Progtipo.find().then((progtipo)=>{
                                             Prognivel.find().then((prognivel)=>{
-                                                res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
-        })})})})})})})})})}).catch((err) =>{
+                                                Usuario.findOne({_id: usuarioAtualId}).then((usuarioAtual)=>{
+                                                    res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
+        })})})})})})})})})})}).catch((err) =>{
             console.log(err);
             req.flash("error_message", "houve um erro ao listar escolas");
             res.redirect('admin/erro');

@@ -136,6 +136,7 @@
 				document.getElementById("folregTotalsimples_e").value = totalE;
 				document.getElementById("folregTotalsimples_plusd").value = totalMaisD;
 				document.getElementById("folregTotalsimples_minusd").value = totalMenosD;
+				atualizarEAtualizarGrafico();
 			}
 
 			//###########################################################################
@@ -211,6 +212,7 @@
 				document.getElementById("folregTotalduplodir_e").value = totalDirE;
 				document.getElementById("folregTotalduplodir_plusd").value = totalDirMaisD;
 				document.getElementById("folregTotalduplodir_minusd").value = totalDirMenosD;
+				atualizarDuploGrafico();
 			}
 
 			function atualizarGraficoDuplo() {
@@ -337,7 +339,7 @@
 									<!-- principais indices-->
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
-									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
+									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual._id}}" />
 									progsetid<input name="folregSetid" id="folregSetid" value="{{progset._id}}"  />
 									
 									<!-- campos oriundos do Programa ABA-->
@@ -499,7 +501,7 @@
 													<label>Técnico Aplicador</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="folregUsuid" id="folregUsuid" class="chosen-select" data-placeholder="Escolha..." >
+															<select name="folregUsuid" id="folregUsuid" class="chosen-select" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
@@ -1865,8 +1867,7 @@
 			// Função para atualizar os dados do gráfico e renderizá-lo
 			function atualizarEAtualizarGrafico() {
 				// Chama a função para calcular os totais
-				somaResEstSI();
-
+console.log("ALOS");
 				// Obtém os valores dos campos de entrada e multiplica por 10
 				const valorI = parseInt(document.getElementById("folregTotalsimples_i").value) * 10;
 				const valorE = parseInt(document.getElementById("folregTotalsimples_e").value) * 10;
@@ -1965,11 +1966,7 @@
 
         // Função para atualizar os dados do gráfico e renderizá-lo
         function atualizarDuploGrafico() {
-            console.log('Atualizando dados do gráfico...');
             // Chama a função para calcular os totais
-            somaResEstDuplo();
-           
-
             // Obtém os valores dos campos de entrada e multiplica por 10
             const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10;
             const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10;

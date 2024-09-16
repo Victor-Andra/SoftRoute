@@ -18,6 +18,13 @@
 				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
+			function checkNoventaDias(){
+				var date1 = new Date(document.getElementById("dataFilDe").value);
+				var date2 = new Date(document.getElementById("dataFilAte").value);
+				var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+				var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+				return diffDays > 90;
+			}
 			function carregaBody(){
 				/*
 				let sessoes = document.getElementsByName("sessoes")
@@ -42,7 +49,7 @@
 							<li class="active">Relatório de Consolidado de Valores por Terapia</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" action="/menu/atendimento/relatendvalconss" method="POST">
+					<form role="form" action="/menu/atendimento/atendreltera/relatendterapiaconss" method="POST">
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
@@ -51,12 +58,6 @@
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" />
-								<label>Beneficiário: </label>
-								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar
@@ -126,7 +127,7 @@
 													<thead>
 														<tr>
 															<th class="center">#</th>
-															<th>Terapia</th>
+															<th>Terapeuta</th>
 															<th>Sessões</th>
 															<th>Valor da Sessão</th>
 															<th>Valor Total</th>															
@@ -136,9 +137,9 @@
 														<tbody>
 															<tr>
 																<td class="center">#</td>
-																{{#each ../terapias}}
-																	{{#ifEqual this._id ../nomecid}}
-																		<td>{{terapia_nomecid}}</td>
+																{{#each ../usuarios}}<!-- Ok -->
+																	{{#ifEqual this._id ../usu_id}}
+																		{{usuario_nome}}
 																	{{/ifEqual}}
 																{{/each}}
 																<td>{{sessoes}}</td>
