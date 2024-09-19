@@ -121,6 +121,7 @@ module.exports = {
                             Progv.find().then((progv)=>{
                                 console.log(" req.params.idProg: "+ req.params.idProg)
                                 Prog.findOne({_id: req.params.idProg}).then((prog)=>{
+                                    console.log(" req.params.idProgset: "+ req.params.idProgset)
                                     Progset.findOne({_id: req.params.id}).then((progset)=>{
                                         Progdica.find().then((progdica)=>{
                                             Progtipo.find().then((progtipo)=>{
@@ -161,7 +162,7 @@ module.exports = {
             }
         })
     },
-
+ 
     atualizaFolreg(req,res){
         let resultado
         let resposta = new Resposta()

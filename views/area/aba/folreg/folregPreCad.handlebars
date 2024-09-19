@@ -69,6 +69,15 @@
 				}
 			}
 
+			function preencherInputAlvo(inputName,index) {
+				let elementoAlvo = document.getElementById(inputName);
+				if (elementoAlvo.checked == true) {
+					document.getElementById(inputName+index).value = "true";
+				} else {
+					document.getElementById(inputName+index).value = "false";
+				}
+			}
+
 			function mudaRegistro() {
 				let tipodoc = document.getElementById("folregTiporeg").value;
 				console.log(tipodoc)
@@ -299,8 +308,8 @@
 				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
 				
 				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
-				document.getElementById("progsetDesc").value = document.getElementById("setDescr").value;
-				document.getElementById("progsetObs").value = document.getElementById("setObs").value;
+				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
+				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
 				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
 				//document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
 
@@ -436,13 +445,13 @@
 													<label>Descrição do SET</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
+															<textarea type="text" name="folregSetdescr" id="folregSetdescr" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
 														</div>
 													</div>
 													<label>Observações do SET</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
+															<textarea type="text" name="folregSetobs" id="folregSetobs" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
 														</div>
 													</div>
 												</div>
@@ -776,55 +785,58 @@
 																</td>
 																<td id="checkboxContainer1" rowspan="9">
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT1tipodsimples1" id="folregT1tipodsimples1" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT1tipodsimples" id="folregT1tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples');">
+																			<input name="folregT1tipodsimples" id="folregT1tipodsimples" type="checkbox" class="ace" onchange="javascript:preencherInputAlvo('folregT1tipodsimples','1');">
 																			<span class="lbl"></span>
 																			<span name="checksimples1" id="checksimples1" class="label label-lg label-purple arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT2tipodsimples2" id="folregT2tipodsimples2" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT2tipodsimples" id="folregT2tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples2');">
+																			<input name="folregT2tipodsimples" id="folregT2tipodsimples" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT2tipodsimples','2');">
 																			<span class="lbl"></span>
 																			<span  name="checksimples2" id="checksimples2" class="label label-lg label-warning arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT3tipodsimples3" id="folregT3tipodsimples3" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT3tipodsimples" id="folregT3tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples3');">
+																			<input name="folregT3tipodsimples" id="folregT3tipodsimples" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT3tipodsimples','3');">
 																			<span class="lbl"></span>
 																			<span name="checksimples3" id="checksimples3" class="label label-lg label-alert arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT4tipodsimples4" id="folregT4tipodsimples4" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT4tipodsimples" id="folregT4tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples4');">
+																			<input name="folregT4tipodsimples" id="folregT4tipodsimples" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT4tipodsimples','4');">
 																			<span class="lbl"></span>
 																			<span name="checksimples4" id="checksimples4" class="label label-lg label-info arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT5tipodsimples5" id="folregT5tipodsimples5" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT5tipodsimples" id="folregT5tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples5');">
+																			<input name="folregT5tipodsimples" id="folregT5tipodsimples" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT5tipodsimples','5');">
 																			<span class="lbl"></span>
 																			<span name="checksimples5" id="checksimples5" class="label label-lg label-success arrowed"></span>
 																		</label>
 																	</div>
 																	<div class="checkbox" style="display: none;">
+																		<input name="folregT6tipodsimples6" id="folregT6tipodsimples6" hidden type="text" value="false" >
 																		<label>
-																			<input name="folregT6tipodsimples" id="folregT6tipodsimples" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodsimples6');">
+																			<input name="folregT6tipodsimples" id="folregT6tipodsimples" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT6tipodsimples','6');">
 																			<span class="lbl"></span>
 																			<span name="checksimples6" id="checksimples6" class="label label-lg label-pink arrowed"></span>
 																		</label>
 																	</div>
 																</td>
 															</tr>
-
 															<tr><!-- 2Reg -->
 																<td class="center">
-																	
-																		<span class="badge badge-gray">2</span>
-																	
+																	<span class="badge badge-gray">2</span>
 																</td>
 																<td>
 																	<label class="pos-rel">
@@ -1162,32 +1174,32 @@
 															<span class="label label-lg label-success arrowed-right">P1</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">At</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae2"  type="radio" class="ace" value="2" onchange="javascript:marcaImput('folregPassodicae','2','2')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae2"  type="radio" class="ace" value="2" onchange="javascript:marcaRadioImput('folregPassodicae','2','2')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-danger arrowed-right">P2</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">2s+At</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae3"  type="radio" class="ace" value="3" onchange="javascript:marcaImput('folregPassodicae','3','3')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae3"  type="radio" class="ace" value="3" onchange="javascript:marcaRadioImput('folregPassodicae','3','3')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-danger arrowed-right">P3</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap1</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae4"  type="radio" class="ace" value="4" onchange="javascript:marcaImput('folregPassodicae','4','4')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae4"  type="radio" class="ace" value="4" onchange="javascript:marcaRadioImput('folregPassodicae','4','4')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-danger arrowed-right">P4</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">3s+Ap2</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae5"  type="radio" class="ace" value="5" onchange="javascript:marcaImput('folregPassodicae','5','5')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae5"  type="radio" class="ace" value="5" onchange="javascript:marcaRadioImput('folregPassodicae','5','5')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-danger arrowed-right">P5</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">4s+Ap2</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae6"  type="radio" class="ace" value="6" onchange="javascript:marcaImput('folregPassodicae','6','6')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae6"  type="radio" class="ace" value="6" onchange="javascript:marcaRadioImput('folregPassodicae','6','6')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-danger arrowed-right">P6</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Es+Ap2</span>
 															<br><br>
-															<input name="folregPassodicaeradio" id="folregPassodicae7"  type="radio" class="ace" value="7" onchange="javascript:marcaImput('folregPassodicae','7','7')" />
+															<input name="folregPassodicaeradio" id="folregPassodicae7"  type="radio" class="ace" value="7" onchange="javascript:marcaRadioImput('folregPassodicae','7','7')" />
 															<span class="lbl"></span>
 															<span class="label label-lg label-purple arrowed-right">P7</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
@@ -1195,43 +1207,49 @@
 														<td id="checkboxContainer2" rowspan="9"><!-- TIPO DE DICA DA ESQUERDA QUANDO GRAFICO DUPLO -->
 															<input name="folregTipodicaproge" id="folregTipodicaproge"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 															<div class="checkbox" style="display: none;">
+																<input name="folregT1tipodesqu1" id="folregT1tipodesqu1" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodesqu');" />
+																	<input name="folregT1tipodesqu" id="folregT1tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT1tipodesqu','1');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-purple arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT2tipodesqu2" id="folregT2tipodesqu2" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT2tipodesqu" id="folregT2tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT2tipodesqu');" />
+																	<input name="folregT2tipodesqu" id="folregT2tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT2tipodesqu','2');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-warning arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT3tipodesqu3" id="folregT3tipodesqu3" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT3tipodesqu" id="folregT3tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT3tipodesqu');" />
+																	<input name="folregT3tipodesqu" id="folregT3tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT3tipodesqu','3');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-alert arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT4tipodesqu4" id="folregT4tipodesqu4" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT4tipodesqu" id="folregT4tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT4tipodesqu');" />
+																	<input name="folregT4tipodesqu" id="folregT4tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT4tipodesqu','4');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-info arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT5tipodesqu5" id="folregT5tipodesqu5" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT5tipodesqu" id="folregT5tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT5tipodesqu');" />
+																	<input name="folregT5tipodesqu" id="folregT5tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT5tipodesqu','5');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-success arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT6tipodesqu6" id="folregT6tipodesqu6" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT6tipodesqu" id="folregT6tipodesqu" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT6tipodesqu');" />
+																	<input name="folregT6tipodesqu" id="folregT6tipodesqu" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT6tipodesqu','6');" />
 																	<span class="lbl"></span>
 																	<span name="checkduploe1" id="checkduploe1" class="label label-lg label-pink arrowed"></span>
 																</label>
@@ -1293,48 +1311,52 @@
 															<span class="lbl"></span>
 															<span class="label label-lg label-purple arrowed-right">P7</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
-
 														</td>
 														<td id="checkboxContainer3" rowspan="9"><!-- TIPO DE DICA DA DIREITA QUANDO GRAFICO DUPLO -->
-															<input name="folregTipodicaprogd" id="folregTipodicaprogd"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 															<div class="checkbox" style="display: none;">
+																<input name="folregT1tipodird1" id="folregT1tipodird1" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT1tipodird');" />
+																	<input name="folregT1tipodird" id="folregT1tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT1tipodird','1');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-purple arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT2tipodird2" id="folregT2tipodird2" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT2tipodird" id="folregT2tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT2tipodird');" />
+																	<input name="folregT2tipodird" id="folregT2tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT2tipodird','2');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-warning arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT3tipodird3" id="folregT3tipodird3" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT3tipodird" id="folregT3tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT3tipodird');" />
+																	<input name="folregT3tipodird" id="folregT3tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT3tipodird','3');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-alert arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT4tipodird4" id="folregT4tipodird4" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT4tipodird" id="folregT4tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT4tipodird');" />
+																	<input name="folregT4tipodird" id="folregT4tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT4tipodird','4');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-info arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT5tipodird5" id="folregT5tipodird5" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT5tipodird" id="folregT5tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT5tipodird');" />
+																	<input name="folregT5tipodird" id="folregT5tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT5tipodird','5');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-success arrowed"></span>
 																</label>
 															</div>
 															<div class="checkbox" style="display: none;">
+																<input name="folregT6tipodird6" id="folregT6tipodird6" type="text" hidden value="false" />
 																<label>
-																	<input name="folregT6tipodird" id="folregT6tipodird" type="checkbox" class="ace" onchange="javascript:marcaImput('folregT6tipodird');" />
+																	<input name="folregT6tipodird" id="folregT6tipodird" type="checkbox" value="false" class="ace" onchange="javascript:preencherInputAlvo('folregT6tipodird','6');" />
 																	<span class="lbl"></span>
 																	<span name="checkduplod1" id="checkduplod1" class="label label-lg label-pink arrowed"></span>
 																</label>
@@ -1449,7 +1471,7 @@
 															</label>
 														</td>
 														<td>
-															<input name="folregT4Resesqu" id="folregT4Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT4Resesqu" id="folregT4Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT4Resesquradio" id="folregT4Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT4Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1468,7 +1490,7 @@
 															<span class="label label-pink arrowed-in">&nbsp;-d</span>
 														</td>
 														<td>
-															<input name="folregT4Resdir" id="folregT4Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT4Resdir" id="folregT4Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT4Resdirradio" id="folregT4Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT4Resdir','1','I');" />
 															<span class="lbl"></span>
@@ -1497,7 +1519,7 @@
 															</label>
 														</td>
 														<td>
-															<input name="folregT5Resesqu" id="folregT5Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT5Resesqu" id="folregT5Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT5Resesquradio" id="folregT5Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT5Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1516,7 +1538,7 @@
 															<span class="label label-pink arrowed-in">&nbsp;-d</span>
 														</td>
 														<td>
-															<input name="folregT5Resdir" id="folregT5Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT5Resdir" id="folregT5Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT5Resdirradio" id="folregT5Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT5Resdir','1','I');" />
 															<span class="lbl"></span>
@@ -1545,7 +1567,7 @@
 															</label>
 														</td>
 														<td>
-															<input name="folregT6Resesqu" id="folregT6Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT6Resesqu" id="folregT6Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT6Resesquradio" id="folregT6Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT6Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1564,7 +1586,7 @@
 															<span class="label label-pink arrowed-in">&nbsp;-d</span>
 														</td>
 														<td>
-															<input name="folregT6Resdir" id="folregT6Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT6Resdir" id="folregT6Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT6Resdirradio" id="folregT6Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT6Resdir','1','I');" />
 															<span class="lbl"></span>
@@ -1594,7 +1616,7 @@
 														</td>
 														
 														<td>
-															<input name="folregT7Resesqu" id="folregT7Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT7Resesqu" id="folregT7Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT7Resesquradio" id="folregT7Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT7Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1613,7 +1635,7 @@
 															<span class="label label-pink arrowed-in">&nbsp;-d</span>
 														</td>
 														<td>
-															<input name="folregT7Resdir" id="folregT7Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT7Resdir" id="folregT7Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT7Resdirradio" id="folregT7Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT7Resdir','1','I');" />
 															<span class="lbl"></span>
@@ -1642,7 +1664,7 @@
 															</label>
 														</td>
 														<td>
-															<input name="folregT8Resesqu" id="folregT8Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT8Resesqu" id="folregT8Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT8Resesquradio" id="folregT8Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT8Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1661,7 +1683,7 @@
 															<span class="label label-pink arrowed-in">&nbsp;-d</span>
 														</td>
 														<td>
-															<input name="folregT8Resdir" id="folregT8Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT8Resdir" id="folregT8Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT8Resdirradio" id="folregT8Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT8Resdir','1','I');" />
 															<span class="lbl"></span>
@@ -1696,7 +1718,7 @@
 														</td>
 														
 														<td>
-															<input name="folregT9Resesqu" id="folregT9Resesqu"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT9Resesqu" id="folregT9Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT9Resesquradio" id="folregT9Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT9Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -1717,7 +1739,7 @@
 														
 														
 														<td>
-															<input name="folregT9Resdir" id="folregT9Resdir"  type="radio" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT9Resdir" id="folregT9Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT9Resdirradio" id="folregT9Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT9Resdir','1','I');" />
 															<span class="lbl"></span>
