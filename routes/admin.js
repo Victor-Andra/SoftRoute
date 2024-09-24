@@ -1540,7 +1540,14 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
     })
 
     router.get('/beneficiario/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta bene
-      fncBene.deletaBene(req, res); 
+        let potinho = Object.assign(new PoteBiscoito, req.cookies);
+        if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0") {
+            fncBene.deletaBene(req, res); 
+        } else {
+            console.log("Acesso NEGADO!");
+            let lvl = "x";
+            res.render("ferramentas/usuario/login", {nivel: lvl});
+        }
     })
 
     router.get('/beneficiario/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene

@@ -2356,7 +2356,6 @@ module.exports = {
             busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false };
         }
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
-            b.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             Agenda.find(busca).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2457,7 +2456,7 @@ module.exports = {
                                         }
                                     }
                                 })
-
+                                b.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                                 agenda.sort(function(a, b) {
                                     let h1 = a.agenda_hora.substring(0,2);
                                     let m1 = a.agenda_hora.substring(3,5);

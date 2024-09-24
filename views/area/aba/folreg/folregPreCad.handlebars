@@ -296,6 +296,9 @@
 			}
 
 			function carregaBody(){
+				if (document.getElementById("tiporeg").value != null){
+					document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
+				}
 				popularCheckboxDicaTipo();
 				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
@@ -311,7 +314,7 @@
 				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
 				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
 				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
-				//document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
+				
 
 				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
 				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
@@ -361,7 +364,7 @@
 									progsetdesc<input name="setDescr" id="setDescr" value="{{progset.progset_desc}}" />
 									progsetobs<input name="setObs" id="setObs" value="{{progset.progset_obs}}" />
 									progsetqt<input name="qtEst" id="qtEst" value="{{progset.progset_qtest}}" />
-									<!-- <input name="tiporeg" id="tiporeg" value="{{progset.progset_tiporeg}}" /> -->
+									<input name="tiporeg" id="tiporeg" value="{{progset.progset_tiporeg}}" />
 									
 									<!-- campos oriundos do SET para atualitizar os estímulos-->
 									a<input name="folrega" id="folrega" value="{{progset.progset_esta}}" />

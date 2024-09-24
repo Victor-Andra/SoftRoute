@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Notas de Supervisão</title>
+		<script type="text/javascript">
+			function addTrObs(){
+				let qtd = (parseInt(document.getElementById("qtdTrNotasupObs").value) + 1);
+				document.getElementById("qtdTrNotasupObs").value = qtd;
+				//
+				var originalRow = document.getElementById('trNotasupObs_0');
+				// Clone the original row
+				var newRow = originalRow.cloneNode(true);
+
+				// Find the current index from the original row's id
+				var originalIndex = parseInt(originalRow.id.match(/\d+/)[0]);
+				var newIndex = parseInt(document.getElementById("qtdTrNotasupObs").value);
+
+				// Update the id of the new row
+				newRow.id = 'trNotasupObs_' + newIndex;
+
+				// Update the ids and names of the children elements
+				var children = newRow.querySelectorAll('[id], [name]');
+				children.forEach(function(child) {
+					if (child.id) {
+						child.id = child.id.replace('_' + originalIndex, '_' + newIndex);
+					}
+					if (child.name) {
+						child.name = child.name.replace('_' + originalIndex, '_' + newIndex);
+					}
+				});
+
+				document.getElementById("tbody_NotasupObs").append(newRow);
+			}
+
+			function removeTrObs(elemento) {
+				let qtd = document.getElementById("qtdTrNotasupObs").value;
+				let campo = elemento.id;
+				let numero = parseInt(campo.substring((campo.length - 1), campo.length));
+				document.getElementById("trNotasupObs_"+numero).remove();
+				if (numero < parseInt(qtd)) {
+					let aux = qtd - numero;
+					for (var i = 0; i < aux; i++) {
+						//numero = numero + 1;
+						var originalRow = document.getElementById('trNotasupObs_'+(numero + 1));
+						var originalIndex = parseInt(originalRow.id.match(/\d+/)[0]);
+
+						originalRow.id = ("trNotasupObs_"+numero);
+						var children = originalRow.querySelectorAll('[id], [name]');
+						children.forEach(function(child) {
+							if (child.id) {
+								child.id = child.id.replace('_' + originalIndex, '_' + numero);
+							}
+							if (child.name) {
+								child.name = child.name.replace('_' + originalIndex, '_' + numero);
+							}
+						});
+						numero = numero + 1;
+					}
+				}
+				document.getElementById("qtdTrNotasupObs").value = (parseInt(qtd) - 1);
+				
+			}
+
+			function carregaBody() {
+				document.getElementById("notasupBeneid").value = document.getElementById("beneid").value;
+				let progsBene = document.getElementsByName("progBene");
+				let qtd = document.getElementById("qtdTrNotasupObs").value;
+				let beneid = document.getElementById("notasupBeneid").value;
+				let progOpts = document.getElementsByName("optProgId");
+
+				progOpts.forEach((po)=>{
+					let oculta = true;
+					progsBene.forEach((b)=>{
+						if ((""+b.id+"") == ("prog_"+beneid)){
+							console.log("poid: "+(""+po.id+""));
+							console.log("bvalue: "+(""+b.value+""));
+							if((""+po.id+"") == (""+b.value+"")){
+								oculta = false;
+							}
+						}
+					})
+					if (oculta){
+						po.style.display = 'none';
+					}
+				})
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Notas de Supervisão</a>
+							</li>
+
+							<li class="active">Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div id="divCarrega" hidden>
+								<table>
+									<thead>
+									</thead>
+									<tbody id="tbody_NotasupObs_0">
+										<tr id="trNotasupObs_0">
+											<td>
+												<div class="input-group">
+													<select name="notasupObsprogid_0" id="notasupObsprogid_0" class="chosen-select" value="Sem Info" onchange="" >
+														<option value="766f69643132333435366964">-</option>
+														{{#each Progtipos}}
+															<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</td>
+											<td>
+												<textarea type="text" name="notasupObsana_0" id="notasupObsana_0" class="form-control" ></textarea>
+											</td>
+											<td>
+												<textarea type="text" name="notasupObssugest_0" id="notasupObssugest_0" class="form-control" ></textarea>
+											</td>
+											<td>
+												<div class="widget-header">
+													<span class="widget-toolbar">
+														<a data-action="add">
+															<i id="notaSupObsI_0" class="red ace-icon fa fa-plus"  onclick="javascript:addTrObs(this);"></i>
+														</a>
+														<a data-action="remove">
+															<i id="notaSupObsI_0" class="red ace-icon fa fa-times"  onclick="javascript:removeTrObs(this);"></i>
+														</a>
+													</span>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								{{#each Progs}}
+									<input id="prog_{{prog_beneid}}" name="progBene" value="{{prog_tipo}}" />
+								{{/each}}
+							</div>
+							<form id="mainForm" name="mainForm" class="form-horizontal" action="/menu/area/aba/notasup/add" method="POST">
+								<div class="form-horizontal" role="form">
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box">
+											<div id="divOculta" hidden >
+												<input id="qtdTrNotasupObs" name="qtdTrNotasupObs" value="1" />
+												<input id="beneid" name="beneid" value="{{beneid}}" />
+											</div>
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho
+												</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-3">
+														<label for="id-date-picker-1"> Data Supervisão</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="notasupDatanotasup" name="notasupDatanotasup" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Hora Supervisão</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="notasupHoranotasup" name="notasupHoranotasup" type="text">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<label> Terapeuta</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="notasupTerapeutaid" id="notasupTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Beneficiário</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="notasupBeneid" id="notasupBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label for="id-date-picker-1"> Data Nascimento</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-3">
+																		<input id="notasupBenedatanasc" name="notasupBenedatanasc" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Idade</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<input type="text" name="notasupBeneidade" id="notasupBeneidade" class="form-control" />
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-sm-6">
+															<label> Tipo Supervisão</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="notasupTiposup" id="notasupTiposup" class="chosen-select" data-placeholder="Escolha..." >
+																			<option value="Direta">Direta</option>
+																			<option value="Indireta">Indireta</option>
+																			<option value="Avaliativa">Avaliativa</option>
+																			<option value="Outras">Outras</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label> Supervisor</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="notasupSupid" id="notasupSupid" class="chosen-select" data-placeholder="Escolha..." >
+																		{{#each Terapeutas}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+
+														
+													</div>
+
+												</div>
+											</div>
+										</div>	
+											
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bullseye"></i>
+													Observações Comportamentais
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<label> Topografias Comportamentais </label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<textarea type="text" name="notasupTopocomp" id="notasupTopocomp" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-2">
+															<label> Fuga / Evitação</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="notasupFugaevit" id="notasupFugaevit" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-3">
+															<label> Atenção</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="notasupAtencao" id="notasupAtencao" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Tangível</label>
+															<div class="form-group">
+																<div class="col-sm-3">
+																	<input type="text" name="notasupTangivel" id="notasupTangivel" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-3">
+															<label> Automático</label>
+															<div class="form-group">
+																<div class="col-sm-2">
+																	<input type="text" name="notasupAutomatico" id="notasupAutomatico" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+
+
+														</div>
+														<label> Notas Narrativas </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<textarea type="text" name="notasupNotanarratfunc" id="notasupNotanarratfunc" placeholder="" class="form-control" ></textarea>
+															</div>
+														</div>
+
+												</div>
+											</div>
+										
+										
+										</div>
+
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-video-camera"></i>
+													Métodos de Gravação das Sessões
+												</h4>
+
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+
+													<div class="row">
+
+														<div class="col-sm-4">
+															<label> ABC Frequência</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupAbc" id="notasupAbc" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-4">
+															<label> Duração</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupDuracao" id="notasupDuracao" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-sm-4">
+															<label> Taxa</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupTaxa" id="notasupTaxa" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+													<div class="row">
+														<div class="col-sm-4">
+															<label> Gravação do Evento</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupGravevento" id="notasupGravevento" class="form-control" />
+																</div>
+															</div>
+														</div>
+														
+														
+														<div class="col-sm-4">
+															<label> Produto Permanente</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupProdper" id="notasupProdper" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-4">
+															<label> Mandos Frequência</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<input type="text" name="notasupMandsfreq" id="notasupMandsfreq" class="form-control" />
+																</div>
+															</div>
+														</div>
+
+
+													</div>
+
+													<label> Notas Narrativas</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="notasupNotanarratgrav" id="notasupNotanarratgrav" placeholder="" class="form-control" ></textarea>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										
+										
+										</div>
+
+										<div id="subFormContainer"><!-- .Sub Formulário -->
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="ace-icon fa fa-comment-o"></i>
+														Observações dos Programas ABA
+													</h4>
+													<span class="widget-toolbar">
+														<a data-action="add">
+															<i class="red ace-icon fa fa-plus" onclick="javascript:addTrObs();"></i>
+														</a>
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+														<a href="#" data-action="fullscreen" class="orange2">
+															<i class="ace-icon fa fa-expand"></i>
+														</a>
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</span>
+												</div>	
+												
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-xs-12">
+																<div class="alert alert-info">
+																	<button type="button" class="close" data-dismiss="alert">
+																		<i class="ace-icon fa fa-times"></i>
+																	</button>
+																	<strong>Para cada supervisão você pode adicionar Análises e Sugestões para a quantidade de programas existentes para o beneficiário. Podendo ainda remover no "x" ou adicionar no "+".  </strong>
+																	
+																	<br>
+																</div>
+																<table id="dynamic-table-super" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+																	<thead>
+																		<tr>
+																			<td>
+																				<span class="label label-pink arrowed-in-right ">
+																					&nbsp;Programas
+																				</span>
+
+																			</td>
+																			<td>
+																				<span class="label label-pink arrowed-in-right ">
+																					&nbsp;Análise
+																				</span>
+																			</td>
+																			<td>
+																				<span class="label label-pink arrowed-in-right ">
+																					&nbsp;Sugestões
+																				</span>
+																			</td>
+																			<td>
+																				<span class="label label-pink arrowed-in-right ">
+																					&nbsp;Ações
+																				</span>
+																			</td>
+																		</th>
+																	</thead>
+																	<tbody id="tbody_NotasupObs">
+																		<tr id="trNotasupObs_1">
+																			<td>
+																				<div class="input-group">
+																					<select name="notasupObsprogid_1" id="notasupObsprogid_1" class="chosen-select" value="Sem Info" onchange="" >
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each Progtipos}}
+																							<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</td>
+																			<td>
+																				<textarea type="text" name="notasupObsana_1" id="notasupObsana_1" class="form-control" ></textarea>
+																			</td>
+																			<td>
+																				<textarea type="text" name="notasupObssugest_1" id="notasupObssugest_1" class="form-control" ></textarea>
+																			</td>
+																			<td>
+																				
+																				<div class="widget-header">
+																					<span class="widget-toolbar">Remover
+																						<a data-action="add">
+																							<i id="notaSupObsI_1" class="red ace-icon fa fa-times" onclick="javascript:removeTrObs(this);"></i>
+																						</a>
+																					</span>
+																				</div>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+										</div><!-- /.Sub Formulário -->
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-exchange"></i>
+													Mudanças de Programação, Mudanças de Frases e Programas Masterizados
+												</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>	
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-12">
+															<label> Alvos dominados </label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea type="text" name="notasupAlvosdominados" id="notasupAlvosdominados" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>
+															<label> Notas gerais de dica </label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea type="text" name="notasupNotasdicas" id="notasupNotasdicas" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>
+															<label> Notas gerais de programação </label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea type="text" name="notasupNotasprog" id="notasupNotasprog" placeholder="" class="form-control" ></textarea>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-user"></i>
+													Informações do Terapeuta
+												</h4>
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<table id="dynamic-table-super" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+																<thead>
+																	<tr>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Comentários
+																			</span>
+
+																		</td>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Dúvidas
+																			</span>
+																		</td>
+																		
+																	</th>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>
+																			<textarea type="text" name="notasupInfteracoment" id="notasupInfteracoment" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		<td>
+																			<textarea type="text" name="notasupInfteraduvid" id="notasupInfteraduvid" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-user-secret "></i>
+													Informações Diretas
+												</h4>
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<table id="dynamic-table-super" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+																<thead>
+																	<tr>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Comentários
+																			</span>
+
+																		</td>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Dúvidas
+																			</span>
+																		</td>
+																		
+																	</th>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>
+																			<textarea type="text" name="notasupInfdircoment" id="notasupInfdircoment" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		<td>
+																			<textarea type="text" name="notasupInfdirduvid" id="notasupInfdirduvid" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-external-link"></i>
+													Acompanhamento das Ações
+												</h4>
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>	
+											
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<table id="dynamic-table-super" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+																<thead>
+																	<tr>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Comentários
+																			</span>
+
+																		</td>
+																		<td>
+																			<span class="label label-pink arrowed-in-right ">
+																				&nbsp;Dúvidas
+																			</span>
+																		</td>
+																		
+																	</th>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>
+																			<textarea type="text" name="notasupAcompprog" id="notasupAcompprog" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		<td>
+																			<textarea type="text" name="notasupAcompgeral" id="notasupAcompgeral" placeholder="" class="form-control" ></textarea>
+																		</td>
+																		
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								<div class="space-4"></div>
+
+								<div class="row">
+									<div clas="col-xs-12">
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-9" style="text-align: center;">
+													<button class="btn btn-info"  name="acao" type="submit">
+														<i class="ace-icon fa fa-check bigger-110"></i>
+														Salvar
+													</button>
+
+													&nbsp; &nbsp; &nbsp;
+													<button class="btn btn-warning"  type="reset">
+														<i class="ace-icon fa fa-undo bigger-110"></i>
+														Voltar
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+
+	</body>
+</html>
