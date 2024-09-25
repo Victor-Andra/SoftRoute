@@ -58,6 +58,15 @@
 					elementoAlvo.value = "false";
 				}
 			}
+			
+			function marcaImput(inputName) {
+				let elementoAlvo = document.getElementById(inputName);
+				if (elementoAlvo.checked == true) {
+					elementoAlvo.value = "true";
+				} else {
+					elementoAlvo.value = "false";
+				}
+			}
 
 			function marcaRadioImput(inputName, index, valor) {
 				let elementoAlvo = document.getElementById(inputName+index);
@@ -298,8 +307,11 @@
 			function carregaBody(){
 				if (document.getElementById("tiporeg").value != null){
 					document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
+					mudaRegistro();
+					populateCheckboxes();
 				}
 				popularCheckboxDicaTipo();
+				updateStimulusFields();
 				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
 				//tipos de dicas
@@ -533,7 +545,9 @@
 											<div class="row">
 												<div class="col-xs-12 col-sm-2">
 													<label>Quantidade de Estímulos Reservados no SET</label>
-													<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+													<input name="folregQtest" id="folregQtest" value="{{progset.progset_qtest}}" onchange="updateStimulusFields()" />
+													<!--
+													<select name="folregQtest" id="folregQtest" class="chosen-select blocked-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -544,7 +558,7 @@
 														<option value="8">8</option>
 														<option value="9">9</option>
 													</select>
-													
+													-->
 												</div>
 											</div>
 											<div class="row">

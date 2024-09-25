@@ -24,9 +24,9 @@
         }
 		</style>
 		<script type="text/javascript">
-		function exibenome() {
-			document.getElementById("beneNomeinfo").value = document.getElementById("beneNome").value;
-		}
+			function exibenome() {
+				document.getElementById("beneNomeinfo").value = document.getElementById("beneNome").value;
+			}
 			function copiaValoresMae() {
 				document.getElementById("beneOut").value = document.getElementById("beneMae").value;
 				document.getElementById("beneGraupar").value = "Mãe";
@@ -44,82 +44,76 @@
 				document.getElementById("beneOutemail").value = document.getElementById("beneMaeemail").value;
 			}
 			function copiaValoresPai() {
-			document.getElementById("beneOut").value = document.getElementById("benePai").value;
-			document.getElementById("beneGraupar").value = "Pai";
-			document.getElementById("beneOutprof").value = document.getElementById("benePaiprof").value;
-			document.getElementById("beneOutident").value = document.getElementById("benePaiident").value;
-			document.getElementById("beneOutcpf").value = document.getElementById("benePaicpf").value;
-			document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
-			document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
-			document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
-			document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
-			document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
-			document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
-			document.getElementById("beneOutcel").value = document.getElementById("benePaicel").value;
-			document.getElementById("beneOutcel2").value = document.getElementById("benePaicel2").value;
-			document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
-		}
-		function atualizaData(){
+				document.getElementById("beneOut").value = document.getElementById("benePai").value;
+				document.getElementById("beneGraupar").value = "Pai";
+				document.getElementById("beneOutprof").value = document.getElementById("benePaiprof").value;
+				document.getElementById("beneOutident").value = document.getElementById("benePaiident").value;
+				document.getElementById("beneOutcpf").value = document.getElementById("benePaicpf").value;
+				document.getElementById("beneOutend").value = document.getElementById("beneEnd").value;
+				document.getElementById("beneOutendcompl").value = document.getElementById("beneEndcompl").value;
+				document.getElementById("beneOutendbairro").value = document.getElementById("beneEndbairro").value;
+				document.getElementById("beneOutendcidade").value = document.getElementById("beneEndcidade").value;
+				document.getElementById("beneOutenduf").value = document.getElementById("beneEnduf").value;
+				document.getElementById("beneOutendcep").value = document.getElementById("beneEndcep").value;
+				document.getElementById("beneOutcel").value = document.getElementById("benePaicel").value;
+				document.getElementById("beneOutcel2").value = document.getElementById("benePaicel2").value;
+				document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
+			}
+			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 				var dataFmt = new Date(dataIso);
 				console.log(dataFmt.toISOString());
 				document.getElementById("a").value = dataFmt;
 			}
-		function formataData(date) {//yyyy-MM-dd
-					var d = new Date(date);
-					if (d.getTimezoneOffset() == 180){
-						d.setHours(d.getHours()+3);
-					}
-					console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
-
-					if (month.length == 1) {
-						month = '0' + month;
-					}
-						
-					if (day.length == 1) {
-						day = '0' + day;
-					}
-
-					return [year, month, day].join('-');
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
 				}
-		function atualizaDadosbene(){
-			var dataIso = document.getElementById("beneDatanasc").value;
-			if (dataIso != undefined && dataIso != "undefined"){
-				var dataFmt = new Date(dataIso);
-				let dataAtual = new Date(); 
-				
-				document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+				console.log("d:"+d);
+				month = '' + (d.getMonth() + 1);
+				day = '' + d.getDate();
+				year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
 			}
-		}
-		
-		function calculaIdade(dataFmt) {
+			function atualizaDadosbene(){
+				var dataIso = document.getElementById("beneDatanasc").value;
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					let dataAtual = new Date(); 
+					
+					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+				}
+			}
+			function calculaIdade(dataFmt) {
 				// Data atual
 				const hoje = new Date();
-
 				// Data de aniversário
 				const aniversario = new Date(dataFmt);
-
 				// Cálculo da idade
 				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
 				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
 				let idadedias = hoje.getDay() - aniversario.getDay();
-
 				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
 				if (hoje.getDate() < aniversario.getDate()) {
 					idadeMeses--;
 				}
-
 				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
 				if (idadeMeses < 0) {
 					idadeAnos--;
 					idadeMeses += 12;
 				}
 				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-				
-				}
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();ajustaData();">
@@ -365,111 +359,101 @@
 													</div>
 												</div>
 												<div id="conv" class="tab-pane fade">
-
 													<label>Convênio</label>
 													<div class="input-group">
-															<div >
-																<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
-																		{{#each convs}}
-																			<option value="{{_id}}">{{conv_nome}}</option>
-																		{{else}}
-																		{{/each}}
-																</select>
-															</div>
+														<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
+															{{#each convs}}
+																<option value="{{_id}}">{{conv_nome}}</option>
+															{{else}}
+															{{/each}}
+														</select>
 													</div>
-													
 													<label>Impressão de Horas nos relatórios</label>
 													<div class="form-group">
 														<div class="col-sm-4">
 															<select name="beneImphora" id="beneImphora" class="chosen-select" >
-																	<option value="-">-</option>
-																	<option value="Ativo">Sim</option>
-																	<option value="Inativo">Não</option>
+																<option value="-">-</option>
+																<option value="Ativo">Sim</option>
+																<option value="Inativo">Não</option>
 															</select>
 														</div>
 													</div>
-													
 													<label>Impressão dos carimbos nos relatórios</label>
 													<div class="form-group">
 														<div class="col-sm-4">
 															<select name="beneImpcarimbo" id="beneImpcarimbo" class="chosen-select" >
-																	<option value="-">-</option>
-																	<option value="Ativo">Sim</option>
-																	<option value="Inativo">Não</option>
+																<option value="-">-</option>
+																<option value="Ativo">Sim</option>
+																<option value="Inativo">Não</option>
 															</select>
 														</div>
 													</div>
-													
 												</div>
 												<div id="mae" class="tab-pane fade">
-														<div class="row">
-															<div class="col-xs-12 col-sm-6">
-																<label > Nome da mãe </label>
-																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 360px;" />
-																	</div>
-																</div>
-															</div>
-															<div class="col-xs-12 col-sm-6">
-																<label> Profissão </label>
-																<div class="input-group">
+													<div class="row">
+														<div class="col-xs-12 col-sm-6">
+															<label > Nome da mãe </label>
+															<div class="input-group">
 																<div >
-																		<input type="text" name="beneMaeprof" id="beneMaeprof" placeholder="" class="form-control" style="width: 150px;"/>
-																	</div>
+																	<input type="text" name="beneMae" id="beneMae" placeholder="" class="form-control" style="width: 360px;" />
 																</div>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-xs-12 col-sm-6">
-																<label> RG </label>
-																<div class="input-group">
-																<div>
-																		<input type="text" name="beneMaeident"  id="beneMaeident" placeholder="" class="form-control" style="width: 200px;"/>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xs-12 col-sm-6">
-																<label> CPF </label>
-																<div class="input-group">
-																	<div >
-																		<input type="text" name="beneMaecpf" id="beneMaecpf" placeholder="" class="form-control" style="width: 200px;"/>
-																	</div>
+														<div class="col-xs-12 col-sm-6">
+															<label> Profissão </label>
+															<div class="input-group">
+															<div >
+																	<input type="text" name="beneMaeprof" id="beneMaeprof" placeholder="" class="form-control" style="width: 150px;"/>
 																</div>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-xs-12 col-sm-4">
-																<label>WhatsApp </label>
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="green ace-icon fa fa-whatsapp"></i>
-																	</span>
-																	<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;"  />
-																</div> 
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-6">
+															<label> RG </label>
+															<div class="input-group">
+																<input type="text" name="beneMaeident"  id="beneMaeident" placeholder="" class="form-control" style="width: 200px;"/>
 															</div>
-						
-															<div class="col-xs-12 col-sm-4">
-																<label>Celular</label>
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-phone"></i>
-																	</span>
-																	<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
-																</div>
-															</div>
-															<div class="col-xs-12 col-sm-4">
-																<label > E-Mail </label>
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="red ace-icon fa fa-envelope"></i>
-																	</span>
-																	<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;" />
-																	
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<label> CPF </label>
+															<div class="input-group">
+																<div >
+																	<input type="text" name="beneMaecpf" id="beneMaecpf" placeholder="" class="form-control" style="width: 200px;"/>
 																</div>
 															</div>
 														</div>
-												
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-4">
+															<label>WhatsApp </label>
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="green ace-icon fa fa-whatsapp"></i>
+																</span>
+																<input name="beneMaecel" id="beneMaecel"   class="document-control input-mask-phone" type="text" style="width: 100px;"  />
+															</div> 
+														</div>
+														<div class="col-xs-12 col-sm-4">
+															<label>Celular</label>
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+																<input name="beneMaecel2" id="beneMaecel2"  class="document-control input-mask-phone" type="text" style="width: 100px;" />
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-4">
+															<label > E-Mail </label>
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="red ace-icon fa fa-envelope"></i>
+																</span>
+																<input type="text" name="beneMaeemail" id="beneMaeemail" placeholder="" class="form-control" style="width: 350px;" />
+																
+															</div>
+														</div>
+													</div>
 												</div>
 												<div id="pai" class="tab-pane fade">
 													<div class="row">
