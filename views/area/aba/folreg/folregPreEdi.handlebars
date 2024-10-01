@@ -100,6 +100,47 @@
 				}
 				
    			}
+
+			function caseClasseCor(letra){
+				let retorno = "";
+				switch (letra){
+					case "A":
+						retorno = "label label-sm label-cian arrowed arrowed-righ";
+						break;
+					case "B":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "C":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "D":
+						retorno = "label label-sm label-info arrowed arrowed-righ";
+						break;
+					case "E":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "F":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "G":
+						retorno = "label label-sm label-purple arrowed arrowed-righ";
+						break;
+					case "H":
+						retorno = "label label-sm label-success arrowed arrowed-righ";
+						break;
+					case "I":
+						retorno = "label label-sm label-danger arrowed arrowed-righ"
+						break;
+					case "J":
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+					default:
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+				}
+				return retorno;
+			}
+			
 			function atualizaTerapeutaId(){
 				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
 			}
@@ -628,6 +669,26 @@
 							console.log("vazio");
 							break;
 					}
+
+					document.getElementById("folregRaTent1").innerHTML = document.getElementById("folregRaTentEdi1").value;
+					document.getElementById("folregRaTent2").innerHTML = document.getElementById("folregRaTentEdi2").value;
+					document.getElementById("folregRaTent3").innerHTML = document.getElementById("folregRaTentEdi3").value;
+					document.getElementById("folregRaTent4").innerHTML = document.getElementById("folregRaTentEdi4").value;
+					document.getElementById("folregRaTent5").innerHTML = document.getElementById("folregRaTentEdi5").value;
+					document.getElementById("folregRaTent6").innerHTML = document.getElementById("folregRaTentEdi6").value;
+					document.getElementById("folregRaTent7").innerHTML = document.getElementById("folregRaTentEdi7").value;
+					document.getElementById("folregRaTent8").innerHTML = document.getElementById("folregRaTentEdi8").value;
+					document.getElementById("folregRaTent9").innerHTML = document.getElementById("folregRaTentEdi9").value;
+
+					document.getElementById("folregRaTent1").className = caseClasseCor(document.getElementById("folregRaTentEdi1").value);
+					document.getElementById("folregRaTent2").className = caseClasseCor(document.getElementById("folregRaTentEdi2").value);
+					document.getElementById("folregRaTent3").className = caseClasseCor(document.getElementById("folregRaTentEdi3").value);
+					document.getElementById("folregRaTent4").className = caseClasseCor(document.getElementById("folregRaTentEdi4").value);
+					document.getElementById("folregRaTent5").className = caseClasseCor(document.getElementById("folregRaTentEdi5").value);
+					document.getElementById("folregRaTent6").className = caseClasseCor(document.getElementById("folregRaTentEdi6").value);
+					document.getElementById("folregRaTent7").className = caseClasseCor(document.getElementById("folregRaTentEdi7").value);
+					document.getElementById("folregRaTent8").className = caseClasseCor(document.getElementById("folregRaTentEdi8").value);
+					document.getElementById("folregRaTent9").className = caseClasseCor(document.getElementById("folregRaTentEdi9").value);
 				}else{
 					//Gráfico DUPLO
 					//Campos com resultados da esquerda do gráfico
@@ -1109,6 +1170,26 @@
 							console.log("vazio");
 							break;
 					}
+					
+					document.getElementById("folregRaTentDupl1").innerHTML = document.getElementById("folregRaTentDuplEdi1").value;
+					document.getElementById("folregRaTentDupl2").innerHTML = document.getElementById("folregRaTentDuplEdi2").value;
+					document.getElementById("folregRaTentDupl3").innerHTML = document.getElementById("folregRaTentDuplEdi3").value;
+					document.getElementById("folregRaTentDupl4").innerHTML = document.getElementById("folregRaTentDuplEdi4").value;
+					document.getElementById("folregRaTentDupl5").innerHTML = document.getElementById("folregRaTentDuplEdi5").value;
+					document.getElementById("folregRaTentDupl6").innerHTML = document.getElementById("folregRaTentDuplEdi6").value;
+					document.getElementById("folregRaTentDupl7").innerHTML = document.getElementById("folregRaTentDuplEdi7").value;
+					document.getElementById("folregRaTentDupl8").innerHTML = document.getElementById("folregRaTentDuplEdi8").value;
+					document.getElementById("folregRaTentDupl9").innerHTML = document.getElementById("folregRaTentDuplEdi9").value;
+
+					document.getElementById("folregRaTentDupl1").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi1").value);
+					document.getElementById("folregRaTentDupl2").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi2").value);
+					document.getElementById("folregRaTentDupl3").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi3").value);
+					document.getElementById("folregRaTentDupl4").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi4").value);
+					document.getElementById("folregRaTentDupl5").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi5").value);
+					document.getElementById("folregRaTentDupl6").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi6").value);
+					document.getElementById("folregRaTentDupl7").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi7").value);
+					document.getElementById("folregRaTentDupl8").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi8").value);
+					document.getElementById("folregRaTentDupl9").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi9").value);
 				}
 
 				showStimulusFieldsWithValues();
@@ -1335,6 +1416,24 @@
 									<input type="text" id="folregT8tipodird" name="folregT8tipodird" value="{{folreg.folreg_t8tipodird}}"/>
 									<input type="text" id="folregT9tipodird" name="folregT9tipodird" value="{{folreg.folreg_t9tipodird}}"/>
 									-->
+									<input type="text" id="folregRaTentEdi1" name="folregRaTentEdi1" value="{{folreg.folreg_ratent1}}"/>
+									<input type="text" id="folregRaTentEdi2" name="folregRaTentEdi2" value="{{folreg.folreg_ratent2}}"/>
+									<input type="text" id="folregRaTentEdi3" name="folregRaTentEdi3" value="{{folreg.folreg_ratent3}}"/>
+									<input type="text" id="folregRaTentEdi4" name="folregRaTentEdi4" value="{{folreg.folreg_ratent4}}"/>
+									<input type="text" id="folregRaTentEdi5" name="folregRaTentEdi5" value="{{folreg.folreg_ratent5}}"/>
+									<input type="text" id="folregRaTentEdi6" name="folregRaTentEdi6" value="{{folreg.folreg_ratent6}}"/>
+									<input type="text" id="folregRaTentEdi7" name="folregRaTentEdi7" value="{{folreg.folreg_ratent7}}"/>
+									<input type="text" id="folregRaTentEdi8" name="folregRaTentEdi8" value="{{folreg.folreg_ratent8}}"/>
+									<input type="text" id="folregRaTentEdi9" name="folregRaTentEdi9" value="{{folreg.folreg_ratent9}}"/>
+									<input type="text" id="folregRaTentDuplEdi1" name="folregRaTentDuplEdi1" value="{{folreg.folreg_ratent_dupl1}}"/>
+									<input type="text" id="folregRaTentDuplEdi2" name="folregRaTentDuplEdi2" value="{{folreg.folreg_ratent_dupl2}}"/>
+									<input type="text" id="folregRaTentDuplEdi3" name="folregRaTentDuplEdi3" value="{{folreg.folreg_ratent_dupl3}}"/>
+									<input type="text" id="folregRaTentDuplEdi4" name="folregRaTentDuplEdi4" value="{{folreg.folreg_ratent_dupl4}}"/>
+									<input type="text" id="folregRaTentDuplEdi5" name="folregRaTentDuplEdi5" value="{{folreg.folreg_ratent_dupl5}}"/>
+									<input type="text" id="folregRaTentDuplEdi6" name="folregRaTentDuplEdi6" value="{{folreg.folreg_ratent_dupl6}}"/>
+									<input type="text" id="folregRaTentDuplEdi7" name="folregRaTentDuplEdi7" value="{{folreg.folreg_ratent_dupl7}}"/>
+									<input type="text" id="folregRaTentDuplEdi8" name="folregRaTentDuplEdi8" value="{{folreg.folreg_ratent_dupl8}}"/>
+									<input type="text" id="folregRaTentDuplEdi9" name="folregRaTentDuplEdi9" value="{{folreg.folreg_ratent_dupl9}}"/>
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -1679,7 +1778,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent1" name="folregRaTent1"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1801,7 +1900,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent2" name="folregRaTent2"></span></label>
 																	</label>
 																</td>
 																
@@ -1836,7 +1935,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent3" name="folregRaTent3"></span></label>
 																	</label>
 																</td>
 																
@@ -1866,7 +1965,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-purple arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1895,7 +1994,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent5" name="folregRaTent5"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1924,7 +2023,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent6" name="folregRaTent6"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1953,7 +2052,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent7" name="folregRaTent7"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1982,7 +2081,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent8" name="folregRaTent8"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -2011,7 +2110,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent9" name="folregRaTent9"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -2105,7 +2204,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl1" name="folregRaTentDupl1"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2333,7 +2432,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl2" name="folregRaTentDupl2"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2381,7 +2480,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl3" name="folregRaTentDupl3"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2429,7 +2528,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-purple arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl4" name="folregRaTentDupl4"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2477,7 +2576,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl5" name="folregRaTentDupl5"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2525,7 +2624,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl6" name="folregRaTentDupl6"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2573,7 +2672,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl7" name="folregRaTentDupl7"></span></label>
 															</label>
 														</td>
 														
@@ -2622,7 +2721,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl8" name="folregRaTentDupl8"></span></label>
 															</label>
 														</td>
 														<td>
@@ -2675,7 +2774,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl9" name="folregRaTentDupl9"></span></label>
 															</label>
 														</td>
 														

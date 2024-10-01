@@ -50,6 +50,153 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
+			function embaralharTotalmenteFolregTentativas (){
+				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+				let tamanhoArray = 9;
+				let reducao = 0;
+				let arrayNovo = [];
+				let arrayDinamico = [];
+				
+				if (document.getElementById("folregTiporeg").value == "triplo"){
+					tamanhoArray = 10;
+				}
+				console.log("arrayOriginal: "+arrayOriginal);
+				arrayOriginal.splice(-(10 - qtdEstimulos));
+				console.log("arrayOriginal: "+arrayOriginal);
+				arrayDinamico = arrayOriginal;
+
+				do {
+					//condição se o array novo está faltando uma quantidade de letras igual ao tamando do array original, remover letras já escolhidas / tamanhoArray - arrayNovo.length <= arrayDinamico
+                    console.log("arrayDinamico:"+arrayDinamico);
+                    let letrasEncontradas = 0;
+                    arrayOriginal.forEach(letra => {
+                        if (arrayNovo.includes(letra)) {
+                            letrasEncontradas++;
+                        }
+                    });
+                    console.log("tamanhoArray:"+tamanhoArray);
+                    console.log("arrayNovo.length:"+arrayNovo.length);
+                    console.log("letrasEncontradas:"+letrasEncontradas);
+                    console.log("tala"+((tamanhoArray - arrayNovo.length + letrasEncontradas)))
+                    console.log("arrayOriginal.length>:"+arrayOriginal.length)
+					if ((tamanhoArray - arrayNovo.length + letrasEncontradas) <= arrayOriginal.length){
+                        arrayNovo.forEach(letra => {
+							const indice = arrayDinamico.indexOf(letra);
+							if (indice !== -1) {
+								arrayDinamico.splice(indice, 1); // Remove a letra do arrayDinamico
+							}
+						});
+						console.log("arrayDinamico:"+arrayDinamico);
+						arrayNovo.push(arrayDinamico[Math.floor(Math.random() * arrayDinamico.length)]);
+					} else {
+						arrayNovo.push(arrayOriginal[Math.floor(Math.random() * arrayDinamico.length)]);
+					}
+					console.log("arrayNovo: "+arrayNovo);
+				}  while (arrayNovo.length < tamanhoArray);
+				console.log(arrayOriginal);
+				console.log(arrayDinamico);
+				console.log(arrayNovo);
+			}
+
+			function embaralharIgualmenteFolregTentativas(){
+				let arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+				let tamanhoArray = 9;
+				let reducao = 0;
+				let arrayNovo = [];
+				let arrayDinamico = [];
+				let index = 1;
+
+				if (document.getElementById("folregTiporeg").value == "triplo"){
+					tamanhoArray = 10;
+				}
+				arrayOriginal.splice(-(10 - qtdEstimulos));
+				arrayDinamico = arrayOriginal;
+				let falta = 0;
+				do {
+					let tamanhoArrayNovo = arrayNovo.length
+					if (tamanhoArrayNovo == 0){
+						arrayDinamico = shuffleArray(arrayDinamico);
+							
+						arrayNovo = arrayDinamico;
+						falta = (tamanhoArray - tamanhoArrayNovo);
+					} else if (falta > tamanhoArrayNovo && falta >= arrayOriginal.length){
+						arrayDinamico = arrayOriginal;
+						do {
+							arrayDinamico = shuffleArray(arrayDinamico);
+						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
+						arrayDinamico.forEach(letra => {
+							arrayNovo.push(letra);
+						})
+						
+						falta = (tamanhoArray - arrayNovo.length);
+					} else if (tamanhoArrayNovo < tamanhoArray){
+						do {
+							arrayDinamico = shuffleArray(arrayDinamico);
+						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
+						console.log(arrayDinamico[0]);
+						console.log(arrayNovo[tamanhoArrayNovo-1]);
+						console.log(arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1]);
+
+						arrayDinamico.splice(tamanhoArray - tamanhoArrayNovo);
+						arrayDinamico.forEach(letra => {
+							arrayNovo.push(letra);
+						})
+					}
+				}  while (arrayNovo.length < tamanhoArray);
+
+				arrayNovo.forEach(letra => {
+					document.getElementById("folregRaTent"+index).class = caseClasseCor(letra);
+					document.getElementById("folregRaTentDupl"+index).class = caseClasseCor(letra);
+					document.getElementById("folregRaTent"+index).innerHTML = letra;
+					document.getElementById("folregRaTentDupl"+index).innerHTML = letra;
+					document.getElementById("folregRaTentCad"+index).value = letra;
+					document.getElementById("folregRaTentDuplCad"+index).value = letra;
+					index++;
+				})
+			}
+			
+			function caseClasseCor(letra){
+				let retorno = "";
+				switch (letra){
+					case "A":
+						retorno = "label label-sm label-cian arrowed arrowed-righ";
+						break;
+					case "B":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "C":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "D":
+						retorno = "label label-sm label-info arrowed arrowed-righ";
+						break;
+					case "E":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "F":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "G":
+						retorno = "label label-sm label-purple arrowed arrowed-righ";
+						break;
+					case "H":
+						retorno = "label label-sm label-success arrowed arrowed-righ";
+						break;
+					case "I":
+						retorno = "label label-sm label-danger arrowed arrowed-righ"
+						break;
+					case "J":
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+					default:
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+				}
+				return retorno;
+			}
+
 			function marcaImput(inputName) {
 				let elementoAlvo = document.getElementById(inputName);
 				if (elementoAlvo.checked == true) {
@@ -326,7 +473,6 @@
 				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
 				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
 				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
-				
 
 				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
 				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
@@ -338,6 +484,7 @@
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
 
+				embaralharIgualmenteFolregTentativas();
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
@@ -392,6 +539,25 @@
 									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
 									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
 									<input type="hidden" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}" />
+
+									<input hidden type="text" id="folregRaTentCad1" name="folregRaTentCad1" value="" />
+									<input hidden type="text" id="folregRaTentCad2" name="folregRaTentCad2" value="" />
+									<input hidden type="text" id="folregRaTentCad3" name="folregRaTentCad3" value="" />
+									<input hidden type="text" id="folregRaTentCad4" name="folregRaTentCad4" value="" />
+									<input hidden type="text" id="folregRaTentCad5" name="folregRaTentCad5" value="" />
+									<input hidden type="text" id="folregRaTentCad6" name="folregRaTentCad6" value="" />
+									<input hidden type="text" id="folregRaTentCad7" name="folregRaTentCad7" value="" />
+									<input hidden type="text" id="folregRaTentCad8" name="folregRaTentCad8" value="" />
+									<input hidden type="text" id="folregRaTentCad9" name="folregRaTentCad9" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad1" name="folregRaTentDuplCad1" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad2" name="folregRaTentDuplCad2" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad3" name="folregRaTentDuplCad3" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad4" name="folregRaTentDuplCad4" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad5" name="folregRaTentDuplCad5" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad6" name="folregRaTentDuplCad6" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad7" name="folregRaTentDuplCad7" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad8" name="folregRaTentDuplCad8" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -545,9 +711,8 @@
 											<div class="row">
 												<div class="col-xs-12 col-sm-2">
 													<label>Quantidade de Estímulos Reservados no SET</label>
-													<input name="folregQtest" id="folregQtest" value="{{progset.progset_qtest}}" onchange="updateStimulusFields()" />
-													<!--
-													<select name="folregQtest" id="folregQtest" class="chosen-select blocked-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+													<!--<input name="folregQtest" id="folregQtest" value="{{progset.progset_qtest}}" onchange="updateStimulusFields()" />-->
+													<select name="folregQtest" id="folregQtest" class="chosen-select blocked-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields();embaralharIgualmenteFolregTentativas();">
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -558,7 +723,6 @@
 														<option value="8">8</option>
 														<option value="9">9</option>
 													</select>
-													-->
 												</div>
 											</div>
 											<div class="row">
@@ -738,7 +902,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent1" name="folregRaTent1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -857,7 +1021,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent2" name="folregRaTent2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																
@@ -892,7 +1056,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent3" name="folregRaTent3" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																
@@ -922,7 +1086,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-purple arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -951,7 +1115,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																		<label class="pos-rel"><span id="folregRaTent5" name="folregRaTent5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -980,7 +1144,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent6" name="folregRaTent6" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1009,7 +1173,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent7" name="folregRaTent7" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1038,7 +1202,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">C</span></label>
+																		<label class="pos-rel"><span id="folregRaTent8" name="folregRaTent8" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1067,7 +1231,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">B</span></label>
+																		<label class="pos-rel"><span id="folregRaTent9" name="folregRaTent9" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1161,7 +1325,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl1" name="folregRaTentDupl1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1388,7 +1552,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl2" name="folregRaTentDupl2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1436,7 +1600,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl3" name="folregRaTentDupl3" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1484,7 +1648,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-purple arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl4" name="folregRaTentDupl4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1532,7 +1696,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-info arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl5" name="folregRaTentDupl5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1580,7 +1744,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-warning arrowed arrowed-righ RA">B</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl6" name="folregRaTentDupl6" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1628,7 +1792,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl7" name="folregRaTentDupl7" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														
@@ -1677,7 +1841,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-pink arrowed arrowed-righ RA">A</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl8" name="folregRaTentDupl8" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1730,7 +1894,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span class="label label-sm label-danger arrowed arrowed-righ RA">C</span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl9" name="folregRaTentDupl9" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														

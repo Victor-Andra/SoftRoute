@@ -2140,6 +2140,10 @@ router.get('/area/aba/progtipo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{
 router.get('/area/aba/progtipo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
     fncProgtipo.carregaProgtipoEdi(req, res);
 })
+
+router.post('/area/aba/progtipo/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProgtipo.atualizaProgtipo(req, res);
+})
 //------------------------------------------------------------------------------------------------
 //Menu Gráfico do Programa ** Area Tecnicos e ABA (DELETAR)
 //Carrega Cadastro (DELETAR)
