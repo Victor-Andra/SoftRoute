@@ -49,9 +49,9 @@
 												</span>
 											</div>
 											<div class="widget-body">
-												<div class="widget-main">
-													<div class="alert alert-warning">
-														<button type="button" class="close" data-dismiss="alert">
+												<div class="widget-main" >
+													<div class="alert alert-warning" hidden>
+														<button type="button" class="close" data-dismiss="alert" >
 															<i class="ace-icon fa fa-times"></i>
 														</button>
 														
@@ -142,7 +142,7 @@
 											</div>
 										</div>	
 
-										<div class="widget-box"><!-- .Avaliação de Habilidades Através do VB-MAPP -->
+										<div class="widget-box" hidden><!-- .Avaliação de Habilidades Através do VB-MAPP -->
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-map-o"></i>
@@ -166,7 +166,7 @@
 											
 											<div class="widget-body">
 												<div class="widget-main">
-													<div class="alert alert-warning">
+													<div class="alert alert-warning" hidden>
 														<button type="button" class="close" data-dismiss="alert">
 															<i class="ace-icon fa fa-times"></i>
 														</button>
@@ -184,31 +184,7 @@
 														  ou 0 ponto, quando a criança não preenche os pré-requisitos para pontuar.
 
 													</div>
-													<label> Considerações iniciais: </label><br>
-														<label style="color:crimson"> Primeira Avaliação </label>
-														<div class="form-group">
-															<div class="col-sm-12">
-																<textarea type="text" name="mappAva01" id="mappAva01" row="3" placeholder="" class="form-control" ></textarea>
-															</div>
-														</div>
-														<label style="color:orange"> Segunda Avaliação </label>
-														<div class="form-group">
-															<div class="col-sm-12">
-																<textarea type="text" name="mappAva02" id="mappAva02" row="3" placeholder="" class="form-control" ></textarea>
-															</div>
-														</div>
-														<label style="color:green" > Terceira Avaliação </label>
-														<div class="form-group">
-															<div class="col-sm-12">
-																<textarea type="text" name="mappAva03" id="mappAva03" row="3" placeholder="" class="form-control" ></textarea>
-															</div>
-														</div>
-														<label style="color:blue"> Quarta Avaliação </label>
-														<div class="form-group">
-															<div class="col-sm-12">
-																<textarea type="text" name="mappAva04" id="mappAva04" row="3" placeholder="" class="form-control" ></textarea>
-															</div>
-														</div>
+													
 												</div>
 											</div>
 										</div>
@@ -217,7 +193,7 @@
 											<div class="widget-header">
 												<h4 class="widget-title">
 													<i class="ace-icon fa fa-map-o"></i>
-													Avaliação de Marcos
+													Avaliação de Marcos do VB-MAPP
 												</h4>
 
 												<span class="widget-toolbar">
@@ -334,7 +310,7 @@
 																		<li class="">
 																			<a data-toggle="tab" href="#ecoico1" aria-expanded="false">
 																				<i class="blue ace-icon fa fa-volume-down"></i>
-																				Ecóico
+																				Ecoico
 																			</a>
 																		</li>
 																		<li class="">
@@ -350,7 +326,7 @@
 
 																	<div class="tab-content">
 																		<div id="mando1" class="tab-pane active">
-																				<div class="alert alert-warning">
+																				<div class="alert alert-warning" hidden>
 																					<button type="button" class="close" data-dismiss="alert">
 																						<i class="ace-icon fa fa-times"></i>
 																					</button>
@@ -388,13 +364,13 @@
 																						</thead>
 																						<tbody>
 																							<tr><!-- Reg1 mando -->
-																								<td rowspan="4">
-																									<span>M1</span>
+																								<td rowspan="4" style="background-color: rgb(237, 255, 249);" >
+																									<span><b>M1</b></span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(237, 255, 249);">	
 																									<span>Emite 2 palavras, sinais ou PECS, porém pode precisar de dica ecóica, imitativa ou outras dicas, desde que não físicas.(O/T) </span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(237, 255, 249);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Mandom1" id="mappnvl1Mandom1" type="text">
 																									</div>
@@ -443,13 +419,13 @@
 																							</tr>
 																							
 																							<tr><!-- Reg2 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(237, 255, 242);">
 																									<span>M2</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(237, 255, 242);">	
 																									<span>Emite 4 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., música, comida, bola). (O/T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(237, 255, 242);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Mandom2" id="mappnvl1Mandom2" type="text">
 																									</div>
@@ -496,13 +472,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg3 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 254, 237);">
 																									<span>M3</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(255, 254, 237);">	
 																									<span>Generaliza 6 mandos entre 2 pessoas, 2 ambientes e para 2 tipos diferentes de reforçador (e.g., Emite mandos para bolinhas de sabão tanto para a mãe quanto para o pai, em um ambiente interno e externo e em um pote plástico vermelho ou azul). (O/T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 254, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Mandom3" id="mappnvl1Mandom3" type="text">
 																									</div>
@@ -546,13 +522,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg4 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 249, 237);">
 																									<span>M4</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(255, 249, 237);">	
 																									<span>Emite 5 mandos espontaneamente (sem dicas verbais). O item desejado pode estar presente. (OC: 60 min)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 249, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Mandom4" id="mappnvl1Mandom4" type="text">
 																									</div>
@@ -596,13 +572,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg5 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 237, 237);">
 																									<span>M5</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(255, 237, 237);">	
 																									<span>Emite 10 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., maçã, balanço, carrinho, suco). (O/T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 237, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Mandom5" id="mappnvl1Mandom5" type="text">
 																									</div>
@@ -661,7 +637,7 @@
 
 																		</div>
 																		<div id="tato1" class="tab-pane">
-																			<div class="alert alert-warning">
+																			<div class="alert alert-warning" hidden>
 																				<button type="button" class="close" data-dismiss="alert">
 																					<i class="ace-icon fa fa-times"></i>
 																				</button>
@@ -675,7 +651,7 @@
 																						<input name="mappnvl1Tatototal" id="mappnvl1Tatototal" type="text" />
 																					</div>
 																				</div>
-																				<div class="col-xs-12"><!-- /.Defesa Sensorial -->
+																				<div class="col-xs-12"><!-- /.Tato-->
 																					<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 																						<thead>
 																							<h5 class="widget-title bigger lighter">
@@ -698,13 +674,13 @@
 																						</thead>
 																						<tbody>
 																							<tr><!-- Reg1 Tato -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(237, 255, 249);">
 																									<span>M1</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(237, 255, 249);">	
 																									<span>Emite tatos para dois itens com dica ecóica ou imitativa (e.g., pessoas, animais de estimação, figuras, ou objetos favoritos). (T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(237, 255, 249);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Tatom1" id="mappnvl1Tatom1" type="text">
 																									</div>
@@ -749,13 +725,13 @@
 																							</tr>
 																							
 																							<tr><!-- Reg2 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(237, 255, 242);">
 																									<span>M2</span>
 																								</td>
-																								<td>	
-																									<span>Emite 4 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., música, comida, bola). (O/T)</span>
+																								<td style="background-color: rgb(237, 255, 242);">	
+																									<span>Emite tatos para 4 itens quaisquer sem dica ecóica ou imitative (e.g., pessoas, bichos de estimação, personagens ou outros objetos). (T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(237, 255, 242);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Tatom2" id="mappnvl1Tatom2" type="text">
 																									</div>
@@ -764,9 +740,7 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1 ponto à criança se ela emitir mandos para 4 reforçadores diferentes sem que o adulto diga a palavra em questão (dica ecóica), sem que ele ofereça uma dica imitativa ou de apontar, e para crianças que usam sinais, sem dizer a palavra (dica intraverbal).
-																										O item ou atividade desejada podem estar presentes e também a dica verbal
-																										“O que você quer?” (ou algo similar).
+																										Dê 1 ponto à criança se ela emitir tatos para 4 itens sem dicas ecóicas durante avaliação.
 
 
 																									</span>
@@ -780,7 +754,7 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1/2 ponto se criança que emitir 3 mandos deste tipo.
+																										Dê 1/2 ponto à criança se ela emitir tatos para 3 itens sem dicas ecoicas durante a avaliação.
 																									</span>	
 																								</td>
 																								<td>
@@ -802,13 +776,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg3 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 254, 237);">
 																									<span>M3</span>
 																								</td>
-																								<td>	
-																									<span>Generaliza 6 mandos entre 2 pessoas, 2 ambientes e para 2 tipos diferentes de reforçador (e.g., Emite mandos para bolinhas de sabão tanto para a mãe quanto para o pai, em um ambiente interno e externo e em um pote plástico vermelho ou azul). (O/T)</span>
+																								<td style="background-color: rgb(255, 254, 237);">	
+																									<span>Emite tato para 6 itens não-reforçadores (e.g., sapato, chapéu, colher, carrinho, copo, cama). (T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 254, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Tatom3" id="mappnvl1Tatom3" type="text">
 																									</div>
@@ -818,7 +792,9 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1 ponto à criança se ela generalizar 6 mandos para 2 pessoas, 2 ambientes e 2 exemplares de reforçador.
+																										Dê 1 ponto à criança se ela emitir tatos para 6 itens sem dicas ecoicas
+																										durante a avaliação. Não dê pontos para a criança por respostas que são 
+																										também parte mando (e.g., ela diz “livro” porque ela vê e quer o livro).
 																									</span>
 																								</td>
 																								<td>
@@ -830,7 +806,7 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1/2 ponto se ela generalizar 3 mandos para 2 pessoas, 2 ambientes e 2 exemplares de um reforçador.
+																										Dê 1/2 ponto à criança se ela emitir tatos para 5 itens.
 																									</span>	
 																								</td>
 																								<td>
@@ -852,13 +828,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg4 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 249, 237);">
 																									<span>M4</span>
 																								</td>
-																								<td>	
+																								<td style="background-color: rgb(255, 249, 237);">	
 																									<span>Emite 5 mandos espontaneamente (sem dicas verbais). O item desejado pode estar presente. (OC: 60 min)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 249, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Tatom4" id="mappnvl1Tatom4" type="text">
 																									</div>
@@ -902,13 +878,13 @@
 																								</td>
 																							</tr>
 																								<tr><!-- Reg5 mando -->
-																								<td rowspan="4">
+																								<td rowspan="4" style="background-color: rgb(255, 237, 237);">
 																									<span>M5</span>
 																								</td>
-																								<td>	
-																									<span>Emite 10 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., maçã, balanço, carrinho, suco). (O/T)</span>
+																								<td style="background-color: rgb(255, 237, 237);">	
+																									<span>Emite tatos para 10 itens (objetos comuns, pessoas, partes do corpo ou imagens). (T)</span>
 																								</td>
-																								<td>
+																								<td style="background-color: rgb(255, 237, 237);">
 																									<div class="col-xs-2 col-sm-2">
 																										<input name="mappnvl1Tatom5" id="mappnvl1Tatom5" type="text">
 																									</div>
@@ -918,9 +894,8 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1 ponto à criança se ela emitir mandos para 10 reforçadores diferentes sem que o adulto diga a palavra, forneça uma dica de imitação ou de apontar e fale a palavra 
-																										(dica intraverbal), no caso de uma criança que utiliza sinais. O item desejado pode estar presente, bem como a dica verbal “O que você quer?” (ou algo similar).
-																										Mandos para remover aversivos tais como dizer “não” ou “meu” podem também ser contados.
+																										Dê 1 ponto à criança se ela emitir tatos para 10 itens sem dicas ecóicas
+																										durante a avaliação.
 																									</span>
 																								</td>
 																								<td>
@@ -932,7 +907,7 @@
 																							<tr>
 																								<td>
 																									<span>
-																										Dê 1/2 ponto à criança se ela emitir 8 mandos diferentes.
+																										Dê 1/2 ponto à criança se ela emitir tatos para 8 itens.
 																									</span>	
 																								</td>
 																								<td>
@@ -967,7 +942,7 @@
 
 																		</div>
 																		<div id="ouvinte1" class="tab-pane">
-																			<div class="alert alert-warning">
+																			<div class="alert alert-warning" hidden>
 																				<button type="button" class="close" data-dismiss="alert">
 																					<i class="ace-icon fa fa-times"></i>
 																				</button>
@@ -990,86 +965,294 @@
 																								A criança atende e responde às palavras faladas por outras pessoas
 																							</h5>
 																							<tr colspan="5">
-																								<th >
+																								<th>
 																									P
 																								</th>
 																								<Th>
 																									Descrição
 																								</Th>
-
+																								<th>
+																									Pontuação
+																								</th>
 																							</tr>
 																							
 																						</thead>
 																						<tbody>
-																							<tr><!-- 1Reg -->
-																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																							<tr><!-- Reg1 Ouvi -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 249);">
+																									<span>M1</span>
 																								</td>
-																								<td>	
-																									<span>1.Atenta para a voz de um falante ao estabelecer contato visual com ele por 5 vezes. (OC 30 min)</span>
+																								<td style="background-color: rgb(237, 255, 249);">	
+																									<span>Dê 1/2 ponto à criança se ela emitir tatos para 8 itens.</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 249);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1ouvim1" id="mappnvl1Ouvim1" type="text">
+																									</div>
 																								</td>
 																								
 																							</tr>
-																							<tr><!-- 2Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Dê 1 ponto à criança se ela estabelecer contato visual quando os outros falam por 5 vezes em 30 min.
+																									</span>
 																								</td>
-																								<td>	
-																									<span>2.Responde ao ouvir seu nome 5 vezes (e. g ., olha para o falante). (T)</span>
+																								<td>
+																									<input name="mappnvl1Ouvim1op" id="mappnvl1Ouvim1op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 3Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Dê 1/2 ponto à criança se ela estabelecer contato visual quando os outros falam por 2 vezes em 30 min.
+																									</span>	
 																								</td>
-																								<td>	
-																									<span>3.Criança olha, toca ou aponta para o membro correto da família, bicho de estimação ou outro reforçador quando esses estímulos são apresentados em arranjos de dois, para 5 reforçadores diferentes (e.g., “Onde está o Elmo?” ou “ Onde está mamãe? ”). (O/T)</span>
+																								<td>
+																									<input name="mappnvl1Ouvim1op" id="mappnvl1Ouvim1op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 4Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Não Pontuou.
+																									</span>
 																								</td>
-																								<td>	
-																									<span>4.Executa 4 ações motoras diferentes quando solicitada e não necessita de uma dica visual (e.g., Você pode pular?, Mostre-me como se bate palmas?). (T)</span>
+																								<td>
+																									<input name="mappnvl1Ouvim1op" id="mappnvl1Ouvim1op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 5Reg -->
-																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
+																							
+																							<tr><!-- Reg2 Ouvi -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 242);">
+																									<span>M2</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">	
+																									<span>Responde ao ouvir seu nome 5 vezes (e.g ., olha para o falante). (T)</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Ouvim2" id="mappnvl1Ouvim2" type="text">
 																									</div>
 																								</td>
-																								<td>	
-																									<span>5.Seleciona o item correto em um arranjo de 4 estímulos para 20 objetos e figuras diferentes (e.g., Mostre-me o gato, toque no sapato). (T)</span>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela olhar para o adulto fazendo contato visual 
+																										quando chamada por seu nome em 5 tentativas nao seguidas em um dia.
+																										Sem limite de tempo específico.
+
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim2op" id="mappnvl1Ouvim2op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não há 1/2 ponto para esta habilidade.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim2op" id="mappnvl1Ouvim2op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim2op" id="mappnvl1Ouvim2op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg3 Ouvi -->
+																								<td rowspan="4" style="background-color: rgb(255, 254, 237);">
+																									<span>M3</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">	
+																									<span>
+																										Criança olha, toca ou aponta para o membro correto da família,
+																										 bicho de estimação ou outro reforçador quando esses estímulos são apresentados
+																										 em arranjos de dois, para 5 reforçadores diferentes 
+																										 (e.g., “Onde está o Elmo?” ou “ Onde está mamãe? ”). (O/T)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Ouvim3" id="mappnvl1Ouvim3" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela identificar corretamente 5 membros diferentes da família,
+																										 animais de estimação ou outros reforçadores quando nomeados individualmente por um adulto.
+																										 Garanta que tenha pelo menos mais um item no arranjo.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim3op" id="mappnvl1Ouvim3op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela identificar corretamente 2 estímulos reforçadores diferentes.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim3op" id="mappnvl1Ouvim3op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim3op" id="mappnvl1Ouvim3op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg4 Ouvi -->
+																								<td rowspan="4" style="background-color: rgb(255, 249, 237);">
+																									<span>M4</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">	
+																									<span>
+																										Executa 4 ações motoras diferentes quando é solicitada e não necessita de uma dica visual (e.g., Você pode pular?, Mostre-me como se bate palmas?). (T)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Ouvim4" id="mappnvl1Ouvim4" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela emitir o comportamento motor correto para quaisquer
+																										estímulos verbais que exijam uma ação motora específica 2 vezes durante a testagem,
+																										para 4 ações diferentes e sem “chutar” a resposta correta.
+																										É importante somente pontuar a resposta como correta se apenas o estímulo verbal
+																										evocá-la. Por exemplo, a palavra “beijo” pode evocar o comportamento
+																										correspondente, porém, se o adulto inclinar o queixo da criança, puxar os lábios,
+																										apontar para eles, ou de alguma maneira der dicas visuais, esses estímulos podem
+																										tornar-se a fonte do controle de estímulos e não a palavra falada.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim4op" id="mappnvl1Ouvim4op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela emitir comportamentos motores corretos 2 vezes durante o teste para 2 ações diferentes.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim4op" id="mappnvl1Ouvim4op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim4op" id="mappnvl1Ouvim4op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg5 Ouvi -->
+																								<td rowspan="4" style="background-color: rgb(255, 237, 237);">
+																									<span>M5</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">	
+																									<span>
+																										Seleciona o item correto em um arranjo de 4 estímulos para 20 objetos e figuras
+																										diferentes (e.g., mostre-me o gato, toque no sapato).(T)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Ouvim5" id="mappnvl1Ouvim5" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto se a criança identificar corretamente 20 itens diferentes em arranjos de 4 itens,
+																										somente nas duas primeiras tentativas de cada arranjo testado. Quando a criança olhar
+																										 diferencialmente para os itens do arranjo (de forma a mostrar suas habilidades de ouvinte)
+																										  certifique-se de que você possa discriminar para onde a criança direciona o olhar e de que
+																										   a resposta dela seja claramente direcionada ao estímulo-alvo.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim5op" id="mappnvl1Ouvim5op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela identificar corretamente 15 itens diferentes em arranjos 
+																										de 4 itens nas duas primeiras tentativas de cada arranjo testado.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim5op" id="mappnvl1Ouvim5op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Ouvim5op" id="mappnvl1Ouvim5op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
 																								</td>
 																							</tr>
 																						</tbody>
@@ -1087,7 +1270,7 @@
 
 																		</div>
 																		<div id="vpmts1" class="tab-pane">
-																			<div class="alert alert-warning">
+																			<div class="alert alert-warning" hidden>
 																				<button type="button" class="close" data-dismiss="alert">
 																					<i class="ace-icon fa fa-times"></i>
 																				</button>
@@ -1115,80 +1298,280 @@
 																								<Th>
 																									Descrição
 																								</Th>
+																								<th>
+																									Pontuação
+																								</th>
 
 																							</tr>
 																							
 																						</thead>
 																						<tbody>
-																							<tr><!-- 1Reg -->
-																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																							<tr><!-- Reg1 vpmts1 -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 249);" >
+																									<span><b>M1</b></span>
 																								</td>
-																								<td>	
-																									<span>1.Segue visualmente um estímulo móvel por 2 segundos, por 5 vezes. (OC 30 min)</span>
+																								<td style="background-color: rgb(237, 255, 249);">	
+																									<span>
+																										Segue visualmente um estímulo móvel por 2 segundos, por 5 vezes. (OC 30 min)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 249);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Vpmtsm1" id="mappnvl1Vpmtsm1" type="text">
+																									</div>
 																								</td>
 																								
 																							</tr>
-																							<tr><!-- 2Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Dê 1 ponto à criança se ela acompanhar visualmente um estímulo móvel por 2 segundos, 5 vezes durante uma observação de 30 minutos.
+
+																									</span>
 																								</td>
-																								<td>	
-																									<span>2.Pega pequenos objetos com o polegar, indicador e dedo médio (movimento de pinça). (O)</span>
+																								<td>
+																									<input name="mappnvl1Vpmtsm1op" id="mappnvl1Vpmtsm1op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 3Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Dê 1/2 ponto à criança se ela acompanhar um estímulo móvel por 2 segundos, 2 vezes durante uma observação de 30 minutos.
+																									</span>	
 																								</td>
-																								<td>	
-																									<span>3.Atenta visualmente para um brinquedo ou livro por 30 segundos (não vale se o item é utilizado para auto estimulação). (O)</span>
+																								<td>
+																									<input name="mappnvl1Vpmtsm1op" id="mappnvl1Vpmtsm1op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 4Reg -->
+																							<tr>
 																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
-																									</div>
+																									<span>
+																										Não Pontuou.
+																									</span>
 																								</td>
-																								<td>	
-																									<span>4.Coloca 3 itens em um recipiente, empilha 3 blocos ou coloca 3 anéis em uma haste. Verificar se a criança realiza duas destas atividades ou atividades similares. (O/T)</span>
+																								<td>
+																									<input name="mappnvl1Vpmtsm1op" id="mappnvl1Vpmtsm1op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
 																								</td>
 																							</tr>
-																							<tr><!-- 5Reg -->
-																								<td>
-																									<input name="abllsrGrafI9val" id="abllsrGrafI9val" type="text" class="hidden ">
-																									<div class="checkbox">
-																										<label class="block">
-																											<input name="abllsrGrafI9ckerr" id="abllsrGrafI9ckerr" type="checkbox" class="ace ">
-																											<span class="lbl small"></span>
-																										</label>
+																							
+																							<tr><!-- Reg2 mando -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 242);">
+																									<span>M2</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">	
+																									<span>
+																										Pega pequenos objetos com o polegar, indicador e dedo médio (movimento de pinça). (O)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Vpmtsm2" id="mappnvl1Vpmtsm2" type="text">
 																									</div>
 																								</td>
-																								<td>	
-																									<span>5.Emparelha quaisquer 10 itens idênticos (e.g., quebra-cabeças, brinquedos ou figuras). (O/T)</span>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela tiver sucesso em pequenas atividades de coordenação viso motora,
+																										 tais como, alcançar e pegar pequenos brinquedos e outros objetos 5 vezes durante a observação.
+
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm2op" id="mappnvl1Vpmtsm2op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela precisar de 2 ou mais tentativas para conseguir ter sucesso em obter pequenos objetos na sua frente.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm2op" id="mappnvl1Vpmtsm2op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm2op" id="mappnvl1Vpmtsm2op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg3 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 254, 237);">
+																									<span>M3</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">	
+																									<span>
+																										Atenta visualmente para um brinquedo ou livro por 30 segundos (não vale se o item é utilizado para auto estimulação). (O)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Vpmtsm3" id="mappnvl1Vpmtsm3" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela demostrar atenção contínua a um estímulo visual específico, possivelmente reforçador, por 30 segundos.
+																										 Não pontue se este for sempre o mesmo item ou outros itens classificados como auto-estimulatórios 
+																										 (e.g., uma vareta que ela fica girando continuamente).
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm3op" id="mappnvl1Vpmtsm3op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela atentar ao estímulo visual por 15 segundos.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm3op" id="mappnvl1Vpmtsm3op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm3op" id="mappnvl1Vpmtsm3op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg4 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 249, 237);">
+																									<span>M4</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">	
+																									<span>
+																										Coloca 3 itens em um recipiente, empilha 3 blocos ou coloca 3 anéis em uma haste. Verificar se a criança realiza duas destas atividades ou atividades similares. (O/T)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Vpmtsm4" id="mappnvl1Vpmtsm4" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela colocar 3 itens em um recipiente, 
+																										empilhar 3 blocos, colocar 3 anéis em uma haste etc., de forma independente e para quaisquer 2 atividades 
+																										durante uma observação ou testagem.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm4op" id="mappnvl1Vpmtsm4op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										De 1/2 ponto à criança se ela colocar 2 itens em um recipiente, empilhar 2 blocos, 
+																										colocar 2 anéis em uma haste, etc., para uma atividade qualquer durante observação ou testagem.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm4op" id="mappnvl1Vpmtsm4op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm4op" id="mappnvl1Vpmtsm4op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg5 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 237, 237);">
+																									<span>M5</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">	
+																									<span>
+																										Emparelha quaisquer 10 itens idênticos (e.g., quebra-cabeças, brinquedos ou figuras). (O/T)
+																									</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Vpmtsm5" id="mappnvl1Vpmtsm5" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela emparelhar 10 itens em um arranjo de 3.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm5op" id="mappnvl1Vpmtsm5op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela emparelhar 5 itens em um arranjo de 3.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm5op" id="mappnvl1Vpmtsm5op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Vpmtsm5op" id="mappnvl1Vpmtsm5op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
 																								</td>
 																							</tr>
 																						</tbody>
@@ -1972,7 +2355,7 @@
 																		<li class="">
 																			<a data-toggle="tab" href="#ecoico2" aria-expanded="false">
 																				<i class="blue ace-icon fa fa-volume-down"></i>
-																				Ecóico
+																				Ecoico
 																			</a>
 																		</li>
 																		<li class="hidden">
@@ -2108,7 +2491,7 @@
 
 																		</div>
 																		<div id="tato2" class="tab-pane">
-																			<div class="alert alert-warning">
+																			<div class="alert alert-warning" hidden>
 																				<button type="button" class="close" data-dismiss="alert">
 																					<i class="ace-icon fa fa-times"></i>
 																				</button>
@@ -3555,7 +3938,7 @@
 																		<li class="hidden">
 																			<a data-toggle="tab" href="#ecoico3" aria-expanded="false">
 																				<i class="blue ace-icon fa fa-volume-down"></i>
-																				Ecóico
+																				Ecoico
 																			</a>
 																		</li>
 																		<li class="hidden">
@@ -3690,7 +4073,7 @@
 
 																		</div>
 																		<div id="tato3" class="tab-pane">
-																			<div class="alert alert-warning">
+																			<div class="alert alert-warning" hidden>
 																				<button type="button" class="close" data-dismiss="alert">
 																					<i class="ace-icon fa fa-times"></i>
 																				</button>

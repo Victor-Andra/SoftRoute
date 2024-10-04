@@ -2085,6 +2085,10 @@ router.get('/area/aba/progdica/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{
     fncProgdica.carregaProgdicaEdi(req, res);
 })
 
+router.get('/area/aba/progdica/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncProgdica.atualizaProgdica(req, res);
+})
+
 //------------------------------------------------------------------------------------------------
 
 //Menu Nivel ** Area Tecnicos e ABA 
@@ -2113,6 +2117,9 @@ router.get('/area/aba/prognivel/edi/:id', fncGeral.IsAuthenticated, (req,res) =>
     fncPrognivel.carregaPrognivelEdi(req, res);
 })
 
+router.get('/area/aba/prognivel/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
+    fncPrognivel.atualizaPrognivel(req, res);
+})
 //----------------------------------------------------------------------------------------------
 
 //Menu Tipo ** Area Tecnicos e ABA 

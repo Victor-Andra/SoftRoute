@@ -860,7 +860,7 @@ module.exports = {
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Terapia.find().then((terapia)=>{
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         res.render("atendimento/relatendvalBene", {terapeutas: terapeuta, terapias: terapia, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
@@ -883,6 +883,8 @@ module.exports = {
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         console.log("periodoDe:? "+periodoDe)
         console.log("periodoAte:? "+periodoAte)
+        let date = new Date();
+        let porHoras = req.body.porHoras;
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
@@ -918,12 +920,12 @@ module.exports = {
                             at.sort(function(a, b) {
                                 let d1 = new Date(a.atend_atenddata);
                                 let d2 = new Date(b.atend_atenddata);
-                                d1.setHours(0);
-                                d1.setMinutes(0);
-                                d1.setSeconds(0);
-                                d2.setHours(0);
-                                d2.setMinutes(0);
-                                d2.setSeconds(0);
+                                //d1.setHours(0);
+                                //d1.setMinutes(0);
+                                //d1.setSeconds(0);
+                                //d2.setHours(0);
+                                //d2.setMinutes(0);
+                                //d2.setSeconds(0);
                                 if(d1 == d2){
                                     return true;
                                 } else {
@@ -936,7 +938,28 @@ module.exports = {
                             });
                             at.forEach((atend)=>{
                                 if (req.body.porHoras == "sim"){
-                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora;
+                                    let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
+                                    let minutoFim = atend.atend_atendhora.substring(3,5);
+                                    console.log("minutoFim: "+minutoFim)
+                                    switch (minutoFim) {
+                                        case "00":
+                                            horaFim = ((""+(horaFim)+"").length == 1 ? ("0"+(horaFim)+""):(""+(horaFim)+""));
+                                            minutoFim = "40";
+                                            break;
+                                        case "20":
+                                            minutoFim = "00";
+                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                            break;
+                                        case "40":
+                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                            minutoFim = "20";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
                                 } else {
                                     console.log("atend.atend_atenddata: "+atend.atend_atenddata)
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
@@ -996,7 +1019,7 @@ module.exports = {
                                 rel.push(rab);
                                 rab = new RelAtendBene();
                             });
-                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome})
+                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
                         })
                     })
                 })
