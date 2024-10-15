@@ -1,0 +1,291 @@
+																			<div class="row"  style="float:right;">
+																				<div class="col-sm-12">
+																					<label for="id-date-picker-1">Pontuação Total:</label>
+																					<input name="folRegset" id="folRegset" type="text" />
+																				</div>
+																			</div>
+																			<div class="col-xs-12"><!-- /.Defesa Sensorial -->
+																				<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																					<thead>
+																						<h5 class="widget-title bigger lighter">
+																							<i class="ace-icon fa fa-table"></i>
+																							A criança atende e tenta interagir socialmente com os outros?
+																						</h5>
+																						<tr colspan="5">
+																							<th >
+																								Marco
+																							</th>
+																							<Th>
+																								Descrição
+																							</Th>
+																							<Th>
+																								Pontuação
+																							</Th>
+
+																						</tr>
+																						
+																					</thead>
+																						
+																						<tbody>
+																							<tr><!-- Reg1 mando -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 249);" >
+																									<span><b>M1</b></span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 249);">	
+																									<span>Emite 2 palavras, sinais ou PECS, porém pode precisar de dica ecóica, imitativa ou outras dicas, desde que não físicas.(O/T) </span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 249);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Mandom1" id="mappnvl1Mandom1" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê um ponto à criança se ela responder quando um adulto fornecer uma dica ecóica, como “diga biscoito”, quando um biscoito estiver presente, para 2 itens ou atividades desejadas.
+																										Dê 1 ponto à criança que utiliza linguagem de sinais se ela responder quando o adulto fornecer uma dica imitativa ou falar a palavra (dica intraverbal). Para uma criança utilizando um sistema de figuras, o adulto pode apontar para a figura em questão e estimular a criança verbalmente a pegá-la.
+																										Não dê ponto se for necessário uma dica física para sinalizar ou escolher
+																										uma figura ou símbolo.
+
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom1op" id="mappnvl1Mandom1op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela emitir apenas 1 mando.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom1op" id="mappnvl1Mandom1op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom1op" id="mappnvl1Mandom1op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																							
+																							<tr><!-- Reg2 mando -->
+																								<td rowspan="4" style="background-color: rgb(237, 255, 242);">
+																									<span>M2</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">	
+																									<span>Emite 4 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., música, comida, bola). (O/T)</span>
+																								</td>
+																								<td style="background-color: rgb(237, 255, 242);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Mandom2" id="mappnvl1Mandom2" type="text">
+																									</div>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela emitir mandos para 4 reforçadores diferentes sem que o adulto diga a palavra em questão (dica ecóica), sem que ele ofereça uma dica imitativa ou de apontar, e para crianças que usam sinais, sem dizer a palavra (dica intraverbal).
+																										O item ou atividade desejada podem estar presentes e também a dica verbal
+																										“O que você quer?” (ou algo similar).
+
+
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom2op" id="mappnvl1Mandom2op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto se criança que emitir 3 mandos deste tipo.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom2op" id="mappnvl1Mandom2op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom2op" id="mappnvl1Mandom2op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg3 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 254, 237);">
+																									<span>M3</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">	
+																									<span>Generaliza 6 mandos entre 2 pessoas, 2 ambientes e para 2 tipos diferentes de reforçador (e.g., Emite mandos para bolinhas de sabão tanto para a mãe quanto para o pai, em um ambiente interno e externo e em um pote plástico vermelho ou azul). (O/T)</span>
+																								</td>
+																								<td style="background-color: rgb(255, 254, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Mandom3" id="mappnvl1Mandom3" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela generalizar 6 mandos para 2 pessoas, 2 ambientes e 2 exemplares de reforçador.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom3op" id="mappnvl1Mandom3op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto se ela generalizar 3 mandos para 2 pessoas, 2 ambientes e 2 exemplares de um reforçador.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom3op" id="mappnvl1Mandom3op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom3op" id="mappnvl1Mandom3op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg4 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 249, 237);">
+																									<span>M4</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">	
+																									<span>Emite 5 mandos espontaneamente (sem dicas verbais). O item desejado pode estar presente. (OC: 60 min)</span>
+																								</td>
+																								<td style="background-color: rgb(255, 249, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Mandom4" id="mappnvl1Mandom4" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela emitir mandos por 5 vezes (pelo menos dois diferentes), espontaneamente e durante uma observação de 1 hora (sem utilizar “O que você quer?” ou dicas similares).
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom4op" id="mappnvl1Mandom4op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela emitir mandos espontaneamente, 5 vezes durante uma observação de 1 hora, porém, sempre com a mesma palavra.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom4op" id="mappnvl1Mandom4op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom4op" id="mappnvl1Mandom4op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																								<tr><!-- Reg5 mando -->
+																								<td rowspan="4" style="background-color: rgb(255, 237, 237);">
+																									<span>M5</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">	
+																									<span>Emite 10 mandos diferentes sem dicas (exceto, O que você quer?). O item desejado pode estar presente (e.g., maçã, balanço, carrinho, suco). (O/T)</span>
+																								</td>
+																								<td style="background-color: rgb(255, 237, 237);">
+																									<div class="col-xs-2 col-sm-2">
+																										<input name="mappnvl1Mandom5" id="mappnvl1Mandom5" type="text">
+																									</div>
+																								</td>
+																								
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1 ponto à criança se ela emitir mandos para 10 reforçadores diferentes sem que o adulto diga a palavra, forneça uma dica de imitação ou de apontar e fale a palavra 
+																										(dica intraverbal), no caso de uma criança que utiliza sinais. O item desejado pode estar presente, bem como a dica verbal “O que você quer?” (ou algo similar).
+																										Mandos para remover aversivos tais como dizer “não” ou “meu” podem também ser contados.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom5op" id="mappnvl1Mandom5op1"  type="radio" class="ace" value="1,0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-success arrowed-in">&nbsp;1,0</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Dê 1/2 ponto à criança se ela emitir 8 mandos diferentes.
+																									</span>	
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom5op" id="mappnvl1Mandom5op2"  type="radio" class="ace" value="0,5" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-warning arrowed-in">&nbsp;0,5</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<span>
+																										Não Pontuou.
+																									</span>
+																								</td>
+																								<td>
+																									<input name="mappnvl1Mandom5op" id="mappnvl1Mandom5op3"  type="radio" class="ace" value="0" onchange="javascript:somaResEstSI()">
+																									<span class="lbl"></span>
+																									<span class="label label-danger arrowed-in">&nbsp;0,0</span>
+																								</td>
+																							</tr>
+																						</tbody>
+																				</table>
