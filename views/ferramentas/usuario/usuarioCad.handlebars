@@ -145,6 +145,19 @@
 					document.getElementById('usuarioMetout').value = selectedValues.join(';');
 				}
 
+				function salvar() {
+					if (document.getElementById("login") == undefined || document.getElementById("login") == "") {
+						alert("Por favor preencha o login corretamente.");
+					} else if (document.getElementById("senha") == undefined || document.getElementById("senha") == "") {
+						alert("Por favor preencha a senha corretamente.");
+					} else if (document.getElementById("usuarioEmail") == undefined || document.getElementById("usuarioEmail") == "") {
+						alert("Por favor preencha o email corretamente.");
+					} else {
+						let form = document.getElementById("formUsuarioCad");
+						form.action = "/menu/ferramentas/usuario/add";
+						form.submit();
+					}
+				}
 		</script>
 	</head>
 
@@ -166,7 +179,7 @@
 					<div class="row">
 						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/usuario/add" method="POST">
+							<form id="formUsuarioCad" class="form-horizontal" role="form" method="POST">
 								<document class="document-horizontal" role="document" >
 									<div class="col-sm-12" style="padding-top: 50px;">
 										<div class="row">
@@ -834,7 +847,7 @@
 									<div class="clearfix document-actions">
 									
 										<div class="col-md-offset-3 col-md-9">
-											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" onclick="javascript:salvar();">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
 											</button>

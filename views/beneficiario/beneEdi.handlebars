@@ -165,7 +165,7 @@
 			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
 			document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
 			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
-			
+			document.getElementById("beneAba").value = document.getElementById("beneAbaEdi").value;
 		}
 		function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
@@ -330,6 +330,7 @@
 			<input type="text" id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
 			<input type="text" id="beneObsadmEdi" name="beneObsadmEdi" value="{{beneEdi.bene_obsadm}}"/>
 			<input type="text" id="beneObsEdi" name="beneObsEdi" value="{{beneEdi.bene_obs}}"/>
+			<input type="text" id="beneAbaEdi" name="beneAbaEdi" value="{{beneEdi.bene_aba}}"/>
 			
 		</div>
 		<div class="main-container ace-save-state" id="main-container">
@@ -1203,7 +1204,6 @@
 													</div>
 												</div>
 												<div id="obsadm" class="tab-pane fade">
-													
 													<div class="row">
 														<div class="col-xs-12">
 															<label> Observações administrativas</label>
@@ -1212,7 +1212,6 @@
 															</div>
 														</div>
 													</div>
-													
 												</div>
 												<div id="obs" class="tab-pane fade">
 													<div class="row">
@@ -1230,11 +1229,10 @@
 														<div class="input-group">
 															<div >
 																<select name="beneAba" id="beneAba" class="chosen-select" class="form-control" data-placeholder="Escolha...">
-																		<option value="Não">Não</option>
-																		<option value="Sim">Sim</option>
+																	<option value="Não">Não</option>
+																	<option value="Sim">Sim</option>
 																</select>
 															</div>
-															
 														</div>
 													</div>
 												</div>
@@ -1242,23 +1240,17 @@
 										</div>
 									</div>
 									<hr>
-									
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
-
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
-									
-									
-									
-									
+									<div class="col-xs-12" style="text-align: center;" >
+										<button class="btn btn-info"  name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
 								</document>
 							</form>
 						</div>

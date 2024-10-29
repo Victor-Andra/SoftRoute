@@ -2712,6 +2712,7 @@ module.exports = {
         let idsToRemove = [];
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        let totalFinal = 0;
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -2871,7 +2872,6 @@ module.exports = {
                                                     beneAtend = agenda.agenda_beneid;
                                                     break;
                                                 default:
-                                                    console.log("DEFAAAAAAAAAAAAAAAAULT");
                                                     terapiaAtend = agenda.agenda_terapiaid;
                                                     terapeutaAtend = agenda.agenda_usuid;
                                                     beneAtend = agenda.agenda_beneid;
@@ -2883,11 +2883,12 @@ module.exports = {
                                                 terapia.some((temp)=>{
                                                     if ((""+temp._id) == (""+terapiaAtend)){
                                                         teraTemp = temp;
+                                                        teranome = temp.terapia_nomecid;
                                                     }
                                                 })
                                                 if ((""+t.terapia_nomecid) == (""+teraTemp.terapia_nomecid)){
                                                     count++;
-                                                    if (count == 1){
+                                                    //if (count == 1){
                                                         //conv_bene + terapia = valor cre e deb
                                                         let benetemp;
                                                         let valdeb;
@@ -2907,24 +2908,50 @@ module.exports = {
                                                                 valdeb = cdeb.convdeb_valor;
                                                             }
                                                         })
-                                                        rab.nomecid = terapiaAtend;
+
+                                                        rab.nomecid = teranome;
                                                         rab.valor = valdeb;
+                                                    //}
+                                                    let existe = rel.find(r => (""+r.nomecid+"") === (""+teranome+"") && r.valor === valdeb);
+                                                    
+                                                    if (existe) {
+                                                        existe.sessoes += 1;
+                                                    } else {
+                                                        rel.push({
+                                                            nomecid: teranome,
+                                                            valor: valdeb,
+                                                            sessoes: 1,
+                                                        });
                                                     }
-                                                    rab.sessoes = count;
+                                                    
+                                                    //rab.sessoes = count;
                                                     idsToRemove.push(agenda._id);
                                                 }
                                             }
                                         })
+                                        /*
                                         if (count > 0){
                                             rab.total =  this.mascaraValores(parseInt(rab.valor.toString().replace(",","").replace(".","")) * rab.sessoes);
 
                                             rel.push(rab);
                                         }
+                                        */
                                         idsToRemove.forEach((itr)=>{
                                             agendaFinal = agendaFinal.filter(af => (""+af._id) !== (""+itr));
                                         })
                                     })
-                                    res.render("atendimento/atendreltera/relatendteracons", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, pesquisa})
+                                    rel.forEach((r)=>{
+                                        terapia.some((t)=>{
+                                            if (t.terapia_nomecid == r.nomecid){
+                                                r.nomecid = t._id;
+                                            }
+                                        })
+                                        r.total = this.mascaraValores(parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes);
+                                        totalFinal += parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes;
+                                    })
+                                    totalFinal = this.mascaraValores(totalFinal);
+
+                                    res.render("atendimento/atendreltera/relatendteracons", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, totalFinal, pesquisa})
                                 })
                             })
                         })
