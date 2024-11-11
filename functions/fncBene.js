@@ -240,8 +240,9 @@ module.exports = {
                         console.log("Listagem Realizada Terapia!")
                                 Usuario.find().then((usuario)=>{
                                 console.log("Listagem Realizada Usuário!")
-            res.render('beneficiario/benesupLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
-        })})})}).catch((err) =>{
+                                Estado.find().then((estado)=>{
+            res.render('beneficiario/benesupLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene, estados: estado})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Benes")
             res.redirect('admin/erro')

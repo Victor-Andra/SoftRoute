@@ -13405,9 +13405,7 @@ atualizar.then((res) =>{
     //console.log(resultado);
 })
 
-let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{
     a.forEach(a=>{Atend.deleteOne({_id: a._id}).then(()=>{//console.log("DELETED!");})})
-})
 */
 /*
 converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento

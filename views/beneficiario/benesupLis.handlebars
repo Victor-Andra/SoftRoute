@@ -51,8 +51,12 @@
 															<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Apelido</th>
 															<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Data Nascimento</th>
 															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Escola</th>
+															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Endereço</th>
 															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Ano Letivo</th>
 															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Série</th>
+															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Responsáveis</th>
+															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Contatos</th>
+															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">E-mail</th>
 															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
 															<th>Ação</th>
 														</tr>
@@ -70,9 +74,32 @@
 																<td>{{bene_nome}}</td>
 																<td>{{bene_apelido}}</td>
 																<td>{{datanasc}}</td>
-																<td>{{nome_escolanome}}</td>
-																<td>{{nome_escolaano}}</td>
-																<td>{{nome_escolaserie}}</td>
+																<td>{{bene_escolanome}}</td>
+																<td>
+																	{{bene_escolaend}}<br>
+																	{{bene_escolacomp}} 
+																	{{bene_escolabairro}} {{bene_escolacidade}} {{bene_escolacep}}<br>
+																	{{#each ../estados}}
+																		{{#ifEqual this._id ../bene_escolauf}}
+																			{{estado_uf}}
+																		{{/ifEqual}}
+																	{{/each}}
+																</td>
+																<td>{{bene_escolaano}}</td>
+																<td>{{bene_escolaserie}}</td>
+																<td>
+																	<span class="badge badge-danger">{{bene_escolacoord}}</span><br>
+																	<span class="badge badge-warning">{{bene_escolaoutro1}}</span><br>
+																	<span class="badge badge-pink">{{bene_escolaoutro2}}</span><br>
+																	<span class="badge badge-info">{{bene_escolaoutro3}}</span><br>
+																</td>
+																<td>
+																	<span class="badge badge-danger">{{bene_escolacoordtel}}</span><br>
+																	<span class="badge badge-warning">{{bene_escolaoutro1tel}}</span><br>
+																	<span class="badge badge-pink">{{bene_escolaoutro2tel}}</span><br>
+																	<span class="badge badge-info">{{bene_escolaoutro3tel}}</span><br>
+																</td>
+																<td>{{bene_escolaemail}}</td>
 																{{#ifEqual this.bene_status "Inativo"}}
 																	<td><span class="label label-sm label-danger">{{bene_status}}</span></td>
 																	{{else}}
@@ -122,7 +149,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, null, null,  { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

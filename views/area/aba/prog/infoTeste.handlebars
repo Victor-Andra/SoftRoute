@@ -1,0 +1,27 @@
+Aqui está um exemplo de como fazer isso:
+
+javascript
+Copiar código
+function initDynamicSparkline(values) {
+    const barColors = [
+        'rgba(0, 255, 0, 0.5)',     // Primeira barra - Verde limão
+        'rgba(255, 255, 0, 0.5)',   // Segunda barra - Amarelo
+        'rgba(255, 165, 0, 0.5)',   // Terceira barra - Laranja
+        'rgba(255, 99, 132, 0.5)'   // Quarta barra - Rosa
+    ];
+
+    $('.sparkline').sparkline(values, {
+        type: 'bar',
+        barWidth: 8,
+        height: '30px',
+        chartRangeMin: 0,
+        colorMap: barColors.map((color, index) => ({ [index]: color })) // Aplica cores fixas por posição
+    });
+}
+
+// Chamando a função com valores aleatórios para teste
+initDynamicSparkline([3, 4, 2, 3]);
+Explicação:
+barColors: Array com as cores em sequência fixa para cada barra.
+colorMap: Ao usar map e [index]: color, estamos definindo cada cor individualmente para a posição exata da barra, ignorando o valor da barra.
+Esse ajuste impede que a cor mude com base no valor da barra e aplica as cores de acordo com a posição.

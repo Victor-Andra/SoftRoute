@@ -12,6 +12,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista ABA</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.7/jquery.easypiechart.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
 			
 			<script>
 				
@@ -30,7 +33,6 @@
 							barWidth: 8,
 							height: '30px',
 							chartRangeMin: 0,
-							firstcolor:'#00FF0080',
 							colorMap: {
 								'0': '#00FF0080',       // '#00FF0080' ou 'rgba(0, 255, 0, 0.5)' Primeira barra - Verde transparente
 								'1': '#FFFF0080',     // '#FFFF0080' ou 'rgba(255, 255, 0, 0.5)' Segunda barra - Amarelo transparente
@@ -40,22 +42,7 @@
 						});
 					});
 				}
-				function initDynamicSparkline(values) {
-					const barColors = [
-						'rgba(0, 255, 0, 0.5)',     // Primeira barra - Verde limão
-						'rgba(255, 255, 0, 0.5)',   // Segunda barra - Amarelo
-						'rgba(255, 165, 0, 0.5)',   // Terceira barra - Laranja
-						'rgba(255, 99, 132, 0.5)'   // Quarta barra - Rosa
-					];
-
-					$('.sparkline').sparkline(values, {
-						type: 'bar',
-						barWidth: 8,
-						height: '30px',
-						chartRangeMin: 0,
-						colorMap: barColors.map((color, index) => ({ [index]: color })) // Aplica cores fixas por posição
-					});
-				}
+				
 				function initEasyPieCharts() {
 					// Seleciona todos os elementos com a classe easy-pie-chart
 					$('.easy-pie-chart').each(function() {
