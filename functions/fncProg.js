@@ -82,7 +82,7 @@ module.exports = {
                 b.dataedi = fulldate;
             });
     
-            Bene.find({ bene_status: "Ativo" }).then((bene) => {
+            Bene.find({ bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
                 bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
     
                 bene.forEach((b) => {

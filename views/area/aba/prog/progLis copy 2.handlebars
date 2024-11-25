@@ -15,49 +15,47 @@
 			
 			<script>
 				
-			function initEasySparkline() {
-				console.log("Iniciando Sparkline");
+				function initEasySparkline() {
+					console.log("Iniciando Sparkline");
+					$('.sparkline').each(function() {
+						console.log("Elemento encontrado:", $(this));
+						console.log("Valores data-values:", $(this).data('values')); // Log de valores
 
-				if (typeof $.fn.sparkline !== "function") {
-					console.error("Biblioteca Sparkline não carregada.");
-					return;
-				}
+						var $box = $(this).closest('.infobox');
+						var barColor = !$box.hasClass('infobox-dark') ? '#0073e6' : '#FFF'; // Força cor para teste
 
-				const fixedColors = [
-					'#00FF00', // Verde
-					'#FFFF00', // Amarelo
-					'#FFA500', // Laranja
-					'#FF69B4',  // Rosa
-					'#0000FF', // Azul
-					'#FF0000', // Vermelho
-					'#00FFFF'  // Ciano
-				];
-
-				$('.sparkline').each(function () {
-					const $this = $(this);
-					const values = $this.data('values');
-
-					if (!values) {
-						console.error("Atributo data-values não definido ou vazio:", $this);
-						return;
-					}
-
-					try {
-						$this.sparkline('html', {
+						$(this).sparkline('html', {
 							tagValuesAttribute: 'data-values',
 							type: 'bar',
 							barWidth: 8,
 							height: '30px',
 							chartRangeMin: 0,
-							colorMap: fixedColors.slice(0, values.split(',').length), // Seleciona cores com base na quantidade de barras
-							barColor: null // Evita sobrescrever o colorMap com uma cor única
+							firstcolor:'#00FF0080',
+							colorMap: {
+								'0': '#00FF0080',       // '#00FF0080' ou 'rgba(0, 255, 0, 0.5)' Primeira barra - Verde transparente
+								'1': '#FFFF0080',     // '#FFFF0080' ou 'rgba(255, 255, 0, 0.5)' Segunda barra - Amarelo transparente
+								'2': '#FFA50080',     // '#FFA50080' ou 'rgba(255, 165, 0, 0.5)' Terceira barra - Laranja transparente
+								'3': '#FF638480'     // '#FF638480'ou 'rgba(255, 99, 132, 0.5) Quarta barra - Rosa transparente
+							}
 						});
-						console.log("Sparkline desenhado com cores fixas no elemento:", $this);
-					} catch (error) {
-						console.error("Erro ao desenhar Sparkline:", error);
-					}
-				});
-			}
+					});
+				}
+				function initDynamicSparkline(values) {
+					const barColors = [
+						'rgba(0, 255, 0, 0.5)',     // Primeira barra - Verde limão
+						'rgba(255, 255, 0, 0.5)',   // Segunda barra - Amarelo
+						'rgba(255, 165, 0, 0.5)',   // Terceira barra - Laranja
+						'rgba(255, 99, 132, 0.5)'   // Quarta barra - Rosa
+					];
+
+					$('.sparkline').sparkline(values, {
+						type: 'bar',
+						barWidth: 8,
+						height: '30px',
+						chartRangeMin: 0,
+						colorMap: barColors.map((color, index) => ({ [index]: color })) // Aplica cores fixas por posição
+					});
+				}
 				function initEasyPieCharts() {
 					// Seleciona todos os elementos com a classe easy-pie-chart
 					$('.easy-pie-chart').each(function() {

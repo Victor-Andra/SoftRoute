@@ -506,6 +506,150 @@ module.exports = {AgendaModel,AgendaSchema,
             return retorno;
         })
     },
+    agendaFeriado: async (req, res) => {
+        console.log("req.body.dataFinal: "+req.body.dataFinal)
+        let seg = new Date(req.body.dataFinal);
+        seg.setDate(seg.getDate()+1);
+        seg.setSeconds(0);
+        seg.setMinutes(0);
+        seg.setHours(0);
+
+        let sex = new Date(req.body.dataFinal);
+        sex.setDate(sex.getDate()+1);
+        sex.setSeconds(59);
+        sex.setMinutes(59);
+        sex.setHours(23);
+
+        let usuarioAtual = req.cookies['idUsu'];
+        var retorno;
+        let arrayAgendasNovas = [];
+        let dataAtual = new Date();
+        let arrayIds =[];
+        let agendaFinal = [];
+        let resultado;
+        let busca;
+        let agendaS;
+        console.log("ini: "+fncGeral.getDateToIsostring(seg));
+        console.log("fim: "+fncGeral.getDateToIsostring(sex));
+
+        busca = { agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_temp: false };
+
+        await AgendaModel.find(busca).then((agenda)=>{
+            agenda.forEach(a => {
+                arrayIds.push(a._id);
+            })
+            AgendaModel.find({agenda_tempId: {$in: arrayIds}}).then((agendaSemanal)=>{
+                agendaSemanal.forEach(as => {
+                    agendaFinal.push(as);
+                })
+                agenda.forEach((a)=>{
+                    let add = "true";
+                    agendaSemanal.forEach(as => {
+                        if ((""+as.agenda_tempId+"") == (""+a._id+"")){
+                            add = "false";
+                        }
+                    })
+                    if (add == "true"){
+                        agendaFinal.push(a);
+                    }
+                })
+                
+                agendaFinal.forEach(a => {
+                    if (a.agenda_tempId == undefined || a.agenda_tempId == "undefined"){
+                        agendaS = "false";
+                    } else {
+                        agendaS = "true";
+                    }
+                    
+                    if (agendaS == "true"){
+                        if (a.agenda_categoria != "Falta Justificada"){
+                            arrayAgendasNovas.push(a);
+                            AgendaModel.findByIdAndUpdate(a._id, 
+                                {$set: {
+                                    agenda_categoria : "Falta Justificada" ,
+                                    agenda_org : "Administrativo" ,
+                                    agenda_usucad : usuarioAtual ,
+                                    agenda_dataedi : dataAtual ,
+                                    agenda_faltaId : req.body.agendaFaltaId ,
+                                    agenda_tempmotivo : "Feriado" ,
+                                    agenda_turnoFalta : req.body.agendaTurnoFalta 
+                                }}
+                            ).then((res) =>{
+                                //console.log("Salvo")
+                                resultado = true;
+                            }).catch((err) =>{
+                                console.log("erro mongo:")
+                                console.log(err)
+                                resultado = err;
+                                //res.redirect('admin/branco')
+                            })
+                        }
+                    } else {
+                        if (a.agenda_mergeterapeutaid != undefined){
+                            let newAgenda = new AgendaModel({
+                                agenda_data : a.agenda_data ,
+                                agenda_beneid : a.agenda_beneid ,
+                                agenda_convid : a.agenda_convid ,
+                                agenda_salaid : a.agenda_salaid ,
+                                agenda_terapiaid : a.agenda_terapiaid ,
+                                agenda_usuid : a.agenda_usuid ,
+                                agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
+                                agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
+                                agenda_migrado : false ,
+                                agenda_categoria : "Falta Justificada" ,
+                                agenda_org : "Administrativo" ,
+                                agenda_obs : a.agenda_obs ,
+                                agenda_temp : true ,
+                                agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                agenda_tempmotivo : "Feriado" ,
+                                agenda_selo : false ,
+                                agenda_copia : false,
+                                agenda_faltaId : req.body.agendaFaltaId,
+                                agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                agenda_usucad : usuarioAtual,
+                                agenda_datacad : dataAtual
+                            });
+                            arrayAgendasNovas.push(newAgenda)
+                            newAgenda.save()
+                        } else {
+                            let newAgenda = new AgendaModel({
+                                agenda_data : a.agenda_data ,
+                                agenda_beneid : a.agenda_beneid ,
+                                agenda_convid : a.agenda_convid ,
+                                agenda_salaid : a.agenda_salaid ,
+                                agenda_terapiaid : a.agenda_terapiaid ,
+                                agenda_usuid : a.agenda_usuid ,
+                                agenda_migrado : false ,
+                                agenda_categoria : "Falta Justificada" ,
+                                agenda_org : "Administrativo" ,
+                                agenda_obs : a.agenda_obs ,
+                                agenda_temp : true ,
+                                agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                agenda_tempmotivo : "Feriado" ,
+                                agenda_selo : false ,
+                                agenda_copia : false,
+                                agenda_faltaId : req.body.agendaFaltaId,
+                                agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                agenda_usucad : usuarioAtual,
+                                agenda_datacad : dataAtual
+                            });
+                            arrayAgendasNovas.push(newAgenda)
+                            newAgenda.save();
+                        }
+                    }
+                });
+            })
+        }).catch((err) =>{
+            retorno = err
+            console.log("erro mongo:");
+            console.log(err);
+        }).finally(()=>{
+            //console.log("arrayAgendasNovas: "+arrayAgendasNovas.length)
+            
+            retorno = "true";
+            return retorno;
+        })
+    },
     /*
     agendaFaltaDia: async (req, res, busca, buscaSemanal) => {
         let usuarioAtual = req.cookies['idUsu'];

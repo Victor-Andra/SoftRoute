@@ -69,12 +69,53 @@ module.exports = {
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
                     console.log("Listagem Realizada de Usuário")
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    Bene.find().then((bene)=>{
+                        Bene.findOne({_id : req.params.id}).then((b)=>{
+                         console.log("b.datanasc"+b.bene_datanasc)
+                            let datanasc = new Date(b.bene_datanasc);
+                            //console.log("datanasc: "+datanasc);
+                            let mes = (datanasc.getMonth()+1).toString();
+                            let dia = (datanasc.getUTCDate()).toString();
+                            if (mes.length == 1){
+                                mes = "0"+mes;
+                            }
+                            if (dia.length == 1){
+                                dia = "0"+dia;
+                            }
+                            let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
+                            b.datanasc=fulldate;
+                            //datanasc = (dia+"-"+mes+"-"+datanasc.getFullYear()).toString();
+
+                            // Data atual
+                            const hoje = new Date();
+                            let idade = new Date(b.bene_idade);
+
+                            // Data de aniversário
+                            let aniversario = new Date(b.bene_datanasc);
+
+                            // Cálculo da idade
+                            let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+                            let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+                            let idadedias = hoje.getDay() - aniversario.getDay();
+
+                            // Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
+                            if (hoje.getDate() < aniversario.getDate()) {
+                                idadeMeses--;
+                            }
+
+                            // Se o mês do aniversário for maior que o mês atual, ajusta a idade
+                            if (idadeMeses < 0) {
+                                idadeAnos--;
+                                idadeMeses += 12;
+                            }
+                            let fullidade = (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
+                            bene.idade = fullidade;
+
                         console.log("Listagem Realizada de beneficiarios")
                         Progtipo.find().then((progtipo)=>{
                             Prog.find().then((prog)=>{
-                              res.render("area/aba/notasup/notasupCad", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, Progtipos: progtipo, Progs: prog, beneid})
-        })})})})})}).catch((err) =>{
+                              res.render("area/aba/notasup/notasupCad", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, Progtipos: progtipo, Progs: prog, beneid, datanasc, fullidade, b})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')

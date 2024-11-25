@@ -6425,20 +6425,26 @@ module.exports = {
         let sexta;
         let hoje;
         let seg = new Date();
+        seg.setDate(seg.getDate()+1)
         seg.setSeconds(0);
         seg.setMinutes(0);
         seg.setHours(0);
 
         let sex = new Date();
+        sex.setDate(sex.getDate()+1)
         sex.setSeconds(59);
         sex.setMinutes(59);
         sex.setHours(23);
 
         let diaSemana = new Date();//segunda
+        diaSemana.setDate(diaSemana.getDate()+1)
         diaSemana.setSeconds(0);
         diaSemana.setMinutes(0);
         diaSemana.setHours(0);
 
+        console.log(seg)
+        console.log(sex)
+        console.log(diaSemana)
         switch (seg.getUTCDay()){
             case 0://DOM
                 hoje = "dom";

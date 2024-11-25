@@ -278,7 +278,7 @@
 				// Loop através de todos os inputs encontrados
 				inputs.forEach(function(input) {
 					// Verifica o valor do input
-					switch((input.id).substring((input.id).length-1,(input.id).length)) {
+					switch((input.id).substring((input.id).length-1,(input.id).length)) {      
 						case '1':
 							totalI++;
 							break;
@@ -488,6 +488,18 @@
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
+
+			function salvar() {
+				if (document.getElementById("folregDatareg").value == '') {
+					alert("Por favor, informe a Data do Registro antes de salvar!");
+				} else if (document.getElementById("folregUsuid").value == '') {
+					alert("Por favor, informe o Técnico Aplicador antes de salvar!");
+				} else {
+					let form = document.getElementById("formFolregPreCad");
+					form.action = "/menu/area/aba/folreg/add";
+					form.submit();
+				}
+			}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
@@ -504,7 +516,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- PAGE CONTENT BEGINS -->
-						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/add" method="POST">
+						<form id="formFolregPreCad" class="form-horizontal" role="form" method="POST">
 							<div class="col-xs-12">
 								<div id="divCarrega" hidden>
 									<!-- principais indices-->
@@ -676,7 +688,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="folregDatareg" id="folregDatareg" type="date" onchange="javascript:atualizaData()" />
+																<input name="folregDatareg" id="folregDatareg" type="date" />
 															</div>
 														</div>
 													</div>
@@ -1986,7 +1998,7 @@
 							<div class="col-xs-12">
 								<br>
 								<div class="col-md-12" style="text-align: center;">
-									<button class="btn btn-info" name="acao" type="submit">
+									<button class="btn btn-info" name="acao" type="button" onclick="javascript:salvar();">
 										<i class="ace-icon fa fa-check bigger-110"></i>
 										Salvar
 									</button>

@@ -60,7 +60,9 @@
 															<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Nascimento</th>
 															<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Idade</th>
 															<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
+															<th>ABA?</th>
 															<th style="width: 50px;"><a title="Foto cadastrada?"><i class="orange ace-icon fa fa-upload bigger-130"></i></a></th>
+															
 															<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
 															
 															<th>Ação</th>
@@ -80,17 +82,39 @@
 																<td>{{bene_apelido}}</td>
 																<td>{{datanasc}}</td>
 																<td>{{idade}}</td>
+																
 																{{#each ../convs}}
 																	{{#ifEqual this._id ../bene_convid}}
 																		<td>{{conv_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
+
+																{{#ifEqual this.bene_aba "Sim"}}
+																	<td>
+																		{{#ifEqual this.bene_abaclinica "Sim"}}
+																		<i class=" blue ace-icon fa fa-industry bigger-130"></i>
+																		{{/ifEqual}}
+																		{{#ifEqual this.bene_abaescola "Sim"}}
+																		<i class=" orange ace-icon fa fa-university bigger-130"></i>
+																		{{/ifEqual}}
+																		{{#ifEqual this.bene_abaparticular "Sim"}}
+																		<i class=" pink ace-icon fa fa-home bigger-160"></i>
+																		{{/ifEqual}}
+																	&nbsp;&nbsp;Sim</td>
+																	{{else}}
+																	<td><i class=" red ace-icon fa fa-minus bigger-130"></i>&nbsp;&nbsp;Não</td>
+																{{/ifEqual}}
+
+
 																<td><i class=" red ace-icon fa fa-ban bigger-130"></i></td>
 																{{#ifEqual this.bene_status "Inativo"}}
 																	<td><span class="label label-sm label-danger">{{bene_status}}</span></td>
 																	{{else}}
 																	<td><span class="label label-sm label-success">{{bene_status}}</span></td>
 																{{/ifEqual}}
+																
+															
+																
 																<td>
 																	<div class="action-buttons">
 																		<a class="blue" href="/menu/beneficiario/imp/{{_id}}">
@@ -140,7 +164,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [200, 500],
 			"lengthChange": true,

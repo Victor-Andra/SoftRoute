@@ -60,8 +60,19 @@
 				document.getElementById("qtdTrNotasupObs").value = (parseInt(qtd) - 1);
 				
 			}
-
+			// Função para formatar a data no formato dd/mm/aaaa
+				function formatDate(date) {
+					let d = new Date(date);
+					let year = d.getFullYear();
+					let month = (d.getMonth() + 1).toString().padStart(2, '0');
+					let day = d.getDate().toString().padStart(2, '0');
+					return `${day}/${month}/${year}`;
+				}
+			
+			// Função para carregar tudo ao inicializar a página
 			function carregaBody() {
+				document.getElementById("notasupBenedatanasc").value = document.getElementById("notasupBenedatanasctext").value;
+				let datanascformatada = formatDate(document.getElementById("notasupBenedatanasc").value);
 				document.getElementById("notasupBeneid").value = document.getElementById("beneid").value;
 				let progsBene = document.getElementsByName("progBene");
 				let qtd = document.getElementById("qtdTrNotasupObs").value;
@@ -72,8 +83,8 @@
 					let oculta = true;
 					progsBene.forEach((b)=>{
 						if ((""+b.id+"") == ("prog_"+beneid)){
-							console.log("poid: "+(""+po.id+""));
-							console.log("bvalue: "+(""+b.value+""));
+							//console.log("poid: "+(""+po.id+""));
+							//console.log("bvalue: "+(""+b.value+""));
 							if((""+po.id+"") == (""+b.value+"")){
 								oculta = false;
 							}
@@ -217,22 +228,23 @@
 															</div>
 														</div>
 														
-														<div class="col-sm-3">
+														<div class="col-sm-2">
 															<label for="id-date-picker-1"> Data Nascimento</label>
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-3">
+																	<div class="col-sm-2">
 																		<input id="notasupBenedatanasc" name="notasupBenedatanasc" type="date">
+																		<input hidden id="notasupBenedatanasctext" name="notasupBenedatanasctext" type="text" value="{{b.datanasc}}">
 																	</div>
 																</div>
 															</div>
 														</div>
 
-														<div class="col-sm-3">
+														<div class="col-sm-4">
 															<label> Idade</label>
 															<div class="form-group">
-																<div class="col-sm-2">
-																	<input type="text" name="notasupBeneidade" id="notasupBeneidade" class="form-control" />
+																<div class="col-sm-4">
+																	<input type="text" name="notasupBeneidade" id="notasupBeneidade" class="form-control" value="{{fullidade}}"/>
 																</div>
 															</div>
 														</div>
@@ -300,12 +312,12 @@
 
 													<label> Topografias Comportamentais </label>
 													<div class="form-group">
-														<div class="col-sm-6">
+														<div class="col-xl-12 col-sm-12">
 															<textarea type="text" name="notasupTopocomp" id="notasupTopocomp" placeholder="" class="form-control" ></textarea>
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-sm-2">
+														<div class="col-xl-3 col-sm-3">
 															<label> Fuga / Evitação</label>
 															<div class="form-group">
 																<div class="col-sm-3">
@@ -314,7 +326,7 @@
 															</div>
 														</div>
 														
-														<div class="col-sm-3">
+														<div class="col-xl-3 col-sm-3">
 															<label> Atenção</label>
 															<div class="form-group">
 																<div class="col-sm-3">
@@ -323,7 +335,7 @@
 															</div>
 														</div>
 
-														<div class="col-sm-3">
+														<div class="col-xl-3 col-sm-3">
 															<label> Tangível</label>
 															<div class="form-group">
 																<div class="col-sm-3">
@@ -332,10 +344,10 @@
 															</div>
 														</div>
 
-														<div class="col-sm-3">
+														<div class="col-xl-3 col-sm-3">
 															<label> Automático</label>
 															<div class="form-group">
-																<div class="col-sm-2">
+																<div class="col-sm-3">
 																	<input type="text" name="notasupAutomatico" id="notasupAutomatico" class="form-control" />
 																</div>
 															</div>
