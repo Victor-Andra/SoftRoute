@@ -116,14 +116,16 @@ carregaAnamn(req, res){
     carregaAnamnEdi(req, res){
         let base64Image;
         Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
-        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
-                    base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
-                }     
-                res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene, base64Image})
+            let datanasc2 = new Date(anamn.anamn_benedatanasc);
+            anamn.anamn_benedatanasc = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
+            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
+                        base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
+                    }     
+                    res.render('area/anamn/anamnEdi', {anamn, usuarios: usuario, benes: bene, base64Image})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -137,8 +139,8 @@ carregaAnamn(req, res){
         Anamn.find().then((anamn) =>{
             anamn.sort((a,b) => (((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : ((((b.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > ((a.anamn_benenome+"").normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             anamn.forEach((b)=>{
-                //console.log("b.datacad"+b.anamn_datacad)
-                let datacad = new Date(b.anamn_datacad)
+                let datanasc2 = new Date(b.anamn_datacad);
+                let datacad = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
                 let mes = (datacad.getMonth()+1).toString();
                 let dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -150,8 +152,8 @@ carregaAnamn(req, res){
                 let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.anamn_data=fulldate;
                 
-                //console.log("b.dataana"+b.anamn_dataanamnese)
-                datacad = new Date(b.anamn_dataanamnese)
+                datanasc2 = new Date(b.anamn_dataanamnese);
+                datacad = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
                 mes = (datacad.getMonth()+1).toString();
                 dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -164,7 +166,8 @@ carregaAnamn(req, res){
                 b.anamn_dataanamn=fulldate;
 
                 //console.log("d.dataanaedi"+d.anamn_dataedi)
-                datacad = new Date(b.anamn_dataedi)
+                datanasc2 = new Date(b.anamn_dataedi);
+                datacad = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
                 mes = (datacad.getMonth()+1).toString();
                 dia = (datacad.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -176,7 +179,6 @@ carregaAnamn(req, res){
                 fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.anamn_edi=fulldate;
 
-                
             })
 
             //console.log("anamn:");
@@ -187,7 +189,8 @@ carregaAnamn(req, res){
     
                 bene.forEach((b) => {
                     //console.log("b.datanasc"+b.bene_datanasc)
-                    let datanasc = new Date(b.bene_datanasc);
+                    let datanasc2 = new Date(b.bene_datanasc);
+                    let datanasc = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
                     let mes = (datanasc.getMonth()+1).toString();
                     let dia = (datanasc.getUTCDate()).toString();
                     if (mes.length == 1){

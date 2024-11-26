@@ -115,7 +115,13 @@
 														{{else}}
 															<td>{{anamn_benenome}}<!-- notOk --></td>
 														{{/compareUndefined}}
-														<td>{{anamn_benedatanasc}}</td>
+														<td>
+															{{#each ../benes}}<!-- Ok -->
+																{{#ifEqual this._id ../anamn_beneid}}
+																	{{datanasc}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
 														<td>	
 															{{#each ../benes}}<!-- Ok -->
 																{{#ifEqual this._id ../anamn_beneid}}

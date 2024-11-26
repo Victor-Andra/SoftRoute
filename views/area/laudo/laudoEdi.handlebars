@@ -31,6 +31,11 @@
 
 
 				let dtnascbene = new Date(document.getElementById("beneDatanascEdi").value);
+				if ((""+dtnascbene.toLocaleTimeString()+"").substring(0,2) != "00") {
+					let num = parseInt((""+dtnascbene.toLocaleTimeString()+"").substring(0,2));
+					let dif = 24-num;
+					dtnascbene = new Date(dtnascbene.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
+				}
 				console.log("dtnascbene:"+dtnascbene)
 				mes = (dtnascbene.getMonth()+1).toString();
 				dia = (dtnascbene.getUTCDate()).toString();
@@ -42,7 +47,7 @@
 				}
 				fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
 				document.getElementById("beneDatanasc").value = fulldate;
-				document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+				document.getElementById("beneIdade").value = calculaIdade(dtnascbene);
 			}
 			function atualizaDadosbene(){
 				let beneid = document.getElementById("laudoBeneid").value;

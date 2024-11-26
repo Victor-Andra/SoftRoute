@@ -16,15 +16,17 @@
 					var preview = document.getElementById('previewImage');
 					var fileInput = document.getElementById('usuarioCarimbo');
 
-					if (fileInput.files && fileInput.files[0]) {
-						var reader = new FileReader();
+					if (fileInput){
+						if (fileInput.files && fileInput.files[0]) {
+							var reader = new FileReader();
 
-						reader.onload = function (e) {
-							preview.src = e.target.result;
-							document.getElementById('previewCarimbo').style.display = 'block'; // Exibe a div
-						};
+							reader.onload = function (e) {
+								preview.src = e.target.result;
+								document.getElementById('previewCarimbo').style.display = 'block'; // Exibe a div
+							};
 
-						reader.readAsDataURL(fileInput.files[0]);
+							reader.readAsDataURL(fileInput.files[0]);
+						}
 					}
 				}
 				function atualizaDadosbene(){
@@ -609,7 +611,15 @@
 					let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 					document.getElementById("anamnDataanamnese").value = fulldate;
 					//anamnBenedatanasc
+					console.log("document.getElementById(beneid+_beneDatanascEdi).value: "+document.getElementById(beneid+"_beneDatanascEdi").value)
 					dtnsc = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
+					console.log((""+dtnsc.toLocaleTimeString()+"").substring(0,2) != "00");
+					if ((""+dtnsc.toLocaleTimeString()+"").substring(0,2) != "00") {
+						let num = parseInt((""+dtnsc.toLocaleTimeString()+"").substring(0,2));
+						let dif = 24-num;
+						dtnsc = new Date(dtnsc.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
+					}
+					console.log("dtnsc: "+dtnsc)
 					mes = (dtnsc.getMonth()+1).toString();
 					dia = (dtnsc.getUTCDate()).toString();
 					if (mes.length == 1){
@@ -619,8 +629,14 @@
 						dia = "0"+dia;
 					}
 					fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+					console.log("fulldate: "+fulldate)
 					document.getElementById("anamnBenedatanasc").value = fulldate;
 					let dtnascbene = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
+					if ((""+dtnascbene.toLocaleTimeString()+"").substring(0,2) != "00") {
+						let num = parseInt((""+dtnascbene.toLocaleTimeString()+"").substring(0,2));
+						let dif = 24-num;
+						dtnascbene = new Date(dtnascbene.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
+					}
 					console.log(document.getElementById(beneid+"_beneDatanascEdi").value);
 					mes = (dtnascbene.getMonth()+1).toString();
 					dia = (dtnascbene.getUTCDate()).toString();

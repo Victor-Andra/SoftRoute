@@ -54,13 +54,13 @@ module.exports = {
         //console.log('listando Relsemeses')
         dataIni = new Date();
         dataIni.setDate(01);
-        dataIni.setFullYear(parseInt(anoIni)-1);
+        dataIni.setFullYear(parseInt(req.body.anoBordo)-1);
         dataIni.setUTCMonth(1);
         dataIni.setHours(0, 0, 0, 0);
 
         dataFim = new Date();
         dataFim.setDate(01);
-        dataFim.setFullYear(parseInt(anoIni)+1);
+        dataFim.setFullYear(parseInt(req.body.anoBordo)+1);
         dataFim.setUTCMonth(1);
         dataFim.setHours(0, 0, 0, 0);
 
