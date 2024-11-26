@@ -12,6 +12,7 @@ const estadoClass = require("../models/estado")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const escolaClass = require("../models/escola")
+const fncGeral = require("./fncGeral")
 
 //Tabelas Extrangeiras
 const Conv = mongoose.model("tb_conv")
@@ -153,8 +154,8 @@ module.exports = {
         Bene.find().then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
-                //console.log("b.datanasc"+b.bene_datanasc)
-                let datanasc = new Date(b.bene_datanasc);
+                let datanasc2 = new Date(b.bene_datanasc);
+                let datanasc = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
                 let mes = (datanasc.getMonth()+1).toString();
                 let dia = (datanasc.getUTCDate()).toString();
                 if (mes.length == 1){

@@ -94,6 +94,12 @@
 						po.style.display = 'none';
 					}
 				})
+				//Carrega Campos
+				document.getElementById("notasupId").value = document.getElementById("notasupIdEdi").value;
+				document.getElementById("notasupDatanotasup").value = document.getElementById("notasupDatanotasupEdi").value;
+				document.getElementById("notasupHoranotasup").value = document.getElementById("notasupHoranotasupEdi").value;
+				document.getElementById("notasupTerapeutaid").value = document.getElementById("notasupTerapeutaidEdi").value;
+				
 			}
 		</script>
 	</head>
@@ -115,6 +121,42 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<div id="divCarrega" hidden>
+								<input type="text" id="notasupIdEdi" name="notasupIdEdi" value="{{notasup._id}}" />
+								<input type="text" id="notasupDatanotasupEdi" name="notasupDatanotasupEdi" value="{{notasup.datanotasup}}" />
+								<input type="text" id="notasupHoranotasupEdi" name="notasupHoranotasupEdi" value="{{notasup.horanotasup}}" />
+								<input type="text" id="notasupTerapeutaidEdi" name="notasupTerapeutaidEdi" value="{{notasup.horanotasup}}" />
+
+								<input type="text" id="notasupBeneidEdi" name="notasupBeneidEdi" value="{{notasup.beneid}}" />
+								<input type="text" id="notasupBenedatanascEdi" name="notasupBenedatanascEdi" value="{{notasup.benedatanasc}}" />
+								<input type="text" id="notasupBeneidadeEdi" name="notasupBeneidadeEdi" value="{{notasup.beneidade}}" />
+								<input type="text" id="notasupTiposupEdi" name="notasupTiposupEdi" value="{{notasup.tiposup}}" />
+								<input type="text" id="notasupSupidEdi" name="notasupSupidEdi" value="{{notasup.supid}}" />
+								<input type="text" id="notasupTopocompEdi" name="notasupTopocompEdi" value="{{notasup.topocomp}}" />
+								<input type="text" id="notasupFugaevitEdi" name="notasupFugaevitEdi" value="{{notasup.fugaevit}}" />
+								<input type="text" id="notasupAtencaoEdi" name="notasupAtencaoEdi" value="{{notasup.atencao}}" />
+								<input type="text" id="notasupTangivelEdi" name="notasupTangivelEdi" value="{{notasup.tangivel}}" />
+								<input type="text" id="notasupAutomaticoEdi" name="notasupAutomaticoEdi" value="{{notasup.automatico}}" />
+								<input type="text" id="notasupNotanarratfuncEdi" name="notasupNotanarratfuncEdi" value="{{notasup.notanarratfunc}}" />
+								<input type="text" id="notasupAbcEdi" name="notasupAbcEdi" value="{{notasup.abc}}" />
+								<input type="text" id="notasupDuracaoEdi" name="notasupDuracaoEdi" value="{{notasup.duracao}}" />
+								<input type="text" id="notasupTaxaEdi" name="notasupTaxaEdi" value="{{notasup.taxa}}" />
+								<input type="text" id="notasupGraveventoEdi" name="notasupGraveventoEdi" value="{{notasup.gravevento}}" />
+								<input type="text" id="notasupProdperEdi" name="notasupProdperEdi" value="{{notasup.prodper}}" />
+								<input type="text" id="notasupMandsfreqEdi" name="notasupMandsfreqEdi" value="{{notasup.mandsfreq}}" />
+								<input type="text" id="notasupNotanarratgravEdi" name="notasupNotanarratgravEdi" value="{{notasup.notanarratgrav}}" />
+								<!-- Inicio Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
+								<!-- Fim Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
+								<input type="text" id="notasupAlvosdominadosEdi" name="notasupAlvosdominadosEdi" value="{{notasup.alvosdominados}}" />
+								<input type="text" id="notasupNotasdicasEdi" name="notasupNotasdicasEdi" value="{{notasup.notasdicas}}" />
+								<input type="text" id="notasupNotasprogEdi" name="notasupNotasprogEdi" value="{{notasup.notasprog}}" />
+								<input type="text" id="notasupInfteracomentEdi" name="notasupInfteracomentEdi" value="{{notasup.infteracoment}}" />
+								<input type="text" id="notasupInfteraduvidEdi" name="notasupInfteraduvidEdi" value="{{notasup.infteraduvid}}" />
+								<input type="text" id="notasupInfdircomentEdi" name="notasupInfdircomentEdi" value="{{notasup.infdircoment}}" />
+								<input type="text" id="notasupInfdirduvidEdi" name="notasupInfdirduvidEdi" value="{{notasup.infdirduvid}}" />
+								<input type="text" id="notasupAcompprogEdi" name="notasupAcompprogEdi" value="{{notasup.acompprog}}" />
+								<input type="text" id="notasupAcompgeralEdi" name="notasupAcompgeralEdi" value="{{notasup.acompgeral}}" />
+
+
 								<table>
 									<thead>
 									</thead>
