@@ -828,7 +828,6 @@ module.exports = {
                             }
                             
                             if(qtdIds != 0){
-                                console.log("ALO")
                                 rel.push(a);
                                 a = new RelAtend();
                             }

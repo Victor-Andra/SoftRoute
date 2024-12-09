@@ -508,27 +508,25 @@ module.exports = {AgendaModel,AgendaSchema,
     },
     agendaFeriado: async (req, res) => {
         //console.log("req.body.agendaData: "+req.body.agendaData)
-        let seg = new Date(req.body.agendaData);
-        seg.setDate(seg.getDate()+1);
+
+        let seg = new Date();
+        seg.setDate(seg.getDate());
         seg.setSeconds(0);
         seg.setMinutes(0);
         seg.setHours(0);
+        seg.setHours(seg.getHours()-3);
 
-        let sex = new Date(req.body.agendaData);
-        sex.setDate(sex.getDate()+1);
+        let sex = new Date();
+        sex.setDate(sex.getDate());
         sex.setSeconds(59);
         sex.setMinutes(59);
         sex.setHours(23);
+        seg.setHours(seg.getHours()-3);
 
-        let usuarioAtual = req.cookies['idUsu'];
         var retorno;
-        let arrayAgendasNovas = [];
-        let dataAtual = new Date();
         let arrayIds =[];
         let agendaFinal = [];
-        let resultado;
         let busca;
-        let agendaS;
         console.log("ini: "+fncGeral.getDateToIsostring(seg));
         console.log("fim: "+fncGeral.getDateToIsostring(sex));
 
