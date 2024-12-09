@@ -11119,10 +11119,10 @@ module.exports = {
                     })
                 })
                 //console.log(convdeb)
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agendaFixa)=>{
-            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, agenda_extra: false}).then((agendaSemanal)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
+            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
             //-------------------------
-            //console.log(agenda)
+            console.log("agendaSemanal.length: "+agendaSemanal.length);
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
                 //console.log("validação caso seja o primeiro registro")
                 atendimento.forEach(e => {atend = e});
@@ -11412,13 +11412,13 @@ module.exports = {
                                                 atend_usuid : "Usuario Atual",
                                                 atend_atenddata : agendaSub.agenda_data,//
                                                 atend_atendhora : hora,//
-                                                atend_terapeutaid : agendaSub.agenda_terapiaid,//Atenderá o outro bene pelo merge
-                                                atend_terapiaid : agendaSub.agenda_usuid,//
+                                                atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
+                                                atend_terapiaid : a.agenda_terapiaid,//
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : "0,00",//não recebe pois foi avisado previamente
                                                 atend_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
-                                                atend_mergeterapeutaid : a.agenda_terapiaid,//Atendendo outro bene
-                                                atend_mergeterapiaid : a.agenda_usuid,
+                                                atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
+                                                atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                 atend_mergevalorcre : convcreval,//recebe pelo novo bene
                                                 atend_mergevalordeb : convdebval,//paga pelo atendimento do novo bene
                                                 atend_num : nextNum,
@@ -11442,6 +11442,84 @@ module.exports = {
                                             newDeb = new Deb({
                                                 debit_atendnum : nextNum ,
                                                 debit_categoria : "Falta Justificada" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                debit_convid : a.agenda_convid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convcreval ,
+                                                debit_datacad : dataAtual
+                                            })
+
+                                            break;
+                                        case "Feriado":
+
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+
+                                            Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
+                                            console.log()
+                                            newAtend = new Atend({
+                                                atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                atend_categoria : "Feriado",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
+                                                atend_convid : a.agenda_convid,//
+                                                atend_usuid : "Usuario Atual",
+                                                atend_atenddata : a.agenda_data,//
+                                                atend_atendhora : hora,//
+                                                atend_terapeutaid : agendaSub.agenda_usuid,//Atenderá o outro bene pelo merge
+                                                atend_terapiaid : agendaSub.agenda_terapiaid,//
+                                                atend_salaid : a.agenda_salaid,//
+                                                atend_valorcre : "0,00",//não recebe pois foi avisado previamente
+                                                atend_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
+                                                atend_num : nextNum,
+                                                atend_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = new Cre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Feriado" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                credit_convid : a.agenda_convid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : agendaSub.agenda_data,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Feriado" ,
                                                 debit_terapiaid : a.agenda_terapiaid ,
                                                 debit_terapeutaid : a.agenda_usuid ,
                                                 debit_convid : a.agenda_convid ,

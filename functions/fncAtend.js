@@ -563,7 +563,7 @@ module.exports = {
             atend.forEach((b)=>{
                 let data;
                 if(b.atend_atenddata){
-                    data = new Date(b.atend_atenddata)
+                    data = new Date(b.atend_atenddata);
                 } else {
                     data = new Date();
                 }
@@ -701,6 +701,7 @@ module.exports = {
         let bene_nome;
 
         Atend.find({atend_convid: req.body.relConvid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
             console.log("at:length: "+at.length);
             Conv.find().then((conv)=>{
                 Conv.find({_id: req.body.relConvid}).then((c)=>{
@@ -726,6 +727,9 @@ module.exports = {
                                         terapiaAtend = ats.atend_terapiaid;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
+                                    case "Feriado":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
                                     case "Glosa":
@@ -771,6 +775,10 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Feriado":
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
@@ -901,6 +909,203 @@ module.exports = {
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
 
         Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Bene.find().then((bene)=>{
+                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        bene.some((b)=>{
+                            if((""+b._id) === (""+req.body.relBeneid)){
+                                bene_nome = b.bene_nome;
+                                conv_id = b.bene_convid;
+                                return true;
+                            }
+                            return false;
+                        })
+                        Conv.findOne({_id: conv_id}).then((conv)=>{
+                            conv_nome = conv.conv_nome;
+                            at.sort(function(a, b) {
+                                let d1 = new Date(a.atend_atenddata);
+                                let d2 = new Date(b.atend_atenddata);
+                                //d1.setHours(0);
+                                //d1.setMinutes(0);
+                                //d1.setSeconds(0);
+                                //d2.setHours(0);
+                                //d2.setMinutes(0);
+                                //d2.setSeconds(0);
+                                if(d1 == d2){
+                                    return true;
+                                } else {
+                                    if(d1 < d2){
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            });
+                            at.forEach((atend)=>{
+                                if (req.body.porHoras == "sim"){
+                                    let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
+                                    let minutoFim = atend.atend_atendhora.substring(3,5);
+                                    console.log("minutoFim: "+minutoFim)
+                                    switch (minutoFim) {
+                                        case "00":
+                                            horaFim = ((""+(horaFim)+"").length == 1 ? ("0"+(horaFim)+""):(""+(horaFim)+""));
+                                            minutoFim = "40";
+                                            break;
+                                        case "20":
+                                            minutoFim = "00";
+                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                            break;
+                                        case "40":
+                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                            minutoFim = "20";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
+                                } else {
+                                    //console.log("atend.atend_atenddata: "+atend.atend_atenddata)
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                    //console.log("rab.dt: "+rab.dt)
+                                }
+                                categorias = atend.atend_categoria
+                                console.log("categorias:"+categorias)
+                                switch (categorias){
+                                    case "Apoio":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Extra":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Falta":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    case "Feriado":
+                                        terapiaAtend = atend.atend_mergeterapiaid
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    case "Glosa":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Padrão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Pais":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "Substituição":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    case "Supervisão":
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                    case "SubstitutoFixo":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    case "Feriado":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;
+                                        break;
+                                    default:
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        break;
+                                }
+                                rab.especialidade = terapiaAtend;
+                                rab.profissional = terapeutaAtend;
+
+                                rel.push(rab);
+                                rab = new RelAtendBene();
+                            });
+                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
+                        })
+                    })
+                })
+            })
+        }).catch((err) =>{
+            console.log(err)
+        })
+    },
+
+    relAtendimentoBeneassin(req,res){
+        console.log("TESTEESTE")
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Bene.find().then((bene)=>{
+            Bene.findOne().then((b)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Terapia.find().then((terapia)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        res.render("atendimento/relatendvalBeneassin", {terapeutas: terapeuta, terapias: terapia, benes: bene})
+        })})})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+
+    relAtendimentoBeneassinFiltro(req,res){
+        let u;
+        let teraID;
+        let usuId;
+        let rel = [];
+        let dt;
+        let conv_cnpj;
+        let conv_nome;
+        let conv_id;
+        let bene_nome;
+        let terapiaAtend;
+        let terapeutaAtend;
+        console.log("req.body.dataIni: "+req.body.dataIni)
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        console.log("periodoDe:? "+periodoDe)
+        console.log("periodoAte:? "+periodoAte)
+        let date = new Date();
+        let porHoras = req.body.porHoras;
+        let rab = new RelAtendBene();//objeto para fazer push em relatendimento
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        console.log("seg: "+seg)
+        console.log("sex: "+sex)
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        console.log("seg:"+seg)
+        console.log("sex:"+sex)
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
+
+        Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
@@ -984,6 +1189,10 @@ module.exports = {
                                         terapiaAtend = atend.atend_mergeterapiaid
                                         terapeutaAtend = atend.atend_mergeterapeutaid;;
                                         break;
+                                    case "Feriado":
+                                        terapiaAtend = atend.atend_mergeterapiaid
+                                        terapeutaAtend = atend.atend_mergeterapeutaid;;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
                                         terapeutaAtend = atend.atend_terapeutaid;
@@ -1019,7 +1228,7 @@ module.exports = {
                                 rel.push(rab);
                                 rab = new RelAtendBene();
                             });
-                            res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
+                            res.render("atendimento/relatendvalBeneassin", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
                         })
                     })
                 })
@@ -1028,6 +1237,7 @@ module.exports = {
             console.log(err)
         })
     },
+
     relAtendimentoBeneCons(req,res){
         let seg = new Date();
         let sex = new Date();
@@ -1107,6 +1317,9 @@ module.exports = {
                                     case "Falta Justificada":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
+                                    case "Feriado":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = ats.atend_terapiaid;
                                         break;
@@ -1150,6 +1363,10 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Feriado":
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
@@ -1297,6 +1514,9 @@ module.exports = {
                                         case "Falta Justificada":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
+                                        case "Feriado":
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
                                         case "Glosa":
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
@@ -1340,6 +1560,10 @@ module.exports = {
                                             creVal = atend.atend_valorcre;
                                             break;
                                         case "Falta Justificada":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                            break;
+                                        case "Feriado":
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
@@ -1514,6 +1738,9 @@ module.exports = {
                                     case "Falta Justificada":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
+                                    case "Feriado":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = ats.atend_terapiaid;
                                         break;
@@ -1557,6 +1784,10 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Feriado":
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
@@ -1720,6 +1951,9 @@ module.exports = {
                                     case "Falta Justificada":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
+                                    case "Feriado":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = ats.atend_terapiaid;
                                         break;
@@ -1763,6 +1997,10 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Feriado":
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
@@ -2141,6 +2379,11 @@ module.exports = {
                                                     //terapiaAtend = agenda.agenda_terapiaid;
                                                     //terapeutaAtend = agenda.agenda_usuid;
                                                     break;
+                                                case "Feriado":
+                                                    continuar = "false";
+                                                    //terapiaAtend = agenda.agenda_terapiaid;
+                                                    //terapeutaAtend = agenda.agenda_usuid;
+                                                    break;
                                                 case "Padrão":
                                                     terapiaAtend = agenda.agenda_terapiaid;
                                                     terapeutaAtend = agenda.agenda_usuid;
@@ -2392,6 +2635,11 @@ module.exports = {
                                         //terapiaAtend = agenda.agenda_terapiaid;
                                         //terapeutaAtend = agenda.agenda_usuid;
                                         break;
+                                    case "Feriado":
+                                        continuar = "false";
+                                        //terapiaAtend = agenda.agenda_terapiaid;
+                                        //terapeutaAtend = agenda.agenda_usuid;
+                                        break;
                                     case "Glosa":
                                         continuar = "false";
                                         //terapiaAtend = agenda.agenda_terapiaid;
@@ -2541,6 +2789,10 @@ module.exports = {
                                     terapeutaAtend = atend.atend_terapeutaid;
                                     break;
                                 case "Falta Justificada":
+                                    terapiaAtend = atend.atend_mergeterapiaid
+                                    terapeutaAtend = atend.atend_mergeterapeutaid;;
+                                    break;
+                                case "Feriado":
                                     terapiaAtend = atend.atend_mergeterapiaid
                                     terapeutaAtend = atend.atend_mergeterapeutaid;;
                                     break;
@@ -2840,6 +3092,11 @@ module.exports = {
                                                     beneAtend = agenda.agenda_beneid;
                                                     break;
                                                 case "Falta Justificada":
+                                                    continuar = "false";
+                                                    //terapiaAtend = agenda.agenda_terapiaid;
+                                                    //terapeutaAtend = agenda.agenda_usuid;
+                                                    break;
+                                                case "Feriado":
                                                     continuar = "false";
                                                     //terapiaAtend = agenda.agenda_terapiaid;
                                                     //terapeutaAtend = agenda.agenda_usuid;

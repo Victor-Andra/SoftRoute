@@ -291,17 +291,14 @@
 																							</tr>
 																							<tr>
 																								
-																								<th style="width:10px;">
+																								<th style="width:30px">
 																									<a href="#" data-action="">
 																										<i class="ace-icon fa fa-tags bigger-130"></i>
 																									</a>
 																									&nbsp;
 																									Programa ABA
 																								</th>
-																								<th style="width:10px;">
-																									Status
-																								</th>
-																								<th style="width:220px;">
+																								<th style="width:220px">
 																									<a href="#" data-action="">
 																										<i class="ace-icon fa fa-calendar bigger-130"></i>
 																									</a>
@@ -318,48 +315,11 @@
 																								<tbody>
 																									<tr>
 																										<!-- .informa os Programas pertencentes ao Beneficiário chaveado acima -->
-																														{{#each ../../progtipos}}<!-- Ok -->
-																																{{#ifEqual this._id ../prog_tipo}}
-																																	<td style="width:10px;">
-																																		<span class="badge badge-warning">{{progtipo_nome}}</span>
-																																	</td>
-																																{{/ifEqual}}
-																															{{/each}}
-																															<td style="width:10px;">
-																																{{#ifEqual this.prog_status "Aguardando"}}
-																															<a href="#" data-action="">
-																																<i class="ace-icon blue fa fa-hourglass-o bigger-130"></i>
-																															</a>
-																															<span class="badge badge-info">{{prog_status}}</span>
-																														{{else}}
-																															{{#ifEqual this.prog_status "Pausado"}}
-																															<a href="#" data-action="">
-																																<i class="orange ace-icon fa fa-hourglass-o bigger-130"></i>
-																															</a>
-																															<span class="badge badge-warning">{{prog_status}}</span>
-																															{{else}}
-																																{{#ifEqual this.prog_status "Inicio"}}
-																																<a href="#" data-action="">
-																																	<i class="green ace-icon fa fa-sign-in bigger-130"></i>
-																																</a>
-																																<span class="badge badge-success">{{prog_status}}</span>
-																														{{else}}
-																															{{#ifEqual this.prog_status "Andamento"}}
-																															<a href="#" data-action="">
-																																<i class="green ace-icon fa fa-send bigger-130"></i>
-																															</a>
-																															<span class="badge badge-success">{{prog_status}}</span>
-																															{{else}}
-																															<a href="#" data-action="">
-																																<i class="red ace-icon fa fa-ban bigger-130"></i>
-																															</a>
-																															<span class="badge badge-danger">{{prog_status}}</span>
-																															{{/ifEqual}}
-																														{{/ifEqual}}
-																													{{/ifEqual}}
-																												{{/ifEqual}}
-																											
-																										</td>
+																										{{#each ../../progtipos}}<!-- Ok -->
+																											{{#ifEqual this._id ../prog_tipo}}
+																												<td>{{progtipo_nome}}</td>
+																											{{/ifEqual}}
+																										{{/each}}
 																										<td>
 																										<!-- /.informa os Programas pertencentes ao Beneficiário chaveado acima -->
 																											{{#each ../../progsets}}

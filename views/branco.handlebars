@@ -174,24 +174,40 @@
 												<div class="col-xs-12">
 													<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 												
-												<thead>
-													<tr role="row">
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Dia</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Aniversariante</th>
-													</tr>
-													
-												</thead>
-												
-												<tbody>
-													{{#each usuarios}}
-														<tr role="row" class="odd">
-															<td>{{bene_datanasc}}</td>
-															<td>{{bene_nome}}</td>
-														</tr>
-													{{/each}}
-												</tbody>
+														<thead>
+															<tr role="row">
+																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Dia</th>
+																<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Aniversariante</th>
+															</tr>
+															
+														</thead>
+														
+														<tbody>
+														{{#each groupedUsers}}
+																				{{#if users.length}}
+																					<h4>Data: {{date}}</h4>
+																					<table class="table table-striped table-bordered">
+																						<thead>
+																							<tr>
+																								<th>Nome</th>
+																							</tr>
+																						</thead>
+																						<tbody>
+																							{{#each users}}
+																								<tr>
+																									<td>{{usuario_nome}}</td>
+																								</tr>
+																							{{/each}}
+																						</tbody>
+																					</table>
+																				{{else}}
+																					<h4>Data: {{date}}</h4>
+																					<p>Nenhum aniversariante.</p>
+																				{{/if}}
+																			{{/each}}
+														</tbody>
 
-											</table>
+													</table>
 												</div>
 											</div>																	
 										</div>

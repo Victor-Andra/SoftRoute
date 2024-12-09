@@ -36,6 +36,246 @@ const Folreg = mongoose.model("tb_folreg")
 const Notasup = mongoose.model("tb_notasup")
 
 module.exports = {
+    listaProg2(req, res, resposta) {
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
+        let filtra = "false";
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
+        let perfilAtual = req.cookies['lvlUsu'];
+        Bene.find({ bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
+            bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+
+            bene.forEach((b) => {
+            
+                //console.log("b.datanasc"+b.bene_datanasc)
+                let datanasc = new Date(b.bene_datanasc);
+                let mes = (datanasc.getMonth()+1).toString();
+                let dia = (datanasc.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.datanasc=fulldate;
+
+                // Data atual
+                const hoje = new Date();
+                let idade = new Date(b.bene_idade);
+
+                // Data de aniversário
+                let aniversario = datanasc;
+
+                // Cálculo da idade
+                let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+                let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+                let idadedias = hoje.getDay() - aniversario.getDay();
+
+                // Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
+                if (hoje.getDate() < aniversario.getDate()) {
+                    idadeMeses--;
+                }
+
+                // Se o mês do aniversário for maior que o mês atual, ajusta a idade
+                if (idadeMeses < 0) {
+                    idadeAnos--;
+                    idadeMeses += 12;
+                }
+                let fullidade = (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
+                b.idade = fullidade;
+            
+            
+            });
+
+            Usuario.find().then((usuario) => {
+                usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                    
+                res.render('area/aba/prog/progLis', {
+                    usuarios: usuario,
+                    benes: bene,
+                    perfilAtual,
+                    flash,
+                    dataAtual,
+                    filtra
+                });
+            });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
+    },
+    filtraProg(req, res, resposta) {
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
+        let idUsu;
+        let filtra = "true";
+        let beneFiltro;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        arrayIds.forEach((id)=>{
+            if(id == lvlUsu){
+                idUsu = id;
+            }
+        })
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        Prog.find().then((prog) => {
+            // Variáveis para contar os programas adquiridos e não adquiridos
+            let countProgs = 0;
+            let countProgsC = 0;
+            let countProgsA = 0;
+    
+            prog.forEach((b) => {
+                // Formatação da Exibição da Data de cadastro
+                let datacad = new Date(b.prog_datacad);
+                let mes = (datacad.getMonth() + 1).toString();
+                let dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1) {
+                    mes = "0" + mes;
+                }
+                if (dia.length == 1) {
+                    dia = "0" + dia;
+                }
+                let fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
+                b.datacad = fulldate;
+    
+                dataedi = new Date(b.prog_dataedi);
+                mes = (dataedi.getMonth() + 1).toString();
+                dia = (dataedi.getUTCDate()).toString();
+                if (mes.length == 1) {
+                    mes = "0" + mes;
+                }
+                if (dia.length == 1) {
+                    dia = "0" + dia;
+                }
+                fulldate = (dataedi.getFullYear() + "-" + mes + "-" + dia).toString();
+                b.dataedi = fulldate;
+            });
+    
+            Bene.find({ _id: req.body.abaBeneid }).then((bene) => {
+                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+
+                bene.forEach((b) => {
+                    b.countProgs = prog.filter((s) => s.prog_beneid.toString() === b._id.toString()).length;
+                    // Contagem de progs adquiridos e não adquiridos
+                    b.countProgsC += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status === "Adquirido").length;
+                    b.countProgsA += prog.filter((s) => s.prog_beneid.toString() === b._id.toString() && s.prog_status !== "Adquirido").length;
+                
+                    //console.log("b.datanasc"+b.bene_datanasc)
+                    let datanasc = new Date(b.bene_datanasc);
+                    let mes = (datanasc.getMonth()+1).toString();
+                    let dia = (datanasc.getUTCDate()).toString();
+                    if (mes.length == 1){
+                        mes = "0"+mes;
+                    }
+                    if (dia.length == 1){
+                        dia = "0"+dia;
+                    }
+                    let fulldate=(datanasc.getFullYear()+"-"+mes+"-"+dia).toString();
+                    b.datanasc=fulldate;
+    
+                    // Data atual
+                    const hoje = new Date();
+                    let idade = new Date(b.bene_idade);
+    
+                    // Data de aniversário
+                    let aniversario = datanasc;
+    
+                    // Cálculo da idade
+                    let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+                    let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+                    let idadedias = hoje.getDay() - aniversario.getDay();
+    
+                    // Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
+                    if (hoje.getDate() < aniversario.getDate()) {
+                        idadeMeses--;
+                    }
+    
+                    // Se o mês do aniversário for maior que o mês atual, ajusta a idade
+                    if (idadeMeses < 0) {
+                        idadeAnos--;
+                        idadeMeses += 12;
+                    }
+                    let fullidade = (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
+                    b.idade = fullidade;
+                
+                    if ((""+b._id+"") == req.body.abaBeneid){
+                        console.log("ACHGOU")
+                        beneFiltro = b;
+                    }
+                });
+                // Aqui, você pode usar as variáveis countProgs e countProgsA como quiser
+                // Por exemplo, enviá-las para sua view junto com outros dados
+                //console.log("b.datanasc"+b.bene_datanasc)
+                
+    
+                Usuario.find().then((usuario) => {
+                    usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                        
+                    Prog.find().then((prog) => {
+                        Progdica.find().then((progdica)=>{
+                            progdica.sort((a,b) => ((a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progdica_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
+                            Progtipo.find().then((progtipo)=>{
+                                progtipo.sort((a,b) => ((a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
+                                Prognivel.find().then((prognivel)=>{
+                                    prognivel.sort((a,b) => ((a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
+                                    Progset.find().then((progset) => {
+                                        prog.forEach((p)=>{
+                                            let total = 0;
+                                            progset.forEach((ps)=>{
+                                                if ((""+ps.progset_progid+"") == (""+p._id+"")){
+                                                    total += parseInt(ps.progset_qtest);
+                                                }
+                                            })
+                                            p.prog_total_estimulos = total;
+                                        })
+                                        Folreg.find().then((folreg) => {
+                                            Notasup.find().then((notasup) => {
+                                                console.log("Finish");
+                                                res.render('area/aba/prog/progLis', {
+                                                    progs: prog,
+                                                    progsets: progset,
+                                                    usuarios: usuario,
+                                                    benes: bene,
+                                                    perfilAtual,
+                                                    flash,
+                                                    progdicas: progdica,
+                                                    progtipos: progtipo,
+                                                    prognivels: prognivel,
+                                                    countProgs, // Envia a contagem de progs adquiridos
+                                                    countProgsA, // Envia a contagem de progs não adquiridos
+                                                    countProgsC,
+                                                    dataAtual,
+                                                    folregs: folreg,
+                                                    notasups: notasup,
+                                                    porgs: prog,
+                                                    beneFiltro,
+                                                    filtra
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
+    },
     listaProg(req, res, resposta) {
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
@@ -192,7 +432,6 @@ module.exports = {
             res.redirect('admin/erro');
         });
     },
-    
 
     carregaProg(req,res){
         let idBene;

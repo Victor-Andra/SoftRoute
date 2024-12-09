@@ -69,6 +69,12 @@ const salaClass = require("../models/sala")
 const Sala = mongoose.model("tb_sala")
 const fncSala = require("../functions/fncSala")
 
+//Saúde dos colaboradores Ficha, onde são cadastrados as informações de saúde dos colaboradores
+//Para emergência médica e hospitalar/SAMU
+const saudecolabClass = require("../models/saudecolab")
+const Saudecolab = mongoose.model("tb_saudecolab")
+const fncSaudecolab= require("../functions/fncSaudecolab")
+
 //terapia, tipos de terapias realiazadas
 const terapiaClass = require("../models/terapia")
 const Terapia = mongoose.model("tb_terapia")
@@ -1199,9 +1205,17 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.get('/atendimento/relatendbene', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBene(req,res)
     })
-
     router.post('/atendimento/relatendbenes', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneFiltro(req,res)
+    })
+//Relatório Individual de Atendimentos por Beneficiário.
+//Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo 
+//com espaço para assinataura individual, tanto responsável quanto do terapeuta
+    router.get('/atendimento/relatendbeneassin', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassin(req,res)
+    })
+    router.post('/atendimento/relatendbeneassins', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassinFiltro(req,res)
     })
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
@@ -2041,6 +2055,14 @@ router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//di
     fncProg.listaProg(req, res, resposta);
 })
 
+//Filtra Programas ABA
+router.post('/area/aba/prog/progfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona lista do ABA.
+    let resposta = new Resposta();
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncProg.filtraProg(req, res, resposta);
+})
+
 router.post('/area/aba/prog/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona ABA
     fncProg.cadastraProg(req, res);
 })
@@ -2776,7 +2798,31 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/sala/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
             fncSala.atualizaSala(req, res);
         })
-        
+
+        //Saudecolab, Ficha Médica dos colaboradores
+        router.get('/ferramentas/saudecolab/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Saudecolab
+            fncSaudecolab.listaSaudecolab(req, res);
+        })
+
+        router.get('/ferramentas/saudecolab/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Saudecolab
+            fncSaudecolab.carregaSaudecolab(req, res);
+        })
+
+        router.post('/ferramentas/saudecolab/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Saudecolab
+            fncSaudecolab.cadastraSaudecolab(req, res);
+        })
+
+        router.get('/ferramentas/saudecolab/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Saudecolab
+            fncSaudecolab.deletaSaudecolab(req, res);
+        })
+
+        router.get('/ferramentas/saudecolab/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de Saudecolab
+            fncSaudecolab.carregaSaudecolabEdi(req, res);
+        })
+
+        router.post('/ferramentas/saudecolab/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Saudecolab
+            fncSaudecolab.atualizaSaudecolab(req, res);
+        })        
         
 
 //Menu Ferramentas

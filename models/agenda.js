@@ -562,15 +562,16 @@ module.exports = {AgendaModel,AgendaSchema,
                     }
                     
                     if (agendaS == "true"){
-                        if (a.agenda_categoria != "Falta Justificada"){
+                        if (a.agenda_categoria != "Feriado"){
                             arrayAgendasNovas.push(a);
                             AgendaModel.findByIdAndUpdate(a._id, 
                                 {$set: {
-                                    agenda_categoria : "Falta Justificada" ,
+                                    agenda_categoria : "Feriado" ,
                                     agenda_org : "Administrativo" ,
                                     agenda_usucad : usuarioAtual ,
                                     agenda_dataedi : dataAtual ,
                                     agenda_tempmotivo : "Feriado" ,
+                                    agenda_extra: false,
                                     agenda_turnoFalta : req.body.agendaTurnoFalta 
                                 }}
                             ).then((res) =>{
@@ -595,7 +596,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
                                 agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
                                 agenda_migrado : false ,
-                                agenda_categoria : "Falta Justificada" ,
+                                agenda_categoria : "Feriado" ,
                                 agenda_org : "Administrativo" ,
                                 agenda_obs : a.agenda_obs ,
                                 agenda_temp : true ,
@@ -603,6 +604,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_tempmotivo : "Feriado" ,
                                 agenda_selo : false ,
                                 agenda_copia : false,
+                                agenda_extra: false,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual
@@ -618,7 +620,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_terapiaid : a.agenda_terapiaid ,
                                 agenda_usuid : a.agenda_usuid ,
                                 agenda_migrado : false ,
-                                agenda_categoria : "Falta Justificada" ,
+                                agenda_categoria : "Feriado" ,
                                 agenda_org : "Administrativo" ,
                                 agenda_obs : a.agenda_obs ,
                                 agenda_temp : true ,
@@ -626,6 +628,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_tempmotivo : "Feriado" ,
                                 agenda_selo : false ,
                                 agenda_copia : false,
+                                agenda_extra: false,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual
