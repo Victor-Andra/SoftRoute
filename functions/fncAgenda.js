@@ -53,6 +53,10 @@ const fncGeral = require("./fncGeral")
 const fncEvoatend = require("../functions/fncEvoatend")
 const terapia = require("../models/terapia")
 const ObjectId = require('mongodb').ObjectId;
+//Gambiarras
+const agendaArquivoClass = require("../models/agendaArquivo")
+const AgendaArquivo = mongoose.model("tb_agendaArquivo")
+
 
 class FiltroAtend{
     constructor(
@@ -13222,18 +13226,20 @@ module.exports = {
         dataIni.setHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
+        dataIni.setHours(dataIni.getHours()-3)
         dataIni = dataIni.toISOString();
         let dataFim = new Date(req.body.data);
         
         dataFim.setHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
-        dataFim.setDate(dataFim.getDate()+4)//+4 dias na segunda-feira para chegar a sexta
+        dataFim.setHours(dataFim.getHours()-3);
+        dataFim.setDate(dataFim.getDate()+4);//+4 dias na segunda-feira para chegar a sexta
         dataFim = dataFim.toISOString();
         let dataAtual = new Date();
         let nextNum;
-        //console.log("dataIni"+dataIni);
-        //console.log("dataFim"+dataFim);
+        console.log("dataIni"+dataIni);
+        console.log("dataFim"+dataFim);
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agenda)=>{
             //console.log("agenda:"+agenda.length)
             agenda.forEach((a)=>{
@@ -13324,7 +13330,14 @@ module.exports = {
     },
     agendaFaltaDiaFill(req,res){
         let flash = new Resposta();
-        let resultado = agendaClass.agendaFaltaDia(req,res);
+        let resultado;
+        console.log("req.body.agendaCateg: "+req.body.agendaCateg)
+        if (req.body.agendaCateg == "Feriado"){
+            resultado = agendaClass.agendaFeriado(req,res);
+        } else {
+            resultado = agendaClass.agendaFaltaDia(req,res);
+        }
+        
         if (resultado = "true") {
             flash.sucesso = "true"
             flash.texto = "Cadastro de faltas realizados!"
@@ -14179,3 +14192,67 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
             })
         })
    */
+         /* 
+        let opIni = new Date();
+        let opFim = new Date();
+        opIni.setFullYear(2024);
+        opFim.setFullYear(2024);
+        opIni.setMonth(11);
+        opFim.setMonth(11);
+        opIni.setDate(15);
+        opFim.setDate(21);
+        opIni.setHours(0);
+        opIni.setMinutes(0);
+        opIni.setSeconds(0);
+        opFim.setHours(23);
+        opFim.setMinutes(59);
+        opFim.setSeconds(59);
+        opFim.setHours(opFim.getHours()-3);
+        opIni.setHours(opIni.getHours()-3);
+        console.log("opIni: "+opIni);
+        console.log("opFim: "+opFim);
+        opIni = opIni.toISOString();
+        opFim = opFim.toISOString();
+        console.log("opIni: "+opIni);
+        console.log("opFim: "+opFim);
+        
+        Agenda.find({ agenda_data: { $gte : opIni, $lte:  opFim } }).then((agenda) =>{
+            console.log("agenda.length: "+agenda.length);
+            //pt1
+            
+            //pt2
+        })
+*/
+  /*
+
+  Agenda.find({ agenda_data: { $gte : opIni, $lte:  opFim } }).then((agenda) =>{
+            console.log("agenda.length: "+agenda.length);
+            //pt1
+            
+            //pt2
+        })
+  */
+
+        /* 
+            //pt1
+            AgendaArquivo.insertMany(agenda).then(()=>{
+                console.log("Then...");
+            }).finally(()=>{
+                console.log("FinishInsert");
+                AgendaArquivo.find({ agenda_data: { $gte : opIni, $lte:  opFim } }).then((arquivos) =>{
+                    console.log("arquivos.length: "+arquivos.length);
+                })
+            });
+            */
+
+           /*
+           //pt2
+            Agenda.deleteMany({ agenda_data: { $gte : opIni, $lte:  opFim } }).then(()=>{
+                console.log("Then...");
+            }).finally(()=>{
+                console.log("FinishDelete");
+                Agenda.find({ agenda_data: { $gte : opIni, $lte:  opFim } }).then((arquivos) =>{
+                    console.log("agenda.length: "+arquivos.length);
+                })
+            });
+            */

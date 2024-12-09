@@ -507,14 +507,14 @@ module.exports = {AgendaModel,AgendaSchema,
         })
     },
     agendaFeriado: async (req, res) => {
-        console.log("req.body.dataFinal: "+req.body.dataFinal)
-        let seg = new Date(req.body.dataFinal);
+        //console.log("req.body.agendaData: "+req.body.agendaData)
+        let seg = new Date(req.body.agendaData);
         seg.setDate(seg.getDate()+1);
         seg.setSeconds(0);
         seg.setMinutes(0);
         seg.setHours(0);
 
-        let sex = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.agendaData);
         sex.setDate(sex.getDate()+1);
         sex.setSeconds(59);
         sex.setMinutes(59);
@@ -570,7 +570,6 @@ module.exports = {AgendaModel,AgendaSchema,
                                     agenda_org : "Administrativo" ,
                                     agenda_usucad : usuarioAtual ,
                                     agenda_dataedi : dataAtual ,
-                                    agenda_faltaId : req.body.agendaFaltaId ,
                                     agenda_tempmotivo : "Feriado" ,
                                     agenda_turnoFalta : req.body.agendaTurnoFalta 
                                 }}
@@ -604,7 +603,6 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_tempmotivo : "Feriado" ,
                                 agenda_selo : false ,
                                 agenda_copia : false,
-                                agenda_faltaId : req.body.agendaFaltaId,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual
@@ -628,7 +626,6 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_tempmotivo : "Feriado" ,
                                 agenda_selo : false ,
                                 agenda_copia : false,
-                                agenda_faltaId : req.body.agendaFaltaId,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual
