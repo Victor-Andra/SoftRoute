@@ -136,7 +136,7 @@ module.exports = {Filtros,
         data = dt;
         let isoString = "";
 
-        let mes = (dt.getUTCMonth()+1).toString();
+        let mes = (dt.getMonth()+1).toString();
         let dia = (dt.getDate()).toString();
         let ano = (dt.getFullYear()).toString();
 

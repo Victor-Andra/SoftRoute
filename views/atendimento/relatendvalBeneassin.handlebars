@@ -3,6 +3,11 @@
 	<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
 		<style>
+			@media print and (orientation: landscape) {
+				.noprint {
+					display: none;
+				}
+			}
 			@media print {
                .noprint {
                   display: none;
@@ -18,8 +23,6 @@
 				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
-			
-			
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -79,12 +82,12 @@
 						<!-- PAGE CONTENT BEGINS -->
 						<div class="space-6"></div>
 						<div class="row">
-							<div class="col-sm-10 col-sm-offset-1">
+							<div id="divPadds" class="col-sm-12">
 								<div class="widget-box transparent">
 									<div style="text-align: center;">
 										<img width="140" height="60" alt="150x150" style="alight: center" src="/images/gallery/logo_route_centro.png">
 									</div>
-										<div class="widget-header widget-header-large">
+										<div class="widget-header widget-header-large" style="padding-left: 20px;">
 											<h3 class="widget-title grey lighter">
 												<i class="ace-icon fa fa-leaf green"></i>
 												Atendimentos por Beneficiário
@@ -138,17 +141,31 @@
 													<thead>
 														
 														<tr>
+															{{#compareString porHoras "true"}}
+															<th style="width:8%">Dta. Atendimento</th>
+															<th style="width:5%">Hora Ini.</th>
+															<th style="width:5%">Hora Fin.</th>
+															<th style="width:9%">Especialidade</th>
+															<th style="width:15%">Profissional</th>
+															<th style="width:29%">Ass. Profissional</th>
+															<th style="width:29%">Ass. Responsável</th>
+															{{else}}
 															<th style="width:11%">Data do Atendimento</th>
 															<th>Especialidade</th>
 															<th>Profissional</th>
 															<th>Ass. Profissional</th>
 															<th>Ass. Responsável</th>
+															{{/compareString}}
 														</tr>
 													</thead>
 													{{#each rels}}
 														<tbody>
 															<tr>
-																<td style="width:10%">{{dt}}</td>
+																<td style="width:8%">{{dt}}</td><!-- /.somente data -->
+																{{#compareString ../porHoras "true"}}
+																<td style="width:5%">{{horaIni}}</td><!-- /.somente hora inicial -->
+																<td style="width:5%">{{horaFim}}</td><!-- /.somente hora Final -->
+																{{/compareString}}
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}
 																		<td>{{terapia_nomecid}}</td>
@@ -159,10 +176,10 @@
 																		<td>{{usuario_nomecompleto}}</td>
 																	{{/ifEqual}}
 																{{/each}}
-																<td>
+																<td style="width:18%">
 																	-
 																</td>
-																<td>
+																<td style="width:18%">
 																	-
 																</td>
 															</tr>

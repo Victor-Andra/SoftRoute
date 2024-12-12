@@ -72,13 +72,17 @@ class RelAtendBene{
         especialidade,
         profissional,
         beneficiario,
-        hora
+        hora,
+        horaIni,
+        horaFim
         ){
         this.dt = dt,
         this.especialidade = especialidade,
         this.profissional = profissional,
         this.beneficiario = beneficiario,
-        this.hora = hora
+        this.hora = hora,
+        this.horaIni = horaIni,
+        this.horaFim = horaFim
     }
 }
 
@@ -355,7 +359,9 @@ module.exports = {
         sex.setSeconds(59);
         let agora = seg.toISOString();
         let depois = sex.toISOString();
-        
+        let atend = [];
+        let qtdAtends = 0;
+        /*
         Atend.find({atend_atenddata: { $gte : agora, $lte:  depois }}).then((atend) =>{
             atend.forEach((b)=>{
                 if(b.atend_atenddata){
@@ -391,6 +397,7 @@ module.exports = {
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
             //console.log("Listagem Realizada de Atendimentos!")
+            */
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Beneficiários!")
@@ -404,7 +411,7 @@ module.exports = {
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 //console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
-        })})})})}).catch((err) =>{
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -1087,7 +1094,6 @@ module.exports = {
         console.log("periodoDe:? "+periodoDe)
         console.log("periodoAte:? "+periodoAte)
         let date = new Date();
-        let porHoras = req.body.porHoras;
         let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
@@ -1142,6 +1148,7 @@ module.exports = {
                             });
                             at.forEach((atend)=>{
                                 if (req.body.porHoras == "sim"){
+                                    porHoras = "true";
                                     let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
                                     let minutoFim = atend.atend_atendhora.substring(3,5);
                                     console.log("minutoFim: "+minutoFim)
@@ -1163,11 +1170,15 @@ module.exports = {
                                     }
 
 
-                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
-                                } else {
-                                    console.log("atend.atend_atenddata: "+atend.atend_atenddata)
+                                    //rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
-                                    console.log("rab.dt: "+rab.dt)
+                                    rab.horaIni = atend.atend_atendhora;
+                                    rab.horaFim = (horaFim + ":" + minutoFim);
+                                } else {
+                                    porHoras = "false";
+                                    //console.log("atend.atend_atenddata: "+atend.atend_atenddata)
+                                    rab.dt = (fncGeral.getData(atend.atend_atenddata));
+                                    //console.log("rab.dt: "+rab.dt)
                                 }
                                 categorias = atend.atend_categoria
                                 //console.log("categorias:"+categorias)

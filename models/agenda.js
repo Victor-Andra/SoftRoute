@@ -508,21 +508,25 @@ module.exports = {AgendaModel,AgendaSchema,
     },
     agendaFeriado: async (req, res) => {
         //console.log("req.body.agendaData: "+req.body.agendaData)
-
-        let seg = new Date();
-        seg.setDate(seg.getDate());
+        let dataAtual = new Date();
+        let seg = new Date(req.body.agendaData);
+        seg.setHours(seg.getHours()+3);
         seg.setSeconds(0);
         seg.setMinutes(0);
         seg.setHours(0);
-        seg.setHours(seg.getHours()-3);
+        //seg.setHours(seg.getHours()-3);
 
-        let sex = new Date();
-        sex.setDate(sex.getDate());
+
+        let sex = new Date(req.body.agendaData);
+        sex.setHours(sex.getHours()+3);
         sex.setSeconds(59);
         sex.setMinutes(59);
         sex.setHours(23);
-        seg.setHours(seg.getHours()-3);
+        //sex.setHours(sex.getHours()-3);
 
+        let agendaS;
+        let usuarioAtual = req.cookies['idUsu'];
+        let arrayAgendasNovas = [];
         var retorno;
         let arrayIds =[];
         let agendaFinal = [];
@@ -551,7 +555,7 @@ module.exports = {AgendaModel,AgendaSchema,
                         agendaFinal.push(a);
                     }
                 })
-                
+                 
                 agendaFinal.forEach(a => {
                     if (a.agenda_tempId == undefined || a.agenda_tempId == "undefined"){
                         agendaS = "false";

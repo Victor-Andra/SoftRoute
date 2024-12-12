@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Sala</title>
+		<title>Ficha de Saúde dos Colaboradores</title>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -16,10 +16,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Sala</a>
+								<a href="#">Ficha de Saúde dos Colaboradores</a>
 							</li>
 
-							<li class="active">Sala Cadastro</li>
+							<li class="active">Cadastro</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,12 +27,12 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/ferramentas/sala/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/saudecolab/add" method="POST">
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">Salas</h4>
+												<h4 class="widget-title">Ficha de Saúde dos Colaboradores</h4>
 
 												<span class="widget-toolbar">
 
@@ -49,17 +49,189 @@
 											<div class="widget-body">
 												<div class="widget-main">
 
-													<label> Nome da Sala</label>
+												
+													<label>Saúde Colab Usuário ID</label>
 													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" name="salaNome" id="salaNome" class="form-control" />
+														<div class="col-xs-2 col-sm-6">
+															<input type="text" name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="form-control" />
 														</div>
 													</div>
-													<div class="space space-8"></div>
-													<label> Descrição</label>
+
+													<label>Saúde Colab Data</label>
 													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" name="salaDescricao" id="salaDescricao" class="form-control" />
+														<div class="col-xs-3 col-sm-3">
+															<input type="text" name="saudecolabSaudecolabdata" id="saudecolabSaudecolabdata" class="form-control" />
+														</div>
+													</div>
+
+													<label>Tipo Sanguíneo</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-3">
+															<input type="text" name="saudecolabTiposangue" id="saudecolabTiposangue" class="form-control" />
+														</div>
+													</div>
+
+													<label>Plano de Saúde</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabPlanosaude" id="saudecolabPlanosaude" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Plano de Saúde Qual</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-6">
+															<input type="text" name="saudecolabPlanosaudequal" id="saudecolabPlanosaudequal" class="form-control" />
+														</div>
+													</div>
+
+													<label>Hospital Qual</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-6">
+															<input type="text" name="saudecolabHospitalqual" id="saudecolabHospitalqual" class="form-control" />
+														</div>
+													</div>
+
+													<label>Alergia</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabAlergia" id="saudecolabAlergia" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Alergia Qual</label>
+													<div class="form-group">
+														<div class="col-xs-62 col-sm-6">
+															<input type="text" name="saudecolabAlergiaqual" id="saudecolabAlergiaqual" class="form-control" />
+														</div>
+													</div>
+
+													<label>Medicamentos que Não pode usar</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabMedicamentonao" id="saudecolabMedicamentonao" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Liste os medicamento que não podem ser usados</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-12">
+															<input type="text" name="saudecolabMedicamentonaoquail" id="saudecolabMedicamentonaoquail" class="form-control" />
+														</div>
+													</div>
+
+													<label>Hipertenso</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabHipertenso" id="saudecolabHipertenso" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Cardíaco</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabCardiaco" id="saudecolabCardiaco" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Diabético</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabDiabetico" id="saudecolabDiabetico" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Insulina</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabInsulina" id="saudecolabInsulina" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Condição de Saúde</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-12">
+															<input type="text" name="saudecolabCondicaosaude" id="saudecolabCondicaosaude" class="form-control" />
+														</div>
+													</div>
+
+													<label>Primeiro Contato</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-6">
+															<input type="text" name="saudecolabContato1" id="saudecolabContato1" class="form-control" />
+														</div>
+													</div>
+
+													<label>Parentesco 1</label>
+													<div class="form-group">
+														<div class="col-xs-3 col-sm-3">
+															<input type="text" name="saudecolabParentesco1" id="saudecolabParentesco1" class="form-control" />
+														</div>
+													</div>
+
+													<label>Celular 1</label>
+													<div class="form-group">
+														<div class="col-xs-3 col-sm-3">
+															<input type="text" name="saudecolabCelular1" id="saudecolabCelular1" class="form-control" />
+														</div>
+													</div>
+
+													<label>Segundo Contato</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-6">
+															<input type="text" name="saudecolabContato2" id="saudecolabContato2" class="form-control" />
+														</div>
+													</div>
+
+													<label>Parentesco 2</label>
+													<div class="form-group">
+														<div class="col-xs-3 col-sm-3">
+															<input type="text" name="saudecolabParentesco2" id="saudecolabParentesco2" class="form-control" />
+														</div>
+													</div>
+
+													<label>Celular 2</label>
+													<div class="form-group">
+														<div class="col-xs-3 col-sm-3">
+															<input type="text" name="saudecolabCelular2" id="saudecolabCelular2" class="form-control" />
+														</div>
+													</div>
+
+													<label>Observações Gerais</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-12">
+															<input type="text" name="saudecolabObs" id="saudecolabObs" class="form-control" />
+														</div>
+													</div>
+
+													<label>Aceitar Termos</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="form-control">
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
 														</div>
 													</div>
 												</div>

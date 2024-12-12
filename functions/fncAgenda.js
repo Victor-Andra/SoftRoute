@@ -4253,6 +4253,7 @@ module.exports = {
 
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
+            agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -6555,6 +6556,7 @@ module.exports = {
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
         Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{
+            agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
             //console.log("agenda.length:"+agenda.length)
@@ -6762,6 +6764,7 @@ module.exports = {
         //let idTera = new ObjectId('636e5e85c276219d41aee9ea');//apenas para teste, trocar depois por idTerapeuta
 
         Agenda.find({ agenda_data: { $gte : agora, $lte: depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
+            agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda.length)
             
@@ -6940,6 +6943,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
+            agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             //console.log("agenda.length:"+agenda.length)
@@ -7130,6 +7134,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
+            agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
