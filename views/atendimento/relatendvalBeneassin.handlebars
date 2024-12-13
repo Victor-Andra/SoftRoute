@@ -137,7 +137,7 @@
 													</div>
 											</div><!-- /.row -->
 											<div>
-												<table class="table table-striped table-bordered">
+												<table class="table table-striped table-bordered" style="font-size: 10px;">
 													<thead>
 														
 														<tr>
@@ -145,10 +145,10 @@
 															<th style="width:8%">Dta. Atendimento</th>
 															<th style="width:5%">Hora Ini.</th>
 															<th style="width:5%">Hora Fin.</th>
-															<th style="width:9%">Especialidade</th>
-															<th style="width:15%">Profissional</th>
-															<th style="width:29%">Ass. Profissional</th>
-															<th style="width:29%">Ass. Responsável</th>
+															<th style="width:8%">Especialidade</th>
+															<th style="width:10%">Profissional</th>
+															<th style="width:32%">Ass. Profissional</th>
+															<th style="width:32%">Ass. Responsável</th>
 															{{else}}
 															<th style="width:11%">Data do Atendimento</th>
 															<th>Especialidade</th>
@@ -161,7 +161,7 @@
 													{{#each rels}}
 														<tbody>
 															<tr>
-																<td style="width:8%">{{dt}}</td><!-- /.somente data -->
+																<td style="width:8%;height:100px">{{dt}}</td><!-- /.somente data -->
 																{{#compareString ../porHoras "true"}}
 																<td style="width:5%">{{horaIni}}</td><!-- /.somente hora inicial -->
 																<td style="width:5%">{{horaFim}}</td><!-- /.somente hora Final -->
