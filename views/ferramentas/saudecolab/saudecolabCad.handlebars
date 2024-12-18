@@ -53,21 +53,37 @@
 													<label>Saúde Colab Usuário ID</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-6">
-															<input type="text" name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="form-control" />
+															<select name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="chosen-select" onchange="">
+																<option value="766f69643132333435366964">-</option>
+																{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																{{/each}}
+															</select>
 														</div>
 													</div>
 
-													<label>Saúde Colab Data</label>
+													<label>Data da Informação dada pelo Colaborador</label>
 													<div class="form-group">
 														<div class="col-xs-3 col-sm-3">
-															<input type="text" name="saudecolabSaudecolabdata" id="saudecolabSaudecolabdata" class="form-control" />
+															<input type="date" name="saudecolabSaudecolabdata" id="saudecolabSaudecolabdata" class="form-control" />
 														</div>
 													</div>
 
 													<label>Tipo Sanguíneo</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-3">
-															<input type="text" name="saudecolabTiposangue" id="saudecolabTiposangue" class="form-control" />
+															<select name="saudecolabTiposangue" id="saudecolabTiposangue" class="chosen-select" onchange="">
+																<option value="-">-</option>
+																<option value="A+">A+</option>
+																<option value="A-">A-</option>
+																<option value="B+">B+</option>
+																<option value="B-">B-</option>
+																<option value="AB+">AB+</option>
+																<option value="AB-">AB-</option>
+																<option value="O+">O+</option>
+																<option value="O-">O-</option>
+																
+															</select>
 														</div>
 													</div>
 
@@ -128,7 +144,25 @@
 													<label>Liste os medicamento que não podem ser usados</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-12">
-															<input type="text" name="saudecolabMedicamentonaoquail" id="saudecolabMedicamentonaoquail" class="form-control" />
+															<input type="text" name="saudecolabMedicamentonaoqual" id="saudecolabMedicamentonaoqual" class="form-control" />
+														</div>
+													</div>
+
+													<label>Usa medicamentos regularmente?</label>
+													<div class="form-group">
+														<div class="col-xs-2 col-sm-2">
+															<select name="saudecolabMedicamentosim" id="saudecolabMedicamentosim" class="form-control">
+																<option value="-">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Não">Não</option>
+															</select>
+														</div>
+													</div>
+
+													<label>Quais medicamentos usa regularmente?</label>
+													<div class="form-group">
+														<div class="col-xs-6 col-sm-12">
+															<input type="text" name="saudecolabMedicamentosimqual" id="saudecolabMedicamentosimqual" class="form-control" />
 														</div>
 													</div>
 
@@ -231,8 +265,30 @@
 															<input type="text" name="saudecolabObs" id="saudecolabObs" class="form-control" />
 														</div>
 													</div>
-
-													<label>Aceitar Termos</label>
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<strong>Veracidade das Informações</strong><br>
+															Declaro que as informações são atuais e me responsabilizando pela veracidade.
+															<br>
+														</div>
+													</div>
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<strong>Armazenamento em Nuvem</strong><br>
+															Autorizo o armazenamento seguro das informações fornecidas neste sistema em uma plataforma de armazenamento na nuvem, em conformidade com as normas de proteção de dados aplicáveis.
+															<br>
+														</div>
+													</div>
+													<div class="col-xs-12">
+														<div class="alert alert-warning">
+															<strong>Acesso às Informações por Colaboradores</strong><br>
+															Autorizo que colaboradores devidamente autorizados possam visualizar as informações fornecidas, especialmente em situações de Emergência e/ou Urgência Médica, com o objetivo de garantir a minha segurança e o pronto atendimento médico necessário.
+															<br>
+														</div>
+														<hr>
+													</div>
+													
+													<label>Aceitar Termos acima</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="form-control">
@@ -242,6 +298,7 @@
 															</select>
 														</div>
 													</div>
+													
 												</div>
 											</div>
 										</div>

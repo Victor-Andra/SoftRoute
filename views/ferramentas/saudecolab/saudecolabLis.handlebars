@@ -2,8 +2,36 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Salas</title>
+		<title>Lista das Ficha de Saúde dos Colaboradores</title>
+		
+		<!-- Importação do Font Awesome -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		/>
+		<style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
+        th, td {
+            border: 1px solid #ddd;
+			align-items: center;
+			text-align: center;
+			width: 10px; /* Ajuste o valor conforme necessário */
+            padding: 8px;
+			white-space: wrap; /* quebre em múltiplas linhas o tetxo */
+        }
+
+        /* Deixa a primeira coluna com largura fixa */
+        td:first-child, th:first-child {
+            width: 130px; /* Ajuste o valor conforme necessário */
+			text-align: left;
+			white-space: nowrap; /* Impede que o texto quebre em múltiplas linhas */
+            
+        }
+    </style>
 		
 	</head>
 
@@ -19,7 +47,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Salas</li>
+							<li class="active">Lista das Ficha de Saúde dos Colaboradores</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -46,39 +74,137 @@
 												
 												<thead>
 													<tr role="row">
-														<th class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Sala: activate to sort column ascending">Sala</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Descrição:     activate to sort column ascending">Descrição</th>
-														<th>Ação</th>
-
+														 <tr>
+															<th rowspan="2" style="width: 20%;">Nome</th>
+															<th rowspan="2" style="width: 5%;">Data <br>Atualização</th>
+															<th colspan="8">Principais Pontuações</th>
+															<th colspan="3">Em caso de Urgência</th>
+															<th rowspan="2" style="width: 5%;">Ações<br>
+																<a class="red" href="/menu/ferramentas/saudecolab/cad">
+																		<i class="ace-icon fa fa-plus bigger-130" title="Adicionar Nova Ficha de Saúde"></i>
+																	</a>
+															</th>
+														</tr>
+														<tr>
+															<th style="width: 5%;">Tipo<br>Sanguíneo</th>
+															<th style="width: 5%;">Plano Saúde</th>
+															<th style="width: 5%;">Alérgico&nbsp;&nbsp;<a class="pink"><i class="ace-icon fa fa-podcast small"></i></a></th>
+															<th style="width: 5%;">Medicamentos&nbsp;&nbsp;<a class="red"><i class="ace-icon fa fa-ban small" title="Não pode tomar."></i></a><br>
+															não pode tomar.</th>
+															<th style="width: 5%;">Hipertensão&nbsp;&nbsp;<a class="red"><i class="ace-icon fa fa-heartbeat small"></i></a></th>
+															<th style="width: 5%;">Cardíaco&nbsp;&nbsp;<a class="purple"><i class="ace-icon fa fa-heart small"></i></a></th>
+															<th style="width: 5%;">Diabetes&nbsp;&nbsp;<a class="orange"><i class="ace-icon fa fa-tint small"></i></a></th>
+															<th style="width: 5%;">Mendicamentos&nbsp;&nbsp;<a class="green"><i class="ace-icon fa fa-plus small" title="Deve tomar regularmente."></i></a> </th>
+															<th style="width: 5%; white-space: wrap;">Hospital</th>
+															<th colspan="2" style="width: 5%;">Contatos</th>
+														</tr>
+														
+														
 													</tr>
+													
 													
 												</thead>
 												
 												<tbody>
-													{{#each salas}}
+													{{#each saudecolabs}}
 														<tr>
-															<th class="center">
-																<label class="pos-rel">
-																	<input type="checkbox" class="ace" />
-																	<span class="lbl"></span>
-																</label>
-															</th>
-															<td>{{sala_nome}}</td>
-															<td>{{sala_descricao}}</td>
+															{{#each ../usuarios}}
+																	{{#ifEqual this._id ../saudecolab_saudecolabusuid}}
+																		<td style="width: 20%;">{{usuario_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															<td  style="width: 5%;">
+																<span class="badge badge-info">{{saudecolab_saudecolabdata}}</span>
+															</td>
+															<td  style="width: 5%;">
+																<span class="badge badge-warning">{{saudecolab_tiposangue}}</span>
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_planosaude "Sim"}}
+																	<span class="badge badge-info">{{saudecolab_planosaudequal}}</span>
+																	{{else}}
+																	<span class="badge badge-danger">{{saudecolab_planosaude}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_alergia "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_alergia}}</span>
+																	<a class="red">
+																		<i class="ace-icon fa fa-search bigger-130" title="{{saudecolab_alergiaqual}}"></i>
+																	</a>
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_alergia}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_medicamentonao "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_medicamentonaoqual}}</span>
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_medicamentonao}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_hipertenso "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_hipertenso}}</span>
+																	
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_hipertenso}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_cardiaco "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_cardiaco}}</span>
+																	
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_cardiaco}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_diabetico "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_diabetico}}</span>
+																		{{#ifEqual this.saudecolab_insulina "Sim"}}
+																		<a class="black">
+																			<i class="ace-icon fa fa-toggle-on bigger-130" title="Toma Insulina"></i>
+																		</a>
+																		{{else}}
+																		<a class="green">
+																			<i class="ace-icon fa fa-toggle-off bigger-130" title="Toma Insulina"></i>
+																		</a>
+																		{{/ifEqual}}
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_diabetico}}</span>
+																{{/ifEqual}}
+															</td>
+															<td >
+																<span class="badge badge-success">{{saudecolab_medicamentosimqual}}</span>
+															</td>
+															
+															<td>
+																<span style="white-space: wrap;" class="badge badge-warning">{{saudecolab_hospitalqual}}</span>
+															</td>
+															
+															<td>
+																<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_contato1}}</span><br>
+																<span class="badge badge-info">{{saudecolab_parentesco1}}</span><br>
+																<span class="badge badge-info">{{saudecolab_celular1}}</span>
+															</td>
+															<td>
+																<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_contato2}}</span><br>
+																<span class="badge badge-info">{{saudecolab_parentesco2}}</span><br>
+																<span class="badge badge-info">{{saudecolab_celular2}}</span>
+															</td>
+
 															<td>
 																<div class="action-buttons">
-																	<a class="green" href="/menu/ferramentas/sala/edi/{{_id}}">
-																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	<a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
 																	</a>
-																	<a class="hidden" class="red" href="/menu/ferramentas/sala/del/{{_id}}">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
+																	
 																</div>
 																<div class="hidden-md hidden-lg">
 																	
@@ -106,7 +232,7 @@
 			<div class="footer">
 				<div class="footer-inner">
 					<div class="footer-content">
-						<span class="bigger-120">
+						<span class="bigger-160">
 							<span class="blue bolder">Soft</span>
 							Route
 						</span>
@@ -114,11 +240,11 @@
 						&nbsp; &nbsp;
 						<span class="action-buttons">
 							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-600"></i>
 							</a>
 
 							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-600"></i>
 							</a>
 
 		
@@ -142,12 +268,12 @@
 		$(document).ready(function() {
 			$("#dynamic-table").DataTable({
 			"language": {
-            "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
+            "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto para portugues
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, { "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, null, null,null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthMenu": [50, 100],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

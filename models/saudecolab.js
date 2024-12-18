@@ -12,7 +12,9 @@ const SaudecolabSchema = mongoose.Schema({
     saudecolab_alergia :{ type: String, required: false },// Sim ou Não
     saudecolab_alergiaqual:{ type: String, required: false },
     saudecolab_medicamentonao :{ type: String, required: false },// Sim ou Não Medicamentos que não pode tormar
-    saudecolab_medicamentonaoquail :{ type: String, required: false },
+    saudecolab_medicamentonaoqual :{ type: String, required: false },
+    saudecolab_medicamentosim :{ type: String, required: false },// Sim ou Não Medicamentos que não pode tormar
+    saudecolab_medicamentosimqual :{ type: String, required: false },
     saudecolab_hipertenso :{ type: String, required: false },// Sim ou Não
     saudecolab_cardiaco :{ type: String, required: false },// Sim ou Não
     saudecolab_diabetico :{ type: String, required: false },// Sim ou Não
@@ -46,7 +48,9 @@ class Saudecolab{
         saudecolab_alergia,
         saudecolab_alergiaqual,
         saudecolab_medicamentonao,
-        saudecolab_medicamentonaoquail,
+        saudecolab_medicamentonaoqual,
+        saudecolab_medicamentosim,
+        saudecolab_medicamentosimqual,
         saudecolab_hipertenso,
         saudecolab_cardiaco,
         saudecolab_diabetico,
@@ -77,7 +81,9 @@ class Saudecolab{
             this.saudecolab_alergia = saudecolab_alergia,
             this.saudecolab_alergiaqual = saudecolab_alergiaqual,
             this.saudecolab_medicamentonao = saudecolab_medicamentonao,
-            this.saudecolab_medicamentonaoquail = saudecolab_medicamentonaoquail,
+            this.saudecolab_medicamentonaoqual = saudecolab_medicamentonaoqual,
+            this.saudecolab_medicamentosim = saudecolab_medicamentosim,
+            this.saudecolab_medicamentosimqual = saudecolab_medicamentosimqual,
             this.saudecolab_hipertenso = saudecolab_hipertenso,
             this.saudecolab_cardiaco = saudecolab_cardiaco,
             this.saudecolab_diabetico = saudecolab_diabetico,
@@ -117,7 +123,7 @@ module.exports = {
         // Realiza Atualização
         await SaudecolabModel.findByIdAndUpdate(req.body.saudecolabId, 
             {
-                saudecolab_progisaudecolab_saudecolabidd: req.body.saudecolabSaudecolabid,
+                saudecolab_progisaudecolab_saudecolabid: req.body.saudecolabSaudecolabid,
                 saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid,
                 saudecolab_saudecolabdata: req.body.saudecolabSaudecolabdata,
                 saudecolab_tiposangue: req.body.saudecolabTiposangue,
@@ -127,7 +133,9 @@ module.exports = {
                 saudecolab_alergia: req.body.saudecolabAlergia,
                 saudecolab_alergiaqual: req.body.saudecolabAlergiaqual,
                 saudecolab_medicamentonao: req.body.saudecolabMedicamentonao,
-                saudecolab_medicamentonaoquail: req.body.saudecolabMedicamentonaoquail,
+                saudecolab_medicamentonaoqual: req.body.saudecolabMedicamentonaoqual,
+                saudecolab_medicamentosim: req.body.saudecolabMedicamentosim,
+                saudecolab_medicamentosimqual: req.body.saudecolabMedicamentosimqual,
                 saudecolab_hipertenso : req.body.saudecolabHipertenso,
                 saudecolab_cardiaco: req.body.saudecolabCardiaco,
                 saudecolab_diabetico: req.body.saudecolabDiabetico,
@@ -139,8 +147,8 @@ module.exports = {
                 saudecolab_contato2: req.body.saudecolabContato2,
                 saudecolab_parentesco2: req.body.saudecolabParentesco2,
                 saudecolab_celular2: req.body.saudecolabCelular2,
-                saudecolab_obs: req.body.saudecolab_obs,
-                saudecolab_aceitartermos: req.body.saudecolab_aceitartermos,
+                saudecolab_obs: req.body.saudecolabObs,
+                saudecolab_aceitartermos: req.body.saudecolabAceitartermos,
                 // Atributos de controle
                 saudecolab_usuidedi: usuarioAtual,
                 saudecolab_dataedi: dataAtual.toISOString(),
@@ -177,7 +185,9 @@ module.exports = {
                 saudecolab_alergia: req.body.saudecolabAlergia,
                 saudecolab_alergiaqual: req.body.saudecolabAlergiaqual,
                 saudecolab_medicamentonao: req.body.saudecolabMedicamentonao,
-                saudecolab_medicamentonaoquail: req.body.saudecolabMedicamentonaoquail,
+                saudecolab_medicamentonaoqual: req.body.saudecolabMedicamentonaoqual,
+                saudecolab_medicamentosim: req.body.saudecolabMedicamentosim,
+                saudecolab_medicamentosimqual: req.body.saudecolabMedicamentosimqual,
                 saudecolab_hipertenso : req.body.saudecolabHipertenso,
                 saudecolab_cardiaco: req.body.saudecolabCardiaco,
                 saudecolab_diabetico: req.body.saudecolabDiabetico,
@@ -189,8 +199,8 @@ module.exports = {
                 saudecolab_contato2: req.body.saudecolabContato2,
                 saudecolab_parentesco2: req.body.saudecolabParentesco2,
                 saudecolab_celular2: req.body.saudecolabCelular2,
-                saudecolab_obs: req.body.saudecolab_obs,
-                saudecolab_aceitartermos: req.body.saudecolab_aceitartermos,
+                saudecolab_obs: req.body.saudecolabObs,
+                saudecolab_aceitartermos: req.body.saudecolabAceitartermos,
                 //Atributos de controle
                 saudecolab_usuidcad : usuarioAtual,
                 saudecolab_datacad : dataAtual.toISOString(),

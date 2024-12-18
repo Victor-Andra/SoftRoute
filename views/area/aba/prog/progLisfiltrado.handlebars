@@ -15,47 +15,49 @@
 			
 			<script>
 				
-				function initEasySparkline() {
-					console.log("Iniciando Sparkline");
-					$('.sparkline').each(function() {
-						console.log("Elemento encontrado:", $(this));
-						console.log("Valores data-values:", $(this).data('values')); // Log de valores
+			function initEasySparkline() {
+				console.log("Iniciando Sparkline");
 
-						var $box = $(this).closest('.infobox');
-						var barColor = !$box.hasClass('infobox-dark') ? '#0073e6' : '#FFF'; // Força cor para teste
+				if (typeof $.fn.sparkline !== "function") {
+					console.error("Biblioteca Sparkline não carregada.");
+					return;
+				}
 
-						$(this).sparkline('html', {
+				const fixedColors = [
+					'#00FF00', // Verde
+					'#FFFF00', // Amarelo
+					'#FFA500', // Laranja
+					'#FF69B4',  // Rosa
+					'#0000FF', // Azul
+					'#FF0000', // Vermelho
+					'#00FFFF'  // Ciano
+				];
+
+				$('.sparkline').each(function () {
+					const $this = $(this);
+					const values = $this.data('values');
+
+					if (!values) {
+						console.error("Atributo data-values não definido ou vazio:", $this);
+						return;
+					}
+
+					try {
+						$this.sparkline('html', {
 							tagValuesAttribute: 'data-values',
 							type: 'bar',
 							barWidth: 8,
 							height: '30px',
 							chartRangeMin: 0,
-							firstcolor:'#00FF0080',
-							colorMap: {
-								'0': '#00FF0080',       // '#00FF0080' ou 'rgba(0, 255, 0, 0.5)' Primeira barra - Verde transparente
-								'1': '#FFFF0080',     // '#FFFF0080' ou 'rgba(255, 255, 0, 0.5)' Segunda barra - Amarelo transparente
-								'2': '#FFA50080',     // '#FFA50080' ou 'rgba(255, 165, 0, 0.5)' Terceira barra - Laranja transparente
-								'3': '#FF638480'     // '#FF638480'ou 'rgba(255, 99, 132, 0.5) Quarta barra - Rosa transparente
-							}
+							colorMap: fixedColors.slice(0, values.split(',').length), // Seleciona cores com base na quantidade de barras
+							barColor: null // Evita sobrescrever o colorMap com uma cor única
 						});
-					});
-				}
-				function initDynamicSparkline(values) {
-					const barColors = [
-						'rgba(0, 255, 0, 0.5)',     // Primeira barra - Verde limão
-						'rgba(255, 255, 0, 0.5)',   // Segunda barra - Amarelo
-						'rgba(255, 165, 0, 0.5)',   // Terceira barra - Laranja
-						'rgba(255, 99, 132, 0.5)'   // Quarta barra - Rosa
-					];
-
-					$('.sparkline').sparkline(values, {
-						type: 'bar',
-						barWidth: 8,
-						height: '30px',
-						chartRangeMin: 0,
-						colorMap: barColors.map((color, index) => ({ [index]: color })) // Aplica cores fixas por posição
-					});
-				}
+						console.log("Sparkline desenhado com cores fixas no elemento:", $this);
+					} catch (error) {
+						console.error("Erro ao desenhar Sparkline:", error);
+					}
+				});
+			}
 				function initEasyPieCharts() {
 					// Seleciona todos os elementos com a classe easy-pie-chart
 					$('.easy-pie-chart').each(function() {
@@ -176,10 +178,18 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<div class="alert alert-success">
+									<strong>Você está na Área ABA para Programas Agendados, em Andamento ou Pausados</strong><br>
+									Todas as informações dos programas serão exibidos aqui, exceto os programas em <strong>Manutenção</strong> desse Beneficiário . 
+									<br>
+								</div>
+								<hr>
+							</div>
 							<div class="col-xs-12 col-sm-12">
 								<form id="formEnv">
 									<div hidden>
-
+										<input type="text" id="dataAtual" name="dataAtual"/>
 										<input type="text" id="DataAgora" name="DataAgora"/>
 										<!--.dados do beneficiário -->
 										<input type="text" id="progsetBeneidEnv" name="progsetBeneidEnv" value="{{prog.prog_beneid}}"/>
@@ -258,12 +268,7 @@
 																						Supervisões
 																					</a>
 																				</li>
-																				<li class="">
-																					<a data-toggle="tab" href="#manuten{{bene_nome}}" aria-expanded="false">
-																						<i class="pink ace-icon fa fa-lock bigger-120"></i>
-																						Programas ABA em Manutenção
-																					</a>
-																				</li>
+																				
 																			</ul>
 
 																			<div class="tab-content">
@@ -278,25 +283,22 @@
 																									<span class=" label label-purple arrowed-in-right ">
 																										&nbsp;Check-List's
 																									</span>
-																																																		
-																									<span >
-																										<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/grafabc/grafabccad" title="Cadastrar novo CHECK-LIST.">
-																												<i class="ace-icon fa fa-plus bigger-130"></i>
-																											</a>
-																									</span>
 																								</th>
 																								
 																							</tr>
 																							<tr>
 																								
-																								<th style="width:30px">
+																								<th style="width:10px;">
 																									<a href="#" data-action="">
 																										<i class="ace-icon fa fa-tags bigger-130"></i>
 																									</a>
 																									&nbsp;
 																									Programa ABA
 																								</th>
-																								<th style="width:220px">
+																								<th style="width:10px;">
+																									Status
+																								</th>
+																								<th style="width:220px;">
 																									<a href="#" data-action="">
 																										<i class="ace-icon fa fa-calendar bigger-130"></i>
 																									</a>
@@ -313,22 +315,59 @@
 																								<tbody>
 																									<tr>
 																										<!-- .informa os Programas pertencentes ao Beneficiário chaveado acima -->
-																										{{#each ../../progtipos}}<!-- Ok -->
-																											{{#ifEqual this._id ../prog_tipo}}
-																												<td>{{progtipo_nome}}</td>
-																											{{/ifEqual}}
-																										{{/each}}
+																														{{#each ../../progtipos}}<!-- Ok -->
+																																{{#ifEqual this._id ../prog_tipo}}
+																																	<td style="width:10px;">
+																																		<span class="badge badge-warning">{{progtipo_nome}}</span>
+																																	</td>
+																																{{/ifEqual}}
+																															{{/each}}
+																															<td style="width:10px;">
+																																{{#ifEqual this.prog_status "Aguardando"}}
+																															<a href="#" data-action="">
+																																<i class="ace-icon blue fa fa-hourglass-o bigger-130"></i>
+																															</a>
+																															<span class="badge badge-info">{{prog_status}}</span>
+																														{{else}}
+																															{{#ifEqual this.prog_status "Pausado"}}
+																															<a href="#" data-action="">
+																																<i class="orange ace-icon fa fa-hourglass-o bigger-130"></i>
+																															</a>
+																															<span class="badge badge-warning">{{prog_status}}</span>
+																															{{else}}
+																																{{#ifEqual this.prog_status "Inicio"}}
+																																<a href="#" data-action="">
+																																	<i class="green ace-icon fa fa-sign-in bigger-130"></i>
+																																</a>
+																																<span class="badge badge-success">{{prog_status}}</span>
+																														{{else}}
+																															{{#ifEqual this.prog_status "Andamento"}}
+																															<a href="#" data-action="">
+																																<i class="green ace-icon fa fa-send bigger-130"></i>
+																															</a>
+																															<span class="badge badge-success">{{prog_status}}</span>
+																															{{else}}
+																															<a href="#" data-action="">
+																																<i class="red ace-icon fa fa-ban bigger-130"></i>
+																															</a>
+																															<span class="badge badge-danger">{{prog_status}}</span>
+																															{{/ifEqual}}
+																														{{/ifEqual}}
+																													{{/ifEqual}}
+																												{{/ifEqual}}
+																											
+																										</td>
 																										<td>
 																										<!-- /.informa os Programas pertencentes ao Beneficiário chaveado acima -->
 																											{{#each ../../progsets}}
 																												{{#ifEqual this.progset_progid ../_id}}
 																													{{#each ../../../folregs}}
 																														{{#ifEqual this.folreg_setid ../_id}}
-																														<button class="btn btn-xs btn-purple" style="vertical-align: middle; " >
+																														<button class="btn btn-app btn-purple " style="vertical-align: middle; " >
 																															<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" style="color:white">
-																																<i class="ace-icon fa fa-newspaper-o bigger-110"></i>
+																																
 
-																																<label for="form-field-select-1" style="font-size: 10px; color:white">
+																																<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white" >
 																																	{{this.folreg_datareg}}
 																																	<br>
 																																	{{#each ../../../../usuarios}}<!-- Ok -->
@@ -338,6 +377,9 @@
 																																	{{/each}}
 																																</label>
 																															</a>
+																															<div class="infobox-chart; infobox-blue">
+																																<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
+																															</div>
 																														</button>
 																														
 																														{{/ifEqual}}
@@ -441,92 +483,12 @@
 																						
 																					</table>
 																				</div>
-																				<div id="manuten{{bene_nome}}" class="tab-pane">
-																					<p class="alert alert-warning">
-																						Programas ABA em manutenção.
-																					</p>
-																					<table id="dynamic-table-progmanuten" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" >
-																						<thead>
-																							<tr>
-																								<th colspan="5">
-																									<span class="label label-pink arrowed-in-right ">
-																										&nbsp;Lista de Programas ABA em Manutenção
-																									</span>
-																									
-																								</th>
-																							</tr>
-																							<tr>
-																								<th style="width:220px">
-																									<a href="#" data-action="reload">
-																										<i class="ace-icon fa fa-sliders  bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Tipo
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-signal bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Nível
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-calendar bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Data
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-calendar-check-o bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Início
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-calendar-check-o bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Manutenção
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-tags bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Status
-																								</th>
-																								<th style="width:220px">
-																									<a href="#" data-action="">
-																										<i class="ace-icon fa fa-tags bigger-130"></i>
-																									</a>
-																									&nbsp;
-																									Ãção
-																								</th>
-																							</tr>
-																						</thead>
-																							
-																									<tbody>
-																										<tr>
-																											<td></td>
-																											<td></td>
-																											<td></td>
-																											<td></td>
-																											<td></td>
-																											<td></td>
-																											<td></td>
-																										</tr>
-
-																									</tbody>
-																								
-																					</table>
-																				</div>
+																				
 																			</div>
 																		</div>
 																	</div>
 																</div>
+																<div><hr></div>
 																<div class="widget-header">
 																	<h6 class="widget-title" >
 																		<table>
@@ -651,11 +613,11 @@
 																									{{else}}
 																										{{#ifEqual this.prog_status "Andamento"}}
 																										<a href="#" data-action="">
-																											<i class="brown ace-icon fa fa-send bigger-130"></i>
+																											<i class="green ace-icon fa fa-send bigger-130"></i>
 																										</a>
 																										{{else}}
 																										<a href="#" data-action="">
-																											<i class="green ace-icon fa fa-bookmark bigger-130"></i>
+																											<i class="red ace-icon fa fa-ban bigger-130"></i>
 																										</a>
 																										{{/ifEqual}}
 																									{{/ifEqual}}
@@ -755,14 +717,27 @@
 																					<span class="label label-danger arrowed-in-right ">
 																						&nbsp;Lista de SET's do programa ABA acima
 																					</span>&nbsp;&nbsp;&nbsp;
+																					
+																					{{#ifEqual this.prog_status "Adquirido"}}
+																					<span class="label label-warnings arrowed-right ">
+																						&nbsp;Não é mais possível adicionar Novos Sets para esse Programa
+																					</span>
+																						<span>
+																							<a class="black" name="acaoCadprogset" id="acaoEdi"  title="Bloqueado para cadastrar novo SET para esse programa ABA.">
+																								<i class="ace-icon fa fa-minus bigger-130"></i>
+																							</a>
+																						</span>	
+																					{{else}}
 																					<span class="label label-danger arrowed-right ">
 																						&nbsp;Adicionar NOVO SET
 																					</span>
-																					<span>
-																					<a class="red" name="acaoCadprogset" id="acaoEdi" href="/menu/area/aba/progset/progsetprecad/{{this._id}}" title="Cadastrar novo SET para esse programa ABA.">
-																							<i class="ace-icon fa fa-plus bigger-130"></i>
-																						</a>
-																					</span>	
+																						<span>
+																							<a class="red" name="acaoCadprogset" id="acaoEdi" href="/menu/area/aba/progset/progsetprecad/{{this._id}}" title="Cadastrar novo SET para esse programa ABA.">
+																								<i class="ace-icon fa fa-plus bigger-130"></i>
+																							</a>
+																						</span>	
+																					{{/ifEqual}}
+																					
 																					<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 																						<thead>
 																							<tr role="row" >
@@ -896,17 +871,21 @@
 																											</div>
 																										</td>
 																										<td>
-																											
-																											{{#ifEqual this.progset_status "Meta"}}
-																													<a class="gray" title="Cadastrar novo REGISTRO desabilitado.">
-																														<i class="ace-icon fa fa-minus bigger-130"></i>
-																													</a>
-																													{{else}}
-																													<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/folreg/folregPrecad/{{this._id}}/{{../_id}}" title="Cadastrar novo REGISTRO para esse programa SET.">
-																														<i class="ace-icon fa fa-plus bigger-130"></i>
-																													</a>
+																											{{#ifEqual ../prog_status "Adquirido"}}
+																												<a class="gray" title="Cadastrar novo REGISTRO desabilitado.">
+																													<i class="ace-icon fa fa-minus bigger-130"></i>{{prog_status}}
+																												</a>
+																											{{else}}
+																												{{#ifEqual progset_status "Meta"}}
+																														<a class="gray" title="Cadastrar novo REGISTRO desabilitado.">
+																															<i class="ace-icon fa fa-minus bigger-130"></i>
+																														</a>
+																														{{else}}
+																														<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/folreg/folregPrecad/{{this._id}}/{{../_id}}" title="Cadastrar novo REGISTRO para esse programa SET.">
+																															<i class="ace-icon fa fa-plus bigger-130"></i>
+																														</a>
 																												{{/ifEqual}}
-																											
+																											{{/ifEqual}}																											
 																										</td>
 																										
 																										<td style="vertical-align: top; text-align: left;">

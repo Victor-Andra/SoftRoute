@@ -2048,12 +2048,30 @@ router.get('/area/aba/prog/progcadBene/:id', fncGeral.IsAuthenticated, (req,res)
 })
 
 //Lista Programas ABA
-router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona lista do ABA.
+router.get('/area/aba/prog/proglis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o filtro da lista do ABA.
     let resposta = new Resposta()
     resposta.texto = ""
     resposta.sucesso = ""
     fncProg.listaProg(req, res, resposta);
 })
+
+//Lista Programas ABA filtrado pelo beneficiário carregado com id
+router.get('/area/aba/prog/proglisF/:id', fncGeral.IsAuthenticated, (req, res) => {
+    console.log("Beneficiário ID recebido:", req.params.id);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncProg.listaProgfiltro(req, res, resposta);
+});
+
+//Lista Programas ABA filtrado pelo beneficiário carregado com id MANUTENÇÃO
+router.get('/area/aba/prog/proglisM/:id', fncGeral.IsAuthenticated, (req, res) => {
+    console.log("Beneficiário ID recebido:", req.params.id);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncProg.listaProgfiltroManut(req, res, resposta);
+});
 
 //Filtra Programas ABA
 router.post('/area/aba/prog/progfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona lista do ABA.

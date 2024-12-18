@@ -56,6 +56,8 @@ const UsuarioSchema = mongoose.Schema({
     usuario_especializacao2 :{type: String, required: false },
     usuario_metodo2 :{type: String, required: false },
     usuario_escolaridadeobs :{type: String, required: false },
+    usuario_aba :{type: String, required: false },
+
     usuario_pix :{type: String, required: false },
     usuario_tipopix :{type: String, required: false },
     usuario_palavrachave :{type: String, required: false},
@@ -115,6 +117,7 @@ class Usuario{
         usuario_especializacao2,
         usuario_metodo2,
         usuario_escolaridadeobs,
+        usuario_aba,
         usuario_pix,
         usuario_palavrachave, 
         usuario_palavrachavedatacad, 
@@ -171,6 +174,7 @@ class Usuario{
         this.usuario_especializacao2 = usuario_especializacao ,
         this.usuario_metodo2 = usuario_metodo ,
         this.usuario_escolaridadeobs = usuario_escolaridadeobs,
+        this.usuario_aba = usuario_aba,
         this.usuario_tipopix = usuario_tipopix,
         this.usuario_pix = usuario_pix ,
         this.usuario_palavrachave = usuario_palavrachave ,
@@ -261,7 +265,7 @@ module.exports = {
                 usuario_especializacao2 : req.body.usuarioEspecializacao2 ,
                 usuario_metodo2 : req.body.usuarioMetodo2 ,
                 usuario_escolaridadeobs : req.body.usuarioEscolaridadeobs ,
-
+                usuario_aba : req.body.usuarioAba ,
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
                 usuario_obs : req.body.usuarioObs,
@@ -339,7 +343,7 @@ module.exports = {
             usuario_especializacao2 : req.body.usuarioEspecializacao2 ,
             usuario_metodo2 : req.body.usuarioMetodo2 ,
             usuario_escolaridadeobs : req.body.usuarioEscolaridadeobs ,
-
+            usuario_aba : req.body.usuarioAba ,
             usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
             usuario_obs : req.body.usuarioObs,

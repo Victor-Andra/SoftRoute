@@ -27,6 +27,7 @@
 				document.getElementById("usuarioMetodo").value = document.getElementById("usuMetodo").value;
 				document.getElementById("usuarioMetout").value = document.getElementById("usuMetout").value;
 				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
+				document.getElementById("usuarioAba").value = document.getElementById("usuAba").value;
 				console.log("termina");
 			}
 			
@@ -175,7 +176,7 @@
 										<input id="usuMetodo" name="usuMetodo" value="{{usuario.usuario_metodo}}" />
 										<input id="usuMetout" name="usuMetout" value="{{usuario.usuario_metout}}" />
 										<input id="usuEscolaridadeobs" name="usuEscolaridadeobs" value="{{usuario.usuario_escolaridadeobs}}" />
-										
+										<input id="usuAba" name="usuAba" value="{{usuario.usuario_aba}}" />
 
 									</div>
 										<div class="col-xl-12" style="padding-top: 50px;">
@@ -524,6 +525,18 @@
 																		<tr>
 																			<td colspan="4"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
 																		</tr>
+																		<tr>
+																			<td colspan="4"><label>Terapeuta ABA</label></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				<select name="usuarioAba" id="usuarioAba" class="chosen-select" data-placeholder="Escolha...">
+																					<option value="-">-</option>
+																					<option value="Sim">Sim</option>
+																					<option value="Não">Não</option>
+																				</select>
+																			</td>
+																		</tr>
 																	</tbody>
 																</table>
 															</div>
@@ -799,11 +812,8 @@
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
 											</button>
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"   name="acaoCancelar" id="acaoCancelar"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Cancelar
-											</button>
+											
+											
 										</div>
 									</div>
 								</document>

@@ -5,20 +5,24 @@ const mongoose = require("mongoose")
 const saudecolabClass = require("../models/saudecolab")
 const Saudecolab = mongoose.model("tb_saudecolab")
 
+
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
+const usuarioClass = require("../models/usuario")
 
 //Tabelas Extrangeiras
 const Estado = mongoose.model("tb_estado")
+const Usuario = mongoose.model("tb_usuario")
 
 
 module.exports = {
     listaSaudecolab(req,res){
         console.log('listando saudecolabs')
         Saudecolab.find().then((saudecolab) =>{
-            console.log("Listagem Realizada!")
-            res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab})
-        }).catch((err) =>{
+            Usuario.find().then((usuario)=>{
+                console.log("Listagem Realizada!")
+                res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab, usuarios: usuario})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
             res.redirect('admin/erro')
@@ -27,10 +31,12 @@ module.exports = {
     },
 
     carregaSaudecolab(req,res){
-        Estado.find().then((estado)=>{
-            console.log("Listagem Realizada de Ufs!")
-            res.render("ferramentas/saudecolab/saudecolabCad", {estados: estado})
-        }).catch((err) =>{
+        Saudecolab.find().then((saudecolab)=>{
+            Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
+                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuario
+            console.log("Listagem Realizada!")
+            res.render("ferramentas/saudecolab/saudecolabCad", {saudecolabs: saudecolab, usuarios: usuario})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
             res.redirect('admin/erro')
@@ -43,9 +49,10 @@ module.exports = {
         Saudecolab.findById(req.params.id).then((saudecolab) =>{
             console.log(saudecolab)
                 Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/saudecolab/saudecolabEdi', {saudecolab, estados: estado})
-        })}).catch((err) =>{
+                    Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
+                        usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuario
+            res.render('ferramentas/saudecolab/saudecolabEdi', {saudecolab, estados: estado, usuarios: usuario})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
