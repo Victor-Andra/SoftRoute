@@ -153,6 +153,25 @@
 				});
 				
 			</script>
+			<script>
+				// Exemplo de como o texto vem do backend
+				const progDicaTipoText = "Condução da Pegunta, Escolha, Sim e Não, Textual, Ecóica";
+
+				// Seleciona o contêiner onde os spans serão inseridos
+				const container = document.getElementById('prog-dicatipo-container');
+
+				// Separa o texto por vírgulas e remove espaços extras
+				const partes = progDicaTipoText.split(',').map(parte => parte.trim());
+
+				// Gera os spans e adiciona ao contêiner
+				partes.forEach(parte => {
+					const span = document.createElement('span');
+					span.className = 'label label-danger arrowed-right';
+					span.innerHTML = `&nbsp;${parte}`;
+					container.appendChild(span);
+					container.appendChild(document.createTextNode(' ')); // Adiciona espaço entre os spans
+				});
+			</script>
 	</head>
 	<body onload="controlaNave();carregaBody();" class="no-skin" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -580,11 +599,13 @@
 																												{{this.prog_exemplo}}
 																											</p>
 																										</td>
+																										
 																										<td>
-																											<p class="alert alert-danger">
-																												
-																											</p>
+																											<!-- Contêiner onde os spans serão inseridos -->
+																											<div id="prog-dicatipo-container-{{@index}}">{{this.prog_dicatipotext}}</div>
+																											
 																										</td>
+																										
 																									</tr>
 																								</tbody>
 																							</table>
@@ -920,7 +941,33 @@
 				});
 			});
 		</script>
-		
+		<script>
+			// Aguarda o DOM estar carregado
+			document.addEventListener('DOMContentLoaded', () => {
+				// Seleciona todos os contêineres que possuem o texto
+				document.querySelectorAll('[id^="prog-dicatipo-container-"]').forEach(container => {
+					const progDicaTipoText = container.textContent.trim(); // Pega o texto do contêiner
+
+					// Limpa o contêiner para inserir os spans
+					container.innerHTML = '';
+
+					// Separa o texto por vírgulas e remove espaços extras
+					const partes = progDicaTipoText.split(',').map(parte => parte.trim());
+
+					// Gera os spans e adiciona ao contêiner
+					partes.forEach(parte => {
+						const span = document.createElement('span');
+						span.className = 'label label-danger arrowed-right';
+						span.innerHTML = `&nbsp;${parte}`;
+						container.appendChild(span);
+						
+						// Adiciona uma quebra de linha após cada span
+						container.appendChild(document.createElement('br'));
+					});
+				});
+			});
+		</script>
+
 		
 	</body>
 	
