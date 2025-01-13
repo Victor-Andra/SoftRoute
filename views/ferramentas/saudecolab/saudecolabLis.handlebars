@@ -78,7 +78,7 @@
 															<th rowspan="2" style="width: 20%;">Nome</th>
 															<th rowspan="2" style="width: 5%;">Data <br>Atualização</th>
 															<th colspan="8">Principais Pontuações</th>
-															<th colspan="3">Em caso de Urgência</th>
+															<th colspan="2">Em caso de Urgência</th>
 															<th rowspan="2" style="width: 5%;">Ações<br>
 																<a class="red" href="/menu/ferramentas/saudecolab/cad">
 																		<i class="ace-icon fa fa-plus bigger-130" title="Adicionar Nova Ficha de Saúde"></i>
@@ -94,7 +94,9 @@
 															<th style="width: 5%;">Hipertensão&nbsp;&nbsp;<a class="red"><i class="ace-icon fa fa-heartbeat small"></i></a></th>
 															<th style="width: 5%;">Cardíaco&nbsp;&nbsp;<a class="purple"><i class="ace-icon fa fa-heart small"></i></a></th>
 															<th style="width: 5%;">Diabetes&nbsp;&nbsp;<a class="orange"><i class="ace-icon fa fa-tint small"></i></a></th>
+															<!-- /.row 
 															<th style="width: 5%;">Mendicamentos&nbsp;&nbsp;<a class="green"><i class="ace-icon fa fa-plus small" title="Deve tomar regularmente."></i></a> </th>
+															-->
 															<th style="width: 5%; white-space: wrap;">Hospital</th>
 															<th colspan="2" style="width: 5%;">Contatos</th>
 														</tr>
@@ -119,30 +121,28 @@
 															<td  style="width: 5%;">
 																<span class="badge badge-warning">{{saudecolab_tiposangue}}</span>
 															</td>
-															<td  style="width: 5%;">
+															<td  style="width: 5%; white-space: wrap;">
 																{{#ifEqual this.saudecolab_planosaude "Sim"}}
-																	<span class="badge badge-info">{{saudecolab_planosaudequal}}</span>
+																	<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_planosaudequal}}</span>
 																	{{else}}
-																	<span class="badge badge-danger">{{saudecolab_planosaude}}</span>
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_planosaude}}</span>
 																{{/ifEqual}}
-																
 															</td>
-															<td  style="width: 5%;">
+															<td style="width: 5%; white-space: wrap;">
 																{{#ifEqual this.saudecolab_alergia "Sim"}}
-																	<span class="badge badge-danger">{{saudecolab_alergia}}</span>
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_alergia}}</span>
 																	<a class="red">
 																		<i class="ace-icon fa fa-search bigger-130" title="{{saudecolab_alergiaqual}}"></i>
 																	</a>
 																	{{else}}
-																	<span class="badge badge-success">{{saudecolab_alergia}}</span>
+																	<span style="white-space: wrap;" class="badge badge-success">{{saudecolab_alergia}}</span>
 																{{/ifEqual}}
-																
 															</td>
 															<td  style="width: 5%;">
 																{{#ifEqual this.saudecolab_medicamentonao "Sim"}}
-																	<span class="badge badge-danger">{{saudecolab_medicamentonaoqual}}</span>
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_medicamentonaoqual}}</span>
 																	{{else}}
-																	<span class="badge badge-success">{{saudecolab_medicamentonao}}</span>
+																	<span style="white-space: wrap;" class="badge badge-success">{{saudecolab_medicamentonao}}</span>
 																{{/ifEqual}}
 																
 															</td>
@@ -166,24 +166,23 @@
 															</td>
 															<td  style="width: 5%;">
 																{{#ifEqual this.saudecolab_diabetico "Sim"}}
-																	<span class="badge badge-danger">{{saudecolab_diabetico}}</span>
+																	<span class="badge badge-danger">{{saudecolab_diabetico}}</span><br>
 																		{{#ifEqual this.saudecolab_insulina "Sim"}}
 																		<a class="black">
 																			<i class="ace-icon fa fa-toggle-on bigger-130" title="Toma Insulina"></i>
 																		</a>
 																		{{else}}
-																		<a class="green">
-																			<i class="ace-icon fa fa-toggle-off bigger-130" title="Toma Insulina"></i>
-																		</a>
+																		
 																		{{/ifEqual}}
 																	{{else}}
 																	<span class="badge badge-success">{{saudecolab_diabetico}}</span>
 																{{/ifEqual}}
 															</td>
+															<!-- /.row 
 															<td >
 																<span class="badge badge-success">{{saudecolab_medicamentosimqual}}</span>
 															</td>
-															
+															-->
 															<td>
 																<span style="white-space: wrap;" class="badge badge-warning">{{saudecolab_hospitalqual}}</span>
 															</td>
@@ -271,7 +270,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto para portugues
         },
 			"aaSorting": [],
-			"aoColumns": [null, null, null, null, null, null, null,null, null, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, null, null,null, null, null, null,  null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [50, 100],
 			"lengthChange": true,

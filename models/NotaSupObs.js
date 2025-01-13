@@ -35,7 +35,7 @@ class NotaSupObs{
 }
 
 NotaSupObsSchema.loadClass(NotaSupObs)
-const NotaSupObsModel = mongoose.model('tb_notaSupObs', NotaSupObsSchema)
+const NotaSupObsModel = mongoose.model('tb_notasupobs', NotaSupObsSchema)
 module.exports = {NotaSupObsModel,NotaSupObsSchema,
     notaSupObsEditar: async (req, res) => {
         let dataAtual = new Date();

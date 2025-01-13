@@ -160,7 +160,7 @@ module.exports = {AgendaModel,AgendaSchema,
         let agenda_temp = false;
         let extra = false;
         //console.log("req.body.agendaData:"+req.body.agendaData)
-        //console.log("req.body.agendaExtra:"+req.body.agendaExtra);
+        console.log("req.body.agendaExtra:"+req.body.agendaExtra);
         if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
             extra = true;
         }

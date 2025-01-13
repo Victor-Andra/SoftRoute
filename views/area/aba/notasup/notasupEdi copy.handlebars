@@ -94,6 +94,40 @@
 						po.style.display = 'none';
 					}
 				})
+				//Carrega Campos
+				document.getElementById("notasupId").value = document.getElementById("notasupIdEdi").value;
+				document.getElementById("notasupDatanotasup").value = document.getElementById("notasupDatanotasupEdi").value;
+				document.getElementById("notasupHoranotasup").value = document.getElementById("notasupHoranotasupEdi").value;
+				document.getElementById("notasupTerapeutaid").value = document.getElementById("notasupTerapeutaidEdi").value;
+				document.getElementById("notasupBeneid").value = document.getElementById("notasupBeneidEdi").value;
+				document.getElementById("notasupBenedatanasc").value = document.getElementById("notasupBenedatanascEdi").value;
+				document.getElementById("notasupBeneidade").value = document.getElementById("notasupBeneidadeEdi").value;
+				document.getElementById("notasupTiposup").value = document.getElementById("notasupTiposupEdi").value;
+				document.getElementById("notasupSupid").value = document.getElementById("notasupSupidEdi").value;
+				document.getElementById("notasupTopocomp").value = document.getElementById("notasupTopocompEdi").value;
+				document.getElementById("notasupFugaevit").value = document.getElementById("notasupFugaevitEdi").value;
+				document.getElementById("notasupAtencao").value = document.getElementById("notasupAtencaoEdi").value;
+				document.getElementById("notasupTangivel").value = document.getElementById("notasupTangivelEdi").value;
+				document.getElementById("notasupAutomatico").value = document.getElementById("notasupAutomaticoEdi").value;
+				document.getElementById("notasupNotanarratfunc").value = document.getElementById("notasupNotanarratfuncEdi").value;
+				document.getElementById("notasupAbc").value = document.getElementById("notasupAbcEdi").value;
+				document.getElementById("notasupDuracao").value = document.getElementById("notasupDuracaoEdi").value;
+				document.getElementById("notasupTaxa").value = document.getElementById("notasupTaxaEdi").value;
+				document.getElementById("notasupGravevento").value = document.getElementById("notasupGraveventoEdi").value;
+				document.getElementById("notasupProdper").value = document.getElementById("notasupProdperEdi").value;
+				document.getElementById("notasupMandsfreq").value = document.getElementById("notasupMandsfreqEdi").value;
+				document.getElementById("notasupNotanarratgrav").value = document.getElementById("notasupNotanarratgravEdi").value;
+				//Carrega Campos Inicio Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem
+				//Carrega Campos Fim Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem
+				document.getElementById("notasupAlvosdominados").value = document.getElementById("notasupAlvosdominadosEdi").value;
+				document.getElementById("notasupNotasdicas").value = document.getElementById("notasupNotasdicasEdi").value;
+				document.getElementById("notasupNotasprog").value = document.getElementById("notasupNotasprogEdi").value;
+				document.getElementById("notasupInfteracoment").value = document.getElementById("notasupInfteracomentEdi").value;
+				document.getElementById("notasupInfteraduvid").value = document.getElementById("notasupInfteraduvidEdi").value;
+				document.getElementById("notasupInfdircoment").value = document.getElementById("notasupInfdircomentEdi").value;
+				document.getElementById("notasupInfdirduvid").value = document.getElementById("notasupInfdirduvidEdi").value;
+				document.getElementById("notasupAcompprog").value = document.getElementById("notasupAcompprogEdi").value;
+				document.getElementById("notasupAcompgeral").value = document.getElementById("notasupAcompgeralEdi").value;
 			}
 		</script>
 	</head>
@@ -103,18 +137,55 @@
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
-							<li>
+							<li> 
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Notas de Supervisão</a>
 							</li>
 
-							<li class="active">Cadastro</li>
+							<li class="active">Visualizar e Editar</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<div id="divCarrega" hidden>
+							<div id="divCarrega" >
+								<input type="text" id="notasupId" name="notasupId" value="" />
+								<input type="text" id="notasupIdEdi" name="notasupIdEdi" value="{{notasup._id}}" />
+								<input type="text" id="notasupDatanotasupEdi" name="notasupDatanotasupEdi" value="{{notasup.datanotasup}}" />
+								<input type="text" id="notasupHoranotasupEdi" name="notasupHoranotasupEdi" value="{{notasup.horanotasup}}" />
+								<input type="text" id="notasupTerapeutaidEdi" name="notasupTerapeutaidEdi" value="{{notasup.terapeutaid}}" />
+
+								<input type="text" id="notasupBeneidEdi" name="notasupBeneidEdi" value="{{notasup.beneid}}" />
+								<input type="text" id="notasupBenedatanascEdi" name="notasupBenedatanascEdi" value="{{notasup.benedatanasc}}" />
+								<input type="text" id="notasupBeneidadeEdi" name="notasupBeneidadeEdi" value="{{notasup.beneidade}}" />
+								<input type="text" id="notasupTiposupEdi" name="notasupTiposupEdi" value="{{notasup.tiposup}}" />
+								<input type="text" id="notasupSupidEdi" name="notasupSupidEdi" value="{{notasup.supid}}" />
+								<input type="text" id="notasupTopocompEdi" name="notasupTopocompEdi" value="{{notasup.topocomp}}" />
+								<input type="text" id="notasupFugaevitEdi" name="notasupFugaevitEdi" value="{{notasup.fugaevit}}" />
+								<input type="text" id="notasupAtencaoEdi" name="notasupAtencaoEdi" value="{{notasup.atencao}}" />
+								<input type="text" id="notasupTangivelEdi" name="notasupTangivelEdi" value="{{notasup.tangivel}}" />
+								<input type="text" id="notasupAutomaticoEdi" name="notasupAutomaticoEdi" value="{{notasup.automatico}}" />
+								<input type="text" id="notasupNotanarratfuncEdi" name="notasupNotanarratfuncEdi" value="{{notasup.notanarratfunc}}" />
+								<input type="text" id="notasupAbcEdi" name="notasupAbcEdi" value="{{notasup.abc}}" />
+								<input type="text" id="notasupDuracaoEdi" name="notasupDuracaoEdi" value="{{notasup.duracao}}" />
+								<input type="text" id="notasupTaxaEdi" name="notasupTaxaEdi" value="{{notasup.taxa}}" />
+								<input type="text" id="notasupGraveventoEdi" name="notasupGraveventoEdi" value="{{notasup.gravevento}}" />
+								<input type="text" id="notasupProdperEdi" name="notasupProdperEdi" value="{{notasup.prodper}}" />
+								<input type="text" id="notasupMandsfreqEdi" name="notasupMandsfreqEdi" value="{{notasup.mandsfreq}}" />
+								<input type="text" id="notasupNotanarratgravEdi" name="notasupNotanarratgravEdi" value="{{notasup.notanarratgrav}}" />
+								<!-- Inicio Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
+								<!-- Fim Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
+								<input type="text" id="notasupAlvosdominadosEdi" name="notasupAlvosdominadosEdi" value="{{notasup.alvosdominados}}" />
+								<input type="text" id="notasupNotasdicasEdi" name="notasupNotasdicasEdi" value="{{notasup.notasdicas}}" />
+								<input type="text" id="notasupNotasprogEdi" name="notasupNotasprogEdi" value="{{notasup.notasprog}}" />
+								<input type="text" id="notasupInfteracomentEdi" name="notasupInfteracomentEdi" value="{{notasup.infteracoment}}" />
+								<input type="text" id="notasupInfteraduvidEdi" name="notasupInfteraduvidEdi" value="{{notasup.infteraduvid}}" />
+								<input type="text" id="notasupInfdircomentEdi" name="notasupInfdircomentEdi" value="{{notasup.infdircoment}}" />
+								<input type="text" id="notasupInfdirduvidEdi" name="notasupInfdirduvidEdi" value="{{notasup.infdirduvid}}" />
+								<input type="text" id="notasupAcompprogEdi" name="notasupAcompprogEdi" value="{{notasup.acompprog}}" />
+								<input type="text" id="notasupAcompgeralEdi" name="notasupAcompgeralEdi" value="{{notasup.acompgeral}}" />
+							
+
 								<table>
 									<thead>
 									</thead>
@@ -152,12 +223,12 @@
 									<input id="prog_{{prog_beneid}}" name="progBene" value="{{prog_tipo}}" />
 								{{/each}}
 							</div>
-							<form id="mainForm" name="mainForm" class="form-horizontal" action="/menu/area/aba/notasup/add" method="POST">
+							<form id="mainForm" name="mainForm" class="form-horizontal" action="/menu/area/aba/notasup/edi" method="POST">
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div id="divOculta" hidden >
-												<input id="qtdTrNotasupObs" name="qtdTrNotasupObs" value="0" />
+												<input id="qtdTrNotasupObs" name="qtdTrNotasupObs" value="1" />
 												<input id="beneid" name="beneid" value="{{beneid}}" />
 											</div>
 											<div class="widget-header">
@@ -532,7 +603,34 @@
 																		</th>
 																	</thead>
 																	<tbody id="tbody_NotasupObs">
-																		
+																		<tr id="trNotasupObs_1">
+																			<td>
+																				<div class="input-group">
+																					<select name="notasupObsprogid_1" id="notasupObsprogid_1" class="chosen-select" value="Sem Info" onchange="" >
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each Progtipos}}
+																							<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</td>
+																			<td>
+																				<textarea type="text" name="notasupObsana_1" id="notasupObsana_1" class="form-control" ></textarea>
+																			</td>
+																			<td>
+																				<textarea type="text" name="notasupObssugest_1" id="notasupObssugest_1" class="form-control" ></textarea>
+																			</td>
+																			<td>
+																				
+																				<div class="widget-header">
+																					<span class="widget-toolbar">Remover
+																						<a data-action="add">
+																							<i id="notaSupObsI_1" class="red ace-icon fa fa-times" onclick="javascript:removeTrObs(this);"></i>
+																						</a>
+																					</span>
+																				</div>
+																			</td>
+																		</tr>
 																	</tbody>
 																</table>
 															</div>
@@ -645,7 +743,6 @@
 												</div>
 											</div>
 										</div>
-
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
@@ -665,7 +762,6 @@
 													</a>
 												</span>
 											</div>	
-											
 											<div class="widget-body">
 												<div class="widget-main">
 													<div class="row">
@@ -677,14 +773,12 @@
 																			<span class="label label-pink arrowed-in-right ">
 																				&nbsp;Comentários
 																			</span>
-
 																		</td>
 																		<td>
 																			<span class="label label-pink arrowed-in-right ">
 																				&nbsp;Dúvidas
 																			</span>
 																		</td>
-																		
 																	</th>
 																</thead>
 																<tbody>
@@ -695,7 +789,6 @@
 																		<td>
 																			<textarea type="text" name="notasupInfdirduvid" id="notasupInfdirduvid" placeholder="" class="form-control" ></textarea>
 																		</td>
-																		
 																	</tr>
 																</tbody>
 															</table>
@@ -704,7 +797,6 @@
 												</div>
 											</div>
 										</div>
-
 										<div class="widget-box">
 											<div class="widget-header">
 												<h4 class="widget-title">
@@ -712,7 +804,6 @@
 													Acompanhamento das Ações
 												</h4>
 												<span class="widget-toolbar">
-
 													<a href="#" data-action="reload">
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
@@ -724,7 +815,6 @@
 													</a>
 												</span>
 											</div>	
-											
 											<div class="widget-body">
 												<div class="widget-main">
 													<div class="row">
@@ -736,14 +826,12 @@
 																			<span class="label label-pink arrowed-in-right ">
 																				&nbsp;Comentários
 																			</span>
-
 																		</td>
 																		<td>
 																			<span class="label label-pink arrowed-in-right ">
 																				&nbsp;Dúvidas
 																			</span>
 																		</td>
-																		
 																	</th>
 																</thead>
 																<tbody>
@@ -754,7 +842,6 @@
 																		<td>
 																			<textarea type="text" name="notasupAcompgeral" id="notasupAcompgeral" placeholder="" class="form-control" ></textarea>
 																		</td>
-																		
 																	</tr>
 																</tbody>
 															</table>
@@ -763,13 +850,10 @@
 												</div>
 											</div>
 										</div>
-
-
 									</div>
 								</div>
 								<div class="space-4"></div>							
 								<div class="space-4"></div>
-
 								<div class="row">
 									<div clas="col-xs-12">
 										<div class="form-actions">
@@ -779,7 +863,6 @@
 														<i class="ace-icon fa fa-check bigger-110"></i>
 														Salvar
 													</button>
-
 													&nbsp; &nbsp; &nbsp;
 													<button class="btn btn-warning"  type="reset">
 														<i class="ace-icon fa fa-undo bigger-110"></i>
@@ -791,25 +874,10 @@
 									</div>
 								</div>
 							</form>
-
-							
 						</div><!-- /.col -->
 					</div><!-- /.row -->
-
-
-
-
 				</div>
 			</div><!-- /.main-content -->
-
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		</div><!-- /.main-container --><!-- basic scripts -->
 	</body>
 </html>

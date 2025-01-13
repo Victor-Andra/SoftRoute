@@ -41,7 +41,7 @@ module.exports = {
                                     metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
                                         Metout.find().then((metout)=>{ //Métodos
                                             metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
-                                    res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao})
+                                    res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao, perfis:perfil})
             })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")

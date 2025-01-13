@@ -801,6 +801,8 @@ module.exports = {FiltroEvoatend,
     },
     filtraEvoatendaberto(req, res, resposta){ //Lista evoluções Agendadas em aberto ou seja evolução não realizada
         let flash = new Resposta();
+        let agendaTempArr = [];
+        let idsAgendasEx = [];
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
         seg.setHours(0);
@@ -978,6 +980,25 @@ module.exports = {FiltroEvoatend,
                         break;
                 }
             })
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
+                    }
+                })
+                if (manter == "true"){
+                    if (!(a.agenda_categoria == "Falta Justificada")){
+                        idsAgendasEx.push(a);
+                    }
+                }
+            })
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -988,7 +1009,7 @@ module.exports = {FiltroEvoatend,
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendabertoLis', {agendas: agenda, benes: bene, terapeutas: usuario, salas: sala, terapias: terapia, convs: conv, flash})
+                                    res.render('area/evol/evoatendabertoLis', {agendas: idsAgendasEx, benes: bene, terapeutas: usuario, salas: sala, terapias: terapia, convs: conv, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -1023,6 +1044,8 @@ module.exports = {FiltroEvoatend,
     },
     filtraEvoatendfechado(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
         filtroTela = new FiltroEvoatend();
+        let agendaTempArr = [];
+        let idsAgendasEx = [];
         filtroTela.tipoData = req.body.tipoData;
         filtroTela.dataFinal = req.body.dataFinal;
         filtroTela.anoAtend = req.body.anoAtend;
@@ -1209,6 +1232,25 @@ module.exports = {FiltroEvoatend,
                         break;
                 }
             })
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
+                    }
+                })
+                if (manter == "true"){
+                    if (!(a.agenda_categoria == "Falta Justificada")){
+                        idsAgendasEx.push(a);
+                    }
+                }
+            })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -1220,7 +1262,7 @@ module.exports = {FiltroEvoatend,
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendfechadoLis', {agendas: agenda,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
+                                    res.render('area/evol/evoatendfechadoLis', {agendas: idsAgendasEx,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -1249,6 +1291,8 @@ module.exports = {FiltroEvoatend,
     },
     filtraEvoatendgeral(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
         filtroTela = new FiltroEvoatend();
+        let agendaTempArr = [];
+        let idsAgendasEx = [];
         filtroTela.tipoData = req.body.tipoData;
         filtroTela.dataFinal = req.body.dataFinal;
         filtroTela.anoAtend = req.body.anoAtend;
@@ -1435,6 +1479,25 @@ module.exports = {FiltroEvoatend,
                         break;
                 }
             })
+            agenda.forEach((as)=>{
+                if ((""+as.agenda_temp+"") == "true"){
+                    agendaTempArr.push(as.agenda_tempId);
+                }
+            })
+            
+            agenda.forEach((a)=>{
+                manter = "true";
+                agendaTempArr.forEach((atr)=>{
+                    if ((""+atr+"") == (""+a._id+"")){
+                        manter = "false";
+                    }
+                })
+                if (manter == "true"){
+                    if (!(a.agenda_categoria == "Falta Justificada")){
+                        idsAgendasEx.push(a);
+                    }
+                }
+            })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -1446,7 +1509,7 @@ module.exports = {FiltroEvoatend,
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendgeralLis', {agendas: agenda,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
+                                    res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")

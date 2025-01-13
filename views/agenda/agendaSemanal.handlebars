@@ -48,49 +48,80 @@
 							let id = "hora"+e.id;//td para receber o append
 							
 							let valor = e.value;//valor para indexar no td
-							console.log("valor"+valor);
 							//console.log("valor:"+valor)
 							//console.log("ELEMENTO VALOR:"+document.getElementById(valor))
 							if(document.getElementById(valor) != null){
 								let color = e.id + "_" + e.value;
 								let hav = document.getElementById(color)
-								let extra = document.getElementsByName(color+"_extra")
+								let extra = document.getElementById(color+"_extra")
 
-								console.log("hav:"+hav)
-								if (hav != null || extra.length > 0) {
+								if (hav != null || extra != null) {
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
+									let motivo;
 
-									if (extra.length > 0){
-										val.style.backgroundColor = "aquamarine";
-									} else {
-										let motivo = hav.value;
-										console.log("motivo:"+motivo)
+									if (extra != null){
+										motivo = extra.value;
 										switch (motivo) {
-										case "Falta" :
-											val.style.backgroundColor = "yellow";
-											break;
-										case "Falta Justificada":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Feriado":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Substituição":
-											val.style.backgroundColor = "cyan";
-											break;
-										case "Roberta Disponpivel":
-											val.style.backgroundColor = "salmon";
-											break;
-										case "Supervisor":
-											val.style.backgroundColor = "lightpink";
-											break;
-										case "Nenhuma Observação":
-											val.style.backgroundColor = "lightgreen";
-											break;
-										default :
-											break;
-									}
+											case "Falta" :
+												val.style.backgroundColor = "yellow";
+												break;
+											case "Falta Justificada":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Feriado":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Glosa":
+												val.style.backgroundColor = "dodgerblue";
+												break;
+											case "Substituição":
+												val.style.backgroundColor = "cyan";
+												break;
+											case "Roberta Disponpivel":
+												val.style.backgroundColor = "salmon";
+												break;
+											case "Supervisor":
+												val.style.backgroundColor = "lightpink";
+												break;
+											case "Nenhuma Observação":
+												val.style.backgroundColor = "lightgreen";
+												break;
+											default :
+												val.style.backgroundColor = "Aquamarine";
+												break;
+										}
+										document.getElementById(id).append(val);
+									} else {
+										motivo = hav.value;
+										switch (motivo) {
+											case "Falta" :
+												val.style.backgroundColor = "yellow";
+												break;
+											case "Falta Justificada":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Feriado":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Glosa":
+												val.style.backgroundColor = "dodgerblue";
+												break;
+											case "Substituição":
+												val.style.backgroundColor = "cyan";
+												break;
+											case "Roberta Disponpivel":
+												val.style.backgroundColor = "salmon";
+												break;
+											case "Supervisor":
+												val.style.backgroundColor = "lightpink";
+												break;
+											case "Nenhuma Observação":
+												val.style.backgroundColor = "lightgreen";
+												break;
+											default :
+												break;
+										}
 									}
 									document.getElementById(id).append(val);
 								} else {
@@ -110,16 +141,17 @@
 							//console.log("valor:"+valor)
 							let color = e.id + "_" + e.value;
 							let hav = document.getElementById(color)
-							let extra = document.getElementsByName(color+"_extra")
+							let extra = document.getElementById(color+"_extra")
 
-							if (hav != null || extra.length > 0) {
+							if (hav != null || extra != null) {
 								let val = document.getElementById(valor).cloneNode(true);
 								val.id = val.id+"x";
-								if (extra.length > 0){
-									val.style.backgroundColor = "aquamarine";
-								} else {
-									let motivo = hav.value;
-									console.log("motivo:"+motivo)
+								let motivo;
+
+								if (extra != null){
+									console.log("NAO FALSO")
+									motivo = extra.value;
+									console.log(motivo);
 									switch (motivo) {
 										case "Falta" :
 											val.style.backgroundColor = "yellow";
@@ -131,7 +163,43 @@
 											val.style.backgroundColor = "orange";
 											break;
 										case "Glosa":
-											val.style.backgroundColor = "gray";
+											console.log("BUCETA???")
+											val.style.backgroundColor = "dodgerblue";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											console.log("PORRA???")
+											val.style.backgroundColor = "aquamarine";
+											break;
+									}
+									console.log("motivo ???");
+									document.getElementById(id).append(val);
+									console.log("APPENDADO????")
+								} else {
+									motivo = hav.value;
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Feriado":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Glosa":
+											val.style.backgroundColor = "dodgerblue";
 											break;
 										case "Substituição":
 											val.style.backgroundColor = "cyan";
@@ -166,7 +234,6 @@
 								document.getElementById(id).append(val);
 						})
 					})
-					console.log("FUCK");
 				} catch(err){
 					console.log("ERROR!!!!!!!");
 					console.log(err);
@@ -208,8 +275,8 @@
 							{{else}}
 							{{/isTrue}}
 							{{#isTrue agenda_extra}}
-								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}_extra" value="roxo">
-								<input name="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}_extra" value="roxo">
+								<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}_extra" value="{{agenda_categoria}}">
+								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}_extra" value="{{agenda_categoria}}">
 							{{else}}
 							{{/isTrue}}
 							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Acao">

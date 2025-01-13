@@ -52,7 +52,14 @@
 															{{/each}}
 
 															<td>{{usuario_contrato}}</td>
-															<td>{{usuario_perfilid}}</td>
+
+															
+															{{#each ../perfis}}
+																{{#ifEqual _id ../usuario_perfilid}}
+																	<td>{{perfil_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+
 															{{#verificarVazioOuIndefinido this.usuario_carimbo }}
 																<td><i class=" red ace-icon fa fa-ban bigger-130"></i></td>
 																{{else}}

@@ -10,7 +10,7 @@ const notasupClass = require("../models/notasup")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const notaSupObsClass = require("../models/NotaSupObs")
+const notaSupObsClass = require("../models/notasupobs")
 const progClass = require("../models/prog")
 const progtipoClass = require("../models/progtipo")
 const terapiaClass = require("../models/terapia")
@@ -27,10 +27,12 @@ const Usuario = mongoose.model("tb_usuario")
 const Prog = mongoose.model("tb_prog")
 const Progtipo = mongoose.model("tb_progtipo")
 const Terapia = mongoose.model("tb_terapia")
+const Notasupobs = mongoose.model("tb_notasupobs")
+const Resposta = mongoose.model("tb_resposta")
 
 //Extrutura de Resposta
 const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const notasupobsClass = require("../models/notasupobs")
 
 module.exports = {
     listaNotasup(req, res){
@@ -136,12 +138,12 @@ module.exports = {
                         Bene.find().then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                             console.log("Listagem Realizada de beneficiarios")
-                            
+                            Notasupobs.find().then((notasupobs)=>{
                                 Progtipo.find().then((progtipo)=>{
                                     progtipo.sort((a,b) => ((a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                     
-                                        res.render('area/aba/notasup/notasupEdi', {notasup, prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progtipos: progtipo, terapeutas: terapeuta})
-        })})})})})})}).catch((err) =>{
+                                        res.render('area/aba/notasup/notasupEdi', {notasup, prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progtipos: progtipo, terapeutas: terapeuta, notasupobss:notasupobs})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')

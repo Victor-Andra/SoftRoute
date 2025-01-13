@@ -128,6 +128,10 @@
 				document.getElementById("notasupInfdirduvid").value = document.getElementById("notasupInfdirduvidEdi").value;
 				document.getElementById("notasupAcompprog").value = document.getElementById("notasupAcompprogEdi").value;
 				document.getElementById("notasupAcompgeral").value = document.getElementById("notasupAcompgeralEdi").value;
+
+
+
+				
 			}
 		</script>
 	</head>
@@ -151,74 +155,46 @@
 							<div id="divCarrega" >
 								<input type="text" id="notasupId" name="notasupId" value="" />
 								<input type="text" id="notasupIdEdi" name="notasupIdEdi" value="{{notasup._id}}" />
-								<input type="text" id="notasupDatanotasupEdi" name="notasupDatanotasupEdi" value="{{notasup.datanotasup}}" />
-								<input type="text" id="notasupHoranotasupEdi" name="notasupHoranotasupEdi" value="{{notasup.horanotasup}}" />
-								<input type="text" id="notasupTerapeutaidEdi" name="notasupTerapeutaidEdi" value="{{notasup.terapeutaid}}" />
+								<input type="text" id="notasupDatanotasupEdi" name="notasupDatanotasupEdi" value="{{notasup.notasup_datanotasup}}" />
+								<input type="text" id="notasupHoranotasupEdi" name="notasupHoranotasupEdi" value="{{notasup.notasup_horanotasup}}" />
+								<input type="text" id="notasupTerapeutaidEdi" name="notasupTerapeutaidEdi" value="{{notasup.notasup_terapeutaid}}" />
 
-								<input type="text" id="notasupBeneidEdi" name="notasupBeneidEdi" value="{{notasup.beneid}}" />
-								<input type="text" id="notasupBenedatanascEdi" name="notasupBenedatanascEdi" value="{{notasup.benedatanasc}}" />
-								<input type="text" id="notasupBeneidadeEdi" name="notasupBeneidadeEdi" value="{{notasup.beneidade}}" />
-								<input type="text" id="notasupTiposupEdi" name="notasupTiposupEdi" value="{{notasup.tiposup}}" />
-								<input type="text" id="notasupSupidEdi" name="notasupSupidEdi" value="{{notasup.supid}}" />
-								<input type="text" id="notasupTopocompEdi" name="notasupTopocompEdi" value="{{notasup.topocomp}}" />
-								<input type="text" id="notasupFugaevitEdi" name="notasupFugaevitEdi" value="{{notasup.fugaevit}}" />
-								<input type="text" id="notasupAtencaoEdi" name="notasupAtencaoEdi" value="{{notasup.atencao}}" />
-								<input type="text" id="notasupTangivelEdi" name="notasupTangivelEdi" value="{{notasup.tangivel}}" />
-								<input type="text" id="notasupAutomaticoEdi" name="notasupAutomaticoEdi" value="{{notasup.automatico}}" />
-								<input type="text" id="notasupNotanarratfuncEdi" name="notasupNotanarratfuncEdi" value="{{notasup.notanarratfunc}}" />
-								<input type="text" id="notasupAbcEdi" name="notasupAbcEdi" value="{{notasup.abc}}" />
-								<input type="text" id="notasupDuracaoEdi" name="notasupDuracaoEdi" value="{{notasup.duracao}}" />
-								<input type="text" id="notasupTaxaEdi" name="notasupTaxaEdi" value="{{notasup.taxa}}" />
-								<input type="text" id="notasupGraveventoEdi" name="notasupGraveventoEdi" value="{{notasup.gravevento}}" />
-								<input type="text" id="notasupProdperEdi" name="notasupProdperEdi" value="{{notasup.prodper}}" />
-								<input type="text" id="notasupMandsfreqEdi" name="notasupMandsfreqEdi" value="{{notasup.mandsfreq}}" />
-								<input type="text" id="notasupNotanarratgravEdi" name="notasupNotanarratgravEdi" value="{{notasup.notanarratgrav}}" />
+								<input type="text" id="notasupBeneidEdi" name="notasupBeneidEdi" value="{{notasup.notasup_beneid}}" />
+								<input type="text" id="notasupBenedatanascEdi" name="notasupBenedatanascEdi" value="{{notasup.notasup_benedatanasc}}" />
+								<input type="text" id="notasupBeneidadeEdi" name="notasupBeneidadeEdi" value="{{notasup.notasup_beneidade}}" />
+								<input type="text" id="notasupTiposupEdi" name="notasupTiposupEdi" value="{{notasup.notasup_tiposup}}" />
+								<input type="text" id="notasupSupidEdi" name="notasupSupidEdi" value="{{notasup.notasup_supid}}" />
+								<input type="text" id="notasupTopocompEdi" name="notasupTopocompEdi" value="{{notasup.notasup_topocomp}}" />
+								<input type="text" id="notasupFugaevitEdi" name="notasupFugaevitEdi" value="{{notasup.notasup_fugaevit}}" />
+								<input type="text" id="notasupAtencaoEdi" name="notasupAtencaoEdi" value="{{notasup.notasup_atencao}}" />
+								<input type="text" id="notasupTangivelEdi" name="notasupTangivelEdi" value="{{notasup.notasup_tangivel}}" />
+								<input type="text" id="notasupAutomaticoEdi" name="notasupAutomaticoEdi" value="{{notasup.notasup_automatico}}" />
+								<input type="text" id="notasupNotanarratfuncEdi" name="notasupNotanarratfuncEdi" value="{{notasup.notasup_notanarratfunc}}" />
+								<input type="text" id="notasupAbcEdi" name="notasupAbcEdi" value="{{notasup.notasup_abc}}" />
+								<input type="text" id="notasupDuracaoEdi" name="notasupDuracaoEdi" value="{{notasup.notasup_duracao}}" />
+								<input type="text" id="notasupTaxaEdi" name="notasupTaxaEdi" value="{{notasup.notasup_taxa}}" />
+								<input type="text" id="notasupGraveventoEdi" name="notasupGraveventoEdi" value="{{notasup.notasup_gravevento}}" />
+								<input type="text" id="notasupProdperEdi" name="notasupProdperEdi" value="{{notasup.notasup_prodper}}" />
+								<input type="text" id="notasupMandsfreqEdi" name="notasupMandsfreqEdi" value="{{notasup.notasup_mandsfreq}}" />
+								<input type="text" id="notasupNotanarratgravEdi" name="notasupNotanarratgravEdi" value="{{notasup.notasup_notanarratgrav}}" />
 								<!-- Inicio Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
 								<!-- Fim Observações dos Programas ABAS Supervisão por os campos que aumentam e diminuem -->
-								<input type="text" id="notasupAlvosdominadosEdi" name="notasupAlvosdominadosEdi" value="{{notasup.alvosdominados}}" />
-								<input type="text" id="notasupNotasdicasEdi" name="notasupNotasdicasEdi" value="{{notasup.notasdicas}}" />
-								<input type="text" id="notasupNotasprogEdi" name="notasupNotasprogEdi" value="{{notasup.notasprog}}" />
-								<input type="text" id="notasupInfteracomentEdi" name="notasupInfteracomentEdi" value="{{notasup.infteracoment}}" />
-								<input type="text" id="notasupInfteraduvidEdi" name="notasupInfteraduvidEdi" value="{{notasup.infteraduvid}}" />
-								<input type="text" id="notasupInfdircomentEdi" name="notasupInfdircomentEdi" value="{{notasup.infdircoment}}" />
-								<input type="text" id="notasupInfdirduvidEdi" name="notasupInfdirduvidEdi" value="{{notasup.infdirduvid}}" />
-								<input type="text" id="notasupAcompprogEdi" name="notasupAcompprogEdi" value="{{notasup.acompprog}}" />
-								<input type="text" id="notasupAcompgeralEdi" name="notasupAcompgeralEdi" value="{{notasup.acompgeral}}" />
-
-
-								<table>
-									<thead>
-									</thead>
-									<tbody id="tbody_NotasupObs_0">
-										<tr id="trNotasupObs_0">
-											<td>
-												<div class="input-group">
-													<select name="notasupObsprogid_0" id="notasupObsprogid_0" class="chosen-select" value="Sem Info" onchange="" >
-														<option value="766f69643132333435366964">-</option>
-														{{#each Progtipos}}
-															<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
-														{{/each}}
-													</select>
-												</div>
-											</td>
-											<td>
-												<textarea type="text" name="notasupObsana_0" id="notasupObsana_0" class="form-control" ></textarea>
-											</td>
-											<td>
-												<textarea type="text" name="notasupObssugest_0" id="notasupObssugest_0" class="form-control" ></textarea>
-											</td>
-											<td>
-												<div class="widget-header">
-													<span class="widget-toolbar">
-														<a data-action="add">
-															<i id="notaSupObsI_0" class="red ace-icon fa fa-times"  onclick="javascript:removeTrObs(this);"></i>
-														</a>
-													</span>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+								<input type="text" id="notasupAlvosdominadosEdi" name="notasupAlvosdominadosEdi" value="{{notasup.notasup_alvosdominados}}" />
+								<input type="text" id="notasupNotasdicasEdi" name="notasupNotasdicasEdi" value="{{notasup.notasup_notasdicas}}" />
+								<input type="text" id="notasupNotasprogEdi" name="notasupNotasprogEdi" value="{{notasup.notasup_notasprog}}" />
+								<input type="text" id="notasupInfteracomentEdi" name="notasupInfteracomentEdi" value="{{notasup.notasup_infteracoment}}" />
+								<input type="text" id="notasupInfteraduvidEdi" name="notasupInfteraduvidEdi" value="{{notasup.notasup_infteraduvid}}" />
+								<input type="text" id="notasupInfdircomentEdi" name="notasupInfdircomentEdi" value="{{notasup.notasup_infdircoment}}" />
+								<input type="text" id="notasupInfdirduvidEdi" name="notasupInfdirduvidEdi" value="{{notasup.notasup_infdirduvid}}" />
+								<input type="text" id="notasupAcompprogEdi" name="notasupAcompprogEdi" value="{{notasup.notasup_acompprog}}" />
+								<input type="text" id="notasupAcompgeralEdi" name="notasupAcompgeralEdi" value="{{notasup.notasup_acompgeral}}" />
+								varios registros para essa supervisao:  
+								{{#each notasupobss}}
+									<input type="text" id="notasupObsprogidEdi" name="notasupObsprogidEdi" value="{{notaSupobs.notaSupObs_progId}}" />
+									<input type="text" id="notasupObsanaEdi" name="notasupObsanaEdi" value="{{notaSupobs.notaSupObs_analise}}" />
+									<input type="text" id="notasupObssugestEdi" name="notasupObssugestEdi" value="{{notaSupobs.notaSupObs_sugestao}}" />
+								{{/each}}
+							
 								{{#each Progs}}
 									<input id="prog_{{prog_beneid}}" name="progBene" value="{{prog_tipo}}" />
 								{{/each}}
@@ -276,7 +252,7 @@
 															<div class="form-group">
 																<div class="col-sm-6">
 																	<select name="notasupTerapeutaid" id="notasupTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
-																		{{#each Terapeutas}}
+																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
 																	</select>
@@ -291,7 +267,7 @@
 															<div class="form-group">
 																<div class="col-sm-4">
 																	<select name="notasupBeneid" id="notasupBeneid" class="chosen-select" data-placeholder="Escolha..." >
-																		{{#each Benes}}
+																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
 																		{{/each}}
 																	</select>
@@ -341,7 +317,7 @@
 															<div class="form-group">
 																<div class="col-sm-4">
 																	<select name="notasupSupid" id="notasupSupid" class="chosen-select" data-placeholder="Escolha..." >
-																		{{#each Terapeutas}}
+																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
 																	</select>
@@ -608,7 +584,7 @@
 																				<div class="input-group">
 																					<select name="notasupObsprogid_1" id="notasupObsprogid_1" class="chosen-select" value="Sem Info" onchange="" >
 																						<option value="766f69643132333435366964">-</option>
-																						{{#each Progtipos}}
+																						{{#each progtipos}}
 																							<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
 																						{{/each}}
 																					</select>
