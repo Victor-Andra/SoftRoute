@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-const notaSupObsClass = require("./notasupobs")
+const notaSupObsClass = require("../notasupobs")
 const Resposta = mongoose.model("tb_resposta")
 
 const NotasupSchema = mongoose.Schema({
