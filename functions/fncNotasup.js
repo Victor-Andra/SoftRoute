@@ -32,7 +32,6 @@ const Resposta = mongoose.model("tb_resposta")
 
 //Extrutura de Resposta
 const respostaClass = require("../models/resposta")
-const notasupobsClass = require("../models/notasupobs")
 
 module.exports = {
     listaNotasup(req, res){
