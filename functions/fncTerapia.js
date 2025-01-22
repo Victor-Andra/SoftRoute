@@ -9,7 +9,7 @@ const Terapia = mongoose.model("tb_terapia")
 module.exports = {
     listaTerapia(req,res){
         console.log('listando terapias')
-        Terapia.find().then((terapia) =>{
+        Terapia.find({terapia_status:"Ativo"}).then((terapia) =>{
             console.log("Listagem Realizada!")
             res.render('ferramentas/terapia/terapiaLis', {terapias: terapia})
         }).catch((err) =>{
@@ -17,7 +17,6 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Terapias")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaTerapia(req,res){

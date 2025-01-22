@@ -50,153 +50,6 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
-			function embaralharTotalmenteFolregTentativas (){
-				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
-				let reducao = 0;
-				let arrayNovo = [];
-				let arrayDinamico = [];
-				
-				if (document.getElementById("folregTiporeg").value == "triplo"){
-					tamanhoArray = 10;
-				}
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayOriginal.splice(-(10 - qtdEstimulos));
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayDinamico = arrayOriginal;
-
-				do {
-					//condição se o array novo está faltando uma quantidade de letras igual ao tamando do array original, remover letras já escolhidas / tamanhoArray - arrayNovo.length <= arrayDinamico
-                    console.log("arrayDinamico:"+arrayDinamico);
-                    let letrasEncontradas = 0;
-                    arrayOriginal.forEach(letra => {
-                        if (arrayNovo.includes(letra)) {
-                            letrasEncontradas++;
-                        }
-                    });
-                    console.log("tamanhoArray:"+tamanhoArray);
-                    console.log("arrayNovo.length:"+arrayNovo.length);
-                    console.log("letrasEncontradas:"+letrasEncontradas);
-                    console.log("tala"+((tamanhoArray - arrayNovo.length + letrasEncontradas)))
-                    console.log("arrayOriginal.length>:"+arrayOriginal.length)
-					if ((tamanhoArray - arrayNovo.length + letrasEncontradas) <= arrayOriginal.length){
-                        arrayNovo.forEach(letra => {
-							const indice = arrayDinamico.indexOf(letra);
-							if (indice !== -1) {
-								arrayDinamico.splice(indice, 1); // Remove a letra do arrayDinamico
-							}
-						});
-						console.log("arrayDinamico:"+arrayDinamico);
-						arrayNovo.push(arrayDinamico[Math.floor(Math.random() * arrayDinamico.length)]);
-					} else {
-						arrayNovo.push(arrayOriginal[Math.floor(Math.random() * arrayDinamico.length)]);
-					}
-					console.log("arrayNovo: "+arrayNovo);
-				}  while (arrayNovo.length < tamanhoArray);
-				console.log(arrayOriginal);
-				console.log(arrayDinamico);
-				console.log(arrayNovo);
-			}
-
-			function embaralharIgualmenteFolregTentativas(){
-				let arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
-				let reducao = 0;
-				let arrayNovo = [];
-				let arrayDinamico = [];
-				let index = 1;
-
-				if (document.getElementById("folregTiporeg").value == "triplo"){
-					tamanhoArray = 10;
-				}
-				arrayOriginal.splice(-(10 - qtdEstimulos));
-				arrayDinamico = arrayOriginal;
-				let falta = 0;
-				do {
-					let tamanhoArrayNovo = arrayNovo.length
-					if (tamanhoArrayNovo == 0){
-						arrayDinamico = shuffleArray(arrayDinamico);
-							
-						arrayNovo = arrayDinamico;
-						falta = (tamanhoArray - tamanhoArrayNovo);
-					} else if (falta > tamanhoArrayNovo && falta >= arrayOriginal.length){
-						arrayDinamico = arrayOriginal;
-						do {
-							arrayDinamico = shuffleArray(arrayDinamico);
-						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
-						arrayDinamico.forEach(letra => {
-							arrayNovo.push(letra);
-						})
-						
-						falta = (tamanhoArray - arrayNovo.length);
-					} else if (tamanhoArrayNovo < tamanhoArray){
-						do {
-							arrayDinamico = shuffleArray(arrayDinamico);
-						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
-						console.log(arrayDinamico[0]);
-						console.log(arrayNovo[tamanhoArrayNovo-1]);
-						console.log(arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1]);
-
-						arrayDinamico.splice(tamanhoArray - tamanhoArrayNovo);
-						arrayDinamico.forEach(letra => {
-							arrayNovo.push(letra);
-						})
-					}
-				}  while (arrayNovo.length < tamanhoArray);
-
-				arrayNovo.forEach(letra => {
-					document.getElementById("folregRaTent"+index).class = caseClasseCor(letra);
-					document.getElementById("folregRaTentDupl"+index).class = caseClasseCor(letra);
-					document.getElementById("folregRaTent"+index).innerHTML = letra;
-					document.getElementById("folregRaTentDupl"+index).innerHTML = letra;
-					document.getElementById("folregRaTentCad"+index).value = letra;
-					document.getElementById("folregRaTentDuplCad"+index).value = letra;
-					index++;
-				})
-			}
-			
-			function caseClasseCor(letra){
-				let retorno = "";
-				switch (letra){
-					case "A":
-						retorno = "label label-sm label-cian arrowed arrowed-righ";
-						break;
-					case "B":
-						retorno = "label label-sm label-warning arrowed arrowed-righ";
-						break;
-					case "C":
-						retorno = "label label-sm label-pink arrowed arrowed-righ";
-						break;
-					case "D":
-						retorno = "label label-sm label-info arrowed arrowed-righ";
-						break;
-					case "E":
-						retorno = "label label-sm label-warning arrowed arrowed-righ";
-						break;
-					case "F":
-						retorno = "label label-sm label-pink arrowed arrowed-righ";
-						break;
-					case "G":
-						retorno = "label label-sm label-purple arrowed arrowed-righ";
-						break;
-					case "H":
-						retorno = "label label-sm label-success arrowed arrowed-righ";
-						break;
-					case "I":
-						retorno = "label label-sm label-danger arrowed arrowed-righ"
-						break;
-					case "J":
-						retorno = "label label-sm label-cyan arrowed arrowed-righ"
-						break;
-					default:
-						retorno = "label label-sm label-cyan arrowed arrowed-righ"
-						break;
-				}
-				return retorno;
-			}
-
 			function marcaImput(inputName) {
 				let elementoAlvo = document.getElementById(inputName);
 				if (elementoAlvo.checked == true) {
@@ -205,7 +58,7 @@
 					elementoAlvo.value = "false";
 				}
 			}
-			
+
 			function marcaRadioImput(inputName, index, valor) {
 				let elementoAlvo = document.getElementById(inputName+index);
 				if (elementoAlvo.checked == true) {
@@ -247,6 +100,47 @@
 				}
 				
    			}
+
+			function caseClasseCor(letra){
+				let retorno = "";
+				switch (letra){
+					case "A":
+						retorno = "label label-sm label-cian arrowed arrowed-righ";
+						break;
+					case "B":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "C":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "D":
+						retorno = "label label-sm label-info arrowed arrowed-righ";
+						break;
+					case "E":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "F":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "G":
+						retorno = "label label-sm label-purple arrowed arrowed-righ";
+						break;
+					case "H":
+						retorno = "label label-sm label-success arrowed arrowed-righ";
+						break;
+					case "I":
+						retorno = "label label-sm label-danger arrowed arrowed-righ"
+						break;
+					case "J":
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+					default:
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+				}
+				return retorno;
+			}
+			
 			function atualizaTerapeutaId(){
 				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
 			}
@@ -269,7 +163,7 @@
 				// Loop através de todos os inputs encontrados
 				inputs.forEach(function(input) {
 					// Verifica o valor do input
-					switch((input.id).substring((input.id).length-1,(input.id).length)) {      
+					switch((input.id).substring((input.id).length-1,(input.id).length)) {
 						case '1':
 							totalI++;
 							break;
@@ -442,53 +336,870 @@
 				});
 			}
 
-			function carregaBody(){
-				if (document.getElementById("tiporeg").value != null){
-					document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
-					mudaRegistro();
-					populateCheckboxes();
+			function switchCases(alvo, gatilho) {
+				switch (document.getElementById(gatilho).value){
+					case "I":
+						document.getElementById(alvo+"1").checked = true;
+						document.getElementById(alvo+"1").checked = document.getElementById(gatilho).value;
+						break;
+					case "E":
+						document.getElementById(alvo+"2").checked = true;
+						document.getElementById(alvo+"2").checked = document.getElementById(gatilho).value;
+						break;
+					case "+d":
+						document.getElementById(alvo+"3").checked = true;
+						document.getElementById(alvo+"3").checked = document.getElementById(gatilho).value;
+						break;
+					case "-d":
+						document.getElementById(alvo+"4").checked = true;
+						document.getElementById(alvo+"4").checked = document.getElementById(gatilho).value;
+						break;
+					default: 
+						console.log("vazio");
+						break;
 				}
+			}
+			
+			function carregaBody(){
+				
 				popularCheckboxDicaTipo();
-				updateStimulusFields();
-				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
+				document.getElementById("folregUsuid").value = document.getElementById("usuarioCad").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
-				//tipos de dicas
+				document.getElementById("folregProgtipoid").value = document.getElementById("folregProgtipoidEdi").value;
+				document.getElementById("folregPrognivelid").value = document.getElementById("folregPrognivelidEdi").value;
+
+				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
+				document.getElementById("progsetDesc").value = document.getElementById("setDescr").value;
+				document.getElementById("progsetObs").value = document.getElementById("setObs").value;
+				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
+
+				document.getElementById("folregTiporeg").value = document.getElementById("folregTiporegEdi").value;
+				document.getElementById("folregDatareg").value = document.getElementById("folregDataregEdi").value;
+				
+				document.getElementById("folregQtest").value = document.getElementById("folregQtestEdi").value;
+
 				document.getElementById("folregT1tipodsimples").value = document.getElementById("progDicatipotext").value;
 				document.getElementById("folregT1tipodesqu").value = document.getElementById("progDicatipotext").value;
 				document.getElementById("folregT1tipodird").value = document.getElementById("progDicatipotext").value;
-
-				document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
-				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
 				
-				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
-				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
-				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
-				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
+				document.getElementById("folregUsuid").value = document.getElementById("folregUsuidEdi").value;
+				//Estimulos vindos do SET e do Programa
+				document.getElementById("folregEsta").value = document.getElementById("folregEstaEdi").value;
+				document.getElementById("folregEstb").value = document.getElementById("folregEstbEdi").value;
+				document.getElementById("folregEstc").value = document.getElementById("folregEstcEdi").value;
+				document.getElementById("folregEstd").value = document.getElementById("folregEstdEdi").value;
+				document.getElementById("folregEste").value = document.getElementById("folregEsteEdi").value;
+				document.getElementById("folregEstf").value = document.getElementById("folregEstfEdi").value;
+				document.getElementById("folregEstg").value = document.getElementById("folregEstgEdi").value;
+				document.getElementById("folregEsth").value = document.getElementById("folregEsthEdi").value;
+				document.getElementById("folregEsti").value = document.getElementById("folregEstiEdi").value;
+				document.getElementById("folregObs").value = document.getElementById("folregObsEdi").value;
+				document.getElementById("folregStatus").value = document.getElementById("folregStatusEdi").value;
+				
+				//Carrega o status, Jason não Usa mas para manter o padrão internacional
+				switch (parseInt(document.getElementById("folregStatus").value)) {
+					case 1:
+						document.getElementById("folregStatus1").checked = true;
+						break;
+					case 2:
+						document.getElementById("folregStatus2").checked = true;
+						break;
+					case 3:
+						document.getElementById("folregStatus3").checked = true;
+						break;
+					case 4:
+						document.getElementById("folregStatus4").checked = true;
+						break;
+					default: 
+						console.log("vazio");
+						break;
+				}
+				mudaRegistro();
+				if (document.getElementById("folregTiporeg").value == "Simples"){
+					//Gráfico SIMPLES
+					//Campos com valor do gráfico Simples
+					console.log("folregT1tipodsimplesEdi: "+document.getElementById("folregT1tipodsimplesEdi").value);
+					if (document.getElementById("folregT1tipodsimplesEdi").value != ''){
+						document.getElementById("folregT1tipodsimples1").value = document.getElementById("folregT1tipodsimplesEdi").value
+						if (document.getElementById("folregT1tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT1tipodsimples").checked = true;
+						}
+					}
+					if (document.getElementById("folregT2tipodsimplesEdi").value != ''){
+						document.getElementById("folregT2tipodsimples2").value = document.getElementById("folregT2tipodsimplesEdi").value
+						if (document.getElementById("folregT2tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT2tipodsimples").checked = true;
+						}
+					}
+					if (document.getElementById("folregT3tipodsimplesEdi").value != ''){
+						document.getElementById("folregT3tipodsimples3").value = document.getElementById("folregT3tipodsimplesEdi").value
+						if (document.getElementById("folregT3tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT3tipodsimples").checked = true;
+						}
+					}
+					if (document.getElementById("folregT4tipodsimplesEdi").value != ''){
+						document.getElementById("folregT4tipodsimples4").value = document.getElementById("folregT4tipodsimplesEdi").value
+						if (document.getElementById("folregT4tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT4tipodsimples").checked = true;
+						}
+					}
+					if (document.getElementById("folregT5tipodsimplesEdi").value != ''){
+						document.getElementById("folregT5tipodsimples5").value = document.getElementById("folregT5tipodsimplesEdi").value
+						if (document.getElementById("folregT5tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT5tipodsimples").checked = true;
+						}
+					}
+					if (document.getElementById("folregT6tipodsimplesEdi").value != ''){
+						document.getElementById("folregT6tipodsimples6").value = document.getElementById("folregT6tipodsimplesEdi").value
+						if (document.getElementById("folregT6tipodsimplesEdi").value == "true"){
+							document.getElementById("folregT6tipodsimples").checked = true;
+						}
+					}
+					/*
+					if (document.getElementById("folregT7tipodsimplesEdi").value != ''){
+						document.getElementById("folregT7tipodsimples7").value = document.getElementById("folregT7tipodsimplesEdi").value
+						document.getElementById("folregT7tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT8tipodsimplesEdi").value != ''){
+						document.getElementById("folregT8tipodsimples8").value = document.getElementById("folregT8tipodsimplesEdi").value
+						document.getElementById("folregT8tipodsimples").checked = true;
+					}
+					if (document.getElementById("folregT9tipodsimplesEdi").value != ''){
+						document.getElementById("folregT9tipodsimples9").value = document.getElementById("folregT9tipodsimplesEdi").value
+						document.getElementById("folregT9tipodsimples").checked = true;
+					}
+					*/
+					//Campos com Resultado do gráfico Simples
+					
+					switchCases("folregT1Ressimples","folregT1RessimplesEdi");
+					switchCases("folregT2Ressimples","folregT2RessimplesEdi");
+					switchCases("folregT3Ressimples","folregT3RessimplesEdi");
+					switchCases("folregT4Ressimples","folregT4RessimplesEdi");
+					switchCases("folregT5Ressimples","folregT5RessimplesEdi");
+					switchCases("folregT6Ressimples","folregT6RessimplesEdi");
+					switchCases("folregT7Ressimples","folregT7RessimplesEdi");
+					switchCases("folregT8Ressimples","folregT8RessimplesEdi");
+					switchCases("folregT9Ressimples","folregT9RessimplesEdi");
 
-				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
-				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
-				document.getElementById("folregEstc").value = document.getElementById("folregc").value;
-				document.getElementById("folregEstd").value = document.getElementById("folregd").value;
-				document.getElementById("folregEste").value = document.getElementById("folrege").value;
-				document.getElementById("folregEstf").value = document.getElementById("folregf").value;
-				document.getElementById("folregEstg").value = document.getElementById("folregg").value;
-				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
-				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
+					//Campos do Passo de Dica do gráfico Simples
+					document.getElementById("folregPassodicas").value = document.getElementById("folregPassodicasEdi").value
+					switch (document.getElementById("folregPassodicasEdi").value){
+						case "1":
+							document.getElementById("folregPassodicas1").checked = true;
+							break;
+						case "2":
+							document.getElementById("folregPassodicas2").checked = true;
+							break;
+						case "3":
+							document.getElementById("folregPassodicas3").checked = true;
+							break;
+						case "4":
+							document.getElementById("folregPassodicas4").checked = true;
+							break;
+						case "5":
+							document.getElementById("folregPassodicas5").checked = true;
+							break;
+						case "6":
+							document.getElementById("folregPassodicas6").checked = true;
+							break;
+						case "7":
+							document.getElementById("folregPassodicas7").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 
-				embaralharIgualmenteFolregTentativas();
+					//Campos com Total da gráfico Simples
+					document.getElementById("folregTotalsimples_i").value = document.getElementById("folregTotalsimples1Edi").value;
+					document.getElementById("folregTotalsimples_e").value = document.getElementById("folregTotalsimples2Edi").value;
+					document.getElementById("folregTotalsimples_plusd").value = document.getElementById("folregTotalsimples3Edi").value;
+					document.getElementById("folregTotalsimples_minusd").value = document.getElementById("folregTotalsimples4Edi").value;
+					//Gráfico Simples
+					//popular radio box esquerda e Único
+					switch (document.getElementById("folregT1ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT1Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT2Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT3Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT4Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT5Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT6Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT7Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT8Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT9Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+
+					document.getElementById("folregRaTent1").innerHTML = document.getElementById("folregRaTentEdi1").value;
+					document.getElementById("folregRaTent2").innerHTML = document.getElementById("folregRaTentEdi2").value;
+					document.getElementById("folregRaTent3").innerHTML = document.getElementById("folregRaTentEdi3").value;
+					document.getElementById("folregRaTent4").innerHTML = document.getElementById("folregRaTentEdi4").value;
+					document.getElementById("folregRaTent5").innerHTML = document.getElementById("folregRaTentEdi5").value;
+					document.getElementById("folregRaTent6").innerHTML = document.getElementById("folregRaTentEdi6").value;
+					document.getElementById("folregRaTent7").innerHTML = document.getElementById("folregRaTentEdi7").value;
+					document.getElementById("folregRaTent8").innerHTML = document.getElementById("folregRaTentEdi8").value;
+					document.getElementById("folregRaTent9").innerHTML = document.getElementById("folregRaTentEdi9").value;
+
+					document.getElementById("folregRaTent1").className = caseClasseCor(document.getElementById("folregRaTentEdi1").value);
+					document.getElementById("folregRaTent2").className = caseClasseCor(document.getElementById("folregRaTentEdi2").value);
+					document.getElementById("folregRaTent3").className = caseClasseCor(document.getElementById("folregRaTentEdi3").value);
+					document.getElementById("folregRaTent4").className = caseClasseCor(document.getElementById("folregRaTentEdi4").value);
+					document.getElementById("folregRaTent5").className = caseClasseCor(document.getElementById("folregRaTentEdi5").value);
+					document.getElementById("folregRaTent6").className = caseClasseCor(document.getElementById("folregRaTentEdi6").value);
+					document.getElementById("folregRaTent7").className = caseClasseCor(document.getElementById("folregRaTentEdi7").value);
+					document.getElementById("folregRaTent8").className = caseClasseCor(document.getElementById("folregRaTentEdi8").value);
+					document.getElementById("folregRaTent9").className = caseClasseCor(document.getElementById("folregRaTentEdi9").value);
+				}else{
+					//Gráfico DUPLO
+					//Campos com resultados da esquerda do gráfico
+					document.getElementById("folregT1Resesqu").value = document.getElementById("folregT1ResesquEdi").value;
+					document.getElementById("folregT2Resesqu").value = document.getElementById("folregT2ResesquEdi").value;
+					document.getElementById("folregT3Resesqu").value = document.getElementById("folregT3ResesquEdi").value;
+					document.getElementById("folregT4Resesqu").value = document.getElementById("folregT4ResesquEdi").value;
+					document.getElementById("folregT5Resesqu").value = document.getElementById("folregT5ResesquEdi").value;
+					document.getElementById("folregT6Resesqu").value = document.getElementById("folregT6ResesquEdi").value;
+					document.getElementById("folregT7Resesqu").value = document.getElementById("folregT7ResesquEdi").value;
+					document.getElementById("folregT8Resesqu").value = document.getElementById("folregT8ResesquEdi").value;
+					document.getElementById("folregT9Resesqu").value = document.getElementById("folregT9ResesquEdi").value;
+					//Campos com resultados da direita do gráfico
+					document.getElementById("folregT1Resdir").value = document.getElementById("folregT1ResdirEdi").value;
+					document.getElementById("folregT2Resdir").value = document.getElementById("folregT2ResdirEdi").value;
+					document.getElementById("folregT3Resdir").value = document.getElementById("folregT3ResdirEdi").value;
+					document.getElementById("folregT4Resdir").value = document.getElementById("folregT4ResdirEdi").value;
+					document.getElementById("folregT5Resdir").value = document.getElementById("folregT5ResdirEdi").value;
+					document.getElementById("folregT6Resdir").value = document.getElementById("folregT6ResdirEdi").value;
+					document.getElementById("folregT7Resdir").value = document.getElementById("folregT7ResdirEdi").value;
+					document.getElementById("folregT8Resdir").value = document.getElementById("folregT8ResdirEdi").value;
+					document.getElementById("folregT9Resdir").value = document.getElementById("folregT9ResdirEdi").value;
+
+					document.getElementById("folregPassodicae").value = document.getElementById("folregPassodicaeEdi").value;
+					switch (document.getElementById("folregPassodicaeEdi").value){
+						case "1":
+							document.getElementById("folregPassodicae1").checked = true;
+							break;
+						case "2":
+							document.getElementById("folregPassodicae2").checked = true;
+							break;
+						case "3":
+							document.getElementById("folregPassodicae3").checked = true;
+							break;
+						case "4":
+							document.getElementById("folregPassodicae4").checked = true;
+							break;
+						case "5":
+							document.getElementById("folregPassodicae5").checked = true;
+							break;
+						case "6":
+							document.getElementById("folregPassodicae6").checked = true;
+							break;
+						case "7":
+							document.getElementById("folregPassodicae7").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+
+					//nomes vindos do Programa ABA para esquerda do Gráfico
+					if (document.getElementById("folregT1tipodesquEdi").value != ''){
+						document.getElementById("folregT1tipodesqu1").value = document.getElementById("folregT1tipodesquEdi").value
+						if (document.getElementById("folregT1tipodesquEdi").value == "true"){
+							document.getElementById("folregT1tipodesqu").checked = true;
+						}
+					}
+					if (document.getElementById("folregT2tipodesquEdi").value != ''){
+						document.getElementById("folregT2tipodesqu2").value = document.getElementById("folregT2tipodesquEdi").value
+						if (document.getElementById("folregT2tipodesquEdi").value == "true"){
+							document.getElementById("folregT2tipodesqu").checked = true;
+						}
+					}
+					if (document.getElementById("folregT3tipodesquEdi").value != ''){
+						document.getElementById("folregT3tipodesqu3").value = document.getElementById("folregT3tipodesquEdi").value
+						if (document.getElementById("folregT3tipodesquEdi").value == "true"){
+							document.getElementById("folregT3tipodesqu").checked = true;
+						}
+					}
+					if (document.getElementById("folregT4tipodesquEdi").value != ''){
+						document.getElementById("folregT4tipodesqu4").value = document.getElementById("folregT4tipodesquEdi").value
+						if (document.getElementById("folregT4tipodesquEdi").value == "true"){
+							document.getElementById("folregT4tipodesqu").checked = true;
+						}
+					}
+					if (document.getElementById("folregT5tipodesquEdi").value != ''){
+						document.getElementById("folregT5tipodesqu5").value = document.getElementById("folregT5tipodesquEdi").value
+						if (document.getElementById("folregT5tipodesquEdi").value == "true"){
+							document.getElementById("folregT5tipodesqu").checked = true;
+						}
+					}
+					if (document.getElementById("folregT6tipodesquEdi").value != ''){
+						document.getElementById("folregT6tipodesqu6").value = document.getElementById("folregT6tipodesquEdi").value
+						if (document.getElementById("folregT6tipodesquEdi").value == "true"){
+							document.getElementById("folregT6tipodesqu").checked = true;
+						}
+					}
+					//document.getElementById("folregT7tipodesqu7").value = document.getElementById("folregT7tipodesquEdi").value;
+					//document.getElementById("folregT8tipodesqu8").value = document.getElementById("folregT8tipodesquEdi").value;
+					//document.getElementById("folregT9tipodesqu9").value = document.getElementById("folregT9tipodesquEdi").value;
+					//nomes vindos do Programa ABA para Direita do Gráfico
+					if (document.getElementById("folregT1tipodirdEdi").value != ''){
+						document.getElementById("folregT1tipodird1").value = document.getElementById("folregT1tipodirdEdi").value
+						if (document.getElementById("folregT1tipodirdEdi").value == "true"){
+							document.getElementById("folregT1tipodird").checked = true;
+						}
+					}
+					if (document.getElementById("folregT2tipodirdEdi").value != ''){
+						document.getElementById("folregT2tipodird2").value = document.getElementById("folregT2tipodirdEdi").value
+						if (document.getElementById("folregT2tipodirdEdi").value == "true"){
+							document.getElementById("folregT2tipodird").checked = true;
+						}
+					}
+					if (document.getElementById("folregT3tipodirdEdi").value != ''){
+						document.getElementById("folregT3tipodird3").value = document.getElementById("folregT3tipodirdEdi").value
+						if (document.getElementById("folregT3tipodirdEdi").value == "true"){
+							document.getElementById("folregT3tipodird").checked = true;
+						}
+					}
+					if (document.getElementById("folregT4tipodirdEdi").value != ''){
+						document.getElementById("folregT4tipodird4").value = document.getElementById("folregT4tipodirdEdi").value
+						if (document.getElementById("folregT4tipodirdEdi").value == "true"){
+							document.getElementById("folregT4tipodird").checked = true;
+						}
+					}
+					if (document.getElementById("folregT5tipodirdEdi").value != ''){
+						document.getElementById("folregT5tipodird5").value = document.getElementById("folregT5tipodirdEdi").value
+						if (document.getElementById("folregT5tipodirdEdi").value == "true"){
+							document.getElementById("folregT5tipodird").checked = true;
+						}
+					}
+					if (document.getElementById("folregT6tipodirdEdi").value != ''){
+						document.getElementById("folregT6tipodird6").value = document.getElementById("folregT6tipodirdEdi").value
+						if (document.getElementById("folregT6tipodirdEdi").value == "true"){
+							document.getElementById("folregT6tipodird").checked = true;
+						}
+					}
+					
+					//document.getElementById("folregT7tipodird7").value = document.getElementById("folregT7tipodirdEdi").value;
+					//document.getElementById("folregT8tipodird8").value = document.getElementById("folregT8tipodirdEdi").value;
+					//document.getElementById("folregT9tipodird9").value = document.getElementById("folregT9tipodirdEdi").value;
+					
+					//Campos com Total da Esquerda do gráfico Duplo
+					document.getElementById("folregTotalduploesq_i").value = document.getElementById("folregTotalduploesq_iEdi").value;
+					document.getElementById("folregTotalduploesq_e").value = document.getElementById("folregTotalduploesq_eEdi").value;
+					document.getElementById("folregTotalduploesq_plusd").value = document.getElementById("folregTotalduploesq_plusdEdi").value;
+					document.getElementById("folregTotalduploesq_minusd").value = document.getElementById("folregTotalduploesq_minusdEdi").value;
+					//Campos com Total da Direita do gráfico Duplo
+					document.getElementById("folregTotalduplodir_i").value = document.getElementById("folregTotalduplodir_iEdi").value;
+					document.getElementById("folregTotalduplodir_e").value = document.getElementById("folregTotalduplodir_eEdi").value;
+					document.getElementById("folregTotalduplodir_plusd").value = document.getElementById("folregTotalduplodir_plusdEdi").value;
+					document.getElementById("folregTotalduplodir_minusd").value = document.getElementById("folregTotalduplodir_minusdEdi").value;
+
+					//Gráfico Duplo
+					//popular radio box esquerda
+					switch (document.getElementById("folregT1ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT1Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT2Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT3Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT4Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT5Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT6Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT7Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT8Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT9Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					//popular radio box Direita
+					switch (document.getElementById("folregT1ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT1Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT1Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT1Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT1Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT2ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT2Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT2Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT2Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT2Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT3ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT3Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT3Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT3Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT3Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT4ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT4Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT4Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT4Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT4Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT5ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT5Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT5Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT5Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT5Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT6ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT6Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT6Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT6Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT6Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT7ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT7Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT7Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT7Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT7Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT8ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT8Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT8Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT8Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT8Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					switch (document.getElementById("folregT9ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT9Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT9Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT9Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT9Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+
+					document.getElementById("folregPassodicad").value = document.getElementById("folregPassodicadEdi").value;
+					switch (document.getElementById("folregPassodicadEdi").value){
+						case "1":
+							document.getElementById("folregPassodicad1").checked = true;
+							break;
+						case "2":
+							document.getElementById("folregPassodicad2").checked = true;
+							break;
+						case "3":
+							document.getElementById("folregPassodicad3").checked = true;
+							break;
+						case "4":
+							document.getElementById("folregPassodicad4").checked = true;
+							break;
+						case "5":
+							document.getElementById("folregPassodicad5").checked = true;
+							break;
+						case "6":
+							document.getElementById("folregPassodicad6").checked = true;
+							break;
+						case "7":
+							document.getElementById("folregPassodicad7").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
+					
+					document.getElementById("folregRaTentDupl1").innerHTML = document.getElementById("folregRaTentDuplEdi1").value;
+					document.getElementById("folregRaTentDupl2").innerHTML = document.getElementById("folregRaTentDuplEdi2").value;
+					document.getElementById("folregRaTentDupl3").innerHTML = document.getElementById("folregRaTentDuplEdi3").value;
+					document.getElementById("folregRaTentDupl4").innerHTML = document.getElementById("folregRaTentDuplEdi4").value;
+					document.getElementById("folregRaTentDupl5").innerHTML = document.getElementById("folregRaTentDuplEdi5").value;
+					document.getElementById("folregRaTentDupl6").innerHTML = document.getElementById("folregRaTentDuplEdi6").value;
+					document.getElementById("folregRaTentDupl7").innerHTML = document.getElementById("folregRaTentDuplEdi7").value;
+					document.getElementById("folregRaTentDupl8").innerHTML = document.getElementById("folregRaTentDuplEdi8").value;
+					document.getElementById("folregRaTentDupl9").innerHTML = document.getElementById("folregRaTentDuplEdi9").value;
+
+					document.getElementById("folregRaTentDupl1").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi1").value);
+					document.getElementById("folregRaTentDupl2").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi2").value);
+					document.getElementById("folregRaTentDupl3").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi3").value);
+					document.getElementById("folregRaTentDupl4").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi4").value);
+					document.getElementById("folregRaTentDupl5").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi5").value);
+					document.getElementById("folregRaTentDupl6").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi6").value);
+					document.getElementById("folregRaTentDupl7").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi7").value);
+					document.getElementById("folregRaTentDupl8").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi8").value);
+					document.getElementById("folregRaTentDupl9").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi9").value);
+				}
+
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
-			}
 
-			function salvar() {
-				if (document.getElementById("folregDatareg").value == '') {
-					alert("Por favor, informe a Data do Registro antes de salvar!");
-				} else if (document.getElementById("folregUsuid").value == '') {
-					alert("Por favor, informe o Técnico Aplicador antes de salvar!");
+				if (document.getElementById("folregTiporeg").value == "Simples"){
+					somaResEstSI();
 				} else {
-					let form = document.getElementById("formFolregPreCad");
-					form.action = "/menu/area/aba/folreg/add";
-					form.submit();
+					somaResEsqDuplo();
 				}
 			}
 		</script>
@@ -506,61 +1217,224 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<!-- PAGE CONTENT BEGINS -->
-						<form id="formFolregPreCad" class="form-horizontal" role="form" method="POST">
+						<form class="form-horizontal" role="form" action="/menu/area/aba/folreg/atualizar" method="POST">
 							<div class="col-xs-12">
-								<div id="divCarrega" hidden>
+								<div id="divCarrega" hidden >
 									<!-- principais indices-->
+									folregId<input name="folregId" id="folregId" value="{{folreg._id}}" />
+									Progid<input name="progid" id="progid" value="{{prog._id}}" />
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
-									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
-									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual._id}}" />
-									progsetid<input name="folregSetid" id="folregSetid" value="{{progset._id}}"  />
-									
+									beneid<input name="progBene" id="progBene" value="{{folreg.folreg_beneid}}" />
+									tecid<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
+									progsetid<input name="folregSetid" id="folregSetid" value="{{folreg.folreg_setid}}"  />
+									<input name="usuarioCad" id="usuarioCad" value="{{folreg.folreg_usuid}}" />
 									<!-- campos oriundos do Programa ABA-->
-									progid<input name="folregProgid" id="folregProgid" value="{{progset.progset_progid}}" />
-									progtipo<input name="progTipo" id="progTipo" value="{{progset.progset_progtipoid}}" />
-									prognivel<input name="progNivel" id="progNivel" value="{{progset.progset_prognivelid}}" />
+									progid<input name="folregProgid" id="folregProgid" value="{{folreg.folreg_progid}}" />
+									progtipo<input name="progTipo" id="progTipo" value="{{folreg.folreg_progtipoid}}" />
+									prognivel<input name="progNivel" id="progNivel" value="{{folreg.folreg_prognivelid}}" />
 									
 									<!-- campos oriundos do SET do ABA acima-->
-									progsetnum<input name="setNum" id="setNum" value="{{progset.progset_num}}" />
-									progsetdesc<input name="setDescr" id="setDescr" value="{{progset.progset_desc}}" />
-									progsetobs<input name="setObs" id="setObs" value="{{progset.progset_obs}}" />
-									progsetqt<input name="qtEst" id="qtEst" value="{{progset.progset_qtest}}" />
-									<input name="tiporeg" id="tiporeg" value="{{progset.progset_tiporeg}}" />
+									progsetnum<input type="text" name="setNum" id="setNum" value="{{folreg.folreg_setnum}}" />
+									progsetdesc<input type="text" name="setDescr" id="setDescr" value="{{folreg.folreg_setdescr}}" />
+									progsetobs<input type="text" name="setObs" id="setObs" value="{{folreg.folreg_setobs}}" />
+									progsetqt<input type="text" name="qtEst" id="qtEst" value="{{progset.progset_qtest}}" />
 									
+									<!-- <input name="tiporeg" id="tiporeg" value="{{progset.progset_tiporeg}}" /> -->
 									<!-- campos oriundos do SET para atualitizar os estímulos-->
-									a<input name="folrega" id="folrega" value="{{progset.progset_esta}}" />
-									b<input name="folregb" id="folregb" value="{{progset.progset_estb}}" />
-									c<input name="folregc" id="folregc" value="{{progset.progset_estc}}" />
-									d<input name="folregd" id="folregd" value="{{progset.progset_estd}}" />
-									e<input name="folrege" id="folrege" value="{{progset.progset_este}}" />
-									f<input name="folregf" id="folregf" value="{{progset.progset_estf}}" />
-									g<input name="folregg" id="folregg" value="{{progset.progset_estg}}" />
-									h<input name="folregh" id="folregh" value="{{progset.progset_esth}}" />
-									i<input name="folregi" id="folregi" value="{{progset.progset_esti}}" />
+									a<input type="text" name="folrega" id="folrega" value="{{progset.progset_esta}}" />
+									b<input type="text" name="folregb" id="folregb" value="{{progset.progset_estb}}" />
+									c<input type="text" name="folregc" id="folregc" value="{{progset.progset_estc}}" />
+									d<input type="text" name="folregd" id="folregd" value="{{progset.progset_estd}}" />
+									e<input type="text" name="folrege" id="folrege" value="{{progset.progset_este}}" />
+									f<input type="text" name="folregf" id="folregf" value="{{progset.progset_estf}}" />
+									g<input type="text" name="folregg" id="folregg" value="{{progset.progset_estg}}" />
+									h<input type="text" name="folregh" id="folregh" value="{{progset.progset_esth}}" />
+									i<input type="text" name="folregi" id="folregi" value="{{progset.progset_esti}}" />
+									<!-- campos oriundos do Passo de Dica-->
+									<input type="text" id="folregPassodicasEdi" value="{{folreg.folreg_passodicas}}">
+									<input type="text" id="folregPassodicaeEdi" value="{{folreg.folreg_passodicae}}">
+									<input type="text" id="folregPassodicadEdi" value="{{folreg.folreg_passodicad}}">
+									<!-- campos oriundos do TIPO de Passo de Dica-->
+									<input type="text" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}">
+									<input type="text" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}">
+									<input type="text" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}">
 
-									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
-									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
-									<input type="hidden" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}" />
+									<input type="text" id="folregProgtipoidEdi" name="folregProgtipoidEdi" value="{{folreg.folreg_progtipoid}}"/>
+									<input type="text" id="folregPrognivelidEdi" name="folregPrognivelidEdi" value="{{folreg.folreg_prognivelid}}"/>
+									
+									
+									<input type="text" id="folregTiporegEdi" name="folregTiporegEdi" value="{{folreg.folreg_tiporeg}}"/>
+									<input type="text" id="folregDataregEdi" name="folregDataregEdi" value="{{folreg.folreg_datareg}}"/>
+									
+									<input type="text" id="folregProgidEdi" name="folregProgidEdi" value="{{folreg.folreg_progid}}"/>
+									
+									<input type="text" id="folregUsuidEdi" name="folregUsuidEdi" value="{{folreg.folreg_usuid}}"/>
+									<input type="text" id="folregQtestEdi" name="folregQtestEdi" value="{{folreg.folreg_qtest}}"/>
+									<!-- campos oriundos do SET para atualizar os estímulos-->
+									esta<input type="text" id="folregEstaEdi" name="folregEstaEdi" value="{{folreg.folreg_esta}}"/>
+									<input type="text" id="folregEstbEdi" name="folregEstbEdi" value="{{folreg.folreg_estb}}"/>
+									<input type="text" id="folregEstcEdi" name="folregEstcEdi" value="{{folreg.folreg_estc}}"/>
+									<input type="text" id="folregEstdEdi" name="folregEstdEdi" value="{{folreg.folreg_estd}}"/>
+									<input type="text" id="folregEsteEdi" name="folregEsteEdi" value="{{folreg.folreg_este}}"/>
+									<input type="text" id="folregEstfEdi" name="folregEstfEdi" value="{{folreg.folreg_estf}}"/>
+									<input type="text" id="folregEstgEdi" name="folregEstgEdi" value="{{folreg.folreg_estg}}"/>
+									<input type="text" id="folregEsthEdi" name="folregEsthEdi" value="{{folreg.folreg_esth}}"/>
+									<input type="text" id="folregEstiEdi" name="folregEstiEdi" value="{{folreg.folreg_esti}}"/>
+									<!-- campos Observação e status-->
+									<input type="text" id="folregObsEdi" name="folregObsEdi" value="{{folreg.folreg_obs}}"/>
+									<input type="text" id="folregStatusEdi" name="folregStatusEdi" value="{{folreg.folreg_status}}"/>
+									<!-- campos Gráficos Simples-->
+									<input type="text" id="folregT1EstsEdi" name="folregT1EstsEdi" value="{{folreg.folreg_t1ests}}"/>
+									<input type="text" id="folregT2EstsEdi" name="folregT2EstsEdi" value="{{folreg.folreg_t2ests}}"/>
+									<input type="text" id="folregT3EstsEdi" name="folregT3EstsEdi" value="{{folreg.folreg_t3ests}}"/>
+									<input type="text" id="folregT4EstsEdi" name="folregT4EstsEdi" value="{{folreg.folreg_t4ests}}"/>
+									<input type="text" id="folregT5EstsEdi" name="folregT5EstsEdi" value="{{folreg.folreg_t5ests}}"/>
+									<input type="text" id="folregT6EstsEdi" name="folregT6EstsEdi" value="{{folreg.folreg_t6ests}}"/>
+									<input type="text" id="folregT7EstsEdi" name="folregT7EstsEdi" value="{{folreg.folreg_t7ests}}"/>
+									<input type="text" id="folregT8EstsEdi" name="folregT8EstsEdi" value="{{folreg.folreg_t8ests}}"/>
+									<input type="text" id="folregT9EstsEdi" name="folregT9EstsEdi" value="{{folreg.folreg_t9ests}}"/>
+									
+									<input type="text" id="folregT1EstdEdi" name="folregT1EstdEdi" value="{{folreg.folreg_t1estd}}"/>
+									<input type="text" id="folregT2EstdEdi" name="folregT2EstdEdi" value="{{folreg.folreg_t2estd}}"/>
+									<input type="text" id="folregT3EstdEdi" name="folregT3EstdEdi" value="{{folreg.folreg_t3estd}}"/>
+									<input type="text" id="folregT4EstdEdi" name="folregT4EstdEdi" value="{{folreg.folreg_t4estd}}"/>
+									<input type="text" id="folregT5EstdEdi" name="folregT5EstdEdi" value="{{folreg.folreg_t5estd}}"/>
+									<input type="text" id="folregT6EstdEdi" name="folregT6EstdEdi" value="{{folreg.folreg_t6estd}}"/>
+									<input type="text" id="folregT7EstdEdi" name="folregT7EstdEdi" value="{{folreg.folreg_t7estd}}"/>
+									<input type="text" id="folregT8EstdEdi" name="folregT8EstdEdi" value="{{folreg.folreg_t8estd}}"/>
+									<input type="text" id="folregT9EstdEdi" name="folregT9EstdEdi" value="{{folreg.folreg_t9estd}}"/>
+									
+									<input type="text" id="folregT1RessimplesEdi" name="folregT1RessimplesEdi" value="{{folreg.folreg_t1ressimples}}"/>
+									<input type="text" id="folregT2RessimplesEdi" name="folregT2RessimplesEdi" value="{{folreg.folreg_t2ressimples}}"/>
+									<input type="text" id="folregT3RessimplesEdi" name="folregT3RessimplesEdi" value="{{folreg.folreg_t3ressimples}}"/>
+									<input type="text" id="folregT4RessimplesEdi" name="folregT4RessimplesEdi" value="{{folreg.folreg_t4ressimples}}"/>
+									<input type="text" id="folregT5RessimplesEdi" name="folregT5RessimplesEdi" value="{{folreg.folreg_t5ressimples}}"/>
+									<input type="text" id="folregT6RessimplesEdi" name="folregT6RessimplesEdi" value="{{folreg.folreg_t6ressimples}}"/>
+									<input type="text" id="folregT7RessimplesEdi" name="folregT7RessimplesEdi" value="{{folreg.folreg_t7ressimples}}"/>
+									<input type="text" id="folregT8RessimplesEdi" name="folregT8RessimplesEdi" value="{{folreg.folreg_t8ressimples}}"/>
+									<input type="text" id="folregT9RessimplesEdi" name="folregT9RessimplesEdi" value="{{folreg.folreg_t9ressimples}}"/>
+									
+									<input type="text" id="folregT1tipodsimplesEdi" name="folregT1tipodsimplesEdi" value="{{folreg.folreg_t1tipodsimples}}"/>
+									<input type="text" id="folregT2tipodsimplesEdi" name="folregT2tipodsimplesEdi" value="{{folreg.folreg_t2tipodsimples}}"/>
+									<input type="text" id="folregT3tipodsimplesEdi" name="folregT3tipodsimplesEdi" value="{{folreg.folreg_t3tipodsimples}}"/>
+									<input type="text" id="folregT4tipodsimplesEdi" name="folregT4tipodsimplesEdi" value="{{folreg.folreg_t4tipodsimples}}"/>
+									<input type="text" id="folregT5tipodsimplesEdi" name="folregT5tipodsimplesEdi" value="{{folreg.folreg_t5tipodsimples}}"/>
+									<input type="text" id="folregT6tipodsimplesEdi" name="folregT6tipodsimplesEdi" value="{{folreg.folreg_t6tipodsimples}}"/>
+									<input type="text" id="folregT7tipodsimplesEdi" name="folregT7tipodsimplesEdi" value="{{folreg.folreg_t7tipodsimples}}"/>
+									<input type="text" id="folregT8tipodsimplesEdi" name="folregT8tipodsimplesEdi" value="{{folreg.folreg_t8tipodsimples}}"/>
+									<input type="text" id="folregT9tipodsimplesEdi" name="folregT9tipodsimplesEdi" value="{{folreg.folreg_t9tipodsimples}}"/>
+									
+									folregT1ResesquEdi<input type="text" id="folregT1ResesquEdi" name="folregT1ResesquEdi" value="{{folreg.folreg_t1resesqu}}"/>
+									<input type="text" id="folregT2ResesquEdi" name="folregT2ResesquEdi" value="{{folreg.folreg_t2resesqu}}"/>
+									<input type="text" id="folregT3ResesquEdi" name="folregT3ResesquEdi" value="{{folreg.folreg_t3resesqu}}"/>
+									<input type="text" id="folregT4ResesquEdi" name="folregT4ResesquEdi" value="{{folreg.folreg_t4resesqu}}"/>
+									<input type="text" id="folregT5ResesquEdi" name="folregT5ResesquEdi" value="{{folreg.folreg_t5resesqu}}"/>
+									<input type="text" id="folregT6ResesquEdi" name="folregT6ResesquEdi" value="{{folreg.folreg_t6resesqu}}"/>
+									<input type="text" id="folregT7ResesquEdi" name="folregT7ResesquEdi" value="{{folreg.folreg_t7resesqu}}"/>
+									<input type="text" id="folregT8ResesquEdi" name="folregT8ResesquEdi" value="{{folreg.folreg_t8resesqu}}"/>
+									<input type="text" id="folregT9ResesquEdi" name="folregT9ResesquEdi" value="{{folreg.folreg_t9resesqu}}"/>
+									
+									<input type="text" id="folregT1ResdirEdi" name="folregT1ResdirEdi" value="{{folreg.folreg_t1resdir}}"/>
+									<input type="text" id="folregT2ResdirEdi" name="folregT2ResdirEdi" value="{{folreg.folreg_t2resdir}}"/>
+									<input type="text" id="folregT3ResdirEdi" name="folregT3ResdirEdi" value="{{folreg.folreg_t3resdir}}"/>
+									<input type="text" id="folregT4ResdirEdi" name="folregT4ResdirEdi" value="{{folreg.folreg_t4resdir}}"/>
+									<input type="text" id="folregT5ResdirEdi" name="folregT5ResdirEdi" value="{{folreg.folreg_t5resdir}}"/>
+									<input type="text" id="folregT6ResdirEdi" name="folregT6ResdirEdi" value="{{folreg.folreg_t6resdir}}"/>
+									<input type="text" id="folregT7ResdirEdi" name="folregT7ResdirEdi" value="{{folreg.folreg_t7resdir}}"/>
+									<input type="text" id="folregT8ResdirEdi" name="folregT8ResdirEdi" value="{{folreg.folreg_t8resdir}}"/>
+									<input type="text" id="folregT9ResdirEdi" name="folregT9ResdirEdi" value="{{folreg.folreg_t9resdir}}"/>
+									
+									<input type="text" id="folregT1tipodesquEdi" name="folregT1tipodesquEdi" value="{{folreg.folreg_t1tipodesqu}}"/>
+									<input type="text" id="folregT2tipodesquEdi" name="folregT2tipodesquEdi" value="{{folreg.folreg_t2tipodesqu}}"/>
+									<input type="text" id="folregT3tipodesquEdi" name="folregT3tipodesquEdi" value="{{folreg.folreg_t3tipodesqu}}"/>
+									<input type="text" id="folregT4tipodesquEdi" name="folregT4tipodesquEdi" value="{{folreg.folreg_t4tipodesqu}}"/>
+									<input type="text" id="folregT5tipodesquEdi" name="folregT5tipodesquEdi" value="{{folreg.folreg_t5tipodesqu}}"/>
+									<input type="text" id="folregT6tipodesquEdi" name="folregT6tipodesquEdi" value="{{folreg.folreg_t6tipodesqu}}"/>
+									<input type="text" id="folregT7tipodesquEdi" name="folregT7tipodesquEdi" value="{{folreg.folreg_t7tipodesqu}}"/>
+									<input type="text" id="folregT8tipodesquEdi" name="folregT8tipodesquEdi" value="{{folreg.folreg_t8tipodesqu}}"/>
+									<input type="text" id="folregT9tipodesquEdi" name="folregT9tipodesquEdi" value="{{folreg.folreg_t9tipodesqu}}"/>
+									
+									<input type="text" id="folregT1tipodirdEdi" name="folregT1tipodirdEdi" value="{{folreg.folreg_t1tipodird}}"/>
+									<input type="text" id="folregT2tipodirdEdi" name="folregT2tipodirdEdi" value="{{folreg.folreg_t2tipodird}}"/>
+									<input type="text" id="folregT3tipodirdEdi" name="folregT3tipodirdEdi" value="{{folreg.folreg_t3tipodird}}"/>
+									<input type="text" id="folregT4tipodirdEdi" name="folregT4tipodirdEdi" value="{{folreg.folreg_t4tipodird}}"/>
+									<input type="text" id="folregT5tipodirdEdi" name="folregT5tipodirdEdi" value="{{folreg.folreg_t5tipodird}}"/>
+									<input type="text" id="folregT6tipodirdEdi" name="folregT6tipodirdEdi" value="{{folreg.folreg_t6tipodird}}"/>
+									<input type="text" id="folregT7tipodirdEdi" name="folregT7tipodirdEdi" value="{{folreg.folreg_t7tipodird}}"/>
+									<input type="text" id="folregT8tipodirdEdi" name="folregT8tipodirdEdi" value="{{folreg.folreg_t8tipodird}}"/>
+									<input type="text" id="folregT9tipodirdEdi" name="folregT9tipodirdEdi" value="{{folreg.folreg_t9tipodird}}"/>
+									
+									<input type="text" id="folregTotalsimples1Edi" name="folregTotalsimples1Edi" value="{{folreg.folreg_totalsimples_i}}"/>
+									<input type="text" id="folregTotalsimples2Edi" name="folregTotalsimples2Edi" value="{{folreg.folreg_totalsimples_e}}"/>
+									<input type="text" id="folregTotalsimples3Edi" name="folregTotalsimples3Edi" value="{{folreg.folreg_totalsimples_plusd}}"/>
+									<input type="text" id="folregTotalsimples4Edi" name="folregTotalsimples4Edi" value="{{folreg.folreg_totalsimples_minusd}}"/>
+									<input type="text" id="folregTotalduploesq_iEdi" name="folregTotalduploesq_iEdi" value="{{folreg.folreg_totalduploesq_i}}"/>
+									<input type="text" id="folregTotalduploesq_eEdi" name="folregTotalduploesq_eEdi" value="{{folreg.folreg_totalduploesq_e}}"/>
+									<input type="text" id="folregTotalduploesq_plusdEdi" name="folregTotalduploesq_plusdEdi" value="{{folreg.folreg_totalduploesq_plusd}}"/>
+									<input type="text" id="folregTotalduploesq_minusdEdi" name="folregTotalduploesq_minusdEdi" value="{{folreg.folreg_totalduploesq_minusd}}"/>
+									<input type="text" id="folregTotalduplodir_iEdi" name="folregTotalduplodir_iEdi" value="{{folreg.folreg_totalduplodir_i}}"/>
+									<input type="text" id="folregTotalduplodir_eEdi" name="folregTotalduplodir_eEdi" value="{{folreg.folreg_totalduplodir_e}}"/>
+									<input type="text" id="folregTotalduplodir_plusdEdi" name="folregTotalduplodir_plusdEdi" value="{{folreg.folreg_totalduplodir_plusd}}"/>
+									<input type="text" id="folregTotalduplodir_minusdEdi" name="folregTotalduplodir_minusdEdi" value="{{folreg.folreg_totalduplodir_minusd}}"/>
+									<!--
+									<input type="text" id="folregT1Resesqu" name="folregT1Resesqu" value="{{folreg.folreg_t1resesqu}}"/>
+									<input type="text" id="folregT2Resesqu" name="folregT2Resesqu" value="{{folreg.folreg_t2resesqu}}"/>
+									<input type="text" id="folregT3Resesqu" name="folregT3Resesqu" value="{{folreg.folreg_t3resesqu}}"/>
+									<input type="text" id="folregT4Resesqu" name="folregT4Resesqu" value="{{folreg.folreg_t4resesqu}}"/>
+									<input type="text" id="folregT5Resesqu" name="folregT5Resesqu" value="{{folreg.folreg_t5resesqu}}"/>
+									<input type="text" id="folregT6Resesqu" name="folregT6Resesqu" value="{{folreg.folreg_t6resesqu}}"/>
+									<input type="text" id="folregT7Resesqu" name="folregT7Resesqu" value="{{folreg.folreg_t7resesqu}}"/>
+									<input type="text" id="folregT8Resesqu" name="folregT8Resesqu" value="{{folreg.folreg_t8resesqu}}"/>
+									<input type="text" id="folregT9Resesqu" name="folregT9Resesqu" value="{{folreg.folreg_t9resesqu}}"/>
 
-									<input hidden type="text" id="folregRaTentCad1" name="folregRaTentCad1" value="" />
-									<input hidden type="text" id="folregRaTentCad2" name="folregRaTentCad2" value="" />
-									<input hidden type="text" id="folregRaTentCad3" name="folregRaTentCad3" value="" />
-									<input hidden type="text" id="folregRaTentCad4" name="folregRaTentCad4" value="" />
-									<input hidden type="text" id="folregRaTentCad5" name="folregRaTentCad5" value="" />
-									<input hidden type="text" id="folregRaTentCad6" name="folregRaTentCad6" value="" />
-									<input hidden type="text" id="folregRaTentCad7" name="folregRaTentCad7" value="" />
-									<input hidden type="text" id="folregRaTentCad8" name="folregRaTentCad8" value="" />
-									<input hidden type="text" id="folregRaTentCad9" name="folregRaTentCad9" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad1" name="folregRaTentDuplCad1" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad2" name="folregRaTentDuplCad2" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad3" name="folregRaTentDuplCad3" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad4" name="folregRaTentDuplCad4" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad5" name="folregRaTentDuplCad5" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad6" name="folregRaTentDuplCad6" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad7" name="folregRaTentDuplCad7" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad8" name="folregRaTentDuplCad8" value="" />
-									<input hidden type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
+									<input type="text" id="folregT1Resdir" name="folregT1Resdir" value="{{folreg.folreg_t1Resdir}}"/>
+									<input type="text" id="folregT2Resdir" name="folregT2Resdir" value="{{folreg.folreg_t2Resdir}}"/>
+									<input type="text" id="folregT3Resdir" name="folregT3Resdir" value="{{folreg.folreg_t3Resdir}}"/>
+									<input type="text" id="folregT4Resdir" name="folregT4Resdir" value="{{folreg.folreg_t4Resdir}}"/>
+									<input type="text" id="folregT5Resdir" name="folregT5Resdir" value="{{folreg.folreg_t5Resdir}}"/>
+									<input type="text" id="folregT6Resdir" name="folregT6Resdir" value="{{folreg.folreg_t6Resdir}}"/>
+									<input type="text" id="folregT7Resdir" name="folregT7Resdir" value="{{folreg.folreg_t7Resdir}}"/>
+									<input type="text" id="folregT8Resdir" name="folregT8Resdir" value="{{folreg.folreg_t8Resdir}}"/>
+									<input type="text" id="folregT9Resdir" name="folregT9Resdir" value="{{folreg.folreg_t9Resdir}}"/>
+
+									<input type="text" id="folregT1tipodesqu" name="folregT1tipodesqu" value="{{folreg.folreg_t1tipodesqu}}"/>
+									<input type="text" id="folregT2tipodesqu" name="folregT2tipodesqu" value="{{folreg.folreg_t2tipodesqu}}"/>
+									<input type="text" id="folregT3tipodesqu" name="folregT3tipodesqu" value="{{folreg.folreg_t3tipodesqu}}"/>
+									<input type="text" id="folregT4tipodesqu" name="folregT4tipodesqu" value="{{folreg.folreg_t4tipodesqu}}"/>
+									<input type="text" id="folregT5tipodesqu" name="folregT5tipodesqu" value="{{folreg.folreg_t5tipodesqu}}"/>
+									<input type="text" id="folregT6tipodesqu" name="folregT6tipodesqu" value="{{folreg.folreg_t6tipodesqu}}"/>
+									<input type="text" id="folregT7tipodesqu" name="folregT7tipodesqu" value="{{folreg.folreg_t7tipodesqu}}"/>
+									<input type="text" id="folregT8tipodesqu" name="folregT8tipodesqu" value="{{folreg.folreg_t8tipodesqu}}"/>
+									<input type="text" id="folregT9tipodesqu" name="folregT9tipodesqu" value="{{folreg.folreg_t9tipodesqu}}"/>
+
+									<input type="text" id="folregT1tipodird" name="folregT1tipodird" value="{{folreg.folreg_t1tipodird}}"/>
+									<input type="text" id="folregT2tipodird" name="folregT2tipodird" value="{{folreg.folreg_t2tipodird}}"/>
+									<input type="text" id="folregT3tipodird" name="folregT3tipodird" value="{{folreg.folreg_t3tipodird}}"/>
+									<input type="text" id="folregT4tipodird" name="folregT4tipodird" value="{{folreg.folreg_t4tipodird}}"/>
+									<input type="text" id="folregT5tipodird" name="folregT5tipodird" value="{{folreg.folreg_t5tipodird}}"/>
+									<input type="text" id="folregT6tipodird" name="folregT6tipodird" value="{{folreg.folreg_t6tipodird}}"/>
+									<input type="text" id="folregT7tipodird" name="folregT7tipodird" value="{{folreg.folreg_t7tipodird}}"/>
+									<input type="text" id="folregT8tipodird" name="folregT8tipodird" value="{{folreg.folreg_t8tipodird}}"/>
+									<input type="text" id="folregT9tipodird" name="folregT9tipodird" value="{{folreg.folreg_t9tipodird}}"/>
+									-->
+									<input type="text" id="folregRaTentEdi1" name="folregRaTentEdi1" value="{{folreg.folreg_ratent1}}"/>
+									<input type="text" id="folregRaTentEdi2" name="folregRaTentEdi2" value="{{folreg.folreg_ratent2}}"/>
+									<input type="text" id="folregRaTentEdi3" name="folregRaTentEdi3" value="{{folreg.folreg_ratent3}}"/>
+									<input type="text" id="folregRaTentEdi4" name="folregRaTentEdi4" value="{{folreg.folreg_ratent4}}"/>
+									<input type="text" id="folregRaTentEdi5" name="folregRaTentEdi5" value="{{folreg.folreg_ratent5}}"/>
+									<input type="text" id="folregRaTentEdi6" name="folregRaTentEdi6" value="{{folreg.folreg_ratent6}}"/>
+									<input type="text" id="folregRaTentEdi7" name="folregRaTentEdi7" value="{{folreg.folreg_ratent7}}"/>
+									<input type="text" id="folregRaTentEdi8" name="folregRaTentEdi8" value="{{folreg.folreg_ratent8}}"/>
+									<input type="text" id="folregRaTentEdi9" name="folregRaTentEdi9" value="{{folreg.folreg_ratent9}}"/>
+									<input type="text" id="folregRaTentDuplEdi1" name="folregRaTentDuplEdi1" value="{{folreg.folreg_ratent_dupl1}}"/>
+									<input type="text" id="folregRaTentDuplEdi2" name="folregRaTentDuplEdi2" value="{{folreg.folreg_ratent_dupl2}}"/>
+									<input type="text" id="folregRaTentDuplEdi3" name="folregRaTentDuplEdi3" value="{{folreg.folreg_ratent_dupl3}}"/>
+									<input type="text" id="folregRaTentDuplEdi4" name="folregRaTentDuplEdi4" value="{{folreg.folreg_ratent_dupl4}}"/>
+									<input type="text" id="folregRaTentDuplEdi5" name="folregRaTentDuplEdi5" value="{{folreg.folreg_ratent_dupl5}}"/>
+									<input type="text" id="folregRaTentDuplEdi6" name="folregRaTentDuplEdi6" value="{{folreg.folreg_ratent_dupl6}}"/>
+									<input type="text" id="folregRaTentDuplEdi7" name="folregRaTentDuplEdi7" value="{{folreg.folreg_ratent_dupl7}}"/>
+									<input type="text" id="folregRaTentDuplEdi8" name="folregRaTentDuplEdi8" value="{{folreg.folreg_ratent_dupl8}}"/>
+									<input type="text" id="folregRaTentDuplEdi9" name="folregRaTentDuplEdi9" value="{{folreg.folreg_ratent_dupl9}}"/>
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -584,7 +1458,9 @@
 												<button type="button" class="close" data-dismiss="alert">
 													<i class="ace-icon fa fa-times"></i>
 												</button>
-												<strong>Aqui se encontram as informações vindas do SET, a qual esse registro pertence. Observe que o registro se rege pelo seu SET correspondente. </strong>
+												<strong>
+													Aqui se encontram as informações vindas do SET a qual esse registro pertence, observe que o Registro se rege pelo seu SET correspondente. 
+													</strong>
 												<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 												<br>
 											</div>
@@ -629,13 +1505,13 @@
 													<label>Descrição do SET</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="folregSetdescr" id="folregSetdescr" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
+															<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
 														</div>
 													</div>
 													<label>Observações do SET</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="folregSetobs" id="folregSetobs" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
+															<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
 														</div>
 													</div>
 												</div>
@@ -668,7 +1544,7 @@
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select"  data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
@@ -679,7 +1555,7 @@
 													<div class="row">
 														<div class="col-sm-4">
 															<div class="input-group">
-																<input name="folregDatareg" id="folregDatareg" type="date" />
+																<input name="folregDatareg" id="folregDatareg" type="date" onchange="javascript:atualizaData()" />
 															</div>
 														</div>
 													</div>
@@ -712,8 +1588,7 @@
 											<div class="row">
 												<div class="col-xs-12 col-sm-2">
 													<label>Quantidade de Estímulos Reservados no SET</label>
-													<!--<input name="folregQtest" id="folregQtest" value="{{progset.progset_qtest}}" onchange="updateStimulusFields()" />-->
-													<select name="folregQtest" id="folregQtest" class="chosen-select blocked-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields();embaralharIgualmenteFolregTentativas();">
+													<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -724,6 +1599,7 @@
 														<option value="8">8</option>
 														<option value="9">9</option>
 													</select>
+													
 												</div>
 											</div>
 											<div class="row">
@@ -903,7 +1779,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent1" name="folregRaTent1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent1" name="folregRaTent1"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1016,13 +1892,16 @@
 																	</div>
 																</td>
 															</tr>
+
 															<tr><!-- 2Reg -->
 																<td class="center">
-																	<span class="badge badge-gray">2</span>
+																	
+																		<span class="badge badge-gray">2</span>
+																	
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent2" name="folregRaTent2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent2" name="folregRaTent2"></span></label>
 																	</label>
 																</td>
 																
@@ -1057,7 +1936,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent3" name="folregRaTent3" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent3" name="folregRaTent3"></span></label>
 																	</label>
 																</td>
 																
@@ -1087,7 +1966,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1116,7 +1995,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent5" name="folregRaTent5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent5" name="folregRaTent5"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1145,7 +2024,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent6" name="folregRaTent6" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent6" name="folregRaTent6"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1174,7 +2053,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent7" name="folregRaTent7" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent7" name="folregRaTent7"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1203,7 +2082,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent8" name="folregRaTent8" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent8" name="folregRaTent8"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1232,7 +2111,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent9" name="folregRaTent9" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent9" name="folregRaTent9"></span></label>
 																	</label>
 																</td>
 																<td>
@@ -1326,7 +2205,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl1" name="folregRaTentDupl1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl1" name="folregRaTentDupl1"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1493,6 +2372,7 @@
 															<span class="lbl"></span>
 															<span class="label label-lg label-purple arrowed-right">P7</span>
 															<span class="label label-lg label-yellow arrowed-in arrowed-in-right">Sem dica</span>
+
 														</td>
 														<td id="checkboxContainer3" rowspan="9"><!-- TIPO DE DICA DA DIREITA QUANDO GRAFICO DUPLO -->
 															<div class="checkbox" style="display: none;">
@@ -1553,7 +2433,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl2" name="folregRaTentDupl2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl2" name="folregRaTentDupl2"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1601,7 +2481,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl3" name="folregRaTentDupl3" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl3" name="folregRaTentDupl3"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1649,7 +2529,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl4" name="folregRaTentDupl4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl4" name="folregRaTentDupl4"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1697,7 +2577,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl5" name="folregRaTentDupl5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl5" name="folregRaTentDupl5"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1730,7 +2610,7 @@
 															<span class="lbl"></span>
 															<span class="label label-yellow arrowed-in">&nbsp;E</span>
 														
-															<input name="folregT5Resdirradio" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT5Resdir','3','+d');" />
+															<input name="folregT5Resdirradioradio" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT5Resdir','3','+d');" />
 															<span class="lbl"></span>
 															<span class="label label-warning arrowed-in">&nbsp;+d</span>
 														
@@ -1745,7 +2625,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl6" name="folregRaTentDupl6" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl6" name="folregRaTentDupl6"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1793,7 +2673,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl7" name="folregRaTentDupl7" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl7" name="folregRaTentDupl7"></span></label>
 															</label>
 														</td>
 														
@@ -1842,7 +2722,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl8" name="folregRaTentDupl8" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl8" name="folregRaTentDupl8"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1895,7 +2775,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl9" name="folregRaTentDupl9" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTentDupl9" name="folregRaTentDupl9"></span></label>
 															</label>
 														</td>
 														
@@ -1980,7 +2860,7 @@
 							<div class="row" style="position: relative;">
 										<div class="col-xs-12">
 											<!-- GRAFICO DUPLO-->
-											<div class="container" style="width: 100%;">
+											<div class="container" style="width: 5%;">
 												<canvas id="doubleBarChart" width="400" height="200"></canvas>
 											</div>
 										</div>																		
@@ -1989,7 +2869,7 @@
 							<div class="col-xs-12">
 								<br>
 								<div class="col-md-12" style="text-align: center;">
-									<button class="btn btn-info" name="acao" type="button" onclick="javascript:salvar();">
+									<button class="btn btn-info" name="acao" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
 										Salvar
 									</button>

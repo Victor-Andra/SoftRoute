@@ -3,8 +3,12 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Terapias</title>
-
-		
+		<script type="text/javascript">
+			function testeConfirmFiltra(acao){
+				this.mudaAcao(acao);
+				document.getElementById("acaoForm").submit();
+			}
+		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -34,8 +38,39 @@
 									<div class="col-xs-12">
 											<div class="clearfix" >
 												<div class="pull-right tableTools-container">
-
-
+													<form id="acaoForm" class="form-horizontal" role="form" action="/menu/terapia/fil" method="POST">
+														<div class="breadcrumbs" id="pesquisaAge">
+															<div class="row">
+																<div class="col-xs-12" style="text-align: center;" >
+																	<div class="input-group">
+																		<div>
+																			<select name="terapiaStatus" id="terapiaStatus" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="Ativo">Ativo</option>
+																				<option value="Inativo">Inativo</option>
+																			</select>
+																		</div>
+																	</div>
+																	<div class="col-xs-2">
+																		<div class="input-group">
+																			<button name="acaoFiltrar" id="acaoFiltrar" type="button" class="btn btn-xs btn-danger" onclick="javascript:testeConfirmFiltra('/menu/terapia/fil');">
+																			<i class="ace-icon fa fa-bolt bigger-110"></i>
+																			Copiar Semana
+																			</button>
+																			<input class="hidden" id="data2" name="data2" value="{{data}}" style="margin-left: 25px;" />
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</form>
+													<div class="input-group">
+														<div >
+															<select name="terapiaStatus" id="terapiaStatus" class="chosen-select" data-placeholder="Escolha...">
+																<option value="Ativo">Ativo</option>
+																<option value="Inativo">Inativo</option>
+															</select>
+														</div>
+													</div>
 												</div>
 											</div>
 

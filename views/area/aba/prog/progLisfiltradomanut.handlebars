@@ -968,13 +968,13 @@
 																													<i class="ace-icon fa fa-minus bigger-130"></i>{{prog_status}}
 																												</a>
 																											{{else}}
-																												{{#ifEqual progset_status "Meta"}}
-																														<a class="gray" title="Cadastrar novo REGISTRO desabilitado.">
-																															<i class="ace-icon fa fa-minus bigger-130"></i>
-																														</a>
-																														{{else}}
+																												{{#ifEqual progset_status "Andamento"}}
 																														<a class="purple" name="acaoCadreg" id="acaoCadreg" href="/menu/area/aba/folreg/folregPrecad/{{this._id}}/{{../_id}}" title="Cadastrar novo REGISTRO para esse programa SET.">
 																															<i class="ace-icon fa fa-plus bigger-130"></i>
+																														</a>
+																														{{else}}
+																														<a class="gray" title="Cadastrar novo REGISTRO desabilitado.">
+																															<i class="ace-icon fa fa-minus bigger-130"></i>
 																														</a>
 																												{{/ifEqual}}
 																											{{/ifEqual}}																											

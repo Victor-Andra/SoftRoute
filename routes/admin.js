@@ -3027,7 +3027,6 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
     //Terapia
         router.get('/ferramentas/terapia/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todos as Terapias
             fncTerapia.listaTerapia(req, res);
-            
         })
 
         router.get('/ferramentas/terapia/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de terapia

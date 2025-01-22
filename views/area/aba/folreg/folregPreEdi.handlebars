@@ -361,6 +361,7 @@
 			}
 			
 			function carregaBody(){
+				
 				popularCheckboxDicaTipo();
 				document.getElementById("folregUsuid").value = document.getElementById("usuarioCad").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
@@ -1537,19 +1538,18 @@
 									</div>
 									<div class="widget-body">
 										<div class="widget-main">
-											
 											<div class="row">
 												<div class="col-sm-12">
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" disabled="disabled" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select"  data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
 															</select>
 														</div>
-													</div>	
+													</div>
 													<label for="id-date-picker-1">Data do Registro</label>
 													<div class="row">
 														<div class="col-sm-4">
