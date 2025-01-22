@@ -240,7 +240,7 @@ const fncNotasup = require("../functions/fncNotasup")
 //NotaSup
 const notasupobsClass = require("../models/notasupobs")
 const Notasupobs = mongoose.model("tb_notasupobs")
-const fncNotasupobs = require("../functions/fncnotasupobs")
+const fncNotasupobs = require("../functions/fncNotasupobs")
 
 //PECS
 const pecsClass = require("../models/pecs")
