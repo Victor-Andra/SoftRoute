@@ -1370,7 +1370,7 @@ module.exports = {
                                         break;
                                     case "Falta":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Falta Justificada":
                                         terapiaAtend = atend.atend_mergeterapiaid;
@@ -1423,7 +1423,6 @@ module.exports = {
                                 a.valor = creVal;
                                 /*
                                 if (creVal == "0,00" || creVal == "undefined"){
-                                    console.log("VAI TOMA NO CU")
                                     cre.forEach((c)=>{
                                         if (c.convcre_convid === convid && c.convcre_terapiaid == t._id){
                                             a.valor = c.convcre_valor;
@@ -1519,7 +1518,7 @@ module.exports = {
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Falta":
-                                            terapiaAtend = ats.atend_terapiaid;
+                                            terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
                                         case "Falta Justificada":
                                             terapiaAtend = ats.atend_mergeterapiaid;
@@ -1567,7 +1566,7 @@ module.exports = {
                                             break;
                                         case "Falta":
                                             terapiaAtend = atend.atend_terapiaid;
-                                            creVal = atend.atend_valorcre;
+                                            creVal = atend.atend_mergevalorcre;
                                             break;
                                         case "Falta Justificada":
                                             terapiaAtend = atend.atend_mergeterapiaid;
@@ -1615,9 +1614,7 @@ module.exports = {
                                 if(qtdIds != 0){
                                     a.sessoes = qtdIds;
                                     a.nomecid = t._id;
-                                    if (creVal != "0,00"){console.log("FUCK YOU3:"+creVal)}
                                     if (creVal == "0,00"){
-                                        console.log("VAI TOMA NO CU")
                                         cre.forEach((c)=>{
                                             if (c.convcre_convid === convid && c.convcre_terapiaid == t._id){
                                                 a.valor = c.convcre_valor;
@@ -1627,7 +1624,7 @@ module.exports = {
                                     } else {
                                         a.valor = creVal;
                                     }
-                                    if (creVal == "0,00"){console.log("FUCK YOU2")}
+                                    
                                     a.valor = creVal;
                                 }
                                 
@@ -1638,7 +1635,6 @@ module.exports = {
                             })
                             rel.forEach((r)=>{
                                 //console.log("valorconv:"+r.valor)
-                                if (!r.valor){console.log("FUCK YOU")}
                                 val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                                 console.log("val:"+val)
                                 val = this.mascaraValores(val);
