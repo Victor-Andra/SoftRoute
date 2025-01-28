@@ -1,14 +1,14 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
-const AtendSchema = mongoose.Schema({
+const AtendArquivoSchema = mongoose.Schema({
     atend_org :{
         type: String,
-        required: true
+        required: false
     },
     atend_categoria :{
         type: String,
-        required: true
+        required: false
     },
     atend_beneid :{
         type: ObjectId,
@@ -16,15 +16,15 @@ const AtendSchema = mongoose.Schema({
     },
     atend_convid :{
         type: ObjectId,
-        required: true
+        required: false
     },
     atend_usuid :{
         type: String,
-        required: true
+        required: false
     },
     atend_atenddata :{
         type: Date,
-        required: true
+        required: false
     },
     atend_atendhora :{
         type: String,
@@ -32,23 +32,23 @@ const AtendSchema = mongoose.Schema({
     },
     atend_terapeutaid :{
         type: ObjectId,
-        required: true
+        required: false
     },
     atend_terapiaid :{
         type: ObjectId,
-        required: true
+        required: false
     },
     atend_salaid :{
         type: ObjectId,
-        required: true
+        required: false
     },
     atend_valorcre :{
         type: String,
-        required: true
+        required: false
     },
     atend_valordeb :{
         type: String,
-        required: true
+        required: false
     },
     atend_mergeterapeutaid :{
         type: ObjectId,
@@ -96,7 +96,7 @@ const AtendSchema = mongoose.Schema({
     },
     atend_num :{
         type: Number,
-        required: true
+        required: false
     },
     atend_rel :{
         type: String,
@@ -116,7 +116,7 @@ const AtendSchema = mongoose.Schema({
     }
 })
 
-class Atend{
+class AtendArquivo{
     constructor(
         atend_org,
         atend_categoria,
@@ -178,10 +178,10 @@ class Atend{
     }
 }
 
-AtendSchema.loadClass(Atend)
-const AtendModel = mongoose.model('tb_atend', AtendSchema)
-module.exports = {AtendModel,AtendSchema,
-    atendEditar: async (req, res) => {
+AtendArquivoSchema.loadClass(AtendArquivo)
+const AtendArquivoModel = mongoose.model('tb_atendarquivo', AtendArquivoSchema)
+module.exports = {AtendArquivoModel,AtendArquivoSchema,
+    atendArquivoEditar: async (req, res) => {
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -220,7 +220,7 @@ module.exports = {AtendModel,AtendSchema,
         })
         return resultado;
     },
-    atendAdicionar: async (req,res) => {
+    atendArquivoAdicionar: async (req,res) => {
         let dataAtual = new Date();
         console.log("atendmodel");
         console.log("req.body.atendAtenddata:")
@@ -257,7 +257,7 @@ module.exports = {AtendModel,AtendSchema,
             return err;
         });
     },
-    montaAtend(req,res){
+    montaArquivoAtend(req,res){
         const newAtend = new AtendModel({
             atend_org : req.body.atendOrg,
             atend_categoria : req.body.atendCategoria,
@@ -283,7 +283,7 @@ module.exports = {AtendModel,AtendSchema,
 
         return newAtend;
     },
-    gerarAtend: async (atend) => {
+    gerarArquivoAtend: async (atend) => {
         console.log("cadastrando novo atend!");
         console.log("atend: "+atend);
         await atend.save().then(()=>{
@@ -295,7 +295,7 @@ module.exports = {AtendModel,AtendSchema,
         });
     }
     
-    ,atendUpdateCampos: async (req,res) => {
+    ,atendArquivoUpdateCampos: async (req,res) => {
         let resultado;
         let busca;
         let troca;

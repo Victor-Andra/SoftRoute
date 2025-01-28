@@ -47,7 +47,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista das Ficha de Saúde dos Colaboradores</li>
+							<li class="active">Lista das Fichas de Saúde dos Colaboradores</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -70,17 +70,17 @@
 											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 											</div>
 											
-											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable " role="grid" aria-describedby="dynamic-table_info">
 												
 												<thead>
 													<tr role="row">
 														 <tr>
-															<th rowspan="2" style="width: 20%;">Nome</th>
+															<th rowspan="2" style="width: 15%;">Nome</th>
 															<th rowspan="2" style="width: 5%;">Data <br>Atualização</th>
 															<th colspan="8">Principais Pontuações</th>
-															<th colspan="2">Em caso de Urgência</th>
-															<th rowspan="2" style="width: 5%;">Ações<br>
-																<a class="red" href="/menu/ferramentas/saudecolab/cad">
+															<th colspan="2">Em Caso de Urgência</th>
+															<th rowspan="2" style="width: 1%;">Ações<br>
+																<a hidden class="red" href="/menu/ferramentas/saudecolab/cad">
 																		<i class="ace-icon fa fa-plus bigger-130" title="Adicionar Nova Ficha de Saúde"></i>
 																	</a>
 															</th>
@@ -112,7 +112,9 @@
 														<tr>
 															{{#each ../usuarios}}
 																	{{#ifEqual this._id ../saudecolab_saudecolabusuid}}
-																		<td style="width: 20%;">{{usuario_nome}}</td>
+																		<td style="width: 15%; white-space: wrap;">
+																			<span class="badge badge-info">{{usuario_nome}}</span>
+																		</td>
 																	{{/ifEqual}}
 																{{/each}}
 															<td  style="width: 5%;">
@@ -257,7 +259,6 @@
 			</a>
 		</div><!-- /.main-container ace-save-state -->
 
-		
 		<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		
@@ -266,15 +267,13 @@
 		<script type="text/javascript">
 		$(document).ready(function() {
 			$("#dynamic-table").DataTable({
-			"language": {
-            "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto para portugues
-        },
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
 			"aoColumns": [null, null, null, null, null, null, null,null, null, null, null,  null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [50, 100],
+			"lengthMenu": [200, 500],
 			"lengthChange": true,
-			"autoWidth": true,
+			"autoWidth": false,
 			"paging": true,
 			"lengthChange": true,
 			"searching": true,
@@ -288,8 +287,6 @@
 		});
 		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
-	
-	
 
 	</body>
 

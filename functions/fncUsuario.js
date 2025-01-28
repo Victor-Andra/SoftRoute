@@ -33,16 +33,16 @@ module.exports = {
             usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome completo
             Perfil.find().then((perfil)=>{
                 Funcao.find().then((funcao) =>{
-                        Especialidade.find().then((especialidade)=>{  //Graduação
+                    Especialidade.find().then((especialidade)=>{  //Graduação
                         especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as especialidades
-                            Especializacao.find().then((especializacao)=>{ //Especialização
-                                especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
-                                Metodo.find().then((metodo)=>{ //Métodos
-                                    metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
-                                        Metout.find().then((metout)=>{ //Métodos
-                                            metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+                        Especializacao.find().then((especializacao)=>{ //Especialização
+                            especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
+                            Metodo.find().then((metodo)=>{ //Métodos
+                                metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
+                                Metout.find().then((metout)=>{ //Métodos
+                                    metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
                                     res.render('ferramentas/usuario/usuarioLis', {usuarios: usuario, funcaos: funcao, perfis:perfil})
-            })})})})})})}).catch((err) =>{
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
