@@ -58,11 +58,13 @@ class RelAtend{
     constructor(
         nomecid,
         sessoes,
+        convid,
         valor,
         total
         ){
         this.nomecid = nomecid,
         this.sessoes = sessoes,
+        this.convid = convid,
         this.valor = valor,
         this.total = total
     }
@@ -1010,8 +1012,10 @@ module.exports = {
                                             terapeutaAtend = atend.atend_terapeutaid;
                                             break;
                                         case "Padrão":
+                                            console.log("WTF?")
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
+                                            console.log("PADRAO: "+atend)
                                             break;
                                         case "Pais":
                                             terapiaAtend = atend.atend_terapiaid;
@@ -1032,11 +1036,18 @@ module.exports = {
                                         default:
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
+                                            console.log("default: "+atend)
                                             break;
                                     }
                                 }
                                 
                                 if (categorias != "Feriado"){
+                                    /*
+                                    terapia.forEach((ttt)=>{
+                                        if ((""+ttt._id) == (""+terapiaAtend)){
+                                            console.log("ttt.nome: "+ttt.terapia_nome+ " /-/ "+ttt.terapia_nomecid);
+                                        }
+                                    })*/
                                     rab.especialidade = terapiaAtend;
                                     rab.profissional = terapeutaAtend;
 
@@ -1497,6 +1508,7 @@ module.exports = {
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
+            Convcre.find().then((cre)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -1593,50 +1605,39 @@ module.exports = {
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Extra":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Falta Justificada":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Feriado":
                                         terapiaAtend = "break";
                                         break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Padrão":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Pais":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Substituição":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "SubstitutoFixo":
                                         terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
                                         break;
                                 }
                                 if (categorias != "Feriado" && atend.atend_fixo == "true"){
@@ -1656,7 +1657,6 @@ module.exports = {
 
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
-                                    creValFinal = creVal;
                                     //console.log("TERAPIA OK")
                                 }
                             })
@@ -1664,21 +1664,6 @@ module.exports = {
                             if(qtdIds != 0){
                                 a.sessoes = qtdIds;
                                 a.nomecid = t._id;
-                                a.valor = creVal;
-                                /*
-                                if (creVal == "0,00" || creVal == "undefined"){
-                                    cre.forEach((c)=>{
-                                        if (c.convcre_convid === convid && c.convcre_terapiaid == t._id){
-                                            a.valor = c.convcre_valor;
-                                            console.log("a.valor: "+a.valor)
-                                        }
-                                    });
-                                } else {
-                                    a.valor = creVal;
-                                }
-                                */
-
-                                //console.log("qtdIds: "+qtdIds+" - t._id: "+t._id+" - creVal: "+creVal)
                             }
                             
                             if(qtdIds != 0){
@@ -1687,6 +1672,11 @@ module.exports = {
                             }
                         })
                         rel.forEach((r)=>{
+                            cre.forEach((c)=>{
+                                if ((""+c.convcre_convid) == (""+convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
+                                    r.valor = c.convcre_valor;
+                                }
+                            });
                             val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                             val = this.mascaraValores(val);
                             r.total = val;
@@ -1704,6 +1694,7 @@ module.exports = {
                 })
             })
         })
+    })
     })
     },
     //
