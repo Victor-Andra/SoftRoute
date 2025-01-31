@@ -56,7 +56,7 @@ module.exports = {
                             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                                 console.log("Listagem Realizada de Usuário")
-                                Terapia.find().then((terapia)=>{
+                                Terapia.find({terapia_status: "Ativo"}).then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
                                     console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
@@ -72,6 +72,7 @@ module.exports = {
     carregaAtendAdmEdi(req,res){
         let atend;
         let nextNumEdi;
+        let lvlUsu = req.cookies['lvlUsu'];
         Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
             //validação caso seja o primeiro registro
             //atendimento.forEach(e => {atend = e});
@@ -102,7 +103,7 @@ module.exports = {
                                             Convcre.find({credit_atendnum : nextNumEdi}).then((convcreEdi) =>{
                                                 Convdeb.find({debit_atendnum : nextNumEdi}).then((convdebEdi) =>{
                                                     Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                                        res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala, horaages: horaage})
+                                                        res.render('atendimento/atendadm/atendAdmEdi', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, atendEdi, convcreEdi, convdebEdi, salas: sala, horaages: horaage, lvlUsu})
         })})})})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -562,7 +563,7 @@ module.exports = {
                 fncDebit.debitAtendEditar(req,res);
                 if(resposta == true){
                     //Volta para a atend de listagem
-                    this.listaAtend2(req,res);
+                    this.listaAtend(req,res);
                 }else{
                     //passar classe de erro
                     console.log("error")
@@ -644,6 +645,29 @@ module.exports = {
                                 //console.log("Listagem Realizada de Terapia")
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
         })})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    listaAtend(req, res){
+        let carregaFiltro = "false";
+        let atend = [];
+        let qtdAtends = 0;
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Usuário")
+                            Terapia.find().then((terapia)=>{
+                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                //console.log("Listagem Realizada de Terapia")
+                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

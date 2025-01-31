@@ -51,6 +51,22 @@
 					}
 				}
 			}
+			function carregaValoresFixo(){
+				if (document.getElementById("atendFixo").value == "true"){
+					if (document.getElementById("atendConvid").value == "X"){
+						alert("Convênio não selecionado!");
+					} else {
+						try{
+							let convId = document.getElementById("atendConvid").value;
+							document.getElementById("atendFixovalorcre").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/cre").value;
+							document.getElementById("atendFixovalordeb").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/deb").value;
+						} catch(err){
+							document.getElementById("atendFixovalorcre").value = "0,00";
+							document.getElementById("atendFixovalordeb").value = "0,00";
+						}
+					}
+				}
+			}
 			function atualizaTerapeutaId(){
 				console.log("X");
 				console.log(document.getElementById("atendTerapeutaid").value);
@@ -112,13 +128,32 @@
 				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
 				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
 				document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
-				console.log("terapiametgeid: "+document.getElementById("atendMergeTerapiaidEdi").value);
+				//console.log("terapiametgeid: "+document.getElementById("atendMergeTerapiaidEdi").value);
 				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
 				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
 				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
 				document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
 				document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
+				if (document.getElementById("atendFixoEdi").value == "true") {
+					document.getElementById("atendFixoCheck").checked = true;
+					document.getElementById("atendFixoTerapiaid").value = document.getElementById("atendFixoTerapiaidEdi").value;
+					document.getElementById("atendFixoTerapeutaid").value = document.getElementById("atendFixoTerapeutaidEdi").value;
+					document.getElementById("atendFixovalorcre").value = document.getElementById("atendFixovalorcreEdi").value;
+					document.getElementById("atendFixovalordeb").value = document.getElementById("atendFixovalordebEdi").value;
+				} else {
+					document.getElementById("atendFixoCheck").checked = false;
+					document.getElementById("divSubFixo").style.display = "none";
+				}
 				console.log("FINISH");
+			}
+			function toggleDivSubFixo(){
+				if (document.getElementById("atendFixoCheck").checked == true) {
+					document.getElementById("divSubFixo").style.display = "";
+					document.getElementById("atendFixo").value = "true";
+				} else {
+					document.getElementById("divSubFixo").style.display = "none";
+					document.getElementById("atendFixo").value = "false";
+				}
 			}
 			function atualizaData(){
 				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
@@ -296,6 +331,7 @@
 														</select>
 													</div>
 												</div>
+												<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}} >Substituto Fixo <input id="atendFixoCheck" id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo()"></label>
 												<div class="row">
 													<div class="col-xs-12">
 														<!-- PAGE CONTENT BEGINS -->
@@ -447,6 +483,64 @@
 																	</div>
 																</div><!-- /.span -->
 															</div><!-- /.row -->
+															<div class="row" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+																<div class="col-xs-12 col-sm-12">
+																	<div class="widget-box">
+																		<div class="widget-header">
+																			<h4 class="widget-title">Dados de Sub Fixo</h4>
+																			<input hidden id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
+																			<span class="widget-toolbar">
+																				<a href="#" data-action="collapse">
+																					<i class="ace-icon fa fa-chevron-up"></i>
+																				</a>
+																			</span>
+																		</div>
+																		<div class="widget-body">
+																			<div class="widget-main">
+																		<div class="alert alert-danger">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			<strong>Alerta!</strong>
+																			Dados informados aqui irão suprimir os demais dados dos relatorios do beneficiario dada a natureza fixa destas informações.<br>
+																		</div>
+																		<label>Terapeuta Fixo</label>
+																		<div class="form-group">
+																			<div class="col-sm-4">
+																				<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
+																						<option value="766f69643132333435366964"></option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																		</div>
+																		<label>Terapia Fixa</label>
+																		<div class="form-group">
+																				<div class="col-sm-4">
+																					<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
+																							<option value="766f69643132333435366964"></option>
+																							{{#each terapias}}
+																							<option value="{{_id}}">{{terapia_nome}}</option>
+																							{{/each}}
+																					</select>
+																				</div>
+																		</div>
+																		<label class="blue"> Valor da Terapia pelo Plano</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control" value="0,00" />
+																			</div>
+																		</div>
+																		<label class="red"> Valor da Terapia para o Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  value="0,00" />
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+															</div><!-- /.row -->
 														</div>
 													</div><!-- /.col -->
 												</div><!-- /.row -->
@@ -476,6 +570,11 @@
 													<input id="atendMergeTerapiaidEdi" name="atendMergeTerapiaidEdi" value="{{atendEdi.atend_mergeterapiaid}}"/>
 													<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atendEdi.atend_mergevalorcre}}"/>
 													<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atendEdi.atend_mergevalordeb}}"/>
+													<input id="atendFixoTerapeutaidEdi" name="atendFixoTerapeutaidEdi" value="{{atendEdi.atend_fixoterapeutaid}}"/>
+													<input id="atendFixoTerapiaidEdi" name="atendFixoTerapiaidEdi" value="{{atendEdi.atend_fixoterapiaid}}"/>
+													<input id="atendFixovalorcreEdi" name="atendFixovalorcreEdi" value="{{atendEdi.atend_fixovalorcre}}"/>
+													<input id="atendFixovalordebEdi" name="atendFixovalordebEdi" value="{{atendEdi.atend_fixovalordeb}}"/>
+													<input id="atendFixoEdi" name="atendFixoEdi" value="{{atendEdi.atend_fixo}}"/>
 													<input id="atendObsEdi" name="atendObsEdi" value="{{atendEdi.atend_obs}}"/>
 													<input id="atendSalaidEdi" name="atendSalaidEdi" value="{{atendEdi.atend_salaid}}"/>
 													<input id="atendHoraEdi" name="atendHoraEdi" value="{{atendEdi.atend_atendhora}}"/>

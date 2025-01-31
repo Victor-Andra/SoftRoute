@@ -1494,7 +1494,7 @@ module.exports = {
         let atends;
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
-        let convid;
+        let arrayconvid = [];
         let cc = convcreClass.convcreCarregarTodos(req,res);
 
         //console.log("SEG:"+seg);
@@ -1508,12 +1508,17 @@ module.exports = {
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
+            at.forEach((aa)=>{
+                if (!arrayconvid.includes((""+aa.atend_convid+""))){
+                    arrayconvid.push((""+aa.atend_convid+""));
+                    console.log("BUCETAAAAAAAAAAAAAAAAAAAAAA")
+                }
+            })
             Convcre.find().then((cre)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                     bene_nome = b.bene_nome;
-                    convid = b.bene_convid;
                     cc.then((convcre)=>{
                         /*
                         convcre.forEach((c)=>{
@@ -1542,13 +1547,14 @@ module.exports = {
                                 //console.log("aaaaratend_mergeterapiaid: "+aaaar.atend_mergeterapiaid);
                             }
                         })
-                        
+                        arrayconvid.forEach((convid)=>{
                         terapia.forEach((t)=>{
                             //console.log("ID-nome: "+t._id + "-" + t.terapia_nome);
                             qtdIds = 0;
                             creValFinal = 0;
                             atends = [];
                             at.forEach((ats)=>{
+                                if ((""+ats.atend_convid+"") == (""+convid+"")){
                                 if (ats.atend_fixo == "true"){
                                     terapiaAtend = ats.atend_fixoterapiaid;
                                     //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
@@ -1563,13 +1569,14 @@ module.exports = {
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Falta":
-                                            terapiaAtend = ats.atend_terapiaid;
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            //terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Falta Justificada":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
                                         case "Feriado":
-                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            terapiaAtend = "break";
                                             break;
                                         case "Glosa":
                                             terapiaAtend = ats.atend_terapiaid;
@@ -1597,23 +1604,35 @@ module.exports = {
                                 if((""+terapiaAtend) === (""+t._id)){
                                     atends.push(ats);
                                 }
+                                }
                             })
                             
                             atends.forEach((atend)=>{
+                                if ((""+atend.atend_convid+"") == (""+convid+"")){
                                 categorias = atend.atend_categoria
                                 
                                 switch (categorias){
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Extra":
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta":
-                                        terapiaAtend = atend.atend_terapiaid;
+                                        //console.log("atend.atend_mergeterapiaid"+atend.atend_mergeterapiaid)
+                                        //if (atend.atend_mergeterapiaid){
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                        //} else {
+                                        //    terapiaAtend = atend.atend_terapiaid;
+                                        //}
+                                        //terapiaAtend = atend.atend_terapiaid;
                                         break;
                                     case "Falta Justificada":
                                         terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Feriado":
                                         terapiaAtend = "break";
@@ -1623,21 +1642,27 @@ module.exports = {
                                         break;
                                     case "Padrão":
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Pais":
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     case "Substituição":
                                         terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "SubstitutoFixo":
                                         terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
+                                        creVal = atend.atend_valorcre;
                                         break;
                                 }
                                 if (categorias != "Feriado" && atend.atend_fixo == "true"){
@@ -1657,13 +1682,17 @@ module.exports = {
 
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
-                                    //console.log("TERAPIA OK")
+                                    creValFinal = creVal;
+                                    console.log("TERAPIA OK")
+                                }
                                 }
                             })
 
                             if(qtdIds != 0){
+                                a.valor = creValFinal;
                                 a.sessoes = qtdIds;
                                 a.nomecid = t._id;
+                                a.convid = convid;
                             }
                             
                             if(qtdIds != 0){
@@ -1671,9 +1700,10 @@ module.exports = {
                                 a = new RelAtend();
                             }
                         })
+                        })
                         rel.forEach((r)=>{
                             cre.forEach((c)=>{
-                                if ((""+c.convcre_convid) == (""+convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
+                                if ((""+c.convcre_convid) == (""+r.convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
                                     r.valor = c.convcre_valor;
                                 }
                             });

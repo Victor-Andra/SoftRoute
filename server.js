@@ -254,6 +254,13 @@ app.post('/upload', upload.single('file'), (req, res) => {
                 inc: function (v1) {//Verifica 2 atributos vindos do banco que não sejam String
                     //console.log("/"+v1)
                     return v1 + 1;
+                },
+                ifIncludes: function (chave, array, options) {
+                    if (array.includes(chave)) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
                 }
             }
         }));
