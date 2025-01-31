@@ -7057,7 +7057,6 @@ module.exports = {
     filtraAgendaPessoalSemanal(req,res){
         //console.log("cookie: "+req.cookies['idUsu'])//idUsu - lvlUsu
         let idTerapeuta = req.cookies['idUsu'];
-        let dataFinal = req.body.dataFinal;
         let idsAgendasEx = [];
         let aux = 1;
         let is = false;
@@ -7069,8 +7068,16 @@ module.exports = {
         let sexta;
         let idsSubs = [];
         let isSemanal = "true";
-        let seg = fncGeral.getDateFromString(req.body.dataFinal, "ini");
-        let sex = fncGeral.getDateFromString(req.body.dataFinal, "fim");
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("seg: "+seg)
+        //console.log("sex: "+sex)
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
@@ -7120,8 +7127,12 @@ module.exports = {
                 sex.setUTCDate(sex.getUTCDate() + 5);
                 break;
         }
+        console.log("seg: "+seg)
+        console.log("sex: "+sex)
         let agora = fncGeral.getDateToIsostring(seg);
         let depois = fncGeral.getDateToIsostring(sex);
+        console.log("agora: "+agora)
+        console.log("depois: "+depois)
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
@@ -7767,7 +7778,8 @@ module.exports = {
         let dtFill;
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
-        //console.log("seg dtf: "+seg);
+        console.log("req.body.dataFinal: "+req.body.dataFinal)
+        console.log("seg dtf: "+seg);
         //console.log("sex dtf: "+sex);
         seg.setHours(0);
         seg.setMinutes(0);
