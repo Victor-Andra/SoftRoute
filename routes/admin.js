@@ -2823,7 +2823,10 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
         //Saudecolab, Ficha Médica dos colaboradores
         router.get('/ferramentas/saudecolab/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Saudecolab
-            fncSaudecolab.listaSaudecolab(req, res);
+            let resposta = new Resposta()
+            resposta.texto = ""
+            resposta.sucesso = ""
+            fncSaudecolab.listaSaudecolab(req, res, resposta);
         })
 
         router.get('/ferramentas/saudecolab/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Saudecolab

@@ -3,7 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const SaudecolabSchema = mongoose.Schema({
     saudecolab_saudecolabid :{ type: ObjectId, required: false },
-    saudecolab_saudecolabusuid :{ type: ObjectId, required: false }, //Uduário id
+    saudecolab_saudecolabusuid :{ type: ObjectId, required: false, unique: true }, //Uduário id
     saudecolab_saudecolabdata :{ type: String, required: false },//Data que o formulário foi feito e pode ser diferente da data de cadastro do sistema já que o cadsatro pode ter sido feito por outros meios
     saudecolab_tiposangue :{ type: String, required: false },
     saudecolab_planosaude :{ type: String, required: false }, // Sim ou Não

@@ -4,9 +4,10 @@
 		<title>Ficha de Saúde dos Colaboradores</title>
 		<script>
 			function carregaBody(){
+				
 				document.getElementById("saudecolabSaudecolabusuid").value = document.getElementById("saudecolabSaudecolabusuidEdi").value;
 				document.getElementById("saudecolabSaudecolabdata").value = document.getElementById("saudecolabSaudecolabdataEdi").value;
-
+ 
 				document.getElementById("saudecolabTiposangue").value = document.getElementById("saudecolabTiposangueEdi").value;
 				document.getElementById("saudecolabPlanosaude").value = document.getElementById("saudecolabPlanosaudeEdi").value;
 				document.getElementById("saudecolabPlanosaudequal").value = document.getElementById("saudecolabPlanosaudequalEdi").value;
@@ -357,10 +358,13 @@
 								<div class="space-4"></div>
 								<div class="form-actions">
 									<div class="col-md-offset-3 col-md-9">
-										<button class="btn btn-info"  name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
+										{{#ifIncludes saudecolab.saudecolab_saudecolabusuid usuarioAtual}}
+											<button class="btn btn-info"  name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											{{else}}
+										{{/ifIncludes}}
 										&nbsp; &nbsp; &nbsp;
 										<button class="btn btn-warning"  href="/menu/ferramentas/sala/lis"/>
 											<i class="ace-icon fa fa-undo bigger-110"></i>

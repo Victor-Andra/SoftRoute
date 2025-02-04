@@ -99,6 +99,7 @@ module.exports = {
 
     preCarregaProgset(req,res){
         let usuarioAtual = req.cookies['idUsu'];
+        let perfilAtual = req.cookies['lvlUsu'];
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
             usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -109,7 +110,7 @@ module.exports = {
                             Progdica.find().then((progdica)=>{
                                 Progtipo.find().then((progtipo)=>{
                                     Prognivel.find().then((prognivel)=>{
-                                res.render("area/aba/progset/progsetPreCad", {usuarios: usuario, benes: bene, prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, usuarioAtual})
+                                res.render("area/aba/progset/progsetPreCad", {usuarios: usuario, benes: bene, prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, usuarioAtual, perfilAtual})
         })})})})})})}).catch((err) =>{
             console.log(err);
             req.flash("error_message", "houve um erro ao listar escolas");
@@ -118,6 +119,7 @@ module.exports = {
     },
 
     carregaProgsetEdi(req,res){
+        let perfilAtual = req.cookies['lvlUsu'];
         Progset.findById(req.params.id).then((progset) =>{
             console.log("ID: "+progset._id)
             let idProg;
@@ -155,7 +157,7 @@ module.exports = {
                                                 Prognivel.find().then((prognivel)=>{
                                                     Prog.find().then((prog)=>{
                                                         Folreg.find().then((folreg)=>{
-                                    res.render("area/aba/progset/progsetEdi", {usuarios: usuario, benes: bene, idProg, idBene, idProgtipo, idPrognivel, progset, progs: prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, folregs: folreg})
+                                    res.render("area/aba/progset/progsetEdi", {usuarios: usuario, benes: bene, idProg, idBene, idProgtipo, idPrognivel, progset, progs: prog, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, folregs: folreg, perfilAtual})
             })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

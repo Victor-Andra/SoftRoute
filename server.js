@@ -256,6 +256,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     return v1 + 1;
                 },
                 ifIncludes: function (chave, array, options) {
+                    console.log("chave: "+chave)
+                    console.log("array: "+array)
                     if (array.includes(chave)) {
                         return options.fn(this);
                     } else {

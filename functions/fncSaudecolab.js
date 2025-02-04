@@ -13,15 +13,26 @@ const usuarioClass = require("../models/usuario")
 //Tabelas Extrangeiras
 const Estado = mongoose.model("tb_estado")
 const Usuario = mongoose.model("tb_usuario")
-
+const respostaClass = require("../models/resposta")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
-    listaSaudecolab(req,res){
+    listaSaudecolab(req,res, resposta){
+        let flash = Resposta();
+        flash = resposta;
         console.log('listando saudecolabs')
+        let filtraUsuario;
+        let usuarioAtual = req.cookies['idUsu'];
+        let lvlUsu = req.cookies['lvlUsu'];
+        if ("62421801a12aa557219a0fb9,62421857a12aa557219a0fc1,6242190fa12aa557219a0fd6,644742e378166939169f82a1,644743aa78166939169f8486".includes(lvlUsu)){
+            filtraUsuario = {};
+        } else {
+            filtraUsuario = {saudecolab_saudecolabusuid : usuarioAtual};
+        }
         Saudecolab.find().then((saudecolab) =>{
-            Usuario.find().then((usuario)=>{
+            Usuario.find(filtraUsuario).then((usuario)=>{
                 console.log("Listagem Realizada!")
-                res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab, usuarios: usuario})
+                res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab, usuarios: usuario, flash})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
@@ -31,11 +42,12 @@ module.exports = {
     },
 
     carregaSaudecolab(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
         Saudecolab.find().then((saudecolab)=>{
             Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuario
             console.log("Listagem Realizada!")
-            res.render("ferramentas/saudecolab/saudecolabCad", {saudecolabs: saudecolab, usuarios: usuario})
+            res.render("ferramentas/saudecolab/saudecolabCad", {saudecolabs: saudecolab, usuarios: usuario, usuarioAtual})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
@@ -46,12 +58,13 @@ module.exports = {
 
 
     carregaSaudecolabEdi(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
         Saudecolab.findById(req.params.id).then((saudecolab) =>{
             console.log(saudecolab)
                 Estado.find().then((estado)=>{
                     Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
                         usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuario
-            res.render('ferramentas/saudecolab/saudecolabEdi', {saudecolab, estados: estado, usuarios: usuario})
+            res.render('ferramentas/saudecolab/saudecolabEdi', {saudecolab, estados: estado, usuarios: usuario, usuarioAtual})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -60,23 +73,45 @@ module.exports = {
     },
 
     cadastraSaudecolab(req,res){
-        let resposta
-        let cadastro = saudecolabClass.saudecolabAdicionar(req,res);//variavel para armazenar a função que armazena o async
+        let resposta;
+        let flash = Resposta();
+        let existe;
         
-        cadastro.then((result)=>{
-            resposta = true;
-        }).catch((err)=>{
-            resposta = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resposta == true){
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaSaudecolab(req,res)
+        Saudecolab.find({saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid}).then((resultado)=>{
+            if (resultado.length == 0){
+                existe = "false";
             } else {
-                console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro');
+                existe = "true";
+            }
+            console.log("existe: "+existe);
+            console.log("resultado.length: "+resultado.length);
+            if (existe == "true"){
+                console.log("WHAT?")
+                flash.texto = "Já existe um registro para esse colaborador!";
+                flash.sucesso = "false";
+                this.listaSaudecolab(req,res, flash);
+            } else {
+                console.log("SHIT?")
+                let cadastro = saudecolabClass.saudecolabAdicionar(req,res);//variavel para armazenar a função que armazena o async
+            
+                cadastro.then((result)=>{
+                    resposta = true;
+                }).catch((err)=>{
+                    resposta = err
+                    console.log("ERRO:"+err)
+                }).finally(()=>{
+                    if (resposta == true){
+                        console.log('verdadeiro')
+                        flash.texto = "Cadastro realizado com sucesso!";
+                        flash.sucesso = "true";
+                        this.listaSaudecolab(req,res, flash);
+                    } else {
+                        console.log('falso')
+                        flash.texto = resposta;
+                        flash.sucesso = "false";
+                        this.listaSaudecolab(req,res, flash);
+                    }
+                })
             }
         })
     },
