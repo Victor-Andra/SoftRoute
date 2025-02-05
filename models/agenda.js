@@ -34,6 +34,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
     agenda_turnoFalta :{ type: String, require: false },
     agenda_faltaId :{ type: ObjectId, require: false },
+    agenda_falta :{ type: String, require: false },
     agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
     agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false }
@@ -73,6 +74,7 @@ class Agenda{
         agenda_rel,
         agenda_turnoFalta,
         agenda_faltaId,
+        agenda_falta,
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
@@ -108,6 +110,7 @@ class Agenda{
         this.agenda_rel = agenda_rel,
         this.agenda_turnoFalta = agenda_turnoFalta,
         this.agenda_faltaId = agenda_faltaId,
+        this.agenda_falta = agenda_falta,
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad
@@ -234,6 +237,7 @@ module.exports = {AgendaModel,AgendaSchema,
             agenda_copia : false,
             agenda_turnoFalta : req.body.agendaTurnoFalta,
             //agenda_faltaId : req.body.agendaFaltaId,
+            //agenda_falta : req.body.agendaAlvoFalta,
             agenda_log: req.body.agendaLog , //Log das alterações
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
@@ -429,6 +433,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_usucad : usuarioAtual ,
                                 agenda_dataedi : dataAtual ,
                                 agenda_faltaId : req.body.agendaFaltaId ,
+                                agenda_falta : req.body.agendaAlvoFalta ,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta 
                             }}
                         ).then((res) =>{
@@ -461,6 +466,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_selo : false ,
                                 agenda_copia : false,
                                 agenda_faltaId : req.body.agendaFaltaId,
+                                agenda_falta : req.body.agendaAlvoFalta ,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual
@@ -485,6 +491,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 agenda_selo : false ,
                                 agenda_copia : false,
                                 agenda_faltaId : req.body.agendaFaltaId,
+                                agenda_falta : req.body.agendaAlvoFalta ,
                                 agenda_turnoFalta : req.body.agendaTurnoFalta,
                                 agenda_usucad : usuarioAtual,
                                 agenda_datacad : dataAtual

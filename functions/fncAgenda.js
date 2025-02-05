@@ -11069,7 +11069,8 @@ module.exports = {
         let atend;
         let agendacreTes;
         let agendadebTes;
-        let temAgendaSub;
+        let agendacreTesSub;
+        let agendadebTesSub;
         let hora;
         let data;
         let hor;
@@ -11178,10 +11179,16 @@ module.exports = {
 
                                     switch (agendaSub.agenda_categoria){
                                         case "Apoio"://ANALISE
-                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
+                                            agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                                if( convcreTes == agendacreTesSub){
                                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
                                                     convCreCpfCnpj = ccre.convcre_convCpfCnpj;
                                                     convcreval = ccre.convcre_valor;
@@ -11399,6 +11406,7 @@ module.exports = {
                                         case "Falta":
 
                                             agendacreTes = ""+a.agenda_convid + a.agenda_terapiaid+""
+                                            agendacreTesSemanal = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
                                                 if( convcreTes == agendacreTes){
@@ -11422,8 +11430,8 @@ module.exports = {
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : "0,00",//
                                                     atend_valordeb : "0,00",//
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//mesmo terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//mesmo terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcreval,//recebe pelo plano pois não foi avisado previamente
                                                     atend_mergevalordeb : "0,00",//Não paga pois o terapeuita não atende ninguem
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,

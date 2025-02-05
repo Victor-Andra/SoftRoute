@@ -34,6 +34,7 @@ const AgendaArquivoSchema = mongoose.Schema({
     agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
     agenda_turnoFalta :{ type: String, require: false },
     agenda_faltaId :{ type: ObjectId, require: false },
+    agenda_falta :{ type: String, require: false },
     agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
     agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false }
@@ -73,6 +74,7 @@ class AgendaArquivo{
         agenda_rel,
         agenda_turnoFalta,
         agenda_faltaId,
+        agenda_falta,
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
@@ -108,6 +110,7 @@ class AgendaArquivo{
         this.agenda_rel = agenda_rel,
         this.agenda_turnoFalta = agenda_turnoFalta,
         this.agenda_faltaId = agenda_faltaId,
+        this.agenda_falta = agenda_falta,
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad

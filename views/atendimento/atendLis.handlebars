@@ -437,7 +437,7 @@
 												<tr>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="6" style="width: 100px;" >Atendimento</th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto</span></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
 												</tr>
 												<tr role="row">
@@ -493,10 +493,14 @@
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
-															<td><span class="label label-sm label-danger">{{atend_categoria}}</span></td>
+														{{#ifEqual this.atend_fixo "true"}}
+															<td><span class="label label-sm label-danger">Substituto Fixo</span></td>
 															{{else}}
-															<td><span class="label label-sm label-success">{{atend_categoria}}</span></td>
+															{{#ifEqual this.atend_categoria "Feriado"}}
+															<td><span class="label label-sm label-warning">Feriado</span></td>
+															{{else}}
+															<td><span class="label label-sm label-success">Padrão</span></td>
+															{{/ifEqual}}
 														{{/ifEqual}}
 
 
@@ -524,12 +528,12 @@
 														{{/ifEqual}}
 
 																												
-														{{#if atend_mergeterapiaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+														{{#if atend_fixoterapiaid}}
+															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
 																<td>-</td>
 															{{else}}
 																{{#each ../terapias}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapiaid}}
+																	{{#ifEqual this._id ../atend_fixoterapiaid}}
 																		<td>{{terapia_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
@@ -538,12 +542,12 @@
 															<td>-</td>
 														{{/if}}
 
-														{{#if atend_mergeterapeutaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+														{{#if atend_fixoterapeutaid}}
+															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
 																<td>-</td>
 															{{else}}
 																{{#each ../terapeutas}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapeutaid}}
+																	{{#ifEqual this._id ../atend_fixoterapeutaid}}
 																		<td>{{usuario_nome}}</td>
 																	{{/ifEqual}}
 																{{/each}}
@@ -552,19 +556,19 @@
 															<td>-</td>
 														{{/if}}
 
-														{{#if atend_mergevalorcre}}
-															{{#ifEqual this.atend_mergevalorcre "0,00"}}
-																<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
+														{{#if atend_fixovalorcre}}
+															{{#ifEqual this.atend_fixovalorcre "0,00"}}
+																<td><span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span></td>
 																{{else}}
-																<td>{{atend_mergevalorcre}}</td>
+																<td>{{atend_fixovalorcre}}</td>
 															{{/ifEqual}}
 														{{else}}
 															<td>-</td>
 														{{/if}}
 														
-														{{#if atend_mergevalordeb}}
-															{{#ifEqual this.atend_mergevalordeb "0,00"}}
-																<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
+														{{#if atend_fixovalordeb}}
+															{{#ifEqual this.atend_fixovalordeb "0,00"}}
+																<td ><span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span></td>
 																{{else}}
 																<td>-</td>
 															{{/ifEqual}}
