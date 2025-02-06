@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>DashBoard Administrativo</title>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
+		
+		<script>
+			function carregaBody(){
+				console.log("Função carregaBody iniciada"); // Log para verificar
+				// Inicializar os gráficos
+				initEasyPieCharts();
+				initEasySparkline();
+				drawPieChart();
+			}
+		</script>
+		<script>
+			function somaResEstSI() {
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
+				
+				}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="page-header">
+			<h1>
+				DashBoard
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+						Administrativo
+				</small>
+			</h1>
+		</div><!-- /.page-header -->
+			<!-- PAGE CONTENT BEGINS -->
+			<form class="form" role="form"  action="" method="">
+				<div class="form-horizontal" role="form">
+					<div class="row">
+								<div class="col-xs-12">
+									<div class="tabbable">
+										<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+											<li class="active" >
+												<a data-toggle="tab" href="#bene" aria-expanded="true">
+													<i class="red ace-icon fa fa-child bigger-120"></i>
+													Beneficiários
+												</a>
+											</li>
+											<li class="">
+												<a data-toggle="tab" href="#sessoes" aria-expanded="false">
+													<i class="orange ace-icon fa fa-globe bigger-120"></i>
+													Sessões
+												</a>
+											</li>
+											<li class="">
+												<a data-toggle="tab" href="#terapias" aria-expanded="false">
+													<i class="green ace-icon fa fa-heartbeat bigger-120"></i>
+													Terapias
+												</a>
+											</li>
+											<li class="">
+												<a data-toggle="tab" href="#terapeutas" aria-expanded="false">
+													<i class="pink ace-icon fa fa-female bigger-120"></i>
+													Terapeutas
+												</a>
+											</li>
+											<li class="">
+												<a data-toggle="tab" href="#fat" aria-expanded="false">
+													<i class="blue ace-icon fa fa-male bigger-120"></i>
+													Faturamento
+												</a>
+											</li>
+											
+										</ul>
+										<div class="tab-content">
+											<div id="bene" class="tab-pane fade active in">
+												<div class="row">
+													<div class="col-xs-12 col-sm-4">
+														<label > Nome</label>
+														<div class="row ">
+															<div class="input-group" >
+																<div class="col-xs-4">
+																	<input type="text" name="beneNome" id="beneNome" style="width: 360px;" placeholder="" class="form-control" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-4">
+														<label > Apelido </label>
+														<div class="row">
+															<div class="input-group" >
+																<div class="col-xs-4">
+																	<input  type="text" name="beneApelido" id="beneApelido" style="width: 360px;" placeholder="" class="form-control" />
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>	
+												
+											</div>
+											<div id="sessoes" class="tab-pane fade">
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="widget-box transparent">
+															<div class="widget-header widget-header-flat">
+																<h4 class="widget-title lighter">
+																	<i class="ace-icon fa fa-star orange"></i>
+																	Distribuição dos Colaboradores
+																</h4>
+
+																<div class="widget-toolbar">
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																</div>
+															</div>
+
+															<div class="widget-body">
+																<div class="widget-main no-padding" style="">
+																		<br>
+																		<div class="infobox infobox-green">
+																			<div class="infobox-icon">
+																				<i class="ace-icon fa fa-tty"></i>
+																			</div>
+
+																			<div class="infobox-data">
+																				<span class="infobox-data-number">24</span>
+																				<div class="infobox-content">Administrativos</div>
+																			</div>
+
+																			<div class="stat stat-success">24%</div>
+																		</div>
+
+																		<div class="infobox infobox-blue">
+																			<div class="infobox-icon">
+																				<i class="ace-icon fa fa-stethoscope"></i>
+																			</div>
+
+																			<div class="infobox-data">
+																				<span class="infobox-data-number">42</span>
+																				<div class="infobox-content">Terapeutas</div>
+																			</div>
+
+																			<div class="stat stat-success">56%</div>
+																			
+																		</div>
+
+																		<div class="infobox infobox-pink">
+																			<div class="infobox-icon">
+																				<i class="ace-icon fa fa-user-secret"></i>
+																			</div>
+
+																			<div class="infobox-data">
+																				<span class="infobox-data-number">8</span>
+																				<div class="infobox-content">Supervisão</div>
+																			</div>
+																			<div class="stat stat-important">10%</div>
+																		</div>
+																		<div class="infobox infobox-red">
+																			<div class="infobox-icon">
+																				<i class="ace-icon fa fa-star"></i>
+																			</div>
+
+																			<div class="infobox-data">
+																				<span class="infobox-data-number">2</span>
+																				<div class="infobox-content">Estratégico</div>
+																			</div>
+																			<div class="stat stat-important">1%</div>
+																		</div>
+																		
+
+																		
+																		
+
+																		<div class="space-6"></div>
+
+																		<div class="infobox infobox-green infobox-small infobox-dark">
+																			<div class="infobox-progress">
+																				<div class="easy-pie-chart percentage" data-percent="61" data-size="39">
+																					<span class="percent">61</span>%
+																				</div>
+																			</div>
+
+																			<div class="infobox-data">
+																				<div class="infobox-content">Task</div>
+																				<div class="infobox-content">Completion</div>
+																			</div>
+																		</div>
+
+																		<div class="infobox infobox-blue infobox-small infobox-dark">
+																			<div class="infobox-chart">
+																				<span class="sparkline" data-values="3,4,2,3"></span>
+																			</div>
+																			<div class="infobox-data">
+																				<div class="infobox-content">Earnings</div>
+																				<div class="infobox-content">$32,000</div>
+																			</div>
+																		</div>
+
+																		<div class="infobox infobox-grey infobox-small infobox-dark">
+																			<div class="infobox-icon">
+																				<i class="ace-icon fa fa-download"></i>
+																			</div>
+
+																			<div class="infobox-data">
+																				<div class="infobox-content">Downloads</div>
+																				<div class="infobox-content">1,205</div>
+																			</div>
+																		</div>
+																	
+
+																</div><!-- /.widget-main -->
+															</div><!-- /.widget-body -->
+														</div><!-- /.widget-box -->
+													</div><!-- /.col -->
+													
+													<div class="col-sm-4">
+														<div class="widget-box transparent">
+															<div class="widget-header widget-header-flat">
+																<h4 class="widget-title lighter">
+																	<i class="ace-icon fa fa-star orange"></i>
+																	Gráfico Quantitativo dos Beneficiários
+																</h4>
+
+																<div class="widget-toolbar">
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																</div>
+															</div>
+
+															<div class="widget-body">
+																<div class="widget-main no-padding">
+																	<br>
+																	<!-- Área do gráfico de pizza -->
+																	<div id="pie-chart" style="width:200px; height:200px; margin: 0 auto;"></div>
+																	<!-- Fim da Área do gráfico de pizza -->
+																	<div class="hr hr8 hr-double"></div>
+
+																	<div class="clearfix">
+																		<div class="grid3">
+																			<span class="grey">
+																				<i class="ace-icon fa fa-home fa-2x purple"></i>
+																				&nbsp; Particular
+																			</span>
+																			<h4 class="bigger pull-right">20</h4>
+																		</div>
+
+																		<div class="grid3">
+																			<span class="grey">
+																				<i class="ace-icon fa fa-gavel fa-2x blue"></i>
+																				&nbsp; Liminar
+																			</span>
+																			<h4 class="bigger pull-right">60</h4>
+																		</div>
+
+																		<div class="grid3">
+																			<span class="grey">
+																				<i class="ace-icon fa fa-heartbeat fa-2x red"></i>
+																				&nbsp; Convênios
+																			</span>
+																			<h4 class="bigger pull-right">140</h4>
+																		</div>
+																		
+																	</div>
+
+
+																</div><!-- /.widget-main -->
+															</div><!-- /.widget-body -->
+														</div><!-- /.widget-box -->
+													</div><!-- /.col -->
+												
+													<div class="col-sm-4">
+														<div class="widget-box transparent">
+															<div class="widget-header widget-header-flat">
+																<h4 class="widget-title lighter">
+																	<i class="ace-icon fa fa-star orange"></i>
+																	Distribuição da Entrada das Receitas
+																</h4>
+
+																<div class="widget-toolbar">
+																	<a href="#" data-action="collapse">
+																		<i class="ace-icon fa fa-chevron-up"></i>
+																	</a>
+																</div>
+															</div>
+
+															<div class="widget-body">
+																<div class="widget-main no-padding">
+																	<table class="table table-bordered table-striped">
+																		<thead class="thin-border-bottom">
+																			<tr>
+																				<th>
+																					<i class="ace-icon fa fa-caret-right blue"></i>Tipo
+																				</th>
+
+																				<th>
+																					<i class="ace-icon fa fa-caret-right blue"></i>Valor
+																				</th>
+
+																				<th class="hidden-480">
+																					<i class="ace-icon fa fa-caret-right blue"></i>status
+																				</th>
+																			</tr>
+																		</thead>
+
+																		<tbody>
+																			<tr>
+																				<td>Particular</td>
+
+																				<td style="text-align: right;">
+																					<b class="green">70.342,00</b>
+																				</td>
+
+																				<td class="hidden-480">
+																					<span class="label label-info arrowed-right arrowed-in">on sale</span>
+																				</td>
+																			</tr>
+
+																			<tr>
+																				<td>Convênios</td>
+
+																				<td style="text-align: right;">
+																					<b class="green">145.415,17</b>
+																				</td>
+
+																				<td class="hidden-480">
+																					<span class="label label-success arrowed-in arrowed-in-right">approved</span>
+																				</td>
+																			</tr>
+
+																			<tr>
+																				<td>Liminar</td>
+
+																				<td style="text-align: right;">
+																					<b class="green">45.123,87</b>
+																				</td>
+
+																				<td class="hidden-480">
+																					<span class="label label-danger arrowed">pending</span>
+																				</td>
+																			</tr>
+
+																			<tr>
+																				<td>Outros</td>
+
+																				<td style="text-align: right;">
+																					
+																					<b class="green" >22.114,45</b>
+																				</td>
+
+																				<td class="hidden-480">
+																					<span class="label arrowed">
+																						<s>out of stock</s>
+																					</span>
+																				</td>
+																			</tr>
+
+																			<tr>
+																				<td>Total</td>
+
+																				<td style="text-align: right;">
+																					<b class="blue">282.995,49</b>
+																				</td>
+
+																				<td class="hidden-480">
+																					<span class="label label-warning arrowed arrowed-right">SOLD</span>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div><!-- /.widget-main -->
+															</div><!-- /.widget-body -->
+														</div><!-- /.widget-box -->
+													</div><!-- /.col -->
+												</div><!-- /.row -->
+											</div>
+											<div id="terapias" class="tab-pane fade">
+											
+												<div class="infobox infobox-blue infobox-small">
+													<div class="infobox-chart">
+														<span class="sparkline" data-values="3,4,2,3"></span>
+													</div>
+													<div class="infobox-data">
+														<div class="infobox-content">Earnings</div>
+														<div class="infobox-content">$32,000</div>
+													</div>
+												</div>
+											</div>
+											<div id="terapeutas" class="tab-pane fade">
+												
+											</div>
+											<div id="faturamento" class="tab-pane fade">
+											
+											</div>
+
+				</div>
+			</form>
+		<script type="text/javascript">
+				if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+			</script>
+			<!-- basic scripts -->
+			<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		<script>
+			$(document).ready(function () {
+				console.log("Documento carregado");
+
+				function drawPieChart() {
+					console.log("Desenhando o gráfico de pizza...");
+					var data = [
+						{ label: "Particular", data: 10, color: "#1abc9c" },
+						{ label: "Convênios", data: 60, color: "#3498db" },
+						{ label: "Liminar", data: 30, color: "#e74c3c" }
+					];
+
+					var options = {
+						series: {
+							pie: {
+								show: true,
+								radius: 1,
+								label: {
+									show: true,
+									radius: 3 / 4,
+									formatter: function (label, series) {
+										return `<div style="font-size:12px; text-align:center; padding:5px; color:white;">${label}<br>${Math.round(series.percent)}%</div>`;
+									},
+									background: {
+										opacity: 0.5,
+										color: '#000'
+									}
+								}
+							}
+						},
+						legend: { show: false }
+					};
+
+					if ($("#pie-chart").length > 0) {
+						$.plot($("#pie-chart"), data, options);
+						console.log("Gráfico desenhado com sucesso");
+					} else {
+						console.log("Elemento #pie-chart não encontrado");
+					}
+				}
+
+				drawPieChart();
+			});
+		</script>
+		<script>
+			function initEasySparkline() {
+				console.log("Iniciando Sparkline");
+
+				if (typeof $.fn.sparkline !== "function") {
+					console.error("Biblioteca Sparkline não carregada.");
+					return;
+				}
+
+				const fixedColors = [
+					'#FF0000', // Vermelho
+					'#00FF00', // Verde
+					'#0000FF', // Azul
+					'#FFFF00', // Amarelo
+					'#FFA500', // Laranja
+					'#800080', // Roxo
+					'#00FFFF'  // Ciano
+				];
+
+				$('.sparkline').each(function () {
+					const $this = $(this);
+					const values = $this.data('values');
+
+					if (!values) {
+						console.error("Atributo data-values não definido ou vazio:", $this);
+						return;
+					}
+
+					try {
+						$this.sparkline('html', {
+							tagValuesAttribute: 'data-values',
+							type: 'bar',
+							barWidth: 8,
+							height: '30px',
+							chartRangeMin: 0,
+							colorMap: fixedColors.slice(0, values.split(',').length), // Seleciona cores com base na quantidade de barras
+							barColor: null // Evita sobrescrever o colorMap com uma cor única
+						});
+						console.log("Sparkline desenhado com cores fixas no elemento:", $this);
+					} catch (error) {
+						console.error("Erro ao desenhar Sparkline:", error);
+					}
+				});
+			}
+		</script>
+		<script>
+			$(document).ready(function () {
+				console.log("Documento carregado. Iniciando Sparkline.");
+				initEasySparkline();
+			});
+		</script>
+		<script>
+			// Dados do gráfico BARRAS
+				const data = {
+				labels: ['SET'],
+				datasets: [
+					{
+					label: 'I',
+					backgroundColor: 'rgba(0, 255, 0, 0.5)', // verde limão
+					data: [40]
+					},
+					{
+					label: '+d',
+					backgroundColor: 'rgba(255, 165, 0, 0.5)', // laranja
+					data: [20]
+					},
+					{
+					label: 'E',
+					backgroundColor: 'rgba(255, 255, 0, 0.5)', // amarelo
+					data: [15]
+					},
+					{
+					label: '-d',
+					backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
+					data: [25]
+					}
+				]
+				};
+
+				// Opções do gráfico
+				const options = {
+				scales: {
+					x: { stacked: true },
+					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+				}
+				};
+
+				// Configuração do gráfico
+				const config = {
+				type: 'bar',
+				data: data,
+				options: options
+				};
+
+				// Renderizar o gráfico
+				window.onload = function() {
+				const ctx = document.getElementById('stackedBarChart-Simples');
+				if (ctx) {
+					new Chart(ctx, config);
+				} else {
+					console.error('Não foi possível encontrar o elemento canvas.');
+				}
+				};
+		 
+			// Função para gerar valores aleatórios entre min e max
+			function randomValue(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+			}
+		</script>
+	</body>
+	
+</html>
