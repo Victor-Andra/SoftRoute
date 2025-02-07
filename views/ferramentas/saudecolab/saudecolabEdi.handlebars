@@ -392,12 +392,14 @@
 								<div class="form-actions">
 									<div class="col-sm-12">
 										<div class="row">
+											{{#ifEqual usuarioAtual saudecolab.saudecolab_saudecolabusuid}}
 											<div class="col-sm-2">
 												<button class="btn btn-info"  id="btnSalvar" name="acao" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
 												</button>
 											</div>
+											{{/ifEqual}}
 												&nbsp;
 											<div class="col-sm-2">
 												<button class="btn btn-warning"  type="reset">

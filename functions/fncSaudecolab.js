@@ -76,44 +76,40 @@ module.exports = {
         let resposta;
         let flash = Resposta();
         let existe;
-        
-        Saudecolab.find({saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid}).then((resultado)=>{
-            if (resultado.length == 0){
-                existe = "false";
-            } else {
-                existe = "true";
-            }
-            console.log("existe: "+existe);
-            console.log("resultado.length: "+resultado.length);
-            if (existe == "true"){
-                console.log("WHAT?")
-                flash.texto = "Já existe um registro para esse colaborador!";
-                flash.sucesso = "false";
-                this.listaSaudecolab(req,res, flash);
-            } else {
-                console.log("SHIT?")
-                let cadastro = saudecolabClass.saudecolabAdicionar(req,res);//variavel para armazenar a função que armazena o async
-            
-                cadastro.then((result)=>{
-                    resposta = true;
-                }).catch((err)=>{
-                    resposta = err
-                    console.log("ERRO:"+err)
-                }).finally(()=>{
-                    if (resposta == true){
-                        console.log('verdadeiro')
-                        flash.texto = "Cadastro realizado com sucesso!";
-                        flash.sucesso = "true";
-                        this.listaSaudecolab(req,res, flash);
-                    } else {
-                        console.log('falso')
-                        flash.texto = resposta;
-                        flash.sucesso = "false";
-                        this.listaSaudecolab(req,res, flash);
-                    }
-                })
-            }
-        })
+        let usuarioAtual = req.cookies['idUsu'];
+        if ((""+usuarioAtual+"") == (""+req.body.saudecolabSaudecolabusuid+"")){
+            Saudecolab.find({saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid}).then((resultado)=>{
+                if (resultado.length == 0){
+                    existe = "false";
+                } else {
+                    existe = "true";
+                }
+                if (existe == "true"){
+                    flash.texto = "Já existe um registro para esse colaborador!";
+                    flash.sucesso = "false";
+                    this.listaSaudecolab(req,res, flash);
+                } else {
+                    let cadastro = saudecolabClass.saudecolabAdicionar(req,res);//variavel para armazenar a função que armazena o async
+                
+                    cadastro.then((result)=>{
+                        resposta = true;
+                    }).catch((err)=>{
+                        resposta = err
+                        console.log("ERRO:"+err)
+                    }).finally(()=>{
+                        if (resposta == true){
+                            flash.texto = "Cadastro realizado com sucesso!";
+                            flash.sucesso = "true";
+                            this.listaSaudecolab(req,res, flash);
+                        } else {
+                            flash.texto = resposta;
+                            flash.sucesso = "false";
+                            this.listaSaudecolab(req,res, flash);
+                        }
+                    })
+                }
+            })
+        }
     },
 
     atualizaSaudecolab(req,res){
