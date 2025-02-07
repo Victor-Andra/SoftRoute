@@ -551,7 +551,29 @@
 										</div>
 										<div class="row">
 											<div class="col-sm-12">
+												<div class="widget-box transparent">
+													<div class="widget-header widget-header-flat">
+														<h4 class="widget-title lighter">
+															<i class="ace-icon fa fa-star orange"></i>
+															Faturamento por Liminar, Credenciados e Particulares
+														</h4>
 
+														<div class="widget-toolbar">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														</div>
+													</div>
+
+													<div class="widget-body">
+														<div class="widget-main no-padding" style="">
+															<div style="width: 100%;">
+																<canvas id="stackedBarChart-comprido" width="400" height="200"></canvas>
+															</div>
+														</div><!-- /.widget-main -->
+													</div><!-- /.widget-body -->
+												</div><!-- /.widget-box -->
+												
 											</div>
 										</div>
 									</div>
@@ -740,6 +762,7 @@
 							backgroundColor: 'rgba(255, 99, 132, 0.5)', // cor padrão
 							data: [1000.00]
 						}
+						
 					]
 				};
 
@@ -763,10 +786,54 @@
 			}
    		</script>
 		<script>
+    function initBargrafconv() {
+        console.log("Iniciando gráfico de barras...");
+
+        const ctx = document.getElementById('stackedBarChart-comprido').getContext('2d');
+
+        if (!ctx) {
+            console.error('Não foi possível encontrar o elemento canvas.');
+            return;
+        }
+
+        // Dados do gráfico com categorias separadas
+        const data = {
+            labels: ['Bradesco', 'Particular', 'Amil','Bradesco', 'Particular', 'Amil'],
+            datasets: [
+                {
+                    label: 'Faturamento',
+                    backgroundColor: ['rgba(0, 255, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(255, 99, 132, 0.5)'],
+                    data: [2000.00, 500.00, 1000.00]
+                }
+            ]
+        };
+
+        // Opções do gráfico
+        const options = {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true },
+                x: { beginAtZero: true }
+            }
+        };
+
+        // Criar o gráfico de barras separadas
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+
+        console.log("Gráfico de barras renderizado com sucesso!");
+    }
+</script>
+
+		<script>
 			$(document).ready(function () {
 				console.log("Documento carregado. Iniciando Sparkline.");
 				initEasySparkline();
 				initBargraf(); // Certifique-se de chamar a função aqui
+				initBargrafconv(); // Certifique-se de chamar a função aqui
 			});
 		</script>
 		

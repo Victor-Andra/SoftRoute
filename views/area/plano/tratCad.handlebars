@@ -135,7 +135,10 @@
 		function validarFormulario() {
 			let tipo = document.getElementById("tratPlanotipo").value;
 
-			if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
+			if (document.getElementById("tratBeneid").value == '766f69643132333435366964') {
+				alert('Por favor, informe qual é o beneficiário.');
+				return "false";
+			} else if (tipo === 'null' || tipo === undefined || tipo === 'undefined' || tipo === "" || tipo === "-") {
 				console.log("null!!!");
 				alert('Por favor, o tipo do plano de tratamento é fundamental. Escolha "Padrão" ou "Ocupacional".');
 				return "false"; // Impede o envio do formulário se algum campo estiver em branco

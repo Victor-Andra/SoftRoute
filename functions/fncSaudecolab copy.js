@@ -29,8 +29,8 @@ module.exports = {
         } else {
             filtraUsuario = {saudecolab_saudecolabusuid : usuarioAtual};
         }
-        Saudecolab.find(filtraUsuario).then((saudecolab) =>{
-            Usuario.find().then((usuario)=>{
+        Saudecolab.find().then((saudecolab) =>{
+            Usuario.find(filtraUsuario).then((usuario)=>{
                 console.log("Listagem Realizada!")
                 res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab, usuarios: usuario, flash})
         })}).catch((err) =>{

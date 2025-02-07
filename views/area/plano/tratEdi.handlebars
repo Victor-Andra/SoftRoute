@@ -88,6 +88,7 @@
 					document.getElementById("acaoSalvar").style.display = 'none';
 				}
 				this.atualizaDadosbene();
+				
 			}
 		
 			function atualizaData(){
@@ -130,7 +131,11 @@
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
 				}
-				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
+				console.log("beneid:"+beneid)
+				console.log(document.getElementById(beneid+"_laudoDiagEdi"));
+				if (document.getElementById(beneid+"_laudoDiagEdi") != "undefined" && document.getElementById(beneid+"_laudoDiagEdi") != null){
+					document.getElementById("laudoDiag").value = document.getElementById(beneid+"_laudoDiagEdi").value;
+				}
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}

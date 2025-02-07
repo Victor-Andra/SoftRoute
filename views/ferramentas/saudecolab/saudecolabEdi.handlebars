@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Ficha de Saúde dos Colaboradores</title>
+		<title>Ficha Médica</title>
 		<script>
 			function carregaBody(){
 				
@@ -34,8 +34,22 @@
 
 			}
 		</script>
+		<script>
+			function aceitaTermo() {
+				let aceita = document.getElementById("saudecolabAceitartermos").value;
+				console.log(aceita);
+
+				if (aceita === "-") {
+					document.getElementById('btnSalvar').style.display = 'none';
+				} else if (aceita === "Não") {
+					document.getElementById('btnSalvar').style.display = 'none';
+				}else{
+					document.getElementById('btnSalvar').style.display = 'block';
+				}
+			}
+		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody(); aceitaTermo();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -45,7 +59,7 @@
 								<a class="red">
 								<i class="ace-icon fa fa-heart bigger-130"></i>
 								</a>
-								<a href="#">&nbsp;&nbsp;Ficha de Saúde dos Colaboradores</a>
+								<a href="#">&nbsp;&nbsp;Ficha Médica</a>
 							</li>
 							
 						</ul><!-- /.breadcrumb -->
@@ -57,7 +71,7 @@
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">Ficha de Saúde dos Colaboradores</h4>
+												<h4 class="widget-title">Ficha Médica</h4>
 
 												<span class="widget-toolbar">
 
@@ -102,8 +116,15 @@
 														<input type="text" id="saudecolabAceitartermosEdi" name="saudecolabAceitartermosEdi" value="{{saudecolab.saudecolab_aceitartermos}}"/>
 
 													</div>
+													<div class="alert alert-warning" style="font-style: initial;">
+														<strong>
+															Esta ficha é confidencial e será utilizada exclusivamente
+															para fins relacionados à saúde e segurança dos colaboradores no ambiente de
+															trabalho.
+														</strong>
+													</div>
 
-													<label>Colaborador</label>
+													<label>Nome completo:</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-6">
 															<select name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="chosen-select" onchange="">
@@ -115,14 +136,9 @@
 														</div>
 													</div>
 
-													<label>Data da Informação dada pelo Colaborador</label>
-													<div class="form-group">
-														<div class="col-xs-3 col-sm-3">
-															<input type="date" name="saudecolabSaudecolabdata" id="saudecolabSaudecolabdata" class="form-control" />
-														</div>
-													</div>
+													
 
-													<label>Tipo Sanguíneo</label>
+													<label>Tipo Sanguíneo:</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-3">
 															<select name="saudecolabTiposangue" id="saudecolabTiposangue" class="chosen-select" onchange="">
@@ -140,7 +156,7 @@
 														</div>
 													</div>
 
-													<label>Plano de Saúde</label>
+													<label>Possui plano de saúde?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabPlanosaude" id="saudecolabPlanosaude" class="form-control">
@@ -151,21 +167,21 @@
 														</div>
 													</div>
 
-													<label>Plano de Saúde Qual</label>
+													<label>Se sim, qual plano de saúde você possui?</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-6">
 															<input type="text" name="saudecolabPlanosaudequal" id="saudecolabPlanosaudequal" class="form-control" />
 														</div>
 													</div>
 
-													<label>Hospital Qual</label>
+													<label>Qual hospital você gostaria de ser levado em caso de emergência?</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-6">
 															<input type="text" name="saudecolabHospitalqual" id="saudecolabHospitalqual" class="form-control" />
 														</div>
 													</div>
 
-													<label>Alergia</label>
+													<label>Possui algum tipo de alergia?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabAlergia" id="saudecolabAlergia" class="form-control">
@@ -176,14 +192,14 @@
 														</div>
 													</div>
 
-													<label>Alergia Qual</label>
+													<label>Se sim, descreva qual tipo de alergia você possui?</label>
 													<div class="form-group">
 														<div class="col-xs-62 col-sm-6">
 															<input type="text" name="saudecolabAlergiaqual" id="saudecolabAlergiaqual" class="form-control" />
 														</div>
 													</div>
 
-													<label>Medicamentos Que Não Pode Usar</label>
+													<label>Há algum medicamento que não possa ingerir?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabMedicamentonao" id="saudecolabMedicamentonao" class="form-control">
@@ -194,15 +210,15 @@
 														</div>
 													</div>
 
-													<label>Liste os Medicamento Que Não Podem Ser Usados</label>
+													<label>Se Sim, descreva qual medicamento?</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-12">
 															<input type="text" name="saudecolabMedicamentonaoqual" id="saudecolabMedicamentonaoqual" class="form-control" />
 														</div>
 													</div>
 
-													<label>Usa Medicamentos Regularmente?</label>
-													<div class="form-group">
+													<label hidden>Usa Medicamentos Regularmente?</label>
+													<div class="form-group" hidden>
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabMedicamentosim" id="saudecolabMedicamentosim" class="form-control">
 																<option value="-">-</option>
@@ -212,14 +228,14 @@
 														</div>
 													</div>
 
-													<label>Quais Medicamentos Usa Regularmente?</label>
-													<div class="form-group">
+													<label hidden>Usa medicamentos regularmente?</label>
+													<div class="form-group" hidden>
 														<div class="col-xs-6 col-sm-12">
 															<input type="text" name="saudecolabMedicamentosimqual" id="saudecolabMedicamentosimqual" class="form-control" />
 														</div>
 													</div>
 
-													<label>Hipertenso</label>
+													<label>É hipertenso?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabHipertenso" id="saudecolabHipertenso" class="form-control">
@@ -230,7 +246,7 @@
 														</div>
 													</div>
 
-													<label>Cardíaco</label>
+													<label>É cardíaco?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabCardiaco" id="saudecolabCardiaco" class="form-control">
@@ -241,7 +257,7 @@
 														</div>
 													</div>
 
-													<label>Diabético</label>
+													<label>É diabético?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabDiabetico" id="saudecolabDiabetico" class="form-control">
@@ -252,7 +268,7 @@
 														</div>
 													</div>
 
-													<label>Insulina</label>
+													<label>Faz uso de insulina?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
 															<select name="saudecolabInsulina" id="saudecolabInsulina" class="form-control">
@@ -263,88 +279,103 @@
 														</div>
 													</div>
 
-													<label>Condição de Saúde</label>
+													<label>Possui alguma condição de saúde que seja importante ser relatada?</label>
+													<label style="color: chocolate;">(ex.: asma, desmaios, convulsão, epilepsia, entre outras)?</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-12">
 															<input type="text" name="saudecolabCondicaosaude" id="saudecolabCondicaosaude" class="form-control" />
 														</div>
 													</div>
 
-													<label>Primeiro Contato</label>
+													<div class="alert alert-warning" style="font-style: initial;">
+														<strong>
+															Indique duas pessoas que possamos entrar em contato em caso de emergência:
+														</strong>
+													</div>
+
+													<label>Primeiro Contato:</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-6">
 															<input type="text" name="saudecolabContato1" id="saudecolabContato1" class="form-control" />
 														</div>
 													</div>
 
-													<label>Parentesco</label>
+													<label>Parentesco:</label>
 													<div class="form-group">
 														<div class="col-xs-3 col-sm-3">
 															<input type="text" name="saudecolabParentesco1" id="saudecolabParentesco1" class="form-control" />
 														</div>
 													</div>
 
-													<label>Celular</label>
+													<label>Celular:</label>
 													<div class="form-group">
 														<div class="col-xs-3 col-sm-3">
 															<input type="text" name="saudecolabCelular1" id="saudecolabCelular1" class="form-control" />
 														</div>
 													</div>
 
-													<label>Segundo Contato</label>
+													<label>Segundo Contato:</label>
 													<div class="form-group">
 														<div class="col-xs-6 col-sm-6">
 															<input type="text" name="saudecolabContato2" id="saudecolabContato2" class="form-control" />
 														</div>
 													</div>
 
-													<label>Parentesco</label>
+													<label>Parentesco:</label>
 													<div class="form-group">
 														<div class="col-xs-3 col-sm-3">
 															<input type="text" name="saudecolabParentesco2" id="saudecolabParentesco2" class="form-control" />
 														</div>
 													</div>
 
-													<label>Celular</label>
+													<label>Celular:</label>
 													<div class="form-group">
 														<div class="col-xs-3 col-sm-3">
 															<input type="text" name="saudecolabCelular2" id="saudecolabCelular2" class="form-control" />
 														</div>
 													</div>
 
-													<label>Observações Gerais</label>
-													<div class="form-group">
+													<label hidden>Observações gerais:</label>
+													<div class="form-group" hidden>
 														<div class="col-xs-6 col-sm-12">
 															<input type="text" name="saudecolabObs" id="saudecolabObs" class="form-control" />
 														</div>
 													</div>
 													
-													<div class="col-xs-12">
-														<div class="alert alert-warning">
+													<div class="alert alert-warning">
 															<strong>Veracidade das Informações</strong><br>
-															Declaro que as informações são atuais e me responsabilizando pela veracidade.
+															Declaro que as informações são atuais e me responsabilizo pela veracidade.
 															<br>
 														</div>
-													</div>
-													<div class="col-xs-12">
+													
+												
 														<div class="alert alert-warning">
 															<strong>Armazenamento em Nuvem</strong><br>
 															Autorizo o armazenamento seguro das informações fornecidas neste sistema em uma plataforma de armazenamento na nuvem, em conformidade com as normas de proteção de dados aplicáveis.
 															<br>
 														</div>
-													</div>
-													<div class="col-xs-12">
+													
+												
 														<div class="alert alert-warning">
-															<strong>Acesso às Informações por Colaboradores</strong><br>
-															Autorizo que colaboradores devidamente autorizados possam visualizar as informações fornecidas, especialmente em situações de Emergência e/ou Urgência Médica, com o objetivo de garantir a minha segurança e o pronto atendimento médico necessário.
-															<br>
+														<strong>Acesso às Informações por Colaboradores</strong><br>
+														Autorizo que colaboradores devidamente autorizados possam visualizar as informações fornecidas, 
+														especialmente em emergências médica, com o objetivo de garantir a minha segurança
+														 e o pronto atendimento médico necessário.
 														</div>
 														<hr>
 													</div>
-													<label>Aceitar Termos</label>
+
+													<label>Data da informação:</label>
+													<div class="form-group">
+														<div class="col-xs-3 col-sm-3">
+															<input type="date" name="saudecolabSaudecolabdata" id="saudecolabSaudecolabdata" class="form-control" />
+														</div>
+													</div>
+
+													<label>Aceita os termos?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="form-control">
+															<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="form-control" onchange="aceitaTermo();">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -357,19 +388,22 @@
 								</div>
 								<div class="space-4"></div>
 								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
-										{{#ifIncludes saudecolab.saudecolab_saudecolabusuid usuarioAtual}}
-											<button class="btn btn-info"  name="acao" type="submit">
+									<div class="col-sm-12">
+										<div class="row">
+											<div class="col-sm-2">
+												<button class="btn btn-info"  id="btnSalvar" name="acao" type="submit">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Salvar
-											</button>
-											{{else}}
-										{{/ifIncludes}}
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/ferramentas/sala/lis"/>
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
+												</button>
+											</div>
+												&nbsp;
+											<div class="col-sm-2">
+												<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+												</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</form>
