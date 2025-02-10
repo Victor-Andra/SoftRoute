@@ -413,6 +413,7 @@ router.get('/', (req,res) =>{
 //Rota Página em Branco
 router.get('/branco', (req,res) =>{
     let lvl = 0;
+    
     res.render("admin/branco", {nivel: lvl})
 })
 
