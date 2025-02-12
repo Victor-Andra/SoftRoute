@@ -828,6 +828,7 @@ module.exports = {
 
     carregaProgEdi(req,res){
         let idBene = "";
+        let perfilAtual = req.cookies['lvlUsu'];
         Prog.findById(req.params.id).then((prog) =>{
             idBene = prog.prog_beneid;
             Terapia.find().then((terapia)=>{
@@ -845,7 +846,7 @@ module.exports = {
                                     Prognivel.find().then((prognivel)=>{
                                         prognivel.sort((a,b) => ((a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.prognivel_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por nome
                                         console.log(prog)
-                                        res.render('area/aba/prog/progEdi', {prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta})
+                                        res.render('area/aba/prog/progEdi', {prog, terapias: terapia, usuarios: usuario, benes: bene, idBene, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, terapeutas: terapeuta, perfilAtual})
         })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

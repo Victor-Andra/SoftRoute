@@ -465,8 +465,20 @@
 			}
 		
 		</script>
+		<script>
+			function ImpedeSalvar(){
+				let perfil
+				perfil = document.getElementById("perfilAtual").value;
+				//coordenador,supervisorABA,socios,root
+			 if ("644742e378166939169f82a1,644743aa78166939169f8486,62421857a12aa557219a0fc1,62421801a12aa557219a0fb9".includes(perfil)){
+				document.getElementById('btnSalvar').style.display = 'block';
+			} else {
+				document.getElementById('btnSalvar').style.display = 'none';
+			}
+			}
+		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();progressValue();loadText();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();progressValue();loadText();ImpedeSalvar();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -496,6 +508,7 @@
 									<input type="text" id="progNivelEdi" name="progNivelEdi" value="{{prog.prog_nivel}}" />
 									<input type="text" id="progObjetivoEdi" name="progObjetivoEdi" value="{{prog.prog_objetivo}}" />
 									<input type="text" id="progAlvoEdi" name="progAlvoEdi" value="{{prog.prog_alvo}}" />
+									<input type="text" id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
 									
 									estrutura<input type="text" id="progEstruturaEdi" name="progEstruturaEdi" value="{{prog.prog_estrutura}}" />
 									materiais<input type="text" id="progMateriaisEdi" name="progMateriaisEdi" value="{{prog.prog_materiais}}" />
@@ -1250,18 +1263,23 @@
 										</div>
 									</div>
 								</div>
-							
-								<div class="col-xs-12">
+								<div class="form-actions">
 									<div class="col-md-12" style="text-align: center;">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/area/aba/prog/proglis">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
+										<div class="row">
+											<div class="col-sm-2">
+												<button class="btn btn-info"  id="btnSalvar" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+												</button>
+											</div>
+												&nbsp;
+											<div class="col-sm-2">
+												<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+												</button>
+											</div>
+										</div>
 									</div>
 								</div>
 								

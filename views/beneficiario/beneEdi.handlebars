@@ -162,6 +162,8 @@
 			document.getElementById("beneEscolaoutro3tel").value = document.getElementById("beneEscolaoutro3telEdi").value;
 			
 			document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
+			document.getElementById("beneEscolahoraini").value = document.getElementById("beneEscolahorainiEdi").value;
+			document.getElementById("beneEscolahorafim").value = document.getElementById("beneEscolahorafimEdi").value;
 			document.getElementById("beneEscolaemail").value = document.getElementById("beneEscolaemailEdi").value;
 			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
 			document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
@@ -315,6 +317,7 @@
 			<input id="beneEscolacepEdi" name="beneEscolacepEdi" value="{{beneEdi.bene_escolacep}}"/>
 			<input id="beneEscolaanoEdi" name="beneEscolaanoEdi" value="{{beneEdi.bene_escolaano}}"/>
 			<input id="beneEscolaserieEdi" name="beneEscolaserieEdi" value="{{beneEdi.bene_escolaserie}}"/>
+
 			<input id="beneEscolacoordEdi" name="beneEscolacoordEdi" value="{{beneEdi.bene_escolacoord}}"/>
 			<input id="beneEscolacoordtelEdi" name="beneEscolacoordtelEdi" value="{{beneEdi.bene_escolacoordtel}}"/>
 			
@@ -331,6 +334,8 @@
 			<input id="beneEscolaoutro3telEdi" name="beneEscolaoutro3telEdi" value="{{beneEdi.bene_escolaoutro3tel}}"/>
 			
 			<input id="beneEscolaturnoEdi" name="beneEscolaturnoEdi" value="{{beneEdi.bene_escolaturno}}"/>
+			<input id="beneEscolahorainiEdi" name="beneEscolahorainiEdi" value="{{beneEdi.bene_escolahoraini}}"/>
+			<input id="beneEscolahorafimEdi" name="beneEscolahorafimEdi" value="{{beneEdi.bene_escolahorafim}}"/>
 			<input type="text" id="beneEscolaemailEdi" name="beneEscolaemailEdi" value="{{beneEdi.bene_escolaemail}}"/>
 			<input type="text" id="beneEscolaobsEdi" name="beneEscolaobsEdi" value="{{beneEdi.bene_escolaobs}}"/>
 			<input type="text" id="beneObsadmEdi" name="beneObsadmEdi" value="{{beneEdi.bene_obsadm}}"/>
@@ -1031,22 +1036,34 @@
 														</div>
 														<hr>
 														<div class="row">
-															<div class="col-xs-12 col-sm-3">
+															<div class="col-xs-12 col-sm-2">
 																<label>Ano letivo</label>
 																<div class="input-group">
 																		<input type="text" name="beneEscolaano" id="beneEscolaano" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-3">
+															<div class="col-xs-12 col-sm-2">
 																<label>Série </label>
 																<div class="input-group">
 																	<input type="text" name="beneEscolaserie" id="beneEscolaserie" placeholder="" class="form-control" style="width: 250px;"/>
 																</div>
 															</div>
-															<div class="col-xs-12 col-sm-3">
+															<div class="col-xs-12 col-sm-2">
 																<label>Turno </label>
 																<div class="input-group">
 																	<input type="text" name="beneEscolaturno" id="beneEscolaturno" placeholder="" class="form-control" style="width: 250px;"/>
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-2">
+																<label>Horário de Início da aula </label>
+																<div class="input-group">
+																	<input type="text" name="beneEscolahoraini" id="beneEscolahoraini" placeholder="__:__" class="form-control" />
+																</div>
+															</div>
+															<div class="col-xs-12 col-sm-2">
+																<label>Horário de término da aula </label>
+																<div class="input-group">
+																	<input type="text" name="beneEscolahorafim" id="beneEscolahorafim" placeholder="__:__" class="form-control" />
 																</div>
 															</div>
 														</div>

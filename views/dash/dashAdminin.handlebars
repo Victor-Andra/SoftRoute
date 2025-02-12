@@ -8,6 +8,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.chart.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js">
+    	
 		console.log("Chart.js versão:", Chart);
 		</script>
 		
@@ -19,7 +20,97 @@
 				
 			}
 		</script>
-		
+		   <script>
+        $(document).ready(function () {
+            function getLast12Months() {
+                const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+                let dataAtual = new Date();
+                let mesesFinais = [];
+                
+                for (let i = 11; i >= 0; i--) {
+                    let mesIndex = (dataAtual.getMonth() - i + 12) % 12;
+                    let ano = dataAtual.getFullYear();
+                    if (mesIndex > dataAtual.getMonth()) {
+                        ano -= 1;
+                    }
+                    mesesFinais.push({ label: `${meses[mesIndex]}/${ano}`, value: ano * 100 + (mesIndex + 1) });
+                }
+                return mesesFinais;
+            }
+
+            function getMockData() {
+                let meses = getLast12Months();
+                let credenciados = meses.map((m, i) => [i, Math.random() * 100]);
+                let liminar = meses.map((m, i) => [i, Math.random() * 100]);
+                let particular = meses.map((m, i) => [i, Math.random() * 100]);
+                
+                return { meses, credenciados, liminar, particular };
+            }
+
+            function plotGrafico() {
+                let data = getMockData();
+                
+                let options = {
+                    series: { 
+                        lines: { show: true, lineWidth: 2 }, 
+                        points: { show: true, radius: 4 } 
+                    },
+                    xaxis: { 
+                        ticks: data.meses.map((m, i) => [i, m.label]), 
+                        tickLength: 5, /* Mantém as linhas de marcação no eixo X */
+                        color: "#bbb" /* Cinza claro */
+                    },
+                    yaxis: { 
+                        tickColor: "#bbb", /* Cinza claro para os ticks */
+                        tickLength: 5
+                    },
+                    grid: { 
+                        hoverable: true, 
+                        clickable: true, 
+                        borderWidth: 1, /* Mantém a borda do gráfico */
+                        borderColor: "#bbb", /* Cinza claro */
+                        color: "#ddd", /* Cor da grade principal */
+                        markings: function(axes) { 
+                            let markings = [];
+                            for (let i = Math.floor(axes.xaxis.min); i < axes.xaxis.max; i++) {
+                                markings.push({ xaxis: { from: i, to: i }, color: "#eee" });
+                            }
+                            return markings;
+                        }
+                    },
+                    legend: { 
+                        position: "s", /* Posiciona abaixo do eixo X */
+                        noColumns: 3, /* Distribui as legendas horizontalmente */
+                        backgroundOpacity: 0
+                    }
+                };
+
+                $.plot("#grafico", [
+                    { label: "Credenciados", data: data.credenciados, color: "#39ff14" }, /* Verde neon */
+                    { label: "Liminar", data: data.liminar, color: "pink" },
+                    { label: "Particular", data: data.particular, color: "yellow" }
+                ], options);
+            }
+
+            plotGrafico();
+        });
+   <style>
+        #grafico {
+            width: 700px;
+            height: 400px;
+        }
+
+        .tooltip {
+            position: absolute;
+            display: none;
+            background: black;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+    </style>
 		
 	</head>
 
@@ -542,7 +633,7 @@
 																</div>
 																
 															</div>
-
+															<div id="grafico"></div>
 
 														</div><!-- /.widget-main -->
 													</div><!-- /.widget-body -->
