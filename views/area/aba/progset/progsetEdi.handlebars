@@ -26,7 +26,10 @@
 				height: auto !important;
 				max-width: 100% !important;
 			}
-			
+			.chosen-container {
+				position: relative;
+				z-index: 9999 !important;
+			}
 		</style>
 		<script>
 			function carregaBody(){
@@ -274,7 +277,7 @@
 
 							<li class="active">SET Editar</li>
 						</ul><!-- /.breadcrumb -->
-					</div>
+					</div><!-- /.breadcrumbs ace-save-state -->
 					
 					<div class="row">
 						<div class="col-xs-12">
@@ -409,6 +412,8 @@
 																</div>
 															</div>
 														</div>
+													</div>
+													<div class="row">
 														<div class="col-xs-12 col-sm-2">
 															<label for="id-date-picker-1"> Data de inicio do SET</label>
 															<div class="row">
@@ -429,6 +434,8 @@
 																</div>
 															</div>
 														</div>
+													</div>
+													<div class="row">
 														<div class="col-xs-12 col-sm-2">
 															<label for="id-date-picker-1"> Data da Meta </label>
 															<div class="row">
@@ -452,8 +459,9 @@
 															</div>
 														</div>
 													</div>
+													<br>
 													<div class="row">
-														<div class="col-xs-12 col-sm-2">
+														<div class="col-xs-12 col-sm-4">
 															<label>Status do SET</label>
 															<div class="input-group">
 																<div class="input-group">
@@ -466,7 +474,9 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-2">
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-4">
 															<label>Tipo do Registro para TODO o SET</label>
 															<div class="form-group">
 																<div class="col-sm-4">
@@ -634,8 +644,8 @@
 											</div>
 										</div>	
 									</div>
-									{{else}}
-										<div class="col-sm-12"><!-- Widget Dados Básicos -->
+								{{else}}
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box" id="cabecset">
 											<div class="widget-header">
 												<h4 class="widget-title">
@@ -729,6 +739,8 @@
 																</div>
 															</div>
 														</div>
+													</div>
+													<div class="row">	
 														<div class="col-xs-12 col-sm-2">
 															<label for="id-date-picker-1"> Data de inicio do SET</label>
 															<div class="row">
@@ -749,6 +761,8 @@
 																</div>
 															</div>
 														</div>
+													</div>
+													<div class="row">
 														<div class="col-xs-12 col-sm-2">
 															<label for="id-date-picker-1"> Data da Meta </label>
 															<div class="row">
@@ -776,17 +790,18 @@
 														<div class="col-xs-12 col-sm-2">
 															<label>Status do SET</label>
 															<div class="input-group">
-																<div class="input-group">
-																	<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="mudarstatusSet(value)">
+																	<select name="progsetStatus" id="progsetStatus"  onchange="mudarstatusSet(value)">
 																		<option value="Agendado">Agendado</option>
 																		<option value="Andamento">Andamento</option>
 																		<option value="Pausado">Pausado</option>
 																		<option value="Meta">Meta</option>
 																	</select>
 																</div>
-															</div>
 														</div>
-														<div class="col-xs-12 col-sm-2">
+													</div>
+													
+													<div class="row">
+														<div class="col-xs-12 col-sm-4">
 															<label>Tipo do Registro para TODO o SET</label>
 															<div class="form-group">
 																<div class="col-sm-4">
@@ -798,11 +813,13 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12">
-														<div class="alert alert-danger" style="font-style: initial;">
-															<strong>Alteração permitida apenas de: </strong>Agendado para Andamento ou Andamento para Meta
-														</div>
 													</div>
+													<div class="row">	
+														<div class="col-xs-12">
+															<div class="alert alert-danger" style="font-style: initial;">
+																<strong>Alteração permitida apenas de: </strong>Agendado para Andamento ou Andamento para Meta
+															</div>
+														</div>
 													</div>
 													
 												</div>
@@ -994,12 +1011,11 @@
 															</div>	
 														</div>
 													</div>
-												</div>
 											</div>
+										</div>
 									</div>	
-
 								
-								</div>
+								
 								<div>
 									<div class="col-md-offprogset-3 col-md-9">
 										<button class="btn btn-info"  name="acao" type="submit">
@@ -1014,12 +1030,14 @@
 									</div>
 								</div>
 							</form>
-					</div><!-- /.col -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
 					
-				</div><!-- /.row -->
-			</div>
-		</div><!-- /.main-content -->
-		</div><!-- /.main-container --><!-- basic scripts -->
-	
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container ace-save-state -->
+		
+		
+    
 	</body>
 </html>
