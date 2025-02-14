@@ -6,16 +6,25 @@
 				overflow-x: auto;
 				max-width: 100%;
 			}
-
 			table {
 				width: 100%;
 				border-collapse: collapse;
 			}
-
 			th, td {
 				border: 1px solid #dddddd;
 				text-align: left;
 				padding: 8px;
+				
+			}
+			span {
+				font-size: 9px; /* Define um tamanho menor para a fonte */
+				}
+			.radio-container {
+			font-size: 9px; /* Diminui a fonte do label */
+			}
+			.radio-container input[type="radio"] {
+			transform: scale(0.8); /* Reduz o tamanho do radio button */
+			margin-right: 5px; /* Espaçamento entre o radio e o texto */
 			}
 			
 		</style>
@@ -495,11 +504,11 @@
 																				<td>
 																					<input name="folregT1Ressimples" id="folregT1Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT1Ressimples" id="folregT1Ressimples2"  type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT1Ressimples" id="folregT1Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -543,11 +552,11 @@
 																				<td>
 																					<input name="folregT2Ressimples" id="folregT2Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT2Ressimples" id="folregT2Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT2Ressimples" id="folregT2Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -591,11 +600,11 @@
 																				<td>
 																					<input name="folregT3Ressimples" id="folregT3Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT3Ressimples" id="folregT3Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT3Ressimples" id="folregT3Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -639,11 +648,11 @@
 																				<td>
 																					<input name="folregT4Ressimples" id="folregT3Ressimples1" type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT4Ressimples" id="folregT4Ressimples2"  type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT4Ressimples" id="folregT4Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -687,11 +696,11 @@
 																				<td>
 																					<input name="folregT5Ressimples" id="folregT5Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT5Ressimples" id="folregT5Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT5Ressimples" id="folregT5Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -735,11 +744,11 @@
 																				<td>
 																					<input name="folregT6Ressimples" id="folregT6Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT6Ressimples" id="folregT6Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT6Ressimples" id="folregT6Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -783,11 +792,11 @@
 																				<td>
 																					<input name="folregT7Ressimples" id="folregT7Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT7Ressimples" id="folregT7Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT7Ressimples" id="folregT7Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -831,11 +840,11 @@
 																				<td>
 																					<input name="folregT8Ressimples" id="folregT8Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT8Ressimples" id="folregT8Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT8Ressimples" id="folregT8Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -878,11 +887,11 @@
 																				<td>
 																					<input name="folregT9Ressimples" id="folregT9Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT9Ressimples" id="folregT9Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT9Ressimples" id="folregT9Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI()">
 																					<span class="lbl"></span>
@@ -976,11 +985,11 @@
 																				<td>
 																					<input name="folregT1Resesqu" id="folregT1Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT1Resesqu" id="folregT1Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT1Resesqu" id="folregT1Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1006,11 +1015,11 @@
 																				<td>
 																					<input name="folregT1Resdir" id="folregT1Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT1Resdir" id="folregT1Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT1Resdir" id="folregT1Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1054,11 +1063,11 @@
 																				<td>
 																					<input name="folregT2Resesqu" id="folregT2Resesqu1"  type="radio" class="ace" value="I">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT2Resesqu" id="folregT2Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT2Resesqu" id="folregT2Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1084,11 +1093,11 @@
 																				<td>
 																					<input name="folregT2Resdir" id="folregT2Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT2Resdir" id="folregT2Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT2Resdir" id="folregT2Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1132,11 +1141,11 @@
 																				<td>
 																					<input name="folregT3Resesqu" id="folregT3Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT3Resesqu" id="folregT3Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT3Resesqu" id="folregT3Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1162,11 +1171,11 @@
 																				<td>
 																					<input name="folregT3Resdir" id="folregT3Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT3Resdir" id="folregT3Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT3Resdir" id="folregT3Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1210,11 +1219,11 @@
 																				<td>
 																					<input name="folregT4Resesqu" id="folregT4Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT4Resesqu" id="folregT4Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT4Resesqu" id="folregT4Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1240,11 +1249,11 @@
 																				<td>
 																					<input name="folregT4Resdir" id="folregT4Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT4Resdir" id="folregT4Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT4Resdir" id="folregT4Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1288,11 +1297,11 @@
 																				<td>
 																					<input name="folregT5Resesqu" id="folregT5Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT5Resesqu" id="folregT5Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT5Resesqu" id="folregT5Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1318,11 +1327,11 @@
 																				<td>
 																					<input name="folregT5Resdir" id="folregT5Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT5Resdir" id="folregT5Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT5Resdir" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1366,11 +1375,11 @@
 																				<td>
 																					<input name="folregT6Resesqu" id="folregT6Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT6Resesqu" id="folregT6Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT6Resesqu" id="folregT6Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1396,11 +1405,11 @@
 																				<td>
 																					<input name="folregT6Resdir" id="folregT6Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT6Resdir" id="folregT6Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT6Resdir" id="folregT6Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1444,11 +1453,11 @@
 																				<td>
 																					<input name="folregT7Resesqu" id="folregT7Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT7Resesqu" id="folregT7Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT7Resesqu" id="folregT7Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1474,11 +1483,11 @@
 																				<td>
 																					<input name="folregT7Resdir" id="folregT7Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT7Resdir" id="folregT7Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT7Resdir" id="folregT7Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1522,11 +1531,11 @@
 																				<td>
 																					<input name="folregT8Resesqu" id="folregT8Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT8Resesqu" id="folregT8Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT8Resesqu" id="folregT8Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1551,11 +1560,11 @@
 																				<td>
 																					<input name="folregT8Resdir" id="folregT8Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT8Resdir" id="folregT8Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT8Resdir" id="folregT8Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1598,11 +1607,11 @@
 																				<td>
 																					<input name="folregT9Resesqu" id="folregT9Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT9Resesqu" id="folregT9Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT9Resesqu" id="folregT9Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();">
 																					<span class="lbl"></span>
@@ -1621,11 +1630,11 @@
 																				<td>
 																					<input name="folregT9Resdir" id="folregT9Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-danger arrowed-in">&nbsp;I</span>
+																					<span class="label label-danger arrowed-in">I</span>
 																				
 																					<input name="folregT9Resdir" id="folregT9Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span>
+																					<span class="label label-alert arrowed-in">E</span>
 																				
 																					<input name="folregT9Resdir" id="folregT9Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResDirDuplo();">
 																					<span class="lbl"></span>
@@ -1652,8 +1661,8 @@
 																				</td>
 																				
 																				<td colspan="1">
-																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduploesq_i" id="folregTotalduploesq_i" type="text" style="width: 15%;" readonly/>
-																					<span class="label label-alert arrowed-in">&nbsp;E</span><input name="folregTotalduploesq_e" id="folregTotalduploesq_e" type="text" style="width: 15%;" readonly/>
+																					<span class="label label-alert arrowed-in">E</span><input name="folregTotalduploesq_i" id="folregTotalduploesq_i" type="text" style="width: 15%;" readonly/>
+																					<span class="label label-alert arrowed-in">E</span><input name="folregTotalduploesq_e" id="folregTotalduploesq_e" type="text" style="width: 15%;" readonly/>
 																					<span class="label label-yellow arrowed-in">+d</span><input name="folregTotalduploesq_plusd" id="folregTotalduploesq_plusd" type="text" style="width: 15%;" readonly/>	
 																					<span class="label label-success arrowed-in">-d</span><input name="folregTotalduploesq_minusd" id="folregTotalduploesq_minusd" type="text" style="width: 15%;" readonly/>																				
 																				</td>
@@ -1691,7 +1700,7 @@
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
-										&nbsp; &nbsp; &nbsp;
+										  
 										<button class="btn btn-warning"  type="reset">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar

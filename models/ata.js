@@ -15,6 +15,7 @@ const AtaSchema = mongoose.Schema({
     ata_parem :{ type: String, required: false },
     ata_acompanhausuid: { type: ObjectId, required: false },
     ata_obs: { type: String, required: false },
+    ata_lixo :{ type: String, required: false },
     //I
     ata_i01:{ type: String, required: false },
     ata_i02:{ type: String, required: false },
@@ -174,6 +175,7 @@ class Ata{
     ata_parem,
     ata_acompanhausuid,
     ata_obs,
+    ata_lixo,
     //I
     ata_i01,
     ata_i02,
@@ -331,6 +333,7 @@ class Ata{
     this.ata_parem = ata_parem,
     this.ata_acompanhausuid = ata_acompanhausuid,
     this.ata_obs = ata_obs,
+    this.ata_lixo = ata_lixo,
     //I
     this.ata_i01 = ata_i01,
     this.ata_i02 = ata_i02,
@@ -499,6 +502,7 @@ module.exports = {AtaModel,AtaSchema,
                 ata_parem : req.body.ataParem,
                 ata_acompanhausuid : req.body.ataAcompanhausuid,
                 ata_obs : req.body.ataObs,
+                ata_lixo : req.body.ataLixo,
                 //I
                 ata_i01 : req.body.ataI01temp,
                 ata_i02 : req.body.ataI02temp,
@@ -669,6 +673,7 @@ module.exports = {AtaModel,AtaSchema,
             ata_parem : req.body.ataParem,
             ata_acompanhausuid : req.body.ataAcompanhausuid,
             ata_obs : req.body.ataObs,
+            ata_lixo : "false",
             //I
             ata_i01 : req.body.ataI01temp,
             ata_i02 : req.body.ataI02temp,

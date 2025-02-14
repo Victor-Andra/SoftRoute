@@ -177,7 +177,7 @@ module.exports = {
     },
 
 
-    deletaAtec(req,res){
+    deletaAtecold(req,res){
         let resposta;
         let flash = new Resposta()
         Atec.deleteOne({_id: req.params.id}).then(() =>{
@@ -193,6 +193,29 @@ module.exports = {
                 flash.sucesso = "true";
             } else {
                 flash.texto = "Erro ao deletar a ATEC";
+                flash.sucesso = "false";
+            }
+            this.listaAtec(req,res, resposta)
+        })
+    },
+
+    deletaAtac(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        let resposta;
+        let flash = new Resposta()
+        Atec.findByIdAndUpdate(req.params.id,{$set: {'atec_lixo': 'true', 'atec_usuidedi': usuarioAtual}}).then(() =>{
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar os formulários ATEC")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "Formulário ATEC deletado!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar o formulário ATEC";
                 flash.sucesso = "false";
             }
             this.listaAtec(req,res, resposta)

@@ -295,7 +295,7 @@ module.exports = {CarsModel,CarsSchema,
             cars_q14 : req.body.carsQ14,
             cars_q15 : req.body.carsQ15,
             //Atributos de controle
-            cars_lixo : req.body.carsLixo,
+            cars_lixo : "false",
             cars_usuidlixo : req.body.carsUsuidlixo,
             cars_datalixo : req.body.carsDatalixo,
             cars_usuidcad : usuarioAtual,

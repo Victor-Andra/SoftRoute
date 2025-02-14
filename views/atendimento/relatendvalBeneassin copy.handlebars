@@ -63,14 +63,6 @@
 								</label>
 								&nbsp;&nbsp;&nbsp;&nbsp;
 								<label class="control-label bolder red">
-									<select name="porSala" id="porSala" class="chosen-select" value=""  >
-											<option value="nao">Não</option>
-											<option value="sim">Sim</option>
-									</select>
-									<span class="lbl">&nbsp;Mostrar sala?</span>
-								</label>
-								&nbsp;&nbsp;&nbsp;&nbsp;
-								<label class="control-label bolder red">
 									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value=""  >
 											<option value="nao">Não</option>
 											<option value="sim">Sim</option>
@@ -149,28 +141,37 @@
 													<thead>
 														
 														<tr>
-															<th style="width:11%">Data do Atendimento</th>
-															{{#compareString porSala "sim"}}
-															<th>Sala</th>
+															{{#compareString porHoras "true"}}
+															<th style="width:8%">Dta. Atendimento</th>
+															<th style="width:5%">Hora Ini.</th>
+															<th style="width:5%">Hora Fin.</th>
+															<th style="width:8%">Local</th>
+															<th style="width:8%">Especialidade</th>
+															<th style="width:10%">Profissional</th>
+															<th style="width:32%">Ass. Profissional</th>
+															<th style="width:32%">Ass. Responsável</th>
 															{{else}}
-															{{/compareString}}
+															<th style="width:11%">Data do Atendimento</th>
 															<th>Especialidade</th>
 															<th>Profissional</th>
 															<th>Ass. Profissional</th>
 															<th>Ass. Responsável</th>
+															{{/compareString}}
 														</tr>
 													</thead>
 													{{#each rels}}
 														<tbody>
 															<tr>
-																<td style="width:8%;height:100px">{{dt}}
-																	{{#compareString ../porHoras "sim"}}
-																	<br>Hora Ini: {{horaIni}}<br>Hora Fim: {{horaFim}}
-																	{{/compareString}}
-																	</td><!-- /.somente data -->
-																{{#compareString ../porSala "sim"}}
-																<td>{{sala}}</td>
-																{{else}}
+																<td style="width:8%;height:100px">{{dt}}</td><!-- /.somente data -->
+																{{#compareString ../porHoras "true"}}
+																<td style="width:5%">{{horaIni}}</td><!-- /.somente hora inicial -->
+																<td style="width:5%">{{horaFim}}</td><!-- /.somente hora Final -->
+																{{#each ../salas}}
+																	{{#ifEqual this.atend_Salaid ../atendimento}}
+																		<td>{{sala_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+																
 																{{/compareString}}
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}

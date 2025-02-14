@@ -12,6 +12,7 @@ const AtecSchema = mongoose.Schema({
     atec_infoiniatec :{ type: String, required: false },
     atec_concluido :{ type: String, required: false },
     atec_dataatec :{ type: String, required: false },
+    atec_lixo :{ type: String, required: false },
     //Totais
     atec_atec1Total :{ type: String, required: false },
     atec_atec2Total :{ type: String, required: false },
@@ -120,6 +121,7 @@ class Atec{
         atec_infoiniatec,
         atec_concluido,
         atec_dataatec,
+        atec_lixo,
         //Totais
         atec_atec1Total,
         atec_atec2Total,
@@ -224,6 +226,7 @@ class Atec{
         this.atec_infoiniatec = atec_infoiniatec,
         this.atec_concluido = atec_concluido,
         this.atec_dataatec = atec_dataatec,
+        this.atec_lixo = atec_lixo,
         //Totais
         this.atec_atec1Total = atec_atec1Total,
         this.atec_atec2Total = atec_atec2Total,
@@ -463,6 +466,7 @@ module.exports = {AtecModel,AtecSchema,
             atec_infoiniatec : req.body.atecInfoiniatec,
             atec_concluido : req.body.atecConcluido,
             atec_dataatec : req.body.atecDataatec,
+            atec_lixo : "false",
             //Totais
             atec_atec1Total : req.body.atecAtec1Total,
             atec_atec2Total : req.body.atecAtec2Total,

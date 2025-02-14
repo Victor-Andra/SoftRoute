@@ -76,6 +76,7 @@ class RelAtendBene{
         especialidade,
         profissional,
         beneficiario,
+        sala,
         hora,
         horaIni,
         horaFim
@@ -84,6 +85,7 @@ class RelAtendBene{
         this.especialidade = especialidade,
         this.profissional = profissional,
         this.beneficiario = beneficiario,
+        this.sala = sala,
         this.hora = hora,
         this.horaIni = horaIni,
         this.horaFim = horaFim
@@ -1101,6 +1103,7 @@ module.exports = {
         let bene_nome;
         let terapiaAtend;
         let terapeutaAtend;
+        let porSala;
         console.log("req.body.dataIni: "+req.body.dataIni)
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
@@ -1121,13 +1124,23 @@ module.exports = {
         console.log("seg:"+seg)
         console.log("sex:"+sex)
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
-
+        if (req.body.porSala == "sim"){
+            porSala = "sim";
+        } else {
+            porSala = "nao";
+        }
+        if (req.body.porHoras == "sim"){
+            porHoras = "sim";
+        } else {
+            porHoras = "nao";
+        }
         Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
             at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Sala.find().then((sala)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         bene.some((b)=>{
@@ -1160,11 +1173,10 @@ module.exports = {
                                 }
                             });
                             at.forEach((atend)=>{
-                                if (req.body.porHoras == "sim"){
-                                    porHoras = "true";
+                                if (porHoras == "sim"){
                                     let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
                                     let minutoFim = atend.atend_atendhora.substring(3,5);
-                                    console.log("minutoFim: "+minutoFim)
+                                    //console.log("minutoFim: "+minutoFim)
                                     switch (minutoFim) {
                                         case "00":
                                             horaFim = ((""+(horaFim)+"").length == 1 ? ("0"+(horaFim)+""):(""+(horaFim)+""));
@@ -1181,14 +1193,11 @@ module.exports = {
                                         default:
                                             break;
                                     }
-
-
                                     //rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
                                     rab.horaIni = atend.atend_atendhora;
                                     rab.horaFim = (horaFim + ":" + minutoFim);
                                 } else {
-                                    porHoras = "false";
                                     //console.log("atend.atend_atenddata: "+atend.atend_atenddata)
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
                                     //console.log("rab.dt: "+rab.dt)
@@ -1245,15 +1254,27 @@ module.exports = {
                                         terapeutaAtend = atend.atend_terapeutaid;
                                         break;
                                 }
+                                if (porSala == "sim"){
+                                    sala.forEach((s)=>{
+                                        if ((""+atend.atend_salaid+"") == (""+s._id+"")){
+                                            if ((""+s.sala_nome+"").includes("Escola")){
+                                                rab.sala = "Escola";
+                                            } else {
+                                                rab.sala = "Clínica";
+                                            }
+                                        }
+                                    })
+                                }
                                 rab.especialidade = terapiaAtend;
                                 rab.profissional = terapeutaAtend;
 
                                 rel.push(rab);
                                 rab = new RelAtendBene();
                             });
-                            res.render("atendimento/relatendvalBeneassin", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
+                            res.render("atendimento/relatendvalBeneassin", {benes: bene, terapeutas: terapeuta, salas:sala, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras, porSala})
                         })
                     })
+                })
                 })
             })
         }).catch((err) =>{

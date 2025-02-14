@@ -163,7 +163,7 @@ module.exports = {
     },
 
 
-    deletaCars(req,res){
+    deletaCarsold(req,res){
         let flash = new Resposta();
         Cars.deleteOne({_id: req.params.id}).then(() =>{
             Cars.find().then((cars)=>{
@@ -180,6 +180,29 @@ module.exports = {
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
                 res.render('admin/erro')
             })
+        })
+    },
+
+    deletaCars(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        let resposta;
+        let flash = new Resposta()
+        Cars.findByIdAndUpdate(req.params.id,{$set: {'cars_lixo': 'true', 'cars_usuidedi': usuarioAtual}}).then(() =>{
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar os formulários CARS")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "Formulário CARS foi deletado!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar o formulário CARS";
+                flash.sucesso = "false";
+            }
+            this.listaCars(req,res, resposta)
         })
     }
 

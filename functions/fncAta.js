@@ -186,7 +186,7 @@ module.exports = {
         }
     },
 
-    deletaAta(req,res){
+    deletaAtaold(req,res){
         let resposta;
         let flash = new Resposta()
         Ata.deleteOne({_id: req.params.id}).then(() =>{
@@ -202,6 +202,29 @@ module.exports = {
                 flash.sucesso = "true";
             } else {
                 flash.texto = "Erro ao deletar a ATA";
+                flash.sucesso = "false";
+            }
+            this.listaAta(req,res, resposta)
+        })
+    },
+    
+    deletaAta(req,res){
+        let usuarioAtual = req.cookies['idUsu'];
+        let resposta;
+        let flash = new Resposta()
+        Ata.findByIdAndUpdate(req.params.id,{$set: {'ata_lixo': 'true', 'ata_usuidedi': usuarioAtual}}).then(() =>{
+            resposta = "true";
+        }).catch((err) =>{
+            resposta = err;
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar os formulários ATA")
+            res.render('admin/erro')
+        }).finally(()=>{
+            if (resposta == "true"){
+                flash.texto = "Formulário ATA deletado!";
+                flash.sucesso = "true";
+            } else {
+                flash.texto = "Erro ao deletar o formulário ATA";
                 flash.sucesso = "false";
             }
             this.listaAta(req,res, resposta)
