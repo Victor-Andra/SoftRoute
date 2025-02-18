@@ -7,7 +7,10 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.chart.js"></script>
-	
+		<script src="https://cdn.jsdelivr.net/npm/chart.js">
+    	
+		console.log("Chart.js versão:", Chart);
+		</script>
 		
 		
 		<script>
@@ -17,7 +20,7 @@
 				
 			}
 		</script>
-		<script>
+		   <script>
         $(document).ready(function () {
             function getLast12Months() {
                 const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -91,23 +94,23 @@
 
             plotGrafico();
         });
-		<style>
-				#grafico {
-					width: 700px;
-					height: 400px;
-				}
+   <style>
+        #grafico {
+            width: 700px;
+            height: 400px;
+        }
 
-				.tooltip {
-					position: absolute;
-					display: none;
-					background: black;
-					color: white;
-					padding: 5px 10px;
-					border-radius: 6px;
-					font-size: 12px;
-					pointer-events: none;
-				}
-			</style>
+        .tooltip {
+            position: absolute;
+            display: none;
+            background: black;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+    </style>
 		
 	</head>
 
@@ -479,7 +482,7 @@
 									
 									</div>
 									<div id="fat" class="tab-pane fade">
-									<div class="row">
+										<div class="row">
 											<div class="col-sm-3">
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
@@ -674,8 +677,9 @@
 			</form>
 		<script type="text/javascript">
 				if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-			
+			</script>
+			<!-- basic scripts -->
+			<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		<script>
 			$(document).ready(function () {

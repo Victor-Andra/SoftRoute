@@ -13,6 +13,7 @@ const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const escolaClass = require("../models/escola")
 const fncGeral = require("./fncGeral")
+const respostaClass = require("../models/resposta")
 
 //Tabelas Extrangeiras
 const Conv = mongoose.model("tb_conv")
@@ -20,6 +21,7 @@ const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Estado = mongoose.model("tb_estado")
 const Escola = mongoose.model("tb_escola")
+const Resposta = mongoose.model("tb_resposta")
 
 module.exports = {
     carregaBene(req,res){
@@ -91,34 +93,41 @@ module.exports = {
         }
 
     },
-    atualizaBenesup(req, res){
-        let resposta;
-        try{
-            beneClass.benesupEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resposta = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resposta = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resposta){
-                    //Volta para a bene de listagem
-                    this.listaBene(req,res);
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
+    atualizaBenesup(req,res){
+            let resultado
+            let resposta = new Resposta()
+            try{
+                beneClass.benesupEditar(req,res).then((res)=>{
+                    console.log("Atualização Realizada!")
+                    console.log(res)
+                    resultado = res;
+                }).catch((err) =>{
+                    console.log("error1")
+                    console.log(err)
+                    resultado = err;
                     res.render('admin/erro')
-                }
-            })
-        } catch(err1){
-            console.log(err1)
-        }
-
-    },
+                }).finally(() =>{
+                    if(resultado == true){
+                        //Volta para a benesup Listar
+                        console.log("Listagem Realizada!")
+                        resposta.texto = "Atualizado com Sucesso!"
+                        resposta.sucesso = "true"
+                        this.listaBenesup(req,res);
+                    }else{
+                        //passar classe de erro
+                        console.log("error")
+                        console.log(resultado)
+                        resposta.texto = resultado
+                        resposta.sucesso = "false"
+                        res.render('admin/erro')
+                    }
+                })
+            } catch(err1){
+                console.log(err1)
+                res.render('admin/erro')
+            }
+        },
+    
     carregaBeneEdi(req, res){
         Escola.find().then((escola)=>{
             Estado.find().then((estado)=>{

@@ -11189,7 +11189,7 @@ module.exports = {
                                         case "Apoio"://ANALISE
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11317,7 +11317,7 @@ module.exports = {
                                         case "Extra":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11377,14 +11377,14 @@ module.exports = {
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Convenio não paga
                                                     atend_valordeb : convdebval,//Paga ao musico
-                                                    //atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    //atend_mergeterapiaid : a.agenda_terapiaid,//ABA
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,
                                                     atend_mergevalordeb : convdebvalSub,
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11403,10 +11403,10 @@ module.exports = {
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Convenio não paga
                                                     atend_valordeb : convdebval,//Paga ao musico
-                                                    //atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    //atend_mergeterapiaid : a.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11444,7 +11444,7 @@ module.exports = {
                                         case "Falta":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11497,21 +11497,21 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//Faltou sem aviso prévio
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//
+                                                    atend_terapeutaid : a.agenda_usuid,//
+                                                    atend_terapiaid : a.agenda_terapiaid,//
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//
-                                                    atend_valordeb : "0,00",//
+                                                    atend_valorcre : convcreval,//
+                                                    atend_valordeb : convdebval,//
                                                     atend_mergeterapeutaid : agendaSub.agenda_usuid,//mesmo terapeuta
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
-                                                    atend_mergevalorcre : convcreval,//recebe pelo plano pois não foi avisado previamente
-                                                    atend_mergevalordeb : "0,00",//Não paga pois o terapeuita não atende ninguem
+                                                    atend_mergevalorcre : convcrevalSub,//recebe pelo plano pois não foi avisado previamente
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga pois o terapeuita não atende ninguem
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11523,17 +11523,17 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//Faltou sem aviso prévio
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//
+                                                    atend_terapeutaid : a.agenda_usuid,//
+                                                    atend_terapiaid : a.agenda_terapiaid,//
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//
-                                                    atend_valordeb : "0,00",//
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//mesmo terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,
-                                                    atend_mergevalorcre : convcreval,//recebe pelo plano pois não foi avisado previamente
-                                                    atend_mergevalordeb : "0,00",//Não paga pois o terapeuita não atende ninguem
+                                                    atend_valorcre : convcreval,//
+                                                    atend_valordeb : convdebval,//
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//mesmo terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                    atend_mergevalorcre : convcrevalSub,//recebe pelo plano pois não foi avisado previamente
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga pois o terapeuita não atende ninguem
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11560,7 +11560,7 @@ module.exports = {
                                         case "Falta Justificada":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11613,21 +11613,21 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
                                                     atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
                                                     atend_terapiaid : a.agenda_terapiaid,//
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//não recebe pois foi avisado previamente
-                                                    atend_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
+                                                    atend_valorcre : convcreval,//não recebe pois foi avisado previamente
+                                                    atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
                                                     atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcrevalSub,//recebe pelo novo bene
                                                     atend_mergevalordeb : convdebvalSub,//paga pelo atendimento do novo bene
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11639,13 +11639,13 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
                                                     atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
                                                     atend_terapiaid : a.agenda_terapiaid,//
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//não recebe pois foi avisado previamente
-                                                    atend_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
+                                                    atend_valorcre : convcreval,//não recebe pois foi avisado previamente
+                                                    atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
                                                     atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
@@ -11688,7 +11688,7 @@ module.exports = {
                                         case "Feriado":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11767,7 +11767,7 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
                                                     atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
                                                     atend_terapiaid : a.agenda_terapiaid,//
@@ -11816,7 +11816,7 @@ module.exports = {
                                         case "Glosa":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -11876,8 +11876,8 @@ module.exports = {
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Convenio não paga
                                                     atend_valordeb : convdebval,//Paga ao musico
-                                                    //atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
-                                                    //atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
@@ -11943,7 +11943,7 @@ module.exports = {
                                         case "Pais":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -12002,15 +12002,15 @@ module.exports = {
                                                     atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Convenio não paga
-                                                    atend_valordeb : "0,00",//Paga ao musico
+                                                    atend_valordeb : convdebval,//Paga ao musico
                                                     atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12028,11 +12028,11 @@ module.exports = {
                                                     atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Convenio não paga
-                                                    atend_valordeb : "0,00",//Paga ao musico
+                                                    atend_valordeb : convdebval,//Paga ao musico
                                                     atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12058,7 +12058,7 @@ module.exports = {
                                         case "Substituição":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -12111,21 +12111,21 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//Convenio não paga
-                                                    atend_valordeb : "0,00",//Paga ao musico
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : convdebval,//Não paga ao outro Terapeuta
+                                                    atend_valorcre : convcreval,//Convenio não paga
+                                                    atend_valordeb : convdebval,//Paga ao musico
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12137,17 +12137,17 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//Convenio não paga
-                                                    atend_valordeb : "0,00",//Paga ao musico
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : convdebval,//Não paga ao outro Terapeuta
+                                                    atend_valorcre : convcreval,//Convenio não paga
+                                                    atend_valordeb : convdebval,//Paga ao musico
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12186,7 +12186,7 @@ module.exports = {
                                         case "SubstitutoFixo":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -12239,21 +12239,21 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//Convenio não paga
+                                                    atend_valorcre : convcreval,//Convenio não paga
                                                     atend_valordeb : convdebval,//Paga ao musico
-                                                    atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                    atend_mergeterapeutaid : agendaSub.agenda_mergeterapeutaid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_mergeterapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12265,17 +12265,17 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//Convenio não paga
+                                                    atend_valorcre : convcreval,//Convenio não paga
                                                     atend_valordeb : convdebval,//Paga ao musico
-                                                    atend_mergeterapeutaid : a.agenda_mergeterapeutaid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
-                                                    atend_mergevalorcre : convcreval,//Recebe pela terapia ABA
-                                                    atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                                    atend_mergeterapeutaid : agendaSub.agenda_mergeterapeutaid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_mergeterapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12314,7 +12314,7 @@ module.exports = {
                                         case "Supervisão":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                            agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
                                             convcre.forEach((ccre)=>{
                                                 convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                                                 if( convcreTes == agendacreTes){
@@ -12367,21 +12367,21 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Recebe pelo atendimento
                                                     atend_valordeb : convdebval,//Paga ao terapeuta
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : "0,00",//Não recebe pela supervisão
-                                                    atend_mergevalordeb : convdebval,//Paga a supervsão
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Não recebe pela supervisão
+                                                    atend_mergevalordeb : convdebvalSub,//Paga a supervsão
                                                     atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12393,17 +12393,17 @@ module.exports = {
                                                     atend_beneid : a.agenda_beneid,//
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//Terapeuta Principal(Musico)
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//Musica
+                                                    atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                                    atend_terapiaid : a.agenda_terapiaid,//Musica
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//Recebe pelo atendimento
                                                     atend_valordeb : convdebval,//Paga ao terapeuta
-                                                    atend_mergeterapeutaid : a.agenda_usuid,//Outro Terapeuta
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,//ABA
-                                                    atend_mergevalorcre : "0,00",//Não recebe pela supervisão
-                                                    atend_mergevalordeb : convdebval,//Paga a supervsão
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Outro Terapeuta
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
+                                                    atend_mergevalorcre : convcrevalSub,//Não recebe pela supervisão
+                                                    atend_mergevalordeb : convdebvalSub,//Paga a supervsão
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12551,20 +12551,24 @@ module.exports = {
                                                 newAtend = new Atend({
                                                     atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
                                                     atend_categoria : "Padrão",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
-                                                    atend_beneid : agendaSub.agenda_beneid,//
-                                                    atend_convid : agendaSub.agenda_convid,//
+                                                    atend_beneid : a.agenda_beneid,//
+                                                    atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
-                                                    atend_atenddata : agendaSub.agenda_data,//
+                                                    atend_atenddata : a.agenda_data,//
                                                     atend_atendhora : hora,//
-                                                    atend_terapeutaid : agendaSub.agenda_usuid,//
-                                                    atend_terapiaid : agendaSub.agenda_terapiaid,//
+                                                    atend_terapeutaid : a.agenda_usuid,//
+                                                    atend_terapiaid : a.agenda_terapiaid,//
                                                     atend_salaid : a.agenda_salaid,//
-                                                    atend_valorcre : "0,00",//
-                                                    atend_valordeb : "0,00",//
-                                                    atend_mergeterapeutaid : a.agenda_usuid,
-                                                    atend_mergeterapiaid : a.agenda_terapiaid,
+                                                    atend_valorcre : convcreval,//
+                                                    atend_valordeb : convdebval,//
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcreval,
                                                     atend_mergevalordeb : convdebval,
+                                                    atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
+                                                    atend_fixoterapiaid : a.agenda_mergeterapiaid,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12587,10 +12591,6 @@ module.exports = {
                                                     atend_mergeterapiaid : a.agenda_terapiaid,
                                                     atend_mergevalorcre : convcreval,
                                                     atend_mergevalordeb : convdebval,
-                                                    atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
-                                                    atend_fixoterapiaid : a.agenda_mergeterapiaid,
-                                                    atend_fixovalorcre : convcreval,
-                                                    atend_fixovalordeb : convdebval,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12777,7 +12777,6 @@ module.exports = {
                                         })
 
                                         agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
-                                        agendadebTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";//Semanal
                                         agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
                                         convdeb.forEach((cdeb)=>{
                                             convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";

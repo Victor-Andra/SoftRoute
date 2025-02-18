@@ -370,15 +370,16 @@ module.exports = {BeneModel,BeneSchema,
         })
         return resultado;
     },
+    
     benesupEditar: async (req, res) => {
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
         
-        //Realiza Atualização dos beneficiários sessãoe escola
-        await BeneModel.findByIdAndUpdate(req.body.beneId, 
+        
+        //Realiza Atualização
+        await BeneModel.findByIdAndUpdate(req.body.id, 
             {$set: {
-                //Essa classe so altera os campos pertecentes a escola no cadastro do bneneficiário criado exclusivamente para supervisores e coordenadores
                 bene_escolanome: req.body.beneEscolanome,
                 bene_escolafone: req.body.beneEscolafone,
                 bene_escolaend: req.body.beneEscolaend,
@@ -407,17 +408,12 @@ module.exports = {BeneModel,BeneSchema,
                 bene_escolaturno: req.body.beneEscolaturno,
                 bene_escolahoraini: req.body.beneEscolahoraini,
                 bene_escolahorafim: req.body.beneEscolahorafim,
-                bene_escolaobs: req.body.beneEscolaobs,
                 bene_escolaemail: req.body.beneEscolaemail,
-                //Permitir Bene Obs também ser editado pelos Supervisores
-                bene_obs: req.body.beneObs,
-                bene_aba: req.body.beneAba,
-                bene_abaclinica: req.body.beneAbaclinica,
-                bene_abaescola: req.body.beneAbaescola,
-                bene_abaparticular: req.body.beneAbaparticular,
-                bene_usuidcad: usuarioAtual,
+                bene_escolaobs: req.body.beneEscolaobs,
+ 
+                bene_usuidedi: usuarioAtual,
                 bene_dataedi: dataAtual
-                }}
+            }}
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -429,6 +425,7 @@ module.exports = {BeneModel,BeneSchema,
         })
         return resultado;
     },
+    
     beneAdicionar: async (req,res) => {
         let beneExiste =  await BeneModel.findOne({bene_nome: req.body.beneNome});//quando não acha fica null
         let dataAtual = new Date();

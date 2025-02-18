@@ -149,15 +149,19 @@
 													<thead>
 														
 														<tr>
+															{{#compareString porHoras "sim"}}
+															<th style="width:11%">Data do Atendimento/<br>Horário de início e fim da sessão</th>
+															{{else}}
 															<th style="width:11%">Data do Atendimento</th>
+															{{/compareString}}
 															{{#compareString porSala "sim"}}
-															<th>Sala</th>
+															<th>Local do <br>Atendimento</th>
 															{{else}}
 															{{/compareString}}
-															<th>Especialidade</th>
-															<th>Profissional</th>
-															<th>Ass. Profissional</th>
-															<th>Ass. Responsável</th>
+															<th style="width:11%">Especialidade</th>
+															<th style="width:24%">Profissional</th>
+															<th style="width:24%">Ass. Profissional</th>
+															<th style="width:24%">Ass. Responsável</th>
 														</tr>
 													</thead>
 													{{#each rels}}

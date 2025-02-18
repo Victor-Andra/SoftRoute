@@ -100,7 +100,7 @@
 					document.getElementById("naveSocios").style.display = '';
 					document.getElementById("naveRoot").remove();
 					document.getElementById("naveHib").remove();
-					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveFinan").remove();
 					document.getElementById("naveTerapeuta").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
@@ -109,13 +109,83 @@
 					document.getElementById("naveSupervisor").remove();
 					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
-				} else if (biscoito == "624218f5a12aa557219a0fd0"){//Administradores e Financeiro
-					//console.log("2: "+(biscoito== "624218f5a12aa557219a0fd0")+"biscoito == 624218f5a12aa557219a0fd0")
-					document.getElementById("naveAdministradorEFinanceiro").style.display = '';
+				} else if (biscoito == "624218f5a12aa557219a0fd0"){//Financeiro (Anderson)
+					//console.log("2: "+(biscoito== "624218f5a12aa557219a0fd0")
+					document.getElementById("naveFinan").style.display = '';
 					document.getElementById("naveRoot").remove();
 					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
 					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704b1a358ba19d0c8eb51"){//Guias (Lucas e Mileide) Novo Perfil
+					//console.log("2: "+(biscoito== "677704b1a358ba19d0c8eb51"))
+					document.getElementById("naveGuia").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704b9a358ba19d0c8eb7a"){//Faturamento (Adriana, Thiago e Dani) Novo Perfil
+					//console.log("2: "+(biscoito== "677704b9a358ba19d0c8eb7a")+"biscoito == 624218f5a12aa557219a0fd0")
+					document.getElementById("naveFatura").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704a8a358ba19d0c8eb27"){//Agenda (Cibele, Elleny, Isabela) Novo Perfil
+					//console.log("2: "+(biscoito== "677704a8a358ba19d0c8eb27"))
+					document.getElementById("naveAge").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "67770413a358ba19d0c8ead4"){//Marketing (Carol) Novo Perfil somente acesso aos aniversariantes
+					//console.log("2: "+(biscoito== "67770413a358ba19d0c8ead4"))
+					document.getElementById("naveMkt").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677e72110967e75764876577"){//Terapeutas Especialistas e ABA
+					//console.log("2: "+(biscoito== "677e72110967e75764876577"))
+					document.getElementById("naveTaba").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
 					document.getElementById("naveRecepcionista").remove();
 					document.getElementById("naveAT").remove();
 					document.getElementById("naveHo").remove();
@@ -246,9 +316,26 @@
 		<div name="navbarPrincipalSelect" id="naveSocios" style="display: none;" class="noprint">
 		{{>_navbarSO}}
 		</div>
-		<div name="navbarPrincipalSelect" id="naveAdministradorEFinanceiro" style="display: none;" class="noprint">
-		{{>_navbarAF}}
+
+		<div name="navbarPrincipalSelect" id="naveFinan" style="display: none;" class="noprint">
+		{{>_navbarFinan}}
 		</div>
+		<div name="navbarPrincipalSelect" id="naveGuia" style="display: none;" class="noprint">
+		{{>_navbarGuia}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveFatura" style="display: none;" class="noprint">
+		{{>_navbarFatura}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveAge" style="display: none;" class="noprint">
+		{{>_navbarAge}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveMkt" style="display: none;" class="noprint">
+		{{>_navbarMkt}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveTaba" style="display: none;" class="noprint">
+		{{>_navbarTaba}}
+		</div>
+		
 		<div name="navbarPrincipalSelect" id="naveTerapeuta" style="display: none;" class="noprint">
 		{{>_navbarT}}
 		</div>
