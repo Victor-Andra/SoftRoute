@@ -194,8 +194,8 @@
 					document.getElementById("naveVazia").remove();
 					//console.log("naveRoot");
 				} else if (biscoito == "62421903a12aa557219a0fd3"){//Terapeutas
-					//console.log("2: "+(biscoito== "62421903a12aa557219a0fd3")+"biscoito == 62421903a12aa557219a0fd3")
-					document.getElementById("naveTerapeuta").style.display = '';
+					//console.log("2: "+(biscoito== "62421903a12aa557219a0fd3"))
+					document.getElementById("naveTaba").style.display = '';
 					document.getElementById("naveRoot").remove();
 					document.getElementById("naveHib").remove();
 					document.getElementById("naveSocios").remove();
@@ -317,23 +317,12 @@
 		{{>_navbarSO}}
 		</div>
 
-		<div name="navbarPrincipalSelect" id="naveFinan" style="display: none;" class="noprint">
-		{{>_navbarFinan}}
-		</div>
-		<div name="navbarPrincipalSelect" id="naveGuia" style="display: none;" class="noprint">
-		{{>_navbarGuia}}
-		</div>
-		<div name="navbarPrincipalSelect" id="naveFatura" style="display: none;" class="noprint">
-		{{>_navbarFatura}}
-		</div>
-		<div name="navbarPrincipalSelect" id="naveAge" style="display: none;" class="noprint">
-		{{>_navbarAge}}
-		</div>
-		<div name="navbarPrincipalSelect" id="naveMkt" style="display: none;" class="noprint">
-		{{>_navbarMkt}}
-		</div>
+		
 		<div name="navbarPrincipalSelect" id="naveTaba" style="display: none;" class="noprint">
 		{{>_navbarTaba}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveAdministradorEFinanceiro" style="display: none;" class="noprint">
+		{{>_navbarTabaestagiario}}
 		</div>
 		
 		<div name="navbarPrincipalSelect" id="naveTerapeuta" style="display: none;" class="noprint">
