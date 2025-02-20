@@ -993,6 +993,7 @@ module.exports = {
                                     terapeutaAtend = atend.atend_fixoterapeutaid;
                                 } else {
                                     switch (categorias){
+                                        /*
                                         case "Apoio":
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
@@ -1004,10 +1005,6 @@ module.exports = {
                                         case "Falta":
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
-                                            break;
-                                        case "Falta Justificada":
-                                            terapiaAtend = atend.atend_mergeterapiaid
-                                            terapeutaAtend = atend.atend_mergeterapeutaid;
                                             break;
                                         case "Glosa":
                                             terapiaAtend = atend.atend_terapiaid;
@@ -1030,6 +1027,15 @@ module.exports = {
                                         case "Supervisão":
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                            */
+                                        case "Falta Justificada":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
                                             break;
                                         case "SubstitutoFixo":
                                             terapiaAtend = atend.atend_fixoterapiaid;
@@ -1582,6 +1588,7 @@ module.exports = {
                                     categorias = ats.atend_categoria
                                     //console.log("categorias: "+categorias);
                                     switch (categorias){
+                                        /*
                                         case "Apoio":
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
@@ -1589,14 +1596,8 @@ module.exports = {
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Falta":
-                                            terapiaAtend = ats.atend_mergeterapiaid;
-                                            //terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Falta Justificada":
-                                            terapiaAtend = ats.atend_mergeterapiaid;
-                                            break;
-                                        case "Feriado":
-                                            terapiaAtend = "break";
+                                            //terapiaAtend = ats.atend_mergeterapiaid;
+                                            terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Glosa":
                                             terapiaAtend = ats.atend_terapiaid;
@@ -1608,12 +1609,19 @@ module.exports = {
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Substituição":
-                                            terapiaAtend = ats.atend_mergeterapiaid;
-                                            break;
-                                        case "SubstitutoFixo":
-                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         case "Supervisão":
+                                            terapiaAtend = ats.atend_terapiaid;
+                                            break;
+                                            */
+                                        case "Falta Justificada":
+                                            terapiaAtend = "break";
+                                            break;
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            break;
+                                        case "SubstitutoFixo":
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
                                         default:
@@ -1632,6 +1640,7 @@ module.exports = {
                                 categorias = atend.atend_categoria
                                 
                                 switch (categorias){
+                                    /*
                                     case "Apoio":
                                         terapiaAtend = atend.atend_terapiaid;
                                         creVal = atend.atend_valorcre;
@@ -1650,13 +1659,6 @@ module.exports = {
                                         //}
                                         //terapiaAtend = atend.atend_terapiaid;
                                         break;
-                                    case "Falta Justificada":
-                                        terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
-                                        break;
-                                    case "Feriado":
-                                        terapiaAtend = "break";
-                                        break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
                                         break;
@@ -1672,20 +1674,27 @@ module.exports = {
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
-                                    case "SubstitutoFixo":
-                                        terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
-                                        break;
                                     case "Supervisão":
                                         terapiaAtend = atend.atend_terapiaid;
                                         creVal = atend.atend_valorcre;
+                                        break;
+                                        */
+                                    case "Falta Justificada":
+                                        terapiaAtend = "break";
+                                        break;
+                                    case "Feriado":
+                                        terapiaAtend = "break";
+                                        break;
+                                    case "SubstitutoFixo":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
                                         creVal = atend.atend_valorcre;
                                         break;
                                 }
-                                if (categorias != "Feriado" && atend.atend_fixo == "true"){
+                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
                                     let convcreval;
                                     let convcreTes;
                                     let agendacreTes;

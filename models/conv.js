@@ -201,7 +201,20 @@ module.exports = {ConvModel,ConvSchema,
     qtregs: async(req, res)=>{
         const qtregs = await ConvModel.estimatedDocumentCount();
         return qtregs;
+    },
+    
+    qtregsconvativos: async (req, res) => {
+        try {
+            // Conta os documentos onde conv_status é igual a "Ativo"
+            const qtregs = await ConvModel.countDocuments({ conv_status: "Ativo" });
+            
+            // Retorna a quantidade de registros
+            return qtregs;
+        } catch (error) {
+            // Em caso de erro, retorna uma mensagem de erro
+            console.error("Erro ao contar registros:", error);
+            throw error; // Ou retorne um erro personalizado
+        }
     }
-
 
 };

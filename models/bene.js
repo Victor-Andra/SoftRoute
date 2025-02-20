@@ -240,6 +240,20 @@ class Bene{
     }
 }
 
+class ArrObj{
+    constructor(
+        idlocal,
+        campo,
+        valor,
+        total
+        ){
+        this.idlocal = idlocal,
+        this.campo = campo,
+        this.valor = valor,
+        this.total = total
+    }
+}
+
 BeneSchema.loadClass(Bene)
 const BeneModel = mongoose.model('tb_bene', BeneSchema)
 module.exports = {BeneModel,BeneSchema,
@@ -550,5 +564,131 @@ module.exports = {BeneModel,BeneSchema,
                 return err;
             });
         }
+    },
+    qtregsbeneativos: async (req, res) => {
+        try {
+            // Conta os documentos onde bene_status é igual a "Ativo"
+            const qtregs = await BeneModel.countDocuments({ bene_status: "Ativo" });
+            
+            // Retorna a quantidade de registros
+            return qtregs;
+        } catch (error) {
+            // Em caso de erro, retorna uma mensagem de erro
+            console.error("Erro ao contar registros:", error);
+            throw error; // Ou retorne um erro personalizado
+        }
+    },
+    qtregsbeneFiltradosold: async (req, res) => {
+        try {
+            let obj = new ArrObj();
+            let arrayRetorno = [];
+            const idConvEspecifico = "62477742e416141415ff7a88"; // ID do convênio específico
+    
+            // Conta os documentos com base nos critérios combinados
+            const qtInativos = await BeneModel.countDocuments({ bene_status: "Inativo" });
+            obj.campo = "qtInativos";
+            obj.valor = qtInativos;
+            obj.idlocal = "qtInativos";
+            arrayRetorno.push(obj);
+
+            const qtAtivos = await BeneModel.countDocuments({ bene_status: "Ativo" });
+            obj = new ArrObj();
+            obj.campo = "qtAtivos";
+            obj.valor = qtAtivos;
+            obj.idlocal = "qtAtivos";
+            arrayRetorno.push(obj);
+
+            const qtLiminarSim = await BeneModel.countDocuments({ bene_status: "Ativo", bene_liminar: "Sim" , $nor: [{bene_convid: idConvEspecifico}]});
+            obj = new ArrObj();
+            obj.campo = "qtLiminarSim";
+            obj.valor = qtLiminarSim;
+            obj.idlocal = "qtLiminarSim";
+            arrayRetorno.push(obj);
+
+            const qtLiminarNao = await BeneModel.countDocuments({ bene_status: "Ativo", bene_liminar: "Não" , $nor: [{bene_convid: idConvEspecifico}]});
+            obj = new ArrObj();
+            obj.campo = "qtLiminarNao";
+            obj.valor = qtLiminarNao;
+            obj.idlocal = "qtLiminarNao";
+            arrayRetorno.push(obj);
+
+            const qtConvEspecifico = await BeneModel.countDocuments({ bene_status: "Ativo", bene_convid: idConvEspecifico });
+            obj = new ArrObj();
+            obj.campo = "qtConvEspecifico";
+            obj.valor = qtConvEspecifico;
+            obj.idlocal = "qtConvEspecifico";
+            arrayRetorno.push(obj);
+
+
+            // Retorna um objeto com as quantidades
+            return arrayRetorno;
+        } catch (error) {
+            // Em caso de erro, retorna uma mensagem de erro
+            console.error("Erro ao contar registros:", error);
+            throw error; // Ou retorne um erro personalizado
+        }
+    },
+    qtregsbeneFiltrados: async (req, res) => {
+        try {
+            const idConvEspecifico = "62477742e416141415ff7a88"; // ID do convênio específico
+            const arrayRetorno = [];
+    
+            // Função auxiliar para adicionar resultados ao array de retorno
+            const adicionarResultado = (campo, valor, idlocal) => {
+                arrayRetorno.push({ campo, valor, idlocal });
+            };
+    
+            // Conta os documentos com base nos critérios combinados
+            adicionarResultado(
+                "qtInativos",
+                await BeneModel.countDocuments({ bene_status: "Inativo" }),
+                "qtInativos"
+            );
+    
+            adicionarResultado(
+                "qtAtivos",
+                await BeneModel.countDocuments({ bene_status: "Ativo" }),
+                "qtAtivos"
+            );
+    
+            adicionarResultado(
+                "qtLiminarSim",
+                await BeneModel.countDocuments({ 
+                    bene_status: "Ativo", 
+                    bene_liminar: "Sim", 
+                    $nor: [{ bene_convid: idConvEspecifico }] 
+                }),
+                "qtLiminarSim"
+            );
+    
+            adicionarResultado(
+                "qtLiminarNao",
+                await BeneModel.countDocuments({ 
+                    bene_status: "Ativo", 
+                    bene_liminar: "Não", 
+                    $nor: [{ bene_convid: idConvEspecifico }] 
+                }),
+                "qtLiminarNao"
+            );
+    
+            adicionarResultado(
+                "qtConvEspecifico",
+                await BeneModel.countDocuments({ 
+                    bene_status: "Ativo", 
+                    bene_convid: idConvEspecifico 
+                }),
+                "qtConvEspecifico"
+            );
+    
+            // Retorna o array com as quantidades
+            return arrayRetorno;
+        } catch (error) {
+            // Em caso de erro, retorna uma mensagem de erro
+            console.error("Erro ao contar registros:", error);
+            throw error; // Ou retorne um erro personalizado
+        }
     }
+   
+    
+    
 };
