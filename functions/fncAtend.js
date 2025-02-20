@@ -1028,11 +1028,11 @@ module.exports = {
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;
                                             break;
-                                            */
                                         case "Falta Justificada":
                                             terapiaAtend = "break";
                                             terapeutaAtend = "break";
                                             break;
+                                            */
                                         case "Feriado":
                                             terapiaAtend = "break";
                                             terapeutaAtend = "break";
@@ -1614,10 +1614,10 @@ module.exports = {
                                         case "Supervisão":
                                             terapiaAtend = ats.atend_terapiaid;
                                             break;
-                                            */
                                         case "Falta Justificada":
                                             terapiaAtend = "break";
                                             break;
+                                            */
                                         case "Feriado":
                                             terapiaAtend = "break";
                                             break;
@@ -1678,10 +1678,10 @@ module.exports = {
                                         terapiaAtend = atend.atend_terapiaid;
                                         creVal = atend.atend_valorcre;
                                         break;
-                                        */
                                     case "Falta Justificada":
                                         terapiaAtend = "break";
                                         break;
+                                        */
                                     case "Feriado":
                                         terapiaAtend = "break";
                                         break;
