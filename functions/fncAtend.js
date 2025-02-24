@@ -73,6 +73,7 @@ class RelAtend{
 class RelAtendBene{
     constructor(
         dt,
+        dataDia,
         especialidade,
         profissional,
         beneficiario,
@@ -82,6 +83,7 @@ class RelAtendBene{
         horaFim
         ){
         this.dt = dt,
+        this.dataDia = dataDia,
         this.especialidade = especialidade,
         this.profissional = profissional,
         this.beneficiario = beneficiario,
@@ -979,8 +981,9 @@ module.exports = {
                                             break;
                                     }
 
-
+                                    rab.dataDia = fncGeral.getData(atend.atend_atenddata);
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
+                                    rab.hora = atend.atend_atendhora;
                                 } else {
                                     //console.log("atend.atend_atenddata: "+atend.atend_atenddata)
                                     rab.dt = (fncGeral.getData(atend.atend_atenddata));
@@ -1063,6 +1066,19 @@ module.exports = {
                                     rab = new RelAtendBene();
                                 }
                             });
+                            rel.sort(function(a, b){
+                                let provHourA = a.hora+":0:0";
+                                let provHourB = b.hora+":0:0";
+                                const [diaA, mesA, anoA] = a.dataDia.split('/').map(Number);
+                                const [diaB, mesB, anoB] = b.dataDia.split('/').map(Number);
+                                const [horaA, minA, segA, mSegA] = provHourA.split(':');
+                                const [horaB, minB, segB, mSegB] = provHourB.split(':');
+                                const dataA = new Date(anoA, mesA - 1, diaA, horaA, minA, segA, mSegA);
+                                const dataB = new Date(anoB, mesB - 1, diaB, horaB, minB, segB, mSegB);
+
+                                return dataA - dataB;
+                            })
+                            
                             res.render("atendimento/relatendvalBene", {benes: bene, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
                         })
                     })
