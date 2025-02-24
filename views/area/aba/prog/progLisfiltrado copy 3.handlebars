@@ -6,18 +6,6 @@
 				display: inline-block;
 				width: 100px;  /* Ajuste conforme necessário */
 				height: 30px;  /* Ajuste conforme necessário */
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				height: 100%; /* Garante que o contêiner ocupe toda a altura do botão */
-			}
-			.btn-wider {
-				display: flex; /* Ativa o Flexbox */
-				align-items: center; /* Centraliza verticalmente */
-				justify-content: center; /* Centraliza horizontalmente */
-				padding: 5px 10px; /* Espaçamento interno para o botão */
-				width: auto; /* Largura automática para acomodar o conteúdo */
-				min-width: 100px; /* Largura mínima para evitar botões muito pequenos */
 			}
    		 </style>
 		
@@ -26,54 +14,50 @@
 		<title>Lista ABA</title>
 			
 			<script>
-				function initEasySparkline() {
-					console.log("Iniciando Sparkline");
+				
+			function initEasySparkline() {
+				console.log("Iniciando Sparkline");
 
-					if (typeof $.fn.sparkline !== "function") {
-						console.error("Biblioteca Sparkline não carregada.");
+				if (typeof $.fn.sparkline !== "function") {
+					console.error("Biblioteca Sparkline não carregada.");
+					return;
+				}
+
+				const fixedColors = [
+					'#00FF00', // Verde
+					'#FFFF00', // Amarelo
+					'#FFA500', // Laranja
+					'#FF69B4',  // Rosa
+					'#0000FF', // Azul
+					'#FF0000', // Vermelho
+					'#00FFFF'  // Ciano
+				];
+
+				$('.sparkline').each(function () {
+					const $this = $(this);
+					const values = $this.data('values');
+
+					if (!values) {
+						console.error("Atributo data-values não definido ou vazio:", $this);
 						return;
 					}
 
-					const fixedColors = [
-						'#00FF00', // Verde
-						'#FFFF00', // Amarelo
-						'#FFA500', // Laranja
-						'#FF69B4',  // Rosa
-						'#00FF00', // Verde
-						'#FFFF00', // Amarelo
-						'#FFA500', // Laranja
-						'#FF69B4',  // Rosa
-						
-					];
-
-					$('.sparkline').each(function () {
-						const $this = $(this);
-						const values = $this.data('values');
-
-						if (!values) {
-							console.error("Atributo data-values não definido ou vazio:", $this);
-							return;
-						}
-
-						try {
-							$this.sparkline('html', {
-								tagValuesAttribute: 'data-values',
-								type: 'bar',
-								barWidth: 8,
-								height: '30px',
-								chartRangeMin: 0,
-								colorMap: fixedColors.slice(0, values.split(',').length), // Seleciona cores com base na quantidade de barras
-								barColor: null // Evita sobrescrever o colorMap com uma cor única
-							});
-							console.log("Sparkline desenhado com cores fixas no elemento:", $this);
-						} catch (error) {
-							console.error("Erro ao desenhar Sparkline:", error);
-						}
-					});
-				}
-			</script>
-			
-			<script>
+					try {
+						$this.sparkline('html', {
+							tagValuesAttribute: 'data-values',
+							type: 'bar',
+							barWidth: 8,
+							height: '30px',
+							chartRangeMin: 0,
+							colorMap: fixedColors.slice(0, values.split(',').length), // Seleciona cores com base na quantidade de barras
+							barColor: null // Evita sobrescrever o colorMap com uma cor única
+						});
+						console.log("Sparkline desenhado com cores fixas no elemento:", $this);
+					} catch (error) {
+						console.error("Erro ao desenhar Sparkline:", error);
+					}
+				});
+			}
 				function initEasyPieCharts() {
 					// Seleciona todos os elementos com a classe easy-pie-chart
 					$('.easy-pie-chart').each(function() {
@@ -779,66 +763,66 @@
 																										<td>{{this.progset_desc}}</td>	
 																										<td>
 																											{{#ifEqual this.progset_qtest 1}}
-																												<span style="white-space: wrap;" class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 2}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 3}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 4}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 5}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 6}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 7}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-purple">{{this.progset_estf}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
 																												{{else}}
 																												{{#ifEqual this.progset_qtest 8}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-purple">{{this.progset_estf}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-green">{{this.progset_esth}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span class="badge badge-green">{{this.progset_esth}}</span>
 																												{{else}}
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-purple">{{this.progset_estf}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-yellow">{{this.progset_esth}}</span>
-																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esti}}</span>
+																												<span class="badge badge-info">{{this.progset_esta}}</span>
+																												<span class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span class="badge badge-success">{{this.progset_este}}</span>
+																												<span class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span class="badge badge-yellow">{{this.progset_esth}}</span>
+																												<span class="badge badge-info">{{this.progset_esti}}</span>
 																												{{/ifEqual}}
 																												{{/ifEqual}}
 																												{{/ifEqual}}
@@ -877,13 +861,11 @@
 																										</td>
 																										
 																										<td style="vertical-align: bottom; text-align: left;">
-																											<!-- Botões da Folha de Registro -->
+																											
 																											{{#each ../../../folregs}}
 																												{{#ifEqual this.folreg_setid ../_id}}
-																												<!-- Botões da Folha de Registro SImples -->
-																												{{#ifEqual this.folreg_tiporeg "Simples"}}
-																													<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-purple btn-xs">
-																												
+																												<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-purple btn-xs">
+																													
 																													<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white">
 																														{{this.folreg_datareg}}
 																														
@@ -897,26 +879,8 @@
 																													<div class="infobox-chart; infobox-blue">
 																														<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
 																													</div>
-																													</a>
-																														{{else}}
-																													<!-- Botões da Folha de Registro Duplo -->
-																													<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-info btn-wider">
-																														<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white">
-																														{{this.folreg_datareg}}
-																														
-																														<br>
-																														{{#each ../../../../usuarios}}<!-- Ok -->
-																															{{#ifEqual this._id ../folreg_usuid}}
-																																{{usuario_nome}}
-																															{{/ifEqual}}
-																														{{/each}}
-																													</label>
-																													<div class="infobox-chart; infobox-blue">
-																														<span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},
-																																							 {{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}" ></span>
-																													</div>
-																													</a>
-																												{{/ifEqual}}
+																													
+																												</a>
 																												
 																													
 																													

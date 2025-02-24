@@ -626,12 +626,12 @@
 															</div>
 														</div>
 														<div>
-															<label>E-mail</label>
+															<label>E-mails de contato</label>
 															<div class="input-group">
 																<span class="input-group-addon">
 																	<i class="ace-icon fa fa-envelope-o"></i>
 																</span>
-																<input name="usuarioEmail" id="usuarioEmail" class="col-sm-8"  type="text" id="Celular"  value="{{usuario.usuario_email}}" />
+																<input name="usuarioLogin" class="col-sm-12" class="form-control" type="text" id="login" style="width: 200px;" value="{{usuario.usuario_login}}"/>
 															</div>
 														</div>
 													</div>
@@ -726,7 +726,7 @@
 													<div id="acesso" class="tab-pane fade">
 															<div class="row">
 																<div class="col-xs-6">
-																	<label>Login
+																	<label>Login, e-mail mais usado ou da instituição
 																		<small class="text-warning"> </small>
 																	</label>
 													
@@ -734,7 +734,8 @@
 																		<span class="input-group-addon">
 																			<i class="ace-icon fa fa-user"></i>
 																		</span>
-																		<input name="usuarioLogin" class="col-sm-4" class="form-control input-mask-phone" type="text" id="login" style="width: 200px;" value="{{usuario.usuario_login}}"/>
+																		
+																		<input name="usuarioEmail" id="usuarioEmail" class="col-sm-8"  type="text" id="Celular"  value="{{usuario.usuario_email}}" />
 																	</div>
 																</div>
 																<div class="col-xs-6">													

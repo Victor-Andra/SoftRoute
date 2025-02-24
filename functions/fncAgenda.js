@@ -7245,6 +7245,7 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
+        this.atualizaValores(req,res);
         let aux = 1;
         let is = false;
         let dtFill;
@@ -14243,6 +14244,177 @@ module.exports = {
                 aux++;
             })
         }
+    },
+    atualizaValores(req,res){
+        let cc = convcreClass.convcreCarregarTodos(req,res);
+        let cd = convdebClass.convdebCarregarTodos(req,res);
+        let convcreTes;
+        let agendacreTes;
+        let agendacreTesSub;
+        let agendacreTesFixo;
+        let convcreval;
+        let convcrevalSub;
+        let convcrevalFixo;
+        let convdebTes;
+        let agendadebTes;
+        let agendadebTesSub;
+        let agendadebTesFixo;
+        let convdebval;
+        let convdebvalSub;
+        let convdebvalFixo;
+
+        let seg = new Date(2025, 1, 1);
+        let sex = new Date(2025, 2, 10);
+        console.log("seg: "+seg);
+        console.log("sex: "+seg);
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        seg.setHours(seg.getHours()-3);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        sex.setHours(sex.getHours()-3);
+        
+        let dataIni = seg.toISOString();
+        let dataFim = sex.toISOString();
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
+        console.log("UEEEEEEEEEEE");
+
+
+        Atend.find({atend_beneid  : new ObjectId('6613f148decce5c01530d736'), agenda_data: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
+
+            cc.then((convcre)=>{
+                convcre.forEach((c)=>{
+                    Conv.findOne({_id: c.convcre_convid}).then((conv)=>{
+                        c.convcre_convCpfCnpj = conv.conv_cnpj;
+                    })
+                })
+                //console.log(convcre)
+                cd.then((convdeb)=>{
+                    convdeb.forEach((d)=>{
+                        Conv.findOne({_id: d.convdeb_convid}).then((conv)=>{
+                            d.convdeb_convCpfCnpj = conv.conv_cnpj;
+                        })
+                    })
+                    console.log("atendimentos: "+atendimentos.length)
+
+                    atendimentos.forEach((a)=>{
+                        agendacreTes = ""+a.atend_convid + a.atend_terapiaid+""
+                        agendacreTesSub = ""+a.atend_convid + a.atend_mergeterapiaid+""
+                        agendacreTesFixo = ""+a.atend_convid + a.atend_fixoterapiaid+""
+                        console.log("agendacreTes: "+agendacreTes)
+                        console.log("agendacreTesSub: "+agendacreTesSub)
+                        console.log("agendacreTesFixo: "+agendacreTesFixo)
+                        convcre.forEach((ccre)=>{
+                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                            if ((""+a._id+"") == "67b726d179ffc3544c07d954"){
+                                console.log("convcreTes: "+convcreTes)
+                                console.log("agendacreTes: "+agendacreTes)
+                                console.log("convcreTes == agendacreTes: "+convcreTes == agendacreTes)
+                            }
+                            if( convcreTes == agendacreTes){
+                                //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                convcreval = ccre.convcre_valor;
+                                console.log("convcreval: "+convcreval)
+                            }
+                            if( convcreTes == agendacreTesSub){
+                                //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                convCreCpfCnpjSub = ccre.convcre_convCpfCnpj;
+                                convcrevalSub = ccre.convcre_valor;
+                                console.log("convcrevalSub: "+convcrevalSub)
+                            }
+                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                if( convcreTes == agendacreTesFixo){
+                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                    convCreCpfCnpjFixo = ccre.convcre_convCpfCnpj;
+                                    convcrevalFixo = ccre.convcre_valor;
+                                    console.log("convcrevalFixo: "+convcrevalFixo)
+                                }
+                            }
+                        })
+
+                        agendadebTes = ""+a.atend_convid + a.atend_terapiaid+"";//padrão
+                        agendadebTesSub = ""+a.atend_convid + a.atend_mergeterapiaid+"";//Semanal
+                        agendadebTesFixo = ""+a.atend_convid + a.atend_fixoterapiaid+"";//SubFixa
+                        convdeb.forEach((cdeb)=>{
+                            convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                            if(convdebTes == agendadebTes){
+                                //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                convdebval = cdeb.convdeb_valor;
+                            }
+                            if(convdebTes == agendadebTesSub){
+                                //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                convDebCpfCnpjSub = cdeb.convdeb_convCpfCnpj;
+                                convdebvalSub = cdeb.convdeb_valor;
+                            }
+                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                if(convdebTes == agendadebTesFixo){
+                                    //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                    convDebCpfCnpjFixo = cdeb.convdeb_convCpfCnpj;
+                                    convdebvalFixo = cdeb.convdeb_valor;
+                                }
+                            }
+                        })
+                        if (a.atend_mergeterapiaid == undefined){
+                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                Atend.findByIdAndUpdate(a._id, { $set: { 
+                                    atend_valorcre : convcreval,//Convenio não paga
+                                    atend_valordeb : convdebval,//Paga ao musico
+                                    atend_fixovalorcre : convcrevalFixo,
+                                    atend_fixovalordeb : convdebvalFixo 
+                                }}).then(() =>{
+                                    console.log("TRUE")
+                                }).catch((err) =>{
+                                    console.log(err)
+                                })
+                            } else {
+                                Atend.findByIdAndUpdate(a._id, { $set: { 
+                                    atend_valorcre : convcreval,//Convenio não paga
+                                    atend_valordeb : convdebval//Paga ao musico 
+                                }}).then(() =>{
+                                    console.log("TRUE")
+                                }).catch((err) =>{
+                                    console.log(err)
+                                })
+                            }
+                        } else {
+                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                Atend.findByIdAndUpdate(a._id, { $set: { 
+                                    atend_valorcre : convcreval,//Convenio não paga
+                                    atend_valordeb : convdebval,//Paga ao musico
+                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                    atend_fixovalorcre : convcrevalFixo,
+                                    atend_fixovalordeb : convdebvalFixo
+                                }}).then((ue)=>{
+                                    console.log("FEZ?!")
+                                }).then(() =>{
+                                    console.log("TRUE")
+                                }).catch((err) =>{
+                                    console.log(err)
+                                })
+                            } else {
+                                Atend.findByIdAndUpdate(a._id, { $set: { 
+                                    atend_valorcre : convcreval,//Convenio não paga
+                                    atend_valordeb : convdebval,//Paga ao musico
+                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                    atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                }}).then(() =>{
+                                    console.log("TRUE")
+                                }).catch((err) =>{
+                                    console.log(err)
+                                })
+                            }
+                        }
+                    })
+                })
+            })
+        })
+            
     }
 }
 /*
