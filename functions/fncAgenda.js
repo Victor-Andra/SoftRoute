@@ -7245,7 +7245,6 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
-        this.atualizaValores(req,res);
         let aux = 1;
         let is = false;
         let dtFill;
