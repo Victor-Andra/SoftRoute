@@ -141,7 +141,7 @@
 											<p class="alert alert-info">
 												<b>Beneficiários</b>
 											</p>
-											{{#if aniversariantesDaSemanaBene.length}}
+											{{#if aniversariantesDoDiaBene.length}}
 												<table id="dynamic-table" class="table table-striped table-bordered table-hover" role="grid" aria-describedby="dynamic-table_info">
 													<thead>
 														<tr>
@@ -150,14 +150,10 @@
 														</tr>
 													</thead>
 													<tbody>
-														{{#each aniversariantesDaSemanaBene}}
+														{{#each aniversariantesDoDiaBene}}
 															<tr>
 																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
-																<td>{{this.bene_nome}}
-																	{{#if this.hoje}}
-																		<span class="badge badge-success">Hoje!</span>
-																	{{/if}}
-																</td>
+																<td>{{this.bene_nome}}</td>
 															</tr>
 														{{/each}}
 													</tbody>
@@ -172,7 +168,7 @@
 											<p class="alert alert-warning">
 												<b>Colaboradores</b>
 											</p>
-											{{#if aniversariantesDaSemanaUsuario.length}}
+											{{#if aniversariantesDoDiaUsuario.length}}
 												<table id="dynamic-table" class="table table-striped table-bordered table-hover" role="grid" aria-describedby="dynamic-table_info">
 													<thead>
 														<tr>
@@ -181,14 +177,10 @@
 														</tr>
 													</thead>
 													<tbody>
-														{{#each aniversariantesDaSemanaUsuario}}
+														{{#each aniversariantesDoDiaUsuario}}
 															<tr>
 																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
-																<td>{{this.usuario_nome}}
-																	{{#if this.hoje}}
-																		<span class="badge badge-success">Hoje!</span>
-																	{{/if}}
-																</td>
+																<td>{{this.usuario_nome}}</td>
 															</tr>
 														{{/each}}
 													</tbody>

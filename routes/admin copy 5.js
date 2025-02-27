@@ -550,58 +550,36 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             }
 
             const hoje = new Date();
-            const anoAtual = hoje.getUTCFullYear();
             const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
             const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
 
-            // Calcula o intervalo da semana corrente
-            const inicioSemana = new Date(hoje);
-            inicioSemana.setDate(hoje.getDate() - hoje.getDay() + 1); // Segunda-feira
-
-            const fimSemana = new Date(hoje);
-            fimSemana.setDate(hoje.getDate() + (7 - hoje.getDay())); // Domingo
-
-            // Função para verificar se uma data está dentro da semana corrente
-            const isDentroDaSemana = (diaNascimento, mesNascimento) => {
-                const dataNascimento = new Date(anoAtual, mesNascimento - 1, diaNascimento);
-                return dataNascimento >= inicioSemana && dataNascimento <= fimSemana;
-            };
-
             // Consulta para aniversariantes do dia na tabela Usuario
             Usuario.find({ usuario_status: "Ativo" }).then((usuarios) => {
-                const aniversariantesDaSemanaUsuario = usuarios
+                const aniversariantesDoDiaUsuario = usuarios
                     .map(usuario => {
                         const datanasc = new Date(usuario.usuario_datanasc);
-                        const diaNascimento = String(datanasc.getUTCDate()).padStart(2, '0');
-                        const mesNascimento = String(datanasc.getUTCMonth() + 1).padStart(2, '0');
                         return {
-                            dtnasc: datanasc,
                             usuario_nome: usuario.usuario_nome,
-                            diaNascimento: diaNascimento,
-                            mesNascimento: mesNascimento,
-                            origem: "Usuario",
-                            hoje: diaNascimento === diaAtual && mesNascimento === mesAtual // Indica se é hoje
+                            diaNascimento: String(datanasc.getUTCDate()).padStart(2, '0'),
+                            mesNascimento: String(datanasc.getUTCMonth() + 1).padStart(2, '0'),
+                            origem: "Usuario" // Identifica que vem da tabela Usuario
                         };
                     })
-                    .filter(usuario => isDentroDaSemana(usuario.diaNascimento, usuario.mesNascimento));
+                    .filter(usuario => usuario.mesNascimento === mesAtual && usuario.diaNascimento === diaAtual);
 
                 // Consulta para aniversariantes do dia na tabela Bene
                 return Bene.find({ bene_status: "Ativo" }).then((benes) => {
-                    const aniversariantesDaSemanaBene = benes
+                    const aniversariantesDoDiaBene = benes
                         .map(bene => {
                             const datanasc = new Date(bene.bene_datanasc);
-                            const diaNascimento = String(datanasc.getUTCDate()).padStart(2, '0');
-                            const mesNascimento = String(datanasc.getUTCMonth() + 1).padStart(2, '0');
                             return {
-                                dtnasc: datanasc,
                                 bene_nome: bene.bene_nome,
-                                diaNascimento: diaNascimento,
-                                mesNascimento: mesNascimento,
-                                origem: "Bene",
-                                hoje: diaNascimento === diaAtual && mesNascimento === mesAtual // Indica se é hoje
+                                diaNascimento: String(datanasc.getUTCDate()).padStart(2, '0'),
+                                mesNascimento: String(datanasc.getUTCMonth() + 1).padStart(2, '0'),
+                                origem: "Bene" // Identifica que vem da tabela Bene
                             };
                         })
-                        .filter(bene => isDentroDaSemana(bene.diaNascimento, bene.mesNascimento));
+                        .filter(bene => bene.mesNascimento === mesAtual && bene.diaNascimento === diaAtual);
 
                     let flash = new Resposta();
                     if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined) {
@@ -615,35 +593,15 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                         flash.texto = "Logado com sucesso!";
                     }
 
-                    aniversariantesDaSemanaUsuario.sort(function(a, b){
-                        const [diaA, mesA] = (""+a.diaNascimento+"/"+a.mesNascimento).split('/').map(Number);
-                        const [diaB, mesB] = (""+b.diaNascimento+"/"+b.mesNascimento).split('/').map(Number);
-                        const dataA = new Date((new Date().getFullYear()), mesA - 1, diaA, 0, 0, 0, 0);
-                        const dataB = new Date((new Date().getFullYear()), mesB - 1, diaB, 0, 0, 0, 0);
-                        console.log("dataA? "+dataA)
-                        console.log("dataB? "+dataB)
-
-                        return dataA - dataB;
-                    })
-
-                    aniversariantesDaSemanaBene.sort(function(a, b){
-                        const [diaA, mesA] = (""+a.diaNascimento+"/"+a.mesNascimento).split('/').map(Number);
-                        const [diaB, mesB] = (""+b.diaNascimento+"/"+b.mesNascimento).split('/').map(Number);
-                        const dataA = new Date((new Date().getFullYear()), mesA - 1, diaA, 0, 0, 0, 0);
-                        const dataB = new Date((new Date().getFullYear()), mesB - 1, diaB, 0, 0, 0, 0);
-
-                        return dataA - dataB;
-                    })
-
                     res.render("branco", {
                         flash,
-                        aniversariantesDaSemanaUsuario: aniversariantesDaSemanaUsuario,
-                        aniversariantesDaSemanaBene: aniversariantesDaSemanaBene
+                        aniversariantesDoDiaUsuario: aniversariantesDoDiaUsuario,
+                        aniversariantesDoDiaBene: aniversariantesDoDiaBene
                     });
                 });
             }).catch((err) => {
                 console.log(err);
-                req.flash("error_message", "Houve um erro ao listar os aniversariantes da semana");
+                req.flash("error_message", "Houve um erro ao listar os aniversariantes do dia");
                 res.redirect('/menu/admin/erro');
             });
         } else {

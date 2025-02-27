@@ -407,6 +407,38 @@ module.exports = {
             res.redirect('admin/erro');
         });
     },
+    relaniverdiaUsu(req, res) {
+        const hoje = new Date(); // Data atual
+        const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0'); // Mês atual (formatado com zero à esquerda)
+        const diaAtual = String(hoje.getUTCDate()).padStart(2, '0'); // Dia atual (formatado com zero à esquerda)
+    
+        console.log('Listando Aniversariantes do Dia');
+    
+        Usuario.find({ usuario_status: "Ativo" }).then((usuarios) => {
+            // Adiciona diaNascimento e mesNascimento a cada usuário
+            usuarios.forEach((usuario) => {
+                const datanasc = new Date(usuario.usuario_datanasc);
+                usuario.mesNascimento = String(datanasc.getUTCMonth() + 1).padStart(2, '0'); // Mês com zero à esquerda
+                usuario.diaNascimento = String(datanasc.getUTCDate()).padStart(2, '0'); // Dia com zero à esquerda
+            });
+        
+            // Filtra os usuários cujo dia e mês de nascimento correspondem ao dia atual
+            const aniversariantesDoDia = usuarios.filter((usuario) => {
+                return usuario.mesNascimento === mesAtual && usuario.diaNascimento === diaAtual;
+            });
+        
+            // Renderiza a página em branco com os aniversariantes do dia
+            res.render('area/relaniverdiaUsu', { 
+                nivel: lvl,
+                aniversariantesDoDia: aniversariantesDoDia 
+            });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar os aniversariantes do dia");
+            res.redirect('admin/erro');
+        });
+    },
+
     carregaCarimboLis(req,res){
         let base64Image;
         Usuario.findOne({_id: req.params.id}).then((usuario) =>{

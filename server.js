@@ -159,11 +159,13 @@ app.post('/upload', upload.single('file'), (req, res) => {
                 
                     var dataAtual = new Date();
                     //console.log("/"+retornaData(v1)+" = "+dataAtual)
-                    if (retornaData(v1) < dataAtual) {
-                        return options.fn(this);
-                    } else {
-                        //console.log("/false")
-                        return options.inverse(this);
+                    if (v1 != undefined){
+                        if (retornaData(v1) < dataAtual) {
+                            return options.fn(this);
+                        } else {
+                            //console.log("/false")
+                            return options.inverse(this);
+                        }
                     }
                 },
                 dataIgual: function (v1, options) {//Verifica 2 atributos que sejam de mesmo tipo e valor
