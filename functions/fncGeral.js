@@ -199,20 +199,6 @@ module.exports = {Filtros,
                 return "dom"
         }
     },
-    getDataFMT(data){
-        let dt = new Date(data);
-        
-        let mes = (dt.getUTCMonth()+1).toString();
-        let dia = (dt.getUTCDate()).toString();
-        if (mes.length == 1){
-            mes = "0"+mes;
-        }
-        if (dia.length == 1){
-            dia = "0"+dia;
-        }
-        
-        return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
-    },
     capitalizarNome(nome) {
         // Lista de preposições a serem excluídas
         const preposicoesExcluir = ["da", "de", "dos", "das"];

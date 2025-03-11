@@ -14277,10 +14277,8 @@ module.exports = {
         
         let dataIni = seg.toISOString();
         let dataFim = sex.toISOString();
-        console.log("dataIni: "+dataIni);
-        console.log("dataFim: "+dataFim);
-        console.log("UEEEEEEEEEEE");
-
+        //console.log("dataIni: "+dataIni);
+        //console.log("dataFim: "+dataFim);
 
         Atend.find({atend_beneid  : new ObjectId('6613f148decce5c01530d736'), agenda_data: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
 

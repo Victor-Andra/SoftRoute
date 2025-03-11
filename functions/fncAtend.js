@@ -980,15 +980,10 @@ module.exports = {
                                         default:
                                             break;
                                     }
-
-                                    rab.dataDia = fncGeral.getData(atend.atend_atenddata);
-                                    rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
-                                    rab.hora = atend.atend_atendhora;
-                                } else {
-                                    //console.log("atend.atend_atenddata: "+atend.atend_atenddata)
-                                    rab.dt = (fncGeral.getData(atend.atend_atenddata));
-                                    //console.log("rab.dt: "+rab.dt)
                                 }
+                                rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+                                rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
+                                rab.hora = atend.atend_atendhora;
                                 categorias = atend.atend_categoria
                                 console.log("categorias:"+categorias)
                                 if (atend.atend_fixo == "true"){
@@ -1067,10 +1062,22 @@ module.exports = {
                                 }
                             });
                             rel.sort(function(a, b){
+                                let dataODiaA = "";
+                                let dataODiaB = "";
+                                if (a.dataDia == undefined || a.dataDia == "undefined" || a.dataDia == null){
+                                    dataODiaA = fncGeral.getData(a.dt);
+                                } else {
+                                    dataODiaA = a.dataDia;
+                                }
+                                if (b.dataDia == undefined || b.dataDia == "undefined" || b.dataDia == null){
+                                    dataODiaB = fncGeral.getData(b.dt);
+                                } else {
+                                    dataODiaB = b.dataDia;
+                                }
                                 let provHourA = a.hora+":0:0";
                                 let provHourB = b.hora+":0:0";
-                                const [diaA, mesA, anoA] = a.dataDia.split('/').map(Number);
-                                const [diaB, mesB, anoB] = b.dataDia.split('/').map(Number);
+                                const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
                                 const [horaA, minA, segA, mSegA] = provHourA.split(':');
                                 const [horaB, minB, segB, mSegB] = provHourB.split(':');
                                 const dataA = new Date(anoA, mesA - 1, diaA, horaA, minA, segA, mSegA);
@@ -1710,6 +1717,8 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                 }
+                                console.log("atend: "+atend)
+                                /*
                                 if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
                                     let convcreval;
                                     let convcreTes;
@@ -1724,11 +1733,11 @@ module.exports = {
                                     })
                                     creVal = convcreval;
                                 }
-
+*/
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
                                     creValFinal = creVal;
-                                    console.log("TERAPIA OK")
+                                    console.log("creVal: "+creVal)
                                 }
                                 }
                             })
@@ -1738,22 +1747,17 @@ module.exports = {
                                 a.sessoes = qtdIds;
                                 a.nomecid = t._id;
                                 a.convid = convid;
-                            }
-                            
-                            if(qtdIds != 0){
+
+                                console.log("a: "+a.valor)
                                 rel.push(a);
                                 a = new RelAtend();
                             }
                         })
                         })
                         rel.forEach((r)=>{
-                            cre.forEach((c)=>{
-                                if ((""+c.convcre_convid) == (""+r.convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
-                                    r.valor = c.convcre_valor;
-                                }
-                            });
                             val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                             val = this.mascaraValores(val);
+                            console.log("VAL: "+val)
                             r.total = val;
 
                             valTot = this.mascaraValores((parseInt(valTot.toString().replace(",","").replace(".","")) + parseInt(val.toString().replace(",","").replace(".",""))));
