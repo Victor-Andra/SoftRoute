@@ -960,26 +960,23 @@ module.exports = {
                                 }
                             });
                             at.forEach((atend)=>{
-                                if (req.body.porHoras == "sim"){
-                                    let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
-                                    let minutoFim = atend.atend_atendhora.substring(3,5);
-                                    console.log("minutoFim: "+minutoFim)
-                                    switch (minutoFim) {
-                                        case "00":
-                                            horaFim = ((""+(horaFim)+"").length == 1 ? ("0"+(horaFim)+""):(""+(horaFim)+""));
-                                            minutoFim = "40";
-                                            break;
-                                        case "20":
-                                            minutoFim = "00";
-                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
-                                            break;
-                                        case "40":
-                                            horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
-                                            minutoFim = "20";
-                                            break;
-                                        default:
-                                            break;
-                                    }
+                                let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
+                                let minutoFim = atend.atend_atendhora.substring(3,5);
+                                switch (minutoFim) {
+                                    case "00":
+                                        horaFim = ((""+(horaFim)+"").length == 1 ? ("0"+(horaFim)+""):(""+(horaFim)+""));
+                                        minutoFim = "40";
+                                        break;
+                                    case "20":
+                                        minutoFim = "00";
+                                        horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                        break;
+                                    case "40":
+                                        horaFim = ((""+(horaFim+1)+"").length == 1 ? ("0"+(horaFim+1)+""):(""+(horaFim+1)+""));
+                                        minutoFim = "20";
+                                        break;
+                                    default:
+                                        break;
                                 }
                                 rab.dataDia = fncGeral.getData(atend.atend_atenddata);
                                 rab.dt = (fncGeral.getData(atend.atend_atenddata)) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;

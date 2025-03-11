@@ -3615,270 +3615,251 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<script>
-		function loadDraftReport() {
-		console.log("Executando loadDraftReport...");
-		const draft = localStorage.getItem('draftReport');
-		console.log("Rascunho recuperado do localStorage:", draft);
+			// Função para carregar o rascunho salvo
+			// Função principal para carregar o rascunho
+			function loadDraftReport() {
+			console.log("Executando loadDraftReport...");
+			const draft = localStorage.getItem('draftReport');
+			console.log("Rascunho recuperado do localStorage:", draft);
 
-		if (!draft || draft === "{}") {
-			console.log("Nenhum rascunho encontrado no localStorage.");
-			alert('Nenhum rascunho encontrado.');
-			return;
-		}
-
-		try {
-			console.log("Tentando processar o rascunho...");
-			const reportData = JSON.parse(draft);
-			console.log("Dados do rascunho processados:", reportData);
-
-			// Lista de campos com sufixo "temp"
-			const fieldsWithTemp = [
-			//Campos Totais e contadores
-			"ataTotalitens",
-			"ataTotalitens_i",
-			"ataTotalitens_ii",
-			"ataTotalitens_iii",
-			"ataTotalitens_iv",
-			"ataTotalitens_v",
-			"ataTotalitens_vi",
-			"ataTotalitens_vii",
-			"ataTotalitens_viii",
-			"ataTotalitens_ix",
-			"ataTotalitens_x",
-			"ataTotalitens_xi",
-			"ataTotalitens_xii",
-			"ataTotalitens_xiii",
-			"ataTotalitens_xiv",
-			"ataTotalitens_xv",
-			"ataTotalitens_xvi",
-			"ataTotalitens_xvii",
-			"ataTotalitens_xviii",
-			"ataTotalitens_xix",
-			"ataTotalitens_xx",
-			"ataTotalitens_xxi",
-			"ataTotalitens_xxii",
-			"ataTotalitens_xxiii",
-			"ataTotalpontos_i",
-			"ataTotalpontos_ii",
-			"ataTotalpontos_iii",
-			"ataTotalpontos_iv",
-			"ataTotalpontos_v",
-			"ataTotalpontos_vi",
-			"ataTotalpontos_vii",
-			"ataTotalpontos_viii",
-			"ataTotalpontos_ix",
-			"ataTotalpontos_x",
-			"ataTotalpontos_xi",
-			"ataTotalpontos_xii",
-			"ataTotalpontos_xiii",
-			"ataTotalpontos_xiv",
-			"ataTotalpontos_xv",
-			"ataTotalpontos_xvi",
-			"ataTotalpontos_xvii",
-			"ataTotalpontos_xviii",
-			"ataTotalpontos_xix",
-			"ataTotalpontos_xx",
-			"ataTotalpontos_xxi",
-			"ataTotalpontos_xxii",
-			"ataTotalpontos_xxiii",
-			"ataTotalpontos",
-			//Cabeçalho
-			"ataBeneid",
-			"ataBeneidade",
-			"ataTerapeutaid",
-			"ataParem",
-			"ataAcompanhausuid",
-			"ataCorrecdata",
-			"ataCorrecusuid",
-			"ataObs",
-			//Campos Temp
-			"ataI01temp",
-			"ataI02temp",
-			"ataI03temp",
-			"ataI04temp",
-			"ataI05temp",
-			"ataI06temp",
-			"ataI07temp",
-			"ataIi01temp",
-			"ataIi02temp",
-			"ataIi03temp",
-			"ataIi04temp",
-			"ataIi05temp",
-			"ataIi06temp",
-			"ataIii01temp",
-			"ataIii02temp",
-			"ataIii03temp",
-			"ataIii04temp",
-			"ataIv01temp",
-			"ataIv02temp",
-			"ataIv03temp",
-			"ataV01temp",
-			"ataV02temp",
-			"ataV03temp",
-			"ataV04temp",
-			"ataVi01temp",
-			"ataVi02temp",
-			"ataVi03temp",
-			"ataVi04temp",
-			"ataVi05temp",
-			"ataVi06temp",
-			"ataVii01temp",
-			"ataVii02temp",
-			"ataVii03temp",
-			"ataVii04temp",
-			"ataViii01temp",
-			"ataViii02temp",
-			"ataViii03temp",
-			"ataViii04temp",
-			"ataViii05temp",
-			"ataIx01temp",
-			"ataIx02temp",
-			"ataIx03temp",
-			"ataIx04temp",
-			"ataIx05temp",
-			"ataIx06temp",
-			"ataIx07temp",
-			"ataIx08temp",
-			"ataX01temp",
-			"ataX02temp",
-			"ataX03temp",
-			"ataX04temp",
-			"ataXi01temp",
-			"ataXi02temp",
-			"ataXi03temp",
-			"ataXi04temp",
-			"ataXii01temp",
-			"ataXii02temp",
-			"ataXii03temp",
-			"ataXii04temp",
-			"ataXii05temp",
-			"ataXii06temp",
-			"ataXii07temp",
-			"ataXiii01temp",
-			"ataXiii02temp",
-			"ataXiii03temp",
-			"ataXiii04temp",
-			"ataXiv01temp",
-			"ataXiv02temp",
-			"ataXiv03temp",
-			"ataXiv04temp",
-			"ataXiv05temp",
-			"ataXv01temp",
-			"ataXv02temp",
-			"ataXv03temp",
-			"ataXv04temp",
-			"ataXv05temp",
-			"ataXvi01temp",
-			"ataXvi02temp",
-			"ataXvi03temp",
-			"ataXvi04temp",
-			"ataXvi05temp",
-			"ataXvi06temp",
-			"ataXvi07temp",
-			"ataXvi08temp",
-			"ataXvii01temp",
-			"ataXvii02temp",
-			"ataXvii03temp",
-			"ataXvii04temp",
-			"ataXviii01temp",
-			"ataXviii02temp",
-			"ataXviii03temp",
-			"ataXviii04temp",
-			"ataXix01temp",
-			"ataXix02temp",
-			"ataXx01temp",
-			"ataXx02temp",
-			"ataXx03temp",
-			"ataXx04temp",
-			"ataXx05temp",
-			"ataXx06temp",
-			"ataXxi01temp",
-			"ataXxi02temp",
-			"ataXxi03temp",
-			"ataXxi04temp",
-			"ataXxi05temp",
-			"ataXxi06temp",
-			"ataXxi07temp",
-			"ataXxi08temp",
-			"ataXxii01temp",
-			"ataXxii02temp",
-			"ataXxii03temp",
-			"ataXxiii01temp" // Campo de rádio
-			];
-
-			// Trata os campos normais (checkboxes e inputs)
-			handleCheckboxesAndInputs(fieldsWithTemp, reportData);
-
-			// Trata os campos de rádio separadamente
-			handleRadioButtons(reportData);
-
-			// Atualiza os campos temp explicitamente
-			updateTempFields(reportData);
-
-			alert('Rascunho recuperado automaticamente!');
-		} catch (error) {
-			console.error("Erro ao processar o rascunho:", error);
-			alert('Falha ao recuperar o rascunho. Tente novamente.');
-		}
-		}
-
-		// Função para tratar checkboxes e inputs de texto
-		function handleCheckboxesAndInputs(fields, reportData) {
-		fields.forEach((fieldName) => {
-			// Remove o sufixo "temp" para encontrar o campo no DOM
-			const fieldNameWithoutTemp = fieldName.replace("temp", "");
-			const field = document.getElementById(fieldNameWithoutTemp);
-
-			if (field) {
-			if (field.type === "checkbox") {
-				// Para checkboxes, define o atributo "checked" com base no valor
-				field.checked = reportData[fieldName] === "true";
-			} else {
-				// Para outros tipos de campos, define o valor diretamente
-				field.value = reportData[fieldName] || '';
+			if (!draft || draft === "{}") {
+				console.log("Nenhum rascunho encontrado no localStorage.");
+				alert('Nenhum rascunho encontrado.');
+				return;
 			}
-			console.log(`Campo ${fieldNameWithoutTemp}: Valor recuperado = ${reportData[fieldName]}`);
-			} else {
-			console.warn(`Campo ${fieldNameWithoutTemp} não encontrado no DOM.`);
-			}
-		});
-		}
 
-		// Função para tratar campos de rádio
-		function handleRadioButtons(reportData) {
-		// Lista de campos de rádio que precisam de tratamento especial
-		const radioFields = ["ataXxiii01"]; // Adicione outros campos de rádio aqui, se necessário
+			try {
+				console.log("Tentando processar o rascunho...");
+				const reportData = JSON.parse(draft);
+				console.log("Dados do rascunho processados:", reportData);
 
-		radioFields.forEach((fieldName) => {
-			const radioSim = document.getElementById(`${fieldName}_sim`);
-			const radioNao = document.getElementById(`${fieldName}_nao`);
+				// Lista de campos 
+				const fieldsWithTemp = [
+					"ataTotalitens",
+					"ataTotalitens_i",
+					"ataTotalitens_ii",
+					"ataTotalitens_iii",
+					"ataTotalitens_iv",
+					"ataTotalitens_v",
+					"ataTotalitens_vi",
+					"ataTotalitens_vii",
+					"ataTotalitens_viii",
+					"ataTotalitens_ix",
+					"ataTotalitens_x",
+					"ataTotalitens_xi",
+					"ataTotalitens_xii",
+					"ataTotalitens_xiii",
+					"ataTotalitens_xiv",
+					"ataTotalitens_xv",
+					"ataTotalitens_xvi",
+					"ataTotalitens_xvii",
+					"ataTotalitens_xviii",
+					"ataTotalitens_xix",
+					"ataTotalitens_xx",
+					"ataTotalitens_xxi",
+					"ataTotalitens_xxii",
+					"ataTotalitens_xxiii",
+					"ataTotalpontos_i",
+					"ataTotalpontos_ii",
+					"ataTotalpontos_iii",
+					"ataTotalpontos_iv",
+					"ataTotalpontos_v",
+					"ataTotalpontos_vi",
+					"ataTotalpontos_vii",
+					"ataTotalpontos_viii",
+					"ataTotalpontos_ix",
+					"ataTotalpontos_x",
+					"ataTotalpontos_xi",
+					"ataTotalpontos_xii",
+					"ataTotalpontos_xiii",
+					"ataTotalpontos_xiv",
+					"ataTotalpontos_xv",
+					"ataTotalpontos_xvi",
+					"ataTotalpontos_xvii",
+					"ataTotalpontos_xviii",
+					"ataTotalpontos_xix",
+					"ataTotalpontos_xx",
+					"ataTotalpontos_xxi",
+					"ataTotalpontos_xxii",
+					"ataTotalpontos_xxiii",
+					"ataTotalpontos",
+				"ataBeneid",
+				"ataBeneidade",
+				"ataTerapeutaid",
+				"ataParem",
+				"ataAcompanhausuid",
+				"ataCorrecdata",
+				"ataCorrecusuid",
+				"ataObs",
+				"ataI01temp",
+				"ataI02temp",
+				"ataI03temp",
+				"ataI04temp",
+				"ataI05temp",
+				"ataI06temp",
+				"ataI07temp",
+				"ataIi01temp",
+				"ataIi02temp",
+				"ataIi03temp",
+				"ataIi04temp",
+				"ataIi05temp",
+				"ataIi06temp",
+				"ataIii01temp",
+				"ataIii02temp",
+				"ataIii03temp",
+				"ataIii04temp",
+				"ataIv01temp",
+				"ataIv02temp",
+				"ataIv03temp",
+				"ataV01temp",
+				"ataV02temp",
+				"ataV03temp",
+				"ataV04temp",
+				"ataVi01temp",
+				"ataVi02temp",
+				"ataVi03temp",
+				"ataVi04temp",
+				"ataVi05temp",
+				"ataVi06temp",
+				"ataVii01temp",
+				"ataVii02temp",
+				"ataVii03temp",
+				"ataVii04temp",
+				"ataViii01temp",
+				"ataViii02temp",
+				"ataViii03temp",
+				"ataViii04temp",
+				"ataViii05temp",
+				"ataIx01temp",
+				"ataIx02temp",
+				"ataIx03temp",
+				"ataIx04temp",
+				"ataIx05temp",
+				"ataIx06temp",
+				"ataIx07temp",
+				"ataIx08temp",
+				"ataX01temp",
+				"ataX02temp",
+				"ataX03temp",
+				"ataX04temp",
+				"ataXi01temp",
+				"ataXi02temp",
+				"ataXi03temp",
+				"ataXi04temp",
+				"ataXii01temp",
+				"ataXii02temp",
+				"ataXii03temp",
+				"ataXii04temp",
+				"ataXii05temp",
+				"ataXii06temp",
+				"ataXii07temp",
+				"ataXiii01temp",
+				"ataXiii02temp",
+				"ataXiii03temp",
+				"ataXiii04temp",
+				"ataXiv01temp",
+				"ataXiv02temp",
+				"ataXiv03temp",
+				"ataXiv04temp",
+				"ataXiv05temp",
+				"ataXv01temp",
+				"ataXv02temp",
+				"ataXv03temp",
+				"ataXv04temp",
+				"ataXv05temp",
+				"ataXvi01temp",
+				"ataXvi02temp",
+				"ataXvi03temp",
+				"ataXvi04temp",
+				"ataXvi05temp",
+				"ataXvi06temp",
+				"ataXvi07temp",
+				"ataXvi08temp",
+				"ataXvii01temp",
+				"ataXvii02temp",
+				"ataXvii03temp",
+				"ataXvii04temp",
+				"ataXviii01temp",
+				"ataXviii02temp",
+				"ataXviii03temp",
+				"ataXviii04temp",
+				"ataXix01temp",
+				"ataXix02temp",
+				"ataXx01temp",
+				"ataXx02temp",
+				"ataXx03temp",
+				"ataXx04temp",
+				"ataXx05temp",
+				"ataXx06temp",
+				"ataXxi01temp",
+				"ataXxi02temp",
+				"ataXxi03temp",
+				"ataXxi04temp",
+				"ataXxi05temp",
+				"ataXxi06temp",
+				"ataXxi07temp",
+				"ataXxi08temp",
+				"ataXxii01temp",
+				"ataXxii02temp",
+				"ataXxii03temp",
+				"ataXxiii01temp" // Campo de rádio  	
+				];
 
-			if (radioSim && radioNao) {
-			// Define qual rádio deve ser marcado com base no valor recuperado
-			const value = reportData[`${fieldName}temp`];
-			radioSim.checked = value === "true"; // Marca "_sim" se o valor for "true"
-			radioNao.checked = value === "false"; // Marca "_nao" se o valor for "false"
-			console.log(`Campo ${fieldName}: Valor recuperado = ${value}, Sim = ${radioSim.checked}, Nao = ${radioNao.checked}`);
-			} else {
-			console.warn(`Campos de rádio ${fieldName}_sim ou ${fieldName}_nao não encontrados no DOM.`);
-			}
-		});
-		}
+				// Trata os campos normais (checkboxes e inputs)
+				handleCheckboxesAndInputs(fieldsWithTemp, reportData);
 
-		// Função para atualizar explicitamente os campos temp
-		function updateTempFields(reportData) {
-		Object.keys(reportData).forEach((key) => {
-			if (key.endsWith("temp")) {
-			const tempField = document.getElementById(key);
-			if (tempField) {
-				tempField.value = reportData[key];
-				console.log(`Campo temp ${key}: Valor atualizado = ${reportData[key]}`);
-			} else {
-				console.warn(`Campo temp ${key} não encontrado no DOM.`);
+				// Trata os campos de rádio separadamente
+				handleRadioButtons(reportData);
+
+				alert('Rascunho recuperado automaticamente!');
+			} catch (error) {
+				console.error("Erro ao processar o rascunho:", error);
+				alert('Falha ao recuperar o rascunho. Tente novamente.');
 			}
 			}
-		});
-		}
+
+// Função para tratar checkboxes e inputs de texto
+function handleCheckboxesAndInputs(fields, reportData) {
+  fields.forEach((fieldName) => {
+    // Remove o sufixo "temp" para encontrar o campo no DOM
+    const fieldNameWithoutTemp = fieldName.replace("temp", "");
+    const field = document.getElementById(fieldNameWithoutTemp);
+
+    if (field) {
+      if (field.type === "checkbox") {
+        // Para checkboxes, define o atributo "checked" com base no valor
+        field.checked = reportData[fieldName] === "true";
+      } else {
+        // Para outros tipos de campos, define o valor diretamente
+        field.value = reportData[fieldName] || '';
+      }
+      console.log(`Campo ${fieldNameWithoutTemp}: Valor recuperado = ${reportData[fieldName]}`);
+    } else {
+      console.warn(`Campo ${fieldNameWithoutTemp} não encontrado no DOM.`);
+    }
+  })
+}
+
+// Função para tratar campos de rádio
+function handleRadioButtons(reportData) {
+  // Lista de campos de rádio que precisam de tratamento especial
+  const radioFields = ["ataXxiii01"]; // Adicione outros campos de rádio aqui, se necessário
+
+  radioFields.forEach((fieldName) => {
+    const radioSim = document.getElementById(`${fieldName}_sim`);
+    const radioNao = document.getElementById(`${fieldName}_nao`);
+
+    if (radioSim && radioNao) {
+      // Define qual rádio deve ser marcado com base no valor recuperado
+      const value = reportData[`${fieldName}temp`];
+      radioSim.checked = value === "true"; // Marca "_sim" se o valor for "true"
+      radioNao.checked = value === "false"; // Marca "_nao" se o valor for "false"
+      console.log(`Campo ${fieldName}: Valor recuperado = ${value}, Sim = ${radioSim.checked}, Nao = ${radioNao.checked}`);
+    } else {
+      console.warn(`Campos de rádio ${fieldName}_sim ou ${fieldName}_nao não encontrados no DOM.`);
+    }
+  });
+}
 			// Função para salvar automaticamente no localStorage
 			function autoSaveReport() {
 				console.log("Executando autoSaveReport...");
