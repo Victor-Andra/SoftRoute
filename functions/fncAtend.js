@@ -1715,7 +1715,7 @@ module.exports = {
                                         break;
                                 }
                                 console.log("atend: "+atend)
-                                /*
+//Abrir comentar aqui
                                 if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
                                     let convcreval;
                                     let convcreTes;
@@ -1730,7 +1730,7 @@ module.exports = {
                                     })
                                     creVal = convcreval;
                                 }
-*/
+//Fechar Comentar aqui
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
                                     creValFinal = creVal;
@@ -1752,6 +1752,11 @@ module.exports = {
                         })
                         })
                         rel.forEach((r)=>{
+                            cre.forEach((c)=>{
+                                if ((""+c.convcre_convid) == (""+r.convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
+                                    r.valor = c.convcre_valor;
+                                }
+                            });
                             val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                             val = this.mascaraValores(val);
                             console.log("VAL: "+val)
