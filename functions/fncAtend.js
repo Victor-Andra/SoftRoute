@@ -1716,7 +1716,8 @@ module.exports = {
                                 }
                                 console.log("atend: "+atend)
 //Abrir comentar aqui
-                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
+                                //Atencao Analise 0 acima
+                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == undefined || creVal == "undefined" || creVal == "0,00")){
                                     let convcreval;
                                     let convcreTes;
                                     let agendacreTes;
@@ -1752,11 +1753,15 @@ module.exports = {
                         })
                         })
                         rel.forEach((r)=>{
-                            cre.forEach((c)=>{
-                                if ((""+c.convcre_convid) == (""+r.convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
-                                    r.valor = c.convcre_valor;
-                                }
-                            });
+                            if (r.valor == "0,00" || r.valor == undefined || r.valor == "undefined"){
+                                console.log("ENTROU!!!!!!!!!!!!!!!!")
+                                cre.forEach((c)=>{
+                                    if ((""+c.convcre_convid) == (""+r.convid) && (""+c.convcre_terapiaid) == (""+r.nomecid)){
+                                        r.valor = c.convcre_valor;
+                                    }
+                                });
+                            }
+                            console.log("r.valor|: "+r.valor)
                             val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
                             val = this.mascaraValores(val);
                             console.log("VAL: "+val)

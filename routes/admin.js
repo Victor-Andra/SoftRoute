@@ -85,7 +85,10 @@ const estadoClass = require("../models/estado")
 const Estado = mongoose.model("tb_estado")
 const fncEstado = require("../functions/fncEstado")
 
-
+//ano, cadastro dos Anos de Atividades 
+const anoClass = require("../models/ano")
+const Ano = mongoose.model("tb_ano")
+const fncAno = require("../functions/fncAno")
 
 
 //usuario, cadastro dos usuários
@@ -2383,33 +2386,42 @@ router.get('/beneficiario/excecaotera/del/:id', fncGeral.IsAuthenticated, (req,r
 
 //------------------------------------------------------------------------------------------------
 
-//Menu ATA ** Area Tecnicos e Escalas 
-//Carrega Cadastro
-router.get('/area/escalas/ata/atacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro para novo
+// **Menu ATA - Área Técnicos e Escalas**
+
+// Carrega formulário de cadastro
+router.get('/area/escalas/ata/atacad', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `carregaAta` para carregar os dados necessários para o formulário de cadastro
     fncAta.carregaAta(req, res);
 })
 
-//adiciona registro
-router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona registro
+// Adiciona um novo registro
+router.post('/area/escalas/ata/add', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `cadastraAta` para salvar os dados do formulário no banco de dados
     fncAta.cadastraAta(req, res);
 })
 
-router.post('/area/escalas/ata/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
-fncAta.atualizaAta(req, res);
+// Atualiza um registro existente
+router.post('/area/escalas/ata/atualizar', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `atualizaAta` para atualizar os dados de um ATA existente
+    fncAta.atualizaAta(req, res);
 })
 
-//carrega registro para edição
-router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+// Carrega formulário de edição
+router.get('/area/escalas/ata/ataedi/:id', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `carregaAtaEdi` para carregar os dados de um ATA específico para edição
     fncAta.carregaAtaEdi(req, res);
 })
 
-//Lista ATA por Tipo, Beneficiário. Tecnico, Medico e data
-router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para lista
+// Lista ATAs por tipo, beneficiário, técnico, médico e data
+router.get('/area/escalas/ata/atalis', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `listaAta` para exibir uma lista de ATAs cadastrados
     fncAta.listaAta(req, res);
 })
-//Deleta Ata Selecionado
-router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
-    fncAta.deletaAta(req,res);
+
+// Deleta um ATA (marca como lixo)
+router.get('/area/escalas/ata/del/:id', fncGeral.IsAuthenticated, (req, res) => {
+    // Chama a função `deletaAta` para marcar um ATA como "lixo" no banco de dados
+    fncAta.deletaAta(req, res);
 })
 
 //------------------------------------------------------------------------------------------------
@@ -2945,7 +2957,40 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/especialidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Especialidadeimento
             fncEspecialidade.atualizaEspecialidade(req, res);
         })
+//Menu Ferramentas
+    //Ano
+    router.get('/ferramentas/ano/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas empresas
+        fncAno.listaAno(req, res);
+    })
+    
+    router.get('/ferramentas/ano/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de empresa.
+        fncAno.carregaAno(req, res);
+    })
 
+    router.post('/ferramentas/ano/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona empresa
+    fncAno.cadastraAno(req, res);
+
+    })
+    
+    router.get('/ferramentas/ano/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
+        try {
+          const anoId = req.params.id;
+          await fncAno.deletaAno(anoId, req, res);
+          // Redireciona para a listagem após a deleção
+          res.redirect('/menu/ferramentas/ano/lis'); // URL da listagem
+        } catch (err) {
+          console.error(err);
+          res.render('admin/erro');
+        }
+      })
+    
+    router.get('/ferramentas/ano/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
+        fncAno.carregaAnoEdi(req, res);
+    })
+
+    router.post('/ferramentas/ano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
+        fncAno.atualizaAno(req, res);
+    })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento
         router.get('/ferramentas/especialidadePlano/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especialidadePlanos

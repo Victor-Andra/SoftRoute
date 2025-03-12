@@ -45,19 +45,20 @@
 
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">ATEC – Escala de avaliação do tratamento do autismo</a>
-							</li>
-						</ul><!-- /.breadcrumb -->
+					<div class="page-header">
+						<h1>
+							ATEC
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Escala de Avaliação do Tratamento do Autismo
+							</small>
+						</h1>
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/escalas/atec/add" method="POST">
-								<div class="col-xs-12" hidden>
+								<div class="col-xs-12" >
 									<!-- Cabeçalho -->
 										<!-- Não necessário atributos, replicação aqui somente na edição -->
 									<!-- Questionário I - 1 -->
@@ -3567,25 +3568,16 @@
 										</div>		
 									</div>
 								</div>			
-																				
-									
-							
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-
-								<div class="form-actions">
-									<div class="col-xs-12" style="text-align: center;" >
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
+								<div class="col-xs-12" style="text-align: center;" >
+									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-danger" name="acaoRec" id="acaoRec" type="button" onclick="loadDraftReport();" style="border: 1px solid blue;">
+										<i class="ace-icon fa fa-life-ring bigger-110"></i>
+										Recuperar Rascunho
+									</button>
 								</div>
 							</form>
 						</div><!-- /.col -->
@@ -3593,5 +3585,303 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<script>
+		function loadDraftReport() {
+    console.log("Executando loadDraftReport...");
+    const draft = localStorage.getItem('draftReport');
+    console.log("Rascunho recuperado do localStorage:", draft);
+
+    if (!draft || draft === "{}") {
+        console.log("Nenhum rascunho encontrado no localStorage.");
+        alert('Nenhum rascunho encontrado.');
+        return;
+    }
+
+    try {
+        console.log("Tentando processar o rascunho...");
+        const reportData = JSON.parse(draft);
+        console.log("Dados do rascunho processados:", reportData);
+
+        // Função para preencher campos de rádio
+        function handleRadioButtons(fieldName, value) {
+            if (!value) {
+                console.warn(`Campo ${fieldName} está vazio. Nenhuma opção será selecionada.`);
+                return;
+            }
+
+            // Determina o sufixo com base no valor
+            let suffix;
+            if (value === "1,0") suffix = "1";
+            else if (value === "2,0") suffix = "2";
+            else if (value === "3,0") suffix = "3";
+            else if (value === "4,0") suffix = "4";
+            else {
+                console.warn(`Valor inválido (${value}) para o campo ${fieldName}.`);
+                return;
+            }
+
+            // Monta o ID do campo de rádio
+            const radioId = `${fieldName}${suffix}`;
+            const radioButton = document.getElementById(radioId);
+
+            if (radioButton) {
+                radioButton.checked = true;
+                console.log(`Campo ${radioId} marcado com sucesso.`);
+            } else {
+                console.warn(`Campo de rádio ${radioId} não encontrado no DOM.`);
+            }
+        }
+
+        // Itera sobre todos os campos no rascunho
+        for (const fieldName in reportData) {
+            const value = reportData[fieldName];
+
+            // Verifica se o campo é um campo de rádio
+            if (fieldName.startsWith("atec")) {
+                console.log(`Processando campo de rádio: ${fieldName}, Valor: ${value}`);
+                handleRadioButtons(fieldName, value);
+            } else {
+                // Trata outros tipos de campos (text, select, etc.)
+                const field = document.getElementById(fieldName);
+                if (field) {
+                    if (field.type === "checkbox") {
+                        field.checked = value === "true";
+                    } else {
+                        field.value = value || '';
+                    }
+                    console.log(`Campo ${fieldName}: Valor recuperado = ${value}`);
+                } else {
+                    console.warn(`Campo ${fieldName} não encontrado no DOM.`);
+                }
+            }
+        }
+
+        alert('Rascunho recuperado automaticamente!');
+    } catch (error) {
+        console.error("Erro ao processar o rascunho:", error);
+        alert('Falha ao recuperar o rascunho. Tente novamente.');
+    }
+}
+			// Função para salvar automaticamente no localStorage
+			function autoSaveReport() {
+				console.log("Executando autoSaveReport...");
+
+				// Coleta os dados dos campos do formulário
+				const reportData = {
+				atecBeneid: document.getElementById('atecBeneid')?.value,
+				atecBenesexo: document.getElementById('atecBenesexo')?.value,
+				atecDatecnasc: document.getElementById('atecDatecnasc')?.value,
+				atecIdade: document.getElementById('atecIdade')?.value,
+				atecPreenchido: document.getElementById('atecPreenchido')?.value,
+				atecParen: document.getElementById('atecParen')?.value,
+				atecTeraacompid: document.getElementById('atecTeraacompid')?.value,
+				atecInfoiniatec: document.getElementById('atecInfoiniatec')?.value,
+				atecConcluido: document.getElementById('atecConcluido')?.value,
+				atecDataatec: document.getElementById('atecDataatec')?.value,
+				//Totais
+				atecAtec1Total: document.getElementById('atecAtec1Total')?.value,
+				atecAtec2Total: document.getElementById('atecAtec2Total')?.value,
+				atecAtec3Total: document.getElementById('atecAtec3Total')?.value,
+				atecAtec4Total: document.getElementById('atecAtec4Total')?.value,
+				atecTotpont: document.getElementById('atecTotpont')?.value,
+				atecComentatec: document.getElementById('atecComentatec')?.value,
+				//Questionário I - 1
+				atec1q01: document.getElementById('atec1q01')?.value,
+				atec1q02: document.getElementById('atec1q02')?.value,
+				atec1q03: document.getElementById('atec1q03')?.value,
+				atec1q04: document.getElementById('atec1q04')?.value,
+				atec1q05: document.getElementById('atec1q05')?.value,
+				atec1q06: document.getElementById('atec1q06')?.value,
+				atec1q07: document.getElementById('atec1q07')?.value,
+				atec1q08: document.getElementById('atec1q08')?.value,
+				atec1q09: document.getElementById('atec1q09')?.value,
+				atec1q10: document.getElementById('atec1q10')?.value,
+				atec1q11: document.getElementById('atec1q11')?.value,
+				atec1q12: document.getElementById('atec1q12')?.value,
+				atec1q13: document.getElementById('atec1q13')?.value,
+				atec1q14: document.getElementById('atec1q14')?.value,
+				// Questionário II - 2
+				atec2q01: document.getElementById('atec2q01')?.value,
+				atec2q02: document.getElementById('atec2q02')?.value,
+				atec2q03: document.getElementById('atec2q03')?.value,
+				atec2q04: document.getElementById('atec2q04')?.value,
+				atec2q05: document.getElementById('atec2q05')?.value,
+				atec2q06: document.getElementById('atec2q06')?.value,
+				atec2q07: document.getElementById('atec2q07')?.value,
+				atec2q08: document.getElementById('atec2q08')?.value,
+				atec2q09: document.getElementById('atec2q09')?.value,
+				atec2q10: document.getElementById('atec2q10')?.value,
+				atec2q11: document.getElementById('atec2q11')?.value,
+				atec2q12: document.getElementById('atec2q12')?.value,
+				atec2q13: document.getElementById('atec2q13')?.value,
+				atec2q14: document.getElementById('atec2q14')?.value,
+				atec2q15: document.getElementById('atec2q15')?.value,
+				atec2q16: document.getElementById('atec2q16')?.value,
+				atec2q17: document.getElementById('atec2q17')?.value,
+				atec2q18: document.getElementById('atec2q18')?.value,
+				atec2q19: document.getElementById('atec2q19')?.value,
+				atec2q20: document.getElementById('atec2q20')?.value,
+				// Questionário III - 3
+				atec3q01: document.getElementById('atec3q01')?.value,
+				atec3q02: document.getElementById('atec3q02')?.value,
+				atec3q03: document.getElementById('atec3q03')?.value,
+				atec3q04: document.getElementById('atec3q04')?.value,
+				atec3q05: document.getElementById('atec3q05')?.value,
+				atec3q06: document.getElementById('atec3q06')?.value,
+				atec3q07: document.getElementById('atec3q07')?.value,
+				atec3q08: document.getElementById('atec3q08')?.value,
+				atec3q09: document.getElementById('atec3q09')?.value,
+				atec3q10: document.getElementById('atec3q10')?.value,
+				atec3q11: document.getElementById('atec3q11')?.value,
+				atec3q12: document.getElementById('atec3q12')?.value,
+				atec3q13: document.getElementById('atec3q13')?.value,
+				atec3q14: document.getElementById('atec3q14')?.value,
+				atec3q15: document.getElementById('atec3q15')?.value,
+				atec3q16: document.getElementById('atec3q16')?.value,
+				atec3q17: document.getElementById('atec3q17')?.value,
+				atec3q18: document.getElementById('atec3q18')?.value,
+				// Questionário IV
+				atec4q01: document.getElementById('atec4q01')?.value,
+				atec4q02: document.getElementById('atec4q02')?.value,
+				atec4q03: document.getElementById('atec4q03')?.value,
+				atec4q04: document.getElementById('atec4q04')?.value,
+				atec4q05: document.getElementById('atec4q05')?.value,
+				atec4q06: document.getElementById('atec4q06')?.value,
+				atec4q07: document.getElementById('atec4q07')?.value,
+				atec4q08: document.getElementById('atec4q08')?.value,
+				atec4q09: document.getElementById('atec4q09')?.value,
+				atec4q10: document.getElementById('atec4q10')?.value,
+				atec4q11: document.getElementById('atec4q11')?.value,
+				atec4q12: document.getElementById('atec4q12')?.value,
+				atec4q13: document.getElementById('atec4q13')?.value,
+				atec4q14: document.getElementById('atec4q14')?.value,
+				atec4q15: document.getElementById('atec4q15')?.value,
+				atec4q16: document.getElementById('atec4q16')?.value,
+				atec4q17: document.getElementById('atec4q17')?.value,
+				atec4q18: document.getElementById('atec4q18')?.value,
+				atec4q19: document.getElementById('atec4q19')?.value,
+				atec4q20: document.getElementById('atec4q20')?.value,
+				atec4q21: document.getElementById('atec4q21')?.value,
+				atec4q22: document.getElementById('atec4q22')?.value,
+				atec4q23: document.getElementById('atec4q23')?.value,
+				atec4q24: document.getElementById('atec4q24')?.value,
+				atec4q25: document.getElementById('atec4q25')?.value,
+				atec1Q01: document.getElementById('atec1Q01')?.value,
+				//campos temporarios, letras maiúsculas
+					atec1Q02: document.getElementById('atec1Q02')?.value,
+					atec1Q03: document.getElementById('atec1Q03')?.value,
+					atec1Q04: document.getElementById('atec1Q04')?.value,
+					atec1Q05: document.getElementById('atec1Q05')?.value,
+					atec1Q06: document.getElementById('atec1Q06')?.value,
+					atec1Q07: document.getElementById('atec1Q07')?.value,
+					atec1Q08: document.getElementById('atec1Q08')?.value,
+					atec1Q09: document.getElementById('atec1Q09')?.value,
+					atec1Q10: document.getElementById('atec1Q10')?.value,
+					atec1Q11: document.getElementById('atec1Q11')?.value,
+					atec1Q12: document.getElementById('atec1Q12')?.value,
+					atec1Q13: document.getElementById('atec1Q13')?.value,
+					atec1Q14: document.getElementById('atec1Q14')?.value,
+					atec2Q01: document.getElementById('atec2Q01')?.value,
+					atec2Q02: document.getElementById('atec2Q02')?.value,
+					atec2Q03: document.getElementById('atec2Q03')?.value,
+					atec2Q04: document.getElementById('atec2Q04')?.value,
+					atec2Q05: document.getElementById('atec2Q05')?.value,
+					atec2Q06: document.getElementById('atec2Q06')?.value,
+					atec2Q07: document.getElementById('atec2Q07')?.value,
+					atec2Q08: document.getElementById('atec2Q08')?.value,
+					atec2Q09: document.getElementById('atec2Q09')?.value,
+					atec2Q10: document.getElementById('atec2Q10')?.value,
+					atec2Q11: document.getElementById('atec2Q11')?.value,
+					atec2Q12: document.getElementById('atec2Q12')?.value,
+					atec2Q13: document.getElementById('atec2Q13')?.value,
+					atec2Q14: document.getElementById('atec2Q14')?.value,
+					atec2Q15: document.getElementById('atec2Q15')?.value,
+					atec2Q16: document.getElementById('atec2Q16')?.value,
+					atec2Q17: document.getElementById('atec2Q17')?.value,
+					atec2Q18: document.getElementById('atec2Q18')?.value,
+					atec2Q19: document.getElementById('atec2Q19')?.value,
+					atec2Q20: document.getElementById('atec2Q20')?.value,
+					atec3Q01: document.getElementById('atec3Q01')?.value,
+					atec3Q02: document.getElementById('atec3Q02')?.value,
+					atec3Q03: document.getElementById('atec3Q03')?.value,
+					atec3Q04: document.getElementById('atec3Q04')?.value,
+					atec3Q05: document.getElementById('atec3Q05')?.value,
+					atec3Q06: document.getElementById('atec3Q06')?.value,
+					atec3Q07: document.getElementById('atec3Q07')?.value,
+					atec3Q08: document.getElementById('atec3Q08')?.value,
+					atec3Q09: document.getElementById('atec3Q09')?.value,
+					atec3Q10: document.getElementById('atec3Q10')?.value,
+					atec3Q11: document.getElementById('atec3Q11')?.value,
+					atec3Q12: document.getElementById('atec3Q12')?.value,
+					atec3Q13: document.getElementById('atec3Q13')?.value,
+					atec3Q14: document.getElementById('atec3Q14')?.value,
+					atec3Q15: document.getElementById('atec3Q15')?.value,
+					atec3Q16: document.getElementById('atec3Q16')?.value,
+					atec3Q17: document.getElementById('atec3Q17')?.value,
+					atec3Q18: document.getElementById('atec3Q18')?.value,
+					atec4Q01: document.getElementById('atec4Q01')?.value,
+					atec4Q02: document.getElementById('atec4Q02')?.value,
+					atec4Q03: document.getElementById('atec4Q03')?.value,
+					atec4Q04: document.getElementById('atec4Q04')?.value,
+					atec4Q05: document.getElementById('atec4Q05')?.value,
+					atec4Q06: document.getElementById('atec4Q06')?.value,
+					atec4Q07: document.getElementById('atec4Q07')?.value,
+					atec4Q08: document.getElementById('atec4Q08')?.value,
+					atec4Q09: document.getElementById('atec4Q09')?.value,
+					atec4Q10: document.getElementById('atec4Q10')?.value,
+					atec4Q11: document.getElementById('atec4Q11')?.value,
+					atec4Q12: document.getElementById('atec4Q12')?.value,
+					atec4Q13: document.getElementById('atec4Q13')?.value,
+					atec4Q14: document.getElementById('atec4Q14')?.value,
+					atec4Q15: document.getElementById('atec4Q15')?.value,
+					atec4Q16: document.getElementById('atec4Q16')?.value,
+					atec4Q17: document.getElementById('atec4Q17')?.value,
+					atec4Q18: document.getElementById('atec4Q18')?.value,
+					atec4Q19: document.getElementById('atec4Q19')?.value,
+					atec4Q20: document.getElementById('atec4Q20')?.value,
+					atec4Q21: document.getElementById('atec4Q21')?.value,
+					atec4Q22: document.getElementById('atec4Q22')?.value,
+					atec4Q23: document.getElementById('atec4Q23')?.value,
+					atec4Q24: document.getElementById('atec4Q24')?.value,
+					atec4Q25: document.getElementById('atec4Q25')?.value
+				};
+
+				console.log("Dados coletados para salvamento automático:", reportData);
+
+				// Salva os dados no localStorage
+				try {
+				localStorage.setItem('setDraftReport', JSON.stringify(reportData)); // Nome exclusivo para o SET
+				console.log("Rascunho SET salvo no localStorage com sucesso!");
+				} catch (error) {
+				console.error("Erro ao salvar o rascunho no localStorage:", error);
+				}
+			}
+
+			// Evento para iniciar o salvamento automático quando a página é carregada
+			document.addEventListener('DOMContentLoaded', () => {
+				console.log("Página carregada. Iniciando salvamento automático...");
+
+				// Carrega o rascunho ao carregar a página
+				//loadDraftReport(); //Desabilita pra ser chamado apenas pelo botão
+
+				// Salva automaticamente a cada 2 minutos (120.000 milissegundos)
+				setInterval(() => {
+				console.log("Disparando salvamento automático (intervalo de 2 minutos)...");
+				autoSaveReport();
+				}, 120000);
+
+				// Salva automaticamente quando o usuário interage com o formulário
+				const form = document.getElementById('reportForm');
+				if (form) {
+				form.addEventListener('input', () => {
+					console.log("Usuário interagiu com o formulário. Salvando rascunho...");
+					autoSaveReport();
+				});
+				} else {
+				console.warn("Formulário 'reportForm' não encontrado no DOM.");
+				}
+			});
+
+		</script>
 	</body>
 </html>
