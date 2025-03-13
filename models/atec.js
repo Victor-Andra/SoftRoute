@@ -473,8 +473,6 @@ module.exports = {AtecModel,AtecSchema,
             atec_concluido : req.body.atecConcluido,
             atec_dataatec : req.body.atecDataatec,
             atec_lixo : "false",
-            atec_lixodata: "",
-            atec_lixoidusu: "",
             //Totais
             atec_atec1Total : req.body.atecAtec1Total,
             atec_atec2Total : req.body.atecAtec2Total,

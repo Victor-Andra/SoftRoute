@@ -3586,88 +3586,130 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<script>
-		function loadDraftReport() {
-    console.log("Executando loadDraftReport...");
-    const draft = localStorage.getItem('draftReport');
-    console.log("Rascunho recuperado do localStorage:", draft);
+			function loadDraftReport() {
+				console.log("Iniciando carregamento do rascunho...");
 
-    if (!draft || draft === "{}") {
-        console.log("Nenhum rascunho encontrado no localStorage.");
-        alert('Nenhum rascunho encontrado.');
-        return;
-    }
+				// Recuperar os dados salvos no localStorage
+				const savedData = localStorage.getItem('setDraftReportAtec'); // Nome exclusivo usado no autoSaveReport
 
-    try {
-        console.log("Tentando processar o rascunho...");
-        const reportData = JSON.parse(draft);
-        console.log("Dados do rascunho processados:", reportData);
+				// Verificar se há dados salvos
+				if (!savedData) {
+					console.warn("Nenhum rascunho encontrado no localStorage.");
+					return;
+				}
 
-        // Função para preencher campos de rádio
-        function handleRadioButtons(fieldName, value) {
-            if (!value) {
-                console.warn(`Campo ${fieldName} está vazio. Nenhuma opção será selecionada.`);
-                return;
-            }
+				console.log("Rascunho encontrado no localStorage. Iniciando análise dos dados...");
 
-            // Determina o sufixo com base no valor
-            let suffix;
-            if (value === "1,0") suffix = "1";
-            else if (value === "2,0") suffix = "2";
-            else if (value === "3,0") suffix = "3";
-            else if (value === "4,0") suffix = "4";
-            else {
-                console.warn(`Valor inválido (${value}) para o campo ${fieldName}.`);
-                return;
-            }
+				// Converter a string JSON de volta para um objeto JavaScript
+				let draftData;
+				try {
+					draftData = JSON.parse(savedData);
+					console.log("Dados do rascunho analisados com sucesso:", draftData);
+				} catch (error) {
+					console.error("Erro ao analisar os dados salvos:", error);
+					return;
+				}
 
-            // Monta o ID do campo de rádio
-            const radioId = `${fieldName}${suffix}`;
-            const radioButton = document.getElementById(radioId);
+				// Estrutura dos campos do formulário
+				const fieldName = [
+					"atecBeneid",
+					"atecBenesexo",
+					"atecDatecnasc",
+					"atecIdade",
+					"atecPreenchido",
+					"atecParen",
+					"atecTeraacompid",
+					"atecInfoiniatec",
+					"atecConcluido", // Checkbox
+					"atecDataatec",
+					"atecAtec1Total",
+					"atecAtec2Total",
+					"atecAtec3Total",
+					"atecAtec4Total",
+					"atecTotpont",
+					"atecComentatec",
+					"atec1Q01", "atec1Q02", "atec1Q03", "atec1Q04", "atec1Q05", "atec1Q06", "atec1Q07", "atec1Q08", "atec1Q09", "atec1Q10", "atec1Q11", "atec1Q12", "atec1Q13", "atec1Q14",
+					"atec2Q01", "atec2Q02", "atec2Q03", "atec2Q04", "atec2Q05", "atec2Q06", "atec2Q07", "atec2Q08", "atec2Q09", "atec2Q10", "atec2Q11", "atec2Q12", "atec2Q13", "atec2Q14", "atec2Q15", "atec2Q16", "atec2Q17", "atec2Q18", "atec2Q19", "atec2Q20",
+					"atec3Q01", "atec3Q02", "atec3Q03", "atec3Q04", "atec3Q05", "atec3Q06", "atec3Q07", "atec3Q08", "atec3Q09", "atec3Q10", "atec3Q11", "atec3Q12", "atec3Q13", "atec3Q14", "atec3Q15", "atec3Q16", "atec3Q17", "atec3Q18",
+					"atec4Q01", "atec4Q02", "atec4Q03", "atec4Q04", "atec4Q05", "atec4Q06", "atec4Q07", "atec4Q08", "atec4Q09", "atec4Q10", "atec4Q11", "atec4Q12", "atec4Q13", "atec4Q14", "atec4Q15", "atec4Q16", "atec4Q17", "atec4Q18", "atec4Q19", "atec4Q20", "atec4Q21", "atec4Q22", "atec4Q23", "atec4Q24", "atec4Q25"
+				];
 
-            if (radioButton) {
-                radioButton.checked = true;
-                console.log(`Campo ${radioId} marcado com sucesso.`);
-            } else {
-                console.warn(`Campo de rádio ${radioId} não encontrado no DOM.`);
-            }
-        }
+				console.log("Iniciando análise dos campos do formulário...");
 
-        // Itera sobre todos os campos no rascunho
-        for (const fieldName in reportData) {
-            const value = reportData[fieldName];
+				// Iterar sobre os campos listados em fieldName
+				fieldName.forEach((campoId) => {
+					console.log(`Analisando campo: ${campoId}`);
 
-            // Verifica se o campo é um campo de rádio
-            if (fieldName.startsWith("atec")) {
-                console.log(`Processando campo de rádio: ${fieldName}, Valor: ${value}`);
-                handleRadioButtons(fieldName, value);
-            } else {
-                // Trata outros tipos de campos (text, select, etc.)
-                const field = document.getElementById(fieldName);
-                if (field) {
-                    if (field.type === "checkbox") {
-                        field.checked = value === "true";
-                    } else {
-                        field.value = value || '';
-                    }
-                    console.log(`Campo ${fieldName}: Valor recuperado = ${value}`);
-                } else {
-                    console.warn(`Campo ${fieldName} não encontrado no DOM.`);
-                }
-            }
-        }
+					// Verificar se o campo existe no DOM
+					const campoTexto = document.getElementById(campoId);
+					if (!campoTexto) {
+						console.warn(`Campo não encontrado: ${campoId}`);
+						return;
+					}
 
-        alert('Rascunho recuperado automaticamente!');
-    } catch (error) {
-        console.error("Erro ao processar o rascunho:", error);
-        alert('Falha ao recuperar o rascunho. Tente novamente.');
-    }
-}
+					console.log(`Campo '${campoId}' encontrado no DOM.`);
+
+					// Obter o valor salvo para este campo
+					const valorSalvo = draftData[campoId];
+					if (!valorSalvo) {
+						console.warn(`Valor não encontrado para o campo: ${campoId}`);
+						return;
+					}
+
+					console.log(`Valor recuperado para o campo '${campoId}': ${valorSalvo}`);
+
+					// Verificar se o campo é um checkbox
+					if (campoTexto.tagName === "INPUT" && campoTexto.type === "checkbox") {
+						console.log(`Identificado checkbox para o campo: ${campoId}`);
+						// Para checkboxes, verificar se o valor é "on"
+						campoTexto.checked = valorSalvo === "on";
+						console.log(`Checkbox '${campoId}' marcado como: ${campoTexto.checked}`);
+					} else if (campoId.match(/^atec\dQ\d+$/)) { // Identificar campos de rádio temporários
+						console.log(`Identificado campo temporário de rádio para o campo: ${campoId}`);
+						// Extrair informações do campo de rádio
+						const questionario = campoId.match(/^atec(\d)/)[1]; // Número do questionário
+						const pergunta = campoId.match(/Q(\d+)/)[1];        // Número da pergunta
+						const valorNumerico = Math.floor(parseFloat(valorSalvo.replace(',', '.'))); // Converte para número inteiro
+
+						console.log(`Extraindo informações do campo de rádio: questionário=${questionario}, pergunta=${pergunta}, valorNumérico=${valorNumerico}`);
+
+						// Construir o ID do rádio correspondente
+						const idRadio = `atec${questionario}q${pergunta}${valorNumerico}`;
+
+						console.log(`ID do campo de rádio gerado: ${idRadio}`);
+
+						// Encontrar o input de rádio correspondente
+						const radioInput = document.getElementById(idRadio);
+						if (radioInput) {
+							// Marcar o rádio como selecionado
+							radioInput.checked = true;
+							console.log(`Rádio '${idRadio}' marcado com sucesso para o valor: ${valorSalvo}`);
+
+							// Atualizar o campo de texto correspondente
+							const numQuestionario = campoId.match(/^atec(\d)/)[1];
+							const numPergunta = campoId.match(/Q(\d+)/)[1];
+							atualizarCampos(numQuestionario, numPergunta, valorSalvo);
+							console.log(`Campo de texto atualizado para o campo de rádio: questionário=${numQuestionario}, pergunta=${numPergunta}, valor=${valorSalvo}`);
+						} else {
+							console.warn(`Rádio não encontrado: ${idRadio}`);
+						}
+					} else {
+						console.log(`Identificado campo de texto ou outro tipo para o campo: ${campoId}`);
+						// Para outros tipos de campos (text, select, etc.), simplesmente definir o valor
+						campoTexto.value = valorSalvo;
+						console.log(`Campo '${campoId}' preenchido com o valor: ${valorSalvo}`);
+					}
+				});
+
+				console.log("Finalizando carregamento do rascunho...");
+				alert("Rascunho ATEC carregado com sucesso!");
+			}
 			// Função para salvar automaticamente no localStorage
 			function autoSaveReport() {
 				console.log("Executando autoSaveReport...");
 
 				// Coleta os dados dos campos do formulário
-				const reportData = {
+				const reportDataatec = {
 				atecBeneid: document.getElementById('atecBeneid')?.value,
 				atecBenesexo: document.getElementById('atecBenesexo')?.value,
 				atecDatecnasc: document.getElementById('atecDatecnasc')?.value,
@@ -3846,11 +3888,11 @@
 					atec4Q25: document.getElementById('atec4Q25')?.value
 				};
 
-				console.log("Dados coletados para salvamento automático:", reportData);
+				console.log("Dados coletados para salvamento automático:", reportDataatec);
 
 				// Salva os dados no localStorage
 				try {
-				localStorage.setItem('setDraftReport', JSON.stringify(reportData)); // Nome exclusivo para o SET
+				localStorage.setItem('setDraftReportAtec', JSON.stringify(reportDataatec)); // Nome exclusivo para o SET
 				console.log("Rascunho SET salvo no localStorage com sucesso!");
 				} catch (error) {
 				console.error("Erro ao salvar o rascunho no localStorage:", error);

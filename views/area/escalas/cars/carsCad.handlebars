@@ -3729,24 +3729,16 @@
 										</div>		
 									</div>
 								</div>															
-									
-							
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-
-								<div class="form-actions">
-									<div class="col-xs-12" style="text-align: center;" >
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
+								<div class="col-xs-12" style="text-align: center;" >
+									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-danger" name="acaoRec" id="acaoRec" type="button" onclick="loadDraftReport();" style="border: 1px solid blue;">
+										<i class="ace-icon fa fa-life-ring bigger-110"></i>
+										Recuperar Rascunho
+									</button>
 								</div>
 							</form>
 						</div><!-- /.col -->
@@ -3754,5 +3746,261 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<script>
+			function loadDraftReport() {
+				console.log("Iniciando carregamento do rascunho...");
+
+				// Recuperar os dados salvos no localStorage
+				const savedData = localStorage.getItem('setDraftReportCars'); // Nome exclusivo usado no autoSaveReport
+
+				// Verificar se há dados salvos
+				if (!savedData) {
+					console.warn("Nenhum rascunho encontrado no localStorage.");
+					return;
+				}
+
+				console.log("Rascunho encontrado no localStorage. Iniciando análise dos dados...");
+
+				// Converter a string JSON de volta para um objeto JavaScript
+				let draftData;
+				try {
+					draftData = JSON.parse(savedData);
+					console.log("Dados do rascunho analisados com sucesso:", draftData);
+				} catch (error) {
+					console.error("Erro ao analisar os dados salvos:", error);
+					return;
+				}
+
+				// Estrutura dos campos do formulário
+				const fieldName = [
+					"carsBeneid",
+					"carsBenesexo",
+					"carsBenedatanasc",
+					"carsBeneidade",
+					"carsPreechido",
+					"carsParentesco",
+					"carsCarsdata",
+					"carsTerapeutaid",
+					"carsInfo",
+					// Atributos de pontuação
+					"carsTq01", "carsTq02", "carsTq03", "carsTq04", "carsTq05",
+					"carsTq06", "carsTq07", "carsTq08", "carsTq09", "carsTq10",
+					"carsTq11", "carsTq12", "carsTq13", "carsTq14", "carsTq15",
+					"carsTqt", "carsComentarios", "carsConcluido",
+					// Atributos de opções
+					"carsQ01", "carsQ02", "carsQ03", "carsQ04", "carsQ05",
+					"carsQ06", "carsQ07", "carsQ08", "carsQ09", "carsQ10",
+					"carsQ11", "carsQ12", "carsQ13", "carsQ14", "carsQ15"
+				];
+
+				console.log("Iniciando análise dos campos do formulário...");
+
+				// Iterar sobre os campos listados em fieldName
+				fieldName.forEach((campoId) => {
+					console.log(`Analisando campo: ${campoId}`);
+
+					// Verificar se o campo existe no DOM
+					const campoTexto = document.getElementById(campoId);
+					if (!campoTexto) {
+						console.warn(`Campo não encontrado: ${campoId}`);
+						return;
+					}
+
+					console.log(`Campo '${campoId}' encontrado no DOM.`);
+
+					// Obter o valor salvo para este campo
+					const valorSalvo = draftData[campoId];
+					if (!valorSalvo) {
+						console.warn(`Valor não encontrado para o campo: ${campoId}`);
+						return;
+					}
+
+					console.log(`Valor recuperado para o campo '${campoId}': ${valorSalvo}`);
+
+					// Verificar se o campo é um checkbox
+					if (campoTexto.tagName === "INPUT" && campoTexto.type === "checkbox") {
+						console.log(`Identificado checkbox para o campo: ${campoId}`);
+						// Para checkboxes, verificar se o valor é "on"
+						campoTexto.checked = valorSalvo === "on";
+						console.log(`Checkbox '${campoId}' marcado como: ${campoTexto.checked}`);
+					} else if (campoId.match(/^carsTq\d+$/)) { // Identificar campos de rádio temporários
+						console.log(`Identificado campo temporário de rádio para o campo: ${campoId}`);
+						// Extrair informações do campo de rádio
+						const pergunta = campoId.match(/Tq(\d+)/)[1]; // Número da pergunta
+						const valorNumerico = Math.floor(parseFloat(valorSalvo.replace(',', '.')) * 10); // Converte para inteiro (multiplica por 10)
+
+						console.log(`Extraindo informações do campo de rádio: pergunta=${pergunta}, valorNumérico=${valorNumerico}`);
+
+						// Mapear o valor numérico para o índice 'v'
+						const mapeamento = {
+							10: 1,
+							15: 2,
+							20: 3,
+							25: 4,
+							30: 5,
+							35: 6,
+							40: 7
+						};
+						const v = mapeamento[valorNumerico];
+
+						if (!v) {
+							console.warn(`Valor inválido para o campo de rádio: ${valorNumerico}`);
+							return;
+						}
+
+						console.log(`Mapeamento realizado: valorNumérico=${valorNumerico}, v=${v}`);
+
+						// Construir o ID do rádio correspondente
+						const idRadio = `cars${pergunta}${v}`;
+
+						console.log(`ID do campo de rádio gerado: ${idRadio}`);
+
+						// Encontrar o input de rádio correspondente
+						const radioInput = document.getElementById(idRadio);
+						if (radioInput) {
+							// Marcar o rádio como selecionado
+							radioInput.checked = true;
+							console.log(`Rádio '${idRadio}' marcado com sucesso para o valor: ${valorSalvo}`);
+
+							// Atualizar o campo de texto correspondente
+							atualizarCampos(pergunta, valorSalvo);
+							console.log(`Campo de texto atualizado para o campo de rádio: pergunta=${pergunta}, valor=${valorSalvo}`);
+						} else {
+							console.warn(`Rádio não encontrado: ${idRadio}`);
+						}
+					} else {
+						console.log(`Identificado campo de texto ou outro tipo para o campo: ${campoId}`);
+						// Para outros tipos de campos (text, select, etc.), simplesmente definir o valor
+						campoTexto.value = valorSalvo;
+						console.log(`Campo '${campoId}' preenchido com o valor: ${valorSalvo}`);
+					}
+				});
+
+				console.log("Finalizando carregamento do rascunho...");
+				alert("Rascunho CARS carregado com sucesso!");
+			}
+
+			// Função para atualizar os campos de texto com os valores dos radio inputs
+			function atualizarCampos(pergunta, valor) {
+				// Construa o ID do campo de texto com base na pergunta
+				var campoId = 'carsTq' + pergunta;
+				console.log(`Atualizando campo de texto: ${campoId}`);
+				// Encontre o elemento de input de texto com o ID correspondente
+				var campoTexto = document.getElementById(campoId);
+				console.log(campoTexto);
+				// Verifique se o campo de texto foi encontrado
+				if (campoTexto) {
+					// Atualize o valor do campo de texto com o valor do radio input
+					campoTexto.value = valor;
+				}
+				console.log(valor);
+			}		
+			
+			
+			// Função para atualizar os campos de texto com os valores dos radio inputs
+			function atualizarCampos(pergunta, valor) {
+				// Construa o ID do campo de texto com base na pergunta
+				var campoId = 'carsTq' + pergunta;
+				console.log(`Atualizando campo de texto: ${campoId}`);
+				// Encontre o elemento de input de texto com o ID correspondente
+				var campoTexto = document.getElementById(campoId);
+				console.log(campoTexto);
+				// Verifique se o campo de texto foi encontrado
+				if (campoTexto) {
+					// Atualize o valor do campo de texto com o valor do radio input
+					campoTexto.value = valor;
+				}
+				console.log(valor);
+			}
+			
+			// Função para salvar automaticamente no localStorage
+			function autoSaveReport() {
+				console.log("Executando autoSaveReport...");
+
+				// Coleta os dados dos campos do formulário
+				const reportDataatec = {
+				carsBeneid: document.getElementById('carsBeneid')?.value,
+				carsBenesexo: document.getElementById('carsBenesexo')?.value,
+				carsBenedatanasc: document.getElementById('carsBenedatanasc')?.value,
+				carsBeneidade: document.getElementById('carsBeneidade')?.value,
+				carsPreechido: document.getElementById('carsPreechido')?.value,
+				carsParentesco: document.getElementById('carsParentesco')?.value,
+				carsCarsdata: document.getElementById('carsCarsdata')?.value,
+				carsTerapeutaid: document.getElementById('carsTerapeutaid')?.value,
+				carsInfo: document.getElementById('carsInfo')?.value,
+				// Atributos de pontuação
+				carsTq01: document.getElementById('carsTq01')?.value,
+				carsTq02: document.getElementById('carsTq02')?.value,
+				carsTq03: document.getElementById('carsTq03')?.value,
+				carsTq04: document.getElementById('carsTq04')?.value,
+				carsTq05: document.getElementById('carsTq05')?.value,
+				carsTq06: document.getElementById('carsTq06')?.value,
+				carsTq07: document.getElementById('carsTq07')?.value,
+				carsTq08: document.getElementById('carsTq08')?.value,
+				carsTq09: document.getElementById('carsTq09')?.value,
+				carsTq10: document.getElementById('carsTq10')?.value,
+				carsTq11: document.getElementById('carsTq11')?.value,
+				carsTq12: document.getElementById('carsTq12')?.value,
+				carsTq13: document.getElementById('carsTq13')?.value,
+				carsTq14: document.getElementById('carsTq14')?.value,
+				carsTq15: document.getElementById('carsTq15')?.value,
+				carsTqt: document.getElementById('carsTqt')?.value,
+				carsComentarios: document.getElementById('carsComentarios')?.value,
+				carsConcluido: document.getElementById('carsConcluido')?.value,
+				// Atributos de opções
+				carsQ01: document.getElementById('carsQ01')?.value,
+				carsQ02: document.getElementById('carsQ02')?.value,
+				carsQ03: document.getElementById('carsQ03')?.value,
+				carsQ04: document.getElementById('carsQ04')?.value,
+				carsQ05: document.getElementById('carsQ05')?.value,
+				carsQ06: document.getElementById('carsQ06')?.value,
+				carsQ07: document.getElementById('carsQ07')?.value,
+				carsQ08: document.getElementById('carsQ08')?.value,
+				carsQ09: document.getElementById('carsQ09')?.value,
+				carsQ10: document.getElementById('carsQ10')?.value,
+				carsQ11: document.getElementById('carsQ11')?.value,
+				carsQ12: document.getElementById('carsQ12')?.value,
+				carsQ13: document.getElementById('carsQ13')?.value,
+				carsQ14: document.getElementById('carsQ14')?.value,
+				carsQ15: document.getElementById('carsQ15')?.value
+				}
+
+				console.log("Dados coletados para salvamento automático:", reportDataatec);
+
+				// Salva os dados no localStorage
+				try {
+				localStorage.setItem('setDraftReportCars', JSON.stringify(reportDataatec)); // Nome exclusivo para o SET
+				console.log("Rascunho SET salvo no localStorage com sucesso!");
+				} catch (error) {
+				console.error("Erro ao salvar o rascunho no localStorage:", error);
+				}
+			}
+
+			// Evento para iniciar o salvamento automático quando a página é carregada
+			document.addEventListener('DOMContentLoaded', () => {
+				console.log("Página carregada. Iniciando salvamento automático...");
+
+				// Carrega o rascunho ao carregar a página
+				//loadDraftReport(); //Desabilita pra ser chamado apenas pelo botão
+
+				// Salva automaticamente a cada 2 minutos (120.000 milissegundos)
+				setInterval(() => {
+				console.log("Disparando salvamento automático (intervalo de 2 minutos)...");
+				autoSaveReport();
+				}, 120000);
+
+				// Salva automaticamente quando o usuário interage com o formulário
+				const form = document.getElementById('reportForm');
+				if (form) {
+				form.addEventListener('input', () => {
+					console.log("Usuário interagiu com o formulário. Salvando rascunho...");
+					autoSaveReport();
+				});
+				} else {
+				console.warn("Formulário 'reportForm' não encontrado no DOM.");
+				}
+			});
+
+		</script>
 	</body>
 </html>

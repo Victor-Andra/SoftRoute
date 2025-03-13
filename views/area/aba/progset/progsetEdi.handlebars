@@ -56,7 +56,7 @@
 				document.getElementById("progsetEstg").value = document.getElementById("progsetEstgEdi").value;
 				document.getElementById("progsetEsth").value = document.getElementById("progsetEsthEdi").value;
 				document.getElementById("progsetEsti").value = document.getElementById("progsetEstiEdi").value;
-				//document.getElementById("progsetEstj").value = document.getElementById("progsetEstjEdi").value;
+				document.getElementById("progsetEstj").value = document.getElementById("progsetEstjEdi").value;
 				document.getElementById("progsetMetatipo").value = document.getElementById("progsetMetatipoEdi").value;
 				document.getElementById("progsetObs").value = document.getElementById("progsetObsEdi").value;
 				updateStimulusFields(); // Chama a função após preencher os campos
@@ -312,7 +312,7 @@
 									<input type="text" id="progsetEstgEdi" name="progsetEstgEdi" value="{{progset.progset_estg}}"/>
 									<input type="text" id="progsetEsthEdi" name="progsetEsthEdi" value="{{progset.progset_esth}}"/>
 									<input type="text" id="progsetEstiEdi" name="progsetEstiEdi" value="{{progset.progset_esti}}"/>
-									<!--<input type="text" id="progsetEstjEdi" name="progsetEstjEdi" value="{{progset.progset_estj}}"/> 10 tentativas caso haja necessidade-->
+									<input type="text" id="progsetEstjEdi" name="progsetEstjEdi" value="{{progset.progset_estj}}"/>
 									<input type="text" id="progsetMetatipoEdi" name="progsetMetatipoEdi" value="{{progset.progset_metatipo}}"/>
 									<input type="text" id="progsetObsEdi" name="progsetObsEdi" value="{{progset.progset_obs}}"/>
 
@@ -629,7 +629,8 @@
 																		</div>
 																	</div>
 																</div>
-
+															</div>
+															<div class="row">
 																<div class="col-sm-6 stimulus-field" id="stimulusI">
 																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																	<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
@@ -638,7 +639,17 @@
 																				<input name="progsetEsti" id="progsetEsti" type="text" class="form-control" />
 																		</div>
 																	</div>
-																</div>		
+																</div>
+																<div class="col-sm-6 stimulus-field" id="stimulusJ">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;J</span>
+																	<span class="label label-sm label-warning">&nbsp;Especial 10 tentativas</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstj" id="progsetEstj" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>	
 															</div>
 															
 															<label> Observações</label>
@@ -881,6 +892,7 @@
 																		<option value="7">7</option>
 																		<option value="8">8</option>
 																		<option value="9">9</option>
+																		<option value="10">10</option>
 																	</select>
 																</div>
 															</div>
@@ -965,6 +977,8 @@
 																		</div>
 																	</div>
 																</div>
+															</div>
+															<div class="row">
 
 																<div class="col-sm-6 stimulus-field" id="stimulusI">
 																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
@@ -972,6 +986,16 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																				<input name="progsetEsti" id="progsetEsti" type="text" disabled class="form-control" />
+																		</div>
+																	</div>
+																</div>		
+																<div class="col-sm-6 stimulus-field" id="stimulusJ">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;J</span>
+																	<span class="label label-sm label-warning">&nbsp;Especial 10 tentativas</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstj" id="progsetEstj" type="text" disabled class="form-control" />
 																		</div>
 																	</div>
 																</div>		

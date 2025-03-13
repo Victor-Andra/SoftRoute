@@ -298,16 +298,14 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">ATA – ESCALA DE AVALIAÇÃO DE TRAÇOS AUTÍSTICOS</a>
-							</li>
-
-							<li class="active"> - Escala</li>
-						</ul><!-- /.breadcrumb -->
-
+					<div class="page-header">
+						<h1>
+							ATA
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Escala de Avaliação de Traços Autísticos
+							</small>
+						</h1>
 					</div>
 
 					<div class="row">
@@ -2995,83 +2993,36 @@
 									</div>
 									
 								</div>
-								
-								<div class="col-xs-6" name="Pontua" id="Pontua"><!-- Formulário de Análise ATA -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												Formulário Pontuação ATA</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												
-												</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">												
-												<div class="row">
-													<div class="col-sm-12">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 ">
+										<div class="col-xs-12 col-sm-12 col-md-6 " name="legenda" id="legenda"><!-- Legenda e Pontuação das Escalas! -->
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+														Legenda e Pontuação das Escalas!</h4>
+														<span class="widget-toolbar">
+															<a href="#" data-action="reload">
+																<i class="ace-icon fa fa-refresh"></i>
+															</a>
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														
+														</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">												
 														<div class="row">
-															<div class="col-sm-4">
-																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-																	<thead>
-																		<h5 class="widget-title bigger lighter">
-																			<i class="ace-icon fa fa-table"></i>
-																			Legenda e Pontuação das Escalas!
-																		</h5>
-																		<tr>
-																			<th >Descrição</th>
-																			<th >Pontuação</th>
-																		</tr>
-																	</thead>
-
-																	<tbody>
-																		<tr><!-- 1Reg -->
-																			
-																			<td>
-																				<span class="badge badge-success">Nenhum item marcado na escala</span>
-																			</td>
-																			<td>
-																				<span class="badge badge-purple">0 Ponto</span>
-																			</td>
-																		</tr>
-																		<tr><!-- 2Reg -->
-																			
-																			<td>
-																				<span class="badge badge-warning">Um item marcado na escala</span>
-																			</td>
-																			<td>
-																				<span class="badge badge-purple">1 Ponto</span>
-																			</td>
-																		</tr>
-																		<tr><!-- 3Reg -->
-																			
-																			<td>
-																				<span class="badge badge-danger">Mais de um item marcado na escala</span>
-																			</td>
-																			<td>
-																				<span class="badge badge-purple">2 Pontos</span>
-																			</td>
-																		</tr>
-																		
-																	</tbody>
-																</table>
-															</div>
-															<div class="col-sm-1"></div>
-															<div class="col-sm-4">
+															<div class="col-lg-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 																<thead>
 																	<h5 class="widget-title bigger lighter">
 																		<i class="ace-icon fa fa-table"></i>
-																		Pontuação Total
+																		Legenda e Pontuação das Escalas!
 																	</h5>
 																	<tr>
-																		<th >Itens</th>
+																		<th >Descrição</th>
 																		<th >Pontuação</th>
 																	</tr>
 																</thead>
@@ -3080,524 +3031,76 @@
 																	<tr><!-- 1Reg -->
 																		
 																		<td>
-																			<input name="ataTotalitens" id="ataTotalitens" type="text" style="width:80%" value="0"/>
+																			<span style="white-space: wrap;" class="badge badge-success">Nenhum item marcado na escala</span>
 																		</td>
 																		<td>
-																			<input name="ataTotalpontos" id="ataTotalpontos" type="text" style="width:80%" value="0"/>
+																			<span class="badge badge-purple">0 Ponto</span>
 																		</td>
 																	</tr>
-																
+																	<tr><!-- 2Reg -->
+																		
+																		<td>
+																			<span style="white-space: wrap;" class="badge badge-warning">Um item marcado na escala</span>
+																		</td>
+																		<td>
+																			<span class="badge badge-purple">1 Ponto</span>
+																		</td>
+																	</tr>
+																	<tr><!-- 3Reg -->
+																		
+																		<td>
+																			<span style="white-space: wrap;" class="badge badge-danger">Mais de um item marcado na escala</span>
+																		</td>
+																		<td>
+																			<span class="badge badge-purple">2 Pontos</span>
+																		</td>
+																	</tr>
 																	
 																</tbody>
 																</table>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-sm-12">
-																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-																	<thead>
-																		<h5 class="widget-title bigger lighter">
-																			<i class="ace-icon fa fa-table"></i>
-																			Pontuação das Escalas!
-																		</h5>
-																		<tr>
-																			<th >Escala</th>
-																			<th >Itens</th>
-																			<th >Pontuação</th>
-																		</tr>
-																	</thead>
-
-																	<tbody>
-																		<tr><!-- 1Reg -->
-																			<td>
-																				<span class="badge badge-pink">I</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_i" id="ataTotalitens_i" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_i" id="ataTotalpontos_i" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 2Reg -->
-																			<td>
-																				<span class="badge badge-pink">II</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_ii" id="ataTotalitens_ii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_ii" id="ataTotalpontos_ii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 3Reg -->
-																			<td>
-																				<span class="badge badge-pink">III</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_iii" id="ataTotalitens_iii" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_iii" id="ataTotalpontos_iii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 4Reg -->
-																			<td>
-																				<span class="badge badge-pink">IV</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_iv" id="ataTotalitens_iv" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_iv" id="ataTotalpontos_iv" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 5Reg -->
-																			<td>
-																				<span class="badge badge-pink">V</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_v" id="ataTotalitens_v" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_v" id="ataTotalpontos_v" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 6Reg -->
-																			<td>
-																				<span class="badge badge-pink">VI</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_vi" id="ataTotalitens_vi" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_vi" id="ataTotalpontos_vi" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 7Reg -->
-																			<td>
-																				<span class="badge badge-pink">VII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_vii" id="ataTotalitens_vii" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_vii" id="ataTotalpontos_vii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 8Reg -->
-																			<td>
-																				<span class="badge badge-pink">VIII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_viii" id="ataTotalitens_viii" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_viii" id="ataTotalpontos_viii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 9Reg -->
-																			<td>
-																				<span class="badge badge-pink">IX</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_ix" id="ataTotalitens_ix" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_ix" id="ataTotalpontos_ix" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 10Reg -->
-																			<td>
-																				<span class="badge badge-pink">X</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_x" id="ataTotalitens_x" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_x" id="ataTotalpontos_x" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 11Reg -->
-																			<td>
-																				<span class="badge badge-pink">XI</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xi" id="ataTotalitens_xi" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xi" id="ataTotalpontos_xi" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 12Reg -->
-																			<td>
-																				<span class="badge badge-pink">XII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xii" id="ataTotalitens_xii" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xii" id="ataTotalpontos_xii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 13Reg -->
-																			<td>
-																				<span class="badge badge-pink">XIII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xiii" id="ataTotalitens_xiii" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xiii" id="ataTotalpontos_xiii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 14Reg -->
-																			<td>
-																				<span class="badge badge-pink">XIV</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xiv" id="ataTotalitens_xiv" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xiv" id="ataTotalpontos_xiv" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 15Reg -->
-																			<td>
-																				<span class="badge badge-pink">XV</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xv" id="ataTotalitens_xv" type="text" style="width:80%" value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xv" id="ataTotalpontos_xv" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 16Reg -->
-																			<td>
-																				<span class="badge badge-pink">XVI</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xvi" id="ataTotalitens_xvi" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xvi" id="ataTotalpontos_xvi" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 17Reg -->
-																			<td>
-																				<span class="badge badge-pink">XVII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xvii" id="ataTotalitens_xvii" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xvii" id="ataTotalpontos_xvii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 18Reg -->
-																			<td>
-																				<span class="badge badge-pink">XVIII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xviii" id="ataTotalitens_xviii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xviii" id="ataTotalpontos_xviii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 19Reg -->
-																			<td>
-																				<span class="badge badge-pink">XIV</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xix" id="ataTotalitens_xix" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xix" id="ataTotalpontos_xix" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 20Reg -->
-																			<td>
-																				<span class="badge badge-pink">XX</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xx" id="ataTotalitens_xx" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xx" id="ataTotalpontos_xx" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 21Reg -->
-																			<td>
-																				<span class="badge badge-pink">XXI</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xxi" id="ataTotalitens_xxi" type="text" style="width:80%"  value="0" />
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xxi" id="ataTotalpontos_xxi" type="text" style="width:80%"  value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr><!-- 22Reg -->
-																			<td>
-																				<span class="badge badge-pink">XXII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xxii" id="ataTotalitens_xxii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xxii" id="ataTotalpontos_xxii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																		<tr hidden><!-- 23Reg -->
-																			<td>
-																				<span class="badge badge-pink">XXIII</span>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalitens_xxiii" id="ataTotalitens_xxiii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																			<td>
-																				<div class="col-sm-3">
-																					<div class="input-group">
-																						<input name="ataTotalpontos_xxiii" id="ataTotalpontos_xxiii" type="text" style="width:80%" value="0"/>
-																					</div>
-																				</div>
-																			</td>
-																		</tr>
-																				
-																		
-																	</tbody>
-																</table>
-																
-															</div>
-														</div>																						
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</div>
-								<div class="col-xs-6" name="Correc" id="Correc"><!-- Correção -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">
-												<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
-												Correção</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												
-												</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">												
-												<div class="row">
-													<div class="col-xs-12">
+										<div class="col-xs-12 col-sm-12 col-md-6 " name="Correc" id="Correc"><!-- Correção -->
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+														Correção</h4>
+														<span class="widget-toolbar">
+															<a href="#" data-action="reload">
+																<i class="ace-icon fa fa-refresh"></i>
+															</a>
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
 														
+														</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">												
 														<div class="row">
-															<div class="col-sm-6">
+															<div class="col-lg-12">
 																<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 																	<thead>
 																		<h5 class="widget-title bigger lighter">
 																			<i class="ace-icon fa fa-table"></i>
-																			Legenda e Pontuação das Escalas!
+																			Correção!
 																		</h5>
 																		<tr>
 																			
-																			<th >Pontuação</th>
-																			<th >Indivação</th>
+																			<th>Pontuação</th>
+																			<th>Indivação</th>
 																		</tr>
 																	</thead>
 
 																	<tbody>
 																		<tr><!-- 1Reg -->
 																			<td>
-																				<span class="badge badge-danger">21 Pontos ou mais</span>
+																				<span style="white-space: wrap;" class="badge badge-danger">21 Pontos ou mais</span>
 																			</td>
 																			<td>
 																				<span>Indicativo de  Autismo</span>
@@ -3605,7 +3108,7 @@
 																		</tr>
 																		<tr><!-- 2Reg -->
 																			<td>
-																				<span class="badge badge-warning">15 Pontos ou mais</span>
+																				<span style="white-space: wrap;" class="badge badge-warning">15 Pontos ou mais</span>
 																			</td>
 																			<td>
 																				<span>Indicativo de  atraso no desenvolvimento</span>
@@ -3613,7 +3116,7 @@
 																		</tr>
 																		<tr><!-- 3Reg -->
 																			<td>
-																				<span class="badge badge-success">Até 14 Pontos</span>
+																				<span style="white-space: wrap;" class="badge badge-success">Até 14 Pontos</span>
 																			</td>
 																			<td>
 																				<span>Indicativo de  atraso no desenvolvimento</span>
@@ -3622,27 +3125,567 @@
 																		
 																	</tbody>
 																</table>
+																<label>Comentários</label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<textarea type="text" name="ataCorrec" id="ataCorrec" placeholder="Insira seus comentários aqui!" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+																	</div>
+																</div>
 															</div>
 														</div>
-														<label>Comentários</label>
-														<div class="form-group">
-															<div class="col-sm-12">
-																<textarea type="text" name="ataCorrec" id="ataCorrec" placeholder="Insira seus comentários aqui!" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
-															</div>
-														</div>
-
 													</div>
-
 												</div>
 											</div>
 										</div>
 									</div>
-												
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" name="pontuaEscala" id="pontuaEscala"><!-- Pontuação escala -->
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+														Pontuação das Escalas!</h4>
+														<span class="widget-toolbar">
+															<a href="#" data-action="reload">
+																<i class="ace-icon fa fa-refresh"></i>
+															</a>
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														
+														</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">												
+														<div class="row">
+															<div class="col-xs-12">
+																<div class="row">
+																	<div class="col-sm-12">
+																		<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																			<thead>
+																				<h5 class="widget-title bigger lighter">
+																					<i class="ace-icon fa fa-table"></i>
+																					Pontuação das Escalas!
+																				</h5>
+																				<tr>
+																					<th >Escala</th>
+																					<th >Itens</th>
+																					<th >Pontuação</th>
+																				</tr>
+																			</thead>
+
+																			<tbody>
+																				<tr><!-- 1Reg -->
+																					<td>
+																						<span class="badge badge-pink">I</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_i" id="ataTotalitens_i" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_i" id="ataTotalpontos_i" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 2Reg -->
+																					<td>
+																						<span class="badge badge-pink">II</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_ii" id="ataTotalitens_ii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_ii" id="ataTotalpontos_ii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 3Reg -->
+																					<td>
+																						<span class="badge badge-pink">III</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_iii" id="ataTotalitens_iii" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_iii" id="ataTotalpontos_iii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 4Reg -->
+																					<td>
+																						<span class="badge badge-pink">IV</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_iv" id="ataTotalitens_iv" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_iv" id="ataTotalpontos_iv" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 5Reg -->
+																					<td>
+																						<span class="badge badge-pink">V</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_v" id="ataTotalitens_v" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_v" id="ataTotalpontos_v" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 6Reg -->
+																					<td>
+																						<span class="badge badge-pink">VI</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_vi" id="ataTotalitens_vi" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_vi" id="ataTotalpontos_vi" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 7Reg -->
+																					<td>
+																						<span class="badge badge-pink">VII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_vii" id="ataTotalitens_vii" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_vii" id="ataTotalpontos_vii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 8Reg -->
+																					<td>
+																						<span class="badge badge-pink">VIII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_viii" id="ataTotalitens_viii" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_viii" id="ataTotalpontos_viii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 9Reg -->
+																					<td>
+																						<span class="badge badge-pink">IX</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_ix" id="ataTotalitens_ix" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_ix" id="ataTotalpontos_ix" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 10Reg -->
+																					<td>
+																						<span class="badge badge-pink">X</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_x" id="ataTotalitens_x" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_x" id="ataTotalpontos_x" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 11Reg -->
+																					<td>
+																						<span class="badge badge-pink">XI</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xi" id="ataTotalitens_xi" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xi" id="ataTotalpontos_xi" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 12Reg -->
+																					<td>
+																						<span class="badge badge-pink">XII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xii" id="ataTotalitens_xii" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xii" id="ataTotalpontos_xii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 13Reg -->
+																					<td>
+																						<span class="badge badge-pink">XIII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xiii" id="ataTotalitens_xiii" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xiii" id="ataTotalpontos_xiii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 14Reg -->
+																					<td>
+																						<span class="badge badge-pink">XIV</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xiv" id="ataTotalitens_xiv" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xiv" id="ataTotalpontos_xiv" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 15Reg -->
+																					<td>
+																						<span class="badge badge-pink">XV</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xv" id="ataTotalitens_xv" type="text" style="width:80%" value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xv" id="ataTotalpontos_xv" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 16Reg -->
+																					<td>
+																						<span class="badge badge-pink">XVI</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xvi" id="ataTotalitens_xvi" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xvi" id="ataTotalpontos_xvi" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 17Reg -->
+																					<td>
+																						<span class="badge badge-pink">XVII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xvii" id="ataTotalitens_xvii" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xvii" id="ataTotalpontos_xvii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 18Reg -->
+																					<td>
+																						<span class="badge badge-pink">XVIII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xviii" id="ataTotalitens_xviii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xviii" id="ataTotalpontos_xviii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 19Reg -->
+																					<td>
+																						<span class="badge badge-pink">XIV</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xix" id="ataTotalitens_xix" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xix" id="ataTotalpontos_xix" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 20Reg -->
+																					<td>
+																						<span class="badge badge-pink">XX</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xx" id="ataTotalitens_xx" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xx" id="ataTotalpontos_xx" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 21Reg -->
+																					<td>
+																						<span class="badge badge-pink">XXI</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xxi" id="ataTotalitens_xxi" type="text" style="width:80%"  value="0" />
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xxi" id="ataTotalpontos_xxi" type="text" style="width:80%"  value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr><!-- 22Reg -->
+																					<td>
+																						<span class="badge badge-pink">XXII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xxii" id="ataTotalitens_xxii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xxii" id="ataTotalpontos_xxii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr hidden><!-- 23Reg -->
+																					<td>
+																						<span class="badge badge-pink">XXIII</span>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalitens_xxiii" id="ataTotalitens_xxiii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																					<td>
+																						<div class="col-sm-3">
+																							<div class="input-group">
+																								<input name="ataTotalpontos_xxiii" id="ataTotalpontos_xxiii" type="text" style="width:80%" value="0"/>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																						
+																				
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" name="pontuacaoTot" id="pontuacaoTot"><!-- Pontuação Total -->
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">
+														<i class="orange ace-icon fa fa-line-chart bigger-110"></i>
+														Pontuação Total</h4>
+														<span class="widget-toolbar">
+															<a href="#" data-action="reload">
+																<i class="ace-icon fa fa-refresh"></i>
+															</a>
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														
+														</span>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">												
+														<div class="row">
+															<div class="col-xs-12">
+																<div class="row">
+																	<div class="col-sm-6">
+																		<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+																			<thead>
+																				<h5 class="widget-title bigger lighter">
+																					<i class="ace-icon fa fa-table"></i>
+																					Pontuação Total
+																				</h5>
+																				<tr>
+																					<th >Itens</th>
+																					<th >Pontuação</th>
+																				</tr>
+																			</thead>
+
+																			<tbody>
+																				<tr><!-- 1Reg -->
+																					
+																					<td>
+																						<input name="ataTotalitens" id="ataTotalitens" type="text" style="width:80%" value="0"/>
+																					</td>
+																					<td>
+																						<input name="ataTotalpontos" id="ataTotalpontos" type="text" style="width:80%" value="0"/>
+																					</td>
+																				</tr>
+																			
+																				
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-
+							
 								<div class="form-actions">
 									<div class="col-xs-12" style="text-align: center;" >
 										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">

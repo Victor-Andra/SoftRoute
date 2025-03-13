@@ -227,23 +227,20 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">ATA – ESCALA DE AVALIAÇÃO DE TRAÇOS AUTÍSTICOS</a>
-							</li>
-
-							<li class="active"> - Escala</li>
-						</ul><!-- /.breadcrumb -->
-
+					<div class="page-header">
+						<h1>
+							ATA
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Escala de Avaliação de Traços Autísticos
+							</small>
+						</h1>
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form id="reportForm" name="reportForm" class="form-horizontal" role="form" action="/menu/area/escalas/ata/add" method="POST">
-								<div class="col-xs-12"  >
+								<div class="col-xs-12" hidden >
 									
 									<input type="text" id="ataI01temp" name="ataI01temp" value="" />
 									<input type="text" id="ataI02temp" name="ataI02temp" value="" />
@@ -3037,6 +3034,12 @@
 																		
 																	</tbody>
 																</table>
+																<label>Comentários</label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<textarea type="text" name="ataCorrec" id="ataCorrec" placeholder="Insira seus comentários aqui!" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -3047,7 +3050,7 @@
 								</div>
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" name="pontuaEscala" id="pontuaEscala"><!-- Correção -->
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" name="pontuaEscala" id="pontuaEscala"><!-- Pontuação escala -->
 											<div class="widget-box">
 												<div class="widget-header">
 													<h4 class="widget-title">
@@ -3590,24 +3593,18 @@
 										</div>
 									</div>
 								</div>
-
 															
-									<div class="col-xs-12" style="text-align: center">
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-
-										&nbsp; &nbsp; &nbsp;
-									
-										<button class="btn btn-danger" name="acaoRec" id="acaoRec" type="button" onclick="loadDraftReport();" style="border: 1px solid blue;">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Recuperar Rascunho
-										</button>
-
-										
-									</div>
-								
+								<div class="col-xs-12" style="text-align: center">
+									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-danger" name="acaoRec" id="acaoRec" type="button" onclick="loadDraftReport();" style="border: 1px solid blue;">
+										<i class="ace-icon fa fa-life-ring bigger-110"></i>
+										Recuperar Rascunho
+									</button>
+								</div>
 							</form>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -3633,65 +3630,15 @@
 
 			// Lista de campos com sufixo "temp"
 			const fieldsWithTemp = [
-			//Campos Totais e contadores
-			"ataTotalitens",
-			"ataTotalitens_i",
-			"ataTotalitens_ii",
-			"ataTotalitens_iii",
-			"ataTotalitens_iv",
-			"ataTotalitens_v",
-			"ataTotalitens_vi",
-			"ataTotalitens_vii",
-			"ataTotalitens_viii",
-			"ataTotalitens_ix",
-			"ataTotalitens_x",
-			"ataTotalitens_xi",
-			"ataTotalitens_xii",
-			"ataTotalitens_xiii",
-			"ataTotalitens_xiv",
-			"ataTotalitens_xv",
-			"ataTotalitens_xvi",
-			"ataTotalitens_xvii",
-			"ataTotalitens_xviii",
-			"ataTotalitens_xix",
-			"ataTotalitens_xx",
-			"ataTotalitens_xxi",
-			"ataTotalitens_xxii",
-			"ataTotalitens_xxiii",
-			"ataTotalpontos_i",
-			"ataTotalpontos_ii",
-			"ataTotalpontos_iii",
-			"ataTotalpontos_iv",
-			"ataTotalpontos_v",
-			"ataTotalpontos_vi",
-			"ataTotalpontos_vii",
-			"ataTotalpontos_viii",
-			"ataTotalpontos_ix",
-			"ataTotalpontos_x",
-			"ataTotalpontos_xi",
-			"ataTotalpontos_xii",
-			"ataTotalpontos_xiii",
-			"ataTotalpontos_xiv",
-			"ataTotalpontos_xv",
-			"ataTotalpontos_xvi",
-			"ataTotalpontos_xvii",
-			"ataTotalpontos_xviii",
-			"ataTotalpontos_xix",
-			"ataTotalpontos_xx",
-			"ataTotalpontos_xxi",
-			"ataTotalpontos_xxii",
-			"ataTotalpontos_xxiii",
-			"ataTotalpontos",
-			//Cabeçalho
 			"ataBeneid",
 			"ataBeneidade",
 			"ataTerapeutaid",
 			"ataParem",
 			"ataAcompanhausuid",
-			"ataCorrecdata",
 			"ataCorrecusuid",
 			"ataObs",
-			//Campos Temp
+			"ataCorrecdata",
+			"ataCorrec",
 			"ataI01temp",
 			"ataI02temp",
 			"ataI03temp",
@@ -3803,7 +3750,55 @@
 			"ataXxii01temp",
 			"ataXxii02temp",
 			"ataXxii03temp",
-			"ataXxiii01temp" // Campo de rádio
+			"ataXxiii01temp",
+			"ataTotalitens",
+			"ataTotalitens_i",
+			"ataTotalitens_ii",
+			"ataTotalitens_iii",
+			"ataTotalitens_iv",
+			"ataTotalitens_v",
+			"ataTotalitens_vi",
+			"ataTotalitens_vii",
+			"ataTotalitens_viii",
+			"ataTotalitens_ix",
+			"ataTotalitens_x",
+			"ataTotalitens_xi",
+			"ataTotalitens_xii",
+			"ataTotalitens_xiii",
+			"ataTotalitens_xiv",
+			"ataTotalitens_xv",
+			"ataTotalitens_xvi",
+			"ataTotalitens_xvii",
+			"ataTotalitens_xviii",
+			"ataTotalitens_xix",
+			"ataTotalitens_xx",
+			"ataTotalitens_xxi",
+			"ataTotalitens_xxii",
+			"ataTotalitens_xxiii",
+			"ataTotalpontos_i",
+			"ataTotalpontos_ii",
+			"ataTotalpontos_iii",
+			"ataTotalpontos_iv",
+			"ataTotalpontos_v",
+			"ataTotalpontos_vi",
+			"ataTotalpontos_vii",
+			"ataTotalpontos_viii",
+			"ataTotalpontos_ix",
+			"ataTotalpontos_x",
+			"ataTotalpontos_xi",
+			"ataTotalpontos_xii",
+			"ataTotalpontos_xiii",
+			"ataTotalpontos_xiv",
+			"ataTotalpontos_xv",
+			"ataTotalpontos_xvi",
+			"ataTotalpontos_xvii",
+			"ataTotalpontos_xviii",
+			"ataTotalpontos_xix",
+			"ataTotalpontos_xx",
+			"ataTotalpontos_xxi",
+			"ataTotalpontos_xxii",
+			"ataTotalpontos_xxiii",
+			"ataTotalpontos"
 			];
 
 			// Trata os campos normais (checkboxes e inputs)
@@ -3893,7 +3888,7 @@
 					ataCorrecusuid: document.getElementById('ataCorrecusuid')?.value,
 					ataObs: document.getElementById('ataObs')?.value,
 					ataCorrecdata: document.getElementById('ataCorrecdata')?.value,
-
+					ataCorrec: document.getElementById('ataCorrec')?.value,
 					ataI01temp: document.getElementById('ataI01temp')?.value,
 					ataI02temp: document.getElementById('ataI02temp')?.value,
 					ataI03temp: document.getElementById('ataI03temp')?.value,

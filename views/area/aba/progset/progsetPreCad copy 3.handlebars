@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>SET Cadastrar</title>
+		<style>
+			
+		</style>
+		<script>
+			
+			function carregaBody(){
+				document.getElementById("progsetBeneid").value = document.getElementById("progBene").value;
+				document.getElementById("progsetProgtipoid").value = document.getElementById("progTipo").value;
+				document.getElementById("progsetPrognivelid").value = document.getElementById("progNivel").value;
+				document.getElementById("progsetTeraid").value = document.getElementById("usuarioAtual").value;
+				document.getElementById("progsetDataset").value = new Date();
+			}
+			document.addEventListener('DOMContentLoaded', function () {
+				function updateStimulusFields() {
+					var select = document.getElementById('progsetQtest');
+					var value = parseInt(select.value, 10);
+
+					// Oculta todos os campos de estímulo
+					var fields = document.querySelectorAll('.stimulus-field');
+					fields.forEach(function (field) {
+						field.style.display = 'none';
+					});
+
+					// Exibe apenas o número de campos selecionados
+					for (var i = 0; i < value; i++) {
+						// Calcula a letra correspondente ao índice (A = 65, B = 66, ..., J = 74)
+						var letter = String.fromCharCode(65 + i);
+						var stimulusField = document.getElementById('stimulus' + letter);
+
+						if (stimulusField) {
+							stimulusField.style.display = 'block';
+						} else {
+							console.warn(`Campo 'stimulus${letter}' não encontrado.`);
+						}
+					}
+				}
+
+				// Inicializa os campos ao carregar a página
+				updateStimulusFields();
+
+				// Adiciona um listener de evento para mudanças no elemento select
+				document.getElementById('progsetQtest').addEventListener('change', updateStimulusFields);
+			});
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">SET Cadastro</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
+								<div id="divCarrega" hidden>
+									<input name="progsetProgid" id="progsetProgid"value="{{prog._id}}" />
+									<input name="progBene"  id="progBene" value="{{prog.prog_beneid}}" />
+									<input name="progTipo" id="progTipo" value="{{prog.prog_tipo}}" />
+									<input name="progNivel" id="progNivel" value="{{prog.prog_nivel}}" />
+									<input name="usuarioAtual" id="usuarioAtual"value="{{usuarioAtual}}" />
+								</div>
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="cabecset">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Cabeçalho do SET e Índices
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">	
+														<label>Beneficiário</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select readonly" value="Sem Info" readonly onchange="" >
+																	<option value="766f69643132333435366964">-</option>
+																		{{#each benes}}
+																			<option value="{{_id}}">{{bene_nome}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-4">
+														<label>Tipo de Programa</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select readonly"  onchange="">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each progtipos}}
+																			<option value="{{_id}}">{{progtipo_nome}}</option>
+																		{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<label>Nível do Programa</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select readonly" onchange="">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each prognivels}}
+																	<option value="{{_id}}">{{prognivel_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<label>Terapeuta Resposável</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetTeraid" id="progsetTecid" class="chosen-select" onchange="">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<label>Número do SET</label>
+												<div class="input-group">
+													<div class="input-group">
+														<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01"/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da criação do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4" >
+																	<input id="progsetDataset" name="progsetDataset" type="date" >
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de início do SET</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDataini" name="progsetDataini" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data de previsão para Meta</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatafin" name="progsetDatafin" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label for="id-date-picker-1"> Data da Meta </label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="progsetDatameta" name="progsetDatameta" type="date">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo Meta</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetMetatipo" id="progsetMetatipo" class="chosen-select" onchange="">
+																	<option value="3">3</option>
+																	<option value="25">25</option>
+																</select>
+																<label>&nbsp;Vezes.</label>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12 col-sm-2">
+														<label>Status do SET</label>
+														<div class="input-group">
+															<div class="input-group">
+																<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="">
+																	<option value="Agendado">Agendado</option>
+																	<option value="Andamento">Andamento</option>
+																	<option value="Pausado">Pausado</option>
+																	<option value="Meta">Meta</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-2">
+														<label>Tipo do Registro para TODO o SET</label>
+														<div class="form-group">
+															<div class="col-sm-4">
+																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																	<option value="Não Informado">Não Informado</option>
+																	<option value="Simples">Simples</option>
+																	<option value="Duplo">Duplo</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
+								</div>
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="mainset">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bullseye"></i>
+												SET
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">
+														<label> Descrição </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
+															</div>
+														</div>
+														<label> Quantidade de Estímulos para esse SET </label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	<option value="5">5</option>
+																	<option value="6">6</option>
+																	<option value="7">7</option>
+																	<option value="8">8</option>
+																	<option value="9">9</option>
+																	<option value="10">10</option>
+																</select>
+															</div>
+														</div>
+														
+														<div class="row">
+															<div class="col-sm-6 stimulus-field" id="stimulusA">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																<div class="row">
+																	<div class="col-sm-6" >
+																			<input name="progsetEsta" id="progsetEsta" type="text" class="form-control" />
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-sm-6 stimulus-field" id="stimulusB">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																			<input name="progsetEstb" id="progsetEstb" type="text" class="form-control"/>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-sm-6 stimulus-field" id="stimulusC">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																			<input name="progsetEstc" id="progsetEstc" type="text" class="form-control" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-6 stimulus-field" id="stimulusD">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																			<input name="progsetEstd" id="progsetEstd" type="text" class="form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+
+															<div class="col-sm-6 stimulus-field" id="stimulusE">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																			<input name="progsetEste" id="progsetEste" type="text" class="form-control"/>
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-sm-6 stimulus-field" id="stimulusF">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																		
+																			<input name="progsetEstf" id="progsetEstf" type="text" class="form-control" />
+																		
+																	</div>
+																</div>
+															</div>																								
+														</div>
+														<div class="row">
+															<div class="col-sm-6 stimulus-field" id="stimulusG">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																		
+																			<input name="progsetEstg" id="progsetEstg" type="text" class="form-control" />
+																		
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-sm-6 stimulus-field" id="stimulusH">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																		
+																			<input name="progsetEsth" id="progsetEsth" type="text" class="form-control"/>
+																		
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+
+															<div class="col-sm-6 stimulus-field" id="stimulusI">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+																<div class="row">
+																	<div class="col-sm-6">
+																		
+																			<input name="progsetEsti" id="progsetEsti" type="text" class="form-control" />
+																		
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-sm-6 stimulus-field" id="stimulusJ">
+																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;J</span>
+																<span class="label label-sm label-warning">&nbsp;Especial 10 tentativas</span>
+																
+																<div class="row">
+																	<div class="col-sm-6">
+																		
+																			<input name="progsetEstj" id="progsetEstj" type="text" class="form-control" />
+																		
+																	</div>
+																</div>
+															</div>
+															
+														</div>
+														
+														<label> Observações</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
+								</div>
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="grafset">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bar-chart"></i>
+												Gráfico Consolidado do SET
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-xs-12">
+													<p class="alert alert-info">
+														Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
+													</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
+								</div>
+								<div>
+									<div class="col-md-offprogset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" href="/menu/area/aba/prog/proglis">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container --><!-- basic scripts -->
+		<script>
+			//O script abaixo só roda após garantir que todos os elementos da página já estejam carregados e disponíveis para o script manipular, evitando problemas que podem ocorrer se o script tentar acessar elementos que ainda não foram carregados.
+			document.addEventListener("DOMContentLoaded", function() {
+				var selects = document.querySelectorAll('.readonly');
+				selects.forEach(function(select) {
+					select.addEventListener('mousedown', function(e) {
+						e.preventDefault();
+					});
+					select.addEventListener('keydown', function(e) {
+						e.preventDefault();
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
