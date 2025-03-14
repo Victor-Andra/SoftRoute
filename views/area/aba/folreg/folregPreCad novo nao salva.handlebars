@@ -475,8 +475,8 @@
 				document.getElementById("folregEstg").value = document.getElementById("folregg").value;
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
-
-				embaralharIgualmenteFolregTentativas();
+				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
+				//embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
@@ -539,6 +539,7 @@
 									g<input name="folregg" id="folregg" value="{{progset.progset_estg}}" />
 									h<input name="folregh" id="folregh" value="{{progset.progset_esth}}" />
 									i<input name="folregi" id="folregi" value="{{progset.progset_esti}}" />
+									j<input name="folregj" id="folregj" value="{{progset.progset_estj}}" />
 
 									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
 									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
@@ -553,6 +554,7 @@
 									<input hidden type="text" id="folregRaTentCad7" name="folregRaTentCad7" value="" />
 									<input hidden type="text" id="folregRaTentCad8" name="folregRaTentCad8" value="" />
 									<input hidden type="text" id="folregRaTentCad9" name="folregRaTentCad9" value="" />
+									<input hidden type="text" id="folregRaTentCad0" name="folregRaTentCad0" value="" />
 									<input hidden type="text" id="folregRaTentDuplCad1" name="folregRaTentDuplCad1" value="" />
 									<input hidden type="text" id="folregRaTentDuplCad2" name="folregRaTentDuplCad2" value="" />
 									<input hidden type="text" id="folregRaTentDuplCad3" name="folregRaTentDuplCad3" value="" />
@@ -562,6 +564,7 @@
 									<input hidden type="text" id="folregRaTentDuplCad7" name="folregRaTentDuplCad7" value="" />
 									<input hidden type="text" id="folregRaTentDuplCad8" name="folregRaTentDuplCad8" value="" />
 									<input hidden type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad0" name="folregRaTentDuplCad0" value="" />
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -724,6 +727,7 @@
 														<option value="7">7</option>
 														<option value="8">8</option>
 														<option value="9">9</option>
+														<option value="10">10</option>
 													</select>
 												</div>
 											</div>
@@ -831,7 +835,18 @@
 															</div>
 														</div>
 													</div>
-												</div>		
+												</div>
+												<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusJ">
+													<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+													<span class="label label-sm label-danger arrowed arrowed-righ">J</span>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="folregEstj" id="folregEstj" type="text" />
+															</div>
+														</div>
+													</div>
+												</div>			
 											</div>
 											<label>Observações adicionais durante a aplicação dos estímulos</label>
 											<div class="form-group">
@@ -1256,7 +1271,41 @@
 																	<span class="label label-pink arrowed-in">-d</span>
 																</td>
 															</tr>
+
+															{{#ifIncludes folregQtest "10" }}
+															
 															<tr><!-- 10Reg -->
+																<td class="center">
+																	<span class="badge badge-blue">10</span>
+																</td>
+																<td>
+																	<label class="pos-rel">
+																		<label class="pos-rel"><span id="folregRaTent0" name="folregRaTent0" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																	</label>
+																</td>
+																<td>
+																	<input name="folregT0Ressimples" id="folregT0Ressimples"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+
+																	<input name="folregT0Ressimplesradio" id="folregT0Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI();marcaRadioImput('folregT9Ressimples','1','I');" />
+																	<span class="lbl"></span>
+																	<span class="label label-success arrowed-in">I</span>
+																
+																	<input name="folregT0Ressimplesradio" id="folregT0Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI();marcaRadioImput('folregT9Ressimples','2','E');" />
+																	<span class="lbl"></span>
+																	<span class="label label-yellow arrowed-in">E</span>
+																
+																	<input name="folregT0Ressimplesradio" id="folregT0Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT9Ressimples','3','+d');" />
+																	<span class="lbl"></span>
+																	<span class="label label-warning arrowed-in">+d</span>
+																
+																	<input name="folregT0Ressimplesradio" id="folregT0Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT9Ressimples','4','-d');" />
+																	<span class="lbl"></span>
+																	<span class="label label-pink arrowed-in">-d</span>
+																</td>
+															</tr>
+															{{else}}
+															{{/ifIncludes}}
+															<tr><!-- TotaisReg -->
 																<td colspan="2" style="text-align:right">
 																	<label class="pos-rel">
 																	<span  class="label label-lg label-inverse arrowed-right">Totais</span>
@@ -1943,8 +1992,65 @@
 														
 														
 													</tr>
+													{{#ifIncludes folregQtest "10" }}
+													<tr><!-- 10 Reg 10 Tentativas -->
+														<td class="center">
+															
+																<span class="badge badge-blue">10</span>
+															
+														</td>
+														<td>
+															<label class="pos-rel">
+																<label class="pos-rel"><span id="folregRaTentDupl0" name="folregRaTentDupl0" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+															</label>
+														</td>
+														
+														<td>
+															<input name="folregT0Resesqu" id="folregT0Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
-													<tr><!-- 10Reg -->
+															<input name="folregT0Resesquradio" id="folregT0Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT9Resesqu','1','I');" />
+															<span class="lbl"></span>
+															<span class="label label-success arrowed-in">I</span>
+														
+															<input name="folregT0Resesquradio" id="folregT0Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT9Resesqu','2','E');" />
+															<span class="lbl"></span>
+															<span class="label label-yellow arrowed-in">E</span>
+														
+															<input name="folregT0Resesquradio" id="folregT0Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT9Resesqu','3','+d');" />
+															<span class="lbl"></span>
+															<span class="label label-warning arrowed-in">+d</span>
+														
+															<input name="folregT0Resesquradio" id="folregT0Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT9Resesqu','4','-d');" />
+															<span class="lbl"></span>
+															<span class="label label-pink arrowed-in">-d</span>
+														</td>
+														
+														
+														<td>
+															<input name="folregT0Resdir" id="folregT0Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+
+															<input name="folregT0Resdirradio" id="folregT0Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT9Resdir','1','I');" />
+															<span class="lbl"></span>
+															<span class="label label-success arrowed-in">I</span>
+														
+															<input name="folregT0Resdirradio" id="folregT0Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT9Resdir','2','E');" />
+															<span class="lbl"></span>
+															<span class="label label-yellow arrowed-in">E</span>
+														
+															<input name="folregT0Resdirradio" id="folregT0Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT9Resdir','3','+d');" />
+															<span class="lbl"></span>
+															<span class="label label-warning arrowed-in">+d</span>
+														
+															<input name="folregT0Resdirradio" id="folregT0Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT9Resdir','4','-d');" />
+															<span class="lbl"></span>
+															<span class="label label-pink arrowed-in">-d</span>
+														</td>
+														
+														
+													</tr>
+													{{else}}
+													{{/ifIncludes}}
+													<tr><!-- Total Reg -->
 														
 														<td colspan="2" style="text-align:right">
 															<label class="pos-rel">
@@ -2038,10 +2144,13 @@
 			};
 
 			// Opções do gráfico
+			const tentativas = document.getElementById('folregQtests');
+			console.log("Valor do campo folregQtests:" + tentativas?.value);
+		
 			const options = {
 				scales: {
 					x: { stacked: true },
-					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+					y: { stacked: true, min: 0, max: tentativas?.value != "10" ? 90 : 100 }
 				}
 			};
 
