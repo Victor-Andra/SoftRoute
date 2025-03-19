@@ -54,12 +54,12 @@
 			function embaralharTotalmenteFolregTentativas (){
 				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
 				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
+				let tamanhoArray = 10;
 				let reducao = 0;
 				let arrayNovo = [];
 				let arrayDinamico = [];
 				
-				if (qtdEstimulos == "10"){
+				if (document.getElementById("folregTiporeg").value == "triplo"){
 					tamanhoArray = 10;
 				}
 				console.log("arrayOriginal: "+arrayOriginal);
@@ -100,91 +100,103 @@
 				console.log(arrayNovo);
 			}
 
-		function embaralharIgualmenteFolregTentativas() {
-    // Array original com as letras dos estímulos
-    const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+			function embaralharIgualmenteFolregTentativas(){
+				let arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+				let tamanhoArray = 9;
+				let reducao = 0;
+				let arrayNovo = [];
+				let arrayDinamico = [];
+				let index = 1;
 
-    // Obtém a quantidade de estímulos selecionada pelo usuário
-    const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-    console.log("Qt Estímulos: " + qtdEstimulos);
+				if (document.getElementById("folregTiporeg").value == "triplo"){
+					tamanhoArray = 10;
+				}
+				arrayOriginal.splice(-(10 - qtdEstimulos));
+				arrayDinamico = arrayOriginal;
+				let falta = 0;
+				do {
+					let tamanhoArrayNovo = arrayNovo.length
+					if (tamanhoArrayNovo == 0){
+						arrayDinamico = shuffleArray(arrayDinamico);
+							
+						arrayNovo = arrayDinamico;
+						falta = (tamanhoArray - tamanhoArrayNovo);
+					} else if (falta > tamanhoArrayNovo && falta >= arrayOriginal.length){
+						arrayDinamico = arrayOriginal;
+						do {
+							arrayDinamico = shuffleArray(arrayDinamico);
+						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
+						arrayDinamico.forEach(letra => {
+							arrayNovo.push(letra);
+						})
+						
+						falta = (tamanhoArray - arrayNovo.length);
+					} else if (tamanhoArrayNovo < tamanhoArray){
+						do {
+							arrayDinamico = shuffleArray(arrayDinamico);
+						} while (arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1])
+						console.log(arrayDinamico[0]);
+						console.log(arrayNovo[tamanhoArrayNovo-1]);
+						console.log(arrayDinamico[0] == arrayNovo[tamanhoArrayNovo-1]);
 
-    // Define o tamanho do array com base na quantidade de estímulos
-    let tamanhoArray = qtdEstimulos; // Padrão dinâmico (9 ou 10)
+						arrayDinamico.splice(tamanhoArray - tamanhoArrayNovo);
+						arrayDinamico.forEach(letra => {
+							arrayNovo.push(letra);
+						})
+					}
+				}  while (arrayNovo.length < tamanhoArray);
 
-    // Remove elementos extras do array original, se necessário
-    const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
-
-    // Embaralha o array reduzido
-    const arrayEmbaralhado = shuffleArray([...arrayReduzido]);
-
-    // Itera sobre o array embaralhado para atualizar o DOM
-    arrayEmbaralhado.forEach((letra, index) => {
-        const currentIndex = index + 1; // Índice começa em 1
-
-        // Atualiza os campos visíveis no front-end
-        const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
-        const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
-
-        if (elementoVisivelSimples && elementoVisivelDuplo) {
-            // Define o texto e a classe de cor para os elementos visíveis
-            elementoVisivelSimples.innerHTML = letra;
-            elementoVisivelDuplo.innerHTML = letra;
-            elementoVisivelSimples.className = caseClasseCor(letra);
-            elementoVisivelDuplo.className = caseClasseCor(letra);
-        } else {
-            console.error(`Elemento folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
-        }
-
-        // Atualiza os campos ocultos para armazenamento no banco
-        const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
-        const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
-
-        if (campoOcultoSimples && campoOcultoDuplo) {
-            campoOcultoSimples.value = letra;
-            campoOcultoDuplo.value = letra;
-        } else {
-            console.error(`Campo oculto folregRaTentCad${currentIndex} ou folregRaTentDuplCad${currentIndex} não encontrado.`);
-        }
-    });
-}
-
-// Função auxiliar para embaralhar um array usando o algoritmo Fisher-Yates
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-// Função auxiliar para definir a classe de cor com base na letra
-function caseClasseCor(letra) {
-    switch (letra) {
-        case 'A':
-            return 'label label-sm label-info arrowed arrowed-righ RA';
-        case 'B':
-            return 'label label-sm label-warning arrowed arrowed-righ RA';
-        case 'C':
-            return 'label label-sm label-danger arrowed arrowed-righ RA';
-        case 'D':
-            return 'label label-sm label-success arrowed arrowed-righ RA';
-        case 'E':
-            return 'label label-sm label-primary arrowed arrowed-righ RA';
-        case 'F':
-            return 'label label-sm label-purple arrowed arrowed-righ RA';
-        case 'G':
-            return 'label label-sm label-pink arrowed arrowed-righ RA';
-        case 'H':
-            return 'label label-sm label-yellow arrowed arrowed-righ RA';
-        case 'I':
-            return 'label label-sm label-gray arrowed arrowed-righ RA';
-        case 'J':
-            return 'label label-sm label-blue arrowed arrowed-righ RA';
-        default:
-            return 'label label-sm label-default arrowed arrowed-righ RA';
-    }
-}
-
+				arrayNovo.forEach(letra => {
+					document.getElementById("folregRaTent"+index).class = caseClasseCor(letra);
+					document.getElementById("folregRaTentDupl"+index).class = caseClasseCor(letra);
+					document.getElementById("folregRaTent"+index).innerHTML = letra;
+					document.getElementById("folregRaTentDupl"+index).innerHTML = letra;
+					document.getElementById("folregRaTentCad"+index).value = letra;
+					document.getElementById("folregRaTentDuplCad"+index).value = letra;
+					index++;
+				})
+			}
+			
+			function caseClasseCor(letra){
+				let retorno = "";
+				switch (letra){
+					case "A":
+						retorno = "label label-sm label-cian arrowed arrowed-righ";
+						break;
+					case "B":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "C":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "D":
+						retorno = "label label-sm label-info arrowed arrowed-righ";
+						break;
+					case "E":
+						retorno = "label label-sm label-warning arrowed arrowed-righ";
+						break;
+					case "F":
+						retorno = "label label-sm label-pink arrowed arrowed-righ";
+						break;
+					case "G":
+						retorno = "label label-sm label-purple arrowed arrowed-righ";
+						break;
+					case "H":
+						retorno = "label label-sm label-success arrowed arrowed-righ";
+						break;
+					case "I":
+						retorno = "label label-sm label-danger arrowed arrowed-righ"
+						break;
+					case "J":
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+					default:
+						retorno = "label label-sm label-cyan arrowed arrowed-righ"
+						break;
+				}
+				return retorno;
+			}
 
 			function marcaImput(inputName) {
 				let elementoAlvo = document.getElementById(inputName);
@@ -463,8 +475,8 @@ function caseClasseCor(letra) {
 				document.getElementById("folregEstg").value = document.getElementById("folregg").value;
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
-				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
-				embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
+
+				embaralharIgualmenteFolregTentativas();
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
@@ -527,32 +539,29 @@ function caseClasseCor(letra) {
 									g<input name="folregg" id="folregg" value="{{progset.progset_estg}}" />
 									h<input name="folregh" id="folregh" value="{{progset.progset_esth}}" />
 									i<input name="folregi" id="folregi" value="{{progset.progset_esti}}" />
-									j<input name="folregj" id="folregj" value="{{progset.progset_estj}}" />
 
 									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
 									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
 									<input type="hidden" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}" />
 
-									ras-a<input  type="text" id="folregRaTentCad1" name="folregRaTentCad1" value="" />
-									ras-b<input  type="text" id="folregRaTentCad2" name="folregRaTentCad2" value="" />
-									ras-c<input  type="text" id="folregRaTentCad3" name="folregRaTentCad3" value="" />
-									ras-d<input  type="text" id="folregRaTentCad4" name="folregRaTentCad4" value="" />
-									ras-e<input  type="text" id="folregRaTentCad5" name="folregRaTentCad5" value="" />
-									ras-f<input  type="text" id="folregRaTentCad6" name="folregRaTentCad6" value="" />
-									ras-g<input  type="text" id="folregRaTentCad7" name="folregRaTentCad7" value="" />
-									ras-h<input  type="text" id="folregRaTentCad8" name="folregRaTentCad8" value="" />
-									ras-i<input  type="text" id="folregRaTentCad9" name="folregRaTentCad9" value="" />
-									ras-j10<input  type="text" id="folregRaTentCad10" name="folregRaTentCad10" value="" />
-									<input  type="text" id="folregRaTentDuplCad1" name="folregRaTentDuplCad1" value="" />
-									<input  type="text" id="folregRaTentDuplCad2" name="folregRaTentDuplCad2" value="" />
-									<input  type="text" id="folregRaTentDuplCad3" name="folregRaTentDuplCad3" value="" />
-									<input  type="text" id="folregRaTentDuplCad4" name="folregRaTentDuplCad4" value="" />
-									<input  type="text" id="folregRaTentDuplCad5" name="folregRaTentDuplCad5" value="" />
-									<input  type="text" id="folregRaTentDuplCad6" name="folregRaTentDuplCad6" value="" />
-									<input  type="text" id="folregRaTentDuplCad7" name="folregRaTentDuplCad7" value="" />
-									<input  type="text" id="folregRaTentDuplCad8" name="folregRaTentDuplCad8" value="" />
-									<input  type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
-									<input  type="text" id="folregRaTentDuplCad10" name="folregRaTentDuplCad10" value="" />
+									<input hidden type="text" id="folregRaTentCad1" name="folregRaTentCad1" value="" />
+									<input hidden type="text" id="folregRaTentCad2" name="folregRaTentCad2" value="" />
+									<input hidden type="text" id="folregRaTentCad3" name="folregRaTentCad3" value="" />
+									<input hidden type="text" id="folregRaTentCad4" name="folregRaTentCad4" value="" />
+									<input hidden type="text" id="folregRaTentCad5" name="folregRaTentCad5" value="" />
+									<input hidden type="text" id="folregRaTentCad6" name="folregRaTentCad6" value="" />
+									<input hidden type="text" id="folregRaTentCad7" name="folregRaTentCad7" value="" />
+									<input hidden type="text" id="folregRaTentCad8" name="folregRaTentCad8" value="" />
+									<input hidden type="text" id="folregRaTentCad9" name="folregRaTentCad9" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad1" name="folregRaTentDuplCad1" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad2" name="folregRaTentDuplCad2" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad3" name="folregRaTentDuplCad3" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad4" name="folregRaTentDuplCad4" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad5" name="folregRaTentDuplCad5" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad6" name="folregRaTentDuplCad6" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad7" name="folregRaTentDuplCad7" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad8" name="folregRaTentDuplCad8" value="" />
+									<input hidden type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -715,7 +724,6 @@ function caseClasseCor(letra) {
 														<option value="7">7</option>
 														<option value="8">8</option>
 														<option value="9">9</option>
-														<option value="10">10</option>
 													</select>
 												</div>
 											</div>
@@ -823,18 +831,7 @@ function caseClasseCor(letra) {
 															</div>
 														</div>
 													</div>
-												</div>
-												<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusJ">
-													<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
-													<span class="label label-sm label-danger arrowed arrowed-righ">J</span>
-													<div class="row">
-														<div class="col-sm-4">
-															<div class="input-group">
-																<input name="folregEstj" id="folregEstj" type="text" />
-															</div>
-														</div>
-													</div>
-												</div>			
+												</div>		
 											</div>
 											<label>Observações adicionais durante a aplicação dos estímulos</label>
 											<div class="form-group">
@@ -1259,41 +1256,7 @@ function caseClasseCor(letra) {
 																	<span class="label label-pink arrowed-in">-d</span>
 																</td>
 															</tr>
-
-															{{#ifIncludes progset.progset_qtest "10" }}
-															
 															<tr><!-- 10Reg -->
-																<td class="center">
-																	<span class="badge badge-blue">10</span>
-																</td>
-																<td>
-																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent10" name="folregRaTent10" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
-																	</label>
-																</td>
-																<td>
-																	<input name="folregT10Ressimples" id="folregT10Ressimples"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
-
-																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','1','I');" />
-																	<span class="lbl"></span>
-																	<span class="label label-success arrowed-in">I</span>
-																
-																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','2','E');" />
-																	<span class="lbl"></span>
-																	<span class="label label-yellow arrowed-in">E</span>
-																
-																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','3','+d');" />
-																	<span class="lbl"></span>
-																	<span class="label label-warning arrowed-in">+d</span>
-																
-																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','4','-d');" />
-																	<span class="lbl"></span>
-																	<span class="label label-pink arrowed-in">-d</span>
-																</td>
-															</tr>
-															{{else}}
-															{{/ifIncludes}}
-															<tr><!-- TotaisReg -->
 																<td colspan="2" style="text-align:right">
 																	<label class="pos-rel">
 																	<span  class="label label-lg label-inverse arrowed-right">Totais</span>
@@ -1980,65 +1943,8 @@ function caseClasseCor(letra) {
 														
 														
 													</tr>
-													{{#ifIncludes progset.progset_qtest "10" }}
-													<tr><!-- 10 Reg 10 Tentativas -->
-														<td class="center">
-															
-																<span class="badge badge-blue">10</span>
-															
-														</td>
-														<td>
-															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl10" name="folregRaTentDupl10" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
-															</label>
-														</td>
-														
-														<td>
-															<input name="folregT10Resesqu" id="folregT10Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
-															<input name="folregT10Resesquradio" id="folregT10Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','1','I');" />
-															<span class="lbl"></span>
-															<span class="label label-success arrowed-in">I</span>
-														
-															<input name="folregT10Resesquradio" id="folregT10Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','2','E');" />
-															<span class="lbl"></span>
-															<span class="label label-yellow arrowed-in">E</span>
-														
-															<input name="folregT10Resesquradio" id="folregT10Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','3','+d');" />
-															<span class="lbl"></span>
-															<span class="label label-warning arrowed-in">+d</span>
-														
-															<input name="folregT10Resesquradio" id="folregT10Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','4','-d');" />
-															<span class="lbl"></span>
-															<span class="label label-pink arrowed-in">-d</span>
-														</td>
-														<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
-														<td></td>
-														<td>
-															<input name="folregT10Resdir" id="folregT10Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
-
-															<input name="folregT10Resdirradio" id="folregT10Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','1','I');" />
-															<span class="lbl"></span>
-															<span class="label label-success arrowed-in">I</span>
-														
-															<input name="folregT10Resdirradio" id="folregT10Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','2','E');" />
-															<span class="lbl"></span>
-															<span class="label label-yellow arrowed-in">E</span>
-														
-															<input name="folregT10Resdirradio" id="folregT10Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','3','+d');" />
-															<span class="lbl"></span>
-															<span class="label label-warning arrowed-in">+d</span>
-														
-															<input name="folregT10Resdirradio" id="folregT10Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','4','-d');" />
-															<span class="lbl"></span>
-															<span class="label label-pink arrowed-in">-d</span>
-														</td>
-														<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
-														<td></td>
-													</tr>
-													{{else}}
-													{{/ifIncludes}}
-													<tr><!-- Total Reg -->
+													<tr><!-- 10Reg -->
 														
 														<td colspan="2" style="text-align:right">
 															<label class="pos-rel">
@@ -2102,7 +2008,6 @@ function caseClasseCor(letra) {
 			</div>
 		</div><!-- /.main-container -->
 		<script>
-			
 			//######################################################################################################
 			//GRAFICO SIMPLES
 			// Dados do gráfico SIMPLES (mantenha os rótulos e as cores, mas os dados serão atualizados dinamicamente)
@@ -2133,13 +2038,10 @@ function caseClasseCor(letra) {
 			};
 
 			// Opções do gráfico
-			const tentativas = {{progset.progset_qtest}};
-			console.log("Valor do campo qtEst:" + tentativas);
-		
 			const options = {
 				scales: {
 					x: { stacked: true },
-					y: { stacked: true, min: 0, max: tentativas != "10" ? 90 : 100 }
+					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
 				}
 			};
 
@@ -2236,15 +2138,11 @@ function caseClasseCor(letra) {
         function renderizarGraficoDuplo() {
             console.log('Renderizando gráfico duplo...');
             
-			const tentativasd = {{progset.progset_qtest}};
-			console.log("Valor do campo qtEst:" + tentativasd);
-
             // Opções do gráfico
             const chartOptions = {
                 scales: {
                     x: { stacked: true },
-                    //y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
-					y: { stacked: true, min: 0, max: tentativasd != "10" ? 90 : 100 }
+                    y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
                 }
             };
 
@@ -2336,8 +2234,8 @@ function caseClasseCor(letra) {
 				const qtestValue = parseInt(document.getElementById('folregQtest').value, 10);
 				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 				
-				if (isNaN(qtestValue) || qtestValue < 1 || qtestValue > 10) {
-					console.error('Invalid value for folregQtest. Please provide a number between 1 and 10.');
+				if (isNaN(qtestValue) || qtestValue < 1 || qtestValue > 9) {
+					console.error('Invalid value for folregQtest. Please provide a number between 1 and 9.');
 					return;
 				}
 

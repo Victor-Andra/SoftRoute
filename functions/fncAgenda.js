@@ -3578,7 +3578,7 @@ module.exports = {
         sex.setMinutes(59);
         sex.setSeconds(59);
         switch (seg.getUTCDay()){
-            case 0://DOM
+            case 0://DOM 
                 seg.setUTCDate(seg.getUTCDate() + 1);
                 dtFill = {dia: "seg"};
                 sex.setUTCDate(sex.getUTCDate() + 5);

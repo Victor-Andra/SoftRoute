@@ -393,6 +393,7 @@
 				document.getElementById("folregEstg").value = document.getElementById("folregEstgEdi").value;
 				document.getElementById("folregEsth").value = document.getElementById("folregEsthEdi").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregEstiEdi").value;
+				document.getElementById("folregEstj").value = document.getElementById("folregEstjEdi").value;
 				document.getElementById("folregObs").value = document.getElementById("folregObsEdi").value;
 				document.getElementById("folregStatus").value = document.getElementById("folregStatusEdi").value;
 				
@@ -480,6 +481,7 @@
 					switchCases("folregT7Ressimples","folregT7RessimplesEdi");
 					switchCases("folregT8Ressimples","folregT8RessimplesEdi");
 					switchCases("folregT9Ressimples","folregT9RessimplesEdi");
+					switchCases("folregT10Ressimples","folregT10RessimplesEdi");
 
 					//Campos do Passo de Dica do gráfico Simples
 					document.getElementById("folregPassodicas").value = document.getElementById("folregPassodicasEdi").value
@@ -670,6 +672,23 @@
 							console.log("vazio");
 							break;
 					}
+					switch (document.getElementById("folregT10ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT10Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT10Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT10Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT10Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 
 					document.getElementById("folregRaTent1").innerHTML = document.getElementById("folregRaTentEdi1").value;
 					document.getElementById("folregRaTent2").innerHTML = document.getElementById("folregRaTentEdi2").value;
@@ -680,6 +699,7 @@
 					document.getElementById("folregRaTent7").innerHTML = document.getElementById("folregRaTentEdi7").value;
 					document.getElementById("folregRaTent8").innerHTML = document.getElementById("folregRaTentEdi8").value;
 					document.getElementById("folregRaTent9").innerHTML = document.getElementById("folregRaTentEdi9").value;
+					document.getElementById("folregRaTent10").innerHTML = document.getElementById("folregRaTentEdi10").value;
 
 					document.getElementById("folregRaTent1").className = caseClasseCor(document.getElementById("folregRaTentEdi1").value);
 					document.getElementById("folregRaTent2").className = caseClasseCor(document.getElementById("folregRaTentEdi2").value);
@@ -690,6 +710,7 @@
 					document.getElementById("folregRaTent7").className = caseClasseCor(document.getElementById("folregRaTentEdi7").value);
 					document.getElementById("folregRaTent8").className = caseClasseCor(document.getElementById("folregRaTentEdi8").value);
 					document.getElementById("folregRaTent9").className = caseClasseCor(document.getElementById("folregRaTentEdi9").value);
+					document.getElementById("folregRaTent10").className = caseClasseCor(document.getElementById("folregRaTentEdi10").value);
 				}else{
 					//Gráfico DUPLO
 					//Campos com resultados da esquerda do gráfico
@@ -702,6 +723,7 @@
 					document.getElementById("folregT7Resesqu").value = document.getElementById("folregT7ResesquEdi").value;
 					document.getElementById("folregT8Resesqu").value = document.getElementById("folregT8ResesquEdi").value;
 					document.getElementById("folregT9Resesqu").value = document.getElementById("folregT9ResesquEdi").value;
+					document.getElementById("folregT10Resesqu").value = document.getElementById("folregT10ResesquEdi").value;
 					//Campos com resultados da direita do gráfico
 					document.getElementById("folregT1Resdir").value = document.getElementById("folregT1ResdirEdi").value;
 					document.getElementById("folregT2Resdir").value = document.getElementById("folregT2ResdirEdi").value;
@@ -712,6 +734,7 @@
 					document.getElementById("folregT7Resdir").value = document.getElementById("folregT7ResdirEdi").value;
 					document.getElementById("folregT8Resdir").value = document.getElementById("folregT8ResdirEdi").value;
 					document.getElementById("folregT9Resdir").value = document.getElementById("folregT9ResdirEdi").value;
+					document.getElementById("folregT10Resdir").value = document.getElementById("folregT10ResdirEdi").value;
 
 					document.getElementById("folregPassodicae").value = document.getElementById("folregPassodicaeEdi").value;
 					switch (document.getElementById("folregPassodicaeEdi").value){
@@ -989,6 +1012,23 @@
 							console.log("vazio");
 							break;
 					}
+					switch (document.getElementById("folregT10ResesquEdi").value){
+						case "I":
+							document.getElementById("folregT10Resesqu1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT10Resesqu2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT10Resesqu3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT10Resesqu4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 					//popular radio box Direita
 					switch (document.getElementById("folregT1ResdirEdi").value){
 						case "I":
@@ -1143,6 +1183,23 @@
 							console.log("vazio");
 							break;
 					}
+					switch (document.getElementById("folregT10ResdirEdi").value){
+						case "I":
+							document.getElementById("folregT10Resdir1").checked = true;
+							break;
+						case "E":
+							document.getElementById("folregT10Resdir2").checked = true;
+							break;
+						case "+d":
+							document.getElementById("folregT10Resdir3").checked = true;
+							break;
+						case "-d":
+							document.getElementById("folregT10Resdir4").checked = true;
+							break;
+						default: 
+							console.log("vazio");
+							break;
+					}
 
 					document.getElementById("folregPassodicad").value = document.getElementById("folregPassodicadEdi").value;
 					switch (document.getElementById("folregPassodicadEdi").value){
@@ -1181,6 +1238,7 @@
 					document.getElementById("folregRaTentDupl7").innerHTML = document.getElementById("folregRaTentDuplEdi7").value;
 					document.getElementById("folregRaTentDupl8").innerHTML = document.getElementById("folregRaTentDuplEdi8").value;
 					document.getElementById("folregRaTentDupl9").innerHTML = document.getElementById("folregRaTentDuplEdi9").value;
+					document.getElementById("folregRaTentDupl10").innerHTML = document.getElementById("folregRaTentDuplEdi10").value;
 
 					document.getElementById("folregRaTentDupl1").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi1").value);
 					document.getElementById("folregRaTentDupl2").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi2").value);
@@ -1191,6 +1249,7 @@
 					document.getElementById("folregRaTentDupl7").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi7").value);
 					document.getElementById("folregRaTentDupl8").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi8").value);
 					document.getElementById("folregRaTentDupl9").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi9").value);
+					document.getElementById("folregRaTentDupl10").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi10").value);
 				}
 
 				showStimulusFieldsWithValues();
@@ -1202,6 +1261,7 @@
 					somaResEsqDuplo();
 				}
 			}
+			
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
@@ -1250,6 +1310,7 @@
 									g<input type="text" name="folregg" id="folregg" value="{{progset.progset_estg}}" />
 									h<input type="text" name="folregh" id="folregh" value="{{progset.progset_esth}}" />
 									i<input type="text" name="folregi" id="folregi" value="{{progset.progset_esti}}" />
+									j<input type="text" name="folregj" id="folregj" value="{{progset.progset_estj}}" />
 									<!-- campos oriundos do Passo de Dica-->
 									<input type="text" id="folregPassodicasEdi" value="{{folreg.folreg_passodicas}}">
 									<input type="text" id="folregPassodicaeEdi" value="{{folreg.folreg_passodicae}}">
@@ -1280,6 +1341,7 @@
 									<input type="text" id="folregEstgEdi" name="folregEstgEdi" value="{{folreg.folreg_estg}}"/>
 									<input type="text" id="folregEsthEdi" name="folregEsthEdi" value="{{folreg.folreg_esth}}"/>
 									<input type="text" id="folregEstiEdi" name="folregEstiEdi" value="{{folreg.folreg_esti}}"/>
+									<input type="text" id="folregEstjEdi" name="folregEstjEdi" value="{{folreg.folreg_estj}}"/>
 									<!-- campos Observação e status-->
 									<input type="text" id="folregObsEdi" name="folregObsEdi" value="{{folreg.folreg_obs}}"/>
 									<input type="text" id="folregStatusEdi" name="folregStatusEdi" value="{{folreg.folreg_status}}"/>
@@ -1293,6 +1355,7 @@
 									<input type="text" id="folregT7EstsEdi" name="folregT7EstsEdi" value="{{folreg.folreg_t7ests}}"/>
 									<input type="text" id="folregT8EstsEdi" name="folregT8EstsEdi" value="{{folreg.folreg_t8ests}}"/>
 									<input type="text" id="folregT9EstsEdi" name="folregT9EstsEdi" value="{{folreg.folreg_t9ests}}"/>
+									10esq<input type="text" id="folregT10EstsEdi" name="folregT10EstsEdi" value="{{folreg.folreg_t10ests}}"/>
 									
 									<input type="text" id="folregT1EstdEdi" name="folregT1EstdEdi" value="{{folreg.folreg_t1estd}}"/>
 									<input type="text" id="folregT2EstdEdi" name="folregT2EstdEdi" value="{{folreg.folreg_t2estd}}"/>
@@ -1303,6 +1366,7 @@
 									<input type="text" id="folregT7EstdEdi" name="folregT7EstdEdi" value="{{folreg.folreg_t7estd}}"/>
 									<input type="text" id="folregT8EstdEdi" name="folregT8EstdEdi" value="{{folreg.folreg_t8estd}}"/>
 									<input type="text" id="folregT9EstdEdi" name="folregT9EstdEdi" value="{{folreg.folreg_t9estd}}"/>
+									10dir<input type="text" id="folregT10EstdEdi" name="folregT10EstdEdi" value="{{folreg.folreg_t10estd}}"/>
 									
 									<input type="text" id="folregT1RessimplesEdi" name="folregT1RessimplesEdi" value="{{folreg.folreg_t1ressimples}}"/>
 									<input type="text" id="folregT2RessimplesEdi" name="folregT2RessimplesEdi" value="{{folreg.folreg_t2ressimples}}"/>
@@ -1313,6 +1377,7 @@
 									<input type="text" id="folregT7RessimplesEdi" name="folregT7RessimplesEdi" value="{{folreg.folreg_t7ressimples}}"/>
 									<input type="text" id="folregT8RessimplesEdi" name="folregT8RessimplesEdi" value="{{folreg.folreg_t8ressimples}}"/>
 									<input type="text" id="folregT9RessimplesEdi" name="folregT9RessimplesEdi" value="{{folreg.folreg_t9ressimples}}"/>
+									10simples<input type="text" id="folregT10RessimplesEdi" name="folregT10RessimplesEdi" value="{{folreg.folreg_t10ressimples}}"/>
 									
 									<input type="text" id="folregT1tipodsimplesEdi" name="folregT1tipodsimplesEdi" value="{{folreg.folreg_t1tipodsimples}}"/>
 									<input type="text" id="folregT2tipodsimplesEdi" name="folregT2tipodsimplesEdi" value="{{folreg.folreg_t2tipodsimples}}"/>
@@ -1323,6 +1388,7 @@
 									<input type="text" id="folregT7tipodsimplesEdi" name="folregT7tipodsimplesEdi" value="{{folreg.folreg_t7tipodsimples}}"/>
 									<input type="text" id="folregT8tipodsimplesEdi" name="folregT8tipodsimplesEdi" value="{{folreg.folreg_t8tipodsimples}}"/>
 									<input type="text" id="folregT9tipodsimplesEdi" name="folregT9tipodsimplesEdi" value="{{folreg.folreg_t9tipodsimples}}"/>
+									<input type="text" id="folregT10tipodsimplesEdi" name="folregT10tipodsimplesEdi" value="{{folreg.folreg_t10tipodsimples}}"/>
 									
 									folregT1ResesquEdi<input type="text" id="folregT1ResesquEdi" name="folregT1ResesquEdi" value="{{folreg.folreg_t1resesqu}}"/>
 									<input type="text" id="folregT2ResesquEdi" name="folregT2ResesquEdi" value="{{folreg.folreg_t2resesqu}}"/>
@@ -1333,7 +1399,8 @@
 									<input type="text" id="folregT7ResesquEdi" name="folregT7ResesquEdi" value="{{folreg.folreg_t7resesqu}}"/>
 									<input type="text" id="folregT8ResesquEdi" name="folregT8ResesquEdi" value="{{folreg.folreg_t8resesqu}}"/>
 									<input type="text" id="folregT9ResesquEdi" name="folregT9ResesquEdi" value="{{folreg.folreg_t9resesqu}}"/>
-									
+									<input type="text" id="folregT10ResesquEdi" name="folregT10ResesquEdi" value="{{folreg.folreg_t10resesqu}}"/>
+
 									<input type="text" id="folregT1ResdirEdi" name="folregT1ResdirEdi" value="{{folreg.folreg_t1resdir}}"/>
 									<input type="text" id="folregT2ResdirEdi" name="folregT2ResdirEdi" value="{{folreg.folreg_t2resdir}}"/>
 									<input type="text" id="folregT3ResdirEdi" name="folregT3ResdirEdi" value="{{folreg.folreg_t3resdir}}"/>
@@ -1343,7 +1410,8 @@
 									<input type="text" id="folregT7ResdirEdi" name="folregT7ResdirEdi" value="{{folreg.folreg_t7resdir}}"/>
 									<input type="text" id="folregT8ResdirEdi" name="folregT8ResdirEdi" value="{{folreg.folreg_t8resdir}}"/>
 									<input type="text" id="folregT9ResdirEdi" name="folregT9ResdirEdi" value="{{folreg.folreg_t9resdir}}"/>
-									
+									<input type="text" id="folregT10ResdirEdi" name="folregT10ResdirEdi" value="{{folreg.folreg_t10resdir}}"/>
+
 									<input type="text" id="folregT1tipodesquEdi" name="folregT1tipodesquEdi" value="{{folreg.folreg_t1tipodesqu}}"/>
 									<input type="text" id="folregT2tipodesquEdi" name="folregT2tipodesquEdi" value="{{folreg.folreg_t2tipodesqu}}"/>
 									<input type="text" id="folregT3tipodesquEdi" name="folregT3tipodesquEdi" value="{{folreg.folreg_t3tipodesqu}}"/>
@@ -1353,7 +1421,8 @@
 									<input type="text" id="folregT7tipodesquEdi" name="folregT7tipodesquEdi" value="{{folreg.folreg_t7tipodesqu}}"/>
 									<input type="text" id="folregT8tipodesquEdi" name="folregT8tipodesquEdi" value="{{folreg.folreg_t8tipodesqu}}"/>
 									<input type="text" id="folregT9tipodesquEdi" name="folregT9tipodesquEdi" value="{{folreg.folreg_t9tipodesqu}}"/>
-									
+									<input type="text" id="folregT10tipodesquEdi" name="folregT10tipodesquEdi" value="{{folreg.folreg_t10tipodesqu}}"/>
+
 									<input type="text" id="folregT1tipodirdEdi" name="folregT1tipodirdEdi" value="{{folreg.folreg_t1tipodird}}"/>
 									<input type="text" id="folregT2tipodirdEdi" name="folregT2tipodirdEdi" value="{{folreg.folreg_t2tipodird}}"/>
 									<input type="text" id="folregT3tipodirdEdi" name="folregT3tipodirdEdi" value="{{folreg.folreg_t3tipodird}}"/>
@@ -1363,7 +1432,8 @@
 									<input type="text" id="folregT7tipodirdEdi" name="folregT7tipodirdEdi" value="{{folreg.folreg_t7tipodird}}"/>
 									<input type="text" id="folregT8tipodirdEdi" name="folregT8tipodirdEdi" value="{{folreg.folreg_t8tipodird}}"/>
 									<input type="text" id="folregT9tipodirdEdi" name="folregT9tipodirdEdi" value="{{folreg.folreg_t9tipodird}}"/>
-									
+									<input type="text" id="folregT10tipodirdEdi" name="folregT10tipodirdEdi" value="{{folreg.folreg_t10tipodird}}"/>
+
 									<input type="text" id="folregTotalsimples1Edi" name="folregTotalsimples1Edi" value="{{folreg.folreg_totalsimples_i}}"/>
 									<input type="text" id="folregTotalsimples2Edi" name="folregTotalsimples2Edi" value="{{folreg.folreg_totalsimples_e}}"/>
 									<input type="text" id="folregTotalsimples3Edi" name="folregTotalsimples3Edi" value="{{folreg.folreg_totalsimples_plusd}}"/>
@@ -1426,6 +1496,8 @@
 									<input type="text" id="folregRaTentEdi7" name="folregRaTentEdi7" value="{{folreg.folreg_ratent7}}"/>
 									<input type="text" id="folregRaTentEdi8" name="folregRaTentEdi8" value="{{folreg.folreg_ratent8}}"/>
 									<input type="text" id="folregRaTentEdi9" name="folregRaTentEdi9" value="{{folreg.folreg_ratent9}}"/>
+									<input type="text" id="folregRaTentEdi10" name="folregRaTentEdi10" value="{{folreg.folreg_ratent10}}"/>
+
 									<input type="text" id="folregRaTentDuplEdi1" name="folregRaTentDuplEdi1" value="{{folreg.folreg_ratent_dupl1}}"/>
 									<input type="text" id="folregRaTentDuplEdi2" name="folregRaTentDuplEdi2" value="{{folreg.folreg_ratent_dupl2}}"/>
 									<input type="text" id="folregRaTentDuplEdi3" name="folregRaTentDuplEdi3" value="{{folreg.folreg_ratent_dupl3}}"/>
@@ -1435,6 +1507,7 @@
 									<input type="text" id="folregRaTentDuplEdi7" name="folregRaTentDuplEdi7" value="{{folreg.folreg_ratent_dupl7}}"/>
 									<input type="text" id="folregRaTentDuplEdi8" name="folregRaTentDuplEdi8" value="{{folreg.folreg_ratent_dupl8}}"/>
 									<input type="text" id="folregRaTentDuplEdi9" name="folregRaTentDuplEdi9" value="{{folreg.folreg_ratent_dupl9}}"/>
+									<input type="text" id="folregRaTentDuplEdi10" name="folregRaTentDuplEdi10" value="{{folreg.folreg_ratent_dupl10}}"/>
 								</div>
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
@@ -1597,6 +1670,7 @@
 														<option value="7">7</option>
 														<option value="8">8</option>
 														<option value="9">9</option>
+														<option value="10">10</option>
 													</select>
 													
 												</div>
@@ -1702,6 +1776,18 @@
 														<div class="col-sm-4">
 															<div class="input-group">
 																<input name="folregEsti" id="folregEsti" type="text" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-2 stimulus-field" id="stimulusJ">
+													<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+													<span class="label label-sm label-purple arrowed arrowed-righ">J</span>
+													<span class="label label-sm label-purple">10 Tentativas</span>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="folregEstj" id="folregEstj" type="text" />
 															</div>
 														</div>
 													</div>
@@ -2133,7 +2219,39 @@
 																	<span class="label label-pink arrowed-in">&nbsp;-d</span>
 																</td>
 															</tr>
-															<tr><!-- 10Reg -->
+																<tr><!-- 10 Tentativas Reg -->
+																<td class="center">
+																	<span class="badge badge-gray">10</span>
+																</td>
+																<td>
+																	<label class="pos-rel">
+																		<label class="pos-rel"><span id="folregRaTent10" name="folregRaTent10"></span></label>
+																	</label>
+																</td>
+																<td>
+																	<input name="folregT10Ressimples" id="folregT10Ressimples"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+
+																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','1','I');" />
+																	<span class="lbl"></span>
+																	<span class="label label-success arrowed-in">I</span>
+																
+																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples2" type="radio" class="ace" value="E" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','2','E');" />
+																	<span class="lbl"></span>
+																	<span class="label label-yellow arrowed-in">&nbsp;E</span>
+																
+																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples3" type="radio" class="ace" value="+d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','3','+d');" />
+																	<span class="lbl"></span>
+																	<span class="label label-warning arrowed-in">&nbsp;+d</span>
+																
+																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples4" type="radio" class="ace" value="-d" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','4','-d');" />
+																	<span class="lbl"></span>
+																	<span class="label label-pink arrowed-in">&nbsp;-d</span>
+																</td>
+																<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
+																<td></td>
+															</tr>
+
+															<tr><!-- Total Reg -->
 																<td colspan="2" style="text-align:right">
 																	<label class="pos-rel">
 																	<span  class="label label-lg label-inverse arrowed-right">Totais</span>
@@ -2821,8 +2939,64 @@
 														
 														
 													</tr>
+													<tr><!-- 10 Tentativas Reg -->
+														<td class="center">
+															
+																<span class="badge badge-gray">10</span>
+															
+														</td>
+														<td>
+															<label class="pos-rel">
+																<label class="pos-rel"><span id="folregRaTentDupl10" name="folregRaTentDupl10"></span></label>
+															</label>
+														</td>
+														
+														<td>
+															<input name="folregT10Resesqu" id="folregT10Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
 
-													<tr><!-- 10Reg -->
+															<input name="folregT10Resesquradio" id="folregT10Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','1','I');" />
+															<span class="lbl"></span>
+															<span class="label label-success arrowed-in">I</span>
+														
+															<input name="folregT10Resesquradio" id="folregT10Resesqu2"  type="radio" class="ace" value="E" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','2','E');" />
+															<span class="lbl"></span>
+															<span class="label label-yellow arrowed-in">&nbsp;E</span>
+														
+															<input name="folregT10Resesquradio" id="folregT10Resesqu3" type="radio" class="ace" value="+d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','3','+d');" />
+															<span class="lbl"></span>
+															<span class="label label-warning arrowed-in">&nbsp;+d</span>
+														
+															<input name="folregT10Resesquradio" id="folregT10Resesqu4" type="radio" class="ace" value="-d" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','4','-d');" />
+															<span class="lbl"></span>
+															<span class="label label-pink arrowed-in">&nbsp;-d</span>
+														</td>
+														<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
+														<td></td>
+														<td>
+															<input name="folregT10Resdir" id="folregT10Resdir"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+
+															<input name="folregT10Resdirradio" id="folregT10Resdir1"  type="radio" class="ace" value="I" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','1','I');" />
+															<span class="lbl"></span>
+															<span class="label label-success arrowed-in">I</span>
+														
+															<input name="folregT10Resdirradio" id="folregT10Resdir2"  type="radio" class="ace" value="E" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','2','E');" />
+															<span class="lbl"></span>
+															<span class="label label-yellow arrowed-in">&nbsp;E</span>
+														
+															<input name="folregT10Resdirradio" id="folregT10Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','3','+d');" />
+															<span class="lbl"></span>
+															<span class="label label-warning arrowed-in">&nbsp;+d</span>
+														
+															<input name="folregT10Resdirradio" id="folregT10Resdir4" type="radio" class="ace" value="-d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT10Resdir','4','-d');" />
+															<span class="lbl"></span>
+															<span class="label label-pink arrowed-in">&nbsp;-d</span>
+														</td>
+														<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
+														<td></td>
+														
+													</tr>
+
+													<tr><!-- Totais Reg -->
 														
 														<td colspan="2" style="text-align:right">
 															<label class="pos-rel">
@@ -2858,9 +3032,13 @@
 							</div>
 							<div class="row" style="position: relative;">
 										<div class="col-xs-12">
-											<!-- GRAFICO DUPLO-->
+											<!-- GRAFICO Simples-->
 											<div class="container" style="width: 5%;">
-												<canvas id="doubleBarChart" width="400" height="200"></canvas>
+												<canvas id="GraficoSimples" width="400" height="200"></canvas>
+											</div>
+											<!-- GRAFICO DUPLO-->
+											<div class="container" >
+												<canvas id="graficoDuplo" ></canvas>
 											</div>
 										</div>																		
 									</div>	
@@ -2916,10 +3094,14 @@
 			};
 
 			// Opções do gráfico
+			const tentativas = {{folreg.folreg_qtest}};
+			console.log("Valor do campo qtEst:" + tentativas);
+
 			const options = {
 				scales: {
 					x: { stacked: true },
-					y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+					//y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+					y: { stacked: true, min: 0, max: tentativas != "10" ? 90 : 100 }
 				}
 			};
 
@@ -3013,67 +3195,96 @@
         };
 
         // Função para renderizar o gráfico
-        function renderizarGraficoDuplo() {
-            console.log('Renderizando gráfico duplo...');
-            
-            // Opções do gráfico
-            const chartOptions = {
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
-                }
-            };
+       function renderizarGraficoDuplo() {
+    console.log('Iniciando renderização do gráfico duplo...');
 
-            // Configuração do gráfico
-            const config = {
-                type: 'bar',
-                data: dataDuplo,
-                options: chartOptions
-            };
+    // Verifica se o elemento canvas existe
+    const ctx = document.getElementById('graficoDuplo')?.getContext('2d');
+    if (!ctx) {
+        console.error('Elemento canvas para o gráfico duplo não encontrado.');
+        return;
+    }
+    console.log('Elemento canvas encontrado:', ctx);
 
-            const ctx = document.getElementById('doubleBarChart');
-            if (ctx) {
-                console.log('Elemento canvas encontrado.');
-                // Se já existe um gráfico, destruímos ele antes de renderizar um novo
-                if (graficoDuplo !== null) {
-                    console.log('Destruindo gráfico existente...');
-                    graficoDuplo.destroy();
-                }
-                console.log('Criando novo gráfico...');
-                graficoDuplo = new Chart(ctx, config);
-            } else {
-                console.error('Não foi possível encontrar o elemento canvas.');
+    // Dados do gráfico
+    const dataDuplo = {
+        labels: ['Esquerda', 'Direita'],
+        datasets: [
+            {
+                label: 'I',
+                backgroundColor: 'rgba(0, 255, 0, 0.5)',
+                data: [0, 0]
+            },
+            {
+                label: 'E',
+                backgroundColor: 'rgba(255, 255, 0, 0.5)',
+                data: [0, 0]
+            },
+            {
+                label: '+d',
+                backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                data: [0, 0]
             }
+        ]
+    };
+    console.log('Dados do gráfico duplo:', dataDuplo);
+
+    // Opções do gráfico
+    const options = {
+        scales: {
+            x: { stacked: true },
+            y: { stacked: true, min: 0, max: 100 }
         }
+    };
+    console.log('Opções do gráfico duplo:', options);
+
+    // Configuração do gráfico
+    const config = {
+        type: 'bar',
+        data: dataDuplo,
+        options: options
+    };
+    console.log('Configuração completa do gráfico duplo:', config);
+
+    // Destruir gráfico existente, se houver
+    if (graficoDuplo !== null) {
+        console.log('Destruindo gráfico duplo existente...');
+        graficoDuplo.destroy();
+    }
+
+    // Criar novo gráfico
+    console.log('Criando novo gráfico duplo...');
+    graficoDuplo = new Chart(ctx, config);
+    console.log('Gráfico duplo criado com sucesso.');
+}
 
         // Função para atualizar os dados do gráfico e renderizá-lo
         function atualizarDuploGrafico() {
-            // Chama a função para calcular os totais
-            // Obtém os valores dos campos de entrada e multiplica por 10
-            const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10;
-            const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10;
-            const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10;
-            const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10;
+    console.log('Iniciando atualização do gráfico duplo...');
 
-            const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10;
-            const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10;
-            const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10;
-            const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10;
+    // Calcula os totais com base nos campos de entrada
+    const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10 || 0;
+    const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10 || 0;
+    const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10 || 0;
+    const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10 || 0;
 
-            // Atualiza os dados do gráfico
-            dataDuplo.datasets[0].data = [valoresqI, valordirI];
-            dataDuplo.datasets[1].data = [valoresqE, valordirE];
-            dataDuplo.datasets[2].data = [valoresqMaisD, valordirMaisD];
-            dataDuplo.datasets[3].data = [valoresqMenosD, valordirMenosD];
+    console.log('Valores calculados para o gráfico duplo:', {
+        valoresqI,
+        valoresqE,
+        valordirI,
+        valordirE
+    });
 
-            // Atualiza o gráfico
-            if (graficoDuplo !== null) {
-                console.log('Atualizando gráfico...');
-                graficoDuplo.update();
-            } else {
-                console.error('O gráfico não foi inicializado corretamente.');
-            }
-        }
+    // Atualiza os dados do gráfico
+    if (graficoDuplo !== null) {
+        graficoDuplo.data.datasets[0].data = [valoresqI, valordirI];
+        graficoDuplo.data.datasets[1].data = [valoresqE, valordirE];
+        graficoDuplo.update();
+        console.log('Gráfico duplo atualizado com sucesso.');
+    } else {
+        console.error('O gráfico duplo não foi inicializado corretamente.');
+    }
+}
 
         // Chamar a função para atualizar e renderizar o gráfico toda vez que os radiobuttons forem alterados
         document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
@@ -3096,7 +3307,7 @@
             renderizarGraficoDuplo();
         });
 		function showStimulusFieldsWithValues() {
-				var fields = ['folregEsta', 'folregEstb', 'folregEstc', 'folregEstd', 'folregEste', 'folregEstf', 'folregEstg', 'folregEsth', 'folregEsti'];
+				var fields = ['folregEsta', 'folregEstb', 'folregEstc', 'folregEstd', 'folregEste', 'folregEstf', 'folregEstg', 'folregEsth', 'folregEsti','folregEstj', ];
 				
 				fields.forEach(function(fieldId) {
 					var field = document.getElementById(fieldId);

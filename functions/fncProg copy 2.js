@@ -17,7 +17,6 @@ const progtipoClass = require("../models/progtipo")
 
 const folregClass = require("../models/folreg")
 const notasupClass = require("../models/notasup")
-const notasupobsClass = require("../models/notasupobs")
 
 //prog, tipos de prog 
 const Prog = mongoose.model("tb_prog")
@@ -35,7 +34,6 @@ const Progtipo = mongoose.model("tb_progtipo")
 
 const Folreg = mongoose.model("tb_folreg")
 const Notasup = mongoose.model("tb_notasup")
-const Notasupobs = mongoose.model("tb_notasupobs")
 
 module.exports = {
    
@@ -583,7 +581,9 @@ module.exports = {
                         p.dataedi = formatarData(new Date(p.prog_dataedi));
                     });
                     
-
+                    
+                    
+                    
                     Progdica.find().then((progdica) => {
                         progdica.sort(ordenarPorNome('progdica_nome'));
     
@@ -639,8 +639,6 @@ module.exports = {
                 res.redirect('admin/erro');
             });
     },
-
-
 
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);

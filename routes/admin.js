@@ -570,7 +570,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                 return dataNascimento >= inicioSemana && dataNascimento <= fimSemana;
             };
 
-            // Consulta para aniversariantes do dia na tabela Usuario
+            // Consulta para aniversariantes do dia na tabela Usuario 
             Usuario.find({ usuario_status: "Ativo" }).then((usuarios) => {
                 const aniversariantesDaSemanaUsuario = usuarios
                     .map(usuario => {
@@ -587,7 +587,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                         };
                     })
                     .filter(usuario => isDentroDaSemana(usuario.diaNascimento, usuario.mesNascimento));
-
+                //Agenda Avisos
+                
                 // Consulta para aniversariantes do dia na tabela Bene
                 return Bene.find({ bene_status: "Ativo" }).then((benes) => {
                     const aniversariantesDaSemanaBene = benes

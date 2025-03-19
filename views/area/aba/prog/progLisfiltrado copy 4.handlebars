@@ -19,15 +19,6 @@
 				width: auto; /* Largura automática para acomodar o conteúdo */
 				min-width: 100px; /* Largura mínima para evitar botões muito pequenos */
 			}
-			.statusfol {
-				display: inline-block;
-				width: 100px;  /* Ajuste conforme necessário */
-				height: 30px;  /* Ajuste conforme necessário */
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 9px;
-			}
    		 </style>
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -668,22 +659,18 @@
 																									<tr>
 																										<td>
 																											<p class="alert alert-info">
-																												{{#each ../progs}}
-																													{{#each ../../notasups}}
-																														{{#each ../../../notasupobss}}
-																															{{#ifEqual this.notaSupObs_progId ../_id}}
-																																	<label><b>Tipo:</b></label>&nbsp;&nbsp;{{notasup.notasup_tiposup}}
-																																	&nbsp;&nbsp;
-																																<br>
-																																	<label><b>Data:</b></label>&nbsp;&nbsp;{{notasup.notasup_datanotasup}}
-																																	&nbsp;&nbsp;
-																																	<label><b>Hora:</b></label>{{notasup.notasup_horanotasup}}
-																																	&nbsp;&nbsp;
-																																	<label><b>Supervisor:</b></label>&nbsp;&nbsp;{{notasup.notasup_terapeutaid}}
-																																	&nbsp;&nbsp;
-																															{{/ifEqual}}
-																														{{/each}}
-																													{{/each}}
+																												{{#each ../../notasup}}
+																													{{#ifEqual this.notaSupObs_progId ../_id}}
+																															<label><b>Tipo:</b></label>&nbsp;&nbsp;{{notasup.notasup_tiposup}}
+																															&nbsp;&nbsp;
+																														<br>
+																															<label><b>Data:</b></label>&nbsp;&nbsp;{{notasup.notasup_datanotasup}}
+																															&nbsp;&nbsp;
+																															<label><b>Hora:</b></label>{{notasup.notasup_horanotasup}}
+																															&nbsp;&nbsp;
+																															<label><b>Supervisor:</b></label>&nbsp;&nbsp;{{notasup.notasup_terapeutaid}}
+																															&nbsp;&nbsp;
+																													{{/ifEqual}}
 																												{{/each}}
 																											</p>
 																										</td>
@@ -911,21 +898,6 @@
 																													<div class="infobox-chart; infobox-blue">
 																														<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
 																													</div>
-																													
-																													{{#ifEqual this.folreg_status "1"}}
-																														<span style="white-space: wrap; font-size: 9px;" >Esvanecimento</span>
-																														{{else}}
-																														{{#ifEqual this.folreg_status "2"}}
-																															<span  style="white-space: wrap; font-size: 9px;" >Meta</span>
-																															{{else}}
-																															{{#ifEqual this.folreg_status "3"}}
-																																<span  style="white-space: wrap; font-size: 9px;" > Volta Passo</span>
-																																{{else}}
-																																<span style="white-space: wrap; font-size: 9px;" > Continua</span>
-																															{{/ifEqual}}
-																														{{/ifEqual}}
-																													{{/ifEqual}}
-																													
 																													</a>
 																														{{else}}
 																													<!-- Botões da Folha de Registro Duplo -->
@@ -943,22 +915,6 @@
 																													<div class="infobox-chart; infobox-blue">
 																														<span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},
 																																							 {{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}" ></span>
-																													
-																													</div>
-																													<div>
-																													{{#ifEqual this.folreg_status "1"}}
-																														<span class="statusfol" style="white-space: wrap;" >Esvanecimento</span>
-																														{{else}}
-																														{{#ifEqual this.folreg_status "2"}}
-																															<span class="statusfol" style="white-space: wrap;" >Meta</span>
-																															{{else}}
-																															{{#ifEqual this.folreg_status "3"}}
-																																<span class="statusfol" style="white-space: wrap;" > Volta Passo</span>
-																																{{else}}
-																																<span class="statusfol" style="white-space: wrap;" > Continua</span>
-																															{{/ifEqual}}
-																														{{/ifEqual}}
-																													{{/ifEqual}}
 																													</div>
 																													</a>
 																												{{/ifEqual}}
