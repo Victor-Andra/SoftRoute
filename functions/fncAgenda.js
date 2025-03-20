@@ -13992,22 +13992,23 @@ module.exports = {
         //console.log("dia:"+req.body.data)
 
         let dataaux;
-        let dataIni = new Date(req.body.data);//deve retornar uma segunda-feira
+        let dataIni = new Date(req.body.dataFinal);//deve retornar uma segunda-feira
+        dataIni.setHours(dataIni.getHours()+3)
         dataIni.setHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);
-        dataIni.setHours(dataIni.getHours()-3)
-        dataIni = dataIni.toISOString();
-        let dataFim = new Date(req.body.data);
-        
+        dataIni = (fncGeral.getDataFMT(dataIni)+"T00:00:00.000Z");
+        let dataFim = new Date(req.body.dataFinal);
+        dataFim.setDate(dataFim.getDate()+4);
         dataFim.setHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);
-        dataFim.setHours(dataFim.getHours()-3);
-        dataFim.setDate(dataFim.getDate()+4);//+4 dias na segunda-feira para chegar a sexta
-        dataFim = dataFim.toISOString();
+        //+4 dias na segunda-feira para chegar a sexta
+        //dataFim = dataFim.toISOString();
+        dataFim = (fncGeral.getDataFMT(dataFim)+"T23:59:59.000Z");
         let dataAtual = new Date();
         let nextNum;
+        let idsDeletar = [];
         console.log("dataIni"+dataIni);
         console.log("dataFim"+dataFim);
         Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agenda)=>{
@@ -15193,5 +15194,14 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                 Agenda.find({ agenda_data: { $gte : opIni, $lte:  opFim } }).then((arquivos) =>{
                     console.log("agenda.length: "+arquivos.length);
                 })
+            });
+            */
+           /*
+            //pt3
+            Agenda.deleteMany({ _id: { $in: idsDeletar } }).then(result => {
+                console.log(`Foram deletados ${result.deletedCount} agendamentos.`);
+            })
+            .catch(err => {
+                console.error("Erro ao deletar agendamentos:", err);
             });
             */

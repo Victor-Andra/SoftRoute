@@ -1642,7 +1642,7 @@ module.exports = {
                                             terapiaAtend = "break";
                                             break;
                                         case "SubstitutoFixo":
-                                            terapiaAtend = ats.atend_terapiaid;
+                                            terapiaAtend = ats.atend_fixoterapiaid;
                                             break;
                                         default:
                                             terapiaAtend = ats.atend_terapiaid;
@@ -1706,7 +1706,7 @@ module.exports = {
                                         terapiaAtend = "break";
                                         break;
                                     case "SubstitutoFixo":
-                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        terapiaAtend = atend.atend_fixoterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
                                     default:
@@ -1760,6 +1760,9 @@ module.exports = {
                                         r.valor = c.convcre_valor;
                                     }
                                 });
+                                if (r.valor == undefined || r.valor == "undefined"){
+                                    r.valor = "0,00";
+                                }
                             }
                             console.log("r.valor|: "+r.valor)
                             val = (parseInt(r.valor.toString().replace(",","").replace(".",""))*parseInt(r.sessoes)).toString();
