@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista de Laudos</title>
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+		<!-- DataTables Core -->
+		<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+		<!-- DataTables Buttons Extension -->
+		<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+		
+		<script type="text/javascript">
+
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar Este beneficiário?");
+				if(confirmado == true){
+					window.location.href=("/menu/beneficiario/del/"+id);
+				}
+			}
+			
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Lista de Laudos</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th class="center" tabindex="1">
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Laudo</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
+													<th tabindex="7">Ação</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each laudos}}
+
+													<tr role="row" class="odd">
+														<td class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+														</td>
+														{{#each ../benes}}
+															{{#ifEqual this._id ../laudo_beneid}}
+																<td>{{bene_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														<td>{{laudo_data}}</td>
+														<td>{{laudo_medico}}</td>
+														<td>{{laudo_medicoesp}}</td>
+														<td>{{laudo_dataedi}}</td>
+														<td>
+															<div class="action-buttons">
+																<a class="green" href="/menu/area/laudo/edi/{{_id}}">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+																<a class="hidden" class="blue" >
+																	<i class="ace-icon fa fa-print bigger-130"></i>
+																</a>
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+															</div>
+														</td>
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+
+		
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+
+	</body>
+
+</html>

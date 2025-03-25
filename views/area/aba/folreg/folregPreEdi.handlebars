@@ -393,7 +393,13 @@
 				document.getElementById("folregEstg").value = document.getElementById("folregEstgEdi").value;
 				document.getElementById("folregEsth").value = document.getElementById("folregEsthEdi").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregEstiEdi").value;
-				document.getElementById("folregEstj").value = document.getElementById("folregEstjEdi").value;
+				if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+				}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						
+						document.getElementById("folregEstj").value = document.getElementById("folregEstjEdi").value;
+					}
+				}
 				document.getElementById("folregObs").value = document.getElementById("folregObsEdi").value;
 				document.getElementById("folregStatus").value = document.getElementById("folregStatusEdi").value;
 				
@@ -481,7 +487,15 @@
 					switchCases("folregT7Ressimples","folregT7RessimplesEdi");
 					switchCases("folregT8Ressimples","folregT8RessimplesEdi");
 					switchCases("folregT9Ressimples","folregT9RessimplesEdi");
-					switchCases("folregT10Ressimples","folregT10RessimplesEdi");
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						switchCases("folregT10Ressimples","folregT10RessimplesEdi");
+						}
+					}
+
+
 
 					//Campos do Passo de Dica do gráfico Simples
 					document.getElementById("folregPassodicas").value = document.getElementById("folregPassodicasEdi").value
@@ -672,23 +686,30 @@
 							console.log("vazio");
 							break;
 					}
-					switch (document.getElementById("folregT10ResesquEdi").value){
-						case "I":
-							document.getElementById("folregT10Resesqu1").checked = true;
-							break;
-						case "E":
-							document.getElementById("folregT10Resesqu2").checked = true;
-							break;
-						case "+d":
-							document.getElementById("folregT10Resesqu3").checked = true;
-							break;
-						case "-d":
-							document.getElementById("folregT10Resesqu4").checked = true;
-							break;
-						default: 
-							console.log("vazio");
-							break;
-					}
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+							if (document.getElementById("folregQtestEdi").value =="10"){
+								switch (document.getElementById("folregT10ResesquEdi").value){
+									case "I":
+										document.getElementById("folregT10Resesqu1").checked = true;
+										break;
+									case "E":
+										document.getElementById("folregT10Resesqu2").checked = true;
+										break;
+									case "+d":
+										document.getElementById("folregT10Resesqu3").checked = true;
+										break;
+									case "-d":
+										document.getElementById("folregT10Resesqu4").checked = true;
+										break;
+									default: 
+										console.log("vazio");
+										break;
+								}
+							}
+						}
+
 
 					document.getElementById("folregRaTent1").innerHTML = document.getElementById("folregRaTentEdi1").value;
 					document.getElementById("folregRaTent2").innerHTML = document.getElementById("folregRaTentEdi2").value;
@@ -699,8 +720,15 @@
 					document.getElementById("folregRaTent7").innerHTML = document.getElementById("folregRaTentEdi7").value;
 					document.getElementById("folregRaTent8").innerHTML = document.getElementById("folregRaTentEdi8").value;
 					document.getElementById("folregRaTent9").innerHTML = document.getElementById("folregRaTentEdi9").value;
-					document.getElementById("folregRaTent10").innerHTML = document.getElementById("folregRaTentEdi10").value;
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						document.getElementById("folregRaTent10").innerHTML = document.getElementById("folregRaTentEdi10").value;
+						}
+					}
 
+					
 					document.getElementById("folregRaTent1").className = caseClasseCor(document.getElementById("folregRaTentEdi1").value);
 					document.getElementById("folregRaTent2").className = caseClasseCor(document.getElementById("folregRaTentEdi2").value);
 					document.getElementById("folregRaTent3").className = caseClasseCor(document.getElementById("folregRaTentEdi3").value);
@@ -710,7 +738,15 @@
 					document.getElementById("folregRaTent7").className = caseClasseCor(document.getElementById("folregRaTentEdi7").value);
 					document.getElementById("folregRaTent8").className = caseClasseCor(document.getElementById("folregRaTentEdi8").value);
 					document.getElementById("folregRaTent9").className = caseClasseCor(document.getElementById("folregRaTentEdi9").value);
-					document.getElementById("folregRaTent10").className = caseClasseCor(document.getElementById("folregRaTentEdi10").value);
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						document.getElementById("folregRaTent10").className = caseClasseCor(document.getElementById("folregRaTentEdi10").value);
+						}
+					}
+
+				
 				}else{
 					//Gráfico DUPLO
 					//Campos com resultados da esquerda do gráfico
@@ -723,7 +759,15 @@
 					document.getElementById("folregT7Resesqu").value = document.getElementById("folregT7ResesquEdi").value;
 					document.getElementById("folregT8Resesqu").value = document.getElementById("folregT8ResesquEdi").value;
 					document.getElementById("folregT9Resesqu").value = document.getElementById("folregT9ResesquEdi").value;
-					document.getElementById("folregT10Resesqu").value = document.getElementById("folregT10ResesquEdi").value;
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value == "10"){
+						document.getElementById("folregT10Resesqu").value = document.getElementById("folregT10ResesquEdi").value;
+						}
+					}
+					
+				
 					//Campos com resultados da direita do gráfico
 					document.getElementById("folregT1Resdir").value = document.getElementById("folregT1ResdirEdi").value;
 					document.getElementById("folregT2Resdir").value = document.getElementById("folregT2ResdirEdi").value;
@@ -734,7 +778,14 @@
 					document.getElementById("folregT7Resdir").value = document.getElementById("folregT7ResdirEdi").value;
 					document.getElementById("folregT8Resdir").value = document.getElementById("folregT8ResdirEdi").value;
 					document.getElementById("folregT9Resdir").value = document.getElementById("folregT9ResdirEdi").value;
-					document.getElementById("folregT10Resdir").value = document.getElementById("folregT10ResdirEdi").value;
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value == "10"){
+						document.getElementById("folregT10Resdir").value = document.getElementById("folregT10ResdirEdi").value;
+						}
+					}
+					
 
 					document.getElementById("folregPassodicae").value = document.getElementById("folregPassodicaeEdi").value;
 					switch (document.getElementById("folregPassodicaeEdi").value){
@@ -1012,23 +1063,33 @@
 							console.log("vazio");
 							break;
 					}
-					switch (document.getElementById("folregT10ResesquEdi").value){
-						case "I":
-							document.getElementById("folregT10Resesqu1").checked = true;
-							break;
-						case "E":
-							document.getElementById("folregT10Resesqu2").checked = true;
-							break;
-						case "+d":
-							document.getElementById("folregT10Resesqu3").checked = true;
-							break;
-						case "-d":
-							document.getElementById("folregT10Resesqu4").checked = true;
-							break;
-						default: 
-							console.log("vazio");
-							break;
+
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						
+						switch (document.getElementById("folregT10ResesquEdi").value){
+							case "I":
+								document.getElementById("folregT10Resesqu1").checked = true;
+								break;
+							case "E":
+								document.getElementById("folregT10Resesqu2").checked = true;
+								break;
+							case "+d":
+								document.getElementById("folregT10Resesqu3").checked = true;
+								break;
+							case "-d":
+								document.getElementById("folregT10Resesqu4").checked = true;
+								break;
+							default: 
+								console.log("vazio");
+								break;
+						}
+
+						}
 					}
+					
+					
 					//popular radio box Direita
 					switch (document.getElementById("folregT1ResdirEdi").value){
 						case "I":
@@ -1183,24 +1244,32 @@
 							console.log("vazio");
 							break;
 					}
-					switch (document.getElementById("folregT10ResdirEdi").value){
-						case "I":
-							document.getElementById("folregT10Resdir1").checked = true;
-							break;
-						case "E":
-							document.getElementById("folregT10Resdir2").checked = true;
-							break;
-						case "+d":
-							document.getElementById("folregT10Resdir3").checked = true;
-							break;
-						case "-d":
-							document.getElementById("folregT10Resdir4").checked = true;
-							break;
-						default: 
-							console.log("vazio");
-							break;
-					}
 
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						
+						switch (document.getElementById("folregT10ResdirEdi").value){
+							case "I":
+								document.getElementById("folregT10Resdir1").checked = true;
+								break;
+							case "E":
+								document.getElementById("folregT10Resdir2").checked = true;
+								break;
+							case "+d":
+								document.getElementById("folregT10Resdir3").checked = true;
+								break;
+							case "-d":
+								document.getElementById("folregT10Resdir4").checked = true;
+								break;
+							default: 
+								console.log("vazio");
+								break;
+						}
+
+						}
+					}
+					
 					document.getElementById("folregPassodicad").value = document.getElementById("folregPassodicadEdi").value;
 					switch (document.getElementById("folregPassodicadEdi").value){
 						case "1":
@@ -1238,8 +1307,16 @@
 					document.getElementById("folregRaTentDupl7").innerHTML = document.getElementById("folregRaTentDuplEdi7").value;
 					document.getElementById("folregRaTentDupl8").innerHTML = document.getElementById("folregRaTentDuplEdi8").value;
 					document.getElementById("folregRaTentDupl9").innerHTML = document.getElementById("folregRaTentDuplEdi9").value;
-					document.getElementById("folregRaTentDupl10").innerHTML = document.getElementById("folregRaTentDuplEdi10").value;
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						document.getElementById("folregRaTentDupl10").innerHTML = document.getElementById("folregRaTentDuplEdi10").value;
+						}
+					}
 
+
+					
 					document.getElementById("folregRaTentDupl1").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi1").value);
 					document.getElementById("folregRaTentDupl2").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi2").value);
 					document.getElementById("folregRaTentDupl3").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi3").value);
@@ -1249,7 +1326,17 @@
 					document.getElementById("folregRaTentDupl7").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi7").value);
 					document.getElementById("folregRaTentDupl8").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi8").value);
 					document.getElementById("folregRaTentDupl9").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi9").value);
-					document.getElementById("folregRaTentDupl10").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi10").value);
+					
+
+					
+					if (document.getElementById("folregQtestEdi").value == undefined || document.getElementById("folregQtestEdi").value == "undefined" || document.getElementById("folregEstjEdi").value == undefined || document.getElementById("folregEstjEdi").value == "undefined"){
+						}else{
+					if (document.getElementById("folregQtestEdi").value =="10"){
+						document.getElementById("folregRaTentDupl10").className = caseClasseCor(document.getElementById("folregRaTentDuplEdi10").value);
+						}
+					}
+					
+				
 				}
 
 				showStimulusFieldsWithValues();
@@ -1264,7 +1351,7 @@
 			
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();mudaRegistro();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -1399,7 +1486,7 @@
 									<input type="text" id="folregT7ResesquEdi" name="folregT7ResesquEdi" value="{{folreg.folreg_t7resesqu}}"/>
 									<input type="text" id="folregT8ResesquEdi" name="folregT8ResesquEdi" value="{{folreg.folreg_t8resesqu}}"/>
 									<input type="text" id="folregT9ResesquEdi" name="folregT9ResesquEdi" value="{{folreg.folreg_t9resesqu}}"/>
-									<input type="text" id="folregT10ResesquEdi" name="folregT10ResesquEdi" value="{{folreg.folreg_t10resesqu}}"/>
+									folregT10ResesquEdi<input type="text" id="folregT10ResesquEdi" name="folregT10ResesquEdi" value="{{folreg.folreg_t10resesqu}}"/>
 
 									<input type="text" id="folregT1ResdirEdi" name="folregT1ResdirEdi" value="{{folreg.folreg_t1resdir}}"/>
 									<input type="text" id="folregT2ResdirEdi" name="folregT2ResdirEdi" value="{{folreg.folreg_t2resdir}}"/>
@@ -1410,7 +1497,7 @@
 									<input type="text" id="folregT7ResdirEdi" name="folregT7ResdirEdi" value="{{folreg.folreg_t7resdir}}"/>
 									<input type="text" id="folregT8ResdirEdi" name="folregT8ResdirEdi" value="{{folreg.folreg_t8resdir}}"/>
 									<input type="text" id="folregT9ResdirEdi" name="folregT9ResdirEdi" value="{{folreg.folreg_t9resdir}}"/>
-									<input type="text" id="folregT10ResdirEdi" name="folregT10ResdirEdi" value="{{folreg.folreg_t10resdir}}"/>
+									folregT10ResdirEdi<input type="text" id="folregT10ResdirEdi" name="folregT10ResdirEdi" value="{{folreg.folreg_t10resdir}}"/>
 
 									<input type="text" id="folregT1tipodesquEdi" name="folregT1tipodesquEdi" value="{{folreg.folreg_t1tipodesqu}}"/>
 									<input type="text" id="folregT2tipodesquEdi" name="folregT2tipodesquEdi" value="{{folreg.folreg_t2tipodesqu}}"/>
@@ -1616,7 +1703,7 @@
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select"  data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select"  data-placeholder="Escolha..." disabled onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
@@ -2219,7 +2306,10 @@
 																	<span class="label label-pink arrowed-in">&nbsp;-d</span>
 																</td>
 															</tr>
-																<tr><!-- 10 Tentativas Reg -->
+															
+															{{#ifIncludes folreg.folreg_qtest "10" }}
+															
+															<tr><!-- 10 Tentativas Reg -->
 																<td class="center">
 																	<span class="badge badge-gray">10</span>
 																</td>
@@ -2229,7 +2319,7 @@
 																	</label>
 																</td>
 																<td>
-																	<input name="folregT10Ressimples" id="folregT10Ressimples"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+																	<input name="folregT10Ressimples" id="folregT10Ressimples"  type="text"  /><!-- Esse campo recebe o valor do Radio como texto -->
 
 																	<input name="folregT10Ressimplesradio" id="folregT10Ressimples1"  type="radio" class="ace" value="I" onchange="javascript:somaResEstSI();marcaRadioImput('folregT10Ressimples','1','I');" />
 																	<span class="lbl"></span>
@@ -2250,6 +2340,8 @@
 																<td><span class="badge badge-danger" style="white-space: wrap;">Folha de Registro 10 Tentativas</span></td>
 																<td></td>
 															</tr>
+															{{else}}
+															{{/ifIncludes}}
 
 															<tr><!-- Total Reg -->
 																<td colspan="2" style="text-align:right">
@@ -2727,7 +2819,7 @@
 															<span class="lbl"></span>
 															<span class="label label-yellow arrowed-in">&nbsp;E</span>
 														
-															<input name="folregT5Resdirradioradio" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT5Resdir','3','+d');" />
+															<input name="folregT5Resdirradio" id="folregT5Resdir3" type="radio" class="ace" value="+d" onchange="javascript:somaResEsqDuplo();marcaRadioImput('folregT5Resdir','3','+d');" />
 															<span class="lbl"></span>
 															<span class="label label-warning arrowed-in">&nbsp;+d</span>
 														
@@ -2939,6 +3031,7 @@
 														
 														
 													</tr>
+													{{#ifIncludes folreg.folreg_qtest "10" }}
 													<tr><!-- 10 Tentativas Reg -->
 														<td class="center">
 															
@@ -2952,7 +3045,7 @@
 														</td>
 														
 														<td>
-															<input name="folregT10Resesqu" id="folregT10Resesqu"  type="text" hidden /><!-- Esse campo recebe o valor do Radio como texto -->
+															<input name="folregT10Resesqu" id="folregT10Resesqu" hidden type="text"  /><!-- Esse campo recebe o valor do Radio como texto -->
 
 															<input name="folregT10Resesquradio" id="folregT10Resesqu1"  type="radio" class="ace" value="I" onchange="javascript: somaResEsqDuplo();marcaRadioImput('folregT10Resesqu','1','I');" />
 															<span class="lbl"></span>
@@ -2995,7 +3088,8 @@
 														<td></td>
 														
 													</tr>
-
+														{{else}}
+													{{/ifIncludes}}
 													<tr><!-- Totais Reg -->
 														
 														<td colspan="2" style="text-align:right">
@@ -3193,9 +3287,12 @@
                 }
             ]
         };
+		console.log('Dados do gráfico duplo:', dataDuplo);
 
-        // Função para renderizar o gráfico
-       function renderizarGraficoDuplo() {
+	
+
+	// Função para renderizar o gráfico
+	function renderizarGraficoDuplo() {
     console.log('Iniciando renderização do gráfico duplo...');
 
     // Verifica se o elemento canvas existe
@@ -3206,35 +3303,14 @@
     }
     console.log('Elemento canvas encontrado:', ctx);
 
-    // Dados do gráfico
-    const dataDuplo = {
-        labels: ['Esquerda', 'Direita'],
-        datasets: [
-            {
-                label: 'I',
-                backgroundColor: 'rgba(0, 255, 0, 0.5)',
-                data: [0, 0]
-            },
-            {
-                label: 'E',
-                backgroundColor: 'rgba(255, 255, 0, 0.5)',
-                data: [0, 0]
-            },
-            {
-                label: '+d',
-                backgroundColor: 'rgba(255, 165, 0, 0.5)',
-                data: [0, 0]
-            }
-        ]
-    };
-    console.log('Dados do gráfico duplo:', dataDuplo);
-
-    // Opções do gráfico
+	const tentativasduplo = {{folreg.folreg_qtest}};
+    // Opções do gráfico Duplo
     const options = {
-        scales: {
-            x: { stacked: true },
-            y: { stacked: true, min: 0, max: 100 }
-        }
+      	scales: {
+					x: { stacked: true },
+					//y: { stacked: true, min: 0, max: 90 } // Define o intervalo de valores no eixo y
+					y: { stacked: true, min: 0, max: tentativasduplo != "10" ? 90 : 100 }
+				}
     };
     console.log('Opções do gráfico duplo:', options);
 
@@ -3258,27 +3334,40 @@
     console.log('Gráfico duplo criado com sucesso.');
 }
 
-        // Função para atualizar os dados do gráfico e renderizá-lo
-        function atualizarDuploGrafico() {
+    // Função para atualizar os dados do gráfico e renderizá-lo
+    function atualizarDuploGrafico() {
     console.log('Iniciando atualização do gráfico duplo...');
 
     // Calcula os totais com base nos campos de entrada
     const valoresqI = parseInt(document.getElementById("folregTotalduploesq_i").value) * 10 || 0;
     const valoresqE = parseInt(document.getElementById("folregTotalduploesq_e").value) * 10 || 0;
-    const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10 || 0;
-    const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10 || 0;
+    const valoresqMaisD = parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10 || 0;
+    const valoresqMenosD = parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10 || 0;
+	
+	const valordirI = parseInt(document.getElementById("folregTotalduplodir_i").value) * 10 || 0;
+	const valordirE = parseInt(document.getElementById("folregTotalduplodir_e").value) * 10 || 0;
+	const valordirMaisD = parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10 || 0;
+	const valordirMenosD = parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10 || 0;
+	
 
     console.log('Valores calculados para o gráfico duplo:', {
         valoresqI,
         valoresqE,
+		valoresqMaisD,
+		valoresqMenosD,
         valordirI,
-        valordirE
+        valordirE,
+		valordirMaisD,
+		valordirMenosD
     });
 
     // Atualiza os dados do gráfico
     if (graficoDuplo !== null) {
         graficoDuplo.data.datasets[0].data = [valoresqI, valordirI];
         graficoDuplo.data.datasets[1].data = [valoresqE, valordirE];
+        graficoDuplo.data.datasets[2].data = [valoresqMaisD, valordirMaisD]; // Atualize conforme necessário
+        graficoDuplo.data.datasets[3].data = [valoresqMenosD, valordirMenosD]; // Atualize conforme necessário
+
         graficoDuplo.update();
         console.log('Gráfico duplo atualizado com sucesso.');
     } else {
@@ -3422,6 +3511,11 @@
 				populateCheckboxes('checkboxContainer1', 'progDicatipotext1');
 				populateCheckboxes('checkboxContainer2', 'progDicatipotext2');
 				populateCheckboxes('checkboxContainer3', 'progDicatipotext3');
+			});
+		</script>
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				carregaBody();
 			});
 		</script>
 	</body>
