@@ -51,112 +51,130 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
-			function embaralharTotalmenteFolregTentativas (){
-				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
-				let reducao = 0;
-				let arrayNovo = [];
-				let arrayDinamico = [];
-				
-				if (qtdEstimulos == "10"){
-					tamanhoArray = 10;
-				}
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayOriginal.splice(-(10 - qtdEstimulos));
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayDinamico = arrayOriginal;
+			function gerarLetrasEmbaralhadas(qtdEstimulos) {
+				console.log("Iniciando geração de letras embaralhadas...");
 
-				do {
-					//condição se o array novo está faltando uma quantidade de letras igual ao tamando do array original, remover letras já escolhidas / tamanhoArray - arrayNovo.length <= arrayDinamico
-                    console.log("arrayDinamico:"+arrayDinamico);
-                    let letrasEncontradas = 0;
-                    arrayOriginal.forEach(letra => {
-                        if (arrayNovo.includes(letra)) {
-                            letrasEncontradas++;
-                        }
-                    });
-                    console.log("tamanhoArray:"+tamanhoArray);
-                    console.log("arrayNovo.length:"+arrayNovo.length);
-                    console.log("letrasEncontradas:"+letrasEncontradas);
-                    console.log("tala"+((tamanhoArray - arrayNovo.length + letrasEncontradas)))
-                    console.log("arrayOriginal.length>:"+arrayOriginal.length)
-					if ((tamanhoArray - arrayNovo.length + letrasEncontradas) <= arrayOriginal.length){
-                        arrayNovo.forEach(letra => {
-							const indice = arrayDinamico.indexOf(letra);
-							if (indice !== -1) {
-								arrayDinamico.splice(indice, 1); // Remove a letra do arrayDinamico
-							}
-						});
-						console.log("arrayDinamico:"+arrayDinamico);
-						arrayNovo.push(arrayDinamico[Math.floor(Math.random() * arrayDinamico.length)]);
-					} else {
-						arrayNovo.push(arrayOriginal[Math.floor(Math.random() * arrayDinamico.length)]);
-					}
-					console.log("arrayNovo: "+arrayNovo);
-				}  while (arrayNovo.length < tamanhoArray);
-				console.log(arrayOriginal);
-				console.log(arrayDinamico);
-				console.log(arrayNovo);
-			}
-
-			function embaralharIgualmenteFolregTentativas() {
-				// Array original com as letras dos estímulos
 				const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-
-				// Obtém a quantidade de estímulos selecionada pelo usuário
-				const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				console.log("Qt Estímulos: " + qtdEstimulos);
-
-				// Define o tamanho do array com base na quantidade de estímulos
-				let tamanhoArray = qtdEstimulos; // Padrão dinâmico (9 ou 10)
-
-				// Remove elementos extras do array original, se necessário
+				let tamanhoArray = Math.max(1, Math.min(qtdEstimulos, 10)); // Limita entre 1 e 10
 				const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
+				console.log("Array reduzido:", arrayReduzido);
 
-				// Embaralha o array reduzido
-				const arrayEmbaralhado = shuffleArray([...arrayReduzido]);
+				const totalCampos = 10;
+				const distribuicao = Math.floor(totalCampos / arrayReduzido.length);
+				const resto = totalCampos % arrayReduzido.length;
 
-				// Itera sobre o array embaralhado para atualizar o DOM
-				arrayEmbaralhado.forEach((letra, index) => {
-					const currentIndex = index + 1; // Índice começa em 1
-
-					// Atualiza os campos visíveis no front-end
-					const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
-					const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
-
-					if (elementoVisivelSimples && elementoVisivelDuplo) {
-						// Define o texto e a classe de cor para os elementos visíveis
-						elementoVisivelSimples.innerHTML = letra;
-						elementoVisivelDuplo.innerHTML = letra;
-						elementoVisivelSimples.className = caseClasseCor(letra);
-						elementoVisivelDuplo.className = caseClasseCor(letra);
-					} else {
-						console.error(`Elemento folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
-					}
-
-					// Atualiza os campos ocultos para armazenamento no banco
-					const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
-					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
-
-					if (campoOcultoSimples && campoOcultoDuplo) {
-						campoOcultoSimples.value = letra;
-						campoOcultoDuplo.value = letra;
-					} else {
-						console.error(`Campo oculto folregRaTentCad${currentIndex} ou folregRaTentDuplCad${currentIndex} não encontrado.`);
+				let arrayFinal = [];
+				arrayReduzido.forEach((letra, index) => {
+					const quantidade = distribuicao + (index < resto ? 1 : 0);
+					for (let i = 0; i < quantidade; i++) {
+						arrayFinal.push(letra);
 					}
 				});
-			}
 
-			function shuffleArray(array) { //Algoritimo de Ytses
-				const newArray = array.slice();
-				for (let i = newArray.length - 1; i > 0; i--) {
-					const j = Math.floor(Math.random() * (i + 1));
-					[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+				console.log("Distribuição inicial:", arrayFinal);
+
+				// Função auxiliar para verificar repetições consecutivas
+				function temRepeticoesConsecutivas(array) {
+					for (let i = 1; i < array.length; i++) {
+						if (array[i] === array[i - 1]) {
+							return true; // Repetição encontrada
+						}
+					}
+					return false; // Sem repetições consecutivas
 				}
-				return newArray;
+
+				// Embaralha o array até que não haja repetições consecutivas
+				let tentativas = 0;
+				const maxTentativas = 1000; // Limite para evitar loops infinitos
+				let arrayEmbaralhado;
+
+				do {
+					arrayEmbaralhado = shuffleArray([...arrayFinal]);
+					tentativas++;
+				} while (temRepeticoesConsecutivas(arrayEmbaralhado) && tentativas < maxTentativas);
+
+				if (tentativas >= maxTentativas) {
+					console.warn("Não foi possível gerar um array sem repetições consecutivas após " + maxTentativas + " tentativas.");
+				}
+
+				console.log("Array embaralhado:", arrayEmbaralhado);
+
+				return arrayEmbaralhado;
 			}
 
+			// Função auxiliar para embaralhar array
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[array[i], array[j]] = [array[j], array[i]];
+				}
+				return array;
+			}
+				
+		function preencherCamposVisiveis(qtdEstimulos) {
+			console.log("Iniciando preenchimento dos campos visíveis...");
+			const modoAtivo = getModoAtivo();
+
+			// Itera sobre os campos de 1 até qtdEstimulos
+			for (let i = 1; i <= qtdEstimulos; i++) {
+				// Preenche campos simples
+				const campoOcultoSimples = document.getElementById(`folregRaTentCad${i}`);
+				const campoVisivelSimples = document.getElementById(`folregRaTent${i}`);
+
+				if (campoOcultoSimples && campoVisivelSimples) {
+					const letra = campoOcultoSimples.value;
+					campoVisivelSimples.innerHTML = letra;
+					campoVisivelSimples.className = caseClasseCor(letra);
+					console.log(`Campo visível folregRaTent${i} preenchido com valor: ${letra}`);
+				} else {
+					console.warn(`Campo oculto folregRaTentCad${i} ou campo visível folregRaTent${i} não encontrado.`);
+				}
+
+				// Preenche campos duplicados (se modo for Duplo)
+				if (modoAtivo === "Duplo") {
+					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${i}`);
+					const campoVisivelDuplo = document.getElementById(`folregRaTentDupl${i}`);
+
+					if (campoOcultoDuplo && campoVisivelDuplo) {
+						const letra = campoOcultoDuplo.value;
+						campoVisivelDuplo.innerHTML = letra;
+						campoVisivelDuplo.className = caseClasseCor(letra);
+						console.log(`Campo visível folregRaTentDupl${i} preenchido com valor: ${letra}`);
+					} else {
+						console.warn(`Campo oculto folregRaTentDuplCad${i} ou campo visível folregRaTentDupl${i} não encontrado.`);
+					}
+				}
+			}
+
+			console.log("Preenchimento dos campos visíveis concluído.");
+		}
+			
+			function preencherCamposOcultos(shuffledLetters) {
+			console.log("Iniciando preenchimento dos campos ocultos...");
+
+			shuffledLetters.forEach((letra, index) => {
+				const currentIndex = index + 1; // Índice começa em 1
+				const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
+
+				if (campoOcultoSimples) {
+					campoOcultoSimples.value = letra;
+					console.log(`Campo oculto folregRaTentCad${currentIndex} preenchido com valor: ${letra}`);
+				} else {
+					console.error(`Campo oculto folregRaTentCad${currentIndex} não encontrado.`);
+				}
+			});
+
+			console.log("Preenchimento dos campos ocultos concluído.");
+		}
+		
+		// Função auxiliar para embaralhar array
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[array[i], array[j]] = [array[j], array[i]];
+				}
+				return array;
+			}
 			// Função auxiliar para definir a classe de cor com base na letra
 			function caseClasseCor(letra) {
 				switch (letra) {
@@ -185,6 +203,14 @@
 				}
 			}
 
+			function getModoAtivo() {
+				const folregTiporeg = document.getElementById("folregTiporeg");
+				if (folregTiporeg) {
+					return folregTiporeg.value; // Retorna "Simples", "Duplo" ou "Não Informado"
+				}
+				console.warn("Campo folregTiporeg não encontrado.");
+				return "Não Informado";
+			}
 
 			function marcaImput(inputName) {
 				let elementoAlvo = document.getElementById(inputName);
@@ -464,7 +490,7 @@
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
 				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
-				embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
+				//embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
@@ -498,7 +524,7 @@
 						<!-- PAGE CONTENT BEGINS -->
 						<form id="formFolregPreCad" class="form-horizontal" role="form" method="POST">
 							<div class="col-xs-12">
-								<div id="divCarrega" >
+								<div id="divCarrega" hidden >
 									<!-- principais indices-->
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
@@ -660,7 +686,7 @@
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select blocked-select" data-placeholder="Escolha..." disabled onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select blocked-select" data-placeholder="Escolha..."  onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
@@ -1364,7 +1390,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl1" name="folregRaTentDupl1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent1" name="folregRaTent1" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1591,7 +1617,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl2" name="folregRaTentDupl2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent2" name="folregRaTent2" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1639,7 +1665,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl3" name="folregRaTentDupl3" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent3" name="folregRaTent3" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1687,7 +1713,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl4" name="folregRaTentDupl4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1735,7 +1761,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl5" name="folregRaTentDupl5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent5" name="folregRaTent5" class="label label-sm label-info arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1783,7 +1809,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl6" name="folregRaTentDupl6" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent6" name="folregRaTent6" class="label label-sm label-warning arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1831,7 +1857,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl7" name="folregRaTentDupl7" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent7" name="folregRaTent7" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														
@@ -1880,7 +1906,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl8" name="folregRaTentDupl8" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent8" name="folregRaTent8" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														<td>
@@ -1933,7 +1959,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl9" name="folregRaTentDupl9" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent9" name="folregRaTent9" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														
@@ -1989,7 +2015,7 @@
 														</td>
 														<td>
 															<label class="pos-rel">
-																<label class="pos-rel"><span id="folregRaTentDupl10" name="folregRaTentDupl10" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
+																<label class="pos-rel"><span id="folregRaTent10" name="folregRaTent10" class="label label-sm label-danger arrowed arrowed-righ RA"></span></label>
 															</label>
 														</td>
 														
@@ -2332,31 +2358,6 @@
 					}
 				});
 			}
-			function carregaRamdomico() {
-				const qtestValue = parseInt(document.getElementById('folregQtest').value, 10);
-				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-				
-				if (isNaN(qtestValue) || qtestValue < 1 || qtestValue > 10) {
-					console.error('Invalid value for folregQtest. Please provide a number between 1 and 10.');
-					return;
-				}
-
-				const letters = alphabet.slice(0, qtestValue).split('');
-				const shuffledLetters = shuffleArray(letters);
-				
-				const tableRows = document.querySelectorAll('#dynamic-table tbody tr');
-				
-				let letterIndex = 0;
-				tableRows.forEach((row, index) => {
-					if (index < tableRows.length - 1) { // Skip the last row which is the totals row
-						const raCell = row.querySelector('td:nth-child(2) .RA');
-						raCell.innerText = shuffledLetters[letterIndex];
-						letterIndex = (letterIndex + 1) % shuffledLetters.length;
-					}
-				});
-			}
-
-			
 			
 			function updateStimulusFields() {
 				var select = document.getElementById('folregQtest');
@@ -2428,6 +2429,28 @@
 				populateCheckboxes('checkboxContainer1', 'progDicatipotext1');
 				populateCheckboxes('checkboxContainer2', 'progDicatipotext2');
 				populateCheckboxes('checkboxContainer3', 'progDicatipotext3');
+				
+				console.log("DOM completamente carregado. Iniciando processamento...");
+				// Quantidade de estímulos (exemplo: 3)
+				const qtdEstimulos = parseInt(document.getElementById("qtEst").value) || 10;
+
+				// Gerar letras embaralhadas
+				const shuffledLetters = gerarLetrasEmbaralhadas(qtdEstimulos);
+
+				// Preencher campos ocultos
+				preencherCamposOcultos(shuffledLetters);
+
+				// Preencher campos visíveis
+				preencherCamposVisiveis(qtdEstimulos);
+				
+				// Sincronizar com mudaRegistro()
+				const folregTiporeg = document.getElementById("folregTiporeg");
+				if (folregTiporeg) {
+					folregTiporeg.addEventListener("change", () => {
+						console.log("Modo alterado. Atualizando campos...");
+						preencherCamposVisiveis(qtdEstimulos);
+					});
+				}
 			});
 		</script>
 	</body>
