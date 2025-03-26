@@ -51,141 +51,93 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
-			function embaralharTotalmenteFolregTentativas (){
-				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
-				let reducao = 0;
-				let arrayNovo = [];
-				let arrayDinamico = [];
-				
-				if (qtdEstimulos == "10"){
-					tamanhoArray = 10;
-				}
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayOriginal.splice(-(10 - qtdEstimulos));
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayDinamico = arrayOriginal;
+			 // Definições das funções (podem permanecer no <head>)
+        function embaralharIgualmenteFolregTentativas() {
+            const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+            const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+            let tamanhoArray = qtdEstimulos;
 
-				do {
-					//condição se o array novo está faltando uma quantidade de letras igual ao tamando do array original, remover letras já escolhidas / tamanhoArray - arrayNovo.length <= arrayDinamico
-                    console.log("arrayDinamico:"+arrayDinamico);
-                    let letrasEncontradas = 0;
-                    arrayOriginal.forEach(letra => {
-                        if (arrayNovo.includes(letra)) {
-                            letrasEncontradas++;
-                        }
-                    });
-                    console.log("tamanhoArray:"+tamanhoArray);
-                    console.log("arrayNovo.length:"+arrayNovo.length);
-                    console.log("letrasEncontradas:"+letrasEncontradas);
-                    console.log("tala"+((tamanhoArray - arrayNovo.length + letrasEncontradas)))
-                    console.log("arrayOriginal.length>:"+arrayOriginal.length)
-					if ((tamanhoArray - arrayNovo.length + letrasEncontradas) <= arrayOriginal.length){
-                        arrayNovo.forEach(letra => {
-							const indice = arrayDinamico.indexOf(letra);
-							if (indice !== -1) {
-								arrayDinamico.splice(indice, 1); // Remove a letra do arrayDinamico
-							}
-						});
-						console.log("arrayDinamico:"+arrayDinamico);
-						arrayNovo.push(arrayDinamico[Math.floor(Math.random() * arrayDinamico.length)]);
-					} else {
-						arrayNovo.push(arrayOriginal[Math.floor(Math.random() * arrayDinamico.length)]);
-					}
-					console.log("arrayNovo: "+arrayNovo);
-				}  while (arrayNovo.length < tamanhoArray);
-				console.log(arrayOriginal);
-				console.log(arrayDinamico);
-				console.log(arrayNovo);
-			}
+            // Embaralha o array reduzido
+            const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
+            const arrayEmbaralhado = shuffleArray([...arrayReduzido]);
 
-			function embaralharIgualmenteFolregTentativas() {
-				// Array original com as letras dos estímulos
-				const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+            // Preenche os campos visíveis e ocultos
+            arrayEmbaralhado.forEach((letra, index) => {
+                const currentIndex = index + 1;
 
-				// Obtém a quantidade de estímulos selecionada pelo usuário
-				const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				console.log("Qt Estímulos: " + qtdEstimulos);
+                // Campos visíveis
+                const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
+                const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
 
-				// Define o tamanho do array com base na quantidade de estímulos
-				let tamanhoArray = qtdEstimulos; // Padrão dinâmico (9 ou 10)
+                if (elementoVisivelSimples && elementoVisivelDuplo) {
+                    elementoVisivelSimples.innerHTML = letra;
+                    elementoVisivelDuplo.innerHTML = letra;
+                    elementoVisivelSimples.className = caseClasseCor(letra);
+                    elementoVisivelDuplo.className = caseClasseCor(letra);
+                }
 
-				// Remove elementos extras do array original, se necessário
-				const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
+                // Campos ocultos
+                const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
+                const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
 
-				// Embaralha o array reduzido
-				const arrayEmbaralhado = shuffleArray([...arrayReduzido]);
+                if (campoOcultoSimples && campoOcultoDuplo) {
+                    campoOcultoSimples.value = letra;
+                    campoOcultoDuplo.value = letra;
+                }
+            });
 
-				// Itera sobre o array embaralhado para atualizar o DOM
-				arrayEmbaralhado.forEach((letra, index) => {
-					const currentIndex = index + 1; // Índice começa em 1
+            // Limpa posições excedentes
+            for (let i = tamanhoArray + 1; i <= 10; i++) {
+                const elementoVisivelSimples = document.getElementById(`folregRaTent${i}`);
+                const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${i}`);
 
-					// Atualiza os campos visíveis no front-end
-					const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
-					const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
+                if (elementoVisivelSimples && elementoVisivelDuplo) {
+                    elementoVisivelSimples.innerHTML = '';
+                    elementoVisivelDuplo.innerHTML = '';
+                }
 
-					if (elementoVisivelSimples && elementoVisivelDuplo) {
-						// Define o texto e a classe de cor para os elementos visíveis
-						elementoVisivelSimples.innerHTML = letra;
-						elementoVisivelDuplo.innerHTML = letra;
-						elementoVisivelSimples.className = caseClasseCor(letra);
-						elementoVisivelDuplo.className = caseClasseCor(letra);
-					} else {
-						console.error(`Elemento folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
-					}
+                const campoOcultoSimples = document.getElementById(`folregRaTentCad${i}`);
+                const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${i}`);
 
-					// Atualiza os campos ocultos para armazenamento no banco
-					const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
-					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
+                if (campoOcultoSimples && campoOcultoDuplo) {
+                    campoOcultoSimples.value = '';
+                    campoOcultoDuplo.value = '';
+                }
+            }
+        }
 
-					if (campoOcultoSimples && campoOcultoDuplo) {
-						campoOcultoSimples.value = letra;
-						campoOcultoDuplo.value = letra;
-					} else {
-						console.error(`Campo oculto folregRaTentCad${currentIndex} ou folregRaTentDuplCad${currentIndex} não encontrado.`);
-					}
-				});
-			}
+        function showStimulusFieldsWithValues() {
+            const fields = ['folregEsta', 'folregEstb', 'folregEstc', 'folregEstd', 'folregEste', 'folregEstf', 'folregEstg', 'folregEsth', 'folregEsti'];
+            fields.forEach((fieldId) => {
+                const field = document.getElementById(fieldId);
+                if (field && field.value.trim() !== '') {
+                    const stimulusDiv = document.getElementById('stimulus' + fieldId.slice(-1).toUpperCase());
+                    if (stimulusDiv) {
+                        stimulusDiv.style.display = 'block';
+                    }
+                }
+            });
+        }
 
-			function shuffleArray(array) { //Algoritimo de Ytses
-				const newArray = array.slice();
-				for (let i = newArray.length - 1; i > 0; i--) {
-					const j = Math.floor(Math.random() * (i + 1));
-					[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-				}
-				return newArray;
-			}
+        function updateStimulusFields() {
+            const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+            console.log("Qt Estímulos: " + qtdEstimulos);
 
-			// Função auxiliar para definir a classe de cor com base na letra
-			function caseClasseCor(letra) {
-				switch (letra) {
-					case 'A':
-						return 'label label-sm label-info arrowed arrowed-righ RA';
-					case 'B':
-						return 'label label-sm label-warning arrowed arrowed-righ RA';
-					case 'C':
-						return 'label label-sm label-danger arrowed arrowed-righ RA';
-					case 'D':
-						return 'label label-sm label-success arrowed arrowed-righ RA';
-					case 'E':
-						return 'label label-sm label-primary arrowed arrowed-righ RA';
-					case 'F':
-						return 'label label-sm label-purple arrowed arrowed-righ RA';
-					case 'G':
-						return 'label label-sm label-pink arrowed arrowed-righ RA';
-					case 'H':
-						return 'label label-sm label-yellow arrowed arrowed-righ RA';
-					case 'I':
-						return 'label label-sm label-gray arrowed arrowed-righ RA';
-					case 'J':
-						return 'label label-sm label-blue arrowed arrowed-righ RA';
-					default:
-						return 'label label-sm label-default arrowed arrowed-righ RA';
-				}
-			}
+            // Chama as funções para atualizar os campos
+            embaralharIgualmenteFolregTentativas();
+            showStimulusFieldsWithValues();
+        }
 
+       
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+			
 			function marcaImput(inputName) {
 				let elementoAlvo = document.getElementById(inputName);
 				if (elementoAlvo.checked == true) {
@@ -359,6 +311,130 @@
 				document.getElementById("folregTotalduplodir_minusd").value = totalDirMenosD;
 				atualizarDuploGrafico();
 			}
+
+			function preencherCamposOcultos(shuffledLetters) {
+				console.log("Iniciando preenchimento dos campos ocultos...");
+
+				// Itera sobre as letras embaralhadas e preenche os campos ocultos
+				shuffledLetters.forEach((letra, index) => {
+					const currentIndex = index + 1; // Índice começa em 1
+					const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
+					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
+
+					if (campoOcultoSimples && campoOcultoDuplo) {
+						campoOcultoSimples.value = letra;
+						campoOcultoDuplo.value = letra;
+						console.log(`Campo oculto folregRaTentCad${currentIndex} preenchido com valor: ${letra}`);
+					} else {
+						console.error(`Campo oculto folregRaTentCad${currentIndex} ou folregRaTentDuplCad${currentIndex} não encontrado.`);
+					}
+				});
+
+				console.log("Preenchimento dos campos ocultos concluído.");
+			}
+
+			function popularTabelaVisivel(shuffledLetters) {
+				console.log("Iniciando preenchimento da tabela visível...");
+
+				// Itera sobre as letras embaralhadas e preenche os campos visíveis
+				shuffledLetters.forEach((letra, index) => {
+					const currentIndex = index + 1; // Índice começa em 1
+					const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
+					const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
+
+					if (elementoVisivelSimples && elementoVisivelDuplo) {
+						elementoVisivelSimples.innerHTML = letra;
+						elementoVisivelDuplo.innerHTML = letra;
+						console.log(`Campo visível folregRaTent${currentIndex} preenchido com valor: ${letra}`);
+					} else {
+						console.error(`Elemento visível folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
+					}
+				});
+
+				console.log("Preenchimento da tabela visível concluído.");
+			}
+
+			function aplicarCores(shuffledLetters) {
+			console.log("Iniciando aplicação de cores e classes CSS...");
+
+				// Função auxiliar para definir a classe com base na letra
+				function caseClasseCor(letra) {
+					switch (letra) {
+						case 'A': return 'label label-sm label-info arrowed arrowed-righ RA';
+						case 'B': return 'label label-sm label-warning arrowed arrowed-righ RA';
+						case 'C': return 'label label-sm label-danger arrowed arrowed-righ RA';
+						case 'D': return 'label label-sm label-success arrowed arrowed-righ RA';
+						case 'E': return 'label label-sm label-primary arrowed arrowed-righ RA';
+						case 'F': return 'label label-sm label-purple arrowed arrowed-righ RA';
+						case 'G': return 'label label-sm label-pink arrowed arrowed-righ RA';
+						case 'H': return 'label label-sm label-inverse arrowed arrowed-righ RA';
+						case 'I': return 'label label-sm label-yellow arrowed arrowed-righ RA';
+						case 'J': return 'label label-sm label-grey arrowed arrowed-righ RA';
+						default: return '';
+					}
+				}
+
+				// Itera sobre as letras embaralhadas e aplica as classes CSS
+				shuffledLetters.forEach((letra, index) => {
+					const currentIndex = index + 1; // Índice começa em 1
+					const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
+					const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
+
+					if (elementoVisivelSimples && elementoVisivelDuplo) {
+						elementoVisivelSimples.className = caseClasseCor(letra);
+						elementoVisivelDuplo.className = caseClasseCor(letra);
+						console.log(`Classes CSS aplicadas ao elemento folregRaTent${currentIndex}: ${caseClasseCor(letra)}`);
+					} else {
+						console.error(`Elemento visível folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
+					}
+				});
+
+				console.log("Aplicação de cores e classes CSS concluída.");
+			}
+
+			function exibirLetrasRandomizadas(shuffledLetters) {
+				console.log("Exibindo letras randomizadas salvas:");
+				shuffledLetters.forEach((letra, index) => {
+					console.log(`Letra ${index + 1}: ${letra}`);
+				});
+			}
+
+			function carregaRamdomico() {
+				console.log("Iniciando função carregaRamdomico...");
+
+				// Gerar letras embaralhadas
+				const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+				const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
+				const tamanhoArray = qtdEstimulos || arrayOriginal.length;
+
+				const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
+				const shuffledLetters = shuffleArray([...arrayReduzido]);
+				console.log("Letras embaralhadas:", shuffledLetters);
+
+				// Preencher campos ocultos
+				preencherCamposOcultos(shuffledLetters);
+
+				// Popular tabela visível
+				popularTabelaVisivel(shuffledLetters);
+
+				// Aplicar cores e classes CSS
+				aplicarCores(shuffledLetters);
+
+				// Exibir letras randomizadas no console
+				exibirLetrasRandomizadas(shuffledLetters);
+
+				console.log("Função carregaRamdomico concluída.");
+			}
+
+			// Função para embaralhar array
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[array[i], array[j]] = [array[j], array[i]];
+				}
+				return array;
+			}
+
 
 			function atualizarGraficoDuplo() {
 				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado esquerdo
@@ -2425,9 +2501,12 @@
 
 			// Chama a função para popular os checkboxes após o carregamento do DOM
 			document.addEventListener('DOMContentLoaded', () => {
+				  carregaRamdomico();
 				populateCheckboxes('checkboxContainer1', 'progDicatipotext1');
 				populateCheckboxes('checkboxContainer2', 'progDicatipotext2');
 				populateCheckboxes('checkboxContainer3', 'progDicatipotext3');
+				
+				 updateStimulusFields(); // Inicializa os campos com base no valor de folregQtest
 			});
 		</script>
 	</body>

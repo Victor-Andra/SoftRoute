@@ -136,11 +136,15 @@
 																								{{/each}}
 																							</td>
 																							<td>
+																								{{#ifEqual agenda_selo "false"}}
 																								<div class="action-buttons">
 																									<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
 																										<i class="ace-icon fa fa-pencil bigger-130"></i>
 																									</a>
 																								</div>
+																								{{else}}
+																								<span class="badge badge-success">Ok</span>
+																								{{/ifEqual}}
 																							</td>
 																						</tr>
 																					

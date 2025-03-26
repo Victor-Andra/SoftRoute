@@ -51,112 +51,56 @@
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script type="text/javascript">
-			function embaralharTotalmenteFolregTentativas (){
-				let arrayOriginal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-				let qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				let tamanhoArray = 9;
-				let reducao = 0;
-				let arrayNovo = [];
-				let arrayDinamico = [];
-				
-				if (qtdEstimulos == "10"){
-					tamanhoArray = 10;
-				}
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayOriginal.splice(-(10 - qtdEstimulos));
-				console.log("arrayOriginal: "+arrayOriginal);
-				arrayDinamico = arrayOriginal;
+			function gerarLetrasEmbaralhadas(qtdEstimulos) {
+				console.log("Iniciando geração de letras embaralhadas...");
 
-				do {
-					//condição se o array novo está faltando uma quantidade de letras igual ao tamando do array original, remover letras já escolhidas / tamanhoArray - arrayNovo.length <= arrayDinamico
-                    console.log("arrayDinamico:"+arrayDinamico);
-                    let letrasEncontradas = 0;
-                    arrayOriginal.forEach(letra => {
-                        if (arrayNovo.includes(letra)) {
-                            letrasEncontradas++;
-                        }
-                    });
-                    console.log("tamanhoArray:"+tamanhoArray);
-                    console.log("arrayNovo.length:"+arrayNovo.length);
-                    console.log("letrasEncontradas:"+letrasEncontradas);
-                    console.log("tala"+((tamanhoArray - arrayNovo.length + letrasEncontradas)))
-                    console.log("arrayOriginal.length>:"+arrayOriginal.length)
-					if ((tamanhoArray - arrayNovo.length + letrasEncontradas) <= arrayOriginal.length){
-                        arrayNovo.forEach(letra => {
-							const indice = arrayDinamico.indexOf(letra);
-							if (indice !== -1) {
-								arrayDinamico.splice(indice, 1); // Remove a letra do arrayDinamico
-							}
-						});
-						console.log("arrayDinamico:"+arrayDinamico);
-						arrayNovo.push(arrayDinamico[Math.floor(Math.random() * arrayDinamico.length)]);
-					} else {
-						arrayNovo.push(arrayOriginal[Math.floor(Math.random() * arrayDinamico.length)]);
-					}
-					console.log("arrayNovo: "+arrayNovo);
-				}  while (arrayNovo.length < tamanhoArray);
-				console.log(arrayOriginal);
-				console.log(arrayDinamico);
-				console.log(arrayNovo);
-			}
-
-			function embaralharIgualmenteFolregTentativas() {
-				// Array original com as letras dos estímulos
+				// Array original contendo as letras A até J
 				const arrayOriginal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-
-				// Obtém a quantidade de estímulos selecionada pelo usuário
-				const qtdEstimulos = parseInt(document.getElementById("folregQtest").value);
-				console.log("Qt Estímulos: " + qtdEstimulos);
-
-				// Define o tamanho do array com base na quantidade de estímulos
-				let tamanhoArray = qtdEstimulos; // Padrão dinâmico (9 ou 10)
-
-				// Remove elementos extras do array original, se necessário
-				const arrayReduzido = arrayOriginal.slice(0, tamanhoArray);
+				
+				// Reduz o array ao número de estímulos desejados (exemplo: 3 = ['A', 'B', 'C'])
+				const arrayReduzido = arrayOriginal.slice(0, qtdEstimulos);
+				console.log("Array reduzido:", arrayReduzido);
 
 				// Embaralha o array reduzido
 				const arrayEmbaralhado = shuffleArray([...arrayReduzido]);
+				console.log("Array embaralhado:", arrayEmbaralhado);
 
-				// Itera sobre o array embaralhado para atualizar o DOM
-				arrayEmbaralhado.forEach((letra, index) => {
+				// Preenche os 10 campos com as letras embaralhadas, repetindo-as se necessário
+				const arrayFinal = [];
+				for (let i = 0; i < 10; i++) {
+					arrayFinal.push(arrayEmbaralhado[i % arrayEmbaralhado.length]);
+				}
+				console.log("Array final para preenchimento:", arrayFinal);
+
+				return arrayFinal;
+			}
+
+			function preencherCamposOcultos(shuffledLetters) {
+				console.log("Iniciando preenchimento dos campos ocultos...");
+
+				shuffledLetters.forEach((letra, index) => {
 					const currentIndex = index + 1; // Índice começa em 1
-
-					// Atualiza os campos visíveis no front-end
-					const elementoVisivelSimples = document.getElementById(`folregRaTent${currentIndex}`);
-					const elementoVisivelDuplo = document.getElementById(`folregRaTentDupl${currentIndex}`);
-
-					if (elementoVisivelSimples && elementoVisivelDuplo) {
-						// Define o texto e a classe de cor para os elementos visíveis
-						elementoVisivelSimples.innerHTML = letra;
-						elementoVisivelDuplo.innerHTML = letra;
-						elementoVisivelSimples.className = caseClasseCor(letra);
-						elementoVisivelDuplo.className = caseClasseCor(letra);
-					} else {
-						console.error(`Elemento folregRaTent${currentIndex} ou folregRaTentDupl${currentIndex} não encontrado.`);
-					}
-
-					// Atualiza os campos ocultos para armazenamento no banco
 					const campoOcultoSimples = document.getElementById(`folregRaTentCad${currentIndex}`);
-					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${currentIndex}`);
 
-					if (campoOcultoSimples && campoOcultoDuplo) {
+					if (campoOcultoSimples) {
 						campoOcultoSimples.value = letra;
-						campoOcultoDuplo.value = letra;
+						console.log(`Campo oculto folregRaTentCad${currentIndex} preenchido com valor: ${letra}`);
 					} else {
-						console.error(`Campo oculto folregRaTentCad${currentIndex} ou folregRaTentDuplCad${currentIndex} não encontrado.`);
+						console.error(`Campo oculto folregRaTentCad${currentIndex} não encontrado.`);
 					}
 				});
+
+				console.log("Preenchimento dos campos ocultos concluído.");
 			}
 
-			function shuffleArray(array) { //Algoritimo de Ytses
-				const newArray = array.slice();
-				for (let i = newArray.length - 1; i > 0; i--) {
+			// Função auxiliar para embaralhar array
+			function shuffleArray(array) {
+				for (let i = array.length - 1; i > 0; i--) {
 					const j = Math.floor(Math.random() * (i + 1));
-					[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+					[array[i], array[j]] = [array[j], array[i]];
 				}
-				return newArray;
+				return array;
 			}
-
 			// Função auxiliar para definir a classe de cor com base na letra
 			function caseClasseCor(letra) {
 				switch (letra) {
@@ -464,7 +408,7 @@
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
 				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
-				embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
+				//embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
 				showStimulusFieldsWithValues();
 				updateStimulusFields();
 			}
@@ -2332,31 +2276,6 @@
 					}
 				});
 			}
-			function carregaRamdomico() {
-				const qtestValue = parseInt(document.getElementById('folregQtest').value, 10);
-				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-				
-				if (isNaN(qtestValue) || qtestValue < 1 || qtestValue > 10) {
-					console.error('Invalid value for folregQtest. Please provide a number between 1 and 10.');
-					return;
-				}
-
-				const letters = alphabet.slice(0, qtestValue).split('');
-				const shuffledLetters = shuffleArray(letters);
-				
-				const tableRows = document.querySelectorAll('#dynamic-table tbody tr');
-				
-				let letterIndex = 0;
-				tableRows.forEach((row, index) => {
-					if (index < tableRows.length - 1) { // Skip the last row which is the totals row
-						const raCell = row.querySelector('td:nth-child(2) .RA');
-						raCell.innerText = shuffledLetters[letterIndex];
-						letterIndex = (letterIndex + 1) % shuffledLetters.length;
-					}
-				});
-			}
-
-			
 			
 			function updateStimulusFields() {
 				var select = document.getElementById('folregQtest');
@@ -2428,6 +2347,16 @@
 				populateCheckboxes('checkboxContainer1', 'progDicatipotext1');
 				populateCheckboxes('checkboxContainer2', 'progDicatipotext2');
 				populateCheckboxes('checkboxContainer3', 'progDicatipotext3');
+				
+				console.log("DOM completamente carregado. Iniciando processamento...");
+				// Quantidade de estímulos (exemplo: 3)
+				const qtdEstimulos = parseInt(document.getElementById("folregQtest").value) || 10;
+
+				// Gerar letras embaralhadas
+				const shuffledLetters = gerarLetrasEmbaralhadas(qtdEstimulos);
+
+				// Preencher campos ocultos
+				preencherCamposOcultos(shuffledLetters);
 			});
 		</script>
 	</body>
