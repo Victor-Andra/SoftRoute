@@ -588,7 +588,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                     })
                     .filter(usuario => isDentroDaSemana(usuario.diaNascimento, usuario.mesNascimento));
 
-                //console.log("Aniversariantes da semana (Usuários):", aniversariantesDaSemanaUsuario);
+                console.log("Aniversariantes da semana (Usuários):", aniversariantesDaSemanaUsuario);
 
                 // Consulta para aniversariantes do dia na tabela Bene
                 return Bene.find({ bene_status: "Ativo" }).then((benes) => {
@@ -608,7 +608,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                         })
                         .filter(bene => isDentroDaSemana(bene.diaNascimento, bene.mesNascimento));
 
-                    //console.log("Aniversariantes da semana (Beneficiários):", aniversariantesDaSemanaBene);
+                    console.log("Aniversariantes da semana (Beneficiários):", aniversariantesDaSemanaBene);
 
                     // Lógica para listar agendamentos do dia
                     const inicioDia = new Date();
@@ -652,9 +652,9 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                                 ]
                             })
                         ]).then(([terapias, benes, usuarios]) => {
-                            //console.log("Terapias carregadas:", terapias);
-                            //console.log("Beneficiários carregados:", benes);
-                            //console.log("Usuários carregados:", usuarios);
+                            console.log("Terapias carregadas:", terapias);
+                            console.log("Beneficiários carregados:", benes);
+                            console.log("Usuários carregados:", usuarios);
 
                             let flash = new Resposta();
                             if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined) {
@@ -668,7 +668,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                                 flash.texto = "Logado com sucesso!";
                             }
 
-                            //console.log("Flash message:", flash);
+                            console.log("Flash message:", flash);
 
                             res.render("branco", {
                                 flash,
@@ -683,7 +683,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                     });
                 });
             }).catch((err) => {
-                //console.error("Erro ao listar aniversariantes ou agendamentos:", err);
+                console.error("Erro ao listar aniversariantes ou agendamentos:", err);
                 req.flash("error_message", "Houve um erro ao listar os aniversariantes ou agendamentos.");
                 res.redirect('/menu/admin/erro');
             });

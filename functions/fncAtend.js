@@ -1658,8 +1658,8 @@ module.exports = {
                             atends.forEach((atend)=>{
                                 if ((""+atend.atend_convid+"") == (""+convid+"")){
                                 categorias = atend.atend_categoria
-                                if (ats.atend_fixo == "true"){
-                                    terapiaAtend = ats.atend_fixoterapiaid;
+                                if (atend.atend_fixo == "true"){
+                                    terapiaAtend = atend.atend_fixoterapiaid;
                                     //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
                                 } else {
                                     switch (categorias){
