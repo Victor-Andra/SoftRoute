@@ -110,50 +110,46 @@
 				}
 				return array;
 			}
+				
 		function preencherCamposVisiveis(qtdEstimulos) {
-    console.log("Iniciando preenchimento dos campos visíveis...");
+			console.log("Iniciando preenchimento dos campos visíveis...");
+			const modoAtivo = getModoAtivo();
 
-    // Ajusta a quantidade de estímulos conforme as regras:
-    // - Se qtdEstimulos < 10, ajusta para 9.
-    // - Se qtdEstimulos === 10, mantém como 10.
-    const quantidadeAjustada = qtdEstimulos < 10 ? 9 : 10;
-    console.log(`Quantidade de estímulos ajustada: ${quantidadeAjustada}`);
+			// Itera sobre os campos de 1 até qtdEstimulos
+			for (let i = 1; i <= qtdEstimulos; i++) {
+				// Preenche campos simples
+				const campoOcultoSimples = document.getElementById(`folregRaTentCad${i}`);
+				const campoVisivelSimples = document.getElementById(`folregRaTent${i}`);
 
-    // Obtém o modo ativo ("Simples" ou "Duplo")
-    const modoAtivo = getModoAtivo();
-    console.log(`Modo ativo: ${modoAtivo}`);
+				if (campoOcultoSimples && campoVisivelSimples) {
+					const letra = campoOcultoSimples.value;
+					campoVisivelSimples.innerHTML = letra;
+					campoVisivelSimples.className = caseClasseCor(letra);
+					console.log(`Campo visível folregRaTent${i} preenchido com valor: ${letra}`);
+				} else {
+					console.warn(`Campo oculto folregRaTentCad${i} ou campo visível folregRaTent${i} não encontrado.`);
+				}
 
-    // Itera sobre os campos com base na quantidade ajustada
-    for (let i = 1; i <= quantidadeAjustada; i++) {
-        console.log(`--- Iteração do loop: ${i} ---`);
+				// Preenche campos duplicados (se modo for Duplo)
+				if (modoAtivo === "Duplo") {
+					const campoOcultoDuplo = document.getElementById(`folregRaTentDuplCad${i}`);
+					const campoVisivelDuplo = document.getElementById(`folregRaTentDupl${i}`);
 
-        // Determina os IDs dos campos ocultos e visíveis com base no modo ativo
-        const campoOcultoSimples = document.getElementById(`folregRaTentCad${i}`);
-        const campoVisivelId = modoAtivo === "Duplo" ? `folregRaTentDupl${i}` : `folregRaTent${i}`;
-        const campoVisivelSimples = document.getElementById(campoVisivelId);
+					if (campoOcultoDuplo && campoVisivelDuplo) {
+						const letra = campoOcultoDuplo.value;
+						campoVisivelDuplo.innerHTML = letra;
+						campoVisivelDuplo.className = caseClasseCor(letra);
+						console.log(`Campo visível folregRaTentDupl${i} preenchido com valor: ${letra}`);
+					} else {
+						console.warn(`Campo oculto folregRaTentDuplCad${i} ou campo visível folregRaTentDupl${i} não encontrado.`);
+					}
+				}
+			}
 
-        console.log(`Campo oculto buscado: folregRaTentCad${i}`);
-        console.log(`Campo visível buscado: ${campoVisivelId}`);
-
-        if (campoOcultoSimples && campoVisivelSimples) {
-            console.log(`Campo oculto encontrado: folregRaTentCad${i}`);
-            console.log(`Campo visível encontrado: ${campoVisivelId}`);
-
-            const letra = campoOcultoSimples.value;
-            console.log(`Valor do campo oculto (letra): ${letra}`);
-
-            campoVisivelSimples.innerHTML = letra;
-            campoVisivelSimples.className = caseClasseCor(letra);
-            console.log(`Campo visível ${campoVisivelId} preenchido com valor: ${letra}`);
-        } else {
-            console.warn(`Campo oculto folregRaTentCad${i} ou campo visível ${campoVisivelId} não encontrado.`);
-        }
-    }
-
-    console.log("Preenchimento dos campos visíveis concluído.");
-}
+			console.log("Preenchimento dos campos visíveis concluído.");
+		}
 			
-		function preencherCamposOcultos(shuffledLetters) {
+			function preencherCamposOcultos(shuffledLetters) {
 			console.log("Iniciando preenchimento dos campos ocultos...");
 
 			shuffledLetters.forEach((letra, index) => {
@@ -1121,7 +1117,7 @@
 																</td>
 																<td>
 																	<label class="pos-rel">
-																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4" class="label label-sm label-pink arrowed arrowed-righ RA"></span></label>
+																		<label class="pos-rel"><span id="folregRaTent4" name="folregRaTent4" class="label label-sm label-purple arrowed arrowed-righ RA"></span></label>
 																	</label>
 																</td>
 																<td>

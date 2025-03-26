@@ -520,7 +520,7 @@ module.exports = {
         });
     },
 
-    xlistaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+    listaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
@@ -640,131 +640,7 @@ module.exports = {
             });
     },
 
-    listaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
-        console.log("Chamando listaProgfiltro para o ID:", req.params.id);
-        const perfilAtual = req.cookies['lvlUsu'];
-        const dataAtual = new Date();
-        
-        // Busca o beneficiário selecionado
-        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" })
-            .then((bene) => {
-                if (!bene) {
-                    return res.status(404).json({ error: "Beneficiário não encontrado!" });
-                }
-    
-                // Cálculo de idade e datas relacionadas
-                const datanasc = new Date(bene.bene_datanasc);
-                bene.datanasc = formatarData(datanasc);
-                bene.idade = calcularIdade(datanasc);
-               
-                    // Funções auxiliares
-                    function calcularIdade(dataNascimento) {
-                        const hoje = new Date();
-                        let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
-                        const aniversarioEsteAno = new Date(
-                            hoje.getFullYear(),
-                            dataNascimento.getMonth(),
-                            dataNascimento.getDate()
-                        );
 
-                        if (hoje < aniversarioEsteAno) {
-                            idadeAnos -= 1;
-                        }
-
-                        const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
-
-                        return `${idadeAnos} anos e ${idadeMeses} meses`;
-                    }
-
-                    function formatarData(data) {
-                        const dia = String(data.getUTCDate()).padStart(2, '0');
-                        const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
-                        const ano = data.getUTCFullYear();
-                        return `${ano}-${mes}-${dia}`;
-                    }
-
-                    function ordenarPorNome(campo) {
-                        return (a, b) => {
-                            const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                            const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                            return nomeA.localeCompare(nomeB);
-                        };
-                    }
-                // Busca as tabelas dependentes
-                Prog.find({ prog_beneid: bene._id , prog_status: { $ne: "Adquirido" }}).then((prog) => {
-                    
-                    // Variáveis para contar os programas adquiridos e não adquiridos
-                    let countProgs = 0;
-                    let countProgsC = 0;
-                    let countProgsA = 0;
-
-                    prog.forEach((p) => {
-                        p.datacad = formatarData(new Date(p.prog_datacad));
-                        p.dataedi = formatarData(new Date(p.prog_dataedi));
-                    });
-                    
-                    Notasup.find().then((notasup) => {
-                        Notasupobs.find().then((notasupobs) => {
-
-                            Progdica.find().then((progdica) => {
-                                progdica.sort(ordenarPorNome('progdica_nome'));
-            
-                                Progtipo.find().then((progtipo) => {
-                                    progtipo.sort(ordenarPorNome('progtipo_nome'));
-            
-                                    Prognivel.find().then((prognivel) => {
-                                        prognivel.sort(ordenarPorNome('prognivel_nome'));
-            
-                                        Progset.find().then((progset) => {
-                                            prog.forEach((p) => {
-                                                let total = 0;
-                                                progset.forEach((ps) => {
-                                                    if (ps.progset_progid.toString() === p._id.toString()) {
-                                                        total += parseInt(ps.progset_qtest || 0);
-                                                    }
-                                                });
-                                                p.prog_total_estimulos = total;
-                                            });
-            
-                                            Folreg.find().then((folreg) => {
-                                                
-                                                Usuario.find().then((usuario) => {
-                                                    usuario.sort(ordenarPorNome('usuario_nome'));
-
-                                                    // Renderização do formulário com os dados filtrados
-                                                    res.render('area/aba/prog/progLisfiltrado', {
-                                                        progs: prog,
-                                                        notasups: notasup,
-                                                        notasupobss: notasupobs,
-                                                        progsets: progset,
-                                                        usuarios: usuario,
-                                                        benes: [bene],
-                                                        perfilAtual,
-                                                        flash: resposta,
-                                                        progdicas: progdica,
-                                                        progtipos: progtipo,
-                                                        prognivels: prognivel,
-                                                        dataAtual,
-                                                        folregs: folreg
-                                                        
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                req.flash("error_message", "Houve um erro ao listar!");
-                res.redirect('admin/erro');
-            });
-    },
-  
 
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);

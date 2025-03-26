@@ -53,7 +53,7 @@ module.exports = {
             res.render('area/aba/folreg/folregLis', {Folregs: folreg, terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Diários de Folreg")
+            req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA")
             res.redirect('admin/erro')
         })
     },
@@ -77,7 +77,7 @@ module.exports = {
                                 res.render("area/aba/folreg/folregCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv ,progs: prog, progsets: progset})
         })})})})})})}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar escolas")
+            req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA")
             res.redirect('admin/erro')
         })
     },
@@ -102,7 +102,7 @@ module.exports = {
                                                     res.render("area/aba/folreg/folregPreCad", {benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
         })})})})})})})})})})}).catch((err) =>{
             console.log(err);
-            req.flash("error_message", "houve um erro ao listar escolas");
+            req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA");
             res.redirect('admin/erro');
         })
     },
@@ -129,7 +129,7 @@ module.exports = {
                                                  res.render("area/aba/folreg/folregPreEdi", {folreg, benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
         })})})})})})})})})})}).catch((err) =>{
             console.log(err);
-            req.flash("error_message", "houve um erro ao listar escolas");
+            req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA");
             res.redirect('admin/erro');
         })
     },
@@ -208,11 +208,11 @@ module.exports = {
                             console.log("Listagem Realizada de Usuário")
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Folregamento Fisioterapêutico deletado!")
+                req.flash("success_message", "folha de registro ABA deletada!")
                 res.render('area/aba/folreg/folregLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
+                req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA")
                 res.render('admin/erro')
             })
         })
