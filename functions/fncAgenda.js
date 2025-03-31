@@ -6635,7 +6635,7 @@ module.exports = {
                                     this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
                                 })
 
-                                agenda.sort(function(a, b) {
+                                idsAgendasEx.sort(function(a, b) {
                                     let h1 = a.agenda_hora.substring(0,2);
                                     let m1 = a.agenda_hora.substring(3,5);
                                     let h2 = b.agenda_hora.substring(0,2);

@@ -1707,7 +1707,7 @@ module.exports = {
                                         break;
                                     case "SubstitutoFixo":
                                         terapiaAtend = atend.atend_fixoterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
+                                        creVal = atend.atend_fixovalorcre;
                                         break;
                                     default:
                                         terapiaAtend = atend.atend_terapiaid;
@@ -1741,18 +1741,25 @@ module.exports = {
                             })
 
                             if(qtdIds != 0){
+                                if ((""+t._id+"") == "625597a973ddf46dc778a576"){
+                                    console.log("terapia_nomecid"+t.terapia_nomecid)
+                                }
                                 a.valor = creValFinal;
                                 a.sessoes = qtdIds;
                                 a.nomecid = t._id;
                                 a.convid = convid;
 
-                                console.log("a: "+a.valor)
+                                console.log("a: "+a.valor);
                                 rel.push(a);
                                 a = new RelAtend();
                             }
                         })
                         })
                         rel.forEach((r)=>{
+                            console.log("r: "+r.nomecid);
+                            console.log("r: "+r.valor);
+                            console.log("r: "+r.sessoes);
+                            console.log("r: "+r.convid);
                             if (r.valor == "0,00" || r.valor == undefined || r.valor == "undefined"){
                                 console.log("ENTROU!!!!!!!!!!!!!!!!")
                                 cre.forEach((c)=>{
@@ -1760,7 +1767,7 @@ module.exports = {
                                         r.valor = c.convcre_valor;
                                     }
                                 });
-                                if (r.valor == undefined || r.valor == "undefined"){
+                                if (r.valor == undefined || r.valor == "undefined" || r.valor == "N,aN"){
                                     r.valor = "0,00";
                                 }
                             }

@@ -536,14 +536,18 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let idUsu;
     let perfilId;
     let ativo;
+    let aux = 1;
+    let agendaTempArr = [];
+    let idsAgendasEx = []
 
-    // Gerar cookie vazio aqui...?
+    // Consultar o usuário no banco de dados
     Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha }).then((usu) => {
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
         ativo = usu.usuario_status;
 
         if (ativo == "Ativo") {
+            // Definir cookies com base no perfil do usuário
             if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {
                 res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (18000000)) });
                 res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (18000000)) });
@@ -588,8 +592,6 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                     })
                     .filter(usuario => isDentroDaSemana(usuario.diaNascimento, usuario.mesNascimento));
 
-                //console.log("Aniversariantes da semana (Usuários):", aniversariantesDaSemanaUsuario);
-
                 // Consulta para aniversariantes do dia na tabela Bene
                 return Bene.find({ bene_status: "Ativo" }).then((benes) => {
                     const aniversariantesDaSemanaBene = benes
@@ -608,8 +610,6 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                         })
                         .filter(bene => isDentroDaSemana(bene.diaNascimento, bene.mesNascimento));
 
-                    //console.log("Aniversariantes da semana (Beneficiários):", aniversariantesDaSemanaBene);
-
                     // Lógica para listar agendamentos do dia
                     const inicioDia = new Date();
                     inicioDia.setHours(0, 0, 0, 0); // Início do dia (00:00:00)
@@ -622,68 +622,131 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
 
                     return Agenda.find({
                         agenda_data: { $gte: inicioDia, $lte: fimDia },
-                        agenda_usuid: idUsu,
-                        agenda_temp: false // Filtra apenas agendamentos não temporários
+                        agenda_usuid: idUsu
+                        //agenda_temp: false // Filtra apenas agendamentos não temporários
                     }).then((agendas) => {
                         console.log("Agendamentos do dia encontrados:", agendas);
 
-                        // Formata os dados dos agendamentos
-                        agendas.forEach((e) => {
-                            const dat = new Date(e.agenda_data);
-                            e.agenda_data_dia = fncGeral.getDataFMT(dat); // Formata a data para exibição
-                            let hora = "" + dat.getUTCHours(); // UTC é necessário para evitar desconfiguração
-                            let min = "" + dat.getMinutes();
-                            if (hora.length == 1) { hora = "0" + hora; }
-                            if (min.length == 1) { min = "0" + min; }
-                            e.agenda_hora = hora + ":" + min;
+                        // Garantir que todos os agendamentos tenham o campo agenda_selo
+                        agendas.forEach((agendamento) => {
+                            if (!agendamento.agenda_selo) {
+                                agendamento.agenda_selo = false; // Criar o campo e definir como false
+                            }
+                            // Verificar se o campo agenda_selo é true ou false
+                            console.log(`Agendamento ID ${agendamento._id}: agenda_selo = ${agendamento.agenda_selo}`);
                         });
 
-                        console.log("Agendamentos formatados:", agendas);
-
-                        // Carrega as terapias, beneficiários e terapeutas para complementar os dados
-                        return Promise.all([
-                            Terapia.find(),
-                            Bene.find(),
-                            Usuario.find({
-                                usuario_status: "Ativo",
-                                $or: [
-                                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                                ]
-                            })
-                        ]).then(([terapias, benes, usuarios]) => {
-                            //console.log("Terapias carregadas:", terapias);
-                            //console.log("Beneficiários carregados:", benes);
-                            //console.log("Usuários carregados:", usuarios);
-
-                            let flash = new Resposta();
-                            if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined) {
-                                flash.sucesso = "almost";
-                                flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
-                            } else if (usu.usuario_senha == "123456789") {
-                                flash.sucesso = "almost";
-                                flash.texto = "Você ainda não alterou sua senha temporária.";
-                            } else {
-                                flash.sucesso = "true";
-                                flash.texto = "Logado com sucesso!";
+                        agendas = agendas.filter(a => (""+a.atend_categoria) !== "Feriado");
+                        //console.log("Listagem Realizada de agendamentos!")
+                        //console.log(agendas.length)
+                        //console.log("agenda.length:"+agendas.length)
+                        agendas.forEach((e)=>{
+                            let dat = new Date(e.agenda_data);
+                            e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                            let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                            let min = ""+dat.getMinutes();
+                            if (hora.length == 1){hora = "0" + hora + "";}
+                            if (min.length == 1){min = "0" + min + "";}
+                            e.agenda_hora = hora+":"+min;
+                            e.agenda_aux = aux;
+                            aux++;
+            
+                            switch (dat.getUTCDay()){
+                                case 0:
+                                    e.agenda_data_semana = "dom"
+                                    break;
+                                case 1:
+                                    e.agenda_data_semana = "seg"
+                                    break;
+                                case 2:
+                                    e.agenda_data_semana = "ter"
+                                    break;
+                                case 3:
+                                    e.agenda_data_semana = "qua"
+                                    break;
+                                case 4:
+                                    e.agenda_data_semana = "qui"
+                                    break;
+                                case 5:
+                                    e.agenda_data_semana = "sex"
+                                    break;
+                                case 6:
+                                    e.agenda_data_semana = "sab"
+                                    break;
+                                default:
+                                    //console.log("erro");
+                                    break;
                             }
+                        })
+            
+                        agendas.forEach((as)=>{
+                            if ((""+as.agenda_temp+"") == "true"){
+                                agendaTempArr.push(as.agenda_tempId);
+                            }
+                        })
+                        
+                        agendas.forEach((a)=>{
+                            manter = "true";
+                            agendaTempArr.forEach((atr)=>{
+                                if ((""+atr+"") == (""+a._id+"")){
+                                    manter = "false";
+                                }
+                            })
+                            if (manter == "true"){
+                                idsAgendasEx.push(a);
+                            }
+                        })
 
-                            //console.log("Flash message:", flash);
+                        // Ordenar os agendamentos por horário (formato 24h)
+                        agendas.sort((a, b) => {
+                            const horaA = new Date(a.agenda_data).getTime();
+                            const horaB = new Date(b.agenda_data).getTime();
+                            return horaA - horaB; // Ordena do menor horário para o maior
+                        });
 
-                            res.render("branco", {
-                                flash,
-                                aniversariantesDaSemanaUsuario: aniversariantesDaSemanaUsuario,
-                                aniversariantesDaSemanaBene: aniversariantesDaSemanaBene,
-                                agendas: agendas, // Todos os agendamentos do dia
-                                terapias: terapias,
-                                benes: benes,
-                                usuarios: usuarios
+                        console.log("Agendamentos ordenados por horário:", agendas);
+                        Sala.find().then((sala)=>{
+                            sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
+                            // Carrega as terapias, beneficiários e terapeutas para complementar os dados
+                            return Promise.all([
+                                Terapia.find(),
+                                Bene.find(),
+                                Usuario.find({
+                                    usuario_status: "Ativo",
+                                    $or: [
+                                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                                    ]
+                                })
+                            ]).then(([terapias, benes, usuarios]) => {
+                                let flash = new Resposta();
+                                if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined) {
+                                    flash.sucesso = "almost";
+                                    flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+                                } else if (usu.usuario_senha == "123456789") {
+                                    flash.sucesso = "almost";
+                                    flash.texto = "Você ainda não alterou sua senha temporária.";
+                                } else {
+                                    flash.sucesso = "true";
+                                    flash.texto = "Logado com sucesso!";
+                                }
+
+                                res.render("branco", {
+                                    flash,
+                                    aniversariantesDaSemanaUsuario: aniversariantesDaSemanaUsuario,
+                                    aniversariantesDaSemanaBene: aniversariantesDaSemanaBene,
+                                    agendas: idsAgendasEx, // Todos os agendamentos do dia, ordenados por horário
+                                    terapias: terapias,
+                                    benes: benes,
+                                    salas: sala,
+                                    usuarios: usuarios
+                                });
                             });
                         });
                     });
                 });
             }).catch((err) => {
-                //console.error("Erro ao listar aniversariantes ou agendamentos:", err);
+                console.error("Erro ao listar aniversariantes ou agendamentos:", err);
                 req.flash("error_message", "Houve um erro ao listar os aniversariantes ou agendamentos.");
                 res.redirect('/menu/admin/erro');
             });
@@ -691,6 +754,10 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
             let lvl = "x";
             res.render("ferramentas/usuario/login", { nivel: lvl });
         }
+    }).catch((err) => {
+        console.error("Erro ao autenticar usuário:", err);
+        req.flash("error_message", "Houve um erro ao autenticar o usuário.");
+        res.redirect('/menu/login');
     });
 });
 
