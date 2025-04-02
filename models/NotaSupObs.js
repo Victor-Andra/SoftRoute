@@ -6,7 +6,7 @@ const NotaSupObsSchema = mongoose.Schema({
         type: ObjectId,
         required: true
     },
-    notaSupObs_progId :{
+    notaSupObs_progid :{
         type: ObjectId,
         required: true
     },
@@ -23,12 +23,12 @@ const NotaSupObsSchema = mongoose.Schema({
 class NotaSupObs{
     constructor(
         notaSupObs_beneid,
-        notaSupObs_progId,
+        notaSupObs_progid,
         notaSupObs_analise,   
         notaSupObs_sugestao
         ){
         this.notaSupObs_beneid = notaSupObs_beneid,
-        this.notaSupObs_progId = notaSupObs_progId,
+        this.notaSupObs_progid = notaSupObs_progid,
         this.notaSupObs_analise = notaSupObs_analise,   
         this.notaSupObs_sugestao = notaSupObs_sugestao
     }
@@ -46,7 +46,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         await NotaSupObsModel.findByIdAndUpdate(req.body.notaSupObsId, 
             {$set: {
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notaSupObsProgid,
+                notaSupObs_progid: req.body.notaSupObsProgid,
                 notaSupObs_analise: req.body.notaSupObsAnalise,   
                 notaSupObs_sugestao: req.body.notaSupObsSugestao
                 }}
@@ -84,7 +84,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_1,
+                notaSupObs_progid: req.body.notasupObsprogid_1,
                 notaSupObs_analise: req.body.notasupObsana_1,   
                 notaSupObs_sugestao: req.body.notasupObssugest_1
             });
@@ -106,7 +106,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_2,
+                notaSupObs_progid: req.body.notasupObsprogid_2,
                 notaSupObs_analise: req.body.notasupObsana_2,   
                 notaSupObs_sugestao: req.body.notasupObssugest_2
             });
@@ -128,7 +128,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_3,
+                notaSupObs_progid: req.body.notasupObsprogid_3,
                 notaSupObs_analise: req.body.notasupObsana_3,   
                 notaSupObs_sugestao: req.body.notasupObssugest_3
             });
@@ -150,7 +150,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_4,
+                notaSupObs_progid: req.body.notasupObsprogid_4,
                 notaSupObs_analise: req.body.notasupObsana_4,   
                 notaSupObs_sugestao: req.body.notasupObssugest_4
             });
@@ -172,7 +172,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_5,
+                notaSupObs_progid: req.body.notasupObsprogid_5,
                 notaSupObs_analise: req.body.notasupObsana_5,   
                 notaSupObs_sugestao: req.body.notasupObssugest_5
             });
@@ -194,7 +194,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_6,
+                notaSupObs_progid: req.body.notasupObsprogid_6,
                 notaSupObs_analise: req.body.notasupObsana_6,   
                 notaSupObs_sugestao: req.body.notasupObssugest_6
             });
@@ -216,7 +216,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_7,
+                notaSupObs_progid: req.body.notasupObsprogid_7,
                 notaSupObs_analise: req.body.notasupObsana_7,   
                 notaSupObs_sugestao: req.body.notasupObssugest_7
             });
@@ -238,7 +238,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_8,
+                notaSupObs_progid: req.body.notasupObsprogid_8,
                 notaSupObs_analise: req.body.notasupObsana_8,   
                 notaSupObs_sugestao: req.body.notasupObssugest_8
             });
@@ -260,7 +260,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_9,
+                notaSupObs_progid: req.body.notasupObsprogid_9,
                 notaSupObs_analise: req.body.notasupObsana_9,   
                 notaSupObs_sugestao: req.body.notasupObssugest_9
             });
@@ -282,7 +282,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
             const newNotaSupObs = new NotaSupObsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
-                notaSupObs_progId: req.body.notasupObsprogid_10,
+                notaSupObs_progid: req.body.notasupObsprogid_10,
                 notaSupObs_analise: req.body.notasupObsana_10,   
                 notaSupObs_sugestao: req.body.notasupObssugest_10
             });

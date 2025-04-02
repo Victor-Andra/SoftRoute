@@ -7245,6 +7245,7 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
+        this.atualizaValores(req,res);
         let aux = 1;
         let is = false;
         let dtFill;
@@ -14263,8 +14264,8 @@ module.exports = {
         let convdebvalSub;
         let convdebvalFixo;
 
-        let seg = new Date(2025, 1, 1);
-        let sex = new Date(2025, 2, 10);
+        let seg = new Date(2025, 2, 1);
+        let sex = new Date(2025, 2, 31);
         console.log("seg: "+seg);
         console.log("sex: "+seg);
         seg.setHours(0);
@@ -14278,10 +14279,10 @@ module.exports = {
         
         let dataIni = seg.toISOString();
         let dataFim = sex.toISOString();
-        //console.log("dataIni: "+dataIni);
-        //console.log("dataFim: "+dataFim);
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
 
-        Atend.find({atend_beneid  : new ObjectId('6613f148decce5c01530d736'), agenda_data: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
+        Atend.find({atend_beneid  : new ObjectId('649af06f0a761357d1e2e556'), atend_atenddata: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
 
             cc.then((convcre)=>{
                 convcre.forEach((c)=>{
@@ -14302,16 +14303,13 @@ module.exports = {
                         agendacreTes = ""+a.atend_convid + a.atend_terapiaid+""
                         agendacreTesSub = ""+a.atend_convid + a.atend_mergeterapiaid+""
                         agendacreTesFixo = ""+a.atend_convid + a.atend_fixoterapiaid+""
+                        /*
                         console.log("agendacreTes: "+agendacreTes)
                         console.log("agendacreTesSub: "+agendacreTesSub)
                         console.log("agendacreTesFixo: "+agendacreTesFixo)
+                        */
                         convcre.forEach((ccre)=>{
                             convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
-                            if ((""+a._id+"") == "67b726d179ffc3544c07d954"){
-                                console.log("convcreTes: "+convcreTes)
-                                console.log("agendacreTes: "+agendacreTes)
-                                console.log("convcreTes == agendacreTes: "+convcreTes == agendacreTes)
-                            }
                             if( convcreTes == agendacreTes){
                                 //console.log("if ("+convcreTes+" == "+agendacreTes)
                                 convCreCpfCnpj = ccre.convcre_convCpfCnpj;
@@ -14324,7 +14322,7 @@ module.exports = {
                                 convcrevalSub = ccre.convcre_valor;
                                 console.log("convcrevalSub: "+convcrevalSub)
                             }
-                            if (a.agenda_categoria == "SubstitutoFixo"){
+                            if (a.atend_fixo == "true"){
                                 if( convcreTes == agendacreTesFixo){
                                     //console.log("if ("+convcreTes+" == "+agendacreTes)
                                     convCreCpfCnpjFixo = ccre.convcre_convCpfCnpj;
@@ -14349,7 +14347,7 @@ module.exports = {
                                 convDebCpfCnpjSub = cdeb.convdeb_convCpfCnpj;
                                 convdebvalSub = cdeb.convdeb_valor;
                             }
-                            if (a.agenda_categoria == "SubstitutoFixo"){
+                            if (a.atend_fixo == "true"){
                                 if(convdebTes == agendadebTesFixo){
                                     //console.log("if ("+convdebTes+" == "+agendadebTes)
                                     convDebCpfCnpjFixo = cdeb.convdeb_convCpfCnpj;
@@ -14380,7 +14378,7 @@ module.exports = {
                                 })
                             }
                         } else {
-                            if (a.agenda_categoria == "SubstitutoFixo"){
+                            if (a.atend_fixo == "true"){
                                 Atend.findByIdAndUpdate(a._id, { $set: { 
                                     atend_valorcre : convcreval,//Convenio não paga
                                     atend_valordeb : convdebval,//Paga ao musico

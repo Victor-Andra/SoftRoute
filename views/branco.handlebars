@@ -206,7 +206,8 @@
 													<strong>
 													Agenda:
 													</strong>
-													<br>
+													<div><hr></div>
+													
 													{{#each agendas}}
 														{{#isNull agenda_obs}}
 														{{else}}
@@ -221,16 +222,12 @@
 													<strong>
 													Evoluções Ausentes:
 													</strong>
-													<br>
-													{{#each agendas}}
-														{{#isNull agenda_obs}}
-														{{else}}
-															{{agenda_obs}}
-															<br>
-														{{/isNull}}
-													{{/each}}
+													<div><hr></div>
 													
-													<br>
+													{{#each evolucaoFaltante}}
+													<div class="action-buttons"><label>{{agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label><a class="blue" class="action-buttons" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');"><i class="ace-icon fa fa-pencil bigger-130"></i></a><br></div>
+													{{/each}}
+
 												</div>
 											</div>
 										</div>

@@ -1608,36 +1608,6 @@ module.exports = {
                                     categorias = ats.atend_categoria
                                     //console.log("categorias: "+categorias);
                                     switch (categorias){
-                                        /*
-                                        case "Apoio":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Extra":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Falta":
-                                            //terapiaAtend = ats.atend_mergeterapiaid;
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Glosa":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Padrão":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Pais":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Substituição":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Supervisão":
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
-                                        case "Falta Justificada":
-                                            terapiaAtend = "break";
-                                            break;
-                                            */
                                         case "Feriado":
                                             terapiaAtend = "break";
                                             break;
@@ -1659,60 +1629,23 @@ module.exports = {
                                 if ((""+atend.atend_convid+"") == (""+convid+"")){
                                 categorias = atend.atend_categoria
                                 
-                                switch (categorias){
-                                    /*
-                                    case "Apoio":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
-                                    case "Extra":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
-                                    case "Falta":
-                                        //console.log("atend.atend_mergeterapiaid"+atend.atend_mergeterapiaid)
-                                        //if (atend.atend_mergeterapiaid){
-                                            terapiaAtend = atend.atend_mergeterapiaid;
-                                            creVal = atend.atend_mergevalorcre;
-                                        //} else {
-                                        //    terapiaAtend = atend.atend_terapiaid;
-                                        //}
-                                        //terapiaAtend = atend.atend_terapiaid;
-                                        break;
-                                    case "Glosa":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        break;
-                                    case "Padrão":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
-                                    case "Pais":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
-                                    case "Substituição":
-                                        terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
-                                        break;
-                                    case "Supervisão":
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
-                                    case "Falta Justificada":
-                                        terapiaAtend = "break";
-                                        break;
-                                        */
-                                    case "Feriado":
-                                        terapiaAtend = "break";
-                                        break;
-                                    case "SubstitutoFixo":
-                                        terapiaAtend = atend.atend_fixoterapiaid;
-                                        creVal = atend.atend_fixovalorcre;
-                                        break;
-                                    default:
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
+                                if (atend.atend_fixo == "true"){
+                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                    creVal = atend.atend_fixovalorcre;
+                                } else {
+                                    switch (categorias){
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            break;
+                                        case "SubstitutoFixo":
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            creVal = atend.atend_fixovalorcre;
+                                            break;
+                                        default:
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            creVal = atend.atend_valorcre;
+                                            break;
+                                    }
                                 }
                                 console.log("atend: "+atend)
 //Abrir comentar aqui
@@ -2092,19 +2025,24 @@ module.exports = {
                             atends.forEach((atend)=>{
                                 if ((""+atend.atend_convid+"") == (""+convid+"")){
                                 categorias = atend.atend_categoria
-                                
-                                switch (categorias){
-                                    case "Feriado":
-                                        terapiaAtend = "break";
-                                        break;
-                                    case "SubstitutoFixo":
-                                        terapiaAtend = atend.atend_mergeterapiaid;
-                                        creVal = atend.atend_mergevalorcre;
-                                        break;
-                                    default:
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        creVal = atend.atend_valorcre;
-                                        break;
+                                if (atend.atend_fixo == "true" && categorias != "Feriado"){
+                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                    creVal = atend.atend_fixovalorcre;
+                                    //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
+                                } else {
+                                    switch (categorias){
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            break;
+                                        case "SubstitutoFixo":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_fixovalorcre;
+                                            break;
+                                        default:
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            creVal = atend.atend_valorcre;
+                                            break;
+                                    }
                                 }
                                 if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
                                     let convcreval;

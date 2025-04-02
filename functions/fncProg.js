@@ -703,33 +703,33 @@ module.exports = {
                         p.dataedi = formatarData(new Date(p.prog_dataedi));
                     });
                     
-                    Notasup.find().then((notasup) => {
-                        Notasupobs.find().then((notasupobs) => {
-
-                            Progdica.find().then((progdica) => {
-                                progdica.sort(ordenarPorNome('progdica_nome'));
-            
-                                Progtipo.find().then((progtipo) => {
-                                    progtipo.sort(ordenarPorNome('progtipo_nome'));
-            
-                                    Prognivel.find().then((prognivel) => {
-                                        prognivel.sort(ordenarPorNome('prognivel_nome'));
-            
-                                        Progset.find().then((progset) => {
-                                            prog.forEach((p) => {
-                                                let total = 0;
-                                                progset.forEach((ps) => {
-                                                    if (ps.progset_progid.toString() === p._id.toString()) {
-                                                        total += parseInt(ps.progset_qtest || 0);
-                                                    }
-                                                });
-                                                p.prog_total_estimulos = total;
-                                            });
-            
-                                            Folreg.find().then((folreg) => {
-                                                
-                                                Usuario.find().then((usuario) => {
-                                                    usuario.sort(ordenarPorNome('usuario_nome'));
+                    Notasup.find({ notasup_beneid: bene._id }).then((notasup) => {
+                        Notasupobs.find({ notaSupObs_notasupId: { $in: notasup.map(n => n._id) } }).then((notasupobs) => {
+                            console.log("Estrutura de notasups:", JSON.stringify(notasup, null, 2));
+                            console.log("Estrutura de notasupobss:", JSON.stringify(notasupobs, null, 2));
+                                    Progdica.find().then((progdica) => {
+                                        progdica.sort(ordenarPorNome('progdica_nome'));
+                                            Progtipo.find().then((progtipo) => {
+                                                progtipo.sort(ordenarPorNome('progtipo_nome'));
+                        
+                                                Prognivel.find().then((prognivel) => {
+                                                    prognivel.sort(ordenarPorNome('prognivel_nome'));
+                        
+                                                    Progset.find().then((progset) => {
+                                                        prog.forEach((p) => {
+                                                            let total = 0;
+                                                            progset.forEach((ps) => {
+                                                                if (ps.progset_progid.toString() === p._id.toString()) {
+                                                                    total += parseInt(ps.progset_qtest || 0);
+                                                                }
+                                                            });
+                                                            p.prog_total_estimulos = total;
+                                                        });
+                        
+                                                        Folreg.find().then((folreg) => {
+                                                            
+                                                            Usuario.find().then((usuario) => {
+                                                                usuario.sort(ordenarPorNome('usuario_nome'));
 
                                                     // Renderização do formulário com os dados filtrados
                                                     res.render('area/aba/prog/progLisfiltrado', {

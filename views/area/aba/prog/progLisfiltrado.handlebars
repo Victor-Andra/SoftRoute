@@ -547,7 +547,7 @@
 																									</a>
 																								</span>
 																								<span class="widget-toolbar">
-																									<a class="orange" name="acaoEdi" id="acaoEdi" href="/menu/area/aba/prog/edi/{{_id}}" title="Editar programa ABA.">
+																									<a class="orange" name="acaoEdi" id="acaoEdi" title="" href="/menu/area/aba/prog/edi/{{_id}}" title="Editar programa ABA.">
 																										<i class="ace-icon fa fa-search bigger-130"></i>
 																									</a>
 																								</span>
@@ -649,17 +649,17 @@
 																								<tbody>
 																									
 																									
-																										{{#each ../notasups}}
+																										{{#each ../../notasups}}
 																											
 																												<tr>
 																													<td>
 																														<p class="alert alert-info">
 																															
-																															<label><b>Tipo:</b></label>&nbsp;&nbsp;{{notasups.notasup_tiposup}}<br>
-																															<label><b>Data:</b></label>&nbsp;&nbsp;{{../notasup_datanotasup}}<br>
+																															<label><b>Tipo:</b></label>&nbsp;&nbsp;{{this.notasup_tiposup}}&nbsp;-&nbsp;
+																															<label><b>Data:</b></label>&nbsp;&nbsp;{{this.notasup_datanotasup}}&nbsp;-&nbsp;
 																															<label><b>Hora:</b></label>&nbsp;&nbsp;{{this.notasup_horanotasup}}<br>
 																															<label><b>Supervisor:</b></label>&nbsp;&nbsp;
-																															{{#each ../../usuarios}}
+																															{{#each ../../../usuarios}}
 																																{{#ifEqual this._id ../notasup_terapeutaid}}
 																																	{{this.usuario_nome}}
 																																{{/ifEqual}}
@@ -668,16 +668,19 @@
 																													</td>
 																													<td>
 																														<p class="alert alert-danger">
-																															{{#each ../../notasupobss}}
-																																{{#ifEqual this.notaSupObs_notasupId ../_id}}
-																																	{{this.notaSupObs_analise}}<br>
+																															{{../_id}}
+																															{{#each ../../../notasupobss}}
+																																{{#ifEqual this.notaSupObs_progid _id}}
+																																	{{this.notaSupObs_analise}}
 																																{{/ifEqual}}
 																															{{/each}}
+																															
 																														</p>
+																														
 																													</td>
 																													<td>
 																														<p class="alert alert-warning">
-																															{{#each ../../notasupobss}}
+																															{{#each ../../../notasupobss}}
 																																{{#ifEqual this.notaSupObs_notasupId ../_id}}
 																																	{{this.notaSupObs_sugestao}}<br>
 																																{{/ifEqual}}
