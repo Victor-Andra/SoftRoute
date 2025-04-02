@@ -14245,7 +14245,9 @@ module.exports = {
                 aux++;
             })
         }
-    },
+    }
+    /*
+    ,
     atualizaValores(req,res){
         let cc = convcreClass.convcreCarregarTodos(req,res);
         let cd = convdebClass.convdebCarregarTodos(req,res);
@@ -14282,7 +14284,7 @@ module.exports = {
         console.log("dataIni: "+dataIni);
         console.log("dataFim: "+dataFim);
 
-        Atend.find({atend_beneid  : new ObjectId('649af06f0a761357d1e2e556'), atend_atenddata: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
+        Atend.find({atend_beneid  : new ObjectId('?'), atend_atenddata: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
 
             cc.then((convcre)=>{
                 convcre.forEach((c)=>{
@@ -14303,11 +14305,6 @@ module.exports = {
                         agendacreTes = ""+a.atend_convid + a.atend_terapiaid+""
                         agendacreTesSub = ""+a.atend_convid + a.atend_mergeterapiaid+""
                         agendacreTesFixo = ""+a.atend_convid + a.atend_fixoterapiaid+""
-                        /*
-                        console.log("agendacreTes: "+agendacreTes)
-                        console.log("agendacreTesSub: "+agendacreTesSub)
-                        console.log("agendacreTesFixo: "+agendacreTesFixo)
-                        */
                         convcre.forEach((ccre)=>{
                             convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
                             if( convcreTes == agendacreTes){
@@ -14412,6 +14409,7 @@ module.exports = {
         })
             
     }
+        */
 }
 /*
 let atualizar = agendaClass.agendaAddNovosCampos(req,res);

@@ -493,11 +493,11 @@
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#ifEqual this.atend_fixo "true"}}
-															<td><span class="label label-sm label-danger">Substituto Fixo</span></td>
-															{{else}}
-															{{#ifEqual this.atend_categoria "Feriado"}}
+														{{#ifEqual this.atend_categoria "Feriado"}}
 															<td><span class="label label-sm label-warning">Feriado</span></td>
+															{{else}}
+															{{#ifEqual this.atend_fixo "true"}}
+															<td><span class="label label-sm label-danger">Substituto Fixo</span></td>
 															{{else}}
 															<td><span class="label label-sm label-success">Padrão</span></td>
 															{{/ifEqual}}

@@ -1601,27 +1601,28 @@ module.exports = {
                             atends = [];
                             at.forEach((ats)=>{
                                 if ((""+ats.atend_convid+"") == (""+convid+"")){
-                                if (ats.atend_fixo == "true"){
-                                    terapiaAtend = ats.atend_fixoterapiaid;
-                                    //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
-                                } else {
                                     categorias = ats.atend_categoria
-                                    //console.log("categorias: "+categorias);
-                                    switch (categorias){
-                                        case "Feriado":
-                                            terapiaAtend = "break";
-                                            break;
-                                        case "SubstitutoFixo":
-                                            terapiaAtend = ats.atend_fixoterapiaid;
-                                            break;
-                                        default:
-                                            terapiaAtend = ats.atend_terapiaid;
-                                            break;
+                                    if (ats.atend_fixo == "true" && categorias != "Feriado"){
+                                        terapiaAtend = ats.atend_fixoterapiaid;
+                                        //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
+                                    } else {
+                                        
+                                        //console.log("categorias: "+categorias);
+                                        switch (categorias){
+                                            case "Feriado":
+                                                terapiaAtend = "break";
+                                                break;
+                                            case "SubstitutoFixo":
+                                                terapiaAtend = ats.atend_fixoterapiaid;
+                                                break;
+                                            default:
+                                                terapiaAtend = ats.atend_terapiaid;
+                                                break;
+                                        }
                                     }
-                                }
-                                if((""+terapiaAtend) === (""+t._id)){
-                                    atends.push(ats);
-                                }
+                                    if((""+terapiaAtend) === (""+t._id)){
+                                        atends.push(ats);
+                                    }
                                 }
                             })
                             
@@ -1629,7 +1630,7 @@ module.exports = {
                                 if ((""+atend.atend_convid+"") == (""+convid+"")){
                                 categorias = atend.atend_categoria
                                 
-                                if (atend.atend_fixo == "true"){
+                                if (atend.atend_fixo == "true" && categorias != "Feriado"){
                                     terapiaAtend = atend.atend_fixoterapiaid;
                                     creVal = atend.atend_fixovalorcre;
                                 } else {
