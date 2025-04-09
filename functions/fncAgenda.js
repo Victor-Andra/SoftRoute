@@ -7245,7 +7245,7 @@ module.exports = {
         })
     },
     carregaAgendaF(req,res){
-        this.atualizaValores(req,res);
+        //this.atualizaValores(req,res);
         let aux = 1;
         let is = false;
         let dtFill;
@@ -14246,7 +14246,6 @@ module.exports = {
             })
         }
     }
-    /*
     ,
     atualizaValores(req,res){
         let cc = convcreClass.convcreCarregarTodos(req,res);
@@ -14266,26 +14265,136 @@ module.exports = {
         let convdebvalSub;
         let convdebvalFixo;
 
-        let seg = new Date(2025, 2, 1);
-        let sex = new Date(2025, 2, 31);
-        console.log("seg: "+seg);
-        console.log("sex: "+seg);
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-        seg.setHours(seg.getHours()-3);
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-        sex.setHours(sex.getHours()-3);
-        
-        let dataIni = seg.toISOString();
-        let dataFim = sex.toISOString();
-        console.log("dataIni: "+dataIni);
-        console.log("dataFim: "+dataFim);
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
 
-        Atend.find({atend_beneid  : new ObjectId('?'), atend_atenddata: { $gte: dataIni, $lte: dataFim}}).then((atendimentos)=>{
+                break;
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
 
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                
+                break;
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            default:
+                
+                break;
+        }
+
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+            case "Beneficiario":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
+                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                break;
+            default:
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+        }
+
+        Atend.find(busca).then((atendimentos)=>{
             cc.then((convcre)=>{
                 convcre.forEach((c)=>{
                     Conv.findOne({_id: c.convcre_convid}).then((conv)=>{
@@ -14409,7 +14518,6 @@ module.exports = {
         })
             
     }
-        */
 }
 /*
 let atualizar = agendaClass.agendaAddNovosCampos(req,res);
