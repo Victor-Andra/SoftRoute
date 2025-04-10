@@ -131,7 +131,7 @@ module.exports = {
                 progset_teraid: req.body.progsetTeraid,
                 progset_progtipoid: req.body.progsetProgtipoid,
                 progset_prognivelid: req.body.progsetPrognivelid,
-                progset_num: req.body.progsetNum.toUpperCase(),
+                progset_num: req.body.progsetNum,
                 progset_dataset: req.body.progsetDataset,
                 progset_dataini: req.body.progsetDataini,
                 progset_datafin: req.body.progsetDatafin,

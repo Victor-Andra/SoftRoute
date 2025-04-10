@@ -8,7 +8,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.chart.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		
 		
@@ -17,6 +17,13 @@
 				console.log("Função carregaBody iniciada"); // Log para verificar
 				// Inicializar os gráficos
 				
+				document.getElementById("qtConvEspecifico").value = document.getElementById("qtConvEspecificoEdi").value;
+				document.getElementById("qtLiminarNao").value = document.getElementById("qtLiminarNaoEdi").value;
+				document.getElementById("qtLiminarSim").value = document.getElementById("qtLiminarSimEdi").value;
+				document.getElementById("qtAtivos").value = document.getElementById("qtAtivosEdi").value;
+
+				
+
 			}
 		</script>
 		<script>
@@ -127,6 +134,12 @@
 			<!-- PAGE CONTENT BEGINS -->
 			<form class="form" role="form"  action="" method="" onload="carregaBody();">
 				<div class="form-horizontal" role="form">
+					<div id="divCarrega" hidden >
+						<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{prog._id}}" />
+						<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{prog._id}}" />
+						<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{prog._id}}" />
+						<input type="text" id="idBeneEdi" name="idBeneEdi" value="{{prog._id}}" />
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="tabbable">
@@ -170,7 +183,7 @@
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
 														<h4 class="widget-title lighter">
-															<i class="ace-icon fa fa-pie-chart purple"></i>
+															<i class="ace-icon fa fa-child purple"></i>
 															Quantitativo dos Beneficiários
 														</h4>
 
@@ -183,17 +196,19 @@
 
 													<div class="widget-body">
 														<div class="widget-main no-padding">
+																<p class="alert alert-info">
+																	Quantos beneficiários são liminar /credenciados/ particular?
+																</p>
 															<br>
 															<!-- Área do gráfico de pizza -->
 															<div id="pie-chart" style="width:200px; height:200px; margin: 0 auto;"></div>
 															<!-- Fim da Área do gráfico de pizza -->
-															<div class="hr hr8 hr-double"></div>
 															
+															<!-- Valores calculados (já visíveis no HTML) -->
 															<div class="clearfix">
 																<div class="grid4">
 																	<span class="grey">
-																		<i class="ace-icon fa fa-home fa-2x green"></i>
-																		&nbsp; Particular
+																		<i class="ace-icon fa fa-home fa-2x green"></i>&nbsp; Particular
 																	</span><br>
 																	<h4 class="bigger pull-right">
 																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtConvEspecifico'}}{{valor}}{{/ifEqual}}{{/each}}
@@ -202,31 +217,136 @@
 
 																<div class="grid4">
 																	<span class="grey">
-																		<i class="ace-icon fa fa-gavel fa-2x red"></i>
-																		&nbsp; Liminar
+																		<i class="ace-icon fa fa-gavel fa-2x red"></i>&nbsp; Liminar
 																	</span><br>
-																	<h4 class="bigger pull-right">{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarSim'}}{{valor}}{{/ifEqual}}{{/each}}</h4>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarSim'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
 																</div>
 
 																<div class="grid4">
 																	<span class="grey">
-																		<i class="ace-icon fa fa-heartbeat fa-2x blue"></i>
-																		&nbsp; Convênios
+																		<i class="ace-icon fa fa-heartbeat fa-2x blue"></i>&nbsp; Convênios
 																	</span><br>
-																	<h4 class="bigger pull-right">{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarNao'}}{{valor}}{{/ifEqual}}{{/each}}</h4>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarNao'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
 																</div>
+
 																<div class="grid4">
 																	<span class="grey">
-																		<i class="ace-icon fa fa-university fa-2x purple"></i>
-																		&nbsp; Total
+																		<i class="ace-icon fa fa-university fa-2x purple"></i>&nbsp; Total
 																	</span><br>
-																	<h4 class="bigger pull-right">{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtAtivos'}}{{valor}}{{/ifEqual}}{{/each}}</h4>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtAtivos'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
 																</div>
 															</div>
+
+															<!-- Elemento com os dados do gráfico -->
+															<div id="pie-chart-data"
+																data-particular="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtConvEspecifico'}}{{valor}}{{/ifEqual}}{{/each}}"
+																data-convenios="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarNao'}}{{valor}}{{/ifEqual}}{{/each}}"
+																data-liminar="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarSim'}}{{valor}}{{/ifEqual}}{{/each}}">
+															</div>
+
+															<!-- Área onde o gráfico será renderizado -->
+															<div id="pie-chart" style="width: 100%; height: 300px;"></div>
+
 														</div><!-- /.widget-main -->
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
 											</div><!-- /.col -->
+											
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+												<div class="widget-box transparent">
+													<div class="widget-header widget-header-flat">
+														<h4 class="widget-title lighter">
+															<i class="ace-icon fa fa-heartbeat red"></i>
+															Quantificação por Credenciados
+														</h4>
+
+														<div class="widget-toolbar">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														</div>
+													</div>
+
+													<div class="widget-body">
+														<div class="widget-main no-padding">
+															<p class="alert alert-info">
+																	Quantidade de beneficiários por convênio
+																</p>
+																<div id="grafico-barras-conv" style="width: 100%; max-width: 900px; margin: 0 auto;">
+																</div>
+														</div><!-- /.widget-main -->
+													</div><!-- /.widget-body -->
+												</div><!-- /.widget-box -->
+											</div><!-- /.col -->
+											
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" hidden>
+												<div class="widget-box transparent">
+													<div class="widget-header widget-header-flat">
+														<h4 class="widget-title lighter">
+															<i class="ace-icon fa fa-heartbeat red"></i>
+															Quantificação por Credenciados
+														</h4>
+
+														<div class="widget-toolbar">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														</div>
+													</div>
+
+													<div class="widget-body">
+														<div class="widget-main no-padding">
+															<p class="alert alert-info">
+																Quantidade de beneficiários por convênio
+															</p>
+															<br>
+															<div class="hr hr8 hr-double"></div>
+																<table class="table table-bordered table-striped">
+																	<thead class="thin-border-bottom">
+																		<tr>
+																			<th>
+																				<i class="ace-icon fa fa-caret-right blue"></i>Convênios
+																			</th>
+
+																			<th>
+																				<i class="ace-icon fa fa-caret-right blue"></i>Quantidades
+																			</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{{#each convs}}
+																		<tr>
+																			<td>{{conv_nome}}</td>
+																			{{#each ../arrayRelQtValors}}
+																			{{#ifEqual ../_id idlocal}}
+																			<td style="text-align: right;">
+																				<b class="green">{{valor}}</b>
+																			{{/ifEqual}}
+																			</td>
+																			{{/each}}
+																		</tr>
+																		{{/each}}
+																	</tbody>
+																	<tfoot>
+																		<tr>
+																			<td>Total</td>
+																			<td style="text-align: right;">
+																				<b class="blue">{{totalBene}}</b>
+																			</td>
+																		</tr>
+																	</tfoot>
+																</table>
+														</div><!-- /.widget-main -->
+													</div><!-- /.widget-body -->
+												</div><!-- /.widget-box -->
+											</div><!-- /.col -->
+											
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
@@ -244,7 +364,10 @@
 
 													<div class="widget-body">
 														<div class="widget-main no-padding">
-															<br>
+															<p class="alert alert-info">
+																Evolução Mensal das quantidades des Beneficiários
+																<span class="badge badge-warning">Em Desenvolvimento</span>
+															</p>
 															<!-- Área do gráfico de pizza -->
 															<div id="meuGraficoDeBarras" style="width: 100%; max-width: 900px; margin: 0 auto;"></div>
 															<!-- Fim da Área do gráfico de pizza -->
@@ -265,12 +388,35 @@
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
 											</div><!-- /.col -->
+										</div>	
+										
+									</div>
+									<div id="sessoes" class="tab-pane fade">
+										<div class="row">
+											
+											
+											
+										</div><!-- /.row -->
+									</div>
+									<div id="terapias" class="tab-pane fade">
+										<div class="row">
+											
+											
+											
+										</div><!-- /.row -->
+									</div>
+									<div id="terapeutas" class="tab-pane fade">
+									
+									</div>
+
+									<div id="fat" class="tab-pane fade">
+										<div class="row">
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
 														<h4 class="widget-title lighter">
-															<i class="ace-icon fa fa-heartbeat red"></i>
-															Quantificação por Convênios
+															<i class="ace-icon fa fa-child purple"></i>
+															Faturamento por Categoria de Beneficiários
 														</h4>
 
 														<div class="widget-toolbar">
@@ -282,233 +428,74 @@
 
 													<div class="widget-body">
 														<div class="widget-main no-padding">
+																<p class="alert alert-info">
+																	Qual o faturamento são liminar /credenciados/ particular??
+																</p>
 															<br>
-															<div class="hr hr8 hr-double"></div>
-																<table class="table table-bordered table-striped">
-																<thead class="thin-border-bottom">
-																	<tr>
-																		<th>
-																			<i class="ace-icon fa fa-caret-right blue"></i>Convênios
-																		</th>
-
-																		<th>
-																			<i class="ace-icon fa fa-caret-right blue"></i>Quantidades
-																		</th>
-																	</tr>
-																</thead>
-
-																<tbody>
-																	{{#each convs}}
-																		
-																	<tr>
-																		<td>{{conv_nome}}</td>
-																		{{#each ../arrayRelQtValors}}
-																		{{#ifEqual ../_id idlocal}}
-																		<td style="text-align: right;">
-																			<b class="green">{{valor}}</b>
-																		{{/ifEqual}}
-																		</td>
-																		{{/each}}
-																	</tr>
-																	{{/each}}
-																		
-																</tbody>
-																<tfoot>
-																		<tr>
-																			<td>Total</td>
-
-																			<td style="text-align: right;">
-																				<b class="blue">{{totalBene}}</b>
-																			</td>
-																		</tr>
-																	</tfoot>
-															</table>
-															<div id="grafico-barras-conv" style="width: 100%; max-width: 900px; margin: 0 auto;"></div>
-														</div><!-- /.widget-main -->
-													</div><!-- /.widget-body -->
-												</div><!-- /.widget-box -->
-											</div><!-- /.col -->
-										</div>	
-										
-									</div>
-									<div id="sessoes" class="tab-pane fade">
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-												<div class="widget-box transparent">
-													<div class="widget-header widget-header-flat">
-														<h4 class="widget-title lighter">
-															<i class="ace-icon fa fa-star orange"></i>
-															Distribuição dos Colaboradores
-														</h4>
-
-														<div class="widget-toolbar">
-															<a href="#" data-action="collapse">
-																<i class="ace-icon fa fa-chevron-up"></i>
-															</a>
-														</div>
-													</div>
-
-													<div class="widget-body">
-														<div class="widget-main no-padding" style="">
-																<br>
-																<div class="infobox infobox-green">
-																	<div class="infobox-icon">
-																		<i class="ace-icon fa fa-tty"></i>
-																	</div>
-
-																	<div class="infobox-data">
-																		<span class="infobox-data-number">24</span>
-																		<div class="infobox-content">Administrativos</div>
-																	</div>
-
-																	<div class="stat stat-success">24%</div>
-																</div>
-
-																<div class="infobox infobox-blue">
-																	<div class="infobox-icon">
-																		<i class="ace-icon fa fa-stethoscope"></i>
-																	</div>
-
-																	<div class="infobox-data">
-																		<span class="infobox-data-number">42</span>
-																		<div class="infobox-content">Terapeutas</div>
-																	</div>
-
-																	<div class="stat stat-success">56%</div>
-																	
-																</div>
-
-																<div class="infobox infobox-pink">
-																	<div class="infobox-icon">
-																		<i class="ace-icon fa fa-user-secret"></i>
-																	</div>
-
-																	<div class="infobox-data">
-																		<span class="infobox-data-number">8</span>
-																		<div class="infobox-content">Supervisão</div>
-																	</div>
-																	<div class="stat stat-important">10%</div>
-																</div>
-																<div class="infobox infobox-red">
-																	<div class="infobox-icon">
-																		<i class="ace-icon fa fa-star"></i>
-																	</div>
-
-																	<div class="infobox-data">
-																		<span class="infobox-data-number">2</span>
-																		<div class="infobox-content">Estratégico</div>
-																	</div>
-																	<div class="stat stat-important">1%</div>
-																</div>
-																
-
-																
-																
-
-																<div class="space-6"></div>
-
-																<div class="infobox infobox-green infobox-small infobox-dark">
-																	<div class="infobox-progress">
-																		<div class="easy-pie-chart percentage" data-percent="61" data-size="39">
-																			<span class="percent">61</span>%
-																		</div>
-																	</div>
-
-																	<div class="infobox-data">
-																		<div class="infobox-content">Task</div>
-																		<div class="infobox-content">Completion</div>
-																	</div>
-																</div>
-
-																<div class="infobox infobox-blue infobox-small infobox-dark">
-																	<div class="infobox-chart">
-																		<span class="sparkline" data-values="3,4,2,3"></span>
-																	</div>
-																	<div class="infobox-data">
-																		<div class="infobox-content">Earnings</div>
-																		<div class="infobox-content">$32,000</div>
-																	</div>
-																</div>
-
-																<div class="infobox infobox-grey infobox-small infobox-dark">
-																	<div class="infobox-icon">
-																		<i class="ace-icon fa fa-download"></i>
-																	</div>
-
-																	<div class="infobox-data">
-																		<div class="infobox-content">Downloads</div>
-																		<div class="infobox-content">1,205</div>
-																	</div>
-																</div>
+															<!-- Área do gráfico de pizza -->
+																<canvas id="stackedPieChartFatCategBene" width="200" height="200"></canvas>
+															<!-- Fim da Área do gráfico de pizza -->
 															
+															<!-- Valores calculados (já visíveis no HTML) -->
+															<div class="clearfix">
+																<div class="grid4">
+																	<span class="grey">
+																		<i class="ace-icon fa fa-home fa-2x green"></i>&nbsp; Particular
+																	</span><br>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtConvEspecifico'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
+																</div>
+
+																<div class="grid4">
+																	<span class="grey">
+																		<i class="ace-icon fa fa-gavel fa-2x red"></i>&nbsp; Liminar
+																	</span><br>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarSim'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
+																</div>
+
+																<div class="grid4">
+																	<span class="grey">
+																		<i class="ace-icon fa fa-heartbeat fa-2x blue"></i>&nbsp; Convênios
+																	</span><br>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarNao'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
+																</div>
+
+																<div class="grid4">
+																	<span class="grey">
+																		<i class="ace-icon fa fa-university fa-2x purple"></i>&nbsp; Total
+																	</span><br>
+																	<h4 class="bigger pull-right">
+																		{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtAtivos'}}{{valor}}{{/ifEqual}}{{/each}}
+																	</h4>
+																</div>
+															</div>
+
+															<!-- Elemento com os dados do gráfico -->
+															<div id="pie-chart-data"
+																data-particular="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtConvEspecifico'}}{{valor}}{{/ifEqual}}{{/each}}"
+																data-convenios="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarNao'}}{{valor}}{{/ifEqual}}{{/each}}"
+																data-liminar="{{#each qtregsbenefiltrados}}{{#ifEqual campo 'qtLiminarSim'}}{{valor}}{{/ifEqual}}{{/each}}">
+															</div>
+
+															<!-- Área onde o gráfico será renderizado -->
+															<div id="pie-chart" style="width: 100%; height: 300px;"></div>
 
 														</div><!-- /.widget-main -->
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
 											</div><!-- /.col -->
 											
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-												<div class="widget-box transparent">
-													<div class="widget-header widget-header-flat">
-														<h4 class="widget-title lighter">
-															<i class="ace-icon fa fa-star orange"></i>
-															Gráfico Quantitativo dos Beneficiários
-														</h4>
-
-														<div class="widget-toolbar">
-															<a href="#" data-action="collapse">
-																<i class="ace-icon fa fa-chevron-up"></i>
-															</a>
-														</div>
-													</div>
-
-													<div class="widget-body">
-														<div class="widget-main no-padding">
-															<br>
-															<!-- Área do gráfico de pizza -->
-															<div id="pie-chart" style="width:200px; height:200px; margin: 0 auto;"></div>
-															<!-- Fim da Área do gráfico de pizza -->
-															<div class="hr hr8 hr-double"></div>
-
-															<div class="clearfix">
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-home fa-2x purple"></i>
-																		&nbsp; Particular
-																	</span>
-																	<h4 class="bigger pull-right">20</h4>
-																</div>
-
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-gavel fa-2x blue"></i>
-																		&nbsp; Liminar
-																	</span>
-																	<h4 class="bigger pull-right">60</h4>
-																</div>
-
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-heartbeat fa-2x red"></i>
-																		&nbsp; Convênios
-																	</span>
-																	<h4 class="bigger pull-right">140</h4>
-																</div>
-																
-															</div>
-															
-
-														</div><!-- /.widget-main -->
-													</div><!-- /.widget-body -->
-												</div><!-- /.widget-box -->
-											</div><!-- /.col -->
-										
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
 														<h4 class="widget-title lighter">
-															<i class="ace-icon fa fa-star orange"></i>
-															Distribuição da Entrada das Receitas
+															<i class="ace-icon fa fa-heartbeat red"></i>
+															Quantificação por Credenciados
 														</h4>
 
 														<div class="widget-toolbar">
@@ -520,110 +507,19 @@
 
 													<div class="widget-body">
 														<div class="widget-main no-padding">
-															<table class="table table-bordered table-striped">
-																<thead class="thin-border-bottom">
-																	<tr>
-																		<th>
-																			<i class="ace-icon fa fa-caret-right blue"></i>Tipo
-																		</th>
-
-																		<th>
-																			<i class="ace-icon fa fa-caret-right blue"></i>Valor
-																		</th>
-
-																		<th class="hidden-480">
-																			<i class="ace-icon fa fa-caret-right blue"></i>status
-																		</th>
-																	</tr>
-																</thead>
-
-																<tbody>
-																	<tr>
-																		<td>Particular</td>
-
-																		<td style="text-align: right;">
-																			<b class="green">70.342,00</b>
-																		</td>
-
-																		<td class="hidden-480">
-																			<span class="label label-info arrowed-right arrowed-in">on sale</span>
-																		</td>
-																	</tr>
-
-																	<tr>
-																		<td>Convênios</td>
-
-																		<td style="text-align: right;">
-																			<b class="green">145.415,17</b>
-																		</td>
-
-																		<td class="hidden-480">
-																			<span class="label label-success arrowed-in arrowed-in-right">approved</span>
-																		</td>
-																	</tr>
-
-																	<tr>
-																		<td>Liminar</td>
-
-																		<td style="text-align: right;">
-																			<b class="green">45.123,87</b>
-																		</td>
-
-																		<td class="hidden-480">
-																			<span class="label label-danger arrowed">pending</span>
-																		</td>
-																	</tr>
-
-																	<tr>
-																		<td>Outros</td>
-
-																		<td style="text-align: right;">
-																			
-																			<b class="green" >22.114,45</b>
-																		</td>
-
-																		<td class="hidden-480">
-																			<span class="label arrowed">
-																				<s>out of stock</s>
-																			</span>
-																		</td>
-																	</tr>
-
-																	<tr>
-																		<td>Total</td>
-
-																		<td style="text-align: right;">
-																			<b class="blue">282.995,49</b>
-																		</td>
-
-																		<td class="hidden-480">
-																			<span class="label label-warning arrowed arrowed-right">SOLD</span>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>
+															<p class="alert alert-info">
+																	Quantidade de beneficiários por convênio
+																</p>
+																<div id="stackedBarrasChartFatConv" style="width: 100%; max-width: 900px; margin: 0 auto;"></div>
+																</div>
 														</div><!-- /.widget-main -->
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
 											</div><!-- /.col -->
-										</div><!-- /.row -->
-									</div>
-									<div id="terapias" class="tab-pane fade">
-									
-										<div class="infobox infobox-blue infobox-small">
-											<div class="infobox-chart">
-												<span class="sparkline" data-values="4,7,2,3"></span>
-											</div>
-											<div class="infobox-data">
-												<div class="infobox-content">Earnings</div>
-												<div class="infobox-content">$32,000</div>
-											</div>
 										</div>
 									</div>
-									<div id="terapeutas" class="tab-pane fade">
-									
-									</div>
-									<div id="fat" class="tab-pane fade">
+
+									<div id="fat-temp" class="tab-pane fade">
 										<div class="row">
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
 												<div class="widget-box transparent">
@@ -731,7 +627,7 @@
 													<div class="widget-header widget-header-flat">
 														<h4 class="widget-title lighter">
 															<i class="ace-icon fa fa-star orange"></i>
-															gráfico pizza
+															grafico pizza categorizada chartPie
 														</h4>
 
 														<div class="widget-toolbar">
@@ -742,48 +638,18 @@
 													</div>
 
 													<div class="widget-body">
-														<div class="widget-main no-padding">
-															<br>
-															<!-- Área do gráfico de pizza -->
-															<div id="pie-chart2" style="width:200px; height:200px; margin: 0 auto;"></div>
-															<!-- Fim da Área do gráfico de pizza -->
-															<div class="hr hr8 hr-double"></div>
-
-															<div class="clearfix">
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-home fa-2x purple"></i>
-																		&nbsp; Particular
-																	</span>
-																	<h4 class="bigger pull-right">20</h4>
-																</div>
-
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-gavel fa-2x blue"></i>
-																		&nbsp; Liminar
-																	</span>
-																	<h4 class="bigger pull-right">60</h4>
-																</div>
-
-																<div class="grid3">
-																	<span class="grey">
-																		<i class="ace-icon fa fa-heartbeat fa-2x red"></i>
-																		&nbsp; Convênios
-																	</span>
-																	<h4 class="bigger pull-right">140</h4>
-																</div>
-																
+														<div class="widget-main no-padding" style="">
+															<div style="width: 100%;">
+																<canvas id="stackedPieChart-Simples" width="400" height="200"></canvas>
 															</div>
-															
-
 														</div><!-- /.widget-main -->
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
-											</div><!-- /.col -->
+											</div>
+
 										</div>
 										<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
 												<div class="widget-box transparent">
 													<div class="widget-header widget-header-flat">
 														<h4 class="widget-title lighter">
@@ -807,6 +673,31 @@
 													</div><!-- /.widget-body -->
 												</div><!-- /.widget-box -->
 												
+											</div>
+										
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+												<div class="widget-box transparent">
+													<div class="widget-header widget-header-flat">
+														<h4 class="widget-title lighter">
+															<i class="ace-icon fa fa-star orange"></i>
+															Gráfico Pizza Apex
+														</h4>
+
+														<div class="widget-toolbar">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+														</div>
+													</div>
+
+													<div class="widget-body">
+														<div class="widget-main no-padding" style="">
+															<div style="width: 100%;">
+																<div id="graficoPizzaApex" style="width: 100%; max-width: 900px; margin: 0 auto;"></div>
+															</div>
+														</div><!-- /.widget-main -->
+													</div><!-- /.widget-body -->
+												</div><!-- /.widget-box -->
 											</div>
 										</div>
 										<div class="row">
@@ -851,108 +742,88 @@
 			<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		<script>
-			$(document).ready(function () {
-				console.log("gráfico de pizza 1 carregado");
+			document.addEventListener("DOMContentLoaded", function () {
+				// Seleciona a div que contém os atributos data-*
+				const pieChartData = document.getElementById("pie-chart-data");
 
-				function drawPieChart() {
-					console.log("Desenhando o gráfico de pizza...");
+				// Obtém os valores dos atributos data-*
+				const particular = pieChartData.getAttribute("data-particular");
+				const convenios = pieChartData.getAttribute("data-convenios");
+				const liminar = pieChartData.getAttribute("data-liminar");
+				const total = pieChartData.getAttribute("data-total");
 
-					// Dados dinâmicos do back-end
-					var particular = {{qtregsbenefiltrados.qtConvEspecifico}} || 0;
-					var convenios = {{qtregsbenefiltrados.qtLiminarNao}} || 0;
-					var liminar = {{qtregsbenefiltrados.qtLiminarSim}} || 0;
-
-					var data = [
-						{ label: "Particular", data: particular, color: "#1abc9c" },
-						{ label: "Convênios", data: convenios, color: "#3498db" },
-						{ label: "Liminar", data: liminar, color: "#e74c3c" }
-					];
-
-					var options = {
-						series: {
-							pie: {
-								show: true,
-								radius: 1,
-								label: {
-									show: true,
-									radius: 3 / 4,
-									formatter: function (label, series) {
-										return `<div style="font-size:12px; text-align:center; padding:5px; color:white;">${label}<br>${Math.round(series.percent)}%</div>`;
-									},
-									background: {
-										opacity: 0.5,
-										color: '#000'
-									}
-								}
-							}
-						},
-						legend: { show: false }
-					};
-
-					if ($("#pie-chart").length > 0) {
-						$.plot($("#pie-chart"), data, options);
-						console.log("Gráfico desenhado com sucesso");
-					} else {
-						console.log("Elemento #pie-chart não encontrado");
-					}
-				}
-
-        drawPieChart();
-    });
-</script>
-		<script>
-			$(document).ready(function () {
-				console.log("gráfico de pizza 2 carregado");
-
-				function drawPieChart2() {
-					console.log("Desenhando o gráfico de pizza 2...");
-					var data = [
-						{ label: "Particular", data: 200, color: "#1abc9c" },
-						{ label: "Bradesco", data: 100, color: "#3498db" },
-						{ label: "AMIL", data: 310, color: "#e74c3c" },
-						{ label: "FACHESF", data: 300, color: "#1abc9c" },
-						{ label: "Porto Seguro", data: 60, color: "#3498db" },
-						{ label: "Petrobrás", data: 70, color: "#e74c3c" },
-						{ label: "SASSEPE", data: 100, color: "#1abc9c" },
-						{ label: "SULAMÉRICA", data: 120, color: "#3498db" },
-						{ label: "TRT6 Saúde", data: 30, color: "#e74c3c" },
-						{ label: "UNIMED P.Alegre", data: 20, color: "#1abc9c" },
-						{ label: "UNIMED S.Catarina", data: 30, color: "#3498db" },
-						{ label: "Hapvida", data: 160, color: "#e74c3c" }
-					];
-
-					var options = {
-						series: {
-							pie: {
-								show: true,
-								radius: 1,
-								label: {
-									show: true,
-									radius: 3 / 4,
-									formatter: function (label, series) {
-										return `<div style="font-size:12px; text-align:center; padding:5px; color:white;">${label}<br>${Math.round(series.percent)}%</div>`;
-									},
-									background: {
-										opacity: 0.5,
-										color: '#000'
-									}
-								}
-							}
-						},
-						legend: { show: false }
-					};
-
-					if ($("#pie-chart2").length > 0) {
-						$.plot($("#pie-chart2"), data, options);
-						console.log("Gráfico 2 desenhado com sucesso");
-					} else {
-						console.log("Elemento #pie-chart 2 não encontrado");
-					}
-				}
-
-				drawPieChart2();
+				// Preenche os inputs com os valores obtidos
+				document.getElementById("qtConvEspecifico").value = particular;
+				document.getElementById("qtLiminarNao").value = convenios;
+				document.getElementById("qtLiminarSim").value = liminar;
+				document.getElementById("qtAtivos").value = total;
 			});
 		</script>
+		<script>
+			$(document).ready(function () {
+			console.log("gráfico de pizza 1 carregado");
+
+			function drawPieChart() {
+				console.log("Desenhando o gráfico de pizza...");
+
+				// Recuperar os valores dos atributos data-* usando .attr()
+				var particular = parseFloat($("#pie-chart-data").attr("data-particular")) || 0;
+				var convenios = parseFloat($("#pie-chart-data").attr("data-convenios")) || 0;
+				var liminar = parseFloat($("#pie-chart-data").attr("data-liminar")) || 0;
+
+				console.log("Particular (antes da conversão):", $("#pie-chart-data").attr("data-particular"));
+				console.log("Convênios (antes da conversão):", $("#pie-chart-data").attr("data-convenios"));
+				console.log("Liminar (antes da conversão):", $("#pie-chart-data").attr("data-liminar"));
+
+				console.log("Particular da função:", particular);
+				console.log("Convênios da função:", convenios);
+				console.log("Liminar da função:", liminar);
+
+				// Verificar se os valores foram convertidos corretamente
+				if (isNaN(particular) || isNaN(convenios) || isNaN(liminar)) {
+					console.error("Erro: Os valores não são números válidos.");
+					return;
+				}
+
+				var data = [
+					{ label: "Particular", data: particular, color: "#1abc9c" },
+					{ label: "Convênios", data: convenios, color: "#3498db" },
+					{ label: "Liminar", data: liminar, color: "#e74c3c" }
+				];
+
+				var options = {
+					series: {
+						pie: {
+							show: true,
+							radius: 1,
+							label: {
+								show: true,
+								radius: 3 / 4,
+								formatter: function (label, series) {
+									return `<div style="font-size:12px; text-align:center; padding:5px; color:white;">${label}<br>${Math.round(series.percent)}%</div>`;
+								},
+								background: {
+									opacity: 0.5,
+									color: '#000'
+								}
+							}
+						}
+					},
+					legend: { show: false }
+				};
+
+				if ($("#pie-chart").length > 0) {
+					$.plot($("#pie-chart"), data, options);
+					console.log("Gráfico desenhado com sucesso");
+				} else {
+					console.error("Elemento #pie-chart não encontrado");
+				}
+			}
+
+			drawPieChart();
+		});
+		</script>
+
 		<script>
 			function initEasySparkline() {
 				console.log("Iniciando Sparkline");
@@ -998,6 +869,7 @@
 				});
 			}
 		</script>
+		
 		<script>
 			function initBargraf() {
 				console.log("Iniciando gráfico de barras...");
@@ -1051,6 +923,63 @@
 				console.log("Gráfico de barras renderizado com sucesso!");
 			}
    		</script>
+
+		<script>//stackedPieChartFatCategBene
+			document.addEventListener("DOMContentLoaded", function () {
+				const ctx = document.getElementById('stackedPieChartFatCategBene').getContext('2d');
+
+				const dataValues = [2000.00, 500.00, 1000.00];
+
+				new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: ['Credenciados', 'Particular', 'Liminar'],
+						datasets: [{
+							data: dataValues,
+							backgroundColor: [
+								'rgba(0, 255, 0, 0.5)',
+								'rgba(255, 255, 0, 0.5)',
+								'rgba(255, 99, 132, 0.5)'
+							],
+							hoverOffset: 4
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							datalabels: {
+								formatter: (value, context) => {
+									const total = context.chart._metasets[0].total;
+									const percentage = ((value / total) * 100).toFixed(1) + '%';
+									return percentage;
+								},
+								color: '#000',
+								font: {
+									weight: 'bold',
+									size: 14
+								}
+							},
+							legend: {
+								position: 'top',
+							},
+							tooltip: {
+								callbacks: {
+									label: function (context) {
+										const value = context.raw;
+										const total = context.chart._metasets[0].total;
+										const percentage = ((value / total) * 100).toFixed(1) + '%';
+										return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${percentage})`;
+									}
+								}
+							}
+						}
+					},
+					plugins: [ChartDataLabels]
+				});
+			});
+		</script>
+
+
 		<script>
 			function initBargrafconv() {
 				console.log("Iniciando gráfico de barras...");
@@ -1093,6 +1022,7 @@
 					console.log("Gráfico de barras renderizado com sucesso!");
 				}
 		</script>
+		
 		<script>
 		function renderMeuGraficoDeBarras() {
 		console.log("Iniciando gráfico de barras com ApexCharts...");
@@ -1173,39 +1103,54 @@
 		</script>
 
 		<script>
-			// Chama a função para inicializar o gráfico
-			function graficobarrasconv() {
-				// Dados do gráfico
+			// Dados gerados no backend graficobarrasconv
+			
+			const nomes = [
+				{{#each convs}}
+					"{{conv_nome}}"{{#unless @last}},{{/unless}}
+				{{/each}}
+			];
+
+			const quantidades = [
+				{{#each convs}}
+					{{#each ../arrayRelQtValors}}
+						{{#ifEqual ../_id idlocal}}
+							{{valor}}{{#unless @last}},{{/unless}}
+						{{/ifEqual}}
+					{{/each}}
+				{{/each}}
+			];
+		</script>
+		
+		<script>
+			function graficobarrasconv(){
 				const dados = {
-					nomes: ["Convênio A", "Convênio B", "Convênio C", "Convênio D", "Convênio E"], // Nomes (eixo Y)
-					quantidades: [30, 45, 60, 25, 50] // Quantidades (eixo X)
+					nomes: nomes, // vindo do template
+					quantidades: quantidades
 				};
 
-				// Configurações do gráfico
 				const options = {
 					series: [{
-						name: "Quantidade",
-						data: dados.quantidades // Dados das quantidades
+						name: "Qt",
+						data: dados.quantidades
 					}],
 					chart: {
-						type: 'bar', // Tipo de gráfico (barras)
-						height: 350, // Altura do gráfico
-						toolbar: {
-							show: true // Mostrar ferramentas de interação
-						}
+						type: 'bar',
+						height: 450,
+						toolbar: { show: true }
 					},
 					plotOptions: {
 						bar: {
-							horizontal: true // Barras horizontais
+							horizontal: true
 						}
 					},
 					dataLabels: {
-						enabled: true // Mostrar valores nas barras
+						enabled: true
 					},
 					xaxis: {
-						categories: dados.nomes, // Nomes no eixo Y
+						categories: dados.nomes,
 						title: {
-							text: 'Quantidades', // Título do eixo X
+							text: 'Beneficiários',
 							style: {
 								fontSize: '14px',
 								fontWeight: 'bold'
@@ -1214,33 +1159,164 @@
 					},
 					yaxis: {
 						title: {
-							text: 'Convênios', // Título do eixo Y
+							text: '',
 							style: {
 								fontSize: '14px',
 								fontWeight: 'bold'
 							}
 						}
 					},
-					colors: ['#00E396'], // Cor das barras
+					colors: ['#00E396'],
 					tooltip: {
-						enabled: true, // Mostrar tooltips ao passar o mouse
-						style: {
-							fontSize: '12px'
-						},
+						enabled: true,
 						y: {
 							formatter: function (value) {
-								return value + " unidades"; // Formatação do tooltip
+								return value + " Beneficiários";
 							}
 						}
 					}
 				};
 
-				// Renderizar o gráfico
 				const chart = new ApexCharts(document.querySelector("#grafico-barras-conv"), options);
 				chart.render();
 			}
+
 		</script>
-</script>
+
+		<script>
+			// Dados gerados no backend stackedBarrasChartFatConv
+			
+			const fatconvnome = [
+				{{#each convs}}
+					"{{conv_nome}}"{{#unless @last}},{{/unless}}
+				{{/each}}
+			];
+
+			const fatconvval = [
+				{{#each convs}}
+					{{#each ../arrayRelQtValors}}
+						{{#ifEqual ../_id idlocal}}
+							{{valor}}{{#unless @last}},{{/unless}}
+						{{/ifEqual}}
+					{{/each}}
+				{{/each}}
+			];
+
+			const fatconvvalinter = [
+				{{#each convs}}
+					{{#each ../arrayRelQtValors}}
+						{{#ifEqual ../_id idlocal}}
+							{{valor}}{{#unless @last}},{{/unless}}
+						{{/ifEqual}}
+					{{/each}}
+				{{/each}}
+			];
+		</script>
+
+		<script>
+			function stackedBarrasChartFatConv(){
+				const dados = {
+					nomes: fatconvnome, // vindo do template
+					valores: fatconvval
+				};
+
+				const options = {
+					series: [{
+						name: "Valor",
+						data: dados.valores
+					}],
+					chart: {
+						type: 'bar',
+						height: 450,
+						toolbar: { show: true }
+					},
+					plotOptions: {
+						bar: {
+							horizontal: true
+						}
+					},
+					dataLabels: {
+						enabled: true
+					},
+					xaxis: {
+						categories: dados.nomes,
+						title: {
+							text: 'Beneficiários',
+							style: {
+								fontSize: '14px',
+								fontWeight: 'bold'
+							}
+						}
+					},
+					yaxis: {
+						title: {
+							text: '',
+							style: {
+								fontSize: '14px',
+								fontWeight: 'bold'
+							}
+						}
+					},
+					colors: ['#00E396'],
+					tooltip: {
+						enabled: true,
+						y: {
+							formatter: function (value) {
+								return value + " Beneficiários";
+							}
+						}
+					}
+				};
+
+				const chart = new ApexCharts(document.querySelector("#stackedBarrasChartFatConv"), options);
+				chart.render();
+			}
+
+		</script>
+	
+		<script>
+			function graficoPieApex() {
+				// Dados para o gráfico
+				const options = {
+					chart: {
+						type: 'pie', // Tipo de gráfico (pizza)
+						height: 350, // Altura do gráfico
+					},
+					series: [12500, 10000, 3000, 5000, 8000], // Valores das fatias
+					labels: ['Produto A', 'Produto B', 'Produto C', 'Produto D', 'Produto E'], // Rótulos das fatias
+					colors: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'], // Cores personalizadas
+					legend: {
+						position: 'left', // Posição da legenda
+						fontSize: '18px', // Tamanho da fonte da legenda
+					},
+					title: {
+						text: 'Total de Vendas por Produto', // Título do gráfico
+						align: 'center',
+						style: {
+							fontSize: '24px', // Tamanho da fonte do título
+						},
+					},
+					tooltip: {
+						y: {
+							formatter: function (value) {
+								return 'R$ ' + value.toLocaleString('pt-BR', {
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2,
+								});
+							},
+						},
+					},
+				};
+
+				// Renderizar o gráfico
+				const chart = new ApexCharts(document.querySelector("#graficoPizzaApex"), options);
+				chart.render();
+			}
+
+			// Executar a função quando o DOM estiver carregado
+			document.addEventListener("DOMContentLoaded", graficoPieApex);
+		</script>
+
 		<script>
 			$(document).ready(function () {
 				
@@ -1249,6 +1325,8 @@
 				initBargrafconv(); // Certifique-se de chamar a função aqui
 				renderMeuGraficoDeBarras();
 				graficobarrasconv();
+				graficoPieApex();
+				stackedBarrasChartFatConv();
 			});
 		</script>
 		

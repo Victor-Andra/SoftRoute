@@ -426,6 +426,9 @@ module.exports = {
         })
     },
     filtraAtend(req, res){
+        if (req.body.atualizaValores == "true"){
+            fncAgenda.atualizaValores(req,res);
+        }
         let fulldate;
         let tipoPessoa = req.body.atendTipoPessoa;
         let tipoData = req.body.tipoData;

@@ -512,7 +512,7 @@
 																										<a href="#" data-action="">
 																											<i class="red ace-icon fa fa-hourglass-o bigger-130"></i>
 																										</a>
-																										<span class="badge badge-warningaaaaaaaaaaaaaaaaaaaaaaa">&nbsp;
+																										<span class="badge badge-warning">&nbsp;
 																										{{this.prog_status}}
 																										{{else}}
 																											{{#ifEqual this.prog_status "Inicio"}}
@@ -668,9 +668,8 @@
 																													</td>
 																													<td>
 																														<p class="alert alert-danger">
-																															{{../_id}}
 																															{{#each ../../../notasupobss}}
-																																{{#ifEqual this.notaSupObs_progid _id}}
+																																{{#ifEqual this.notaSupObs_progid ../_id}}
 																																	{{this.notaSupObs_analise}}
 																																{{/ifEqual}}
 																															{{/each}}

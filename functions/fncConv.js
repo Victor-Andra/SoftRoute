@@ -13,7 +13,6 @@ const estadoClass = require("../models/estado")
 const Usuario = mongoose.model("tb_usuario")
 const Estado = mongoose.model("tb_estado")
 
-
 module.exports = {
     carregaConv(req,res){
         Estado.find().then((estado)=>{
@@ -90,8 +89,11 @@ module.exports = {
     carregaConvEdi(req, res){
         Conv.findById(req.params.id).then((conv) =>{
             console.log(conv)
-            res.render('convenio/conv/convEdi', conv)
-        }).catch((err) =>{
+                Estado.find().then((estado)=>{
+                    console.log(estado)
+            res.render("convenio/conv/convEdi", {conv, estados: estado})
+        })
+    }).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })

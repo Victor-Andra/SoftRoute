@@ -221,6 +221,18 @@
 					document.getElementById("btnDeleteMany").style.display = "none";
 				}
 			}
+			function callAtualizarValores(){
+				let confirmado = confirm("Quer mesmo atualizar todos os atendimentos encontrados com essa pesquisa?");
+				if(confirmado == true){
+					let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+					if(confirmado == true){
+						console.log("idsSelecionados: "+idsSelecionados);
+						document.getElementById("atualizaValores").value = "true";
+						document.getElementById("divFormPesquisa").action = "/menu/menu/atendimento/lisF/";
+						document.getElementById("divFormPesquisa").submit();
+					}
+				}
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
@@ -251,6 +263,7 @@
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
 						<input id="idsChecked" value="" />
+						<input id="atualizaValores" value="false" />
 					</div>
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
@@ -362,6 +375,10 @@
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
 										Pesquisar
+									</button>
+									<button name="acaoAtualizarValores" id="acaoAtualizarValores" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:callAtualizarValores();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Atualizar Valores
 									</button>
 									<button id="btnEnviarCopia" name="acaoCopiar" id="acaoCopiar" class="btn btn-xs btn-info" style="margin-left: 25px;display: none;" onclick="javascript:enviarCopia();">
 										<i class="ace-icon fa fa-search-plus "></i>
