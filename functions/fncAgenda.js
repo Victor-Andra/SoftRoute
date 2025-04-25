@@ -7256,11 +7256,9 @@ module.exports = {
         let sexta;
         let seg = new Date();
         let sex = new Date();
-        seg.setDate(21);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
-        sex.setDate(21);
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
