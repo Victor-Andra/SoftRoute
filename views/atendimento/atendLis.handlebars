@@ -3,7 +3,32 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Atendimentos</title>
+		<style>
+			/* Tooltip personalizado */
+			.custom-tooltip .tooltip-text {
+				visibility: hidden; /* Inicialmente oculto */
+				width: auto; /* Ajusta automaticamente ao conteúdo */
+				background-color: rgb(243, 223, 223); /* Fundo escuro para contraste */
+				color: red; /* Cor do texto vermelha */
+				font-size: 6px; /* Tamanho da fonte pequena */
+				text-align: center;
+				padding: 2px 5px; /* Espaçamento interno */
+				border-radius: 4px; /* Borda arredondada */
 
+				/* Posicionamento do tooltip */
+				position: absolute;
+				top: -20px; /* Acima do ícone */
+				left: 50%; /* Centralizado horizontalmente */
+				transform: translateX(-50%); /* Ajuste fino para centralizar */
+				z-index: 1; /* Garante que o tooltip fique acima de outros elementos */
+				white-space: nowrap; /* Evita que o texto quebre linha */
+			}
+
+			/* Mostra o tooltip quando o mouse passa sobre o link */
+			.custom-tooltip:hover .tooltip-text {
+				visibility: visible;
+			}
+		</style>
 		
 		<script type="text/javascript">
 			function ajustaData(){
@@ -120,8 +145,8 @@
 					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
 						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
 					}
-
 				}
+				document.getElementById("atualizaValores").value = "false";
 			}
 			function mostraDivCopia(id){
 				document.getElementById("atualId").value = id;
@@ -226,10 +251,10 @@
 				if(confirmado == true){
 					let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
 					if(confirmado == true){
-						console.log("idsSelecionados: "+idsSelecionados);
+						let form = document.getElementById("divFormPesquisa");
 						document.getElementById("atualizaValores").value = "true";
-						document.getElementById("divFormPesquisa").action = "/menu/menu/atendimento/lisF/";
-						document.getElementById("divFormPesquisa").submit();
+						form.action = "/menu/atendimento/lisF/";
+						form.submit();
 					}
 				}
 			}
@@ -263,7 +288,6 @@
 						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
 						<input id="idsChecked" value="" />
-						<input id="atualizaValores" value="false" />
 					</div>
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
@@ -398,6 +422,7 @@
 								<input id="categoriaCopia" name="categoriaCopia" value="" />
 								<input id="temCopia" name="temCopia" value="false" />
 								<input id="idsDeletar" name="idsDeletar" value="" />
+								<input id="atualizaValores" name="atualizaValores" value="false" />
 							</div>
 						</form>
 						<div id="divCopiaAtend" class="col-xs-12" class="row" style="display: none;">
@@ -603,6 +628,10 @@
 																</a>
 																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia('{{_id}}');">
 																	<i class="ace-icon fa fa-clone bigger-130"></i>
+																</a>
+																<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
+																	<i class="ace-icon fa fa-eye bigger-130"></i>
+																	<span class="tooltip-text">em breve</span>
 																</a>
 															</div>
 															<div class="hidden-md hidden-lg">
