@@ -369,56 +369,19 @@ module.exports = {
         let depois = sex.toISOString();
         let atend = [];
         let qtdAtends = 0;
-        /*
-        Atend.find({atend_atenddata: { $gte : agora, $lte:  depois }}).then((atend) =>{
-            atend.forEach((b)=>{
-                if(b.atend_atenddata){
-                } else {
-                    b.atend_atenddata=new Date();
-                }
-                    
-                let data = new Date(b.atend_atenddata)
-                let mes = (data.getMonth()+1).toString();
-                let dia = (data.getUTCDate()).toString();
-
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-
-                let hora = (data.getHours()).toString();
-                let minuto = (data.getMinutes()).toString();
-
-                if (hora.length == 1){
-                    hora = "0"+hora;
-                }
-                if (minuto.length == 1){
-                    minuto = "0"+minuto;
-                }
-
-                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.data=fulldate;
-                b.hora = hora + ":" + minuto;
-            })
-            var tamanho = atend.length;
-            var qtdAtends = {qtd: tamanho}
-            //console.log("Listagem Realizada de Atendimentos!")
-            */
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                //console.log("Listagem Realizada de Beneficiários!")
-                Conv.find().then((conv)=>{
-                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Convenios")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-                            Terapia.find().then((terapia)=>{
-                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                //console.log("Listagem Realizada de Terapia")
-                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+            //console.log("Listagem Realizada de Beneficiários!")
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Convenios")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                            //console.log("Listagem Realizada de Terapia")
+                            res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

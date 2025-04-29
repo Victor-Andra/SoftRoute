@@ -112,13 +112,12 @@ module.exports = {Filtros,
         mes = data.substring(5,7);
         dia = data.substring(8,10);
 
-        let formatData = new Date();
+        let formatData = new Date(ano, (parseInt(mes)-1), dia);
+        /*
         formatData.setFullYear(ano);
-        //console.log("formatData1:"+formatData)
         formatData.setUTCMonth((parseInt(mes)-1).toString());//recebendo o mes 1-12 passando para 0-11;
-        //console.log("formatData2:"+formatData)
         formatData.setDate(dia);
-        //console.log("formatData3:"+formatData)
+        */
         if(iniFim == "ini"){
             formatData.setHours(0);
             formatData.setMinutes(0);
@@ -177,6 +176,20 @@ module.exports = {Filtros,
         }
         
         return (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
+    },
+    getDataFMTOption(data, opt){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        
+        return (dt.getFullYear()).toString()+opt+mes+opt+dia;
     },
     getDiaSemana(dt){
         let dat = new Date(dt);
