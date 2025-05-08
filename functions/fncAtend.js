@@ -2583,7 +2583,6 @@ module.exports = {
         let datas = req.body.dtCopia;
         let arrayData = datas.split(",");
         let quantidades = req.body.qtdCopia;
-        console.log("quantidades:"+quantidades);
         let arrayQuantidade = quantidades.split(",");
         //let arrCategs = req.body.categoriaCopia;
         //let arrayCategs = arrCategs.split(",");
@@ -2595,13 +2594,9 @@ module.exports = {
         let dataAtendData;
         let horaAtendHora;
 
-        console.log("Começando Copia!");
         arrayQuantidade.forEach((aq)=>{
             console.log("quantidade!"+aq);
         })
-        console.log("arrayQuantidade[0]:"+arrayQuantidade[0]);
-        console.log("arrayQuantidade[1]:"+arrayQuantidade[1]);
-        console.log("arrayQuantidade[2]:"+arrayQuantidade[2]);
         if (arrayIds.length == arrayData.length && arrayData.length == arrayQuantidade.length){
             //let i = 0;
             Atend.find().sort({atend_num : -1}).limit(1).then((ultimoAtend) =>{
@@ -2611,24 +2606,16 @@ module.exports = {
                 //arrayIds.forEach((a)=>{
                     console.log("arrayIds.length:"+arrayIds.length);
                     let tamanho = parseInt(arrayIds.length);
-                    console.log("tamanho:"+tamanho);
                 for (var i = 0; i < tamanho;i++){
-                    console.log("i:"+i);
                     qtd = parseInt(arrayQuantidade[i]);
                     dataAtendData = arrayData[i];
                     nextNumAtendCopiar = parseInt(arrayIds[i]);
-                    console.log("qtd:"+qtd);
-                    console.log("dataAtendData:"+dataAtendData);
-                    console.log("nextNumAtendCopiar:"+nextNumAtendCopiar);
 
                     if (qtd != undefined && dataAtendData != undefined && nextNumAtendCopiar != undefined){
                         let j = 0;
 //testar com o nextNumAtendCopiar string e int
-                        console.log("arrayIds[i]:"+arrayIds[i]);
                         let idAtend = new ObjectId(arrayIds[i]);
-                        console.log("idAtend:"+idAtend);
                         Atend.findOne({_id: idAtend}).then((a)=>{
-                            console.log("AAAAAAAAAA:"+a);
                             atendCopia = a;
                             
                             /*
@@ -2662,9 +2649,9 @@ module.exports = {
                                 if (atendCopia.atend_beneid != undefined){atendimentoNovo.atend_beneid = atendCopia.atend_beneid;}
                                 if (atendCopia.atend_convid != undefined){atendimentoNovo.atend_convid = atendCopia.atend_convid;}
                                 if (atendCopia.atend_usuid != undefined){atendimentoNovo.atend_usuid = atendCopia.atend_usuid;}
-                                console.log("dataAtendData"+i+":"+dataAtendData);
+                                //console.log("dataAtendData"+i+":"+dataAtendData);
                                 atendimentoNovo.atend_atenddata = dataAtendData;
-                                console.log("atendCopia:"+atendCopia);
+                                //console.log("atendCopia:"+atendCopia);
                                 if (atendCopia.atend_atendhora != undefined){atendimentoNovo.atend_atendhora = atendCopia.atend_atendhora;} else {atendimentoNovo.atend_atendhora = "08:00"}
                                 if (atendCopia.atend_terapeutaid != undefined){atendimentoNovo.atend_terapeutaid = atendCopia.atend_terapeutaid;}
                                 if (atendCopia.atend_terapiaid != undefined){atendimentoNovo.atend_terapiaid = atendCopia.atend_terapiaid;}
@@ -2675,10 +2662,13 @@ module.exports = {
                                 if (atendCopia.atend_mergeterapiaid != undefined){atendimentoNovo.atend_mergeterapiaid = atendCopia.atend_mergeterapiaid;}
                                 if (atendCopia.atend_mergevalorcre != undefined){atendimentoNovo.atend_mergevalorcre = atendCopia.atend_mergevalorcre;}
                                 if (atendCopia.atend_mergevalordeb != undefined){atendimentoNovo.atend_mergevalordeb = atendCopia.atend_mergevalordeb;}
-                                atendimentoNovo.atend_num = atendCopia.atend_num;
+                                if (atendCopia.atend_fixoterapeutaid != undefined){atendimentoNovo.atend_fixoterapeutaid = atendCopia.atend_fixoterapeutaid;}
+                                if (atendCopia.atend_fixoterapiaid != undefined){atendimentoNovo.atend_fixoterapiaid = atendCopia.atend_fixoterapiaid;}
+                                if (atendCopia.atend_fixovalorcre != undefined){atendimentoNovo.atend_fixovalorcre = atendCopia.atend_fixovalorcre;}
+                                if (atendCopia.atend_fixovalordeb != undefined){atendimentoNovo.atend_fixovalordeb = atendCopia.atend_fixovalordeb;}
                                 if (atendCopia.atend_datacad != undefined){atendimentoNovo.atend_datacad = dataAtual.toISOString();}
                                 atendimentoNovo.atend_num = nextNum;
-                                console.log("atendimentoNovo:"+atendimentoNovo);
+                                //console.log("atendimentoNovo:"+atendimentoNovo);
 
                                 Atend.find({_id: atendimentoNovo._id}).then((atendimentoExitente)=>{
                                     if (atendimentoExitente.length > 0){

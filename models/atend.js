@@ -2,118 +2,37 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const AtendSchema = mongoose.Schema({
-    atend_org :{
-        type: String,
-        required: true
-    },
-    atend_categoria :{
-        type: String,
-        required: true
-    },
-    atend_beneid :{
-        type: ObjectId,
-        required: false
-    },
-    atend_convid :{
-        type: ObjectId,
-        required: true
-    },
-    atend_usuid :{
-        type: String,
-        required: true
-    },
-    atend_atenddata :{
-        type: Date,
-        required: true
-    },
-    atend_atendhora :{
-        type: String,
-        required: false
-    },
-    atend_terapeutaid :{
-        type: ObjectId,
-        required: true
-    },
-    atend_terapiaid :{
-        type: ObjectId,
-        required: true
-    },
-    atend_salaid :{
-        type: ObjectId,
-        required: true
-    },
-    atend_valorcre :{
-        type: String,
-        required: true
-    },
-    atend_valordeb :{
-        type: String,
-        required: true
-    },
-    atend_mergeterapeutaid :{
-        type: ObjectId,
-        required: false
-    },
-    atend_mergeterapiaid :{
-        type: ObjectId,
-        required: false
-    },
-    atend_mergevalorcre :{
-        type: String,
-        required: false
-    },
-    atend_mergevalordeb :{
-        type: String,
-        required: false
-    },
-    atend_fixo :{
-        type: String,
-        required: false
-    },
-    atend_fixoterapeutaid :{
-        type: ObjectId,
-        required: false
-    },
-    atend_fixoterapiaid :{
-        type: ObjectId,
-        required: false
-    },
-    atend_fixovalorcre :{
-        type: String,
-        required: false
-    },
-    atend_fixovalordeb :{
-        type: String,
-        required: false
-    },
-    atend_evolucao :{
-        type: String,
-        required: false
-    },
-    atend_obs :{
-        type: String,
-        required: false
-    },
-    atend_num :{
-        type: Number,
-        required: true
-    },
-    atend_rel :{
-        type: String,
-        required: false
-    },
-    atend_numnf :{
-        type: String,
-        required: false
-    },
-    atend_datacad :{
-        type: Date,
-        required: false
-    },
-    atend_dataedi :{
-        type: Date,
-        required: false
-    }
+    atend_org :{ type: String, required: true },
+    atend_categoria :{ type: String, required: true },
+    atend_beneid :{ type: ObjectId, required: false },
+    atend_convid :{ type: ObjectId, required: true },
+    atend_usuid :{ type: String, required: true },
+    atend_atenddata :{ type: Date, required: true },
+    atend_atendhora :{ type: String, required: false },
+    atend_terapeutaid :{ type: ObjectId, required: true },
+    atend_terapiaid :{ type: ObjectId, required: true },
+    atend_salaid :{ type: ObjectId, required: true },
+    atend_valorcre :{ type: String, required: true },
+    atend_valordeb :{ type: String, required: true },
+    atend_mergeterapeutaid :{ type: ObjectId, required: false },
+    atend_mergeterapiaid :{ type: ObjectId, required: false },
+    atend_mergevalorcre :{ type: String, required: false },
+    atend_mergevalordeb :{ type: String, required: false },
+    atend_fixo :{ type: String, required: false },
+    atend_fixoterapeutaid :{ type: ObjectId, required: false },
+    atend_fixoterapiaid :{ type: ObjectId, required: false },
+    atend_fixovalorcre :{ type: String, required: false },
+    atend_fixovalordeb :{ type: String, required: false },
+    atend_evolucao :{ type: String, required: false },
+    atend_obs :{ type: String, required: false },
+    atend_num :{ type: Number, required: true },
+    atend_rel :{ type: String, required: false },
+    atend_agenda_f_id_orig :{ type: ObjectId, required: false },
+    atend_agenda_s_id_orig :{ type: ObjectId, required: false },
+    atend_numnf :{ type: String, required: false },
+    atend_datacad :{ type: Date, required: false },
+    atend_usuidedi :{ type: ObjectId, required: false }, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
+    atend_dataedi :{ type: Date, required: false }
 })
 
 class Atend{
@@ -145,6 +64,7 @@ class Atend{
         atend_numnf,
         atend_rel,
         atend_datacad,
+        atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
         atend_dataedi
         ){
         this.atend_org = atend_org,
@@ -174,7 +94,8 @@ class Atend{
         this.atend_numnf = atend_numnf,
         this.atend_rel = atend_rel,
         this.atend_datacad = atend_datacad,
-        this.atend_dataedi = atend_dataedi       
+        this.atend_usuidedi = atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
+        this.atend_dataedi = atend_dataedi
     }
 }
 
@@ -182,6 +103,7 @@ AtendSchema.loadClass(Atend)
 const AtendModel = mongoose.model('tb_atend', AtendSchema)
 module.exports = {AtendModel,AtendSchema,
     atendEditar: async (req, res) => {
+        let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -212,6 +134,7 @@ module.exports = {AtendModel,AtendSchema,
                 atend_fixovalorcre : req.body.atendFixovalorcre,
                 atend_fixovalordeb : req.body.atendFixovalordeb,
                 atend_obs : req.body.atendObs,
+                atend_usuidedi : usuarioAtual, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
                 atend_dataedi : dataAtual.toISOString()
                 }}
         ).then((res) =>{
@@ -306,6 +229,7 @@ module.exports = {AtendModel,AtendSchema,
         let troca;
         let ini;
         let fim;
+        let usuarioAtual = req.cookies['idUsu']; //novo campo para rastrear alterações de quem fez a edição 25/04/2025
         //-dataini
         let dt = new Date(req.body.agendaDataIni);
         

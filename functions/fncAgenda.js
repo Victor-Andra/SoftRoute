@@ -10815,6 +10815,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agendaMergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -10837,6 +10839,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -10943,6 +10947,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -10965,6 +10971,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11070,6 +11078,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11092,6 +11102,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcrevalSub,//recebe pelo plano pois não foi avisado previamente
                                                     atend_mergevalordeb : convdebvalSub,//Não paga pois o terapeuita não atende ninguem
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11186,6 +11198,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11208,6 +11222,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11314,6 +11330,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11336,6 +11354,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11442,6 +11462,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11464,6 +11486,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11569,6 +11593,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11591,6 +11617,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11684,6 +11712,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11706,6 +11736,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11812,6 +11844,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11834,6 +11868,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_mergeterapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                     atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11940,6 +11976,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -11962,6 +12000,8 @@ module.exports = {
                                                     atend_mergeterapiaid : agendaSub.agenda_terapiaid,//ABA
                                                     atend_mergevalorcre : convcrevalSub,//Não recebe pela supervisão
                                                     atend_mergevalordeb : convdebvalSub,//Paga a supervsão
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12024,6 +12064,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : "0,00",
                                                     atend_fixovalordeb : "0,00",
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12046,6 +12088,8 @@ module.exports = {
                                                     atend_mergeterapiaid : a.agenda_terapiaid,
                                                     atend_mergevalorcre : "0,00",
                                                     atend_mergevalordeb : "0,00",
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12127,6 +12171,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcrevalFixo,
                                                     atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12149,6 +12195,8 @@ module.exports = {
                                                     atend_mergeterapiaid : a.agenda_terapiaid,
                                                     atend_mergevalorcre : convcreval,
                                                     atend_mergevalordeb : convdebval,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_num : nextNum,
                                                     atend_datacad : dataAtual.toISOString()
@@ -12239,6 +12287,8 @@ module.exports = {
                                                     atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                     atend_fixovalorcre : convcreval,
                                                     atend_fixovalordeb : convdebval,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "true",
                                                     atend_categoria : "Padrão",
                                                     atend_num : nextNum,
@@ -12258,6 +12308,8 @@ module.exports = {
                                                     atend_salaid : a.agenda_salaid,//
                                                     atend_valorcre : convcreval,//
                                                     atend_valordeb : convdebval,//
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
                                                     atend_fixo : "false",
                                                     atend_categoria : "Padrão",
                                                     atend_num : nextNum,
@@ -12374,6 +12426,7 @@ module.exports = {
                                                 atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                 atend_fixovalorcre : convcrevalFixo,
                                                 atend_fixovalordeb : convdebvalFixo,
+                                                atend_agenda_f_id_orig : a._id,
                                                 atend_fixo : "true",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
@@ -12396,6 +12449,7 @@ module.exports = {
                                                 atend_mergeterapiaid : a.agenda_mergeterapiaid,//ABA
                                                 atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
                                                 atend_mergevalordeb : convdebvalSub,//Não paga ao outro Terapeuta
+                                                atend_agenda_f_id_orig : a._id,
                                                 atend_fixo : "false",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
@@ -12484,6 +12538,7 @@ module.exports = {
                                                 atend_fixoterapiaid : a.agenda_mergeterapiaid,
                                                 atend_fixovalorcre : convcrevalFixo,
                                                 atend_fixovalordeb : convdebvalFixo,
+                                                atend_agenda_f_id_orig : a._id,
                                                 atend_fixo : "true",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
@@ -12502,6 +12557,7 @@ module.exports = {
                                                 atend_salaid : a.agenda_salaid,//
                                                 atend_valorcre : convcreval,//
                                                 atend_valordeb : convdebval,//
+                                                atend_agenda_f_id_orig : a._id,
                                                 atend_fixo : "false",
                                                 atend_num : nextNum,
                                                 atend_datacad : dataAtual.toISOString()
