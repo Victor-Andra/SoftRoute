@@ -3,27 +3,27 @@ const mongoose = require("mongoose")
 
 //As classe tem que ser declaradas antes das tabelas
 //Classe
-const anoClass = require("../models/ano")
+const funcionalidadeClass = require("../models/funcionalidade")
 
 //Classes Extrangeiras
 const usuarioClass = require("../models/usuario")
 
 //Tabelas
-//anos
-const Ano = mongoose.model("tb_ano")
+//funcionalidades
+const Funcionalidade = mongoose.model("tb_funcionalidade")
 
 //Tabelas Extrangeiras
 const Usuario = mongoose.model("tb_usuario")
 
 module.exports = {
-    listaAno(req,res){
-        console.log('listando anos')
+    listaFuncionalidade(req,res){
+        console.log('listando funcionalidades')
         Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-        Ano.find({ ano_lixo: "false" }) // Filtra pelo campo
-        .sort({ ano: 1 }) // Ordena por ano crescente (opcional)
-        .then((ano) => {
-            ano.forEach((b)=>{
-            dataedi = new Date(b.ano_dataedi)
+        Funcionalidade.find({ funcionalidade_lixo: "false" }) // Filtra pelo campo
+        .sort({ funcionalidade: 1 }) // Ordena por funcionalidade crescente (opcional)
+        .then((funcionalidade) => {
+            funcionalidade.forEach((b)=>{
+            dataedi = new Date(b.funcionalidade_dataedi)
                 mes = (dataedi.getMonth()+1).toString();
                 dia = (dataedi.getUTCDate()).toString();
                 if (mes.length == 1){
@@ -36,32 +36,32 @@ module.exports = {
                 b.dataedi=fulldate;
             })
             console.log("Listagem Realizada!")
-            res.render('ferramentas/ano/anoLis', {anos: ano, usuarios: usuario})
+            res.render('ferramentas/funcionalidade/funcionalidadeLis', {funcionalidades: funcionalidade, usuarios: usuario})
         })}).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Anos")
+            req.flash("error_message", "houve um erro ao listar Funcionalidades")
             res.redirect('admin/erro')
         })
 
     },
 
-    carregaAno(req,res){
-        Ano.find().then((ano)=>{
-            console.log("Listagem Realizada de Anos de Uso!")
-            res.render("ferramentas/ano/anoCad", {anos: ano})
+    carregaFuncionalidade(req,res){
+        Funcionalidade.find().then((funcionalidade)=>{
+            console.log("Listagem Realizada de Funcionalidades de Uso!")
+            res.render("ferramentas/funcionalidade/funcionalidadeCad", {funcionalidades: funcionalidade})
         }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Anos")
+            req.flash("error_message", "houve um erro ao listar Funcionalidades")
             res.redirect('admin/erro')
         })
 
     },
 
 
-    carregaAnoEdi(req,res){
-        Ano.findById(req.params.id).then((ano) =>{console.log("ID: "+ano._id)
-            console.log(ano)
-            res.render('ferramentas/ano/anoEdi', {anos: ano})
+    carregaFuncionalidadeEdi(req,res){
+        Funcionalidade.findById(req.params.id).then((funcionalidade) =>{console.log("ID: "+funcionalidade._id)
+            console.log(funcionalidade)
+            res.render('ferramentas/funcionalidade/funcionalidadeEdi', {funcionalidades: funcionalidade})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as lista!")
@@ -69,9 +69,9 @@ module.exports = {
         })
     },
 
-    cadastraAno(req,res){
+    cadastraFuncionalidade(req,res){
         let resposta
-        let cadastro = anoClass.anoAdicionar(req,res);//variavel para armazenar a função que armazena o async
+        let cadastro = funcionalidadeClass.funcionalidadeAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
         cadastro.then((result)=>{
             resposta = true;
@@ -82,7 +82,7 @@ module.exports = {
             if (resposta == true){
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaAno(req,res)
+                this.listaFuncionalidade(req,res)
             } else {
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
@@ -91,10 +91,10 @@ module.exports = {
         })
     },
 
-    atualizaAno(req,res){
+    atualizaFuncionalidade(req,res){
         let resposta;
         try{
-            anoClass.anoEditar(req,res).then((res)=>{
+            funcionalidadeClass.funcionalidadeEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resposta = res;
@@ -105,9 +105,9 @@ module.exports = {
                 res.render('admin/erro')
             }).finally(() =>{
                 if(resposta){
-                    //Volta para a ano de listagem
+                    //Volta para a funcionalidade de listagem
                     console.log('verdadeiro')
-                    this.listaAno(req,res)
+                    this.listaFuncionalidade(req,res)
                 }else{
                     //passar classe de erro
                     console.log("error")
@@ -120,16 +120,16 @@ module.exports = {
         }
     },
 
-    deletaAno: async (anoId, req, res) => { // Recebe o ID como parâmetro
-        console.log("ID recebido na função deletaAno:", anoId); // Verificação
+    deletaFuncionalidade: async (funcionalidadeId, req, res) => { // Recebe o ID como parâmetro
+        console.log("ID recebido na função deletaFuncionalidade:", funcionalidadeId); // Verificação
       
         try {
           // Chama a classe de deleção passando o ID
-          const resultado = await anoClass.anoDeletar(anoId, req, res);
+          const resultado = await funcionalidadeClass.funcionalidadeDeletar(funcionalidadeId, req, res);
           console.log("Resultado da deleção:", resultado);
           return resultado;
         } catch (err) {
-          console.error("Erro em deletaAno:", err);
+          console.error("Erro em deletaFuncionalidade:", err);
           throw err;
         }
       }

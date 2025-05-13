@@ -90,6 +90,11 @@ const anoClass = require("../models/ano")
 const Ano = mongoose.model("tb_ano")
 const fncAno = require("../functions/fncAno")
 
+//Funcionalidade, cadastro das Funcionalidades para definição das permissões
+const funcionalidadeClass = require("../models/funcionalidade")
+const Funcionalidade = mongoose.model("tb_funcionalidade")
+const fncFuncionalidade = require("../functions/fncFuncionalidade")
+
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
@@ -539,6 +544,8 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
     let aux = 1;
     let agendaTempArr = [];
     let idsAgendasEx = [];
+    let agendaTempIds = [];
+    let agendaFinal = [];
 
     // Consultar o usuário no banco de dados
     Bene.find({ bene_status: "Ativo" }).then((benesGeral) => {
@@ -678,7 +685,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
 
                                     return {
                                         _id: agendamento._id,
-                                        agenda_data: agenda_data, // Formato: aaaa/mm/dd
+                                        agenda_data: fncGeral.getDataFMTOption(dat,"/"), // Formato: aaaa/mm/dd
                                         agenda_hora: agenda_hora, // Formato: HH:MM
                                         agenda_data_dia: fncGeral.getDataFMT(dat),
                                         agenda_aux: aux++,
@@ -698,9 +705,10 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                             //console.log("Evolução faltante ordenada:", evolucaoFaltante);
 
                             // Agendamentos diários (lógica original)
-                            return Agenda.find({
+                            Agenda.find({
                                 agenda_data: { $gte: inicioDia, $lte: fimDia },
-                                agenda_usuid: idUsu
+                                agenda_usuid: idUsu,
+                                agenda_temp: false 
                             }).then((agendas) => {
                                 //console.log("Agendamentos do dia encontrados:", agendas);
 
@@ -770,10 +778,77 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                                     }
                                 });
 
+                                Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
+                                    
+                                    agendaS.forEach((e)=>{
+                                        let dat = new Date(e.agenda_data);
+                                        e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                                        let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                                        let min = ""+dat.getMinutes();
+                                        if (hora.length == 1){hora = "0" + hora + "";}
+                                        if (min.length == 1){min = "0" + min + "";}
+                                        e.agenda_hora = hora+":"+min;
+                                        //console.log("aux:"+aux)
+                                        switch (dat.getUTCDay()){
+                                            case 0:
+                                                e.agenda_data_semana = "dom"
+                                                break;
+                                            case 1:
+                                                e.agenda_data_semana = "seg"
+                                                break;
+                                            case 2:
+                                                e.agenda_data_semana = "ter"
+                                                break;
+                                            case 3:
+                                                e.agenda_data_semana = "qua"
+                                                break;
+                                            case 4:
+                                                e.agenda_data_semana = "qui"
+                                                break;
+                                            case 5:
+                                                e.agenda_data_semana = "sex"
+                                                break;
+                                            case 6:
+                                                e.agenda_data_semana = "sab"
+                                                break;
+                                            default:
+                                                console.log("erro");
+                                                break;
+                                        }
+                                    })
+                    
+                                    agendas.forEach((a)=>{
+                                        let ok = "true";
+                                        agendaS.forEach((s)=>{
+                                            if (("-"+s.agenda_tempId+"-") == ("-"+a._id+"-")) {
+                                                ok = "false";
+                                            }
+                                        })
+                                        if (ok == "true"){
+                                            agendaFinal.push(a);
+                                        }
+                                    })
+                    
+                                    agendaS.forEach((s)=>{
+                                        if (!(s.agenda_categoria == "Falta Justificada")){
+                                            if (!(s.agenda_categoria == "Feriado")){
+                                                if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
+                                                    agendaFinal.push(s);
+                                                }
+                                            }
+                                        }
+                                    });
+                    
+                                    agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
+
                                 // Ordenar os agendamentos por horário (formato 24h) usando dia_hora_ordenação
-                                idsAgendasEx.sort((a, b) => {
+                                agendaFinal.sort((a, b) => {
                                     return a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação);
                                 });
+
+                                agendaFinal.forEach((af)=>{
+                                    af.agenda_data = fncGeral.getDataFMTOption(af.agenda_data, "/");
+                                })
 
                                 //console.log("Agendamentos ordenados por horário:", idsAgendasEx);
 
@@ -808,10 +883,10 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                                             flash,
                                             aniversariantesDaSemanaUsuario: aniversariantesDaSemanaUsuario,
                                             aniversariantesDaSemanaBene: aniversariantesDaSemanaBene,
-                                            agendas: idsAgendasEx, // Todos os agendamentos do dia, ordenados por horário
-                                            evolucaoFaltante: evolucaoFaltante, // Lista de agendamentos semanais sem selo
+                                            agendas: agendaFinal, // Todos os agendamentos do dia, ordenados por horário
+                                            evolucaoFaltante: agendaFinal, // Lista de agendamentos semanais sem selo
                                             terapias: terapias,
-                                            agendasSemanaiss: agendasSemanais, // Passando os agendamentos formatados para a view
+                                            agendasSemanaiss: agendaFinal, // Passando os agendamentos formatados para a view
                                             benes: benesGeral,
                                             salas: sala,
                                             usuarios: usuarios
@@ -821,7 +896,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/l
                             });
                         });
                     });
-                });
+                });});
                 
             }).catch((err) => {
                 console.error("Erro ao listar aniversariantes ou agendamentos:", err);
@@ -1329,7 +1404,7 @@ router.post('/agenda/agendaSubTerapiaEdi', fncGeral.IsAuthenticated, (req,res) =
     fncAgenda.agendaAtualizaTerapia(req, res);
 })
 // Visualizar Agenda
-/*
+/*filtraAtend
 router.get("/agenda/vis", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro A AGENDA.
     fncAgenda.carregaAgendaVis(req, res);
 })
@@ -3173,6 +3248,40 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
     router.post('/ferramentas/ano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
         fncAno.atualizaAno(req, res);
+    })
+//Menu Ferramentas
+    //funcionalidade
+    router.get('/ferramentas/funcionalidade/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Funcionalidade
+        fncFuncionalidade.listaFuncionalidade(req, res);
+    })
+    
+    router.get('/ferramentas/funcionalidade/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Funcionalidade.
+        fncFuncionalidade.carregaFuncionalidade(req, res);
+    })
+
+    router.post('/ferramentas/funcionalidade/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Funcionalidade
+    fncFuncionalidade.cadastraFuncionalidade(req, res);
+
+    })
+    
+    router.get('/ferramentas/funcionalidade/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
+        try {
+          const funcionalidadeId = req.params.id;
+          await fncFuncionalidade.deletaFuncionalidade(funcionalidadeId, req, res);
+          // Redireciona para a listagem após a deleção
+          res.redirect('/menu/ferramentas/funcionalidade/lis'); // URL da listagem
+        } catch (err) {
+          console.error(err);
+          res.render('admin/erro');
+        }
+      })
+    
+    router.get('/ferramentas/funcionalidade/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
+        fncFuncionalidade.carregaFuncionalidadeEdi(req, res);
+    })
+
+    router.post('/ferramentas/funcionalidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
+        fncFuncionalidade.atualizaFuncionalidade(req, res);
     })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento

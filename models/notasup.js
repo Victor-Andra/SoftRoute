@@ -44,6 +44,15 @@ const NotasupSchema = mongoose.Schema({
     notasup_acompprog :{ type: String, required: false },
     notasup_acompgeral :{ type: String, required: false },
     notasup_obsIds :{ type: String, required: false },
+    notasup_obs: [
+        {
+            _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
+            notaSupObs_beneid :{ type: ObjectId, required: true },
+            notaSupObs_progid :{ type: ObjectId, required: true },
+            notaSupObs_analise :{ type: String, required: false },
+            notaSupObs_sugestao :{ type: String, required: false }
+        }
+    ],
     //Atributos de controle
     notasup_usuidcad :{ type: ObjectId, required: false },
     notasup_usuidedi :{ type: ObjectId, required: false },
@@ -94,6 +103,7 @@ class Notasup{
         notasup_acompprog,
         notasup_acompgeral,
         notasup_obsIds,
+        notasup_obs,
         //Atributos de controle
         notasup_usuidcad,
         notasup_usuidedi,
@@ -141,6 +151,7 @@ class Notasup{
             this.notasup_acompprog = notasup_acompprog,
             this.notasup_acompgeral = notasup_acompgeral,
             this.notasup_obsIds = notasup_obsIds,
+            this.notasup_obs = notasup_obs,
             //Atributos de controle
             this.notasup_usuidcad = notasup_usuidcad,
             this.notasup_usuidedi = notasup_usuidedi,
@@ -167,8 +178,23 @@ module.exports = {NotasupModel,NotasupSchema,
                 idUsu = id;
             }
         })
+
+        let observacoes = [];
+        if (req.body.observacoes) {
+            Object.values(req.body.observacoes).forEach(obs => {
+                if (obs.programa || obs.analise || obs.sugestao) {
+                    observacoes.push({
+                        notaSupObs_beneid: req.body.notasupBeneid,
+                        notaSupObs_progid: new ObjectId(obs.programa),
+                        notaSupObs_analise: (""+obs.analise+""),
+                        notaSupObs_sugestao: (""+obs.sugestao+"")
+                    });
+                }
+            });
+        }
+        console.log("req.body.notasupId: "+req.body.notasupId)
         //Realiza Atualização
-        await NotasupModel.findByIdAndUpdate(req.body.notasupSupid, 
+        await NotasupModel.findByIdAndUpdate(req.body.notasupId, 
             {$set: {
                 notasup_tiposup : req.body.notasupTiposup,
                 notasup_datanotasup : req.body.notasupDatanotasup,
@@ -208,6 +234,8 @@ module.exports = {NotasupModel,NotasupSchema,
                 //acompanhamento de ações
                 notasup_acompprog : req.body.notasupAcompprog,
                 notasup_acompgeral : req.body.notasupAcompgeral,
+                //NotaSupObs
+                notasup_obs : observacoes,
                 //Atributos de controle
                 notasup_usuidedi : idUsu,
                 notasup_dataedi : dataAtual.toISOString(),
@@ -275,6 +303,8 @@ module.exports = {NotasupModel,NotasupSchema,
             //acompanhamento de ações
             notasup_acompprog : req.body.notasupAcompprog,
             notasup_acompgeral : req.body.notasupAcompgeral,
+            //NotaSupObs
+            notasup_obs : observacoes,
             //Atributos de controle
             notasup_usuidcad : idUsu,
             notasup_dataedi : dataAtual.toISOString(),
@@ -290,83 +320,96 @@ module.exports = {NotasupModel,NotasupSchema,
             return err;
         });
     },
-    notaSupEObsAdicionar: async (req,res) =>{
+    notaSupEObsAdicionar: async (req, res) => {
         let resultado;
         let resposta = new Resposta();
-        let resultadoNotasup;
         let dataAtual = new Date();
-        //Informação do Usuario
+        
+        // Informações do Usuário
         let lvlUsu = req.cookies['lvlUsu'];
         let idUsu;
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
-        arrayIds.forEach((id)=>{
-            if(id == lvlUsu){
+        let arrayIds = ['62421801a12aa557219a0fb9', '62421903a12aa557219a0fd3'];
+        
+        arrayIds.forEach((id) => {
+            if (id == lvlUsu) {
                 idUsu = id;
             }
-        })
-
-        await notaSupObsClass.notaSupObsAdicionarMuitos(req,res).then((result)=>{
-            resultadoNotasup = result;
-            
-            
-        })
-
-        const NewNotasup = new NotasupModel({
-            notasup_tiposup : req.body.notasupTiposup,
-            notasup_datanotasup : req.body.notasupDatanotasup,
-            notasup_horanotasup : req.body.notasupHoranotasup,
-            notasup_terapeutaid : req.body.notasupTerapeutaid,
-            notasup_beneid : req.body.notasupBeneid,
-            notasup_beneidade : req.body.notasupBeneidade,
-            notasup_benedatanasc : req.body.notasupBenedatanasc,
-            notasup_supid : req.body.notasupSupid,
-            //observações comportamentais
-            //topografia comportamental
-            notasup_topocomp : req.body.notasupTopocomp,
-            //funções comportamentais
-            notasup_fugaevit : req.body.notasupFugaevit,
-            notasup_atencao : req.body.notasupAtencao,
-            notasup_tangivel : req.body.notasupTangivel,
-            notasup_automatico : req.body.notasupAutomatico,
-            notasup_notanarratfunc : req.body.notasupNotanarratfunc,
-            //metodos de gravação
-            notasup_abc : req.body.notasupAbc,
-            notasup_duracao : req.body.notasupDuracao,
-            notasup_taxa : req.body.notasupTaxa,
-            notasup_gravevento : req.body.notasupGravevento,
-            notasup_prodper : req.body.notasupProdper,
-            notasup_mandsfreq : req.body.notasupMandsfreq,
-            notasup_notanarratgrav : req.body.notasupNotanarratgrav,
-            //mudanças de programação
-            notasup_alvosdominados : req.body.notasupAlvosdominados,
-            notasup_notasdicas : req.body.notasupNotasdicas,
-            notasup_notasprog : req.body.notasupNotasprog,
-            //informação terapeuta
-            notasup_infteracoment : req.body.notasupInfteracoment,
-            notasup_infteraduvid : req.body.notasupInfteraduvid,
-            //informação direta
-            notasup_infdircoment : req.body.notasupInfdircoment,
-            notasup_infdirduvid : req.body.notasupInfdirduvid,
-            //acompanhamento de ações
-            notasup_acompprog : req.body.notasupAcompprog,
-            notasup_acompgeral : req.body.notasupAcompgeral,
-            //array de ids das observacoes
-            notasup_obsIds : resultadoNotasup,
-            //Atributos de controle
-            notasup_usuidcad : idUsu,
-            notasup_dataedi : dataAtual.toISOString(),
-            notasup_lixo : "false"
         });
 
-        console.log("NewNotasupeobs save");
-        await NewNotasup.save().then(()=>{
-            console.log("Cadastro realizado!");
-            console.log("RETORNANDOP VERDADEWIRO");
-            resultado = "true";
-        }).catch((err)=>{
-            resultado = err
-            console.log("ERRO:"+err)
-        })
+        let observacoes = [];
+        if (req.body.observacoes) {
+            Object.values(req.body.observacoes).forEach(obs => {
+                if (obs.programa || obs.analise || obs.sugestao) {
+                    observacoes.push({
+                        notaSupObs_beneid: req.body.notasupBeneid,
+                        notaSupObs_progid: new ObjectId(obs.programa),
+                        notaSupObs_analise: (""+obs.analise+""),
+                        notaSupObs_sugestao: (""+obs.sugestao+"")
+                    });
+                }
+            });
+        }
+        // Adiciona um novo objeto Notasup com os dados recebidos do formulário
+        const NewNotasup = new NotasupModel({
+            notasup_tiposup: req.body.notasupTiposup, // Tipo de supervisão
+            notasup_datanotasup: req.body.notasupDatanotasup, // Data da supervisão
+            notasup_horanotasup: req.body.notasupHoranotasup, // Hora da supervisão
+            notasup_terapeutaid: req.body.notasupTerapeutaid, // ID do terapeuta
+            notasup_beneid: req.body.notasupBeneid, // ID do beneficiário
+            notasup_beneidade: req.body.notasupBeneidade, // Idade do beneficiário
+            notasup_benedatanasc: req.body.notasupBenedatanasc, // Data de nascimento do beneficiário
+            notasup_supid: req.body.notasupSupid, // ID do supervisor
+            // Observações comportamentais
+            notasup_topocomp: req.body.notasupTopocomp, // Topografia comportamental
+            notasup_fugaevit: req.body.notasupFugaevit, // Fuga evitada
+            notasup_atencao: req.body.notasupAtencao, // Atenção
+            notasup_tangivel: req.body.notasupTangivel, // Comportamento tangível
+            notasup_automatico: req.body.notasupAutomatico, // Comportamento automático
+            notasup_notanarratfunc: req.body.notasupNotanarratfunc, // Narrativa funcional
+            // Métodos de gravação
+            notasup_abc: req.body.notasupAbc, // ABC (antecedente, comportamento, consequência)
+            notasup_duracao: req.body.notasupDuracao, // Duração do evento
+            notasup_taxa: req.body.notasupTaxa, // Taxa de ocorrência
+            notasup_gravevento: req.body.notasupGravevento, // Evento grave
+            notasup_prodper: req.body.notasupProdper, // Produção pessoal
+            notasup_mandsfreq: req.body.notasupMandsfreq, // Frequência de mands
+            notasup_notanarratgrav: req.body.notasupNotanarratgrav, // Narrativa de evento grave
+            // Mudanças de programação
+            notasup_alvosdominados: req.body.notasupAlvosdominados, // Alvos dominados
+            notasup_notasdicas: req.body.notasupNotasdicas, // Notas de dicas
+            notasup_notasprog: req.body.notasupNotasprog, // Notas de programação
+            // Informações do terapeuta
+            notasup_infteracoment: req.body.notasupInfteracoment, // Comentários do terapeuta
+            notasup_infteraduvid: req.body.notasupInfteraduvid, // Dúvidas do terapeuta
+            // Informações diretas
+            notasup_infdircoment: req.body.notasupInfdircoment, // Comentários diretos
+            notasup_infdirduvid: req.body.notasupInfdirduvid, // Dúvidas diretas
+            // Acompanhamento de ações
+            notasup_acompprog: req.body.notasupAcompprog, // Acompanhamento de programação
+            notasup_acompgeral: req.body.notasupAcompgeral, // Acompanhamento geral
+            //NotaSupObs
+            notasup_obs : observacoes,
+            // ID do usuário que cadastrou
+            notasup_usuidcad: idUsu,
+            notasup_dataedi: dataAtual.toISOString(), // Data da edição
+            notasup_lixo: "false" // Status do item
+        });
+
+        console.log("Novo Notasup sendo salvo");
+        try {
+            // Salva a nota de supervisão
+            await NewNotasup.save().then(doc => {
+                console.log("Cadastro realizado com sucesso!");
+                resultado = "true";
+            }).catch((err) => {
+                resultado = err;
+                console.log("Erro ao salvar a nota de supervisão: " + err);
+            });
+    
+        } catch (err) {
+            resultado = err;
+            console.log("Erro inesperado: " + err);
+        }
 
         return resultado;
     }

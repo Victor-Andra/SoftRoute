@@ -456,7 +456,7 @@
 																		</table>
 																	</h6>
 																</div>
-																{{#each ../progs}}
+																{{#each ../progs}}{{this.prog_tipo}}
 																	{{#ifEqual this.prog_beneid ../_id}}
 																		
 																		<div class="widget-box collapsed">
@@ -647,49 +647,41 @@
 																									</tr>
 																								</thead>
 																								<tbody>
-																									
-																									
-																										{{#each ../../notasups}}
-																											
-																												<tr>
-																													<td>
-																														<p class="alert alert-info">
-																															
-																															<label><b>Tipo:</b></label>&nbsp;&nbsp;{{this.notasup_tiposup}}&nbsp;-&nbsp;
-																															<label><b>Data:</b></label>&nbsp;&nbsp;{{this.notasup_datanotasup}}&nbsp;-&nbsp;
-																															<label><b>Hora:</b></label>&nbsp;&nbsp;{{this.notasup_horanotasup}}<br>
-																															<label><b>Supervisor:</b></label>&nbsp;&nbsp;
-																															{{#each ../../../usuarios}}
-																																{{#ifEqual this._id ../notasup_terapeutaid}}
-																																	{{this.usuario_nome}}
-																																{{/ifEqual}}
-																															{{/each}}
-																														</p>
-																													</td>
-																													<td>
-																														<p class="alert alert-danger">
-																															{{#each ../../../notasupobss}}
-																																{{#ifEqual this.notaSupObs_progid ../_id}}
-																																	{{this.notaSupObs_analise}}
-																																{{/ifEqual}}
-																															{{/each}}
-																															
-																														</p>
-																														
-																													</td>
-																													<td>
-																														<p class="alert alert-warning">
-																															{{#each ../../../notasupobss}}
-																																{{#ifEqual this.notaSupObs_notasupId ../_id}}
-																																	{{this.notaSupObs_sugestao}}<br>
-																																{{/ifEqual}}
-																															{{/each}}
-																														</p>
-																													</td>
-																												</tr>
-																											
+																									{{#each ../../notasups}}
+																									<tr>
+																										<td>
+																											<p class="alert alert-info">
+																												<label><b>Tipo:</b></label>&nbsp;&nbsp;{{this.notasup_tiposup}}&nbsp;-&nbsp;
+																												<label><b>Data:</b></label>&nbsp;&nbsp;{{this.notasup_datanotasup}}&nbsp;-&nbsp;
+																												<label><b>Hora:</b></label>&nbsp;&nbsp;{{this.notasup_horanotasup}}<br>
+																												<label><b>Supervisor:</b></label>&nbsp;&nbsp;
+																												{{#each ../../../usuarios}}
+																													{{#ifEqual this._id ../notasup_terapeutaid}}
+																														{{this.usuario_nome}}
+																													{{/ifEqual}}
+																												{{/each}}
+																											</p>
+																										</td>
+																										<td>
+																										{{#each this.notasup_obs}}
+																											{{#ifEqual ../../prog_tipo notaSupObs_progid}}
+																											<p class="alert alert-danger">
+																												{{notaSupObs_analise}}
+																											</p>
+																											{{/ifEqual}}
 																										{{/each}}
-																									
+																										</td>
+																										<td>
+																										{{#each this.notasup_obs}}
+																											{{#ifEqual ../../prog_tipo notaSupObs_progid}}
+																											<p class="alert alert-warning">
+																												{{notaSupObs_sugestao}}
+																											</p>
+																											{{/ifEqual}}
+																										{{/each}}
+																										</td>
+																									</tr>
+																									{{/each}}
 																								</tbody>
 																							</table>
 																						</div>
@@ -827,6 +819,7 @@
 																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
 																												<span style="white-space: wrap;"  class="badge badge-green">{{this.progset_esth}}</span>
 																												{{else}}
+																												{{#ifEqual this.progset_qtest 9}}
 																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
 																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
 																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
@@ -836,6 +829,18 @@
 																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
 																												<span style="white-space: wrap;"  class="badge badge-yellow">{{this.progset_esth}}</span>
 																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esti}}</span>
+																												{{else}}
+																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esta}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estb}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-pink">{{this.progset_estc}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-danger">{{this.progset_estd}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-success">{{this.progset_este}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-purple">{{this.progset_estf}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-brown">{{this.progset_estg}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-yellow">{{this.progset_esth}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-info">{{this.progset_esti}}</span>
+																												<span style="white-space: wrap;"  class="badge badge-warning">{{this.progset_estj}}</span>
+																												{{/ifEqual}}
 																												{{/ifEqual}}
 																												{{/ifEqual}}
 																												{{/ifEqual}}
@@ -894,55 +899,61 @@
 																													<div class="infobox-chart; infobox-blue">
 																														<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
 																													</div>
-																													
-																													{{#ifEqual this.folreg_status "1"}}
-																														<span style="white-space: wrap; font-size: 9px;" >Esvanecimento</span>
-																														{{else}}
-																														{{#ifEqual this.folreg_status "2"}}
-																															<span  style="white-space: wrap; font-size: 9px;" >Meta</span>
-																															{{else}}
-																															{{#ifEqual this.folreg_status "3"}}
-																																<span  style="white-space: wrap; font-size: 9px;" > Volta Passo</span>
+																														<div>
+																															{{#ifEqual this.folreg_status "1"}}
+																																<span style="white-space: wrap; font-size: 9px;" >Esvanecimento</span>
 																																{{else}}
-																																<span style="white-space: wrap; font-size: 9px;" > Continua</span>
+																																{{#ifEqual this.folreg_status "2"}}
+																																	<span  style="white-space: wrap; font-size: 9px;" >Meta</span>
+																																	{{else}}
+																																	{{#ifEqual this.folreg_status "3"}}
+																																		<span  style="white-space: wrap; font-size: 9px;" > Volta Passo</span>
+																																		{{else}}
+																																		<span style="white-space: wrap; font-size: 9px;" > Continua</span>
+																																	{{/ifEqual}}
+																																{{/ifEqual}}
 																															{{/ifEqual}}
-																														{{/ifEqual}}
-																													{{/ifEqual}}
-																													
+																														</div>
+																														<div>
+																															<!-- Inserir aqui passo de dica aplicado na Folha de Registro Simples-->
+																														</div>
 																													</a>
 																														{{else}}
 																													<!-- Botões da Folha de Registro Duplo -->
 																													<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-info btn-wider">
 																														<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white">
-																														{{this.folreg_datareg}}
+																															{{this.folreg_datareg}}
+																															
+																															<br>
+																															{{#each ../../../../usuarios}}<!-- Ok -->
+																																{{#ifEqual this._id ../folreg_usuid}}
+																																	{{usuario_nome}}
+																																{{/ifEqual}}
+																															{{/each}}
+																														</label>
+																														<div class="infobox-chart; infobox-blue">
+																															<span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},
+																																								{{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}" ></span>
 																														
-																														<br>
-																														{{#each ../../../../usuarios}}<!-- Ok -->
-																															{{#ifEqual this._id ../folreg_usuid}}
-																																{{usuario_nome}}
-																															{{/ifEqual}}
-																														{{/each}}
-																													</label>
-																													<div class="infobox-chart; infobox-blue">
-																														<span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},
-																																							 {{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}" ></span>
-																													
-																													</div>
-																													<div>
-																													{{#ifEqual this.folreg_status "1"}}
-																														<span class="statusfol" style="white-space: wrap;" >Esvanecimento</span>
-																														{{else}}
-																														{{#ifEqual this.folreg_status "2"}}
-																															<span class="statusfol" style="white-space: wrap;" >Meta</span>
-																															{{else}}
-																															{{#ifEqual this.folreg_status "3"}}
-																																<span class="statusfol" style="white-space: wrap;" > Volta Passo</span>
+																														</div>
+																														<div>
+																															{{#ifEqual this.folreg_status "1"}}
+																																<span class="statusfol" style="white-space: wrap;" >Esvanecimento</span>
 																																{{else}}
-																																<span class="statusfol" style="white-space: wrap;" > Continua</span>
+																																{{#ifEqual this.folreg_status "2"}}
+																																	<span class="statusfol" style="white-space: wrap;" >Meta</span>
+																																	{{else}}
+																																	{{#ifEqual this.folreg_status "3"}}
+																																		<span class="statusfol" style="white-space: wrap;" > Volta Passo</span>
+																																		{{else}}
+																																		<span class="statusfol" style="white-space: wrap;" > Continua</span>
+																																	{{/ifEqual}}
+																																{{/ifEqual}}
 																															{{/ifEqual}}
-																														{{/ifEqual}}
-																													{{/ifEqual}}
-																													</div>
+																														</div>
+																														<div>
+																															<!-- Inserir aqui passo de dica aplicado na Folha de Registro Dupla-->
+																														</div>
 																													</a>
 																												{{/ifEqual}}
 																												

@@ -39,6 +39,12 @@
 										</a>
 									</li>
 									<li>
+										<a data-toggle="tab" href="#lau">
+											Laudos
+											<i class="blue ace-icon fa fa-file-text-o bigger-120"></i>
+										</a>
+									</li>
+									<li>
 										<a data-toggle="tab" href="#end">
 											Endereço
 											<i class="orange ace-icon fa fa-globe bigger-120"></i>
@@ -114,6 +120,40 @@
 												<select name="convStatus" id="convStatus" class="chosen-select" style="width: 100px;"	data-placeholder="">
 													<option value="Ativo">Ativo</option>
 													<option value="Inativo">Inativo</option>
+												</select>
+											</div>
+										</div>
+
+									</div>
+									<div id="lau" class="tab-pane fade">
+
+										<div class="alert alert-warning">
+											<button type="button" class="close" data-dismiss="alert">
+												<i class="ace-icon fa fa-times"></i>
+											</button>
+											<strong>Aviso!</strong>
+
+											É fundamental informar a obrigatoriedade da cobrança de laudos pelo Convênio, com o objetivo de organizar o processo de cobrança e controlar o vencimento dos laudos obtidos para tratamento.
+											<br>
+										</div>
+
+										
+
+										<div class="space space-8"></div>
+										<label>Inicio da data de cobrança de laudo</label>
+										<div class="form-group">
+											<div class="col-sm-3">
+												<input type="date" name="convCobralaudodata" id="convCobralaudodata" placeholder="" style="width: 300px;"	class="form-control" />
+											</div>
+										</div>
+
+										<label>Cobrança de laudo</label>
+										<div class="form-group">
+											<div class="col-sm-2">
+												<select name="convCobralaudo" id="convCobralaudo" class="chosen-select" style="width: 100px;"	data-placeholder="">
+													<option value="0 Mês">0 Mês</option>
+													<option value="6 Meses">6 Meses</option>
+													<option value="12 Meses">12 Meses</option>
 												</select>
 											</div>
 										</div>

@@ -181,7 +181,7 @@ module.exports = {
                                                     dataAtual,
                                                     folregs: folreg,
                                                     notasups: notasup,
-                                                    porgs: prog,
+                                                    progs: prog,
                                                     beneFiltro,
                                                     filtra
                                                 });
@@ -339,7 +339,7 @@ module.exports = {
                                                     dataAtual,
                                                     folregs: folreg,
                                                     notasups: notasup,
-                                                    porgs: prog
+                                                    progs: prog
                                                 });
                                             });
                                         });
@@ -497,7 +497,7 @@ module.exports = {
                                                     dataAtual,
                                                     folregs: folreg,
                                                     notasups: notasup,
-                                                    porgs: prog
+                                                    progs: prog
                                                 });
                                             });
                                         });

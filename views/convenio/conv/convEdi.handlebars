@@ -4,17 +4,19 @@
 		<title>Convênios</title>
 		<script>
 			function carregaBody(){
-				document.getElementById("beneEnduf").value = document.getElementById("beneEndufEdi").value;
+				document.getElementById("convEnduf").value = document.getElementById("convEndufEdi").value;
 				document.getElementById("convStatus").value = document.getElementById("convStatusEdi").value;
+				document.getElementById("convCobralaudo").value = document.getElementById("convCobralaudoEdi").value;
 			}
 		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="convId" name="convId" value="{{conv._id}}"/>
 			<input id="convEndufEdi" name="convEndufEdi" value="{{conv.conv_enduf}}"/>
 			<input id="convStatusEdi" name="convStatusEdi" value="{{conv.conv_status}}"/>
-			
+			<input id="convCobralaudoEdi" name="convCobralaudoEdi" value="{{conv.conv_cobralaudo}}"/>
 		</div>
 		
 
@@ -46,6 +48,12 @@
 												<a data-toggle="tab" href="#dados">
 													<i class="red ace-icon fa fa-heartbeat bigger-120"></i>
 													Dados Básicos
+												</a>
+											</li>
+											<li>
+												<a data-toggle="tab" href="#lau">
+													Laudos
+													<i class="blue ace-icon fa fa-file-text-o bigger-120"></i>
 												</a>
 											</li>
 											<li>
@@ -115,7 +123,40 @@
 															</div>
 													</div>
 											</div>
-													
+											<div id="lau" class="tab-pane fade">
+
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Aviso!</strong>
+
+													É fundamental informar a obrigatoriedade da cobrança de laudos pelo Convênio, com o objetivo de organizar o processo de cobrança e controlar o vencimento dos laudos obtidos para tratamento.
+													<br>
+												</div>
+
+												
+
+												<div class="space space-8"></div>
+												<label>Inicio da data de cobrança de laudo</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="date" name="convCobralaudodata" id="convCobralaudodata" placeholder="" style="width: 300px;" value="{{conv.conv_cobralaudodata}}"	class="form-control" />
+													</div>
+												</div>
+
+												<label>Cobrança de laudo</label>
+												<div class="form-group">
+													<div class="col-sm-2">
+														<select name="convCobralaudo" id="convCobralaudo" class="chosen-select" style="width: 100px;"	data-placeholder="">
+															<option value="0 Mês">0 Mês</option>
+															<option value="6 Meses">6 Meses</option>
+															<option value="12 Meses">12 Meses</option>
+														</select>
+													</div>
+												</div>
+
+											</div>		
 											<div id="end" class="tab-pane fade">
 												<label > Endereço </label>
 												<div class="form-group">
@@ -248,7 +289,7 @@
 														</div>
 													</div>
 													<div class="hidden">
-														<input name="convId" id="convId" value="{{_id}}" />
+														<input name="convId" id="convId" value="{{conv._id}}" />
 													</div>
 
 											</div>

@@ -57,9 +57,11 @@
 															</label>
 														</th>
 
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Convênio:     activate to sort column ascending">Convênio</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">CNPJ</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Beneficiário: activate to sort column ascending">Status</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >CNPJ</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrança de Laudo</th>
+														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data da Cobrança de Laudo</th>
+														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
 														<th>Ação</th>
 
 													</tr>
@@ -79,6 +81,36 @@
 
 														<td>{{conv_nome}}</td>
 														<td>{{conv_cnpj}}</td>
+														<td>
+															{{#ifEqual this.conv_cobralaudo "0 Mês"}}
+																<a href="#" data-action="">
+																	<i class="ace-icon green fa fa-minus bigger-130"></i>
+																</a>
+																<span class="badge badge-success">&nbsp;
+																	Não
+																</span>
+															{{else}}
+																{{#ifEqual this.conv_cobralaudo "6 Meses"}}
+																	<a href="#" data-action="">
+																		<i class="ace-icon warning fa fa-time bigger-130"></i>
+																	</a>
+																	<span class="badge badge-warning">&nbsp;
+																		Sim - prazo de 6 Meses
+																	</span>
+																{{else}}
+																	{{#ifEqual this.conv_cobralaudo "12 Meses"}}
+																		<a href="#" data-action="">
+																			<i class="ace-icon warning fa fa-time bigger-130"></i>
+																		</a>
+																		<span class="badge badge-warning">&nbsp;
+																			Sim - prazo de 12 Meses
+																		</span>
+																	{{else}}
+																	{{/ifEqual}}
+																{{/ifEqual}}
+															{{/ifEqual}}
+														</td>
+														<td>{{conv_cobralaudodata}}</td>
 														<td>{{conv_status}}</td>
 
 															<td>
@@ -88,9 +120,7 @@
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
 
-																	<a class="red" href="/menu/convenio/conv/del/{{_id}}">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
+																	
 																</div>
 																<div class="hidden-md hidden-lg">
 																	
@@ -135,9 +165,8 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthMenu": [100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

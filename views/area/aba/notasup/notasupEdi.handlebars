@@ -2,72 +2,46 @@
 <html lang="pt-br">
 	<head>
 		<title>Notas de Supervisão</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
 		<script type="text/javascript">
-			function addTrObs(){
-				let qtd = (parseInt(document.getElementById("qtdTrNotasupObs").value) + 1);
-				document.getElementById("qtdTrNotasupObs").value = qtd;
-				//
-				var originalRow = document.getElementById('trNotasupObs_0');
-				// Clone the original row
-				var newRow = originalRow.cloneNode(true);
+			let obsCount = 0;
 
-				// Find the current index from the original row's id
-				var originalIndex = parseInt(originalRow.id.match(/\d+/)[0]);
-				var newIndex = parseInt(document.getElementById("qtdTrNotasupObs").value);
+			function addTrObs(programas) {
+				const table = document.getElementById("tbody_NotasupObs");
+				const row = document.createElement("tr");
 
-				// Update the id of the new row
-				newRow.id = 'trNotasupObs_' + newIndex;
+				// Obter o template Handlebars
+				const source = document.getElementById("programas-template").innerHTML;
+				const template = Handlebars.compile(source);
 
-				// Update the ids and names of the children elements
-				var children = newRow.querySelectorAll('[id], [name]');
-				children.forEach(function(child) {
-					if (child.id) {
-						child.id = child.id.replace('_' + originalIndex, '_' + newIndex);
-					}
-					if (child.name) {
-						child.name = child.name.replace('_' + originalIndex, '_' + newIndex);
-					}
-				});
+				// Gerar o HTML para as opções usando o template
+				const optionsHtml = template({ Progtipos: programas });
 
-				document.getElementById("tbody_NotasupObs").append(newRow);
+				row.innerHTML = `
+					<td>
+						<select name="observacoes[${obsCount}][programa]" class="form-control">
+							<option value="766f69643132333435366964">Selecione</option>
+							${optionsHtml}
+						</select>
+					</td>
+					<td><input type="text" name="observacoes[${obsCount}][analise]" class="form-control"></td>
+					<td><input type="text" name="observacoes[${obsCount}][sugestao]" class="form-control"></td>
+					<td><button type="button" onclick="this.closest('tr').remove();">Remover</button></td>
+				`;
+
+				table.appendChild(row);
+				obsCount++;
+				document.getElementById("qtdTrNotasupObs").value = obsCount;
 			}
 
-			function removeTrObs(elemento) {
-				let qtd = document.getElementById("qtdTrNotasupObs").value;
-				let campo = elemento.id;
-				let numero = parseInt(campo.substring((campo.length - 1), campo.length));
-				document.getElementById("trNotasupObs_"+numero).remove();
-				if (numero < parseInt(qtd)) {
-					let aux = qtd - numero;
-					for (var i = 0; i < aux; i++) {
-						//numero = numero + 1;
-						var originalRow = document.getElementById('trNotasupObs_'+(numero + 1));
-						var originalIndex = parseInt(originalRow.id.match(/\d+/)[0]);
-
-						originalRow.id = ("trNotasupObs_"+numero);
-						var children = originalRow.querySelectorAll('[id], [name]');
-						children.forEach(function(child) {
-							if (child.id) {
-								child.id = child.id.replace('_' + originalIndex, '_' + numero);
-							}
-							if (child.name) {
-								child.name = child.name.replace('_' + originalIndex, '_' + numero);
-							}
-						});
-						numero = numero + 1;
-					}
-				}
-				document.getElementById("qtdTrNotasupObs").value = (parseInt(qtd) - 1);
-				
-			}
 			// Função para formatar a data no formato dd/mm/aaaa
-				function formatDate(date) {
-					let d = new Date(date);
-					let year = d.getFullYear();
-					let month = (d.getMonth() + 1).toString().padStart(2, '0');
-					let day = d.getDate().toString().padStart(2, '0');
-					return `${day}/${month}/${year}`;
-				}
+			function formatDate(date) {
+				let d = new Date(date);
+				let year = d.getFullYear();
+				let month = (d.getMonth() + 1).toString().padStart(2, '0');
+				let day = d.getDate().toString().padStart(2, '0');
+				return `${day}/${month}/${year}`;
+			}
 			
 			// Função para carregar tudo ao inicializar a página
 			function carregaBody() {
@@ -95,7 +69,6 @@
 					}
 				})
 				//Carrega Campos
-				document.getElementById("notasupId").value = document.getElementById("notasupIdEdi").value;
 				document.getElementById("notasupDatanotasup").value = document.getElementById("notasupDatanotasupEdi").value;
 				document.getElementById("notasupHoranotasup").value = document.getElementById("notasupHoranotasupEdi").value;
 				document.getElementById("notasupTerapeutaid").value = document.getElementById("notasupTerapeutaidEdi").value;
@@ -128,11 +101,13 @@
 				document.getElementById("notasupInfdirduvid").value = document.getElementById("notasupInfdirduvidEdi").value;
 				document.getElementById("notasupAcompprog").value = document.getElementById("notasupAcompprogEdi").value;
 				document.getElementById("notasupAcompgeral").value = document.getElementById("notasupAcompgeralEdi").value;
-
-
-
-				
+				obsCount = {{notasup.notasup_obs.length}};
 			}
+		</script>
+		<script id="programas-template" type="text/x-handlebars-template">
+			{{#each progtipos}}
+				<option value="{{_id}}">{{progtipo_nome}}</option>
+			{{/each}}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -153,8 +128,6 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<div id="divCarrega" >
-								<input type="text" id="notasupId" name="notasupId" value="" />
-								<input type="text" id="notasupIdEdi" name="notasupIdEdi" value="{{notasup._id}}" />
 								<input type="text" id="notasupDatanotasupEdi" name="notasupDatanotasupEdi" value="{{notasup.notasup_datanotasup}}" />
 								<input type="text" id="notasupHoranotasupEdi" name="notasupHoranotasupEdi" value="{{notasup.notasup_horanotasup}}" />
 								<input type="text" id="notasupTerapeutaidEdi" name="notasupTerapeutaidEdi" value="{{notasup.notasup_terapeutaid}}" />
@@ -199,7 +172,8 @@
 									<input id="prog_{{prog_beneid}}" name="progBene" value="{{prog_tipo}}" />
 								{{/each}}
 							</div>
-							<form id="mainForm" name="mainForm" class="form-horizontal" action="/menu/area/aba/notasup/edi" method="POST">
+							<form id="mainForm" name="mainForm" class="form-horizontal" action="/menu/area/aba/notasup/atualizar" method="POST">
+								<input hidden type="text" id="notasupId" name="notasupId" value="{{notasup._id}}" />
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
@@ -579,34 +553,21 @@
 																		</th>
 																	</thead>
 																	<tbody id="tbody_NotasupObs">
-																		<tr id="trNotasupObs_1">
-																			<td>
-																				<div class="input-group">
-																					<select name="notasupObsprogid_1" id="notasupObsprogid_1" class="chosen-select" value="Sem Info" onchange="" >
-																						<option value="766f69643132333435366964">-</option>
-																						{{#each progtipos}}
-																							<option id="{{_id}}" name="optProgId" value="{{_id}}">{{progtipo_nome}}</option>
+																		{{#each notasup.notasup_obs}}
+																			<tr>
+																				<td>
+																					<select name="observacoes[{{@index}}][programa]" class="form-control">
+																						<option value="766f69643132333435366964">Selecione</option>
+																						{{#each ../progtipos}}
+																						<option value="{{_id}}" {{#ifEqual _id ../notaSupObs_progid}} selected {{/ifEqual}}>{{progtipo_nome}}</option>
 																						{{/each}}
 																					</select>
-																				</div>
-																			</td>
-																			<td>
-																				<textarea type="text" name="notasupObsana_1" id="notasupObsana_1" class="form-control" ></textarea>
-																			</td>
-																			<td>
-																				<textarea type="text" name="notasupObssugest_1" id="notasupObssugest_1" class="form-control" ></textarea>
-																			</td>
-																			<td>
-																				
-																				<div class="widget-header">
-																					<span class="widget-toolbar">Remover
-																						<a data-action="add">
-																							<i id="notaSupObsI_1" class="red ace-icon fa fa-times" onclick="javascript:removeTrObs(this);"></i>
-																						</a>
-																					</span>
-																				</div>
-																			</td>
-																		</tr>
+																				</td>
+																				<td><input type="text" name="observacoes[{{@index}}][analise]" class="form-control" value="{{notaSupObs_analise}}"></td>
+																				<td><input type="text" name="observacoes[{{@index}}][sugestao]" class="form-control" value="{{notaSupObs_sugestao}}"></td>
+																				<td><button type="button" onclick="this.closest('tr').remove();">Remover</button></td>
+																			</tr>
+																		{{/each}}
 																	</tbody>
 																</table>
 															</div>

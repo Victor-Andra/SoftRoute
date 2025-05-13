@@ -278,7 +278,7 @@ module.exports = {AgendaModel,AgendaSchema,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
                 agenda_copia : req.body.agendaCopia ,
                 agenda_usucad : usuarioAtual,
-                agenda_usuedi: req.body.agendaUsuedi ,
+                agenda_usuedi: usuarioAtual ,
                 agenda_log: req.body.agendaLog , //Log das alterações
                 agenda_dataedi : dataAtual
                 }}

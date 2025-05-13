@@ -17,6 +17,10 @@ const NotaSupObsSchema = mongoose.Schema({
     notaSupObs_sugestao :{
         type: String,
         required: false
+    },
+    notaSup_id :{
+        type: ObjectId,
+        required: true
     }
 })
 
@@ -25,12 +29,14 @@ class NotaSupObs{
         notaSupObs_beneid,
         notaSupObs_progid,
         notaSupObs_analise,   
-        notaSupObs_sugestao
+        notaSupObs_sugestao,
+        notaSup_id
         ){
         this.notaSupObs_beneid = notaSupObs_beneid,
         this.notaSupObs_progid = notaSupObs_progid,
-        this.notaSupObs_analise = notaSupObs_analise,   
-        this.notaSupObs_sugestao = notaSupObs_sugestao
+        this.notaSupObs_analise = notaSupObs_analise,
+        this.notaSupObs_sugestao = notaSupObs_sugestao,
+        this.notaSup_id = notaSup_id
     }
 }
 
@@ -60,7 +66,7 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         })
         return resultado;
     },
-    notaSupObsAdicionarMuitos: async (req,res) => {
+    notaSupObsAdicionarMuitos: async (req,res,notaSup_id) => {
         let dataAtual = new Date();
         console.log("notaSupObsmodel");
         //trabalhar a func aqui
@@ -68,15 +74,8 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         let newidId;
         let arrayNewIds = "";
         let qtd = parseInt((""+qtdTrNotasupObs+""));
-        
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("qtd: "+qtd)
-        console.log("req.body.notasupObsprogid_1 != undefined && qtd >= 1: "+(req.body.notasupObsprogid_1 != undefined && qtd >= 1))
+
+        //console.log("req.body.notasupObsprogid_1 != undefined && qtd >= 1: "+(req.body.notasupObsprogid_1 != undefined && qtd >= 1))
         if (req.body.notasupObsprogid_1 != undefined && qtd >= 1){
             newidId = new ObjectId();
             arrayNewIds = ""+newidId+"";
@@ -85,8 +84,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_1,
-                notaSupObs_analise: req.body.notasupObsana_1,   
-                notaSupObs_sugestao: req.body.notasupObssugest_1
+                notaSupObs_analise: req.body.notasupObsana_1,
+                notaSupObs_sugestao: req.body.notasupObssugest_1,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save1");
@@ -107,8 +107,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_2,
-                notaSupObs_analise: req.body.notasupObsana_2,   
-                notaSupObs_sugestao: req.body.notasupObssugest_2
+                notaSupObs_analise: req.body.notasupObsana_2,
+                notaSupObs_sugestao: req.body.notasupObssugest_2,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save2");
@@ -129,8 +130,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_3,
-                notaSupObs_analise: req.body.notasupObsana_3,   
-                notaSupObs_sugestao: req.body.notasupObssugest_3
+                notaSupObs_analise: req.body.notasupObsana_3,
+                notaSupObs_sugestao: req.body.notasupObssugest_3,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save3");
@@ -151,8 +153,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_4,
-                notaSupObs_analise: req.body.notasupObsana_4,   
-                notaSupObs_sugestao: req.body.notasupObssugest_4
+                notaSupObs_analise: req.body.notasupObsana_4,
+                notaSupObs_sugestao: req.body.notasupObssugest_4,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save4");
@@ -173,8 +176,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_5,
-                notaSupObs_analise: req.body.notasupObsana_5,   
-                notaSupObs_sugestao: req.body.notasupObssugest_5
+                notaSupObs_analise: req.body.notasupObsana_5,
+                notaSupObs_sugestao: req.body.notasupObssugest_5,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save5");
@@ -195,8 +199,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_6,
-                notaSupObs_analise: req.body.notasupObsana_6,   
-                notaSupObs_sugestao: req.body.notasupObssugest_6
+                notaSupObs_analise: req.body.notasupObsana_6,
+                notaSupObs_sugestao: req.body.notasupObssugest_6,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save6");
@@ -217,8 +222,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_7,
-                notaSupObs_analise: req.body.notasupObsana_7,   
-                notaSupObs_sugestao: req.body.notasupObssugest_7
+                notaSupObs_analise: req.body.notasupObsana_7,
+                notaSupObs_sugestao: req.body.notasupObssugest_7,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save7");
@@ -239,8 +245,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_8,
-                notaSupObs_analise: req.body.notasupObsana_8,   
-                notaSupObs_sugestao: req.body.notasupObssugest_8
+                notaSupObs_analise: req.body.notasupObsana_8,
+                notaSupObs_sugestao: req.body.notasupObssugest_8,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save8");
@@ -261,8 +268,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_9,
-                notaSupObs_analise: req.body.notasupObsana_9,   
-                notaSupObs_sugestao: req.body.notasupObssugest_9
+                notaSupObs_analise: req.body.notasupObsana_9,
+                notaSupObs_sugestao: req.body.notasupObssugest_9,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save9");
@@ -283,8 +291,9 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_10,
-                notaSupObs_analise: req.body.notasupObsana_10,   
-                notaSupObs_sugestao: req.body.notasupObssugest_10
+                notaSupObs_analise: req.body.notasupObsana_10,
+                notaSupObs_sugestao: req.body.notasupObssugest_10,
+                notaSup_id : notaSup_id
             });
 
             console.log("newNotaSupObs save10");

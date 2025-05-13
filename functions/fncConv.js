@@ -50,7 +50,7 @@ module.exports = {
             })
         })
     },
-
+   
     atualizaConv(req, res){
         let resposta;
         try{
@@ -88,16 +88,13 @@ module.exports = {
 
     carregaConvEdi(req, res){
         Conv.findById(req.params.id).then((conv) =>{
-            console.log(conv)
-                Estado.find().then((estado)=>{
-                    console.log(estado)
-            res.render("convenio/conv/convEdi", {conv, estados: estado})
+            Estado.find().then((estado)=>{
+                res.render("convenio/conv/convEdi", {conv, estados: estado})
         })
     }).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
-
     },
 
     listaConv(req, res){

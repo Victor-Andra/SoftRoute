@@ -2,90 +2,64 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const ConvSchema = mongoose.Schema({
-    conv_nome : {
-        type: String,
-        unique: true,
-        required: true
-    },
-
-    conv_razao : {
-        type: String,
-        unique: true,
-        required: false
-    },
-
-    conv_contrato: {
-        type: String,
-        required: false
-    },
-    conv_cnpj : {
-        type: String,
-        required: true
-    },
-    conv_end : {
-        type: String,
-        required: false
-    },
-    conv_endcompl : {
-        type: String,
-        required: false
-    },
-    conv_endbairro : {
-        type: String,
-        required: false
-    },
-    conv_endcidade : {
-        type: String,
-        required: false
-    },
-    conv_enduf : {
-        type: String,
-        required: false
-    },
-    conv_endcep : {
-        type: String,
-        required: false
-    },
-    conv_whatsapp : {
-        type: String,
-        required: false
-    },
-    conv_fixo : {
-        type: String,
-        required: false
-    },
-    conv_email : {
-        type: String,
-        required: false
-    },
-    conv_site : {
-        type: String,
-        required: false
-    },
-    conv_status : {
-        type: String,
-        required: false
-    },
-    conv_obs : {
-        type: String,
-        required: false
-    },
-    conv_datacad: {
-        type: Date,
-        required: false
-    },
-    conv_dataedi: {
-        type: Date,
-        required: false
-    }
+    conv_nome : { type: String, unique: true, required: true },
+    conv_razao : { type: String, unique: true, required: false },
+    conv_contrato: { type: String, required: false },
+    conv_cnpj : { type: String, required: true },
+    conv_end : { type: String, required: false },
+    conv_endcompl : { type: String, required: false },
+    conv_endbairro : { type: String, required: false },
+    conv_endcidade : { type: String, required: false },
+    conv_enduf : { type: String, required: false },
+    conv_endcep : { type: String, required: false },
+    conv_whatsapp : { type: String, required: false },
+    conv_fixo : { type: String, required: false },
+    conv_email : { type: String, required: false },
+    conv_site : { type: String, required: false },
+    conv_status : { type: String, required: false },
+    conv_obs : { type: String, required: false },
+    conv_cobralaudodata : { type: String, required: false },
+    conv_cobralaudo : { type: String, required: false },
+    //controle
+    conv_datacad: { type: Date, required: false },
+    conv_dataedi: { type: Date, required: false },
+    conv_usuidcad: { type: ObjectId, required: false },
+    conv_usuidedi: { type: ObjectId, required: false },
+    conv_lixo :{ type: String, required: false },
+    conv_datalixo: { type: String, required: false },
+    conv_usuidlixo: { type: ObjectId, required: false }
     
 })
 
 class Conv{
-    constructor(conv_nome,conv_razao,conv_contrato,conv_cnpj,
-        conv_end,conv_endcompl,conv_endbairro,conv_endcidade,
-        conv_enduf,conv_endcep,conv_whatsapp,conv_cel,conv_fixo,
-        conv_email,conv_site,conv_status,conv_obs,conv_datacad,conv_dataedi 
+    constructor(
+        conv_nome,
+        conv_razao,
+        conv_contrato,
+        conv_cnpj,
+        conv_end,
+        conv_endcompl,
+        conv_endbairro,
+        conv_endcidade,
+        conv_enduf,
+        conv_endcep,
+        conv_whatsapp,
+        conv_cel,
+        conv_fixo,
+        conv_email,
+        conv_site,
+        conv_status,
+        conv_obs,
+        conv_cobralaudodata,
+        conv_cobralaudo,
+        //Controle registro
+        conv_datacad,
+        conv_dataedi,
+        conv_usuidcad,
+        conv_usuidedi,
+        conv_lixo,
+        conv_datalixo,
+        conv_usuidlixo
         ){
         this.conv_nome  = conv_nome,
         this.conv_razao = conv_razao,
@@ -104,12 +78,18 @@ class Conv{
         this.conv_site  = conv_site,
         this.conv_status  = conv_status,
         this.conv_obs  = conv_obs,
+        this.conv_cobralaudodata = conv_cobralaudodata,
+        this.conv_cobralaudo = conv_cobralaudo,
+        //Controle registro
         this.conv_datacad  = conv_datacad,
         this.conv_dataedi  = conv_dataedi
-            
+        this.conv_usuidcad = conv_usuidcad,
+        this.conv_usuidedi = conv_usuidedi,
+        this.conv_lixo = conv_lixo,
+        this.conv_datalixo = conv_datalixo,
+        this.conv_usuidlixo = conv_usuidlixo
     }
 }
-
 
 ConvSchema.loadClass(Conv)
 const ConvModel = mongoose.model('tb_conv', ConvSchema)
@@ -118,9 +98,9 @@ module.exports = {ConvModel,ConvSchema,
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
-        
+        let usuarioAtual = req.cookies['idUsu'];
         //Realiza Atualização
-        await ConvModel.findByIdAndUpdate(req.body.convId, 
+        await ConvModel.findByIdAndUpdate(new ObjectId(req.body.convId), 
             {$set: {
                 conv_nome: req.body.convNome,
                 conv_razao: req.body.convRazao,
@@ -139,7 +119,11 @@ module.exports = {ConvModel,ConvSchema,
                 conv_site: req.body.convSite,
                 conv_status: req.body.convStatus,
                 conv_obs: req.body.convObs,
-                conv_dataedi: dataAtual
+                conv_cobralaudo: req.body.convCobralaudo,
+                conv_cobralaudodata: req.body.convCobralaudodata,
+                conv_dataedi: dataAtual,
+                conv_usuidedi: usuarioAtual
+
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -152,12 +136,6 @@ module.exports = {ConvModel,ConvSchema,
         })
         return resultado;
     },
-
-
-
-
-
-
 
     convAdicionar: async (req,res) => {
         let convExiste =  await ConvModel.findOne({conv_nome: req.body.convNome});//quando não acha fica null
@@ -185,6 +163,9 @@ module.exports = {ConvModel,ConvSchema,
                 conv_site: req.body.convSite,
                 conv_status: req.body.convStatus,
                 conv_obs: req.body.convObs,
+                conv_cobralaudodata: req.body.convCobralaudodata,
+                conv_cobralaudo: req.body.convCobralaudo,
+                conv_usuidcad: usuarioAtual,
                 conv_datacad: dataAtual
             });
             console.log("newConv save");

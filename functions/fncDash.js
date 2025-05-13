@@ -43,8 +43,9 @@ class RelObjvalor{
         this.total = total
     }
 }
-//carregaDashfinan(req,res){
+    
 module.exports = {
+    //carregaDashfinan(req,res){
     carregaDashfinan(req,res){
         // Variável para habilitar/desabilitar logs
         const habilitarConsoleLog = true;
@@ -210,8 +211,7 @@ module.exports = {
                 res.redirect("/admin/erro");
             });
     },
-
-        //res.render("dash/dashFinan"
+    //carregaDashfinan res.render("dash/dashFinan"
     carregaDashadminin_Primeira(req,res){
         let qtregsbene;
         let arrayRelQtValor = [];
