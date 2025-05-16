@@ -18,6 +18,8 @@ const BeneSchema = mongoose.Schema({
     bene_ident:{ type: String, required: false },
     bene_cpf:{ type: String, required: false },
     bene_status:{ type: String, required: false },
+    bene_dtaini:{ type: String, required: false },// Data inicio das ativides 16/05/2025 , Débora.
+    bene_dtafim:{ type: String, required: false },// Data Fim das ativides 16/05/2025 , Débora..
     bene_convid:{ type: ObjectId, required: true },
     bene_liminar:{ type: String, required: false },
     bene_imphora:{ type: String, required: false},
@@ -117,7 +119,7 @@ const BeneSchema = mongoose.Schema({
 class Bene{
     constructor(
         bene_nome, bene_apelido, bene_idade, bene_datanasc, bene_nacionalidade, bene_end, bene_endcompl, bene_endbairro,
-        bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_convid, bene_liminar, bene_out,bene_imphora,bene_impcarimbo, bene_graupar,
+        bene_endcidade, bene_enduf,	bene_endcep, bene_ident, bene_cpf, bene_status, bene_dtaini, bene_dtafim, bene_convid, bene_liminar, bene_out,bene_imphora,bene_impcarimbo, bene_graupar,
         bene_supervisor, bene_outprof, bene_outident, bene_outcpf, bene_outend, bene_outendcompl, bene_outendbairro, 
         bene_outendcidade, bene_outenduf, bene_outendcep, bene_outcel, bene_outcel2, bene_outemail, bene_ordempg, bene_ordemdoc, bene_ordemnome, bene_ordemretem, bene_pai, 
         bene_paiprof, bene_paiident, bene_paicpf, bene_paiend, bene_paiendcompl, bene_paiendbairro, bene_paiendcidade, 
@@ -142,6 +144,8 @@ class Bene{
             this.bene_ident = bene_ident,
             this.bene_cpf = bene_cpf,
             this.bene_status = bene_status,
+            this.bene_dtaini = bene_dtaini,// Data inicio das ativides 16/05/2025, Débora.
+            this.bene_dtafim = bene_dtafim,// Data fim das ativides 16/05/2025, Débora.
             this.bene_convid = bene_convid,
             this.bene_liminar = bene_liminar,
             this.bene_out = bene_out,
@@ -280,6 +284,8 @@ module.exports = {BeneModel,BeneSchema,
                 bene_ident: req.body.beneIdent,
                 bene_cpf: req.body.beneCpf,
                 bene_status: req.body.beneStatus,
+                bene_dtaini: req.body.beneDtaini,// Data inicio das ativides 16/05/2025, Débora.
+                bene_dtafim: req.body.beneDtafim,// Data fim das ativides 16/05/2025, Débora.
                 bene_convid: req.body.beneConvid,
                 bene_liminar: req.body.beneLiminar,
                 bene_imphora: req.body.beneImphora,
@@ -463,6 +469,8 @@ module.exports = {BeneModel,BeneSchema,
                 bene_ident: req.body.beneIdent,
                 bene_cpf: req.body.beneCpf,
                 bene_status: req.body.beneStatus,
+                bene_dtaini: req.body.beneDtaini,// Data inicio das ativides 16/05/2025, Débora.
+                bene_dtafim: req.body.beneDtafim,// Data fim das ativides 16/05/2025, Débora.
                 bene_convid: req.body.beneConvid,
                 bene_liminar: req.body.beneLiminar,
                 bene_imphora: req.body.beneImphora,

@@ -30,18 +30,44 @@ const ObjectId = require('mongodb').ObjectId;
 module.exports = {
     listaLaudo(req, res, resposta){
         let flash = new Resposta();
-        //console.log('listando Laudoeses')
-            let laudo;
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+        let laudo;
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => ((a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o Convênio por nome
                 Usuario.find().then((usuario)=>{
-                    res.render('area/laudo/laudoLis', {laudos: laudo, usuarios: usuario, benes: bene, flash})
-        })}).catch((err) =>{
+                    Laudo.find().then((laudo)=>{
+                        let beneLaudo;
+                        let convBene;
+                        let i = 1;
+                        laudo.forEach((l)=>{
+                            console.log("LAudO "+i);
+                            i++;
+                            beneLaudo = bene.find(a => (""+a._id+"") === (""+l.laudo_beneid+""));
+                            if (beneLaudo != undefined && beneLaudo != "undefined" && (""+beneLaudo.bene_convid+"") != "undefined" && (""+beneLaudo.bene_convid+"") != undefined){
+                                convBene = conv.find(a => (""+a._id+"") === (""+beneLaudo.bene_convid+""));
+                                console.log(convBene);
+                                if ((""+convBene.conv_cobralaudo+"") != ""){
+                                    if (convBene.conv_cobralaudo == "6 Meses" || convBene.conv_cobralaudo == "12 Meses"){
+                                        let laudoPrazo = new Date(l.laudo_data);
+                                        l.laudo_dataString = fncGeral.getData(laudoPrazo);
+                                        laudoPrazo.setMonth(laudoPrazo.getMonth() + (convBene.conv_cobralaudo == "6 Meses" ? 6 : (convBene.conv_cobralaudo == "12 Meses" ? 12 : 0)));
+                                        l.laudo_prazo = fncGeral.getData(laudoPrazo);
+                                        l.laudo_periodoValidade = convBene.conv_cobralaudo;
+                                        let laudo_dataEdi = new Date(l.laudo_dataedi);
+                                        l.laudo_dataediString = (fncGeral.getData(laudo_dataEdi) == "NaN/NaN/NaN" ? "" : fncGeral.getData(laudo_dataEdi));
+                                    }
+                                }
+                            }
+                        })
+                    res.render('area/laudo/laudoLis', {laudos: laudo, usuarios: usuario, benes: bene, convs: conv, flash})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
         })
     },
+   
     carregaLaudo(req,res){
         let usuarioAtual = req.cookies['idUsu'];
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -50,8 +76,10 @@ module.exports = {
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Escola.find().sort({escola_nome: 1}).then((escola)=>{
                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
-                    res.render("area/laudo/laudoCad", {escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
-        })})}).catch((err) =>{
+                    Conv.find().then((conv)=>{
+                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o bene por nome
+                        res.render("area/laudo/laudoCad", {escolas: escola, terapeutas: terapeuta, benes: bene, convs: conv, usuarioAtual})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar os  Laudo")
             res.redirect('admin/erro')
@@ -118,45 +146,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    carregaLaudo(req,res){
-        let usuarioAtual = req.cookies['idUsu'];
-        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-            Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Escola.find().sort({escola_nome: 1}).then((escola)=>{
-                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome
-                    res.render("area/laudo/laudoCad", {escolas: escola, terapeutas: terapeuta, benes: bene, usuarioAtual})
-        })})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar os  Laudo")
-            res.redirect('admin/erro')
-        })
-
-    },
-    carregaLaudoedi(req,res){
-        let usuarioAtual = req.cookies['idUsu'];
-        Laudo.findById(req.params.id).then((laudo) =>{console.log("ID: "+laudo._id)
-            Conv.find().then((conv)=>{
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                        console.log("Listagem Realizada de Usuário")
-                        Bene.find().then((beneficiarios)=>{
-                            Bene.findOne({_id: laudo.laudo_beneid}).then((bene)=>{
-                                //bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                                console.log("Listagem Realizada de beneficiarios")
-                                Escola.find().then((escola) =>{
-                                    escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
-                                    res.render("area/laudo/laudoEdi", {laudo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, bene, usuarioAtual, benes:  beneficiarios})
-        })})})})})})}).catch((err) =>{
-        
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
-        })
-    },
+    
     cadastraLaudo(req,res){
         console.log("chegou")
         let resultado

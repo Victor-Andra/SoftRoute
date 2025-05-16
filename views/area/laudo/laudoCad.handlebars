@@ -12,6 +12,7 @@
 					var dataFmt = new Date(dataIso);
 					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
 					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+					document.getElementById("beneConvid").value = document.getElementById(document.getElementById(beneid+"_beneConvid").value+"_conv_nome").value;
 				}
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
@@ -42,6 +43,7 @@
 
 				return [year, month, day].join('-');
 			}
+			
 			function calculaIdade(dataFmt) {
 				// Data atual
 				const hoje = new Date();
@@ -65,10 +67,10 @@
 				}
 				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
 				
-				}
+			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -87,7 +89,10 @@
 							<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 							{{#each benes}}
 								<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-
+								<input type="text" id="{{_id}}_beneConvid" name="beneConvidEdi" value="{{bene_convid}}"/>
+							{{/each}}
+							{{#each convs}}
+								<input type="text" id="{{_id}}_conv_nome" name="convNome" value="{{conv_nome}}"/>
 							{{/each}}
 						</div>
 					</div><!-- /.page-header -->
@@ -135,6 +140,7 @@
 															</div>
 														</div>
 													</div>
+													
 												</div>	
 											</div>	
 										</div>
@@ -194,9 +200,17 @@
 																</div>
 															</div>
 														</div>
-														
+														<div class="col-xs-3 col-sm-3">
+															<label>Convênio:</label>
+															<div class="row">
+																<div class="col-sm-3">
+																	<div class="input-group">
+																		<input name="beneConvid" id="beneConvid" type="text" readonly="true" />
+																	</div>
+																</div>
+															</div>
+														</div>
 													</div>
-																												
 												</div>	
 											</div>	
 										</div>

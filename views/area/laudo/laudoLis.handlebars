@@ -5,77 +5,21 @@
 		<title>Lista de Laudos</title>
 
 		
-		<script>
-			function confirmeDeletar(id){
-				let confirmado = confirm("Quer mesmo deletar esse Laudo? essa ação é irreversível");
-				if(confirmado == true){
-					window.location.href=("/menu/area/laudo/del/"+id);
-				}
-			}
-			function carregaBody(){
-				let arraydt = document.getElementsByName("datalaudo");
-				let arraydtedi = document.getElementsByName("datalaudoedi");
-				arraydt.forEach((e)=>{
-					let dt = new Date(e.value);
-					let mes = (dt.getUTCMonth()+1).toString();
-					let dia = (dt.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					
-					let resultado = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
-					let val = document.getElementById("moldedata").cloneNode(true);
-					val.value = resultado;
-					document.getElementById(e.id+"dt").append(val);
-				})
-
-				arraydtedi.forEach((e)=>{
-					if (e.value == undefined || e.value == "undefined" || e.value == "" || e.value == null){
-						let val = document.getElementById("moldedata").cloneNode(true);
-						val.value = "-";
-						document.getElementById(e.id+"edi").append(val);
-					} else {
-						let dt = new Date(e.value);
-						let mes = (dt.getUTCMonth()+1).toString();
-						let dia = (dt.getUTCDate()).toString();
-						if (mes.length == 1){
-							mes = "0"+mes;
-						}
-						if (dia.length == 1){
-							dia = "0"+dia;
-						}
-						
-						let resultado = (dt.getFullYear()).toString()+'-'+mes+'-'+dia;
-						let val = document.getElementById("moldedata").cloneNode(true);
-						val.value = resultado;
-						document.getElementById(e.id+"edi").append(val);
-					}
-				})
-			}
-		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-		<div class="hidden">
-			<input type="text" id="moldedata" readonly="true"  />
-			{{#each laudos}}
-				<input id="{{_id}}" name="datalaudo" value="{{laudo_data}}" />
-				<input id="{{_id}}" name="datalaudoedi" value="{{laudo_dataedi}}" />
-			{{/each}}
-		</div>
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs" id="breadcrumbs">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Route</a>
+								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Laudos</li>
+						<li class="active">Lista de Laudos</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -83,39 +27,24 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/laudo/lisF" method="POST">
-							<div id="divAtendBeneficiario" class="col-xs-12 col-sm-4">
-								<div class="row">
-									<div class="input-group">
-										<label>Beneficiário:&nbsp;</label>
-										<select name="laudoBeneid" id="laudoBeneid" class="chosen-select" data-placeholder="Escolha..." value="">
-											{{#each benes}}
-												<option value="{{_id}}">{{bene_nome}}</option>
-											{{/each}}
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-									<i class="ace-icon fa fa-search-plus "></i>
-									Pesquisar
-								</button>
-							</div>
-						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-										<div class="clearfix" >
-											<div class="pull-right tableTools-container">
+											<div class="clearfix" >
+												<div class="pull-right tableTools-container">
+
+
+												</div>
 											</div>
-										</div>
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-											<thead>
+
+											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline ">
+											</div>
+											
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable " role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
 												<tr role="row">
 													<th class="center" tabindex="1">
 														<label class="pos-rel">
@@ -123,15 +52,19 @@
 															<span class="lbl"></span>
 														</label>
 													</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Laudo</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
-													<th tabindex="7">Ação</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Laudo</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Período Validade</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data de Validade</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
+													<th tabindex="10">Ação</th>
 												</tr>
 											</thead>
-											<tbody>
+												
+												<tbody>
 												{{#each laudos}}
 
 													<tr role="row" class="odd">
@@ -141,15 +74,29 @@
 																<span class="lbl"></span>
 															</label>
 														</td>
+														<td>
 														{{#each ../benes}}
 															{{#ifEqual this._id ../laudo_beneid}}
-																<td>{{bene_nome}}</td>
+																{{bene_nome}}
 															{{/ifEqual}}
 														{{/each}}
-														<td id="{{_id}}dt"></td>
+														<td>
+														{{#each ../benes}}
+															{{#ifEqual this._id ../laudo_beneid}}
+																{{#each ../../convs}}
+																	{{#ifEqual this._id ../bene_convid}}
+																		{{conv_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															{{/ifEqual}}
+														{{/each}}
+														</td>
+														<td>{{laudo_dataString}}</td>
+														<td>{{laudo_periodoValidade}}</td>
+														<td>{{laudo_prazo}}</td>
 														<td>{{laudo_medico}}</td>
 														<td>{{laudo_medicoesp}}</td>
-														<td id="{{_id}}edi"></td>
+														<td>{{laudo_dataediString}}</td>
 														<td>
 															<div class="action-buttons">
 																<a class="green" href="/menu/area/laudo/edi/{{_id}}">
@@ -158,15 +105,19 @@
 																<a class="hidden" class="blue" >
 																	<i class="ace-icon fa fa-print bigger-130"></i>
 																</a>
-																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
+																
 															</div>
 														</td>
 													</tr>
 												{{/each}}
 											</tbody>
-										</table>
+
+											</table>
+
+
+										
+										
+										
 									</div>
 								</div>				
 							</div>
@@ -176,7 +127,27 @@
 			</div><!-- /.main-content -->
 
 			<div class="footer">
-				
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Soft</span>
+							Route
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+		
+						</span>
+					</div>
+				</div>
 			</div>
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
@@ -186,7 +157,7 @@
 
 		<!-- basic scripts -->
 
-		<!-- page specific plugin scripts -->
+				<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		
 
@@ -196,7 +167,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null,null,null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [10, 25, 50, 100, 200],
 			"lengthChange": true,

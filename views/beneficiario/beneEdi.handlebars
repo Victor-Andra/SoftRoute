@@ -85,6 +85,10 @@
 			document.getElementById("beneIdent").value = document.getElementById("beneIdentEdi").value;
 			document.getElementById("beneCpf").value = document.getElementById("beneCpfEdi").value;
 			document.getElementById("beneStatus").value = document.getElementById("beneStatusEdi").value;
+
+			document.getElementById("beneDtaini").value = document.getElementById("beneDtainiEdi").value;
+			document.getElementById("beneDtafim").value = document.getElementById("beneDtafimEdi").value;
+
 			document.getElementById("beneConvid").value = document.getElementById("beneConvEdi").value;
 			document.getElementById("beneLiminar").value = document.getElementById("beneLiminarEdi").value;
 			document.getElementById("beneImphora").value = document.getElementById("beneImphoraEdi").value;
@@ -247,6 +251,9 @@
 			<input id="beneIdentEdi" name="beneIdentEdi" value="{{beneEdi.bene_ident}}"/>
 			<input id="beneCpfEdi" name="beneCpfEdi" value="{{beneEdi.bene_cpf}}"/>
 			<input id="beneStatusEdi" name="beneStatusEdi" value="{{beneEdi.bene_status}}"/>
+
+			<input id="beneDtainiEdi" name="beneDtainiEdi" value="{{beneEdi.bene_dtaini}}"/>
+			<input id="beneDtafimEdi" name="beneDtafimEdi" value="{{beneEdi.bene_dtafim}}"/>
 			
 			<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
 			<input id="beneLiminarEdi" name="beneLiminarEdi" value="{{beneEdi.bene_liminar}}"/>
@@ -516,18 +523,38 @@
 															</div>
 														</div>
 													</div>
-													
-													<label>Status</label>
-													<div class="input-group">
-														<div >
-															<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="Ativo">Ativo</option>
-																	<option value="Inativo">Inativo</option>
-															</select>
+												<div class="row">
+													<div class="col-xs-10 col-sm-4">
+														<label>Status</label>
+														<div class="input-group">
+															<div >
+																<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																		<option value="Ativo">Ativo</option>
+																		<option value="Inativo">Inativo</option>
+																</select>
+															</div>
 														</div>
 													</div>
-													<div class="row">
-													
+													<div class="col-xs-10 col-sm-4">	
+														<label for="id-date-picker-1">Data Inicio das Atividades</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="beneDtaini" name="beneDtaini" type="date" >
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xs-10 col-sm-4">
+														<label for="id-date-picker-1">Data Final das Atividades</label>
+														<div class="row">
+															<div class="input-group">
+																<div class="col-sm-4">
+																	<input id="beneDtafim" name="beneDtafim" type="date" >
+																</div>
+															</div>
+														</div>
+													</div>
 												</div>
 																										
 												</div>

@@ -26,6 +26,18 @@ const LaudoSchema = mongoose.Schema({
         type: Date,
         required: false
     },
+    laudo_dataString :{
+        type: String,
+        required: false
+    },
+    laudo_prazo :{
+        type: String,
+        required: false
+    },
+    laudo_periodoValidade :{
+        type: String,
+        required: false
+    },
     laudo_usuid :{
         type: ObjectId,
         required: false
@@ -41,6 +53,10 @@ const LaudoSchema = mongoose.Schema({
     laudo_dataedi :{
         type: Date,
         required: false
+    },
+    laudo_dataediString :{
+        type: String,
+        required: false
     }
 })
 
@@ -52,10 +68,14 @@ class Laudo{
         laudo_medico,
         laudo_medicoesp,
         laudo_data,
+        laudo_dataString,
+        laudo_prazo,
+        laudo_periodoValidade,
         laudo_usuid,
         laudo_datacad,
         laudo_usuidedi,
-        laudo_dataedi
+        laudo_dataedi,
+        laudo_dataediString
         ){
         this.laudo_id = laudo_id,
         this.laudo_beneid = laudo_beneid,
@@ -63,10 +83,14 @@ class Laudo{
         this.laudo_medico = laudo_medico,
         this.laudo_medicoesp = laudo_medicoesp,
         this.laudo_data = laudo_data,
+        this.laudo_dataString = laudo_dataString,
+        this.laudo_prazo = laudo_prazo,
+        this.laudo_periodoValidade = laudo_periodoValidade,
         this.laudo_usuid = laudo_usuid,
         this.laudo_datacad = laudo_datacad,
         this.laudo_usuidedi = laudo_usuidedi,
-        this.laudo_dataedi = laudo_dataedi       
+        this.laudo_dataedi = laudo_dataedi,
+        this.laudo_dataediString = laudo_dataediString
     }
 }
 
