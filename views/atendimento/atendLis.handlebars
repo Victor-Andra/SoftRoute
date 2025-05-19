@@ -631,7 +631,13 @@
 																</a>
 																<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
 																	<i class="ace-icon fa fa-eye bigger-130"></i>
-																	<span class="tooltip-text">em breve</span>
+																	<span class="tooltip-text">
+																		{{#each ../usuarios}}
+																			{{#ifEqual this._id ../atend_usuidedi}}
+																				{{usuario_nome}}
+																			{{/ifEqual}}
+																		{{/each}}
+																	</span>
 																</a>
 															</div>
 															<div class="hidden-md hidden-lg">
