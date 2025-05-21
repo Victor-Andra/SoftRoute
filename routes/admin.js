@@ -2931,7 +2931,7 @@ router.get('/area/aba/anafuncomp/anafuncomplis', fncGeral.IsAuthenticated, (req,
 //Sub Menu Conv
     
 router.get('/convenio/conv/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas os registros dos convênios
-fncConv.listaConv(req, res);    
+fncConv.listaConv(req, res);
 })
 
 router.get('/convenio/conv/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o cadastro de novos convênios
