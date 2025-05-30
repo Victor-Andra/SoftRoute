@@ -2,6 +2,22 @@
 <html lang="pt-br">
 	<head>
 		<title>Agenda Semanal</title>
+		<style>
+			/* Linha divisória entre dias */
+			.dia-semana {
+				border-right: 3px solid #000 !important;
+			}
+
+			/* Fundo verde claro */
+			.bg-verde-suave {
+				background-color: #e5f5e5 !important; /* Verde bem suave */
+			}
+
+			/* Fundo amarelo claro */
+			.bg-amarelo-suave {
+				background-color: #f3f1e0 !important; /* Amarelo bem suave */
+			}
+		</style>
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- bootstrap & fontawesome -->
@@ -17,27 +33,11 @@
 		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
  	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
 		<!-- inline styles related to this page -->
-		<style>
-			/* Linha divisória entre dias */
-			.dia-semana {
-				border-right: 3px solid #000 !important;
-			}
-
-			/* Fundo verde claro */
-			.bg-verde-suave {
-				background-color: #e5f5e5 !important;
-			}
-
-			/* Fundo amarelo claro */
-			.bg-amarelo-suave {
-				background-color: #f3f1e0 !important;
-			}
-			
-			/* Linha divisória grossa após 11:20 */
-			.divisoria-meio-dia td {
-				border-bottom: 4px solid #999 !important; /* Borda grossa e cinza */
-			}
-		</style>
+		<!-- ace settings handler -->	
+		<script src="../../assets/js/ace-extra.min.js"></script>
+		<style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
+		<script src="../../assets/js/html5shiv.min.js"></script>
+		<script src="../../assets/js/respond.min.js"></script>
 
 		<script type="text/javascript">
 			function atualizaData(){
@@ -179,7 +179,7 @@
 											val.style.backgroundColor = "orange";
 											break;
 										case "Glosa":
-											console.log("Glosa")
+											console.log("BUCETA???")
 											val.style.backgroundColor = "lightgray";
 											break;
 										case "Substituição":
@@ -195,13 +195,13 @@
 											val.style.backgroundColor = "lightgreen";
 											break;
 										default :
-											console.log("Padrão")
+											console.log("PORRA???")
 											val.style.backgroundColor = "aquamarine";
 											break;
 									}
-									console.log("Qual motivo!");
+									console.log("motivo ???");
 									document.getElementById(id).append(val);
-									console.log("Append efetuado!")
+									console.log("APPENDADO????")
 								} else {
 									motivo = hav.value;
 									switch (motivo) {
@@ -271,45 +271,33 @@
 				aplicarEstiloPorHora();
 			});
 
-			function criarLinhaEspacadora(colspanTotal) {
-				return `<tr class="espacador"><td colspan="${colspanTotal}"></td></tr>`;
-			}
 			function aplicarEstiloPorHora() {
-				$('tbody tr').each(function () {
-					const $linha = $(this);
-					const $horaCell = $linha.find('td:eq(0)');
-					const horaTexto = $horaCell.text().trim(); // Ex: "11:20"
+    $('tbody tr').each(function () {
+        const horaCell = $(this).find('td:eq(0)'); // Primeira célula é a hora
+        let horaTexto = horaCell.text().trim(); // Ex: "09:00"
 
-					if (!horaTexto) return;
+        if (!horaTexto) return;
 
-					const [horaStr, minutoStr] = horaTexto.split(':');
-					const hora = parseInt(horaStr, 10);
-					const minuto = parseInt(minutoStr, 10);
+        // Extrair hora como número
+        const hora = parseInt(horaTexto.split(':')[0], 10);
 
-					// Aplica estilos de fundo
-					$linha.find('td').each(function (index) {
-						$(this).removeClass('bg-verde-suave bg-amarelo-suave');
+        // Agora vamos aplicar estilo a TODAS as células, INCLUINDO a da hora
+        $(this).find('td').each(function (index) {
+            if (hora < 12) {
+                $(this).addClass('bg-verde-suave');
+                $(this).removeClass('bg-amarelo-suave');
+            } else {
+                $(this).addClass('bg-amarelo-suave');
+                $(this).removeClass('bg-verde-suave');
+            }
 
-						if (hora < 12) {
-							$(this).addClass('bg-verde-suave');
-						} else {
-							$(this).addClass('bg-amarelo-suave');
-						}
-
-						if (index === 0) {
-							$(this).html('<b>' + horaTexto + '</b>');
-						}
-					});
-
-					// Aplica linha divisória se for exatamente 11:20
-					if (hora === 11 && minuto === 20) {
-						$linha.addClass('divisoria-meio-dia');
-					} else {
-						$linha.removeClass('divisoria-meio-dia');
-					}
-				});
-			}
-
+            // Adiciona negrito apenas na primeira célula (hora)
+            if (index === 0) {
+                $(this).html('<b>' + horaTexto + '</b>');
+            }
+        });
+    });
+}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
@@ -402,11 +390,11 @@
 												</tr>
 												<tr  role="row">
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana" >&nbsp;</th>
-													<th style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../segunda}}</span></th>
-													<th style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../terca}}</span></th>
-													<th style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../quarta}}</span></th>
-													<th style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../quinta}}</span></th>
-													<th style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../sexta}}</span></th>
+													<th style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-danger">{{../segunda}}</span></th>
+													<th style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-pink">{{../terca}}</span></th>
+													<th style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-purple">{{../quarta}}</span></th>
+													<th style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-warning">{{../quinta}}</span></th>
+													<th style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-success">{{../sexta}}</span></th>
 												</tr>
 												<tr  role="row">	
 													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana" ><b>Hora</b></th>

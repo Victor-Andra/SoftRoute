@@ -3,27 +3,21 @@
 	<head>
 		<title>Agenda Semanal por Beneficiário</title>
 		<style>
-			/* Estilo atualizado para funcionar tanto em th quanto em td */
-			th.dia-semana,
-			td.dia-semana {
-				border-right: 3px solid #000 !important;
-			}
+		/* Linha divisória entre dias */
+		.dia-semana {
+			border-right: 3px solid #000 !important;
+		}
 
-			/* Fundo verde claro */
-			.bg-verde-suave {
-				background-color: #e5f5e5 !important;
-			}
+		/* Fundo verde claro */
+		.bg-verde-suave {
+			background-color: #d4f5d4 !important; /* Verde bem suave */
+		}
 
-			/* Fundo amarelo claro */
-			.bg-amarelo-suave {
-				background-color: #f3f1e0 !important;
-			}
-
-			/* Linha divisória grossa após 11:20 */
-			.divisoria-meio-dia td {
-				border-bottom: 4px solid #999 !important;
-			}
-		</style>
+		/* Fundo amarelo claro */
+		.bg-amarelo-suave {
+			background-color: #fffac8 !important; /* Amarelo bem suave */
+		}
+	</style>
 
 		<script type="text/javascript">
 			function atualizaData(){
@@ -31,54 +25,6 @@
 				var dataFmt = new Date(dataIso);
 				console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
-
-				$(document).ready(function () {
-				// Executar após DataTables terminar de desenhar a tabela
-				$('#dynamic-table').on('draw.dt', function () {
-					aplicarEstiloPorHora();
-				});
-
-				// Primeira execução
-				aplicarEstiloPorHora();
-			});
-			}
-			function criarLinhaEspacadora(colspanTotal) {
-				return `<tr class="espacador"><td colspan="${colspanTotal}"></td></tr>`;
-			}
-			function aplicarEstiloPorHora() {
-				$('tbody tr').each(function () {
-					const $linha = $(this);
-					const $horaCell = $linha.find('td:eq(0)');
-					const horaTexto = $horaCell.text().trim(); // Ex: "11:20"
-
-					if (!horaTexto) return;
-
-					const [horaStr, minutoStr] = horaTexto.split(':');
-					const hora = parseInt(horaStr, 10);
-					const minuto = parseInt(minutoStr, 10);
-
-					// Aplica estilos de fundo
-					$linha.find('td').each(function (index) {
-						$(this).removeClass('bg-verde-suave bg-amarelo-suave');
-
-						if (hora < 12) {
-							$(this).addClass('bg-verde-suave');
-						} else {
-							$(this).addClass('bg-amarelo-suave');
-						}
-
-						if (index === 0) {
-							$(this).html('<b>' + horaTexto + '</b>');
-						}
-					});
-
-					// Aplica linha divisória se for exatamente 11:20
-					if (hora === 11 && minuto === 20) {
-						$linha.addClass('divisoria-meio-dia');
-					} else {
-						$linha.removeClass('divisoria-meio-dia');
-					}
-				});
 			}
 			function carregaBody(){
 				let dias = ["seg","ter","qua","qui","sex"];
@@ -313,57 +259,57 @@
 														<b>
 															<form class="form-horizontal" role="form" method="POST">
 																<input class="hidden" id="data" name="data" value="" />
-																<div><span style="white-space: wrap;" class="badge badge-info" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{benenomeconv}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><!-- se for tipo tera colocar nome do tecnico só-->
+																<div>{{benenomeconv}}</div><!-- se for tipo tera colocar nome do tecnico só-->
 															</form>
 														</b>
 													</th>
 												</tr>
 												<tr role="row">
-													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana">&nbsp;</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{segunda}}</span></th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{terca}}</span></th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{quarta}}</span></th>
-													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{quinta}}</span></th>
-													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{sexta}}</span></th>
+													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
 												</tr>
 												<tr role="row">
-													<th class="sorting" style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana" ><b>Hora</b></th>
+													<th class="sorting" style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
 												</tr>
 											</thead>
 											{{#each horaages}}
 											<tbody>
 												<tr role="row" class="odd">
-													<td style="width: 50px;" class="dia-semana"><b>{{horaage_hora}}</b></td>
+													<td style="width: 50px;">{{horaage_hora}}</td>
 													<td id="horasegTeraId_{{horaage_hora}}"></td>
 													<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasegAcaoId_{{horaage_hora}}" class="dia-semana"></td>
+													<td id="horasegAcaoId_{{horaage_hora}}"></td>
 													<td id="horaterTeraId_{{horaage_hora}}"></td>
 													<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaterAcaoId_{{horaage_hora}}" class="dia-semana"></td>
+													<td id="horaterAcaoId_{{horaage_hora}}"></td>
 													<td id="horaquaTeraId_{{horaage_hora}}"></td>
 													<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquaAcaoId_{{horaage_hora}}" class="dia-semana"></td>
+													<td id="horaquaAcaoId_{{horaage_hora}}"></td>
 													<td id="horaquiTeraId_{{horaage_hora}}"></td>
 													<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-													<td id="horaquiAcaoId_{{horaage_hora}}" class="dia-semana"></td>
+													<td id="horaquiAcaoId_{{horaage_hora}}"></td>
 													<td id="horasexTeraId_{{horaage_hora}}"></td>
 													<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-													<td id="horasexAcaoId_{{horaage_hora}}" class="dia-semana"></td>										
+													<td id="horasexAcaoId_{{horaage_hora}}"></td>										
 												</tr>
 											</tbody>
 											{{/each}}
@@ -401,34 +347,28 @@
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
-			$(document).ready(function () {
-				
-
-				// Inicializa DataTable
-				var table = $('#dynamic-table').DataTable({
-					"language": { "url": "/js/lang/datatable-pt-br.json" },
-					"aaSorting": [],
-					"aoColumns": [null, null, null,null, null, null, null, null,null, null, null,null, null, null, null, null],
-					"responsive": true,
-					
-					"autoWidth": true,
-					"paging": false,
-					"searching": false,
-					"ordering": true,
-					"info": false,
-					select: {
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [ null, null, null,null, null, null, null, null,null, null, null,null, null, null, null, null],
+			"responsive": true,
+			"lengthMenu": [ 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
 						style: 'multi'
 					}
-				});
-
-				// Aplica estilo sempre que a tabela for redesenhada
-				table.on('draw.dt', function () {
-					aplicarEstiloPorHora();
-				});
-
-				// Primeira execução após carregar a página
-				aplicarEstiloPorHora();
 			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
+
 	</body>
 </html>

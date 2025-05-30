@@ -17,6 +17,27 @@
 		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
  	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
 		<!-- inline styles related to this page -->
+		<style>
+			/* Linha divisória entre dias */
+			.dia-semana {
+				border-right: 3px solid #000 !important;
+			}
+
+			/* Fundo verde claro */
+			.bg-verde-suave {
+				background-color: #e5f5e5 !important;
+			}
+
+			/* Fundo amarelo claro */
+			.bg-amarelo-suave {
+				background-color: #f3f1e0 !important;
+			}
+			
+			/* Linha divisória grossa após 11:20 */
+			.divisoria-meio-dia td {
+				border-bottom: 4px solid #999 !important; /* Borda grossa e cinza */
+			}
+		</style>
 		<!-- ace settings handler -->	
 		<script src="../../assets/js/ace-extra.min.js"></script>
 		<style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
@@ -143,6 +164,45 @@
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
+			
+			function criarLinhaEspacadora(colspanTotal) {
+				return `<tr class="espacador"><td colspan="${colspanTotal}"></td></tr>`;
+			}
+			function aplicarEstiloPorHora() {
+				$('tbody tr').each(function () {
+					const $linha = $(this);
+					const $horaCell = $linha.find('td:eq(0)');
+					const horaTexto = $horaCell.text().trim(); // Ex: "11:20"
+
+					if (!horaTexto) return;
+
+					const [horaStr, minutoStr] = horaTexto.split(':');
+					const hora = parseInt(horaStr, 10);
+					const minuto = parseInt(minutoStr, 10);
+
+					// Aplica estilos de fundo
+					$linha.find('td').each(function (index) {
+						$(this).removeClass('bg-verde-suave bg-amarelo-suave');
+
+						if (hora < 12) {
+							$(this).addClass('bg-verde-suave');
+						} else {
+							$(this).addClass('bg-amarelo-suave');
+						}
+
+						if (index === 0) {
+							$(this).html('<b>' + horaTexto + '</b>');
+						}
+					});
+
+					// Aplica linha divisória se for exatamente 11:20
+					if (hora === 11 && minuto === 20) {
+						$linha.addClass('divisoria-meio-dia');
+					} else {
+						$linha.removeClass('divisoria-meio-dia');
+					}
+				});
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
@@ -232,57 +292,57 @@
 													<b>
 														<form class="form-horizontal" role="form">
 															<input class="hidden" id="data" name="data" value="" />
-															<div>{{usunomefnc}}</div><!-- se for tipo tera colocar nome do tecnico só-->
+															<div><span class="badge badge-info" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{usunomefnc}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><!-- se for tipo tera colocar nome do tecnico só-->
 														</form>
 													</b>
 												</th>
 											</tr>
 											<tr role="row">
-												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
-												<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
-												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
-												<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
-												<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
+												<th  style="text-align: center;" style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana">&nbsp;</th>
+												<th  style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{segunda}}</span></th>
+												<th  style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{terca}}</span></th>
+												<th  style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{quarta}}</span></th>
+												<th  style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{quinta}}</span></th>
+												<th  style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana"><span style="white-space: wrap;" class="badge badge-info">{{sexta}}</span></th>
 											</tr>
 											<tr role="row">	
-												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana"><b>Hora</b></th>
 												<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana">&ensp;Ação&ensp;</th>
 												<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-												<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana">&ensp;Ação&ensp;</th>
 												<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-												<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana">&ensp;Ação&ensp;</th>
 												<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-												<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana">&ensp;Ação&ensp;</th>
 												<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
 												<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-												<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana">&ensp;Ação&ensp;</th>
 											</tr>
 										</thead>
 										{{#each horaages}}
 										<tbody>
 											<tr role="row" class="odd">
-												<td style="width: 50px;">{{horaage_hora}}</td>
+												<td style="width: 50px;" class="dia-semana">{{horaage_hora}}</td>
 												<td id="horasegBeneId_{{horaage_hora}}"></td>
 												<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-												<td id="horasegAcaoId_{{horaage_hora}}"></td>
+												<td id="horasegAcaoId_{{horaage_hora}}" class="dia-semana"></td>
 												<td id="horaterBeneId_{{horaage_hora}}"></td>
 												<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-												<td id="horaterAcaoId_{{horaage_hora}}"></td>
+												<td id="horaterAcaoId_{{horaage_hora}}" class="dia-semana"></td>
 												<td id="horaquaBeneId_{{horaage_hora}}"></td>
 												<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-												<td id="horaquaAcaoId_{{horaage_hora}}"></td>
+												<td id="horaquaAcaoId_{{horaage_hora}}" class="dia-semana"></td>
 												<td id="horaquiBeneId_{{horaage_hora}}"></td>
 												<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-												<td id="horaquiAcaoId_{{horaage_hora}}"></td>
+												<td id="horaquiAcaoId_{{horaage_hora}}" class="dia-semana"></td>
 												<td id="horasexBeneId_{{horaage_hora}}"></td>
 												<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-												<td id="horasexAcaoId_{{horaage_hora}}"></td>										
+												<td id="horasexAcaoId_{{horaage_hora}}" class="dia-semana"></td>										
 											</tr>
 										</tbody>
 										{{/each}}
@@ -323,5 +383,62 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
+		<script type="text/javascript">
+			$(document).ready(function () {
+				// Função principal para aplicar estilos por hora
+				function aplicarEstiloPorHora() {
+					$('tbody tr').each(function () {
+						const $linha = $(this);
+						const $horaCell = $linha.find('td:eq(0)');
+						const horaTexto = $horaCell.text().trim(); // Ex: "11:20"
+						if (!horaTexto) return;
+
+						const [horaStr, minutoStr] = horaTexto.split(':');
+						const hora = parseInt(horaStr, 10);
+
+						// Aplica estilos de fundo
+						$linha.find('td').each(function (index) {
+							$(this).removeClass('bg-verde-suave bg-amarelo-suave');
+
+							if (hora < 12) {
+								$(this).addClass('bg-verde-suave');
+							} else {
+								$(this).addClass('bg-amarelo-suave');
+							}
+
+							// Negrito na primeira coluna (hora)
+							if (index === 0) {
+								$(this).html('<b>' + horaTexto + '</b>');
+							}
+						});
+					});
+				}
+
+				// Inicializa DataTable
+				var table = $('#dynamic-table').DataTable({
+					"language": { "url": "/js/lang/datatable-pt-br.json" },
+					"aaSorting": [],
+					"aoColumns": [null, null, null,null, null, null, null, null,null, null, null,null, null, null, null, null],
+					"responsive": true,
+					
+					"autoWidth": true,
+					"paging": false,
+					"searching": false,
+					"ordering": true,
+					"info": false,
+					select: {
+						style: 'multi'
+					}
+				});
+
+				// Aplica estilo sempre que a tabela for redesenhada
+				table.on('draw.dt', function () {
+					aplicarEstiloPorHora();
+				});
+
+				// Primeira execução após carregar a página
+				aplicarEstiloPorHora();
+			});
+		</script>
 	</body>
 </html>
