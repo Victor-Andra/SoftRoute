@@ -2042,7 +2042,7 @@ module.exports = {
                                             break;
                                     }
                                 }
-                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true"){
+                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == "0,00" || creVal == undefined || creVal == "undefined")){
                                     let convcreval;
                                     let convcreTes;
                                     let agendacreTes;
@@ -2060,7 +2060,7 @@ module.exports = {
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
                                     creValFinal = creVal;
-                                    console.log("TERAPIA OK")
+                                    //console.log("TERAPIA OK")
                                 }
                                 }
                             })
@@ -2314,7 +2314,7 @@ module.exports = {
                                 if ((""+t._id) === (""+terapiaAtend)){
                                     qtdIds++;
                                     creValFinal = creVal;
-                                    console.log("TERAPIA OK")
+                                    //console.log("TERAPIA OK")
                                 }
                                 }
                             })
