@@ -7314,14 +7314,118 @@ module.exports = {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: true, agenda_categoria: "Feriado" }).then((agenda) =>{
-
-        }).catch((err)=>{
-            console.log("err: "+err)
-        })
-
         res.render("agenda/agendaFixa", {semanas: semana, segunda, terca, quarta, quinta, sexta})
+    },
+    listaAgendaExtra(req, res, resposta) {
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // Definir início e fim da semana (segunda à sexta)
+        let seg = new Date();
+        let sex = new Date();
+
+        seg.setHours(0, 0, 0, 0);
+        sex.setHours(23, 59, 59, 999);
+
+        switch (seg.getUTCDay()) {
+            case 0: // DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1: // SEG
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2: // TER
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3: // QUA
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4: // QUI
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5: // SEX
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6: // SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+
+        const dataIni = seg.toISOString();
+        const dataFim = sex.toISOString();
+
+        // Aplicando filtro agenda_extra = true e agenda_cobrarextra = true
+        Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        })
+        .then((agendas) => {
+            agendas.forEach((a) => {
+                const data = new Date(a.agenda_data);
+                let hor = data.getUTCHours().toString().padStart(2, '0');
+                let min = data.getUTCMinutes().toString().padStart(2, '0');
+                a.extra_hora = `${hor}:${min}`;
+                a.extra_data_dia = fncGeral.getDataFMT(data); // Formata data como string legível
+            });
+
+            Bene.find()
+            .then((bene) => {
+                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+
+                Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                    ]
+                })
+                .then((terapeuta) => {
+                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome));
+
+                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                    .then((horaage) => {
+                        Sala.find()
+                        .then((salas) => {
+                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome));
+
+                            Terapia.find()
+                            .then((terapias) => {
+                                Conv.find()
+                                .then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome));
+                                    res.render('atendimento/extra/extraLis', {
+                                        extras: agendas, // Agora estamos passando agendas como extras
+                                        benes: bene,
+                                        terapeutas: terapeuta,
+                                        horaages: horaage,
+                                        salas: salas,
+                                        terapias: terapias,
+                                        convs: convs,
+                                        flash
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('/admin/erro');
+        });
     },
     carregaAgendaFilF(req,res){
         //agendaClass.agendaUpdateCampos(req,res);

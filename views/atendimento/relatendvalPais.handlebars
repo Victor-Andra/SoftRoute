@@ -2,6 +2,18 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório de Atendimentos e Valores</title>
+		<style>
+			@media print and (orientation: landscape) {
+				.noprint {
+					display: none;
+				}
+			}
+			@media print {
+               .noprint {
+                  display: none;
+               }
+            }
+		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
 				let dat = new Date(document.getElementById('dataFilDe').value);

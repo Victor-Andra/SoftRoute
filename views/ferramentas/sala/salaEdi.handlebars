@@ -2,8 +2,24 @@
 <html lang="pt-br">
 	<head>
 		<title>Salas</title>
+		<script>
+			function alteraStatus() {
+				if (document.getElementById("salaStatusCheck").checked){
+					document.getElementById("salaStatus").value = "Ativo";
+				} else {
+					document.getElementById("salaStatus").value = "Inativo";
+				}
+			}
+			function carregaBody() {
+				if (document.getElementById("salaStatus").value = "Ativo"){
+					document.getElementById("salaStatusCheck").checked = true;
+				} else {
+					document.getElementById("salaStatusCheck").checked = false;
+				}
+			}
+		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody()" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -42,21 +58,26 @@
 														<input type="text" name="salaNome" id="salaNome" class="form-control" value="{{sala.sala_nome}}" />
 													</div>
 												</div>
-											
 												<div class="space space-8"></div>
-											
 												<label> Descrição</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="salaDescricao"  id="salaDescricao" class="form-control" value="{{sala.sala_descricao}}" />
 													</div>
 												</div>
-											
+												<label> Status</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<label class="pos-rel">
+															<input type="checkbox" name="salaStatusCheck" id="salaStatusCheck" onchange="javascript:alteraStatus()" />
+															Ativo
+														</label>
+														<input hidden type="text" name="salaStatus"  id="salaStatus" class="form-control" value="{{sala.sala_status}}" />
+													</div>
+												</div>
 												<div class="hidden">
 													<input name="salaId"value="{{sala._id}}" />
 												</div>
-											
-											
 											</div>
 										</div>
 									</div>

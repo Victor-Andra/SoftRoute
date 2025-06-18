@@ -12,7 +12,7 @@ const convClass = require("../models/conv")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const respostaClass = require("../models/resposta")
-
+const agendaClass = require("../models/agenda")
 //tabelas Extrangeiras
 
 const Bene = mongoose.model("tb_bene")
@@ -20,10 +20,23 @@ const Conv = mongoose.model("tb_conv")
 const Terapia = mongoose.model("tb_terapia")
 const Usuario = mongoose.model("tb_usuario")
 const Resposta = mongoose.model("tb_resposta")
+const Agenda = mongoose.model("tb_agenda")
 
 //Funções auxiliares
 
 module.exports = {
+    getInicioFimSemana(data) {
+        const dia = data.getDay(); // 0 = domingo, 1 = segunda...
+        const inicioSemana = new Date(data);
+        inicioSemana.setDate(data.getDate() - dia); // volta para domingo
+        inicioSemana.setHours(0, 0, 0, 0);
+
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        fimSemana.setHours(23, 59, 59, 999);
+
+        return { inicio: inicioSemana, fim: fimSemana };
+    },
     carregaSessao(req,res){
         let sessao = new Array();
         console.log('listando Sessao')
@@ -144,71 +157,337 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    listaSessao(req, res) {
-        let sessao = new Array();
+   
+    listaSessaoOld(req, res) {
         console.log('listando Sessao');
-        Sessao.find().then((sessao) => {
-            sessao.forEach((b) => {
-                //Formatação da Exibição da Data de cadastro
+
+        // Função para pegar início e fim da semana
+        function getInicioFimSemana(data) {
+            const dia = data.getDay();
+            const diff = data.getDate() - dia + (dia === 0 ? -6 : 1); // ajusta para segunda-feira
+            const inicioSemana = new Date(data);
+            inicioSemana.setDate(diff);
+            inicioSemana.setHours(0, 0, 0, 0);
+
+            const fimSemana = new Date(inicioSemana);
+            fimSemana.setDate(inicioSemana.getDate() + 6);
+            fimSemana.setHours(23, 59, 59, 999);
+
+            return { inicio: inicioSemana, fim: fimSemana };
+        }
+
+        // Formata data para dd/mm/yyyy
+        function formatDateToBR(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
+        const hoje = new Date();
+        const { inicio, fim } = getInicioFimSemana(hoje);
+        const datainiSemana = formatDateToBR(inicio);
+        const datafimSemana = formatDateToBR(fim);
+
+        Sessao.find().then(async (sessaoList) => {
+            // Formatação das datas de cadastro e edição
+            sessaoList.forEach((b) => {
                 let datacad = new Date(b.sessao_datacad);
-                let mes = (datacad.getMonth() + 1).toString();
-                let dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1) {
-                    mes = "0" + mes;
-                }
-                if (dia.length == 1) {
-                    dia = "0" + dia;
-                }
-                let fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
-                b.datacad = fulldate;
-    
-                //Formatação da Exibição da Data de Edição
+                let mes = String(datacad.getMonth() + 1).padStart(2, '0');
+                let dia = String(datacad.getUTCDate()).padStart(2, '0');
+                b.datacad = `${datacad.getFullYear()}-${mes}-${dia}`;
+
                 datacad = new Date(b.sessao_dataedi);
-                mes = (datacad.getMonth() + 1).toString();
-                dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1) {
-                    mes = "0" + mes;
-                }
-                if (dia.length == 1) {
-                    dia = "0" + dia;
-                }
-                fulldate = (datacad.getFullYear() + "-" + mes + "-" + dia).toString();
-                b.dataedi = fulldate;
+                mes = String(datacad.getMonth() + 1).padStart(2, '0');
+                dia = String(datacad.getUTCDate()).padStart(2, '0');
+                b.dataedi = `${datacad.getFullYear()}-${mes}-${dia}`;
             });
-    
+
             console.log("Listagem Realizada Sessão!");
-            Bene.find({ bene_status: "Ativo" }).then((bene) => {
-                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); //Ordena o bene por nome
+
+            Bene.find({ bene_status: "Ativo" }).then(async (beneList) => {
+                beneList.sort((a, b) => {
+                    const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    return nomeA.localeCompare(nomeB);
+                });
                 console.log("Listagem Realizada Bene!");
-                Conv.find().then((conv) => {
-                    console.log("Listagem Realizada Convênio!");
-                    Terapia.find().then((terapia) => {
-                        console.log("Listagem Realizada Terapia!");
-                        Usuario.find().then((usuario) => {
-    
-                            // Adicionando a propriedade countSessaos a cada bene
-                            bene.forEach((b) => {
-                                b.countSessaos = sessao.filter((s) => s.sessao_beneid.toString() === b._id.toString()).length;
+
+                Conv.find().then(async (convList) => {
+                    Terapia.find().then(async (terapiaList) => {
+                        Usuario.find().then(async (usuarioList) => {
+
+                            // Adicionando countSessaos
+                            beneList.forEach((b) => {
+                                b.countSessaos = sessaoList.filter((s) => s.sessao_beneid.toString() === b._id.toString()).length;
                             });
-    
-                            sessao.forEach((s) => {
-                                console.log("s: " + s);
-                                bene.forEach((b) => {
-                                    if (("" + b._id + "") == ("" + s.sessao_beneid + "")) {
-                                        console.log("b.bene_nome: " + b.bene_nome);
+
+                            // Para cada sessão, busca agenda e conta terapias
+                            for (const sessao of sessaoList) {
+                                const beneId = sessao.sessao_beneid;
+
+                                // Busca agendas do beneficiário dentro da semana
+                                const agendas = await Agenda.find({
+                                    agenda_beneid: beneId,
+                                    agenda_data: {
+                                        $gte: inicio,
+                                        $lte: fim
                                     }
                                 });
+
+                                // Adicionar datas da semana para uso no front
+                                sessao.datainiSemana = datainiSemana;
+                                sessao.datafimSemana = datafimSemana;
+
+                                // Processar campos de terapiaid01 até 25
+                                for (let i = 1; i <= 25; i++) {
+                                    const fieldTerapiaId = `sessao_terapiaid${i.toString().padStart(2, '0')}`;
+                                    const idTerapia = sessao[fieldTerapiaId];
+
+                                    // Verifica se o ID é inválido ou vazio
+                                    if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
+                                        continue;
+                                    }
+
+                                    // Conta quantas vezes essa terapia aparece nas agendas
+                                    const totalAgenda = agendas.filter(a => a.agenda_terapiaid.toString() === idTerapia.toString()).length;
+
+                                    if (totalAgenda === 0) {
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "Não Localizado, favor corrigir a tabela de sessões ou a agenda!";
+                                        continue;
+                                    }
+
+                                    // Se válido, salva quantidade
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = totalAgenda;
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "";
+
+                                    // Pega valor previsto
+                                    const qtPrevField = `sessao_qtterapiaprev${i.toString().padStart(2, '0')}`;
+                                    const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                                    // Calcula saldo com sinal
+                                    let saldoFinal = "";
+                                    if (!isNaN(qtPrev) && !isNaN(totalAgenda)) {
+                                        const diferenca = qtPrev - totalAgenda;
+
+                                        if (diferenca > 0) {
+                                            saldoFinal = "+" + diferenca;
+                                        } else if (diferenca < 0) {
+                                            saldoFinal = "" + diferenca;
+                                        } else {
+                                            saldoFinal = "0";
+                                        }
+                                    }
+
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = saldoFinal;
+                                }
+                            }
+
+                            res.render("beneficiario/sessao/sessaoLis", {
+                                sessaos: sessaoList,
+                                usuarios: usuarioList,
+                                terapias: terapiaList,
+                                convs: convList,
+                                benes: beneList,
+                                datainiSemana: datainiSemana, // Adicionado aqui
+                                datafimSemana: datafimSemana  // Adicionado aqui
                             });
-    
-                            res.render("beneficiario/sessao/sessaoLis", { sessaos: sessao, usuarios: usuario, terapias: terapia, convs: conv, benes: bene });
+
+                        }).catch(err => {
+                            console.error(err);
+                            req.flash("error_message", "Houve um erro ao listar usuários");
+                            res.redirect('/admin/erro');
                         });
+
+                    }).catch(err => {
+                        console.error(err);
+                        req.flash("error_message", "Houve um erro ao listar terapias");
+                        res.redirect('/admin/erro');
                     });
+
+                }).catch(err => {
+                    console.error(err);
+                    req.flash("error_message", "Houve um erro ao listar convênios");
+                    res.redirect('/admin/erro');
                 });
+
+            }).catch(err => {
+                console.error(err);
+                req.flash("error_message", "Houve um erro ao listar beneficiários");
+                res.redirect('/admin/erro');
             });
-        }).catch((err) => {
-            console.log(err);
-            req.flash("error_message", "houve um erro ao listar Sessões");
-            res.redirect('admin/erro');
+
+        }).catch(err => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar sessões");
+            res.redirect('/admin/erro');
         });
     },
+    listaSessao(req, res) {
+        console.log('listando Sessao');
+
+        // Função corrigida para pegar início e fim da semana começando no domingo
+        function getInicioFimSemana(data) {
+            const dia = data.getDay(); // 0 = domingo
+            const inicioSemana = new Date(data);
+            inicioSemana.setDate(data.getDate() - dia); // volta ao domingo
+            inicioSemana.setHours(0, 0, 0, 0);
+
+            const fimSemana = new Date(inicioSemana);
+            fimSemana.setDate(inicioSemana.getDate() + 6);
+            fimSemana.setHours(23, 59, 59, 999);
+
+            return { inicio: inicioSemana, fim: fimSemana };
+        }
+
+        function formatDateToBR(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
+        const hoje = new Date();
+        const { inicio, fim } = getInicioFimSemana(hoje);
+        const datainiSemana = formatDateToBR(inicio);
+        const datafimSemana = formatDateToBR(fim);
+
+        Sessao.find().then(async (sessaoList) => {
+            // Formatação das datas de cadastro e edição
+            sessaoList.forEach((b) => {
+                let datacad = new Date(b.sessao_datacad);
+                let mes = String(datacad.getMonth() + 1).padStart(2, '0');
+                let dia = String(datacad.getUTCDate()).padStart(2, '0');
+                b.datacad = `${datacad.getFullYear()}-${mes}-${dia}`;
+
+                datacad = new Date(b.sessao_dataedi);
+                mes = String(datacad.getMonth() + 1).padStart(2, '0');
+                dia = String(datacad.getUTCDate()).padStart(2, '0');
+                b.dataedi = `${datacad.getFullYear()}-${mes}-${dia}`;
+            });
+
+            console.log("Listagem Realizada Sessão!");
+
+            Bene.find({ bene_status: "Ativo" }).then(async (beneList) => {
+                beneList.sort((a, b) => {
+                    const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    return nomeA.localeCompare(nomeB);
+                });
+                console.log("Listagem Realizada Bene!");
+
+                Conv.find().then(async (convList) => {
+                    Terapia.find().then(async (terapiaList) => {
+                        Usuario.find().then(async (usuarioList) => {
+
+                            // Adicionando countSessaos
+                            beneList.forEach((b) => {
+                                b.countSessaos = sessaoList.filter((s) => s.sessao_beneid.toString() === b._id.toString()).length;
+                            });
+
+                            // Para cada sessão, busca agenda e conta terapias
+                            for (const sessao of sessaoList) {
+                                const beneId = sessao.sessao_beneid;
+
+                                // Busca agendas do beneficiário dentro da semana
+                                const agendas = await Agenda.find({
+                                    agenda_beneid: beneId,
+                                    agenda_data: {
+                                        $gte: inicio,
+                                        $lte: fim
+                                    }
+                                });
+
+                                // Adicionar datas da semana para uso no front
+                                sessao.datainiSemana = datainiSemana;
+                                sessao.datafimSemana = datafimSemana;
+
+                                // Processar campos de terapiaid01 até 25
+                                for (let i = 1; i <= 25; i++) {
+                                    const fieldTerapiaId = `sessao_terapiaid${i.toString().padStart(2, '0')}`;
+                                    const idTerapia = sessao[fieldTerapiaId];
+
+                                    // Verifica se o ID é inválido ou vazio
+                                    if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
+                                        continue;
+                                    }
+
+                                    // Conta quantas vezes essa terapia aparece nas agendas
+                                    const totalAgenda = agendas.filter(a => a.agenda_terapiaid.toString() === idTerapia.toString()).length;
+
+                                    if (totalAgenda === 0) {
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = "";
+                                        sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "Não Localizado, favor corrigir a tabela de sessões ou a agenda!";
+                                        continue;
+                                    }
+
+                                    // Se válido, salva quantidade
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}qt`] = totalAgenda;
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}incons`] = "";
+
+                                    // Pega valor previsto
+                                    const qtPrevField = `sessao_qtterapiaprev${i.toString().padStart(2, '0')}`;
+                                    const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                                    // Calcula saldo com sinal
+                                    let saldoFinal = "";
+                                    if (!isNaN(qtPrev) && !isNaN(totalAgenda)) {
+                                        const diferenca = qtPrev - totalAgenda;
+
+                                        if (diferenca > 0) {
+                                            saldoFinal = "+" + diferenca;
+                                        } else if (diferenca < 0) {
+                                            saldoFinal = "" + diferenca;
+                                        } else {
+                                            saldoFinal = "0";
+                                        }
+                                    }
+
+                                    sessao[`terapiaid${i.toString().padStart(2, '0')}saldo`] = saldoFinal;
+                                }
+                            }
+
+                            res.render("beneficiario/sessao/sessaoLis", {
+                                sessaos: sessaoList,
+                                usuarios: usuarioList,
+                                terapias: terapiaList,
+                                convs: convList,
+                                benes: beneList,
+                                datainiSemana: datainiSemana,
+                                datafimSemana: datafimSemana
+                            });
+
+                        }).catch(err => {
+                            console.error(err);
+                            req.flash("error_message", "Houve um erro ao listar usuários");
+                            res.redirect('/admin/erro');
+                        });
+
+                    }).catch(err => {
+                        console.error(err);
+                        req.flash("error_message", "Houve um erro ao listar terapias");
+                        res.redirect('/admin/erro');
+                    });
+
+                }).catch(err => {
+                    console.error(err);
+                    req.flash("error_message", "Houve um erro ao listar convênios");
+                    res.redirect('/admin/erro');
+                });
+
+            }).catch(err => {
+                console.error(err);
+                req.flash("error_message", "Houve um erro ao listar beneficiários");
+                res.redirect('/admin/erro');
+            });
+
+        }).catch(err => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar sessões");
+            res.redirect('/admin/erro');
+        });
+    }
 }

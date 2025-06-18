@@ -2,21 +2,18 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const SalaSchema = mongoose.Schema({
-    sala_nome: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    sala_descricao: {
-        type: String,
-        required: true
-    },
-    sala_datacad: {
-        type: Date
-    },
-    sala_dataedi: {
-        type: Date
-    }
+    sala_nome: { type: String, unique: true, required: true },
+    sala_descricao: { type: String, required: true},
+    //controle
+    sala_datacad: { type: Date, required: false  },
+    sala_dataedi: { type: Date, required: false  },
+    //novos campos de controle
+    sala_usuidcad: { type: ObjectId, required: false },
+    sala_usuidedi: { type: ObjectId, required: false },
+    sala_lixo :{ type: String, required: false },
+    sala_datalixo: { type: String, required: false },
+    sala_usuidlixo: { type: ObjectId, required: false },
+    sala_status: { type: String, required: false }
 })
 
 class Sala{
@@ -24,12 +21,24 @@ class Sala{
         sala_nome,
         sala_descricao,
         sala_datacad,
-        sala_dataedi
+        sala_dataedi,
+        sala_usuidcad,
+        sala_usuidedi,
+        sala_lixo,
+        sala_datalixo,
+        sala_usuidlixo,
+        sala_status
         ){
         this.sala_nome = sala_nome,
         this.sala_descricao = sala_descricao,
         this.sala_datacad = sala_datacad,
-        this.sala_dataedi = sala_dataedi
+        this.sala_dataedi = sala_dataedi,
+        this.sala_usuidcad = sala_usuidcad,
+        this.sala_usuidedi = sala_usuidedi,
+        this.sala_lixo = sala_lixo,
+        this.sala_datalixo = sala_datalixo,
+        this.sala_usuidlixo = sala_usuidlixo,
+        this.sala_status = sala_status
     }
 }
 
@@ -46,6 +55,7 @@ module.exports = {SalaModel,SalaSchema,
             {$set: {
                 sala_nome: req.body.salaNome,
                 sala_descricao: req.body.salaDescricao,
+                sala_status: req.body.salaStatus,
                 sala_dataedi: dataAtual
                 }}
         ).then((res) =>{
@@ -76,6 +86,7 @@ module.exports = {SalaModel,SalaSchema,
             const newSala = new SalaModel({
                 sala_nome: req.body.salaNome,
                 sala_descricao: req.body.salaDescricao,
+                sala_status: "Ativo",
                 sala_datacad: dataAtual
             });
             console.log("newSala save");

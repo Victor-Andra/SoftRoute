@@ -4,136 +4,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Sessões por Beneficiários</title>
-		<style>
-			@media print and (orientation: landscape) {
-				.noprint {
-					display: none;
-				}
-			}
-			@media print {
-               .noprint {
-                  display: none;
-               }
-            }
-			@media print {
-				.print-hide-link::after {
-					content: none !important;
-				}
-			}
-		</style>
-		<script type="text/javascript">
-
-			// Nova função para pegar a data atual no formato dd/mm/yyyy
-			function getDataAtualFormatada() {
-				let data = new Date();
-				let dia = String(data.getDate()).padStart(2, '0');
-				let mes = String(data.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
-				let ano = data.getFullYear();
-				return `${dia}/${mes}/${ano}`;
-			}
-
-			// Função para converter data brasileira para objeto Date
-			function parseDataBr(dataStr) {
-				let [dia, mes, ano] = dataStr.split('/');
-				return new Date(ano, mes - 1, dia);
-			}
-
-			// Sua função ajustaData modificada para aceitar o valor formatado em dd/mm/yyyy
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-
-					// Trata possíveis datas inválidas
-					if (isNaN(dat.getTime())) {
-						dat = parseDataBr(elementox.value); // tenta parsear se for formato BR
-					}
-
-					let mes = (dat.getMonth()+1).toString().padStart(2, '0');
-					let dia = dat.getDate().toString().padStart(2, '0');
-
-					let fulldate = `${dia}/${mes}/${dat.getFullYear()}`;
-				});
-			}
-
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-
-				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-					let mes = String(dat.getUTCMonth()+1).padStart(2, '0');
-					let dia = String(dat.getUTCDate()).padStart(2, '0');
-					let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-					document.getElementById('dataFinal').value = fulldate;
-				} else if (tipo == "Semana" || tipo == "Dia") {
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = String(dat.getUTCMonth() + 1).padStart(2, '0'); // UTC
-					let dia = String(dat.getUTCDate()).padStart(2, '0');
-					let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-					document.getElementById('dataFinal').value = fulldate;
-				}
-			}
-
-			function trocaFiltroData(){
-				let fill = document.getElementById("tipoData").value;
-				if(fill == "Ano/Mes"){
-					document.getElementById("divAnoAtend").hidden = false;
-					document.getElementById("divMesAtend").hidden = false;
-					document.getElementById("divDataFil").hidden = true;
-				} else {
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
-				}
-			}
-
-			function formatDateToBR(date) {
-					return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-				}
-
-				const { inicio, fim } = getInicioFimSemana(hoje);
-				const datainiSemana = formatDateToBR(inicio);
-				const datafimSemana = formatDateToBR(fim);
-
-				// Adicionando às sessões para uso no front
-				for (const sessao of sessaoList) {
-					sessao.datainiSemana = datainiSemana;
-					sessao.datafimSemana = datafimSemana;
-				}
-			
-			function carregaBody(){
-				trocaFiltroData();
-				formataData();
-
-				// Preenche o campo #dataFil com a data atual no formato dd/mm/yyyy
-				const dataAtual = getDataAtualFormatada();
-				document.getElementById("dataFil").value = dataAtual.split('/').reverse().join('-'); // formato yyyy-mm-dd para input date
-				document.getElementById("dataFinal").value = dataAtual; // ou qualquer outro uso que você precise
-
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					}
-
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-						// nada por enquanto
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value;
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
-					}
-				}
-			}
-
-		</script>
 	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -146,94 +18,14 @@
 							<li class="active">Lista de Quadro de Sessões por Beneficiários</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					
 					{{#each error}}
 					<div class="alert alert-danger">{{texto}}{{error}}</div>
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
-							<div class="col-xs-12" class="row">
-								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
-												<option value="Semana">Semana</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								
-								<div id="divAnoAtend" class="col-xs-12 col-sm-1">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
-												<option value="2024">2024</option>
-												<option selected value="2025">2025</option>
-												<option value="2026">2026</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divMesAtend" class="col-xs-12 col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
-												<option value="0">Janeiro</option>
-												<option value="1">Fevereiro</option>
-												<option value="2">Março</option>
-												<option value="3">Abril</option>
-												<option value="4">Maio</option>
-												<option value="5">Junho</option>
-												<option value="6">Julho</option>
-												<option value="7">Agosto</option>
-												<option value="8">Setembro</option>
-												<option value="9">Outubro</option>
-												<option value="10">Novembro</option>
-												<option value="11">Dezembro</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
-									<div class="input-group">
-										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
-									</div>
-								</div>
-								<p>Período da Semana: {{datainiSemana}} até {{datafimSemana}}</p>
-								<div class="row">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-										Pesquisar
-									</button>
-									
-								</div>
-								<hr>
-							</div>
-						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12 col-sm-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<div class="col-xs-12">
-						<div class="row">
-							<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-									Controle do Quadro de Sessões é gerido por semana.<br>
-									Ao abrir esse formulário ele carraga automaticamente a Data Atual e consequentemente a semana pertencente a data atual.<br>
-									Em caso de necessidade de pesquisar outras semanas, basta escolher a data e clicar em pesquisar, todos os calculos serão refeitos baseados na semana da data estipulada.<br>
-
-									<br>
-							</div>
-							<hr>
-						</div>
-					</div>
 								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											
 											<thead>
@@ -316,10 +108,10 @@
 																			{{#ifEqual this.sessao_beneid ../_id}}
 																			<thead>
 																				<tr role="row">
-																					<th style="width: 30%;" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																					<th style="width: 5%;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" ><span style="white-space: wrap;"  class="badge badge-danger">Liminar</span></th>
-																					<th style="width: 5%;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" ><span style="white-space: wrap;"  class="badge badge-info">Contagem Automática da Agenda Fixa</span></th>
-																					<th style="width: 5%;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" ><span style="white-space: wrap;"  class="badge badge-warning">Saldo</span></th>
+																					<th style="width: 30%;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																					<th style="width: 5%;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Liminar</th>
+																					<th style="width: 5%;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Realizado</th>
+																					<th style="width: 5%;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Saldo</th>
 																					<th>Obs</th>
 																					
 																				</tr>
@@ -336,8 +128,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev01}}</td>
-																							<td>{{terapiaid01qt}}</td>
-																							<td>{{terapiaid01saldo}}</td>
+																							<td>{{sessao_qtterapiacon01}}</td>
+																							<td>{{sessao_qtterapiasaldo01}}</td>
 																							<td>{{sessao_obssessao01}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -350,8 +142,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev02}}</td>
-																							<td>{{terapiaid02qt}}</td>
-																							<td>{{terapiaid02saldo}}</td>
+																							<td>{{sessao_qtterapiacon02}}</td>
+																							<td>{{sessao_qtterapiasaldo02}}</td>
 																							<td>{{sessao_obssessao02}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -364,8 +156,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev03}}</td>
-																							<td>{{terapiaid03qt}}</td>
-																							<td>{{terapiaid03saldo}}</td>
+																							<td>{{sessao_qtterapiacon03}}</td>
+																							<td>{{sessao_qtterapiasaldo03}}</td>
 																							<td>{{sessao_obssessao03}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -378,8 +170,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev04}}</td>
-																							<td>{{terapiaid04qt}}</td>
-																							<td>{{terapiaid04saldo}}</td>
+																							<td>{{sessao_qtterapiacon04}}</td>
+																							<td>{{sessao_qtterapiasaldo04}}</td>
 																							<td>{{sessao_obssessao04}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -392,8 +184,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev05}}</td>
-																							<td>{{terapiaid05qt}}</td>
-																							<td>{{terapiaid05saldo}}</td>
+																							<td>{{sessao_qtterapiacon05}}</td>
+																							<td>{{sessao_qtterapiasaldo05}}</td>
 																							<td>{{sessao_obssessao05}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -406,8 +198,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev06}}</td>
-																							<td>{{terapiaid06qt}}</td>
-																							<td>{{terapiaid06saldo}}</td>
+																							<td>{{sessao_qtterapiacon06}}</td>
+																							<td>{{sessao_qtterapiasaldo06}}</td>
 																							<td>{{sessao_obssessao06}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -420,8 +212,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev07}}</td>
-																							<td>{{terapiaid07qt}}</td>
-																							<td>{{terapiaid07saldo}}</td>
+																							<td>{{sessao_qtterapiacon07}}</td>
+																							<td>{{sessao_qtterapiasaldo07}}</td>
 																							<td>{{sessao_obssessao07}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -434,8 +226,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev08}}</td>
-																							<td>{{terapiaid08qt}}</td>
-																							<td>{{terapiaid08saldo}}</td>
+																							<td>{{sessao_qtterapiacon08}}</td>
+																							<td>{{sessao_qtterapiasaldo08}}</td>
 																							<td>{{sessao_obssessao08}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -448,8 +240,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev09}}</td>
-																							<td>{{terapiaid09qt}}</td>
-																							<td>{{terapiaid09saldo}}</td>
+																							<td>{{sessao_qtterapiacon09}}</td>
+																							<td>{{sessao_qtterapiasaldo09}}</td>
 																							<td>{{sessao_obssessao09}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -462,8 +254,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev10}}</td>
-																							<td>{{terapiaid10qt}}</td>
-																							<td>{{terapiaid10saldo}}</td>
+																							<td>{{sessao_qtterapiacon10}}</td>
+																							<td>{{sessao_qtterapiasaldo10}}</td>
 																							<td>{{sessao_obssessao10}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -476,8 +268,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev11}}</td>
-																							<td>{{terapiaid11qt}}</td>
-																							<td>{{terapiaid11saldo}}</td>
+																							<td>{{sessao_qtterapiacon11}}</td>
+																							<td>{{sessao_qtterapiasaldo11}}</td>
 																							<td>{{sessao_obssessao11}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -490,8 +282,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev12}}</td>
-																							<td>{{terapiaid12qt}}</td>
-																							<td>{{terapiaid12saldo}}</td>
+																							<td>{{sessao_qtterapiacon12}}</td>
+																							<td>{{sessao_qtterapiasaldo12}}</td>
 																							<td>{{sessao_obssessao12}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -504,8 +296,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev13}}</td>
-																							<td>{{terapiaid13qt}}</td>
-																							<td>{{terapiaid13saldo}}</td>
+																							<td>{{sessao_qtterapiacon13}}</td>
+																							<td>{{sessao_qtterapiasaldo13}}</td>
 																							<td>{{sessao_obssessao13}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -518,8 +310,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev14}}</td>
-																							<td>{{terapiaid14qt}}</td>
-																							<td>{{terapiaid14saldo}}</td>
+																							<td>{{sessao_qtterapiacon14}}</td>
+																							<td>{{sessao_qtterapiasaldo14}}</td>
 																							<td>{{sessao_obssessao14}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -532,8 +324,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev15}}</td>
-																							<td>{{terapiaid15qt}}</td>
-																							<td>{{terapiaid15saldo}}</td>
+																							<td>{{sessao_qtterapiacon15}}</td>
+																							<td>{{sessao_qtterapiasaldo15}}</td>
 																							<td>{{sessao_obssessao15}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -546,8 +338,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev16}}</td>
-																							<td>{{terapiaid16qt}}</td>
-																							<td>{{terapiaid16saldo}}</td>
+																							<td>{{sessao_qtterapiacon16}}</td>
+																							<td>{{sessao_qtterapiasaldo16}}</td>
 																							<td>{{sessao_obssessao16}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -560,8 +352,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev17}}</td>
-																							<td>{{terapiaid17qt}}</td>
-																							<td>{{terapiaid17saldo}}</td>
+																							<td>{{sessao_qtterapiacon17}}</td>
+																							<td>{{sessao_qtterapiasaldo17}}</td>
 																							<td>{{sessao_obssessao17}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -574,8 +366,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev18}}</td>
-																							<td>{{terapiaid18qt}}</td>
-																							<td>{{terapiaid18saldo}}</td>
+																							<td>{{sessao_qtterapiacon18}}</td>
+																							<td>{{sessao_qtterapiasaldo18}}</td>
 																							<td>{{sessao_obssessao18}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -588,8 +380,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev19}}</td>
-																							<td>{{terapiaid19qt}}</td>
-																							<td>{{terapiaid19saldo}}</td>
+																							<td>{{sessao_qtterapiacon19}}</td>
+																							<td>{{sessao_qtterapiasaldo19}}</td>
 																							<td>{{sessao_obssessao19}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -602,8 +394,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev20}}</td>
-																							<td>{{terapiaid20qt}}</td>
-																							<td>{{terapiaid20saldo}}</td>
+																							<td>{{sessao_qtterapiacon20}}</td>
+																							<td>{{sessao_qtterapiasaldo20}}</td>
 																							<td>{{sessao_obssessao20}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -616,8 +408,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev21}}</td>
-																							<td>{{terapiaid21qt}}</td>
-																							<td>{{terapiaid21saldo}}</td>
+																							<td>{{sessao_qtterapiacon21}}</td>
+																							<td>{{sessao_qtterapiasaldo21}}</td>
 																							<td>{{sessao_obssessao21}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -630,8 +422,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev22}}</td>
-																							<td>{{terapiaid22qt}}</td>
-																							<td>{{terapiaid22saldo}}</td>
+																							<td>{{sessao_qtterapiacon22}}</td>
+																							<td>{{sessao_qtterapiasaldo22}}</td>
 																							<td>{{sessao_obssessao22}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -644,8 +436,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev23}}</td>
-																							<td>{{terapiaid23qt}}</td>
-																							<td>{{terapiaid23saldo}}</td>
+																							<td>{{sessao_qtterapiacon23}}</td>
+																							<td>{{sessao_qtterapiasaldo23}}</td>
 																							<td>{{sessao_obssessao23}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -658,8 +450,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev24}}</td>
-																							<td>{{terapiaid24qt}}</td>
-																							<td>{{terapiaid24saldo}}</td>
+																							<td>{{sessao_qtterapiacon24}}</td>
+																							<td>{{sessao_qtterapiasaldo24}}</td>
 																							<td>{{sessao_obssessao24}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -672,8 +464,8 @@
 																								{{/ifEqual}}
 																							{{/each}}
 																							<td>{{sessao_qtterapiaprev25}}</td>
-																							<td>{{terapiaid25qt}}</td>
-																							<td>{{terapiaid25saldo}}</td>
+																							<td>{{sessao_qtterapiacon25}}</td>
+																							<td>{{sessao_qtterapiasaldo25}}</td>
 																							<td>{{sessao_obssessao25}}</td>
 																						</tr>
 																						{{/isNull}}
@@ -718,8 +510,8 @@
 		$(document).ready(function() {
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
-			
-			
+			"aaSorting": [],
+			"aoColumns": [null],
 			"responsive": true,
 			"lengthMenu": [ 100, 200],
 			"lengthChange": true,

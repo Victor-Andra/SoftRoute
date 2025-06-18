@@ -1109,6 +1109,11 @@ router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
     fncAgenda.carregaAgendaF(req, res);
 })
 
+//controle de Extras vindo da Agenda Fixa
+router.get("/atendimento/extra/extraLis", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
+    fncAgenda.carregaControleextrasF(req, res);
+})
+
 router.post("/agenda/filF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.carregaAgendaFilF(req, res);
 })
@@ -2183,6 +2188,14 @@ router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//
 //Lista todos os Extras Controles
 router.get('/atendimento/extra/lisctrl', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.listaExtractrl(req,res);
+})
+//Lista todos os Extras Exportados para Base de Extras a fim de Auditar e gerar Atendimentos para seguir à Cobrança
+router.get('/atendimento/extra/ctrlextra', fncGeral.IsAuthenticated, (req,res) =>{
+    fncExtra.controleExtra(req,res);
+})
+//Lista todos os Extras
+router.post('/atendimento/extra/ctrlextraF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
+    fncExtra.controleExtraFil(req,res);
 })
 //Lista todos os Extras
 router.post('/atendimento/extra/lisctrlF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.

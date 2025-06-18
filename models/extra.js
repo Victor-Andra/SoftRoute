@@ -2,10 +2,18 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const ExtraSchema = mongoose.Schema({
+    //campos exclusivos do controle de extra
     extra_tipo :{ type: String, required: false },
     extra_auditado :{ type: String, required: false },
+    extra_auditadoObs :{ type: String, required: false },
     extra_exportado :{ type: String, required: false },
+    extra_dtaExportado :{ type: String, required: false },
+    extra_horaExportado :{ type: String, required: false },
+    extra_usuidExportou :{type: ObjectId, required: false },
     extra_cobrarextra :{ type: Boolean, required: false},
+    extra_extraStatus :{ type: String, required: false},
+    extra_extraStatusPg :{ type: String, required: false},
+    //campos de agendamento 
     extra_org :{type: String, required: false },
     extra_categoria :{type: String, required: false },
     extra_beneid :{ type: ObjectId, required: false },
@@ -54,10 +62,18 @@ const ExtraSchema = mongoose.Schema({
 
 class Extra{
     constructor(
+        //campos exclusivos extra
         extra_tipo,
         extra_auditado,
+        extra_auditadoObs,
         extra_exportado,
+        extra_dtaExportado,
+        extra_horaExportado,
+        extra_usuidExportou,
         extra_cobrarextra,
+        extra_extraStatus,
+        extra_extraStatusPg,
+        //campos agendamento
         extra_org,
         extra_categoria,
         extra_beneid,
@@ -104,10 +120,18 @@ class Extra{
         extra_dataedicop
 
         ){
+            //campos exclusivos extra
             this.extra_tipo = extra_tipo,
             this.extra_auditado = extra_auditado,
+            this.extra_auditadoObs = extra_auditadoObs,
             this.extra_exportado = extra_exportado,
+            this.extra_dtaExportado = extra_dtaExportado,
+            this.extra_horaExportado = extra_horaExportado,
+            this.extra_usuidExportou = extra_usuidExportou,
             this.extra_cobrarextra = extra_cobrarextra,
+            this.extra_extraStatus = extra_extraStatus,
+            this.extra_extraStatusPg = extra_extraStatusPg,
+            //campos agendamento
             this.extra_org = extra_org,
             this.extra_categoria = extra_categoria,
             this.extra_beneid = extra_beneid,
@@ -176,10 +200,18 @@ module.exports = {ExtraModel,ExtraSchema,
         //Realiza Atualização
         await ExtraModel.findByIdAndUpdate(new ObjectId(req.body.id), 
             {$set: {
+               //campos exclusivos extra
                 extra_tipo : req.body.extraTipo,
                 extra_auditado : req.body.extraAuditado,
+                extra_auditadoObs : req.body.extraAuditadoObs,
                 extra_exportado : req.body.extraExportado,
+                extra_dtaExportado : req.body.extraDtaExportado,
+                extra_horaExportado : req.body.extraHoraExportado,
+                extra_usuidExportou : req.body.extraUsuidExportou,
                 extra_cobrarextra : req.body.extraCobrarextra,
+                extra_extraStatus : req.body.extraExtraStatus,
+                extra_extraStatusPg : req.body.extraExtraStatusPg,
+                //campos agendamento
                 extra_org : req.body.extraOrg,
                 extra_categoria : req.body.extraCategoria,
                 extra_beneid : req.body.extraBeneid,
@@ -243,10 +275,18 @@ module.exports = {ExtraModel,ExtraSchema,
             }
         })
         const newExtra = new ExtraModel({
+            //campos exclusivos extra
             extra_tipo : req.body.extraTipo,
             extra_auditado : req.body.extraAuditado,
+            extra_auditadoObs : req.body.extraAuditadoObs,
             extra_exportado : req.body.extraExportado,
+            extra_dtaExportado : req.body.extraDtaExportado,
+            extra_horaExportado : req.body.extraHoraExportado,
+            extra_usuidExportou : req.body.extraUsuidExportou,
             extra_cobrarextra : req.body.extraCobrarextra,
+            extra_extraStatus : req.body.extraExtraStatus,
+            extra_extraStatusPg : req.body.extraExtraStatusPg,
+            //campos agendamento
             extra_org : req.body.extraOrg,
             extra_categoria : req.body.extraCategoria,
             extra_beneid : req.body.extraBeneid,
@@ -301,11 +341,19 @@ module.exports = {ExtraModel,ExtraSchema,
 
     montaExtra(req,res){
         const newExtra = new ExtraModel({
+            //campos exclusivos extra
             extra_tipo : req.body.extraTipo,
             extra_auditado : req.body.extraAuditado,
-            extra_org : req.body.extraOrg,
-            extra_cobrarextra : req.body.extraCobrarextra,
+            extra_auditadoObs : req.body.extraAuditadoObs,
             extra_exportado : req.body.extraExportado,
+            extra_dtaExportado : req.body.extraDtaExportado,
+            extra_horaExportado : req.body.extraHoraExportado,
+            extra_usuidExportou : req.body.extraUsuidExportou,
+            extra_cobrarextra : req.body.extraCobrarextra,
+            extra_extraStatus : req.body.extraExtraStatus,
+            extra_extraStatusPg : req.body.extraExtraStatusPg,
+            //campos agendamento
+            extra_org : req.body.extraOrg,
             extra_categoria : req.body.extraCategoria,
             extra_beneid : req.body.extraBeneid,
             extra_convid : req.body.extraConvid,
