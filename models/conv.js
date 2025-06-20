@@ -26,7 +26,7 @@ const ConvSchema = mongoose.Schema({
     conv_usuidcad: { type: ObjectId, required: false },
     conv_usuidedi: { type: ObjectId, required: false },
     conv_lixo :{ type: String, required: false },
-    conv_datalixo: { type: String, required: false },
+    conv_datalixo: { type: Date, required: false },
     conv_usuidlixo: { type: ObjectId, required: false }
     
 })
@@ -166,7 +166,8 @@ module.exports = {ConvModel,ConvSchema,
                 conv_cobralaudodata: req.body.convCobralaudodata,
                 conv_cobralaudo: req.body.convCobralaudo,
                 conv_usuidcad: usuarioAtual,
-                conv_datacad: dataAtual
+                conv_datacad: dataAtual,
+                conv_lixo: "false"
             });
             console.log("newConv save");
             await newConv.save().then(()=>{

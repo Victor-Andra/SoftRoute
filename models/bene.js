@@ -109,6 +109,7 @@ const BeneSchema = mongoose.Schema({
     bene_abaclinica:{ type: String, required: false},
     bene_abaescola:{ type: String, required: false},
     bene_abaparticular:{ type: String, required: false},
+    //Controle CRUD
     bene_datacad:{ type: Date, required: false },
     bene_usuidcad:{ type: ObjectId, required: false },
     bene_usuidedi:{ type: ObjectId, required: false },
@@ -235,6 +236,7 @@ class Bene{
             this.bene_abaclinica = bene_aba,
             this.bene_abaescola = bene_aba,
             this.bene_abaparticular = bene_aba,
+            //Controle CRUD
             this.bene_datacad = bene_datacad,
             this.bene_usuidcad = bene_usuidcad,
             this.bene_usuidedi = bene_usuidedi,

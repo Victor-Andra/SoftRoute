@@ -124,6 +124,9 @@ const benefotoClass = require("../models/benefoto")
 const Benefoto = mongoose.model("tb_benefoto")
 const fncBenefoto = require("../functions/fncBenefoto")
 
+// Extraia apenas o que for necessário
+const upload = benefotoClass.upload; // ✅ Importa o upload do Multer
+
 //Evolução Atendimento
 const evoatendClass = require("../models/evoatend")
 const Evoatend = mongoose.model("tb_evoatend")
@@ -1885,13 +1888,27 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
         fncBene.listaResp(req, res);
     })
 
-   router.get('/beneficiario/foto/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
+    router.get('/beneficiario/foto/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
        fncBenefoto.carregaFotoLis(req, res); 
     })
 
-    router.post('/beneficiario/cadastrarfoto', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
-        fncBenefoto.cadastrarFoto(req, res); 
-     })
+    // Rota para cadastro de foto
+    router.post('/beneficiario/cadastrarFoto', upload, (req, res) => {
+        benefotoClass.beneFotoAdicionar(req, res)
+            .then(result => {
+                if (result === true) {
+                    req.flash('success_message', 'Foto salva com sucesso');
+                    res.redirect('/menu/beneficiario/foto/lis');
+                } else {
+                    req.flash('error_message', 'Erro ao salvar foto');
+                    res.render('admin/erro');
+                }
+            })
+            .catch(err => {
+                console.error('Erro interno:', err.message);
+                res.redirect('/admin/erro');
+            });
+    });
     // Lista e edição de beneficiários para supervisores e coordenadores pode ver mas limitado  salvar apoenas a sessão escola
 
     
@@ -1969,10 +1986,10 @@ fncSessao.deletaSessao(req, res);
 
 
 
-//Menu Beneficiario /Sessaoese
-//Edita a Requisição de Atendimentos.
-router.get('/beneficiario/sessao/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{
- fncSessao.carregaSessaoEdi(req, res);
+//Menu Beneficiario /Sessoes
+// Agora vamos usar o ID da sessão, não do beneficiário
+router.get('/beneficiario/sessao/edi/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncSessao.carregaSessaoEdi(req, res);
 })
 
 router.post('/beneficiario/sessao/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneimento
@@ -1981,12 +1998,17 @@ router.post('/beneficiario/sessao/atualizar', fncGeral.IsAuthenticated, (req,res
 
 
 //Menu Beneficiario /Sessaos
-//Lista de Requisição de Atendimentos.
+//Lista de Tabela de Sessões.
 router.get('/beneficiario/sessao/lis', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessao(req, res);
 })
 
-//Lista de Requisição de Tabela com QT de Atendimentos por beneficiario.
+// Rota que recebe a data do formulário
+router.get('/beneficiario/sessao/lisF', fncGeral.IsAuthenticated, (req, res) => {
+    fncSessao.listaSessaofil(req, res);
+})
+
+//Lista de sessões OBSOLETO
 router.get('/beneficiario/sessao/listab/:id', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessaoTab(req, res); 
 })
@@ -3443,13 +3465,6 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/terapia/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Terapiaimento
             fncTerapia.atualizaTerapia(req, res);
         })
-        
-        
-   
-
-
-
-
 
 //Menu Ferramentas
     //Funcao
@@ -3486,28 +3501,26 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.get('/ferramentas/horaage/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas horarios
             fncHoraAge.listaHoraage(req, res);
             
-        }),
+        })
 
         router.get('/ferramentas/horaage/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de horario
             fncHoraAge.carregaHoraage(req, res);
-        }),
+        })
         
         router.post('/ferramentas/horaage/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona horario
             fncHoraAge.cadastraHoraage(req, res);
 
-        }),
+        })
         
         router.get('/ferramentas/horaage/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta horario
             fncHoraAge.deletaHoraage(req, res);
      
-        }),
+        })
         
         router.get('/ferramentas/horaage/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de horario
             fncHoraAge.carregaHoraageEdi(req, res);
-        }),
+        })
         
-
-
         router.post('/ferramentas/horaage/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Horarioimento
             fncHoraAge.atualizaHoraage(req, res);
         })
@@ -3571,9 +3584,6 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/estado/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Estadoimento
             fncEstado.atualizaEstado(req, res);
         })
-
-        module.exports = router;
-    
 
 
 

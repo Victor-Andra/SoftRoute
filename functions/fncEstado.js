@@ -11,17 +11,45 @@ const Resposta = mongoose.model("tb_resposta")
 
 
 module.exports = {
-    listaEstado(req,res){
-        console.log('listando estados')
-        Estado.find().then((estado) =>{
-            console.log("Listagem Realizada!")
-            res.render('ferramentas/estado/estadoLis', {estados: estado})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Estados")
-            res.render('admin/erro')
-        })
+   listaEstado(req, res) {
+        console.log('listando estados');
+        Estado.find().then((estados) => {
+            // Função auxiliar para formatar data
+            function formatDateToBR(date) {
+                const d = new Date(date);
+                const dia = String(d.getDate()).padStart(2, '0');
+                const mes = String(d.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+                const ano = d.getFullYear();
+                const hora = String(d.getHours()).padStart(2, '0');
+                const minuto = String(d.getMinutes()).padStart(2, '0');
 
+                return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+            }
+
+            // Processa cada estado para adicionar as datas formatadas
+            estados.forEach((estado) => {
+                // Formata data de cadastro
+                if (estado.estado_datacad) {
+                    estado.datacad = formatDateToBR(estado.estado_datacad);
+                } else {
+                    estado.datacad = "--/--/---- h--:--";
+                }
+
+                // Formata data de edição
+                if (estado.estado_dataedi && estado.estado_dataedi !== "undefined") {
+                    estado.dataedi = formatDateToBR(estado.estado_dataedi);
+                } else {
+                    estado.dataedi = "--/--/---- h--:--";
+                }
+            });
+
+            console.log("Listagem Realizada!");
+            res.render('ferramentas/estado/estadoLis', { estados });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Estados");
+            res.redirect('/admin/erro');
+        });
     },
     carregaEstado(req,res){
         Estado.find().then((estado)=>{

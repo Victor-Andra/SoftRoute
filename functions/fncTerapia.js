@@ -1,27 +1,76 @@
-//Exports
-const mongoose = require("mongoose")
+// Exports
+const mongoose = require("mongoose");
 
+// Modelos Mongoose
+const Terapia = mongoose.model("tb_terapia");
+const Usuario = mongoose.model("tb_usuario");
 
-//Base Terapia
-const terapiaClass = require("../models/terapia")
-const Terapia = mongoose.model("tb_terapia")
+// Classes e funções customizadas
+const terapiaClass = require("../models/terapia");
+const usuarioClass = require("../models/usuario");
+const fncGeral = require("./fncGeral");
+
 
 module.exports = {
-    listaTerapia(req,res){
-        console.log('listando terapias')
-        Terapia.find({terapia_status:"Ativo"}).then((terapia) =>{
-            console.log("Listagem Realizada!")
-            res.render('ferramentas/terapia/terapiaLis', {terapias: terapia})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Terapias")
-            res.redirect('admin/erro')
-        })
-    },
+   listaTerapia(req, res) {
+        console.log('listando terapias');
 
-    carregaTerapia(req,res){
-        res.render("ferramentas/terapia/terapiaCad")
+        function formatDateToBR(date) {
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            const hora = String(d.getHours()).padStart(2, '0');
+            const minuto = String(d.getMinutes()).padStart(2, '0');
 
+            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+        }
+
+        Terapia.find({ terapia_status: "Ativo" }).then(async (terapiaList) => {
+            if (!terapiaList.length) {
+                return res.render("ferramentas/terapia/terapiaLis", { terapias: [] });
+            }
+
+            try {
+                // Carregar todos os usuários para mapeamento
+                const usuarioList = await Usuario.find();
+
+                // Mapear usuários para acesso rápido
+                const usuarioMap = usuarioList.reduce((acc, u) => {
+                    acc[u._id.toString()] = u;
+                    return acc;
+                }, {});
+
+                // Processar cada terapia
+                for (const terapia of terapiaList) {
+                    // Formatação das datas
+                    terapia.datacad = terapia.terapia_datacad ? formatDateToBR(terapia.terapia_datacad) : "--/--/---- h--:--";
+                    terapia.dataedi = terapia.terapia_dataedi ? formatDateToBR(terapia.terapia_dataedi) : "--/--/---- h--:--";
+
+                    // Nome dos usuários
+                    const usuarioCad = usuarioMap[terapia.terapia_usuidcad?.toString()];
+                    const usuarioEdi = usuarioMap[terapia.terapia_usuidedi?.toString()];
+
+                    terapia.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "--";
+                    terapia.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+                }
+
+                // Renderiza a view com os dados formatados
+                res.render("ferramentas/terapia/terapiaLis", {
+                    terapias: terapiaList
+                });
+
+            } catch (err) {
+                console.error("Erro ao carregar usuários:", err.message);
+                req.flash("error_message", "Houve um erro ao carregar dados adicionais");
+                res.redirect("/admin/erro");
+            }
+
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Terapias");
+            res.redirect("/admin/erro");
+        });
     },
 
 

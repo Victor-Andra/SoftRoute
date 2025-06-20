@@ -1,136 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<title>Estados</title>
-		<script>
-			function carregarImagem() {
-				var preview = document.getElementById('previewImage');
-				var fileInput = document.getElementById('estadoBandeira');
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Estado</title>
 
-				if (fileInput.files && fileInput.files[0]) {
-					var reader = new FileReader();
+    <!-- Estilos do Ace Admin -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/assets/css/ace.min.css" />
 
-					reader.onload = function (e) {
-						preview.src = e.target.result;
-						document.getElementById('previewBandeira').style.display = 'block'; // Exibe a div
-					};
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
-					reader.readAsDataURL(fileInput.files[0]);
-				}
-			}
+        #previewImage {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
 
-			function validarFormulario() {
-				var estadoBandeiraInput = document.getElementById("estadoBandeira");
-				if (estadoBandeiraInput.files.length === 0) {
-					alert("Selecione uma imagem para a bandeira!");
-					return false; // Impede o envio do formulário
-				}
-				return true; // Permite o envio do formulário
-			}
-		</script>
-	</head>
+        .widget-header h4.widget-title {
+            font-size: 1.1rem;
+        }
+    </style>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+    <script>
+        function carregarImagem() {
+            var preview = document.getElementById('previewImage');
+            var fileInput = document.getElementById('estadoBandeira');
 
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
 
-		<div class="main-container ace-save-state" id="main-container">
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    document.getElementById('previewBandeira').style.display = 'block';
+                };
 
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                preview.src = "";
+                document.getElementById('previewBandeira').style.display = 'none';
+            }
+        }
 
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
+        function validarFormulario() {
+            var estadoBandeiraInput = document.getElementById("estadoBandeira");
+            if (estadoBandeiraInput.files.length === 0) {
+                alert("Selecione uma imagem para a bandeira!");
+                return false; // Impede o envio do formulário
+            }
+            return true; // Permite o envio do formulário
+        }
+    </script>
+</head>
 
-							<li class="active">Estado Cadastro</li>
-						</ul><!-- /.breadcrumb -->
+<body onload="javascript:controlaNave();" class="no-skin">
 
-					</div>
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                    <li class="active">Cadastro de Estado</li>
+                </ul>
+            </div>
 
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" enctype="multipart/form-data" action="/menu/ferramentas/estado/add" method="POST">
-								<div class="form-horizontal" role="form">
-									<div class="col-sm-12"><!-- Widget Dados Básicos -->
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">Estados</h4>
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="/menu/ferramentas/estado/add" method="POST" onsubmit="return validarFormulario();">
+                            <div class="col-sm-12">
+                                <!-- Widget Dados Básicos -->
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                    					<h2 class="widget-title">Estados</h2>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
 
-												<span class="widget-toolbar">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
 
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
+                                            <!-- Nome do Estado -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="estadoNome">Nome do Estado:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="estadoNome" id="estadoNome" placeholder="Ex: São Paulo" class="form-control" required />
+                                                </div>
+                                            </div>
 
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
+                                            <!-- Código IBGE -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="estadoCodigo">Código IBGE:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" name="estadoCodigo" id="estadoCodigo" placeholder="Ex: 35" class="form-control" required />
+                                                </div>
+                                            </div>
 
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
+                                            <!-- UF -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="estadoUf">UF:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="estadoUf" id="estadoUf" placeholder="Ex: SP" maxlength="2" class="form-control" required />
+                                                </div>
+                                            </div>
 
-													<label> Nome do Estado</label>
-													<div class="form-group">
-														<div class="col-sm-6">
-															<input name="estadoNome"  id="estadoNome" />
-														</div>
-													</div>
-													<div class="space space-8"></div>
-													<label> Código</label>
-													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" name="estadoCodigo" id="estadoCodigo" class="form-control" />
-														</div>
-													</div>
+                                            <!-- Bandeira -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="estadoBandeira">Bandeira:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" onchange="carregarImagem()" class="form-control" />
+                                                    <!-- Prévua da Imagem -->
+                                                    <div id="previewBandeira" style="margin-top: 10px;">
+                                                        <img id="previewImage" src="#" alt="Prévia da Bandeira" style="max-width: 200px; border: 1px solid #ddd; padding: 5px;" />
+                                                    </div>
+                                                </div>
+                                            </div>
 
-													<div class="space space-8"></div>
-													<label> UF</label>
-													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" name="estadoUf" id="estadoUf" class="form-control" />
-														</div>
-													</div>
+                                            <!-- Ações -->
+                                            
+                                               
+                                            
 
-													<label for="bandeira">Bandeira:</label>
-													<input type="file" id="estadoBandeira" name="estadoBandeira" accept="image/*" onchange="carregarImagem()">
-													<!-- Div para mostrar a imagem -->
-													<div id="previewBandeira" style="display: none;">
-														<img id="previewImage" src="#" alt="Bandeira Preview" style="max-width: 100%; max-height: 200px;">
-													</div>
-													
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
+                                        </div>
+										<br>
+										 <div class="col-md-12" style="text-align: center;">
+                                                    <button class="btn btn-info" type="submit">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        Salvar
+                                                    </button>
 
-								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
-										<button class="btn btn-info"  name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
+                                                    &nbsp; &nbsp; &nbsp;
 
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
-								</div>
-							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container --><!-- basic scripts -->
-	</body>
+                                                    <button class="btn btn-warning" type="reset">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        Limpar
+                                                    </button>
+                                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+
+</body>
 </html>

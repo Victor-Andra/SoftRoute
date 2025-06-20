@@ -1,0 +1,95 @@
+    <html lang="pt=br">
+        <head>
+		    <title>Exemplo para  copiar e colar em todas as listas de registros</title>
+	    </head>
+    <style>
+        /*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 12px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
+
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    </style>
+    <span class="widget-toolbar">
+        
+        <a class="purple custom-tooltip" name="acaoCrud" id="acaoCrud">
+            <i class="ace-icon fa fa-eye bigger-130"></i>
+            <span class="tooltip-text">
+                <strong>Última Edição:</strong>
+                {{#each ../sessaos}}
+                    {{#ifEqual ../_id sessao_beneid}}
+                        {{#verificarVazioOuIndefinido sessao_dataedi}}
+                            <p>--/--/----</p>
+                        {{else}}
+                            <p><b>{{dataedi}}</b></p>
+                            {{#each ../../usuarios}}
+                                {{#ifEqual ../sessao_usuidedi this._id}}
+                                    <p>{{this.usuario_nome}}</p>
+                                {{/ifEqual}}
+                            {{/each}}
+                        {{/verificarVazioOuIndefinido}}
+                    {{/ifEqual}}
+                {{/each}}
+                <strong>Cadastrado em:</strong>
+                {{#each ../sessaos}}
+                    {{#ifEqual ../_id sessao_beneid}}
+                        <p><b>{{datacad}}</b></p>
+                        {{#each ../../usuarios}}
+                            {{#ifEqual ../sessao_usuidcad this._id}}
+                                <p>{{this.usuario_nome}}</p>
+                            {{/ifEqual}}
+                        {{/each}}
+                    {{/ifEqual}}
+                {{/each}}
+            </span>
+        </a>
+    </span>
+        <script>
+        //controle esse campos devem estar dentro do banco, com prefixo alterado pra cada tabela
+        conv_datacad: { type: Date, required: false },
+        conv_dataedi: { type: Date, required: false },
+        conv_usuidcad: { type: ObjectId, required: false },
+        conv_usuidedi: { type: ObjectId, required: false },
+        conv_lixo :{ type: String, required: false },
+        conv_datalixo: { type: Date, required: false },
+        conv_usuidlixo: { type: ObjectId, required: false }
+        </script>
+    </html>

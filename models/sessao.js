@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const SessaoSchema = mongoose.Schema({
-    sessao_beneid :{ type: ObjectId, required: false },
+    sessao_beneid :{ type: ObjectId, unique: true, required: false },
     sessao_convid :{ type: ObjectId, required: false },
     sessao_terapiaid01 :{ type: ObjectId, required: false },
     sessao_qtterapiaprev01 :{ type: String, required: false },
@@ -133,11 +133,10 @@ const SessaoSchema = mongoose.Schema({
     sessao_usuidcad :{ type: ObjectId, required: false },
     sessao_usuidedi :{ type: ObjectId, required: false },
     sessao_datacad :{ type: String, required: false },
-    sessao_dataedi :{ type: String, required: false }
-
-
-
-
+    sessao_dataedi :{ type: String, required: false },
+    sessao_lixo :{ type: String, required: false },
+    sessao_datalixo: { type: Date, required: false },
+    sessao_usuidlixo: { type: ObjectId, required: false }
     
 })
 
@@ -274,7 +273,10 @@ class Sessao{
         sessao_usuidcad,
         sessao_usuidedi,
         sessao_datacad,
-        sessao_dataedi
+        sessao_dataedi,
+        sessao_lixo,
+        sessao_datalixo,
+        sessao_usuidlixo
 
         ){
             this.sessao_beneid = sessao_beneid,
@@ -408,7 +410,10 @@ class Sessao{
             this.sessao_usuidcad = sessao_usuidcad,
             this.sessao_usuidedi = sessao_usuidedi,
             this.sessao_datacad = sessao_datacad,
-            this.sessao_dataedi = sessao_dataedi
+            this.sessao_dataedi = sessao_dataedi,
+            this.sessao_lixo = sessao_lixo,
+            this.sessao_datalixo = sessao_datalixo,
+            this.sessao_usuidlixo = sessao_usuidlixo
 
     }
 }
@@ -713,7 +718,8 @@ module.exports = {SessaoModel,SessaoSchema,
                 sessao_obssessao25 : req.body.sessaoObssessao25,
                 //Atributos de controle
                 sessao_usuidcad : usuarioAtual,
-                sessao_datacad : dataAtual.toISOString()
+                sessao_datacad : dataAtual.toISOString(),
+                sessao_lixo : "false"
             });
             console.log("newSessao save");
             await newSessao.save().then(()=>{

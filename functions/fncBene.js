@@ -158,7 +158,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    listaBene(req, res){
+    listaBeneOLD(req, res){//Wagner cintra
         console.log('listando beneficiários');
         Bene.find().then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
@@ -220,6 +220,110 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Benes")
             res.redirect('admin/erro')
         })
+    },
+    listaBene(req, res) {
+        console.log('listando beneficiários');
+
+        // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
+        function formatDateToBR(date) {
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+            const ano = d.getFullYear();
+            const hora = String(d.getHours()).padStart(2, '0');
+            const minuto = String(d.getMinutes()).padStart(2, '0');
+
+            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+        }
+
+        Bene.find().then(async (beneList) => {
+            if (!beneList.length) {
+                return res.render("beneficiario/beneLis", {
+                    benes: [],
+                    usuarios: [],
+                    terapias: [],
+                    convs: []
+                });
+            }
+
+            try {
+                const [convList, terapiaList, usuarioList] = await Promise.all([
+                    Conv.find(),
+                    Terapia.find(),
+                    Usuario.find()
+                ]);
+
+                // Mapeia usuários para acesso rápido
+                const usuarioMap = usuarioList.reduce((acc, u) => {
+                    acc[u._id.toString()] = u;
+                    return acc;
+                }, {});
+
+                // Processa cada beneficiário
+                beneList.forEach(b => {
+                    // Formata datas do beneficiário
+                    let datanasc = new Date(b.bene_datanasc);
+                    datanasc.setHours(datanasc.getHours() + 3); // ajuste de fuso horário
+                    let mes = String(datanasc.getMonth() + 1).padStart(2, '0');
+                    let dia = String(datanasc.getUTCDate()).padStart(2, '0');
+                    b.datanasc = `${datanasc.getFullYear()}-${mes}-${dia}`;
+
+                    // Cálculo da idade
+                    const hoje = new Date();
+                    let idadeAnos = hoje.getFullYear() - datanasc.getFullYear();
+                    let idadeMeses = hoje.getMonth() - datanasc.getMonth();
+
+                    if (hoje.getDate() < datanasc.getDate()) {
+                        idadeMeses--;
+                    }
+
+                    if (idadeMeses < 0) {
+                        idadeAnos--;
+                        idadeMeses += 12;
+                    }
+
+                    b.idade = idadeAnos >= 0 ? `${idadeAnos} anos e ${Math.abs(idadeMeses)} meses` : '--';
+
+                    // Formata data de cadastro e edição
+                    b.datacad = b.bene_datacad ? formatDateToBR(b.bene_datacad) : "--/--/---- h--:--";
+                    b.dataedi = b.bene_dataedi ? formatDateToBR(b.bene_dataedi) : "--/--/---- h--:--";
+
+                    // Nome do usuário que cadastrou e editou
+                    const usuarioCad = usuarioMap[b.bene_usuidcad?.toString()];
+                    const usuarioEdi = usuarioMap[b.bene_usuidedi?.toString()];
+
+                    b.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "--";
+                    b.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+                });
+
+                // Ordenação dos dados
+                beneList.sort((a, b) => {
+                    const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    return nomeA.localeCompare(nomeB);
+                });
+
+                convList.sort((a, b) => (a.conv_nome > b.conv_nome ? 1 : b.conv_nome > a.conv_nome ? -1 : 0));
+                terapiaList.sort((a, b) => (a.terapia_nome > b.terapia_nome ? 1 : b.terapia_nome > a.terapia_nome ? -1 : 0));
+
+                res.render("beneficiario/beneLis", {
+                    benes: beneList,
+                    convs: convList,
+                    terapias: terapiaList,
+                    usuarios: usuarioList
+                });
+
+            } catch (err) {
+                console.error("Erro ao carregar dados adicionais:", err.message);
+                req.flash("error_message", "Houve um erro ao carregar dados adicionais");
+                res.redirect("/admin/erro");
+            }
+
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Beneficiários");
+            res.redirect("/admin/erro");
+        });
     },
     listaBenesup(req, res){
         let convs = new Array();

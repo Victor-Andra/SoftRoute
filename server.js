@@ -76,7 +76,24 @@ app.post('/upload', upload.single('file'), (req, res) => {
             defaultLayout: 'main',
             handlebars: allowInsecurePrototypeAccess(handlebars),
             helpers: {
-                ifEqual: function (v1, v2, options) {//Verifica 2 atributos vindos do banco que não sejam String
+                /**
+                 - Helper Handlebars: {{#ifEqual valor1 valor2}}
+                 - Compara dois valores convertendo-os para string, garantindo compatibilidade entre tipos (ex: ObjectId, Number, String)
+                 - Retorna o bloco interno se forem iguais, ou o bloco {{else}} se forem diferentes
+                 - Exemplo:
+                    {{#each ../../terapias}}
+                        {{#ifEqual this._id ../sessao_terapiaid01}}
+                            <td>{{terapia_nome}}</td>
+                        {{/ifEqual}}
+                    {{/each}}
+                    O que isso faz:
+                        Para cada terapia na lista ../../terapias (acessível via this._id):
+                        Compara o this._id da terapia com o valor de ../sessao_terapiaid01 (um campo da sessão).
+                        Se forem iguais, mostra o nome da terapia (<td>{{terapia_nome}}</td>).
+                        Isso é usado para filtrar e mostrar apenas a terapia correta para aquele campo da sessão .
+                 - Wagner Cintra 18/06/2025
+                **/
+                ifEqual: function (v1, v2, options) {
                     //console.log("/"+v1+"="+v2+"/");
                     if ((""+v1+"") === (""+v2+"")) {
                         return options.fn(this);

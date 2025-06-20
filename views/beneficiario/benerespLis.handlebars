@@ -3,7 +3,52 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Reponsáveis pelos beneficiários</title>
+		 <style>
+        /*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
 
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 8px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
+
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    </style>
 		
 	</head>
 
@@ -115,7 +160,36 @@
 																<a class="green" href="/menu/beneficiario/edi/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
-																
+																<a class="purple custom-tooltip" name="acaoCrud" id="acaoCrud-{{_id}}">
+																			<i class="ace-icon fa fa-eye bigger-130"></i>
+																			<span class="tooltip-text">
+																				<!-- Bloco Última Edição -->
+																				<strong>Última Edição:</strong>
+																				{{#if dataedi}}
+																					<p><b>{{dataedi}}</b></p>
+																				{{else}}
+																					<p>--/--/----</p>
+																				{{/if}}
+																				{{#if usuarioEdiNome}}
+																					<p>Por: {{usuarioEdiNome}}</p>
+																				{{else}}
+																					<p>Por: Não informado</p>
+																				{{/if}}
+
+																				<!-- Bloco Cadastrado em -->
+																				<strong>Cadastrado em:</strong>
+																				{{#if datacad}}
+																					<p><b>{{datacad}}</b></p>
+																				{{else}}
+																					<p>--/--/----</p>
+																				{{/if}}
+																				{{#if usuarioCadNome}}
+																					<p>Por: {{usuarioCadNome}}</p>
+																				{{else}}
+																					<p>Por: Não informado</p>
+																				{{/if}}
+																			</span>
+																		</a>
 															</div>
 														</td>
 													</tr>

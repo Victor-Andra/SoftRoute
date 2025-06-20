@@ -3,49 +3,42 @@ const ObjectId = mongoose.Types.ObjectId
 
 
 const ConvcreSchema = mongoose.Schema({
-    convcre_convid :{
-         type: ObjectId, 
-         required: true 
-        },
-    convcre_convCpfCnpj :{
-         type: String, 
-         required: false 
-        },
-    convcre_convnome :{
-         type: String, 
-         required: false 
-        },
-    convcre_terapiaid :{
-         type: ObjectId, 
-         required: true 
-        },
-    convcre_data :{
-         type: String, 
-         required: true 
-        },
-    convcre_valor :{
-         type: String, 
-         required: true 
-        },
-    convcre_obs :{
-         type: String, 
-         required: false 
-        },
-    convcre_datacad :{
-         type: Date, 
-         required: false 
-        },
-    convcre_dataedi :{
-         type: Date, 
-         required: false 
-        },
+    convcre_convid :{ type: ObjectId, required: true  },
+    convcre_convCpfCnpj :{ type: String, required: false },
+    convcre_convnome :{ type: String,  required: false },
+    convcre_terapiaid :{ type: ObjectId,  required: true },
+    convcre_data :{ type: String, required: true  },
+    convcre_valor :{ type: String, required: true  },
+    convcre_obs :{ type: String,  required: false  },
+    //Atributos de controle
+    convcre_datacad :{ type: Date, required: false  },
+    convcre_dataedi :{ type: Date, required: false},
+    convcre_usuidcad :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_usuidedi :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_usuidlixo :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_datalixo :{ type: String, required: false },//Wagner C. 18/06/2025
+    convcre_lixo :{ type: String, required: false }//Wagner C. 18/06/2025
 })
 
 class Convcre{
     constructor(
-        convcre_convid, convcre_convCpfCnpj,convcre_convnome ,convcre_terapiaid ,convcre_terapianome ,convcre_data,
-        convcre_valor, convcre_obs, convcre_datacad, convcre_dataedi
-        ){
+        convcre_convid,
+        convcre_convCpfCnpj,
+        convcre_convnome,
+        convcre_terapiaid,
+        convcre_terapianome,
+        convcre_data,
+        convcre_valor,
+        convcre_obs,
+        //Atributos de controle
+        convcre_datacad,
+        convcre_dataedi,
+        convcre_usuidcad,
+        convcre_usuidedi,
+        convcre_usuidlixo,
+        convcre_datalixo,
+        convcre_lixo
+    ){
             this.convcre_convid = convcre_convid, //vem da tabela Convenio
             this.convcre_convCpfCnpj = convcre_convCpfCnpj,
             this.convcre_convnome = convcre_convnome, //Facilitar identificação do convenio pelo nome
@@ -54,8 +47,14 @@ class Convcre{
             this.convcre_data = convcre_data,
             this.convcre_valor = convcre_valor,
             this.convcre_obs = convcre_obs,
+            //Atributos de controle
             this.convcre_datacad = convcre_datacad,
             this.convcre_dataedi = convcre_dataedi
+            this.convcre_usuidcad = convcre_usuidcad,
+            this.convcre_usuidedi = convcre_usuidedi,
+            this.convcre_usuidlixo = convcre_usuidlixo,
+            this.convcre_datalixo = convcre_datalixo,
+            this.convcre_lixo = convcre_lixo
           
     }
 }
@@ -65,10 +64,9 @@ ConvcreSchema.loadClass(Convcre)
 const ConvcreModel = mongoose.model('tb_convcre', ConvcreSchema)
 module.exports = {ConvcreModel,ConvcreSchema,
     convcreEditar: async (req, res) => {
-        let dataAtual = new Date();
+        let dataAtual = new Date();//Pega data atual
         let resultado;
-        //Pega data atual
-        
+        let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         //Realiza Atualização
         console.log("id:"+req.body.convcreId)
         await ConvcreModel.findByIdAndUpdate(req.body.convcreId, 
@@ -79,7 +77,8 @@ module.exports = {ConvcreModel,ConvcreSchema,
                 convcre_data : req.body.convcreData ,
                 convcre_valor : req.body.convcreValor ,
                 convcre_obs : req.body.convcreObs ,
-                convcre_dataedi : dataAtual
+                convcre_dataedi : dataAtual,
+                convcre_usuidedi : usuarioAtual,
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -116,8 +115,9 @@ module.exports = {ConvcreModel,ConvcreSchema,
                 convcre_data : req.body.convcreData ,
                 convcre_valor : req.body.convcreValor ,
                 convcre_obs : req.body.convcreObs ,
-                convcre_datacad : dataAtual
-
+                convcre_datacad : dataAtual,
+                convcre_usuidcad : usuarioAtual,
+                convcre_lixo : "false"
             });
             console.log("newConvcre save");
             await newConvcre.save().then(()=>{

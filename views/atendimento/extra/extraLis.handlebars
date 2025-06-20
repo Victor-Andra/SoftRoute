@@ -341,7 +341,6 @@
 													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
 													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrar</th>
 													
-													<th tabindex="10">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -396,14 +395,7 @@
 															{{/ifEqual}}
 															</td>
 															
-															<td>
-																<div class="action-buttons">
-																	<a class="blue no-print" name="acaoEdi" id="acaoEdi" href="/menu/extra/edi/{{_id}}">
-																		<i class="ace-icon fa fa-pencil bigger-130"></i>
-																	</a>
-																	
-																</div>
-															</td>
+															
 												
 														</tr>
 													{{/each}}
@@ -443,9 +435,9 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 100, 200],
+			"lengthMenu": [ 200,300],
 			"lengthChange": true,
 			"autoWidth": false,
 			"paging": true,

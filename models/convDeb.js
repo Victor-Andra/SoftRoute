@@ -2,50 +2,42 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const ConvdebSchema = mongoose.Schema({
-    convdeb_convid :{
-         type: ObjectId, 
-         required: true 
-        },
-    convdeb_convCpfCnpj :{
-         type: String, 
-         required: false 
-        },
-    convdeb_convnome :{
-         type: String, 
-         required: false 
-        },
-    convdeb_terapiaid :{
-         type: ObjectId, 
-         required: true 
-        },
-    convdeb_data :{
-         type: String, 
-         required: true 
-        },
-    convdeb_valor :{
-         type: String, 
-         required: true 
-        },
-    convdeb_obs :{
-         type: String, 
-         required: false 
-        },
-    convdeb_datacad :{
-         type: Date, 
-         required: false 
-        },
-    convdeb_dataedi :{
-         type: Date, 
-         required: false 
-        },
-    
+
+    convdeb_convid :{ type: ObjectId, required: true },
+    convdeb_convCpfCnpj :{ type: String, required: false },
+    convdeb_convnome :{ type: String, required: false },
+    convdeb_terapiaid :{ type: ObjectId, required: true },
+    convdeb_data :{ type: String, required: true },
+    convdeb_valor :{type: String, required: true },
+    convdeb_obs :{type: String, required: false},
+    //Atributos de controle
+    convdeb_datacad :{type: Date, required: false },
+    convdeb_dataedi :{type: Date, required: false },
+    convcre_usuidcad :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_usuidedi :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_usuidlixo :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convcre_datalixo :{ type: String, required: false },//Wagner C. 18/06/2025
+    convcre_lixo :{ type: String, required: false }//Wagner C. 18/06/2025
     
 })
 
 class Convdeb{
     constructor(
-        convdeb_convid , convdeb_convCpfCnpj, convdeb_convnome ,convdeb_terapiaid ,convdeb_data,
-        convdeb_valor, convdeb_obs, convdeb_datacad, convdeb_dataedi
+        convdeb_convid,
+        convdeb_convCpfCnpj,
+        convdeb_convnome,
+        convdeb_terapiaid,
+        convdeb_data,
+        convdeb_valor,
+        convdeb_obs,
+        //Atributos de controle
+        convdeb_datacad,
+        convdeb_dataedi,
+        convdeb_usuidcad,
+        convdeb_usuidedi,
+        convdeb_usuidlixo,
+        convdeb_datalixo,
+        convdeb_lixo
         ){
             this.convdeb_convid = convdeb_convid, //vem da tabela Convenio
             this.convdeb_convCpfCnpj = convdeb_convCpfCnpj, 
@@ -54,8 +46,14 @@ class Convdeb{
             this.convdeb_data = convdeb_data,
             this.convdeb_valor = convdeb_valor,
             this.convdeb_obs = convdeb_obs,
+            //Atributos de controle
             this.convdeb_datacad = convdeb_datacad,
-            this.convdeb_dataedi = convdeb_dataedi
+            this.convdeb_dataedi = convdeb_dataedi,
+            this.convdeb_usuidcad = convdeb_usuidcad,
+            this.convdeb_usuidedi = convdeb_usuidedi,
+            this.convdeb_usuidlixo = convdeb_usuidlixo,
+            this.convdeb_datalixo = convdeb_datalixo,
+            this.convdeb_lixo = convdeb_lixo
           
     }
 }
@@ -65,10 +63,9 @@ ConvdebSchema.loadClass(Convdeb)
 const ConvdebModel = mongoose.model('tb_convdeb', ConvdebSchema)
 module.exports = {ConvdebModel,ConvdebSchema,
     convdebEditar: async (req, res) => {
-        let dataAtual = new Date();
+        let dataAtual = new Date();//Pega data atual
         let resultado;
-        //Pega data atual
-        
+        let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         //Realiza Atualização
         await ConvdebModel.findByIdAndUpdate(req.body.convdebId, 
             {$set: {
@@ -78,7 +75,8 @@ module.exports = {ConvdebModel,ConvdebSchema,
                 convdeb_data : req.body.convdebData ,
                 convdeb_valor : req.body.convdebValor ,
                 convdeb_obs : req.body.convdebObs ,
-                convdeb_dataedi : dataAtual
+                convdeb_dataedi : dataAtual,
+                convdeb_usuidedi : usuarioAtual,
                 }}
         ).then((res) =>{
             console.log("Salvo")
@@ -116,7 +114,9 @@ module.exports = {ConvdebModel,ConvdebSchema,
                 convdeb_data : req.body.convdebData ,
                 convdeb_valor : req.body.convdebValor ,
                 convdeb_obs : req.body.convdebObs ,
-                convdeb_datacad : dataAtual
+                convdeb_datacad : dataAtual,
+                convdeb_usuidcad : usuarioAtual,
+                convdeb_lixo : "false"
             });
             console.log("newConvdeb save");
             await newConvdeb.save().then(()=>{
