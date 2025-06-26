@@ -2,8 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Foto</title>
+    <title>Cadastro de benefoto</title>
 
     <!-- Estilos do Ace Admin -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
@@ -11,153 +10,134 @@
     <link rel="stylesheet" href="/assets/css/ace.min.css" />
 
     <style>
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            resize: none;
-            rows: 2;
+        .form-group {
+            margin-bottom: 1rem;
         }
 
         #previewImage {
             max-width: 100%;
             height: auto;
+            border: 1px solid #ccc;
             margin-top: 10px;
-            display: block;
         }
 
-        .botoes-centralizados {
-            margin-top: 20px;
-            text-align: center;
+        .widget-header h4.widget-title {
+            font-size: 1.1rem;
         }
     </style>
 
     <script>
         function carregarImagem() {
             var preview = document.getElementById('previewImage');
-            var fileInput = document.getElementById('benefotoFoto');
+            var fileInput = document.getElementById('benefotoBandeira');
 
             if (fileInput.files && fileInput.files[0]) {
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
                     preview.src = e.target.result;
-                    document.getElementById('previewCarimbo').style.display = 'block';
+                    document.getElementById('previewBandeira').style.display = 'block';
                 };
 
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 preview.src = "";
-                document.getElementById('previewCarimbo').style.display = 'none';
+                document.getElementById('previewBandeira').style.display = 'none';
             }
         }
 
         function validarFormulario() {
-            var benefotoInput = document.getElementById("benefotoFoto");
-            if (benefotoInput.files.length === 0) {
-                alert("Selecione uma imagem para a Foto!");
+            var benefotoBandeiraInput = document.getElementById("benefotoBandeira");
+            if (benefotoBandeiraInput.files.length === 0) {
+                alert("Selecione uma imagem para a bandeira!");
                 return false; // Impede o envio do formulário
             }
-            return true; // Permite o envio
+            return true; // Permite o envio do formulário
         }
+      
+       
+
     </script>
 </head>
-<body class="no-skin">
+
+<body onload="javascript:controlaNave(); " class="no-skin">
 
 <div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
                 <ul class="breadcrumb">
-                    <li>
-                        <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="#">Home</a>
-                    </li>
-                    <li class="active">Cadastro de Foto do Beneficiário</li>
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                    <li class="active">Cadastro de benefoto</li>
                 </ul>
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <!-- Formulário com enctype multipart/form-data -->
-                        <form class="form-horizontal" role="form"
-                              action="/menu/beneficiario/cadastrarFoto"
-                              method="POST"
-                              enctype="multipart/form-data"
-                              onsubmit="return validarFormulario();">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="/menu/beneficiario/foto/add"  method="POST" onsubmit="return validarFormulario();">
+                            <div class="col-sm-12">
+                                <!-- Widget Dados Básicos -->
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                    					<h2 class="widget-title">benefotos</h2>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
 
-                            <div class="widget-box">
-                                <div class="widget-header">
-                                    <h4 class="widget-title">
-                                        <i class="red ace-icon fa fa-key bigger-110"></i>
-                                        Foto do Beneficiário
-                                    </h4>
-
-                                    <span class="widget-toolbar">
-                                        <a href="#" data-action="reload">
-                                            <i class="ace-icon fa fa-refresh"></i>
-                                        </a>
-                                        <a href="#" data-action="collapse">
-                                            <i class="ace-icon fa fa-chevron-up"></i>
-                                        </a>
-                                    </span>
-                                </div>
-
-                                <div class="widget-body">
-                                    <div class="widget-main">
-                                        <!-- Mensagens informativas -->
-                                        <div class="alert alert-warning">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="ace-icon fa fa-times"></i>
-                                            </button>
-                                            <strong>Importante!</strong><br>
-                                            A foto deve ser menor ou igual a 5MB<br>
-                                            Formato PNG ou JPG recomendado.
-                                        </div>
-
-                                        <div class="alert alert-danger">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="ace-icon fa fa-times"></i>
-                                            </button>
-                                            <strong>{{bene.bene_nome}}</strong><br>
-                                            {{bene.bene_cpf}}
-                                        </div>
-
-                                        <!-- Campo de Upload -->
-                                        <div class="form-group">
-                                            <label for="benefotoFoto">Foto:</label>
-                                            <input type="file" id="benefotoFoto" name="benefotoFoto" accept="image/*"
-                                                   onchange="carregarImagem()" required>
-                                            <div id="previewCarimbo" style="display: none;">
-                                                <img id="previewImage" src="" alt="Prévia da foto"
-                                                     style="max-width: 300px; border: 1px solid #ccc;">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div hidden class="col-sm-9">
+                                                   <input type="text" name="benefotoBeneid" id="benefotoBeneid" class="form-control" value="{{_id}}"/>
+                                                </div>
                                             </div>
-                                        </div>
+                                            
+                                            <!-- Nome do benefoto -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="benefotoNome">Nome do benefoto:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="benefotoNome" id="benefotoNome" class="form-control" value=""/>
+                                                </div>
+                                            </div>
 
-                                        <!-- ID do beneficiário -->
-                                        <div class="form-group" hidden>
-                                            <label for="benefotoBeneId">ID do Beneficiário:</label>
-                                            <input type="text" id="benefotoBeneId" name="benefotoBeneId" value="{{_id}}" required>
-                                        </div>
+                                          
 
-                                        <!-- Observações -->
-                                        <div class="form-group">
-                                            <label for="benefotoObs">Observações:</label>
-                                            <textarea id="benefotoObs" name="benefotoObs" placeholder="Digite observações sobre a foto..."></textarea>
-                                        </div>
+                                            <!-- Foto do beneficiário -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="benefotoBandeira">Foto:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="file" id="benefotoFoto" name="benefotoFoto" accept="image/*" onchange="carregarImagem()" class="form-control" />
+                                                    <!-- Prévua da Imagem -->
+                                                    <div id="previewBandeira" style="margin-top: 10px;">
+                                                        <img id="previewImage" src="#" alt="Prévia da Bandeira" style="max-width: 200px; border: 1px solid #ddd; padding: 5px;" />
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                        <!-- Botões centralizados -->
-                                        <div class="botoes-centralizados">
-                                            <button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-                                                <i class="ace-icon fa fa-check bigger-110"></i>
-                                                Salvar
-                                            </button>&nbsp; &nbsp;
+                                            <!-- Ações -->
+                                            
+                                               
+                                            
 
-                                            <button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-                                                <i class="ace-icon fa fa-undo bigger-110"></i>
-                                                Cancelar
-                                            </button>
                                         </div>
+										<br>
+										 <div class="col-md-12" style="text-align: center;">
+                                                    <button class="btn btn-info" type="submit">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        Salvar
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+
+                                                    <button class="btn btn-warning" type="reset">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        Limpar
+                                                    </button>
+                                                </div>
                                     </div>
                                 </div>
                             </div>

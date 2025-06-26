@@ -14,6 +14,7 @@ const Usuario = mongoose.model("tb_usuario")
 const Estado = mongoose.model("tb_estado")
 
 module.exports = {
+    //Função que Carrega view para cadastro novo
     carregaConv(req,res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
@@ -25,6 +26,7 @@ module.exports = {
         })
     },
 
+    //Função que controla Classe para salvar
     cadastraConv(req,res){
         let cadastro = convClass.convAdicionar(req,res);//variavel para armazenar a função que armazena o async
 
@@ -38,6 +40,7 @@ module.exports = {
         }
     },
 
+    //Função que controla Classe para Deletar
     deletaConv(req, res){
         Conv.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv) =>{
@@ -50,7 +53,8 @@ module.exports = {
             })
         })
     },
-   
+    
+    //Função que controla Classe para Atualizar registro
     atualizaConv(req, res){
         let resposta;
         try{
@@ -86,6 +90,7 @@ module.exports = {
         } 
     },
 
+    //Função que Carrega view para Editar Registro
     carregaConvEdi(req, res){
         Conv.findById(req.params.id).then((conv) =>{
             Estado.find().then((estado)=>{
@@ -97,6 +102,7 @@ module.exports = {
         })
     },
 
+    //Função que Carrega view para Listar registros
     listaConv(req, res){
         console.log('listando convs')
         let qtregs;

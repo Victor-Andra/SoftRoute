@@ -1888,30 +1888,30 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
         fncBene.listaResp(req, res);
     })
 
-    router.get('/beneficiario/foto/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de bene
-       fncBenefoto.carregaFotoLis(req, res); 
+    router.get('/beneficiario/foto/:id', fncGeral.IsAuthenticated, (req, res) => {
+        const bene_id = req.params.id;
+
+        // Valida se é um ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(bene_id)) {
+            req.flash("error_message", "ID inválido!");
+            return res.redirect("/menu/beneficiario/lista");
+        }
+
+        // Chama a função carregabeneFoto passando o ID
+        fncBenefoto.carregabeneFoto(req, res, bene_id);
     })
 
-    // Rota para cadastro de foto
-    router.post('/beneficiario/cadastrarFoto', upload, (req, res) => {
-        benefotoClass.beneFotoAdicionar(req, res)
-            .then(result => {
-                if (result === true) {
-                    req.flash('success_message', 'Foto salva com sucesso');
-                    res.redirect('/menu/beneficiario/foto/lis');
-                } else {
-                    req.flash('error_message', 'Erro ao salvar foto');
-                    res.render('admin/erro');
-                }
-            })
-            .catch(err => {
-                console.error('Erro interno:', err.message);
-                res.redirect('/admin/erro');
-            });
-    });
-    // Lista e edição de beneficiários para supervisores e coordenadores pode ver mas limitado  salvar apoenas a sessão escola
+    router.post('/beneficiario/foto/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona beneFoto
+        fncBenefoto.cadastrabeneFoto(req, res);
+    })
 
-    
+    // Rota para salvar com opção de sobrescrever (POST)
+    router.post('/beneficiario/foto/sobrescrever', fncGeral.IsAuthenticated, (req, res) => {
+        fncBenefoto.sobrescrevebeneFoto(req, res);
+    })
+
+   
+    // Lista e edição de beneficiários para supervisores e coordenadores pode ver mas limitado  salvar apoenas a sessão escola
     router.get('/beneficiario/lissup', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
         fncBene.listaBenesup(req, res);        
     })
@@ -2001,6 +2001,16 @@ router.post('/beneficiario/sessao/atualizar', fncGeral.IsAuthenticated, (req,res
 //Lista de Tabela de Sessões.
 router.get('/beneficiario/sessao/lis', fncGeral.IsAuthenticated, (req,res) =>{
 fncSessao.listaSessao(req, res);
+})
+
+//Rota que carrega a view com fltro de sessões para um beneficiário individual
+router.get('/beneficiario/sessao/lisind', fncGeral.IsAuthenticated, (req,res) =>{
+fncSessao.pesquisaind(req, res);
+})
+
+//sessões para um beneficiário individual filtrado
+router.post('/beneficiario/sessao/lisindfil', fncGeral.IsAuthenticated, (req,res) =>{
+fncSessao.pesquisaindfil(req, res);
 })
 
 // Rota que recebe a data do formulário
@@ -2663,7 +2673,7 @@ router.post('/beneficiario/excecaotera/add', fncGeral.IsAuthenticated, (req,res)
 })
 
 //Edita o registro
-router.post('/beneficiario/excecaotera/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+router.post('/beneficiario/excecaotera/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no 
 fncExcecaotera.atualizaExcecaotera(req, res);
 })
 
@@ -2738,7 +2748,7 @@ router.get('/area/escalas/cars/carsedi/:id', fncGeral.IsAuthenticated, (req,res)
     fncCars.carregaCarsEdi(req, res);
 })
 
-router.post('/area/escalas/cars/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no convênio
+router.post('/area/escalas/cars/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza no 
     fncCars.atualizaCars(req, res);
 })
 
