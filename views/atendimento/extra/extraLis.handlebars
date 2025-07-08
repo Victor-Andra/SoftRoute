@@ -310,11 +310,17 @@
 								</div>
 								<div class="row">
 									<div class="col-sm-12">
-										<button name="acaoExportarExtra" id="acaoExportarExtra" type="submit" class="btn btn-xs btn-danger">
-											<i class="ace-icon fa fa-bolt"></i>
-											Exportar Agendamentos Extras para Iniciar Atividades de Controle
-										</button>
+										<form action="/menu/extra/extraCopia" method="POST">
+											<input type="hidden" name="tipoData" value="<%= filtroTipo %>" />
+											<input type="hidden" name="anoAtend" value="<%= filtroAno %>" />
+											<input type="hidden" name="mesAtend" value="<%= filtroMes %>" />
+
+											<button name="acaoExportarExtra" id="acaoExportarExtra" type="submit" class="btn btn-xs btn-danger">Exportar Agendamentos Extras para Iniciar Atividades de Controle
+												<i class="ace-icon fa fa-bolt"></i>
+											</button>
+										</form>
 									</div>
+									
 									<hr>
 								</div>
 								<div class="row">

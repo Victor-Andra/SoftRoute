@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Escolher o Beneficiários para mostrar sessões</title>
+		<title>Lista de Sessões por Beneficiários</title>
 		<style>
 			@media print and (orientation: landscape) {
 				.noprint {
@@ -65,151 +65,7 @@
 				visibility: visible;
 			}
 		</style>
-		<script type="text/javascript">
-			// Função para formatar data como DD/MM/YYYY
-			function formatDateToBR(date) {
-				return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-			}
-			// Função para calcular início e fim da semana (domingo a sábado)
-			function getInicioFimSemana(data) {
-				const dia = data.getDay(); // 0 = domingo
-				const inicioSemana = new Date(data);
-				inicioSemana.setDate(data.getDate() - dia); // volta ao domingo
-				inicioSemana.setHours(0, 0, 0, 0);
-
-				const fimSemana = new Date(inicioSemana);
-				fimSemana.setDate(inicioSemana.getDate() + 6);
-				fimSemana.setHours(23, 59, 59, 999);
-
-				return {
-					inicio: inicioSemana,
-					fim: fimSemana
-				};
-			}
-			// Atualiza campo hidden com data_fim e mostra período na tela
-			function atualizaDatas() {
-				const dataInput = document.getElementById("dataFil").value;
-				if (!dataInput) return;
-
-				const dataSelecionada = new Date(dataInput);
-				const { inicio, fim } = getInicioFimSemana(dataSelecionada);
-
-				document.getElementById("dataFinal").value = fim.toISOString(); // formato ISO para backend
-				document.getElementById("periodoSemana").textContent = `${formatDateToBR(inicio)} até ${formatDateToBR(fim)}`;
-			}
-			// Nova função para pegar a data atual no formato dd/mm/yyyy
-			function getDataAtualFormatada() {
-				let data = new Date();
-				let dia = String(data.getDate()).padStart(2, '0');
-				let mes = String(data.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
-				let ano = data.getFullYear();
-				return `${dia}/${mes}/${ano}`;
-			}
-
-			// Função para converter data brasileira para objeto Date
-			function parseDataBr(dataStr) {
-				let [dia, mes, ano] = dataStr.split('/');
-				return new Date(ano, mes - 1, dia);
-			}
-
-			// Sua função ajustaData modificada para aceitar o valor formatado em dd/mm/yyyy
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-
-					// Trata possíveis datas inválidas
-					if (isNaN(dat.getTime())) {
-						dat = parseDataBr(elementox.value); // tenta parsear se for formato BR
-					}
-
-					let mes = (dat.getMonth()+1).toString().padStart(2, '0');
-					let dia = dat.getDate().toString().padStart(2, '0');
-
-					let fulldate = `${dia}/${mes}/${dat.getFullYear()}`;
-				});
-			}
-
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-
-				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-					let mes = String(dat.getUTCMonth()+1).padStart(2, '0');
-					let dia = String(dat.getUTCDate()).padStart(2, '0');
-					let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-					document.getElementById('dataFinal').value = fulldate;
-				} else if (tipo == "Semana" || tipo == "Dia") {
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = String(dat.getUTCMonth() + 1).padStart(2, '0'); // UTC
-					let dia = String(dat.getUTCDate()).padStart(2, '0');
-					let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-					document.getElementById('dataFinal').value = fulldate;
-				}
-			}
-
-			function trocaFiltroData(){
-				let fill = document.getElementById("tipoData").value;
-				if(fill == "Ano/Mes"){
-					document.getElementById("divAnoAtend").hidden = false;
-					document.getElementById("divMesAtend").hidden = false;
-					document.getElementById("divDataFil").hidden = true;
-				} else {
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
-				}
-			}
-
-			function formatDateToBR(date) {
-					return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-				}
-
-				const { inicio, fim } = getInicioFimSemana(hoje);
-				const datainiSemana = formatDateToBR(inicio);
-				const datafimSemana = formatDateToBR(fim);
-
-				// Adicionando às sessões para uso no front
-				for (const sessao of sessaoList) {
-					sessao.datainiSemana = datainiSemana;
-					sessao.datafimSemana = datafimSemana;
-				}
-			
-			function carregaBody(){
-				trocaFiltroData();
-				formataData();
-
-				// Preenche o campo #dataFil com a data atual no formato dd/mm/yyyy
-				const hoje = new Date();
-				document.getElementById("dataFil").value = hoje.toISOString().split('T')[0]; // yyyy-mm-dd
-				atualizaDatas(); // calcula início e fim da semana
-
-				const dataAtual = getDataAtualFormatada();
-				document.getElementById("dataFil").value = dataAtual.split('/').reverse().join('-'); // formato yyyy-mm-dd para input date
-				document.getElementById("dataFinal").value = dataAtual; // ou qualquer outro uso que você precise
-
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					}
-
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-						// nada por enquanto
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value;
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
-					}
-				}
-			}
-
-		</script>
+		
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -221,7 +77,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Escolha o Beneficiário e a Semana para Mostrar o Quadro</li>
+							<li class="active">Lista de Quadro de Sessões por Beneficiários</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					
@@ -230,52 +86,86 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/beneficiario/sessao/lisindfil" method="POST">
-							<div class="col-xs-12 row">
-								<!-- Tipo de Filtro -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
+							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
-									<div class="input-group">
-										<label>Tipo Filtro:&nbsp;</label>
-										<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="trocaFiltroData()">
-											<option value="Semana" selected>Semana</option>
-										</select>
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Semana">Semana</option>
+											</select>
+										</div>
 									</div>
 								</div>
-
-								<!-- Campo Data -->
+								
+								<div id="divAnoAtend" class="col-xs-12 col-sm-1">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												<option value="2024">2024</option>
+												<option selected value="2025">2025</option>
+												<option value="2026">2026</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesAtend" class="col-xs-12 col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
 								<div id="divDataFil" class="col-xs-12 col-sm-2">
 									<div class="input-group">
-										<label>Data:</label>
-										<input style="height: 30px;" id="dataFil" name="data_inicio" type="date" onchange="atualizaDatas()">
-										<input type="hidden" id="dataFinal" name="data_fim">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
 									</div>
 								</div>
-
 								<!-- Beneficiário -->
 								<div id="divAtendBeneficiario" class="col-sm-4">
 									<div class="input-group">
 										<label>Beneficiário:</label>
 										<select name="bene_id" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
-											<option value="-">-</option>
+											
 											{{#each benes}}
 												<option value="{{_id}}">{{bene_nome}}</option>
 											{{/each}}
 										</select>
 									</div>
 								</div>
-
-								<!-- Botão Pesquisar -->
-								<div class="col-sm-2">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
-										<i class="ace-icon fa fa-search-plus"></i> Pesquisar
+								
+								<hr>
+								
+								<div class="col-xs-12 col-sm-4" style="text-align: center;">
+									<p>Período da Semana: {{datainiSemana}} até {{datafimSemana}}</p>
+								</div>
+								<div class="col-xs-12 col-sm-2">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
 									</button>
 								</div>
+								
 							</div>
-
-							<!-- Exibição do período da semana -->
-							<div class="col-xs-12 text-center" style="margin-top: 15px;">
-								<p><strong>Período da Semana:</strong> <span id="periodoSemana">--/-- até --/--</span></p>
-							</div>
+							<hr>
 						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12 col-sm-12">
@@ -293,7 +183,17 @@
 									Os cálculos serão atualizados com base na semana da data informada.
 							</div>
 						</div>
-						
+						<div class="row">
+							<div class="alert alert-warning">
+								<button type="button" class="close" data-dismiss="alert">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+									<strong>Dica:</strong><br>
+									A carga dessa lista pode ser um pouco lenta, pois realiza contagens detalhadas de todas as terapias de cada beneficiário.<br>
+									Para maior agilidade, utilize o <strong>botão do meio do mouse (rolamento) ou o clique com o botão do meio</strong> nos links de edição.<br>
+									Dessa forma, o formulário será aberto em uma nova aba ou janela, mantendo a lista atual intacta e evitando recarregamentos desnecessários.
+							</div>
+						</div>
 					</div>
 								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											
@@ -303,12 +203,25 @@
 												</tr>
 											</thead>
 											<tbody>
-												
+												{{#each sessaos}}
 													<tr role="row" class="odd">
-														<td><label class="hidden">{{bene_nome}}</label>
+														<td><label class="hidden">
+															{{#each ../benes}}
+																{{#ifEqual ../bene_beneid this.sessao_beneid}}
+																	{{this.bene_nome}}
+																{{/ifEqual}}
+															{{/each}}
+															</label>
 															<div class="widget-box collapsed">
 																<div class="widget-header">
-																	<h6 class="widget-title" >{{bene_nome}}</h6>
+																	<h6 class="widget-title" >
+																		{{#each ../benes}}
+																			{{#ifEqual ../bene_beneid this.sessao_beneid}}
+																				{{this.bene_nome}}
+																			{{/ifEqual}}
+																		{{/each}}
+																		
+																	</h6>
 																	
 																	<span class="widget-toolbar">
 																		
@@ -781,7 +694,7 @@
 
 
 													</tr>
-												
+												{{/each}}
 											</tbody>
 										</table>
 								
@@ -825,6 +738,50 @@
 			});
 		});
 		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+			
+			// Função para formatar data como DD/MM/YYYY
+			function formatDateToBR(date) {
+				return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+			}
+
+			// Função para calcular início e fim da semana
+			function getInicioFimSemana(data) {
+				const dia = data.getDay();
+				const inicioSemana = new Date(data);
+				inicioSemana.setDate(data.getDate() - dia);
+				inicioSemana.setHours(0, 0, 0, 0);
+
+				const fimSemana = new Date(inicioSemana);
+				fimSemana.setDate(inicioSemana.getDate() + 6);
+				fimSemana.setHours(23, 59, 59, 999);
+
+				return { inicio: inicioSemana, fim: fimSemana };
+			}
+
+			// Preenche automaticamente as datas ao carregar
+			function carregaBody() {
+				const hoje = new Date();
+				document.getElementById("dataFil").value = hoje.toISOString().split('T')[0];
+				atualizaDatas();
+			}
+
+			// Atualiza campo hidden com data_fim e mostra período na tela
+			function atualizaDatas() {
+				const dataInput = document.getElementById("dataFil").value;
+				if (!dataInput) return;
+
+				const dataSelecionada = new Date(dataInput);
+				const { inicio, fim } = getInicioFimSemana(dataSelecionada);
+
+				document.getElementById("dataFinal").value = fim.toISOString();
+				document.getElementById("periodoSemana").textContent = `${formatDateToBR(inicio)} até ${formatDateToBR(fim)}`;
+			}
+
+			function trocaFiltroData() {
+				// Se quiser adicionar mais lógica de filtro por mês ou ano
+			}
+		
 		</script>
+	
 	</body>
 </html>

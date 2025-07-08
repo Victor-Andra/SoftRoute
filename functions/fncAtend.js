@@ -2892,7 +2892,7 @@ module.exports = {
                                             let teraTemp;
                                             if (continuar == "true"){
                                                 terapia.some((temp)=>{
-                                                    if ((""+temp._id) == (""+terapiaAtend)){
+                                                    if ((""+temp._id+"") == (""+terapiaAtend+"")){
                                                         teraTemp = temp;
                                                     }
                                                 })
@@ -3533,7 +3533,7 @@ module.exports = {
                                             if (mins.length == 1){
                                                 mins = "0"+mins;
                                             }
-
+console.log("TESTE")
                                             rab.hora = (hours+":"+mins);
                                             categorias = agenda.agenda_categoria;
                                             //console.log("categorias: "+categorias)
@@ -3682,7 +3682,7 @@ module.exports = {
                                         totalFinal += parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes;
                                     })
                                     totalFinal = this.mascaraValores(totalFinal);
-
+console.log("TESTE")
                                     res.render("atendimento/atendreltera/relatendteracons", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, totalFinal, pesquisa})
                                 })
                             })

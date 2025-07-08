@@ -359,6 +359,7 @@ module.exports = {
         try {
             // Carregar BENEFICIÁRIOS ATIVOS para preencher o filtro
             const beneList = await Bene.find({ bene_status: "Ativo" });
+                beneList.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
 
             const [convList, terapiaList, usuarioList] = await Promise.all([
                 Conv.find(),
@@ -387,15 +388,7 @@ module.exports = {
     async pesquisaindfil(req, res) {
         console.log('Carregando view com filtro aplicado');
 
-        const { bene_id, data_inicio, data_fim } = req.body;
-
-        // Função interna: formata data como YYYY-MM-DD
-        function formatDateToISO(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+        const { bene_id, data_inicio } = req.body;
 
         // Função interna: calcula início e fim da semana (domingo a sábado)
         function getInicioFimSemana(data) {
@@ -411,136 +404,225 @@ module.exports = {
             return { inicio: inicioSemana, fim: fimSemana };
         }
 
+        // Função interna: formata data como dd/mm/yyyy
+        function formatDateToBR(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
         let inicioPeriodo, fimPeriodo;
 
-        if (data_inicio && data_fim) {
-            // Se o usuário informou datas, usa elas
-            inicioPeriodo = new Date(data_inicio);
-            fimPeriodo = new Date(data_fim);
-            fimPeriodo.setHours(23, 59, 59, 999);
+        if (data_inicio) {
+            const dataSelecionada = new Date(data_inicio);
+            const periodoAtual = getInicioFimSemana(dataSelecionada);
+            inicioPeriodo = periodoAtual.inicio;
+            fimPeriodo = periodoAtual.fim;
         } else {
-            // Senão, usa a semana atual
-            const periodoAtual = getInicioFimSemana(new Date());
+            const hoje = new Date();
+            const periodoAtual = getInicioFimSemana(hoje);
             inicioPeriodo = periodoAtual.inicio;
             fimPeriodo = periodoAtual.fim;
         }
 
-        const datainiSemana = formatDateToISO(inicioPeriodo);
-        const datafimSemana = formatDateToISO(fimPeriodo);
+        const datainiSemana = formatDateToBR(inicioPeriodo);
+        const datafimSemana = formatDateToBR(fimPeriodo);
 
         try {
-            // Carregar BENEFICIÁRIO SELECIONADO
-            let beneList = [];
-            let beneSelecionado = null;
-
-            if (bene_id) {
-                beneSelecionado = await Bene.findById(bene_id);
-                if (beneSelecionado) {
-                    beneList = [beneSelecionado]; // Mostra só esse
+            // Passo 1: Carregar sessão do beneficiário selecionado, dentro do período
+            const sessao = await Sessao.findOne({
+                sessao_beneid: bene_id,
+                sessao_data: {
+                    $gte: inicioPeriodo,
+                    $lte: fimPeriodo
                 }
+            });
+
+            if (!sessao) {
+                // Se não encontrar sessão, renderiza com campos vazios
+                const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
+                    Bene.find(),
+                    
+                    Conv.find(),
+                    Terapia.find(),
+                    Usuario.find()
+                ]);
+
+                const output = {
+                    sessao: null,
+                    datacad: "--/--/---- h--:--",
+                    dataedi: "--/--/---- h--:--",
+                    usuario_nome_cad: "--",
+                    usuario_nome_edi: "--",
+                    datainiSemana,
+                    datafimSemana,
+                    bene_id,
+                    benes: beneList.map(b => b._id.toString()),
+                    convs: convList.map(c => c._id.toString()),
+                    terapias: terapiaList.map(t => t._id.toString()),
+                    usuarios: usuarioList.map(u => u._id.toString())
+                };
+
+                console.log("🔍 Dados enviados para a view (sem sessão):");
+                console.dir(output, { depth: null, colors: true });
+
+                return res.render("beneficiario/sessao/sessaoLisindfil", output);
             }
 
-            // Se nenhum foi encontrado, carrega todos ativos (para caso de recarregar sem filtro)
-            if (!beneSelecionado) {
-                beneList = await Bene.find({ bene_status: "Ativo" });
-            }
+            // Passo 2: Buscar dados relacionados
+            const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
+                Bene.find(),
 
-            // Carregar outros dados
-            const [convList, terapiaList, usuarioList] = await Promise.all([
                 Conv.find(),
                 Terapia.find(),
                 Usuario.find()
             ]);
 
-            // Buscar sessões do beneficiário no período
-            let sessaoList = [];
-
-            if (bene_id) {
-                sessaoList = await Sessao.find({
-                    sessao_beneid: bene_id,
-                    sessao_data: {
-                        $gte: inicioPeriodo,
-                        $lte: fimPeriodo
-                    }
-                });
-
-                // Processar cada sessão (contar terapias, formatar datas, etc.)
-                const agendasPromises = sessaoList.map(sessao =>
-                    Agenda.find({
-                        agenda_beneid: sessao.sessao_beneid,
-                        agenda_data: {
-                            $gte: inicioPeriodo,
-                            $lte: fimPeriodo
-                        }
-                    })
-                );
-
-                const agendasList = await Promise.all(agendasPromises);
-
-                for (let i = 0; i < sessaoList.length; i++) {
-                    const sessao = sessaoList[i];
-                    const agendas = agendasList[i];
-
-                    // Formatar data de cadastro e edição
-                    if (sessao.sessao_datacad) {
-                        const datacad = new Date(sessao.sessao_datacad);
-                        sessao.datacad = `${String(datacad.getDate()).padStart(2, '0')}/${String(datacad.getMonth() + 1).padStart(2, '0')}/${datacad.getFullYear()}`;
-                    } else {
-                        sessao.datacad = "--/--/----";
-                    }
-
-                    if (sessao.sessao_dataedi) {
-                        const dataedi = new Date(sessao.sessao_dataedi);
-                        sessao.dataedi = `${String(dataedi.getDate()).padStart(2, '0')}/${String(dataedi.getMonth() + 1).padStart(2, '0')}/${dataedi.getFullYear()}`;
-                    } else {
-                        sessao.dataedi = "--/--/----";
-                    }
-
-                    // Calcular saldo de terapias
-                    for (let j = 1; j <= 25; j++) {
-                        const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
-                        const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
-
-                        const idTerapia = sessao[fieldTerapiaId];
-                        const qtPrev = parseInt(sessao[qtPrevField]) || 0;
-
-                        if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
-                            sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = "";
-                            sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = "";
-                            sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
-                            continue;
-                        }
-
-                        const totalAgenda = agendas.filter(a => a.agenda_terapiaid.toString() === idTerapia.toString()).length;
-                        const qtAgenda = totalAgenda || 0;
-
-                        sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
-                        sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "";
-
-                        const diferenca = qtPrev - qtAgenda;
-                        let saldoFinal = "0";
-                        if (diferenca > 0) saldoFinal = "+" + diferenca;
-                        else if (diferenca < 0) saldoFinal = "" + diferenca;
-
-                        sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldoFinal;
-                    }
-                }
+            // Função auxiliar para remover acentos e comparar strings
+            function normalizarNome(nome) {
+                return nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             }
 
-            res.render("beneficiario/sessao/sessaoLisindfil", {
-                sessaos: sessaoList,
-                usuarios: usuarioList,
-                terapias: terapiaList,
-                convs: convList,
-                benes: beneList,
+            // Ordenar a lista de beneficiários
+            beneList.sort((a, b) => {
+                const nomeA = normalizarNome(a.bene_nome);
+                const nomeB = normalizarNome(b.bene_nome);
+
+                if (nomeA < nomeB) return -1;
+                if (nomeA > nomeB) return 1;
+                return 0;
+            });
+            // Encontrar convênio associado à sessão
+            const convenio = convList.find(c => c._id.toString() === sessao.sessao_convid?.toString());
+            const nomeConvenio = convenio ? convenio.conv_nome : "--";
+
+            // Formatar datas de cadastro e edição
+            let datacad = "--/--/---- h--:--";
+            let dataedi = "--/--/---- h--:--";
+            let usuario_nome_cad = "--";
+            let usuario_nome_edi = "--";
+
+            if (sessao.sessao_datacad) {
+                const data = new Date(sessao.sessao_datacad);
+                const diaCad = String(data.getDate()).padStart(2, '0');
+                const mesCad = String(data.getMonth() + 1).padStart(2, '0');
+                const anoCad = data.getFullYear();
+                const horaCad = String(data.getHours()).padStart(2, '0');
+                const minCad = String(data.getMinutes()).padStart(2, '0');
+                datacad = `${diaCad}/${mesCad}/${anoCad} h${horaCad}:${minCad}`;
+            }
+
+            if (sessao.sessao_dataedi) {
+                const data = new Date(sessao.sessao_dataedi);
+                const diaEdi = String(data.getDate()).padStart(2, '0');
+                const mesEdi = String(data.getMonth() + 1).padStart(2, '0');
+                const anoEdi = data.getFullYear();
+                const horaEdi = String(data.getHours()).padStart(2, '0');
+                const minEdi = String(data.getMinutes()).padStart(2, '0');
+                dataedi = `${diaEdi}/${mesEdi}/${anoEdi} h${horaEdi}:${minEdi}`;
+            }
+
+            // Encontrar nome dos usuários
+            const usuarioCad = usuarioList.find(u => u._id.toString() === sessao.sessao_usuidcad?.toString());
+            const usuarioEdi = usuarioList.find(u => u._id.toString() === sessao.sessao_usuidedi?.toString());
+
+            usuario_nome_cad = usuarioCad ? usuarioCad.usuario_nome : "--";
+            usuario_nome_edi = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+
+            // Passo 3: Buscar agendas da sessão
+            const agendas = await Agenda.find({
+                agenda_beneid: sessao.sessao_beneid,
+                agenda_data: {
+                    $gte: inicioPeriodo,
+                    $lte: fimPeriodo
+                }
+            });
+
+            // Processar cada terapia (1 a 25)
+            for (let j = 1; j <= 25; j++) {
+                const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
+                const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
+
+                const idTerapia = sessao[fieldTerapiaId];
+                const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
+                    continue;
+                }
+
+                // Conta quantas vezes essa terapia aparece nas agendas
+                const totalAgenda = agendas.filter(a => a.agenda_terapiaid?.toString() === idTerapia.toString()).length;
+                const qtAgenda = totalAgenda || 0;
+
+                // Saldo entre previsto e realizado
+                let saldoFinal = "0";
+                const diferenca = qtPrev - qtAgenda;
+
+                if (diferenca > 0) saldoFinal = "+" + diferenca;
+                else if (diferenca < 0) saldoFinal = "" + diferenca;
+
+                // Atribui campos dinâmicos à sessão
+                sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
+                sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldoFinal;
+                sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "";
+            }
+
+            // Preparar saída para o console
+        // Buscar nome do beneficiário a partir do bene_id e beneList
+            const beneficiarioSelecionado = beneList.find(b => b._id.toString() === bene_id);
+            const nomeBeneficiario = beneficiarioSelecionado ? beneficiarioSelecionado.bene_nome : "--";
+
+            const output = {
+                sessao: {
+                    _id: sessao._id,
+                    sessao_beneid: sessao.sessao_beneid,
+                    sessao_data: sessao.sessao_data,
+                    sessao_convid: sessao.sessao_convid,
+                    datacad,
+                    dataedi,
+                    usuario_nome_cad,
+                    usuario_nome_edi,
+                    terapias: Object.keys(sessao)
+                        .filter(k => k.startsWith('terapiaid'))
+                        .reduce((obj, key) => {
+                            obj[key] = sessao[key];
+                            return obj;
+                        }, {})
+                },
                 datainiSemana,
                 datafimSemana,
-                bene_id: bene_id || ""
+                bene_id,
+                nome_beneficiario: nomeBeneficiario,
+                benes: beneList.length,
+                convs: convList.length,
+                terapias: terapiaList.length,
+                usuarios: usuarioList.length
+            };
+
+            // Exibir no console para depuração
+            console.log("🔍 Dados enviados para a view:");
+            console.dir(output, { depth: null, colors: true });
+
+            // Renderizar view com os dados filtrados
+            res.render("beneficiario/sessao/sessaoLisindfil", {
+                sessao,
+                datacad,
+                dataedi,
+                usuario_nome_cad,
+                usuario_nome_edi,
+                datainiSemana,
+                datafimSemana,
+                bene_id,
+                benes: beneList,
+                convs: convList,
+                terapias: terapiaList,
+                usuarios: usuarioList
             });
 
         } catch (err) {
-            console.error(err);
-            req.flash("error_message", "Houve um erro ao carregar a tela");
+            console.error("❌ Erro interno:", err);
+            req.flash("error_message", "Houve um erro ao carregar os dados");
             res.redirect('/admin/erro');
         }
     },
@@ -628,7 +710,20 @@ module.exports = {
                 Terapia.find(),
                 Usuario.find()
             ]);
+            // Função auxiliar para remover acentos e comparar strings
+            function normalizarNome(nome) {
+                return nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            }
 
+            // Ordenar a lista de beneficiários
+            beneList.sort((a, b) => {
+                const nomeA = normalizarNome(a.bene_nome);
+                const nomeB = normalizarNome(b.bene_nome);
+
+                if (nomeA < nomeB) return -1;
+                if (nomeA > nomeB) return 1;
+                return 0;
+            });
             // Mapear para acesso rápido
             const beneMap = beneList.reduce((acc, b) => {
                 acc[b._id.toString()] = b;
@@ -731,6 +826,7 @@ module.exports = {
             beneList.forEach(b => {
                 b.countSessaos = sessaoList.filter(s => s.sessao_beneid.toString() === b._id.toString()).length;
             });
+             beneList.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
 
             // Renderiza a view com os dados filtrados
             res.render("beneficiario/sessao/sessaoLisfil", {

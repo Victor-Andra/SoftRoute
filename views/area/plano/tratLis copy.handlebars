@@ -27,7 +27,54 @@
 					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
 				})
 			}
-			
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(fill == "Ano"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
 				if(fill == "Ano"){
@@ -64,8 +111,27 @@
 			function carregaBody(){
 				trocaFiltroData();
 				trocaFilpessoa();
-				
-				
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
+						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("tratTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("tratTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("tratTipoPessoa").value == "Beneficiario"){
+						document.getElementById("tratBeneficiario").value = document.getElementById("tratBeneficiarioFil").value
+					} else if (document.getElementById("tratTipoPessoa").value == "Terapeuta"){
+						document.getElementById("tratTerapeuta").value = document.getElementById("tratTerapeutaFil").value;
+					}
+				}
 				this.ocultaDelete();
 			}
 
@@ -94,7 +160,56 @@
 					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
 				})
 			}
-			
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipo);
+				if(tipo == "Ano/Mes"){
+					if (document.getElementById('anoAtend').value && document.getElementById('mesAtend').value){
+						let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+						let mes = (dat.getUTCMonth()+1).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
+					}
+				} else if (tipo == "Semana"){
+					if (document.getElementById('dataFil').value){
+						let dat = new Date(document.getElementById('dataFil').value);
+						let mes = (dat.getUTCMonth()).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
+					}
+				} else if (tipo == "Dia"){
+					if (document.getElementById('dataFil').value){
+						let dat = new Date(document.getElementById('dataFil').value);
+						let mes = (dat.getUTCMonth()).toString();
+						let dia = (dat.getUTCDate()).toString();
+						if (mes.length == 1){
+							mes = "0"+mes;
+						}
+						if (dia.length == 1){
+							dia = "0"+dia;
+						}
+						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+						document.getElementById('dataFinal').value = fulldate;
+						console.log("dataFinal:"+document.getElementById('dataFinal').value);
+					}
+				}
+			}
 			function ocultaDelete(){
 				let perfilAtual = document.getElementById("perfilAtual").value;
 				if (perfilAtual == '62421801a12aa557219a0fb9'){
@@ -157,14 +272,14 @@
 					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/plano/lisF" method="POST">
-							<div class="col-xs-12">
+							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label>Filtro por:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
 												<option value="Ano">Ano</option>
-												<option value="Ano/Mes" selected>Ano/Mês</option>
+												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
 											</select>
@@ -234,7 +349,7 @@
 											<select name="tratTipoPessoa" id="tratTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
-												<option value="Terapeuta">Terapeuta</option>
+												O sistema não quer que funcione <option value="Terapeuta">Terapeuta</option>
 											</select>
 										</div>
 									</div>
@@ -451,7 +566,7 @@
 																	</a>
 																	
 																	<!-- 
-																	<a class="red" name="acaoDel" id="acaoDel" href="javascript:void(0);" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<a class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
 																	 -->

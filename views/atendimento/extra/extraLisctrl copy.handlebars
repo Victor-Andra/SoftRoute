@@ -19,17 +19,8 @@
 					content: none !important;
 				}
 			}
-			.detail-row {
-				display: none;
-			}
-			.detail-row.open {
-				display: table-row;
-			}
-
-			#TabelaExpansiva td .action-buttons {
-				margin-bottom: 0 !important;
-			}
-		
+		</style>
+		<style>
 			#dynamic-table th,
 			#dynamic-table td {
 				font-size: 10px;
@@ -37,14 +28,114 @@
 		</style>
 		
 		<script type="text/javascript">
+
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
 			
 			function carregaBody(){
-				//vazio
+				trocaFiltroData();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+
+				}
 			}
 			
 		</script>
-		<!-- Script que controla a expansão da linha -->
-				
+		
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -74,7 +165,8 @@
 											<label>Tipo Filtro:&nbsp;</label>
 											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
 												<option selected value="Ano/Mes">Ano/Mês</option>
-												
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
 											</select>
 										</div>
 									</div>
@@ -113,7 +205,14 @@
 										</div>
 									</div>
 								</div>
-																
+								<div id="divDataFil" class="col-xs-12 col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+								
 								<div class="row">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
@@ -175,75 +274,30 @@
 											<thead>
 												<tr role="row">
 													
-												
-													<th style="width: 90px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
-													<th style="width: 80px;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Histórico</th>
+													<th class="center" tabindex="1">
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</th>
 													
+													<th style="width: 80px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Hora</th>
+													<th style="width: 200px;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th style="width: 120px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrar</th>
+													
+													<th tabindex="10">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
 												{{#each extras}}
-													<tr>
-														<td>{{extraDatafor}}</td> <!-- Data formatada -->
-														<td>{{extra_hora}}</td>
-														<td>{{bene_nome}}</td> <!-- Nome do beneficiário -->
-														<td>{{conv_nome}}</td> <!-- Nome do convênio -->
-														<td>{{terapia_nome}}</td> <!-- Nome da terapia -->
-														<td>{{extraTeraputa}}</td> <!-- Nome do terapeuta -->
-														<td></td> 
-														<td>
-															<div class="widget-box collapsed">
-																<div class="widget-header">
-																	<h6 class="widget-title">
-																		<a href="#" data-action="reload">
-																			<i class="ace-icon green fa fa-archive bigger-130"></i>
-																		</a>
-																		&nbsp;{{bene_nome}}&nbsp;&nbsp;&nbsp;&nbsp;
-
-																		<i class="ace-icon orange fa fa-birthday-cake "></i>
-																		{{datanasc}}&nbsp;&nbsp;&nbsp;&nbsp;
-
-																		<i class="ace-icon red fa fa-sliders"></i>
-																		{{idade}}
-																	</h6>
-																	<span class="widget-toolbar">
-																		<a href="#" data-action="collapse">
-																			<i class="orange ace-icon fa fa-chevron-up bigger-130"></i>
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
-																		<a name="acaoViz" id="acaoViz">
-																			{{#if countProgs}}
-																				<i class="ace-icon green fa fa-check bigger-130"></i>
-																			{{else}}
-																				<i class="ace-icon red fa fa-ban bigger-130" title="Ainda não foram cadastrados programas ABA para esse beneficiário."></i>
-																			{{/if}}
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
-																		Qt. Programas:&nbsp;&nbsp;
-																		<span class="badge badge-info">{{countProgs}}</span>
-																	</span>
-																</div>
-
-																<div class="widget-body">
-																	<div class="widget-main">
-																		<div class="row">
-																			<div class="col-sm-12">
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</td>
-														
-													</tr>
+													
 												{{/each}}
 											</tbody>
 										</table>
@@ -266,20 +320,26 @@
 
 		<!-- basic scripts -->
 
-		
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
 		<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 		$(document).ready(function() {
 			$("#dynamic-table").DataTable({
-			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"language": {
+            "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
+        },
 			"aaSorting": [],
-			"aoColumns": [ null, null,null, null, null, null, null, null],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
+			"lengthMenu": [ 100, 200],
 			"lengthChange": true,
-			"autoWidth": true,
+			"autoWidth": false,
 			"paging": true,
 			"lengthChange": true,
 			"searching": true,
@@ -291,8 +351,8 @@
 					}
 			});
 		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
-	
 	
 	</body>
 

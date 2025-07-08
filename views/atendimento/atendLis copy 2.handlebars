@@ -477,8 +477,8 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead style="font-size: 11px;">
 												<tr>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="7" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="6" style="width: 100px;" >Atendimento</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
 												</tr>
@@ -493,9 +493,8 @@
 													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evento</th>
+													
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
@@ -536,53 +535,16 @@
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														
-														<td>
-														{{#ifEqual this.atend_org "ADM"}}
-															<span class="label label-sm label-warning">{{atend_org}}</span>
-														{{else}}
-															<span class="label label-sm label-success">{{atend_org}}</span>
-														{{/ifEqual}}
-														</td>
-														<td>
-															{{#ifEqual this.atend_fixo "true"}}
-																<span class="label label-sm label-danger">Substituto Fixo</span>
-																{{else}}
-																<span class="label label-sm label-success">Padrão</span>
-															{{/ifEqual}}
-														</td>
-
-														<td>
 														{{#ifEqual this.atend_categoria "Feriado"}}
-															<span class="label label-sm label-warning">Feriado</span>
+															<td><span class="label label-sm label-warning">Feriado</span></td>
 															{{else}}
-															{{#ifEqual this.atend_categoria "Extra"}}
-																<span class="label label-sm label-purple">Extra</span>
-																{{else}}
-																	{{#ifEqual this.atend_categoria "Substituto"}}
-																	<span class="label label-sm label-pink">Substituição</span>
-																	{{else}}
-																		{{#ifEqual this.atend_categoria "Substituição"}}
-																		<span class="label label-sm label-pink">Substituição</span>
-																		{{else}}
-																			{{#ifEqual this.atend_categoria "Falta"}}
-																			<span class="label label-sm label-yellow">Falta</span>
-																			{{else}}
-																				{{#ifEqual this.atend_categoria "Padrão"}}
-																				<span class="label label-sm label-success">Sem Evento</span>
-																				{{else}}
-																					{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
-																					<span class="label label-sm label-success">Sem Evento</span>
-																					{{else}}
-																					{{/ifEqual}}
-																				{{/ifEqual}}
-																			{{/ifEqual}}
-																		{{/ifEqual}}
-																	{{/ifEqual}}
+															{{#ifEqual this.atend_fixo "true"}}
+															<td><span class="label label-sm label-danger">Substituto Fixo</span></td>
+															{{else}}
+															<td><span class="label label-sm label-success">Padrão</span></td>
 															{{/ifEqual}}
 														{{/ifEqual}}
-														</td>
-														
+
 
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../atend_terapiaid}}
@@ -710,9 +672,9 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null, null, null, null, null,null,null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
+			"lengthMenu": [10, 25, 50, 100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

@@ -70,9 +70,7 @@ module.exports = {
     listaLaudo(req, res, resposta) {
         let flash = new Resposta();
 
-        Bene.find({ bene_status: "Ativo" }) // <-- AQUI FILTRAMOS APENAS BENEFICIÁRIOS ATIVOS
-            .then((bene) => {
-
+        Bene.find({ bene_status: "Ativo" }).then((bene) => {
                 // Ordena por nome sem localeCompare (mantém seu método original)
                 bene.sort((a, b) => {
                     return ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
@@ -80,85 +78,69 @@ module.exports = {
                         (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
                             (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0);
                 });
+                Conv.find().then((conv) => {
+                    conv.sort((a, b) => {
+                        return ((a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
+                            (b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 :
+                            (((b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
+                                (a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0);
+                    });
+                    Usuario.find().then((usuario) => {
+                        Laudo.find().then((laudo) => {
+                            let beneLaudo;
+                            let convBene;
+                            let i = 1;
+                            // Filtra os laudos para exibir somente os de beneficiários ativos
+                            const laudosFiltrados = [];
+                            laudo.forEach((l) => {
+                                //console.log("LAUDÓ " + i);
+                                i++;
+                                beneLaudo = bene.find(a => "" + a._id + "" === "" + l.laudo_beneid + "");
+                                if (beneLaudo && beneLaudo.bene_convid) {
+                                    convBene = conv.find(a => "" + a._id + "" === "" + beneLaudo.bene_convid + "");
 
-                Conv.find()
-                    .then((conv) => {
+                                    if (convBene && convBene.conv_cobralaudo && convBene.conv_cobralaudo !== "") {
+                                        if (convBene.conv_cobralaudo === "6 Meses" || convBene.conv_cobralaudo === "12 Meses") {
+                                            let laudoPrazo = new Date(l.laudo_data);
+                                            l.laudo_dataString = fncGeral.getData(laudoPrazo);
 
-                        conv.sort((a, b) => {
-                            return ((a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
-                                (b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 :
-                                (((b.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >
-                                    (a.conv_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0);
-                        });
+                                            laudoPrazo.setMonth(laudoPrazo.getMonth() + (convBene.conv_cobralaudo === "6 Meses" ? 6 : 12));
+                                            l.laudo_prazo = fncGeral.getData(laudoPrazo);
+                                            l.laudo_periodoValidade = convBene.conv_cobralaudo;
 
-                        Usuario.find()
-                            .then((usuario) => {
-
-                                Laudo.find()
-                                    .then((laudo) => {
-
-                                        let beneLaudo;
-                                        let convBene;
-                                        let i = 1;
-
-                                        // Filtra os laudos para exibir somente os de beneficiários ativos
-                                        const laudosFiltrados = [];
-
-                                        laudo.forEach((l) => {
-                                            console.log("LAUDÓ " + i);
-                                            i++;
-
-                                            beneLaudo = bene.find(a => "" + a._id + "" === "" + l.laudo_beneid + "");
-
-                                            if (beneLaudo && beneLaudo.bene_convid) {
-                                                convBene = conv.find(a => "" + a._id + "" === "" + beneLaudo.bene_convid + "");
-
-                                                if (convBene && convBene.conv_cobralaudo && convBene.conv_cobralaudo !== "") {
-                                                    if (convBene.conv_cobralaudo === "6 Meses" || convBene.conv_cobralaudo === "12 Meses") {
-                                                        let laudoPrazo = new Date(l.laudo_data);
-                                                        l.laudo_dataString = fncGeral.getData(laudoPrazo);
-
-                                                        laudoPrazo.setMonth(laudoPrazo.getMonth() + (convBene.conv_cobralaudo === "6 Meses" ? 6 : 12));
-                                                        l.laudo_prazo = fncGeral.getData(laudoPrazo);
-                                                        l.laudo_periodoValidade = convBene.conv_cobralaudo;
-
-                                                        let laudo_dataEdi = new Date(l.laudo_dataedi);
-                                                        l.laudo_dataediString = (fncGeral.getData(laudo_dataEdi) === "NaN/NaN/NaN" ? "" : fncGeral.getData(laudo_dataEdi));
-                                                    }
-                                                }
-
-                                                // Adiciona à lista filtrada somente se o bene for ativo (já está garantido acima)
-                                                laudosFiltrados.push(l);
-                                            }
-                                        });
-
-                                        res.render('area/laudo/laudoLis', {
-                                            laudos: laudosFiltrados,
-                                            usuarios: usuario,
-                                            benes: bene,
-                                            convs: conv,
-                                            flash
-                                        });
-                                    })
-                                    .catch((err) => {
-                                        console.log(err);
-                                        req.flash("error_message", "Houve um erro ao buscar os laudos!");
-                                        res.redirect('/admin/erro');
-                                    });
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                                req.flash("error_message", "Houve um erro ao buscar os usuários!");
-                                res.redirect('/admin/erro');
+                                            let laudo_dataEdi = new Date(l.laudo_dataedi);
+                                            l.laudo_dataediString = (fncGeral.getData(laudo_dataEdi) === "NaN/NaN/NaN" ? "" : fncGeral.getData(laudo_dataEdi));
+                                            console.log("FINAL meses")
+                                        }
+                                    }
+                                    // Adiciona à lista filtrada somente se o bene for ativo (já está garantido acima)
+                                    laudosFiltrados.push(l);
+                                }
                             });
-                    })
-                    .catch((err) => {
+
+                            res.render('area/laudo/laudoLis', {
+                                laudos: laudosFiltrados,
+                                usuarios: usuario,
+                                benes: bene,
+                                convs: conv,
+                                flash
+                            });
+                        }).catch((err) => {
+                            console.log(err);
+                            req.flash("error_message", "Houve um erro ao buscar os laudos!");
+                            res.redirect('/admin/erro');
+                        });
+                    }).catch((err) => {
                         console.log(err);
-                        req.flash("error_message", "Houve um erro ao buscar os convênios!");
+                        req.flash("error_message", "Houve um erro ao buscar os usuários!");
                         res.redirect('/admin/erro');
                     });
-            })
-            .catch((err) => {
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "Houve um erro ao buscar os convênios!");
+                    res.redirect('/admin/erro');
+                });
+            }).catch((err) => {
                 console.log(err);
                 req.flash("error_message", "Houve um erro ao listar os beneficiários!");
                 res.redirect('/admin/erro');

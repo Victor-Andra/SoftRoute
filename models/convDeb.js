@@ -93,6 +93,7 @@ module.exports = {ConvdebModel,ConvdebSchema,
 
     convdebAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         let convdebExiste =  await ConvdebModel.findOne({
             convdeb_convid : req.body.convdebConvid ,
             convdeb_terapiaid : req.body.convdebTerapiaid ,

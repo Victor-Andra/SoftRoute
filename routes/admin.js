@@ -2238,6 +2238,11 @@ router.get('/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Ext
     fncExtra.deletaExtra(req,res);
 })
 
+// Rota para copiar agendamentos extras
+router.post('/extra/extraCopia', fncGeral.IsAuthenticated, (req, res) => {
+    fncExtra.extraCopiar(req, res);
+});
+
 //Menu Laudos ** Area Tecnicos   
 //Carrega Cadastro de Laudo 
 router.get('/area/laudo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.

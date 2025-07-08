@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>Quadro de Sessões por Beneficiário</title>
+
+    <!-- Estilos -->
+    <style>
+        @media print and (orientation: landscape) {.noprint {display: none;}}
+        @media print {.noprint {display: none;}}
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 8px;
+            text-align: left;
+            border-radius: 4px;
+            position: absolute;
+            z-index: 1;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #f3dfdf transparent;
+        }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body onload="javascript:carregaBody();">
+
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                <li class="active">Quadro de Sessões por Beneficiário</li>
+            </ul>
+        </div>
+
+        <div class="page-content">
+            <!-- Formulário de Filtro -->
+            <form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/beneficiario/sessao/lisindfil" method="POST">
+                <div class="col-xs-12 row">
+                    <!-- Tipo de Filtro -->
+                    <div class="col-sm-2">
+                        <div class="input-group">
+                            <label>Tipo Filtro:</label>
+                            <select name="tipoData" id="tipoData" class="chosen-select" onchange="trocaFiltroData()">
+                                <option value="Semana" selected>Semana</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Campo Data -->
+                    <div id="divDataFil" class="col-xs-12 col-sm-2">
+                        <div class="input-group">
+                            <label>Data:</label>
+                            <input style="height: 30px;" id="dataFil" name="data_inicio" type="date" onchange="atualizaDatas()">
+                            <input type="hidden" id="dataFinal" name="data_fim">
+                        </div>
+                    </div>
+
+                    <!-- Beneficiário -->
+                    <div id="divAtendBeneficiario" class="col-sm-4">
+                        <div class="input-group">
+                            <label>Beneficiário:</label>
+                            <select name="bene_id" id="atendBeneficiario" class="chosen-select">
+                                <option value="-">-</option>
+                                {{#each benes}}
+                                    <option value="{{_id}}" {{#ifEqual ../bene_id _id}}selected{{/ifEqual}}>{{bene_nome}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botão Pesquisar -->
+                    <div class="col-sm-2">
+                        <button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
+                            <i class="ace-icon fa fa-search-plus"></i> Pesquisar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exibição do período da semana -->
+                <div class="col-xs-12 text-center" style="margin-top: 15px;">
+                    <p><strong>Período da Semana:</strong> <span id="periodoSemana">{{datainiSemana}} até {{datafimSemana}}</span></p>
+                </div>
+            </form>
+
+            <!-- Conteúdo Principal -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Terapia</th>
+                            <th>Prevista</th>
+                            <th>Realizada</th>
+                            <th>Saldo</th>
+                            <th>Observação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each sessaos}}
+                            <tr>
+                                <td colspan="6"><h5><strong>Beneficiário:</strong> {{this.bene_nome}}</h5></td>
+                            </tr>
+                            {{#each this.terapias}}
+                                <tr>
+                                    <td>{{@key}}</td>
+                                    <td>{{this.nome}}</td>
+                                    <td>{{this.prevista}}</td>
+                                    <td>{{this.realizada}}</td>
+                                    <td>{{this.saldo}}</td>
+                                    <td>{{this.obs}}</td>
+                                </tr>
+                            {{/each}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script type="text/javascript">
+    // Função para formatar data como DD/MM/YYYY
+    function formatDateToBR(date) {
+        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    }
+
+    // Função para calcular início e fim da semana
+    function getInicioFimSemana(data) {
+        const dia = data.getDay();
+        const inicioSemana = new Date(data);
+        inicioSemana.setDate(data.getDate() - dia);
+        inicioSemana.setHours(0, 0, 0, 0);
+
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        fimSemana.setHours(23, 59, 59, 999);
+
+        return { inicio: inicioSemana, fim: fimSemana };
+    }
+
+    // Preenche automaticamente as datas ao carregar
+    function carregaBody() {
+        const hoje = new Date();
+        document.getElementById("dataFil").value = hoje.toISOString().split('T')[0];
+        atualizaDatas();
+    }
+
+    // Atualiza campo hidden com data_fim e mostra período na tela
+    function atualizaDatas() {
+        const dataInput = document.getElementById("dataFil").value;
+        if (!dataInput) return;
+
+        const dataSelecionada = new Date(dataInput);
+        const { inicio, fim } = getInicioFimSemana(dataSelecionada);
+
+        document.getElementById("dataFinal").value = fim.toISOString();
+        document.getElementById("periodoSemana").textContent = `${formatDateToBR(inicio)} até ${formatDateToBR(fim)}`;
+    }
+
+    function trocaFiltroData() {
+        // Se quiser adicionar mais lógica de filtro por mês ou ano
+    }
+</script>
+
+</body>
+</html>

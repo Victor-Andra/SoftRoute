@@ -394,14 +394,16 @@ module.exports = {
                 Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     usuario.forEach((usu)=>{
-                        if (trat.trat_planotipo == "Padrão" && (""+trat.trat_terapeutaidpad+"") == (""+usu._id+"")){
-                            carimboUsuPad = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
-                        } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidis+"") == (""+usu._id+"")){
-                            carimboUsuIs = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
-                        } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidavd+"") == (""+usu._id+"")){
-                            carimboUsuAvd = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
-                        } else if ('62e008adea444f5b7a02c04f' == usu._id){
-                            carimboRoute = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                        if (usu.usuario_carimbo != undefined){
+                            if (trat.trat_planotipo == "Padrão" && (""+trat.trat_terapeutaidpad+"") == (""+usu._id+"")){
+                                carimboUsuPad = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                            } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidis+"") == (""+usu._id+"")){
+                                carimboUsuIs = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                            } else if (trat.trat_planotipo == "Ocupacional" && (""+trat.trat_terapeutaidavd+"") == (""+usu._id+"")){
+                                carimboUsuAvd = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                            } else if ('62e008adea444f5b7a02c04f' == usu._id){
+                                carimboRoute = new Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                            }
                         }
                     })
                     

@@ -282,85 +282,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
                     } else {
                         return options.inverse(this);
                     }
-                },
-                /**
-                 * Helper Handlebars: {{formatDate "formato" data}}
-                 * Criado em 26/06/2025 às 11:25 por Wagner Cintra
-                 * 
-                 * Este helper permite formatar datas diretamente na view sem precisar de tratamento no backend.
-                 * É robusto e suporta:
-                 * - Datas em formato string: "2024/1/13", "2024-01-13", "13/01/2024", ISO ("2025-06-26T03:00:00.000Z")
-                 * - Objetos Date JavaScript
-                 * - Valores numéricos (timestamp)
-                 * 
-                 * Caso a data seja inválida, nula ou indefinida, retorna uma string vazia ('').
-                 * 
-                 * Formatos aceitos:
-                 *   yyyy = ano completo (ex: 2025)
-                 *   yy   = últimos dois dígitos do ano (ex: 25)
-                 *   MM   = mês com zero à esquerda (01 a 12)
-                 *   M    = mês sem zero (1 a 12)
-                 *   dd   = dia com zero à esquerda (01 a 31)
-                 *   d    = dia sem zero (1 a 31)
-                 *   HH   = hora (00 a 23)
-                 *   mm   = minutos (00 a 59)
-                 *   ss   = segundos (00 a 59)
-                 * 
-                 * Exemplos de uso na view:
-                 *   {{formatDate "yyyy/mm/dd" agenda_data}} → 2025/06/26
-                 *   {{formatDate "dd/mm/yyyy" agenda_data}} → 26/06/2025
-                 *   {{formatDate "MM/dd" agenda_data}}       → 06/26
-                 *   {{formatDate "yyyy-MM" agenda_data}}     → 2025-06
-                 *   {{formatDate "HH:mm" agenda_data}}       → 00:00
-                 */
-              formatDate: function (_, value) {
-                    const habilitarLog = true; // ⬅️ Use false para ocultar logs
-
-                    if (habilitarLog) {
-                        console.log('📥 Valor recebido:', value);
-                        console.log('📎 Tipo:', typeof value);
-                    }
-
-                    let date;
-
-                    try {
-                        if (value instanceof Date) {
-                            date = value;
-                        } else if (typeof value === 'string' || typeof value === 'number') {
-                            date = new Date(value);
-                        } else if (value && typeof value === 'object') {
-                            if (value.toISOString) {
-                                date = new Date(value.toISOString());
-                            } else {
-                                const raw = value._date || value.data || value.date || value.toString();
-                                date = new Date(typeof raw === 'function' ? raw() : raw);
-                            }
-                        }
-
-                        if (!(date instanceof Date) || isNaN(date.getTime())) {
-                            if (habilitarLog) console.warn('❌ Data inválida após parsing');
-                            return '';
-                        }
-                    } catch (e) {
-                        if (habilitarLog) console.error('❌ Erro ao converter data:', e.message);
-                        return '';
-                    }
-
-                    const pad2 = (n) => (typeof n === 'number' && !isNaN(n) ? n.toString().padStart(2, '0') : '00');
-
-                    const year = date.getFullYear();
-                    const month = pad2(date.getMonth() + 1); // Janeiro = 0
-                    const day = pad2(date.getDate());
-
-                    const result = `${year}-${month}-${day}`;
-
-                    if (habilitarLog) console.log('📤 Resultado final:', result);
-
-                    return result;
                 }
-
-            }//fim dos helpers
-        }));//fim do app.engine
+            }
+        }));
                
         app.set('view engine', 'handlebars');
         app.set("views", "./views");

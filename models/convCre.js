@@ -93,6 +93,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
     },
     convcreAdicionar: async (req,res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         let convcreExiste =  await ConvcreModel.findOne({
             convcre_nome: req.body.convcreNome, 
             convcre_convnome : req.body.convcreConvid ,
