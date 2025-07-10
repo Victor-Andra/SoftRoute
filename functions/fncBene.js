@@ -332,9 +332,12 @@ module.exports = {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             bene.forEach((b)=>{
                 //console.log("b.datanasc"+b.bene_datanasc)
-                let datanasc = new Date(b.bene_datanasc)
-                let mes = (datanasc.getMonth()+1).toString();
-                let dia = (datanasc.getUTCDate()).toString();
+                // Formata datas do beneficiário
+                let datanasc = new Date(b.bene_datanasc);
+                datanasc.setHours(datanasc.getHours() + 3); // ajuste de fuso horário
+                let mes = String(datanasc.getMonth() + 1).padStart(2, '0');
+                let dia = String(datanasc.getUTCDate()).padStart(2, '0');
+                b.datanasc = `${datanasc.getFullYear()}-${mes}-${dia}`;
                 if (mes.length == 1){
                     mes = "0"+mes;
                 }

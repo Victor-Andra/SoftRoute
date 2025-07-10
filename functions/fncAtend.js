@@ -3440,6 +3440,7 @@ module.exports = {
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
         let totalFinal = 0;
+        let totalSessoes = 0
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -3680,10 +3681,11 @@ console.log("TESTE")
                                         })
                                         r.total = this.mascaraValores(parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes);
                                         totalFinal += parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes;
+                                        totalSessoes += r.sessoes;
                                     })
                                     totalFinal = this.mascaraValores(totalFinal);
 console.log("TESTE")
-                                    res.render("atendimento/atendreltera/relatendteracons", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, totalFinal, pesquisa})
+                                    res.render("atendimento/atendreltera/relatendteracons", {terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, totalFinal, pesquisa, totalSessoes})
                                 })
                             })
                         })
