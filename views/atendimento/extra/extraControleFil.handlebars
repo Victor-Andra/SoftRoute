@@ -306,7 +306,7 @@
 													</a>
 												</span>
 												<span class="widget-toolbar">
-													Qt. Programas:&nbsp;&nbsp;
+													Qt. atendmentos:&nbsp;&nbsp;
 													<span class="badge badge-info">{{countProgs}}</span>
 												</span>
 											</div>
@@ -336,6 +336,7 @@
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
 													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Auditado</th>
 													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Observação</th>
 													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cobrar</th>
 													
@@ -383,7 +384,14 @@
 																	<td>{{usuario_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-															
+															<td>
+																<span class="badge badge-success">Sim</span>
+
+															</td>
+															<td>
+																<span class="badge badge-success">Sim</span>
+																
+															</td>
 															<td>{{extra_obs}}</td>
 															<td></td>
 															<td>

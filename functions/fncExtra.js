@@ -621,7 +621,7 @@ module.exports = {
     /**
      * Função que copia agendamentos extras com base nos filtros do formulário
      */
-   extraCopiar: async (req, res) => {
+   extraCopiarOld: async (req, res) => {
     try {
         const { tipoData, anoAtend, mesAtend, dataFil } = req.body;
 
@@ -774,6 +774,122 @@ module.exports = {
 
         req.flash("success_message", "Cópias realizadas com sucesso!");
         res.redirect('/atendimento/extra/lisF');
+
+    } catch (error) {
+        console.error("❌ Erro em extraCopiar:", error);
+        req.flash("error_message", "Houve um erro ao copiar os registros.");
+        res.redirect('/admin/erro');
+    }
+},
+extraCopiar: async (req, res) => {
+    try {
+        // 🗓️ Sempre usar o mês e ano atual
+        const hoje = new Date();
+        const ano = hoje.getUTCFullYear();
+        const mes = hoje.getUTCMonth(); // zero-based (janeiro = 0)
+
+        // 🧮 Define o primeiro e último dia do mês atual (em UTC)
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0)).toISOString();
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
+
+        // 🔍 LOGS PARA VERIFICAÇÃO
+        console.log("🔍 [extraCopiar] Filtro automático do mês atual:");
+        console.log("➡️ Data Inicial:", dataIni);
+        console.log("➡️ Data Final:", dataFim);
+
+        // 🎯 Buscar agendamentos extras do mês atual
+        const agendas = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        });
+
+        console.log(`✅ [extraCopiar] Agendamentos encontrados: ${agendas.length}`);
+
+        if (!agendas.length) {
+            return res.status(404).json({ sucesso: false, texto: 'Nenhum agendamento encontrado para o mês atual.' });
+        }
+
+        const usuarioId = req.user._id; // ⚠️ Ajuste conforme sistema de autenticação
+        const agora = new Date();
+
+        // 🧱 Mapeamento para criação dos registros Extra
+        const extrasParaInserir = agendas.map(a => {
+            const dataAgenda = new Date(a.agenda_data);
+            const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+            const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+            const extra_copiado = `${dataAgenda.toISOString().split('T')[0]}_${hora}:${minuto}_${a.agenda_beneid}`;
+
+            return new Extra({
+                extra_data: a.agenda_data,
+                extra_hora: `${hora}:${minuto}`,
+                extra_data_semana: a.agenda_data_semana,
+                extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                extra_beneid: a.agenda_beneid,
+                extra_convid: a.agenda_convid,
+                extra_salaid: a.agenda_salaid,
+                extra_terapiaid: a.agenda_terapiaid,
+                extra_usuid: a.agenda_usuid,
+                extra_mergeterapeutaid: a.agenda_mergeterapeutaid,
+                extra_mergeterapiaid: a.agenda_mergeterapiaid,
+                extra_migrado: a.agenda_migrado,
+                extra_datacad: a.agenda_datacad,
+                extra_dataedi: a.agenda_dataedi,
+                extra_categoria: a.agenda_categoria,
+                extra_org: a.agenda_org,
+                extra_obs: a.agenda_obs,
+                extra_aux: a.agenda_aux,
+                extra_temp: a.agenda_temp,
+                extra_tempId: a.agenda_tempId,
+                extra_tempmotivo: a.agenda_tempmotivo,
+                extra_extra: a.agenda_extra,
+                extra_cobrarextra: a.agenda_cobrarextra,
+                extra_evolucao: a.agenda_evolucao,
+                extra_copia: true,
+                extra_selo: a.agenda_selo,
+                extra_dataSelo: a.agenda_dataSelo,
+                extra_atrazo: a.agenda_atrazo,
+                extra_rel: a.agenda_rel,
+                extra_turnoFalta: a.agenda_turnoFalta,
+                extra_faltaId: a.agenda_faltaId,
+                extra_falta: a.agenda_falta,
+                extra_usuedi: a.agenda_usuedi,
+                extra_log: a.agenda_log,
+                extra_usucad: a.agenda_usucad,
+
+                // Campos próprios do Extra
+                extra_tipo: "Padrão",
+                extra_auditado: false,
+                extra_auditadoObs: "",
+                extra_copiado,
+                extra_dtaExportado: agora.toISOString().split('T')[0],
+                extra_horaExportado: `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`,
+                extra_usuidExportou: usuarioId,
+                extra_extraStatus: "Aguardando",
+                extra_extraStatusPg: false
+            });
+        });
+
+        // 💾 Inserção com tratamento de duplicidade
+        const resultados = [];
+
+        for (const extra of extrasParaInserir) {
+            try {
+                await extra.save();
+                resultados.push({ sucesso: true, extraId: extra._id });
+            } catch (err) {
+                if (err.code === 11000) {
+                    console.warn(`⚠️ Duplicado ignorado: ${extra.extra_copiado}`);
+                    resultados.push({ sucesso: false, erro: `Duplicado: ${extra.extra_copiado}` });
+                } else {
+                    console.error("❌ Erro ao salvar:", err);
+                    resultados.push({ sucesso: false, erro: "Erro ao salvar" });
+                }
+            }
+        }
+
+        req.flash("success_message", "Cópias realizadas com sucesso!");
+        res.redirect('/atendimento/extra/lisctrl');
 
     } catch (error) {
         console.error("❌ Erro em extraCopiar:", error);

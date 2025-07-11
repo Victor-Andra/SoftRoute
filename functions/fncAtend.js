@@ -35,8 +35,8 @@ const Terapia = mongoose.model("tb_terapia")
 const Sala = mongoose.model("tb_sala")
 
 //Funções auxiliares
-const fncCredit = require("../functions/fncCredit")
-const fncGeral = require("../functions/fncGeral")
+const fncCredit = require("./fncCredit")
+const fncGeral = require("./fncGeral")
 const fncAtendAdm = require("./fncAtendAdm")
 const fncAgenda = require("./fncAgenda")
 const agenda = require("../models/agenda")

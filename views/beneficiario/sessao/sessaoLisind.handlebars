@@ -94,8 +94,12 @@
 				const dataSelecionada = new Date(dataInput);
 				const { inicio, fim } = getInicioFimSemana(dataSelecionada);
 
-				document.getElementById("dataFinal").value = fim.toISOString(); // formato ISO para backend
-				document.getElementById("periodoSemana").textContent = `${formatDateToBR(inicio)} até ${formatDateToBR(fim)}`;
+				// Atualiza o campo hidden "dataFinal"
+				document.getElementById("dataFinal").value = fim.toISOString();
+
+				// Atualiza o campo "periodoSemana" (agora é um input)
+				const periodoInput = document.getElementById("periodoSemana");
+				periodoInput.value = `${formatDateToBR(inicio)} até ${formatDateToBR(fim)}`;
 			}
 			// Nova função para pegar a data atual no formato dd/mm/yyyy
 			function getDataAtualFormatada() {
@@ -231,70 +235,76 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/beneficiario/sessao/lisindfil" method="POST">
-							<div class="col-xs-12 row">
-								<!-- Tipo de Filtro -->
-								<div class="col-sm-2">
-									<div class="input-group">
-										<label>Tipo Filtro:&nbsp;</label>
-										<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="trocaFiltroData()">
-											<option value="Semana" selected>Semana</option>
-										</select>
-									</div>
+							<div class="row mb-3">
+								<!-- Tipo Filtro -->
+								<div class="col-12 col-sm-6 col-md-3 col-lg-2">
+									<label for="tipoData">Tipo Filtro:</label>
+									<select name="tipoData" id="tipoData" class="chosen-select form-control form-control-sm" data-placeholder="Escolha..." onchange="trocaFiltroData()">
+										<option value="Semana" selected>Semana</option>
+									</select>
 								</div>
 
 								<!-- Campo Data -->
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
-									<div class="input-group">
-										<label>Data:</label>
-										<input style="height: 30px;" id="dataFil" name="data_inicio" type="date" onchange="atualizaDatas()">
-										<input type="hidden" id="dataFinal" name="data_fim">
-									</div>
+								<div class="col-12 col-sm-6 col-md-3 col-lg-2">
+									<label for="dataFil">Data:</label>
+									<input id="dataFil" name="data_inicio" type="date" class="form-control form-control-sm" onchange="atualizaDatas()" />
+									<input type="hidden" id="dataFinal" name="data_fim">
+								</div>
+
+								<!-- Período da Semana -->
+								<div class="col-12 col-md-6 col-lg-4">
+									<label>Período da semana selecionada:</label><br>
+									<input class="form-control form-control-sm" id="periodoSemana" readonly value="--/-- até --/--">
 								</div>
 
 								<!-- Beneficiário -->
-								<div id="divAtendBeneficiario" class="col-sm-4">
-									<div class="input-group">
-										<label>Beneficiário:</label>
-										<select name="bene_id" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
-											<option value="-">-</option>
-											{{#each benes}}
-												<option value="{{_id}}">{{bene_nome}}</option>
-											{{/each}}
-										</select>
-									</div>
+								<div class="col-12 col-md-6 col-lg-3">
+									<label for="atendBeneficiario">Beneficiário:</label>
+									<select name="bene_id" id="atendBeneficiario" class="chosen-select form-control form-control-sm" data-placeholder="Escolha...">
+										<option value="-">-</option>
+										{{#each benes}}
+											<option value="{{_id}}">{{bene_nome}}</option>
+										{{/each}}
+									</select>
 								</div>
 
 								<!-- Botão Pesquisar -->
-								<div class="col-sm-2">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
-										<i class="ace-icon fa fa-search-plus"></i> Pesquisar
+								<div class="col-12 col-lg-1 d-flex align-items-end">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-sm btn-info w-100">
+										<i class="ace-icon fa fa-search-plus"></i>
+										<span class="d-none d-md-inline"> Pesquisar</span>
 									</button>
 								</div>
 							</div>
-
-							<!-- Exibição do período da semana -->
-							<div class="col-xs-12 text-center" style="margin-top: 15px;">
-								<p><strong>Período da Semana:</strong> <span id="periodoSemana">--/-- até --/--</span></p>
-							</div>
 						</form>
+						<hr>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12 col-sm-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<div class="col-xs-12">
-						<div class="row">
-							<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-									Controle do Quadro de Sessões é realizado com base na semana atual.<br>
-									Ao abrir este formulário, a <strong>Data Atual</strong> é carregada automaticamente, exibindo também a semana correspondente.<br>
-									Todos os cálculos são realizados com base nas terapias existentes na agenda para cada beneficiário.<br>
-									Caso precise consultar outra semana, selecione a data desejada e clique em <strong>Pesquisar</strong>.<br>
-									Os cálculos serão atualizados com base na semana da data informada.
+								{{#if sessoesNaoEncontradas}}
+									<div class="row">
+										<div class="alert alert-danger">
+											<button type="button" class="close" data-dismiss="alert">
+												<i class="ace-icon fa fa-times"></i>
+											</button>
+											Este beneficiário não possui sessões cadastradas.
+										</div>
+									</div>
+								{{/if}}
+								<div class="row">
+									<div class="alert alert-danger">
+										<button type="button" class="close" data-dismiss="alert">
+											<i class="ace-icon fa fa-times"></i>
+										</button>
+											Controle do Quadro de Sessões é realizado com base na semana atual.<br>
+											Ao abrir este formulário, a <strong>Data Atual</strong> é carregada automaticamente, exibindo também a semana correspondente.<br>
+											Todos os cálculos são realizados com base nas terapias existentes na agenda para cada beneficiário.<br>
+											Caso precise consultar outra semana, selecione a data desejada e clique em <strong>Pesquisar</strong>.<br>
+											Os cálculos serão atualizados com base na semana da data informada.
+									</div>
+								</div>
 							</div>
 						</div>
-						
-					</div>
 								<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											
 											<thead>

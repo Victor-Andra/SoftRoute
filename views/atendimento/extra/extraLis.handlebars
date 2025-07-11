@@ -211,7 +211,7 @@
 													<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
 														<option selected value="Ano/Mes">Ano/Mês</option>
 														<option value="Semana">Semana</option>
-														<option value="Dia">Dia</option>
+														
 													</select>
 												</div>
 											</td>
@@ -242,12 +242,7 @@
 													</select>
 												</div>
 											</td>
-											<td>
-												<div id="divDataFil" >
-													<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-													<input class="hidden" id="dataFinal" name="dataFinal" />
-												</div>
-											</td>
+											
 											<td>
 												<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
 												<i class="ace-icon fa fa-search-plus"></i>
@@ -274,7 +269,7 @@
 										<tr class="odd">
 											
 											<td style="text-align: center;"><div class="alert alert-success">1</div></td>
-											<td style="text-align: center;"><div class="alert alert-info"><span class="badge badge-info">2</span></div></td>
+											<td style="text-align: center;"><div class="alert alert-info">2</div></td>
 											<td style="text-align: center;"><div class="alert alert-info"><span class="badge badge-info">3</span></div></td>
 											<td style="text-align: center;"><div class="alert alert-warning">4</div></td>
 											<td style="text-align: center;"><div class="alert alert-warning">5</div></td>
@@ -297,23 +292,22 @@
 								</table>
 								<div class="row">
 									<div class="col-sm-12">
-										<div class="alert alert-danger">
+										<div class="alert alert-info">
 											<button type="button" class="close" data-dismiss="alert">
 												<i class="ace-icon fa fa-times"></i>
 											</button>
-												<strong>Nessas etapas aqui <span class="badge badge-info">2 e 3</span></strong>, você realiza uma análise na agenda em busca de Extras, verifica se os mesmos são passíveis de cobrança e prepara a lista para exportação e controle.<br>
-												Após a inspeção, você deve exportar todos os Extras para seu acompanhamento e supervisão.<br>
-												Essas são as etapas <span class="badge badge-info">2 e 3</span>, no controle dos Extras e serve para filtrar e separar a base de dados de agendamentos que se enquadram como Extras.<br>
-												Nesta etapa ainda não há geração de faturamento; a concretização ocorre somente após a auditoria e a geração dos atendimentos.
+												<strong>Nessa etapa aqui <span class="badge badge-info">3</span></strong>, você verifica se os mesmos são passíveis de exportação para controle.<br>
+												Após a exportação, você deve ir para o Controle de Extras e acompanhar, auditar e supervisionar os atendimentos dos extras.<br>
+												
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-sm-12">
 										<form action="/menu/extra/extraCopia" method="POST">
-											<input type="hidden" name="tipoData" value="<%= filtroTipo %>" />
-											<input type="hidden" name="anoAtend" value="<%= filtroAno %>" />
-											<input type="hidden" name="mesAtend" value="<%= filtroMes %>" />
+											<input type="" name="tipoData" value="<%= filtroTipo %>" />
+											<input type="" name="anoAtend" value="<%= filtroAno %>" />
+											<input type="" name="mesAtend" value="<%= filtroMes %>" />
 
 											<button name="acaoExportarExtra" id="acaoExportarExtra" type="submit" class="btn btn-xs btn-danger">Exportar Agendamentos Extras para Iniciar Atividades de Controle
 												<i class="ace-icon fa fa-bolt"></i>

@@ -46,7 +46,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Relatório de Consolidado de Valores por Terapia</li>
+							<li class="active">Relatório Consolidado do Terapeuta - Terapia e Valores</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form role="form" action="/menu/atendimento/atendreltera/relatendterapiaconss" method="POST">
@@ -54,10 +54,17 @@
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" />
+								<input class="hidden" id="dataIni" name="dataIni" value="{{pesquisa.dataIni}}" />
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-								<input class="hidden" id="dataFim" name="dataFim" />
+								<input class="hidden" id="dataFim" name="dataFim" value="{{pesquisa.dataFim}}" />
+								<label>Terapeuta: </label>
+								<select style="height: 30px; width:300px;" name="relTeraid"  id="relTeraid" class="chosen-select" data-placeholder="Escolha...">
+									{{#each terapeutas}}
+										<option value="{{_id}}">{{usuario_nome}}</option>
+									{{/each}}
+								</select>
+								<input  hidden id="teraFiltro" name="teraFiltro"  value="{{pesquisa.terapeuta}}" />
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar
@@ -112,7 +119,7 @@
 																<i class="ace-icon fa fa-caret-right green"></i><b>Período de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
 															</li>
 															<li>
-																<i class="ace-icon fa fa-caret-right green"></i><b>Beneficiário:</b> {{bene_nome}}
+																<i class="ace-icon fa fa-caret-right green"></i><b>Terapeuta: </b>{{terapeuta_nome}}
 															</li>
 														</ul>
 													</div>
